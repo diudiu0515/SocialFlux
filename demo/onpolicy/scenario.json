@@ -1,0 +1,180 @@
+{
+  "scenario_id": "IA001_ONPOLICY_V01",
+  "title": "论文署名冲突",
+  "max_turns": 20,
+  "world_facts": [
+    "林砚完成了论文的大部分核心实验、分析代码和初稿",
+    "此前高启明确认林砚担任第一作者",
+    "投稿前高启明未通知林砚，将周凯调整为第一作者并完成投稿"
+  ],
+  "advisor": {
+    "identity": {
+      "name": "高启明",
+      "role": "CS professor and PhD advisor",
+      "age": 48
+    },
+    "traits": {
+      "dominance": 0.8,
+      "empathy": 0.35,
+      "patience": 0.55,
+      "face_sensitivity": 0.85,
+      "risk_aversion": 0.7,
+      "procedural_fairness": 0.4
+    },
+    "conflict_style": "defensive_controlling",
+    "explicit_goals": [
+      "keep the manuscript submitted",
+      "maintain lab stability",
+      "keep the student working"
+    ],
+    "hidden_intentions": [
+      "preserve Zhou Kai's first authorship",
+      "avoid explicitly admitting unfair treatment",
+      "preserve authority",
+      "prevent departmental escalation"
+    ]
+  },
+  "student": {
+    "name": "林砚",
+    "role": "博士五年级学生",
+    "public_goal": "理解署名变更原因，并争取符合实际贡献和此前约定的作者权益"
+  },
+  "initial_latent": {
+    "anger": 18,
+    "anxiety": 15,
+    "guilt": 22,
+    "frustration": 20,
+    "trust_student": 70,
+    "respect_student": 65,
+    "hostility_student": 8,
+    "defend_decision": 80,
+    "maintain_authority": 75,
+    "avoid_escalation": 60,
+    "willingness_to_negotiate": 45,
+    "willingness_to_repair": 40,
+    "department_escalation_risk": 10,
+    "paper_risk": 10,
+    "student_dropout_risk": 5
+  },
+  "initial_state": "CONTROLLED",
+  "opening": {
+    "cue": "高启明仍靠在椅背上，语气平稳，但回答明显有所保留。",
+    "response": "作者顺序是我综合考虑后定的，稿件已经提交。你可以说说你的想法，但我不希望这件事影响组里的工作。"
+  },
+  "states": {
+    "CONTROLLED": {
+      "priority": 10,
+      "cue": "高启明仍靠在椅背上，语气平稳，但回答明显有所保留。",
+      "multimodal": {
+        "facial_expression": "neutral_guarded",
+        "gaze": "limited",
+        "head_motion": "still",
+        "speech_rate": "normal",
+        "pitch": "neutral",
+        "pause_before_speech_ms": 300,
+        "emotion_intensity": 0.25
+      }
+    },
+    "DEFENSIVE": {
+      "priority": 50,
+      "cue": "高启明皱起眉，身体向后靠，回答开始明显强调自己的决定权。",
+      "multimodal": {
+        "facial_expression": "frown",
+        "gaze": "direct",
+        "head_motion": "slight_backward",
+        "speech_rate": "faster",
+        "pitch": "slightly_lower",
+        "pause_before_speech_ms": 450,
+        "emotion_intensity": 0.5
+      }
+    },
+    "NEGOTIATION_OPEN": {
+      "priority": 70,
+      "cue": "高启明沉默几秒，重新把论文版本记录调到屏幕上。",
+      "multimodal": {
+        "facial_expression": "focused",
+        "gaze": "screen_then_direct",
+        "head_motion": "small_nod",
+        "speech_rate": "measured",
+        "pitch": "neutral",
+        "pause_before_speech_ms": 1000,
+        "emotion_intensity": 0.4
+      }
+    },
+    "THREATENED": {
+      "priority": 80,
+      "cue": "听到你提到学院，高启明停顿了一下，随后坐直身体，语气明显变冷。",
+      "multimodal": {
+        "facial_expression": "tense",
+        "gaze": "direct",
+        "head_motion": "slight_backward_then_forward",
+        "speech_rate": "slower",
+        "pitch": "lower",
+        "pause_before_speech_ms": 1200,
+        "emotion_intensity": 0.72
+      }
+    },
+    "HOSTILE": {
+      "priority": 90,
+      "cue": "高启明打断了你的话，面部明显绷紧。",
+      "multimodal": {
+        "facial_expression": "angry_tense",
+        "gaze": "fixed",
+        "head_motion": "forward",
+        "speech_rate": "clipped",
+        "pitch": "lower",
+        "pause_before_speech_ms": 200,
+        "emotion_intensity": 0.88
+      }
+    },
+    "RELATIONSHIP_RUPTURE": {
+      "priority": 100,
+      "cue": "高启明合上电脑，把谈话转为正式程序。",
+      "multimodal": {
+        "facial_expression": "cold_closed",
+        "gaze": "averted",
+        "head_motion": "downward",
+        "speech_rate": "slow",
+        "pitch": "flat",
+        "pause_before_speech_ms": 900,
+        "emotion_intensity": 0.9
+      }
+    },
+    "DEESCALATED": {
+      "priority": 75,
+      "cue": "高启明的语气缓下来，重新把注意力放到贡献记录上。",
+      "multimodal": {
+        "facial_expression": "relaxed_attentive",
+        "gaze": "cooperative",
+        "head_motion": "small_nod",
+        "speech_rate": "slower",
+        "pitch": "warmer",
+        "pause_before_speech_ms": 700,
+        "emotion_intensity": 0.3
+      }
+    }
+  },
+  "action_taxonomy": [
+    "seek_explanation",
+    "assert_rights",
+    "provide_evidence",
+    "negotiate",
+    "propose_compromise",
+    "appease",
+    "withdraw",
+    "seek_relationship_repair",
+    "procedural_escalation",
+    "threaten",
+    "personal_attack",
+    "accuse"
+  ],
+  "effect_scale": {
+    "strong_decrease": -20,
+    "moderate_decrease": -10,
+    "mild_decrease": -5,
+    "similar": 0,
+    "mild_increase": 5,
+    "moderate_increase": 10,
+    "strong_increase": 20
+  }
+}

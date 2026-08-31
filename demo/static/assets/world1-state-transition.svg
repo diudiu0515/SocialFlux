@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+<defs><marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#52635a"/></marker><filter id="s"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity=".12"/></filter><style>
+.t{font-family:Inter,system-ui,'PingFang SC','Microsoft YaHei',sans-serif;fill:#17211d}.title{font-size:42px;font-weight:800}.sub{font-size:18px;fill:#657069}.h{font-size:21px;font-weight:800}.n{font-size:18px;font-weight:800}.d{font-size:14px;fill:#52635a}.edge{fill:none;stroke:#52635a;stroke-width:3;marker-end:url(#a)}.recover{fill:none;stroke:#267354;stroke-width:4;stroke-dasharray:10 7;marker-end:url(#a)}.trigger{font-size:13px;fill:#657069}.box{stroke:#d6d2c6;stroke-width:2;filter:url(#s)}
+</style></defs>
+<rect width="1600" height="1000" fill="#f4f1e9"/>
+<text x="70" y="72" class="t title">EmoTree World 1 · On-Policy State Transition</text>
+<text x="70" y="108" class="t sub">学生开放语言行动 → 15 个隐藏变量更新 → 阈值触发 → 可观察 Cue 与导师回复</text>
+
+<rect x="70" y="155" width="350" height="730" rx="24" fill="#fffdf8" class="box"/>
+<text x="100" y="202" class="t h">Continuous Latent Variables</text>
+<text x="100" y="230" class="t d">每轮更新，范围 [0,100]；参与者不可见</text>
+<rect x="100" y="268" width="290" height="118" rx="16" fill="#f5ded8"/><text x="122" y="301" class="t n">Emotion</text><text x="122" y="332" class="t d">anger · anxiety · guilt</text><text x="122" y="358" class="t d">frustration</text>
+<rect x="100" y="406" width="290" height="118" rx="16" fill="#dfece4"/><text x="122" y="439" class="t n">Relationship</text><text x="122" y="470" class="t d">trust_student · respect_student</text><text x="122" y="496" class="t d">hostility_student</text>
+<rect x="100" y="544" width="290" height="152" rx="16" fill="#e4e9f0"/><text x="122" y="577" class="t n">Motivation</text><text x="122" y="608" class="t d">defend_decision · maintain_authority</text><text x="122" y="634" class="t d">avoid_escalation · negotiate</text><text x="122" y="660" class="t d">willingness_to_repair</text>
+<rect x="100" y="716" width="290" height="136" rx="16" fill="#f4e8cc"/><text x="122" y="749" class="t n">Risk Perception</text><text x="122" y="780" class="t d">department_escalation_risk</text><text x="122" y="806" class="t d">paper_risk · student_dropout_risk</text>
+<path d="M420 520 C480 520 470 520 530 520" class="edge"/>
+
+<rect x="520" y="355" width="260" height="330" rx="24" fill="#17211d" filter="url(#s)"/>
+<text x="650" y="400" text-anchor="middle" style="font:800 21px Inter,system-ui;fill:#d8ea75">Transition Engine</text>
+<text x="550" y="444" style="font:15px Inter,system-ui;fill:#fff">1. Action taxonomy + dimensions</text>
+<text x="550" y="481" style="font:15px Inter,system-ui;fill:#fff">2. Impact level judgment</text>
+<text x="550" y="518" style="font:15px Inter,system-ui;fill:#fff">3. Fixed Δ mapping</text>
+<text x="566" y="546" style="font:13px Inter,system-ui;fill:#aebbb4">−20 / −10 / −5 / 0 / +5 / +10 / +20</text>
+<text x="550" y="583" style="font:15px Inter,system-ui;fill:#fff">4. Trait modifiers + clamp</text>
+<text x="550" y="620" style="font:15px Inter,system-ui;fill:#fff">5. Priority + hysteresis</text>
+<text x="550" y="657" style="font:15px Inter,system-ui;fill:#fff">6. Cue + response + memory</text>
+<path d="M780 520 C825 520 825 520 870 520" class="edge"/>
+
+<text x="870" y="160" class="t h">Discrete Interaction State Graph</text>
+<text x="870" y="187" class="t d">State 改变行为模式，不等于 Ending；绿色虚线表示恢复路径</text>
+
+<rect x="900" y="230" width="250" height="92" rx="18" fill="#edf1e9" class="box"/><text x="1025" y="270" text-anchor="middle" class="t n">CONTROLLED</text><text x="1025" y="296" text-anchor="middle" class="t d">有限讨论，保持控制</text>
+<rect x="900" y="390" width="250" height="92" rx="18" fill="#f3e5c9" class="box"/><text x="1025" y="430" text-anchor="middle" class="t n">DEFENSIVE</text><text x="1025" y="456" text-anchor="middle" class="t d">强调权威与决定权</text>
+<rect x="1240" y="390" width="280" height="92" rx="18" fill="#e0eee5" class="box"/><text x="1380" y="430" text-anchor="middle" class="t n">NEGOTIATION_OPEN</text><text x="1380" y="456" text-anchor="middle" class="t d">开始核对证据与方案</text>
+<rect x="900" y="550" width="250" height="92" rx="18" fill="#e7e0ec" class="box"/><text x="1025" y="590" text-anchor="middle" class="t n">THREATENED</text><text x="1025" y="616" text-anchor="middle" class="t d">感知学院升级风险</text>
+<rect x="900" y="710" width="250" height="92" rx="18" fill="#f2d7d2" class="box"/><text x="1025" y="750" text-anchor="middle" class="t n">HOSTILE</text><text x="1025" y="776" text-anchor="middle" class="t d">对抗、终止协商倾向</text>
+<rect x="900" y="868" width="300" height="92" rx="18" fill="#d6c8c5" class="box"/><text x="1050" y="908" text-anchor="middle" class="t n">RELATIONSHIP_RUPTURE</text><text x="1050" y="934" text-anchor="middle" class="t d">转为邮件与正式程序</text>
+<rect x="1240" y="710" width="280" height="92" rx="18" fill="#dceee2" class="box"/><text x="1380" y="750" text-anchor="middle" class="t n">DEESCALATED</text><text x="1380" y="776" text-anchor="middle" class="t d">语气缓和，重新看事实</text>
+
+<path d="M1025 322 L1025 385" class="edge"/><text x="1038" y="356" class="t trigger">anger ≥ 40 或 authority ≥ 85</text>
+<path d="M1150 275 C1290 275 1380 300 1380 385" class="edge"/><text x="1235" y="260" class="t trigger">negotiate ≥ 65, hostility &lt; 45</text>
+<path d="M1025 482 L1025 545" class="edge"/><text x="1038" y="516" class="t trigger">risk ≥ 60 且 anxiety ≥ 45</text>
+<path d="M1025 642 L1025 705" class="edge"/><text x="1038" y="677" class="t trigger">anger ≥ 70 且 hostility ≥ 60</text>
+<path d="M1025 802 L1045 862" class="edge"/><text x="1055" y="838" class="t trigger">trust ≤ 20 且 hostility ≥ 75</text>
+<path d="M1150 436 L1235 436" class="recover"/><text x="1170" y="420" class="t trigger">证据 + 协商</text>
+<path d="M1150 595 C1290 595 1350 560 1380 487" class="recover"/><text x="1245" y="574" class="t trigger">关系修复 + 降低升级风险</text>
+<path d="M1380 482 L1380 704" class="recover"/><text x="1395" y="602" class="t trigger">anger ≤ 30, negotiate ≥ 65</text>
+<path d="M1240 756 C1160 756 1170 645 1155 610" class="edge"/><text x="1182" y="702" class="t trigger">再次升级</text>
+
+<rect x="470" y="735" width="330" height="150" rx="20" fill="#fffdf8" class="box"/>
+<text x="495" y="772" class="t h">Observable Output</text>
+<text x="495" y="807" class="t d">Text Cue / Talking Head control</text>
+<text x="495" y="834" class="t d">State-conditioned Advisor Response</text>
+<text x="495" y="861" class="t d">Participant 只看到这两项</text>
+<path d="M650 685 L650 730" class="edge"/>
+</svg>

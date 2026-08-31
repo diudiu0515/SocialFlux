@@ -1,0 +1,56 @@
+{
+  "format": "emotree_scenario_manifest_v1",
+  "scenario_count": 10,
+  "scenarios": [
+    {
+      "scenario_id": "IA_PIPE_001",
+      "title": "导师—学生署名冲突",
+      "mechanism": "institutional resource control"
+    },
+    {
+      "scenario_id": "IA_PIPE_002",
+      "title": "经理—员工绩效争议",
+      "mechanism": "workplace authority"
+    },
+    {
+      "scenario_id": "IA_PIPE_003",
+      "title": "朋友间借款与信任",
+      "mechanism": "friendship trust"
+    },
+    {
+      "scenario_id": "IA_PIPE_004",
+      "title": "伴侣照护责任冲突",
+      "mechanism": "intimate obligation"
+    },
+    {
+      "scenario_id": "IA_PIPE_005",
+      "title": "家庭养老资源分配",
+      "mechanism": "family resource"
+    },
+    {
+      "scenario_id": "IA_PIPE_006",
+      "title": "编辑与记者信息核验",
+      "mechanism": "professional ethics"
+    },
+    {
+      "scenario_id": "IA_PIPE_007",
+      "title": "平台申诉与商户责任",
+      "mechanism": "information asymmetry"
+    },
+    {
+      "scenario_id": "IA_PIPE_008",
+      "title": "医疗沟通与治疗选择",
+      "mechanism": "medical information asymmetry"
+    },
+    {
+      "scenario_id": "IA_PIPE_009",
+      "title": "团队项目贡献冲突",
+      "mechanism": "peer collaboration"
+    },
+    {
+      "scenario_id": "IA_PIPE_010",
+      "title": "AI 上线安全与效率",
+      "mechanism": "safety-efficiency conflict"
+    }
+  ]
+}

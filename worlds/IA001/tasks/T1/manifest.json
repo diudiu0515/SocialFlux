@@ -1,0 +1,24 @@
+{
+  "benchmark_version": "0.2.0",
+  "world_id": "IA001",
+  "task_type": "T1_state_tracking",
+  "source": "../../../../build/interactive_benchmark_v0.2/instances.jsonl",
+  "instance_count": 10,
+  "semantic_instance_count": 5,
+  "modality_counts": {
+    "text": 5,
+    "text_video": 5
+  },
+  "minimum_history_rounds": 8,
+  "ground_truth_status": "pending_human_annotation",
+  "files": {
+    "all": "instances.jsonl",
+    "text": "instances_text.jsonl",
+    "text_video": "instances_text_video.jsonl"
+  },
+  "instance_schema": "../../../../interactive_benchmark/schema/benchmark_instance_schema_v0.2.json",
+  "task_definition": "../../../../tasks/T1/TASK1_SPEC_v0.2.md",
+  "model_output_schema": "../../../../tasks/T1/model_output_schema_v0.2.json",
+  "human_annotation_schema": "../../../../tasks/T1/human_annotation_schema_v0.2.json",
+  "probability_tool": "../../../../tasks/T1/t1_probability_utils.py"
+}

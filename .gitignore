@@ -1,0 +1,24 @@
+# Python and local tooling
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+ENV/
+*.egg-info/
+
+# Secrets and local environment
+.secrets/
+.env
+.env.*
+!.env.example
+
+# Runtime-generated demo sessions
+demo/data/trajectories/*.json
+
+# Logs and OS files
+*.log
+.DS_Store
+Thumbs.db

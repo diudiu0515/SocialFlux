@@ -1,0 +1,70 @@
+{
+  "benchmark_version": "0.2.0",
+  "status": "unlabeled_pilot",
+  "instance_count": 48,
+  "story_ids": [
+    "IA001",
+    "IA002"
+  ],
+  "task_counts": {
+    "T1_state_tracking": 20,
+    "T2_history_sensitive_merge": 12,
+    "T3_counterfactual_choice_effect": 16
+  },
+  "modality_counts": {
+    "text": 24,
+    "text_video": 24
+  },
+  "label_status_counts": {
+    "pending_human_annotation": 48
+  },
+  "t1_sampling_contract": {
+    "semantic_instances_per_world": 5,
+    "variants_per_semantic_instance": [
+      "text",
+      "text_video"
+    ],
+    "physical_instances_per_world": 10,
+    "selection_strategy": "round_robin_checkpoint_then_path"
+  },
+  "t1_definition": "subjective_state_tracking_v0.2; >=8 history rounds; ordinal probability distributions; no self-reported model confidence; situational risks excluded",
+  "ground_truth_policy": "Author effects are hidden hypotheses; formal labels require independent human annotation.",
+  "source_files": [
+    "worlds/IA001/story.json",
+    "worlds/IA002/story.json"
+  ],
+  "instance_file": "instances.jsonl",
+  "t2_sampling_contract": {
+    "semantic_instances_per_world": 3,
+    "variants_per_semantic_instance": [
+      "text",
+      "text_video"
+    ],
+    "physical_instances_per_world": 6,
+    "selection_strategy": "all_preregistered_merge_comparisons",
+    "target_state_count_range": [
+      6,
+      10
+    ],
+    "preserve_causal_choice_attribution": true
+  },
+  "t2_definition": "pairwise_state_difference_v0.2; same current scene, different histories; four-way direction probabilities; evidence grounding and causal-choice attribution",
+  "t3_sampling_contract": {
+    "semantic_instances_per_world": 4,
+    "variants_per_semantic_instance": [
+      "text",
+      "text_video"
+    ],
+    "physical_instances_per_world": 8,
+    "selection_strategy": "round_robin_decision_then_history",
+    "target_state_count_range": [
+      6,
+      10
+    ],
+    "time_horizons": [
+      "immediate",
+      "delayed"
+    ]
+  },
+  "t3_definition": "counterfactual_option_effects_v0.2; option x state x horizon; four-way change probabilities; derived confidence and rankings"
+}

@@ -1,0 +1,27 @@
+{
+  "format": "emotree_rollout_manifest_v1",
+  "trajectory_count": 3,
+  "scenario_ids": [
+    "IA_PIPE_005"
+  ],
+  "policy_ids": [
+    "IA_PIPE_005__escalate",
+    "IA_PIPE_005__neutral",
+    "IA_PIPE_005__repair"
+  ],
+  "config": {
+    "t1_candidates": 5,
+    "t2_candidates": 3,
+    "t3_candidates": 4,
+    "delayed_horizon": 5
+  },
+  "trajectory_ids": [
+    "41e12921350b4cbcb72d55c32c4e5032",
+    "85e630bce06c49248fa389bfa863d487",
+    "a650cbc8ed32404a8de770c0a2b28cce"
+  ],
+  "scenario_id": "IA_PIPE_005",
+  "t1": 5,
+  "t2": 3,
+  "t3": 4
+}

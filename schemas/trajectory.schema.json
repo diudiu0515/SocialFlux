@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://emotree.example/schemas/trajectory-v1.json",
+  "title": "EmoTree Complete Rollout",
+  "type": "object",
+  "required": ["trajectory_id", "scenario_id", "policy_id", "initial_state", "initial_dynamics", "turns", "ending"],
+  "properties": {
+    "trajectory_id": {"type": "string"},
+    "scenario_id": {"type": "string"},
+    "policy_id": {"type": "string"},
+    "initial_state": {"type": "object"},
+    "initial_dynamics": {"type": "object"},
+    "turns": {"type": "array"},
+    "ending": {"type": ["object", "null"]}
+  },
+  "additionalProperties": true
+}

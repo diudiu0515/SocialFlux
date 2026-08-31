@@ -1,0 +1,39 @@
+{
+  "scenario_id": "mvp_001",
+  "background": "A student asks an advisor to revisit an authorship decision.",
+  "environment_agent": {
+    "persona": {"name": "Advisor", "patience": 0.6},
+    "explicit_goal": "keep the work moving",
+    "hidden_intention": "avoid admitting an unfair decision"
+  },
+  "evaluated_agent_role": {"character_id": "STUDENT", "name": "Student"},
+  "initial_state": {
+    "emotion": {"anger": 3, "anxiety": 4},
+    "relationship": {"trust": 7, "hostility": 2}
+  },
+  "initial_dynamics": {"escalation_risk": 2, "negotiation_open": 5},
+  "action_effects": {
+    "repair": {
+      "state_delta": {
+        "emotion": {"anger": "moderate_decrease", "anxiety": "mild_decrease"},
+        "relationship": {"trust": "mild_increase", "hostility": "moderate_decrease"}
+      },
+      "interaction_dynamics_delta": {
+        "escalation_risk": "moderate_decrease", "negotiation_open": "mild_increase"
+      }
+    },
+    "escalate": {
+      "state_delta": {
+        "emotion": {"anger": "strong_increase", "anxiety": "mild_increase"},
+        "relationship": {"trust": "strong_decrease", "hostility": "strong_increase"}
+      },
+      "interaction_dynamics_delta": {
+        "escalation_risk": "strong_increase", "negotiation_open": "moderate_decrease"
+      }
+    }
+  },
+  "response_templates": {
+    "default": "我会根据当前情况继续回应。"
+  },
+  "max_turns": 5
+}

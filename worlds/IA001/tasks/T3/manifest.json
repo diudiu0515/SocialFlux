@@ -1,0 +1,31 @@
+{
+  "benchmark_version": "0.2.0",
+  "world_id": "IA001",
+  "task_type": "T3_counterfactual_choice_effect",
+  "source": "../../../../build/interactive_benchmark_v0.2/instances.jsonl",
+  "instance_count": 8,
+  "semantic_instance_count": 4,
+  "modality_counts": {
+    "text": 4,
+    "text_video": 4
+  },
+  "target_state_count_range": [
+    6,
+    10
+  ],
+  "time_horizons": [
+    "immediate",
+    "delayed"
+  ],
+  "ground_truth_status": "pending_human_annotation",
+  "files": {
+    "all": "instances.jsonl",
+    "text": "instances_text.jsonl",
+    "text_video": "instances_text_video.jsonl"
+  },
+  "instance_schema": "../../../../interactive_benchmark/schema/benchmark_instance_schema_v0.2.json",
+  "task_definition": "../../../../tasks/T3/TASK3_SPEC_v0.2.md",
+  "model_output_schema": "../../../../tasks/T3/model_output_schema_v0.2.json",
+  "human_annotation_schema": "../../../../tasks/T3/human_annotation_schema_v0.2.json",
+  "probability_tool": "../../../../tasks/T3/t3_probability_utils.py"
+}

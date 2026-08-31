@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://emotree.example/schemas/t1-human-annotation-v0.2.json",
+  "title": "EmoTree T1 Human Annotation v0.2",
+  "type": "object",
+  "required": [
+    "annotation_id",
+    "instance_id",
+    "annotator_id",
+    "task_type",
+    "state_annotations",
+    "created_at",
+    "quality_status"
+  ],
+  "properties": {
+    "annotation_id": {
+      "type": "string"
+    },
+    "instance_id": {
+      "type": "string"
+    },
+    "annotator_id": {
+      "type": "string"
+    },
+    "task_type": {
+      "const": "T1_state_tracking"
+    },
+    "state_annotations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "state_id",
+          "intensity_label",
+          "change_direction",
+          "annotator_confidence",
+          "evidence_node_ids"
+        ],
+        "properties": {
+          "state_id": {
+            "type": "string"
+          },
+          "intensity_label": {
+            "enum": [
+              "absent",
+              "mild",
+              "moderate",
+              "strong",
+              "very_strong",
+              "cannot_determine"
+            ]
+          },
+          "change_direction": {
+            "enum": [
+              "increase",
+              "similar",
+              "decrease",
+              "cannot_determine"
+            ]
+          },
+          "annotator_confidence": {
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "very_high"
+            ]
+          },
+          "evidence_node_ids": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "optional_comment": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "response_time_ms": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "quality_status": {
+      "enum": [
+        "unreviewed",
+        "accepted",
+        "rejected"
+      ]
+    },
+    "review_notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

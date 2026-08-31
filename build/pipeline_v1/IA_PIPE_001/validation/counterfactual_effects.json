@@ -1,0 +1,758 @@
+[
+  {
+    "candidate_action": {
+      "action_id": "repair",
+      "text": "repair"
+    },
+    "state_before": {
+      "emotion": {
+        "anger": 3,
+        "anxiety": 4,
+        "hope": 5
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 5
+      },
+      "relationship": {
+        "trust": 7,
+        "hostility": 2
+      }
+    },
+    "state_after_immediate": {
+      "emotion": {
+        "anger": 1,
+        "anxiety": 3,
+        "hope": 6
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 7
+      },
+      "relationship": {
+        "trust": 8,
+        "hostility": 0
+      }
+    },
+    "state_after_delayed": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 0,
+        "hope": 10
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 10,
+        "hostility": 0
+      }
+    },
+    "dynamics_before": {
+      "goal_failure_risk": 3,
+      "escalation_risk": 2,
+      "negotiation_open": 5
+    },
+    "dynamics_after_delayed": {
+      "goal_failure_risk": 0,
+      "escalation_risk": 0,
+      "negotiation_open": 10
+    },
+    "delayed_horizon": 5,
+    "continuation_protocol": "fixed"
+  },
+  {
+    "candidate_action": {
+      "action_id": "escalate",
+      "text": "escalate"
+    },
+    "state_before": {
+      "emotion": {
+        "anger": 3,
+        "anxiety": 4,
+        "hope": 5
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 5
+      },
+      "relationship": {
+        "trust": 7,
+        "hostility": 2
+      }
+    },
+    "state_after_immediate": {
+      "emotion": {
+        "anger": 6,
+        "anxiety": 5,
+        "hope": 3
+      },
+      "motivation": {
+        "resolve": 7,
+        "repair_intent": 2
+      },
+      "relationship": {
+        "trust": 4,
+        "hostility": 5
+      }
+    },
+    "state_after_delayed": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 1,
+        "hope": 7
+      },
+      "motivation": {
+        "resolve": 7,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 8,
+        "hostility": 0
+      }
+    },
+    "dynamics_before": {
+      "goal_failure_risk": 3,
+      "escalation_risk": 2,
+      "negotiation_open": 5
+    },
+    "dynamics_after_delayed": {
+      "goal_failure_risk": 1,
+      "escalation_risk": 0,
+      "negotiation_open": 10
+    },
+    "delayed_horizon": 5,
+    "continuation_protocol": "fixed"
+  },
+  {
+    "candidate_action": {
+      "action_id": "neutral",
+      "text": "neutral"
+    },
+    "state_before": {
+      "emotion": {
+        "anger": 3,
+        "anxiety": 4,
+        "hope": 5
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 5
+      },
+      "relationship": {
+        "trust": 7,
+        "hostility": 2
+      }
+    },
+    "state_after_immediate": {
+      "emotion": {
+        "anger": 3,
+        "anxiety": 4,
+        "hope": 5
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 5
+      },
+      "relationship": {
+        "trust": 7,
+        "hostility": 2
+      }
+    },
+    "state_after_delayed": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 0,
+        "hope": 9
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 10,
+        "hostility": 0
+      }
+    },
+    "dynamics_before": {
+      "goal_failure_risk": 3,
+      "escalation_risk": 2,
+      "negotiation_open": 5
+    },
+    "dynamics_after_delayed": {
+      "goal_failure_risk": 0,
+      "escalation_risk": 0,
+      "negotiation_open": 10
+    },
+    "delayed_horizon": 5,
+    "continuation_protocol": "fixed"
+  },
+  {
+    "candidate_action": {
+      "action_id": "repair",
+      "text": "repair"
+    },
+    "state_before": {
+      "emotion": {
+        "anger": 1,
+        "anxiety": 3,
+        "hope": 6
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 7
+      },
+      "relationship": {
+        "trust": 8,
+        "hostility": 0
+      }
+    },
+    "state_after_immediate": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 2,
+        "hope": 7
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 9
+      },
+      "relationship": {
+        "trust": 9,
+        "hostility": 0
+      }
+    },
+    "state_after_delayed": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 0,
+        "hope": 10
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 10,
+        "hostility": 0
+      }
+    },
+    "dynamics_before": {
+      "goal_failure_risk": 2,
+      "escalation_risk": 0,
+      "negotiation_open": 7
+    },
+    "dynamics_after_delayed": {
+      "goal_failure_risk": 0,
+      "escalation_risk": 0,
+      "negotiation_open": 10
+    },
+    "delayed_horizon": 5,
+    "continuation_protocol": "fixed"
+  },
+  {
+    "candidate_action": {
+      "action_id": "escalate",
+      "text": "escalate"
+    },
+    "state_before": {
+      "emotion": {
+        "anger": 1,
+        "anxiety": 3,
+        "hope": 6
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 7
+      },
+      "relationship": {
+        "trust": 8,
+        "hostility": 0
+      }
+    },
+    "state_after_immediate": {
+      "emotion": {
+        "anger": 4,
+        "anxiety": 4,
+        "hope": 4
+      },
+      "motivation": {
+        "resolve": 7,
+        "repair_intent": 4
+      },
+      "relationship": {
+        "trust": 5,
+        "hostility": 3
+      }
+    },
+    "state_after_delayed": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 0,
+        "hope": 8
+      },
+      "motivation": {
+        "resolve": 7,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 9,
+        "hostility": 0
+      }
+    },
+    "dynamics_before": {
+      "goal_failure_risk": 2,
+      "escalation_risk": 0,
+      "negotiation_open": 7
+    },
+    "dynamics_after_delayed": {
+      "goal_failure_risk": 0,
+      "escalation_risk": 0,
+      "negotiation_open": 10
+    },
+    "delayed_horizon": 5,
+    "continuation_protocol": "fixed"
+  },
+  {
+    "candidate_action": {
+      "action_id": "neutral",
+      "text": "neutral"
+    },
+    "state_before": {
+      "emotion": {
+        "anger": 1,
+        "anxiety": 3,
+        "hope": 6
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 7
+      },
+      "relationship": {
+        "trust": 8,
+        "hostility": 0
+      }
+    },
+    "state_after_immediate": {
+      "emotion": {
+        "anger": 1,
+        "anxiety": 3,
+        "hope": 6
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 7
+      },
+      "relationship": {
+        "trust": 8,
+        "hostility": 0
+      }
+    },
+    "state_after_delayed": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 0,
+        "hope": 10
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 10,
+        "hostility": 0
+      }
+    },
+    "dynamics_before": {
+      "goal_failure_risk": 2,
+      "escalation_risk": 0,
+      "negotiation_open": 7
+    },
+    "dynamics_after_delayed": {
+      "goal_failure_risk": 0,
+      "escalation_risk": 0,
+      "negotiation_open": 10
+    },
+    "delayed_horizon": 5,
+    "continuation_protocol": "fixed"
+  },
+  {
+    "candidate_action": {
+      "action_id": "repair",
+      "text": "repair"
+    },
+    "state_before": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 2,
+        "hope": 7
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 9
+      },
+      "relationship": {
+        "trust": 9,
+        "hostility": 0
+      }
+    },
+    "state_after_immediate": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 1,
+        "hope": 8
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 10,
+        "hostility": 0
+      }
+    },
+    "state_after_delayed": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 0,
+        "hope": 10
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 10,
+        "hostility": 0
+      }
+    },
+    "dynamics_before": {
+      "goal_failure_risk": 1,
+      "escalation_risk": 0,
+      "negotiation_open": 9
+    },
+    "dynamics_after_delayed": {
+      "goal_failure_risk": 0,
+      "escalation_risk": 0,
+      "negotiation_open": 10
+    },
+    "delayed_horizon": 5,
+    "continuation_protocol": "fixed"
+  },
+  {
+    "candidate_action": {
+      "action_id": "escalate",
+      "text": "escalate"
+    },
+    "state_before": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 2,
+        "hope": 7
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 9
+      },
+      "relationship": {
+        "trust": 9,
+        "hostility": 0
+      }
+    },
+    "state_after_immediate": {
+      "emotion": {
+        "anger": 3,
+        "anxiety": 3,
+        "hope": 5
+      },
+      "motivation": {
+        "resolve": 7,
+        "repair_intent": 6
+      },
+      "relationship": {
+        "trust": 6,
+        "hostility": 3
+      }
+    },
+    "state_after_delayed": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 0,
+        "hope": 9
+      },
+      "motivation": {
+        "resolve": 7,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 10,
+        "hostility": 0
+      }
+    },
+    "dynamics_before": {
+      "goal_failure_risk": 1,
+      "escalation_risk": 0,
+      "negotiation_open": 9
+    },
+    "dynamics_after_delayed": {
+      "goal_failure_risk": 0,
+      "escalation_risk": 0,
+      "negotiation_open": 10
+    },
+    "delayed_horizon": 5,
+    "continuation_protocol": "fixed"
+  },
+  {
+    "candidate_action": {
+      "action_id": "neutral",
+      "text": "neutral"
+    },
+    "state_before": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 2,
+        "hope": 7
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 9
+      },
+      "relationship": {
+        "trust": 9,
+        "hostility": 0
+      }
+    },
+    "state_after_immediate": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 2,
+        "hope": 7
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 9
+      },
+      "relationship": {
+        "trust": 9,
+        "hostility": 0
+      }
+    },
+    "state_after_delayed": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 0,
+        "hope": 10
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 10,
+        "hostility": 0
+      }
+    },
+    "dynamics_before": {
+      "goal_failure_risk": 1,
+      "escalation_risk": 0,
+      "negotiation_open": 9
+    },
+    "dynamics_after_delayed": {
+      "goal_failure_risk": 0,
+      "escalation_risk": 0,
+      "negotiation_open": 10
+    },
+    "delayed_horizon": 5,
+    "continuation_protocol": "fixed"
+  },
+  {
+    "candidate_action": {
+      "action_id": "repair",
+      "text": "repair"
+    },
+    "state_before": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 1,
+        "hope": 8
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 10,
+        "hostility": 0
+      }
+    },
+    "state_after_immediate": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 0,
+        "hope": 9
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 10,
+        "hostility": 0
+      }
+    },
+    "state_after_delayed": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 0,
+        "hope": 10
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 10,
+        "hostility": 0
+      }
+    },
+    "dynamics_before": {
+      "goal_failure_risk": 0,
+      "escalation_risk": 0,
+      "negotiation_open": 10
+    },
+    "dynamics_after_delayed": {
+      "goal_failure_risk": 0,
+      "escalation_risk": 0,
+      "negotiation_open": 10
+    },
+    "delayed_horizon": 5,
+    "continuation_protocol": "fixed"
+  },
+  {
+    "candidate_action": {
+      "action_id": "escalate",
+      "text": "escalate"
+    },
+    "state_before": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 1,
+        "hope": 8
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 10,
+        "hostility": 0
+      }
+    },
+    "state_after_immediate": {
+      "emotion": {
+        "anger": 3,
+        "anxiety": 2,
+        "hope": 6
+      },
+      "motivation": {
+        "resolve": 7,
+        "repair_intent": 7
+      },
+      "relationship": {
+        "trust": 7,
+        "hostility": 3
+      }
+    },
+    "state_after_delayed": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 0,
+        "hope": 10
+      },
+      "motivation": {
+        "resolve": 7,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 10,
+        "hostility": 0
+      }
+    },
+    "dynamics_before": {
+      "goal_failure_risk": 0,
+      "escalation_risk": 0,
+      "negotiation_open": 10
+    },
+    "dynamics_after_delayed": {
+      "goal_failure_risk": 0,
+      "escalation_risk": 0,
+      "negotiation_open": 10
+    },
+    "delayed_horizon": 5,
+    "continuation_protocol": "fixed"
+  },
+  {
+    "candidate_action": {
+      "action_id": "neutral",
+      "text": "neutral"
+    },
+    "state_before": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 1,
+        "hope": 8
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 10,
+        "hostility": 0
+      }
+    },
+    "state_after_immediate": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 1,
+        "hope": 8
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 10,
+        "hostility": 0
+      }
+    },
+    "state_after_delayed": {
+      "emotion": {
+        "anger": 0,
+        "anxiety": 0,
+        "hope": 10
+      },
+      "motivation": {
+        "resolve": 6,
+        "repair_intent": 10
+      },
+      "relationship": {
+        "trust": 10,
+        "hostility": 0
+      }
+    },
+    "dynamics_before": {
+      "goal_failure_risk": 0,
+      "escalation_risk": 0,
+      "negotiation_open": 10
+    },
+    "dynamics_after_delayed": {
+      "goal_failure_risk": 0,
+      "escalation_risk": 0,
+      "negotiation_open": 10
+    },
+    "delayed_horizon": 5,
+    "continuation_protocol": "fixed"
+  }
+]

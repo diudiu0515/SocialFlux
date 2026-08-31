@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://emotree.example/schemas/scenario-v1.json",
+  "title": "EmoTree Stateful Scenario",
+  "type": "object",
+  "required": ["scenario_id", "background", "environment_agent", "evaluated_agent_role", "initial_state", "initial_dynamics", "action_effects", "max_turns"],
+  "properties": {
+    "scenario_id": {"type": "string", "minLength": 1},
+    "background": {"type": "string", "minLength": 1},
+    "environment_agent": {"$ref": "#/$defs/environmentAgent"},
+    "evaluated_agent_role": {"type": "object"},
+    "initial_state": {"$ref": "#/$defs/boundedObject"},
+    "initial_dynamics": {"$ref": "#/$defs/boundedObject"},
+    "action_effects": {"type": "object"},
+    "response_templates": {"type": "object"},
+    "max_turns": {"type": "integer", "minimum": 1},
+    "termination_conditions": {"type": "array"}
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "environmentAgent": {
+      "type": "object",
+      "required": ["persona", "explicit_goal", "hidden_intention"],
+      "properties": {
+        "persona": {"type": "object"},
+        "explicit_goal": {"type": "string"},
+        "hidden_intention": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "boundedObject": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          {"type": "number", "minimum": 0, "maximum": 10},
+          {"$ref": "#/$defs/boundedObject"}
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,1 @@
+根据场景、角色、完整可见历史、当前环境回应和 observable cues，完成一次在线交互。评估维度是 goal achievement、state adaptation、risk management、recovery、relationship outcome。不要输出隐藏状态、隐藏意图、appraisal 或 transition rule。

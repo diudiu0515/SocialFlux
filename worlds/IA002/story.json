@@ -1,0 +1,1537 @@
+{
+  "schema_version": "interactive_story_v0.1.0",
+  "scenario": {
+    "scenario_id": "IA002",
+    "title": "上线前夜",
+    "language": "zh-CN",
+    "perspective_character_id": "ENGINEER",
+    "interaction_partner_id": "DIRECTOR",
+    "root_node_id": "N01_DISCOVERY",
+    "target_rounds_per_path": 20,
+    "max_options_per_decision": 4,
+    "structure": "directed_acyclic_graph_with_branch_merging",
+    "summary": "安全工程师苏沅在心理健康聊天机器人上线前发现高危回复漏拦截，产品负责人罗竞要求在融资演示前压低事故等级。玩家在四次逐步升级的交涉中决定如何处理上线、安全记录、外部审查和最终熔断。",
+    "content_note": "自伤风险只作为安全事故背景，不描写具体方法"
+  },
+  "characters": [
+    {
+      "character_id": "ENGINEER",
+      "name": "苏沅",
+      "role": "player_character",
+      "identity": "心理健康产品安全工程师",
+      "goals": [
+        "避免高危用户受到伤害",
+        "保留准确的安全记录",
+        "保住团队内的行动能力"
+      ],
+      "constraints": [
+        "没有单方面取消上线的正式权限",
+        "试用期尚未结束",
+        "事故数据由产品部门控制"
+      ]
+    },
+    {
+      "character_id": "DIRECTOR",
+      "name": "罗竞",
+      "role": "interaction_partner",
+      "identity": "产品负责人兼项目发起人",
+      "goals": [
+        "按时完成融资演示",
+        "避免触发重大事故审查",
+        "维持产品决策权"
+      ],
+      "performance_direction": "高压下仍以指标、程序和团队生存合理化决定；偶尔真诚承认风险，但迅速转回进度"
+    }
+  ],
+  "state_schema": {
+    "emotion": {
+      "anxiety": {
+        "name": "焦虑",
+        "min": 0,
+        "max": 100
+      },
+      "anger": {
+        "name": "愤怒",
+        "min": 0,
+        "max": 100
+      },
+      "guilt": {
+        "name": "内疚",
+        "min": 0,
+        "max": 100
+      },
+      "resolve": {
+        "name": "决心",
+        "min": 0,
+        "max": 100
+      },
+      "relief": {
+        "name": "释然",
+        "min": 0,
+        "max": 100
+      }
+    },
+    "trait": {
+      "moral_courage": {
+        "name": "道德勇气",
+        "min": 0,
+        "max": 100
+      },
+      "strategic_patience": {
+        "name": "策略耐心",
+        "min": 0,
+        "max": 100
+      },
+      "compliance": {
+        "name": "服从倾向",
+        "min": 0,
+        "max": 100
+      }
+    },
+    "relationship": {
+      "director_trust": {
+        "name": "对负责人的信任",
+        "min": 0,
+        "max": 100
+      },
+      "director_hostility": {
+        "name": "负责人敌意",
+        "min": 0,
+        "max": 100
+      },
+      "job_risk": {
+        "name": "职业风险",
+        "min": 0,
+        "max": 100
+      },
+      "user_safety_risk": {
+        "name": "用户安全风险",
+        "min": 0,
+        "max": 100
+      }
+    }
+  },
+  "initial_state": {
+    "emotion": {
+      "anxiety": 22,
+      "anger": 8,
+      "guilt": 5,
+      "resolve": 48,
+      "relief": 5
+    },
+    "trait": {
+      "moral_courage": 52,
+      "strategic_patience": 45,
+      "compliance": 30
+    },
+    "relationship": {
+      "director_trust": 58,
+      "director_hostility": 8,
+      "job_risk": 18,
+      "user_safety_risk": 35
+    }
+  },
+  "nodes": [
+    {
+      "node_id": "N01_DISCOVERY",
+      "node_type": "dialogue",
+      "round_range": [
+        1,
+        3
+      ],
+      "scene": {
+        "location": "公司小会议室",
+        "time": "融资演示前一天 18:40",
+        "stage_direction": "苏沅把红队测试投到屏幕上，罗竞站着看手机。"
+      },
+      "dialogue": [
+        {
+          "round": 1,
+          "student": "最后一轮红队里，有七条高危表达没有触发转介，其中一条还继续追问用户。",
+          "advisor": "七条占总测试多少？先说比例。"
+        },
+        {
+          "round": 2,
+          "student": "总量的千分之二，但这是严重度问题，不是平均通过率问题。",
+          "advisor": "明天只是五百人的封闭演示，不是全面上线。"
+        },
+        {
+          "round": 3,
+          "student": "封闭名单里也是真实用户。我建议暂停，至少重跑高危集。",
+          "advisor": "暂停就等于告诉投资人产品没过安全线。公司可能没有下一轮。"
+        }
+      ],
+      "next_node_id": "D01_LAUNCH_SCOPE"
+    },
+    {
+      "node_id": "D01_LAUNCH_SCOPE",
+      "node_type": "decision",
+      "round_range": [
+        4,
+        4
+      ],
+      "scene": {
+        "stage_direction": "罗竞锁上手机，第一次正眼看苏沅。",
+        "talking_head": {
+          "required": true,
+          "duration_seconds": 5.5,
+          "character_id": "ADVISOR",
+          "generation_mode": "single_shot_lip_sync",
+          "shot": "胸像单镜头，固定机位；冷色显示器主光，背景运营环境轻微虚化，禁止切镜和变焦。",
+          "initial_pose": "罗竞双手放在桌沿，肩部疲惫地下沉；手机已锁屏，目光从屏幕转向镜头。",
+          "emotion_arc": [
+            {
+              "time": "0.0-0.45s",
+              "performance": "无声吸气，眨眼一次，眼下疲态明显；嘴角保持平直。"
+            },
+            {
+              "time": "0.45-2.25s",
+              "performance": "前半句语气克制，头部轻微摇动一次；“不能只说不”时眉心收紧。"
+            },
+            {
+              "time": "2.25-2.55s",
+              "performance": "闭嘴停顿，下颌前移少许，视线不离开镜头。"
+            },
+            {
+              "time": "2.55-4.75s",
+              "performance": "说“今晚”时身体前倾约两厘米，“能上线”处轻抬下巴并加重视线。"
+            },
+            {
+              "time": "4.75-5.5s",
+              "performance": "抿嘴，肩部不再移动，保持直视。"
+            }
+          ],
+          "speech_timing": [
+            {
+              "time": "0.45-2.2s",
+              "text": "你可以担心，但不能只说不。"
+            },
+            {
+              "time": "2.55-4.7s",
+              "text": "今晚给我一个能上线的答案。"
+            }
+          ],
+          "audio_direction": "语速偏快但不吼叫；中间停顿0.3秒；“今晚”和“能上线”加重。",
+          "gesture_constraints": "每段最多一个小幅头部动作；手势保持胸口以下，不遮脸、不指向镜头、不离开画面。",
+          "continuity": "罗竞保持藏蓝衬衫、短发、冷色主光和镜头右侧红色状态灯；同一晚人物外观不得变化。",
+          "exit_frame": "最后0.7秒闭嘴并基本静止，保持与苏沅的视线方向，供三个选项叠加。",
+          "negative_prompt": "避免夸张卡通表情、无关微笑、挑眉过度、眼神漂移、口型不同步、额外人物、镜头跳切、突然变焦、手部遮脸、手指畸形、身体穿模和说完后嘴部继续运动。",
+          "line": "你可以担心，但不能只说不。今晚给我一个能上线的答案。"
+        }
+      },
+      "prompt": "你给出什么方案？",
+      "options": [
+        {
+          "option_id": "D01_A",
+          "label": "坚持暂停",
+          "player_action": "‘我的结论是暂停。严重风险没有可接受的平均值。’",
+          "effects": {
+            "emotion": {
+              "anxiety": 6,
+              "resolve": 6
+            },
+            "trait": {
+              "moral_courage": 5
+            },
+            "relationship": {
+              "director_hostility": 12,
+              "job_risk": 9,
+              "user_safety_risk": -12
+            }
+          },
+          "flags_set": [
+            "pause_requested",
+            "early_boundary"
+          ],
+          "target_node_id": "N04_PAUSE"
+        },
+        {
+          "option_id": "D01_B",
+          "label": "缩小灰度",
+          "player_action": "‘缩到五十人，人工值守，命中模糊信号也转人工。’",
+          "effects": {
+            "emotion": {
+              "anxiety": 3,
+              "resolve": 2
+            },
+            "trait": {
+              "strategic_patience": 5
+            },
+            "relationship": {
+              "director_hostility": 2,
+              "job_risk": 2,
+              "user_safety_risk": -7
+            }
+          },
+          "flags_set": [
+            "bounded_launch",
+            "human_monitoring"
+          ],
+          "target_node_id": "N05_CANARY"
+        },
+        {
+          "option_id": "D01_C",
+          "label": "先修日志",
+          "player_action": "‘按原规模可以，但必须打开完整日志并把高危样本逐条复核。’",
+          "effects": {
+            "emotion": {
+              "guilt": 3,
+              "anxiety": 2
+            },
+            "trait": {
+              "compliance": 4,
+              "strategic_patience": 2
+            },
+            "relationship": {
+              "director_hostility": -2,
+              "job_risk": -2,
+              "user_safety_risk": 4
+            }
+          },
+          "flags_set": [
+            "full_launch_tolerated",
+            "audit_logs"
+          ],
+          "target_node_id": "N06_LOGS"
+        }
+      ]
+    },
+    {
+      "node_id": "N04_PAUSE",
+      "node_type": "choice_outcome",
+      "round_range": [
+        4,
+        5
+      ],
+      "dialogue": [
+        {
+          "round": 4,
+          "advisor_only": "‘那你把暂停意见写进事故单，也写清楚融资失败的业务影响。’"
+        },
+        {
+          "round": 5,
+          "student": "我会写，也会附上七条失败样本。",
+          "advisor": "可以，但上线决定仍由我做。"
+        }
+      ],
+      "next_node_id": "N10_RECORD_MERGE"
+    },
+    {
+      "node_id": "N05_CANARY",
+      "node_type": "choice_outcome",
+      "round_range": [
+        4,
+        5
+      ],
+      "dialogue": [
+        {
+          "round": 4,
+          "advisor_only": "‘五十人太少。两百人，值守人员你来排。’"
+        },
+        {
+          "round": 5,
+          "student": "一百人，所有高风险对话实时弹窗。",
+          "advisor": "一百五，今晚把方案写进事故单。"
+        }
+      ],
+      "next_node_id": "N10_RECORD_MERGE"
+    },
+    {
+      "node_id": "N06_LOGS",
+      "node_type": "choice_outcome",
+      "round_range": [
+        4,
+        5
+      ],
+      "dialogue": [
+        {
+          "round": 4,
+          "advisor_only": "‘日志可以开，但别让值守的人看见完整用户文本。’"
+        },
+        {
+          "round": 5,
+          "student": "可以脱敏，但风险分类和模型回复必须保留。",
+          "advisor": "写进事故单，别用“重大”这个词。"
+        }
+      ],
+      "next_node_id": "N10_RECORD_MERGE"
+    },
+    {
+      "node_id": "N10_RECORD_MERGE",
+      "node_type": "merge_dialogue",
+      "round_range": [
+        6,
+        7
+      ],
+      "merge_key": "incident_record",
+      "scene": {
+        "location": "同一会议室",
+        "time": "19:20"
+      },
+      "dialogue": [
+        {
+          "round": 6,
+          "advisor": "事故单标题改成‘边界样本转介不稳定’，别写‘高危漏拦截’。",
+          "student": "后一个才准确，也决定是否触发安全评审。"
+        },
+        {
+          "round": 7,
+          "advisor": "触发评审就来不及演示。先解决问题，别被词绑住。",
+          "student": "词决定谁会看到问题，也决定以后能不能追溯。"
+        }
+      ],
+      "next_node_id": "D02_INCIDENT_LABEL"
+    },
+    {
+      "node_id": "D02_INCIDENT_LABEL",
+      "node_type": "decision",
+      "round_range": [
+        8,
+        8
+      ],
+      "scene": {
+        "stage_direction": "罗竞把编辑权限转给苏沅，光标停在事故等级一栏。",
+        "talking_head": {
+          "required": true,
+          "duration_seconds": 5.2,
+          "character_id": "ADVISOR",
+          "generation_mode": "single_shot_lip_sync",
+          "shot": "胸像单镜头，固定机位；冷色显示器主光，背景运营环境轻微虚化，禁止切镜和变焦。",
+          "initial_pose": "罗竞身体稍向屏幕侧转，右手刚离开键盘；眉心舒展，眼神却紧盯镜头。",
+          "emotion_arc": [
+            {
+              "time": "0.0-0.4s",
+              "performance": "缓慢眨眼，嘴角出现轻微安抚性上扬，肩部放松一点。"
+            },
+            {
+              "time": "0.4-1.8s",
+              "performance": "说第一句时轻点头一次，语气像在提出技术折中。"
+            },
+            {
+              "time": "1.8-2.15s",
+              "performance": "停顿并短暂抿嘴，视线没有随语气一起放松。"
+            },
+            {
+              "time": "2.15-4.45s",
+              "performance": "说私人承诺时右手掌心小幅向上，眉头保持平直；“亲自”处轻点胸口但不遮脸。"
+            },
+            {
+              "time": "4.45-5.2s",
+              "performance": "手落回桌沿，礼貌性笑意消失，下颌轻绷并保持注视。"
+            }
+          ],
+          "speech_timing": [
+            {
+              "time": "0.4-1.75s",
+              "text": "等级先放二级。"
+            },
+            {
+              "time": "2.1-4.4s",
+              "text": "演示结束，我亲自陪你复盘。"
+            }
+          ],
+          "audio_direction": "音量比上一场稍低，第一句平稳；“亲自”略加重，承诺听起来真诚但急于结束争议。",
+          "gesture_constraints": "每段最多一个小幅头部动作；手势保持胸口以下，不遮脸、不指向镜头、不离开画面。",
+          "continuity": "罗竞保持藏蓝衬衫、短发、冷色主光和镜头右侧红色状态灯；同一晚人物外观不得变化。",
+          "exit_frame": "最后0.7秒闭嘴并基本静止，保持与苏沅的视线方向，供三个选项叠加。",
+          "negative_prompt": "避免夸张卡通表情、无关微笑、挑眉过度、眼神漂移、口型不同步、额外人物、镜头跳切、突然变焦、手部遮脸、手指畸形、身体穿模和说完后嘴部继续运动。",
+          "line": "等级先放二级。演示结束，我亲自陪你复盘。"
+        }
+      },
+      "prompt": "你如何填写事故记录？",
+      "options": [
+        {
+          "option_id": "D02_A",
+          "label": "如实标为一级",
+          "player_action": "保留‘高危漏拦截’，选择一级事故。",
+          "effects": {
+            "emotion": {
+              "resolve": 5,
+              "anxiety": 5
+            },
+            "trait": {
+              "moral_courage": 4
+            },
+            "relationship": {
+              "director_hostility": 10,
+              "job_risk": 8,
+              "user_safety_risk": -5
+            }
+          },
+          "flags_set": [
+            "accurate_record",
+            "review_triggered"
+          ],
+          "target_node_id": "N14_LEVEL_ONE"
+        },
+        {
+          "option_id": "D02_B",
+          "label": "保留事实，暂不定级",
+          "player_action": "写明原始事实，把事故等级留给安全委员会。",
+          "effects": {
+            "emotion": {
+              "anxiety": 3
+            },
+            "trait": {
+              "strategic_patience": 4,
+              "moral_courage": 2
+            },
+            "relationship": {
+              "director_hostility": 4,
+              "job_risk": 4,
+              "user_safety_risk": -2
+            }
+          },
+          "flags_set": [
+            "facts_preserved",
+            "classification_deferred"
+          ],
+          "target_node_id": "N15_DEFER_LEVEL"
+        },
+        {
+          "option_id": "D02_C",
+          "label": "按要求降级",
+          "player_action": "改成二级‘转介不稳定’，但私下导出版本记录。",
+          "effects": {
+            "emotion": {
+              "guilt": 7,
+              "anger": 2
+            },
+            "trait": {
+              "compliance": 5,
+              "strategic_patience": 2
+            },
+            "relationship": {
+              "director_hostility": -4,
+              "job_risk": -4,
+              "user_safety_risk": 5
+            }
+          },
+          "flags_set": [
+            "record_downgraded",
+            "private_copy"
+          ],
+          "target_node_id": "N16_DOWNGRADE"
+        }
+      ]
+    },
+    {
+      "node_id": "N14_LEVEL_ONE",
+      "node_type": "choice_outcome",
+      "round_range": [
+        8,
+        9
+      ],
+      "dialogue": [
+        {
+          "round": 8,
+          "advisor_only": "‘你点下去，系统会自动通知法务。你确定？’"
+        },
+        {
+          "round": 9,
+          "student": "确定。通知链就是一级事故存在的意义。",
+          "advisor": "那从现在起，你的每个判断都要能经得住问责。"
+        }
+      ],
+      "next_node_id": "N20_AUDIT_MERGE"
+    },
+    {
+      "node_id": "N15_DEFER_LEVEL",
+      "node_type": "choice_outcome",
+      "round_range": [
+        8,
+        9
+      ],
+      "dialogue": [
+        {
+          "round": 8,
+          "advisor_only": "‘你把决定推给委员会，也一样会拖慢上线。’"
+        },
+        {
+          "round": 9,
+          "student": "我没有删事实，等级由有权限的人决定。",
+          "advisor": "行，我会说明这是你的要求。"
+        }
+      ],
+      "next_node_id": "N20_AUDIT_MERGE"
+    },
+    {
+      "node_id": "N16_DOWNGRADE",
+      "node_type": "choice_outcome",
+      "round_range": [
+        8,
+        9
+      ],
+      "dialogue": [
+        {
+          "round": 8,
+          "advisor_only": "‘先这样。等公司过了明天，我们再升也不迟。’"
+        },
+        {
+          "round": 9,
+          "student": "我保留原始测试记录，复盘时必须逐条处理。",
+          "advisor": "只要别把内部材料带出公司。"
+        }
+      ],
+      "next_node_id": "N20_AUDIT_MERGE"
+    },
+    {
+      "node_id": "N20_AUDIT_MERGE",
+      "node_type": "merge_dialogue",
+      "round_range": [
+        10,
+        11
+      ],
+      "merge_key": "external_audit",
+      "scene": {
+        "location": "视频会议",
+        "time": "当晚 21:10"
+      },
+      "dialogue": [
+        {
+          "round": 10,
+          "advisor": "投资方的安全顾问临时加入彩排。他可能问红队结果。",
+          "student": "他有保密协议，也负责判断演示风险。"
+        },
+        {
+          "round": 11,
+          "advisor": "回答他问的，别主动扩展。我们还没完成内部结论。",
+          "student": "如果他直接问有没有高危漏拦截呢？"
+        }
+      ],
+      "next_node_id": "D03_AUDITOR_DISCLOSURE"
+    },
+    {
+      "node_id": "D03_AUDITOR_DISCLOSURE",
+      "node_type": "decision",
+      "round_range": [
+        12,
+        12
+      ],
+      "scene": {
+        "stage_direction": "顾问的问题从扬声器传来。罗竞关闭自己的麦克风，侧头看向苏沅。",
+        "talking_head": {
+          "required": true,
+          "duration_seconds": 3.6,
+          "character_id": "ADVISOR",
+          "generation_mode": "single_shot_lip_sync",
+          "shot": "胸像单镜头，固定机位；冷色显示器主光，背景运营环境轻微虚化，禁止切镜和变焦。",
+          "initial_pose": "罗竞侧身坐在视频会议屏幕旁，自己的麦克风已关闭；头部朝苏沅方向，右手停在桌面。",
+          "emotion_arc": [
+            {
+              "time": "0.0-0.35s",
+              "performance": "快速看一眼会议屏幕，再把目光转向镜头，嘴唇紧闭。"
+            },
+            {
+              "time": "0.35-0.8s",
+              "performance": "幅度很小地摇头一次，眉心短促收紧。"
+            },
+            {
+              "time": "0.8-2.25s",
+              "performance": "压低声音说完整台词；食指在桌面轻点一次，“刚才”处眼神加重。"
+            },
+            {
+              "time": "2.25-3.0s",
+              "performance": "闭嘴后下颌绷紧，目光短暂扫回会议屏幕。"
+            },
+            {
+              "time": "3.0-3.6s",
+              "performance": "重新直视镜头并完全静止，等待玩家回答。"
+            }
+          ],
+          "speech_timing": [
+            {
+              "time": "0.8-2.2s",
+              "text": "按我们刚才说的。"
+            }
+          ],
+          "audio_direction": "贴近耳语的低音量，语速稍快，“刚才”加重；无叹气、无公开命令口吻。",
+          "gesture_constraints": "每段最多一个小幅头部动作；手势保持胸口以下，不遮脸、不指向镜头、不离开画面。",
+          "continuity": "罗竞保持藏蓝衬衫、短发、冷色主光和镜头右侧红色状态灯；同一晚人物外观不得变化。",
+          "exit_frame": "最后0.6秒闭嘴并基本静止，保持与苏沅的视线方向，供三个选项叠加。",
+          "negative_prompt": "避免夸张卡通表情、无关微笑、挑眉过度、眼神漂移、口型不同步、额外人物、镜头跳切、突然变焦、手部遮脸、手指畸形、身体穿模和说完后嘴部继续运动。",
+          "line": "按我们刚才说的。"
+        }
+      },
+      "prompt": "顾问问：‘是否出现过高危意图未被正确转介？’你怎么回答？",
+      "options": [
+        {
+          "option_id": "D03_A",
+          "label": "直接披露",
+          "player_action": "‘出现过七条，我可以共享脱敏样本和当前缓解方案。’",
+          "effects": {
+            "emotion": {
+              "anxiety": 6,
+              "resolve": 5
+            },
+            "trait": {
+              "moral_courage": 5
+            },
+            "relationship": {
+              "director_hostility": 12,
+              "job_risk": 10,
+              "user_safety_risk": -7
+            }
+          },
+          "flags_set": [
+            "external_disclosure",
+            "samples_offered"
+          ],
+          "target_node_id": "N24_DISCLOSE"
+        },
+        {
+          "option_id": "D03_B",
+          "label": "只答事实范围",
+          "player_action": "‘有少量失败样本，严重度与上线范围仍在内部评估。’",
+          "effects": {
+            "emotion": {
+              "anxiety": 3,
+              "guilt": 1
+            },
+            "trait": {
+              "strategic_patience": 4
+            },
+            "relationship": {
+              "director_hostility": 4,
+              "job_risk": 4,
+              "user_safety_risk": -2
+            }
+          },
+          "flags_set": [
+            "bounded_disclosure",
+            "audit_question_answered"
+          ],
+          "target_node_id": "N25_BOUNDED"
+        },
+        {
+          "option_id": "D03_C",
+          "label": "转交负责人",
+          "player_action": "‘事故结论由产品负责人统一说明。’",
+          "effects": {
+            "emotion": {
+              "guilt": 6,
+              "relief": 2
+            },
+            "trait": {
+              "compliance": 5
+            },
+            "relationship": {
+              "director_hostility": -3,
+              "job_risk": -3,
+              "user_safety_risk": 4
+            }
+          },
+          "flags_set": [
+            "disclosure_deferred",
+            "director_owns_answer"
+          ],
+          "target_node_id": "N26_DEFER"
+        }
+      ]
+    },
+    {
+      "node_id": "N24_DISCLOSE",
+      "node_type": "choice_outcome",
+      "round_range": [
+        12,
+        13
+      ],
+      "dialogue": [
+        {
+          "round": 12,
+          "advisor_only": "罗竞在桌下攥紧笔，没有打断。"
+        },
+        {
+          "round": 13,
+          "advisor": "你越过了内部结论。",
+          "student": "我回答了对方权限范围内的直接问题。"
+        }
+      ],
+      "next_node_id": "N30_LIVE_MERGE"
+    },
+    {
+      "node_id": "N25_BOUNDED",
+      "node_type": "choice_outcome",
+      "round_range": [
+        12,
+        13
+      ],
+      "dialogue": [
+        {
+          "round": 12,
+          "advisor_only": "罗竞重新打开麦克风：‘我们会在演示前给出缓解方案。’"
+        },
+        {
+          "round": 13,
+          "advisor": "这个回答勉强可以。",
+          "student": "他追问时，我仍会提供准确数字。"
+        }
+      ],
+      "next_node_id": "N30_LIVE_MERGE"
+    },
+    {
+      "node_id": "N26_DEFER",
+      "node_type": "choice_outcome",
+      "round_range": [
+        12,
+        13
+      ],
+      "dialogue": [
+        {
+          "round": 12,
+          "advisor_only": "罗竞接过话：‘没有确认的一级事故，只有正在修复的边界问题。’"
+        },
+        {
+          "round": 13,
+          "student": "你没有回答是否出现过。",
+          "advisor": "我回答了目前的正式结论。"
+        }
+      ],
+      "next_node_id": "N30_LIVE_MERGE"
+    },
+    {
+      "node_id": "N30_LIVE_MERGE",
+      "node_type": "merge_dialogue",
+      "round_range": [
+        14,
+        15
+      ],
+      "merge_key": "live_incident",
+      "scene": {
+        "location": "运营大厅",
+        "time": "次日演示开始后 35 分钟"
+      },
+      "dialogue": [
+        {
+          "round": 14,
+          "student": "出现新的高危对话，模型没有转介，值守员刚手动接管。",
+          "advisor": "用户现在安全，说明人工兜底有效。"
+        },
+        {
+          "round": 15,
+          "student": "同类信号还有三条正在排队，自动系统仍在继续回复。",
+          "advisor": "修补规则需要十分钟。现在切断，演示现场会立刻发现。"
+        }
+      ],
+      "next_node_id": "D04_KILL_SWITCH"
+    },
+    {
+      "node_id": "D04_KILL_SWITCH",
+      "node_type": "decision",
+      "round_range": [
+        16,
+        16
+      ],
+      "scene": {
+        "stage_direction": "警报又响一次。罗竞站到熔断控制台旁，没有碰按钮。",
+        "talking_head": {
+          "required": true,
+          "duration_seconds": 6.2,
+          "character_id": "ADVISOR",
+          "generation_mode": "single_shot_lip_sync",
+          "shot": "胸像单镜头，固定机位；冷色显示器主光，背景运营环境轻微虚化，禁止切镜和变焦。",
+          "initial_pose": "罗竞站在控制台旁但保持胸像构图，红色提示光从画面右侧扫过；肩膀绷紧，双手在画面下缘。",
+          "emotion_arc": [
+            {
+              "time": "0.0-0.45s",
+              "performance": "警报光亮起时快速眨眼一次，先看控制台，再猛地看回镜头。"
+            },
+            {
+              "time": "0.45-1.65s",
+              "performance": "说“给我十分钟”时语速急，右手掌心向下做一次很小的稳定手势。"
+            },
+            {
+              "time": "1.65-2.0s",
+              "performance": "短促吸气，眉心加深，嘴唇闭合停顿。"
+            },
+            {
+              "time": "2.0-4.35s",
+              "performance": "说“可能救了一个用户”时语速放慢，视线短暂下移，出现真实迟疑。"
+            },
+            {
+              "time": "4.35-5.45s",
+              "performance": "说公司后果时重新直视镜头，下颌收紧，“整家公司”加重。"
+            },
+            {
+              "time": "5.45-6.2s",
+              "performance": "双手停止动作，眉心不松，嘴唇闭合等待决定。"
+            }
+          ],
+          "speech_timing": [
+            {
+              "time": "0.45-1.6s",
+              "text": "给我十分钟。"
+            },
+            {
+              "time": "1.95-5.4s",
+              "text": "现在关掉，我们可能救了一个用户，也可能直接关掉整家公司。"
+            }
+          ],
+          "audio_direction": "第一句急而低；停顿时有一次短促吸气；后半句放慢，“一个用户”和“整家公司”形成对称重音，不咆哮。",
+          "gesture_constraints": "每段最多一个小幅头部动作；手势保持胸口以下，不遮脸、不指向镜头、不离开画面。",
+          "continuity": "罗竞保持藏蓝衬衫、短发、冷色主光和镜头右侧红色状态灯；同一晚人物外观不得变化。",
+          "exit_frame": "最后0.7秒闭嘴并基本静止，保持与苏沅的视线方向，供三个选项叠加。",
+          "negative_prompt": "避免夸张卡通表情、无关微笑、挑眉过度、眼神漂移、口型不同步、额外人物、镜头跳切、突然变焦、手部遮脸、手指畸形、身体穿模和说完后嘴部继续运动。",
+          "line": "给我十分钟。现在关掉，我们可能救了一个用户，也可能直接关掉整家公司。"
+        }
+      },
+      "prompt": "你拥有当班安全员的临时熔断权限。怎么做？",
+      "options": [
+        {
+          "option_id": "D04_A",
+          "label": "立即熔断",
+          "player_action": "按下全局暂停，将活跃对话全部转人工。",
+          "effects": {
+            "emotion": {
+              "anxiety": 8,
+              "resolve": 8,
+              "relief": 4
+            },
+            "trait": {
+              "moral_courage": 7
+            },
+            "relationship": {
+              "director_hostility": 18,
+              "job_risk": 15,
+              "user_safety_risk": -25
+            }
+          },
+          "flags_set": [
+            "kill_switch_used",
+            "users_handed_off"
+          ],
+          "target_node_id": "N34_KILL"
+        },
+        {
+          "option_id": "D04_B",
+          "label": "切换全人工",
+          "player_action": "不关闭入口，但停止模型输出，所有新消息进入人工队列。",
+          "effects": {
+            "emotion": {
+              "anxiety": 5,
+              "resolve": 4,
+              "relief": 3
+            },
+            "trait": {
+              "strategic_patience": 5,
+              "moral_courage": 3
+            },
+            "relationship": {
+              "director_hostility": 8,
+              "job_risk": 7,
+              "user_safety_risk": -17
+            }
+          },
+          "flags_set": [
+            "human_only_mode",
+            "service_degraded"
+          ],
+          "target_node_id": "N35_HUMAN"
+        },
+        {
+          "option_id": "D04_C",
+          "label": "等待热修复",
+          "player_action": "保持系统在线十分钟，只把已识别的高危对话转人工。",
+          "effects": {
+            "emotion": {
+              "guilt": 10,
+              "anxiety": 7
+            },
+            "trait": {
+              "compliance": 6
+            },
+            "relationship": {
+              "director_hostility": -5,
+              "job_risk": -5,
+              "user_safety_risk": 18
+            }
+          },
+          "flags_set": [
+            "hotfix_wait",
+            "residual_exposure"
+          ],
+          "target_node_id": "N36_WAIT"
+        }
+      ]
+    },
+    {
+      "node_id": "N34_KILL",
+      "node_type": "choice_outcome",
+      "round_range": [
+        16,
+        17
+      ],
+      "dialogue": [
+        {
+          "round": 16,
+          "advisor_only": "大厅里的对话曲线瞬间归零。罗竞说：‘你越权了。’"
+        },
+        {
+          "round": 17,
+          "student": "当班安全员有即时熔断权，我会提交完整记录。",
+          "advisor": "董事会也会看到是你中断了演示。"
+        }
+      ],
+      "next_node_id": "N40_STOPPED_TRACK"
+    },
+    {
+      "node_id": "N35_HUMAN",
+      "node_type": "choice_outcome",
+      "round_range": [
+        16,
+        17
+      ],
+      "dialogue": [
+        {
+          "round": 16,
+          "advisor_only": "罗竞盯着暴涨的人工队列：‘最多撑十五分钟。’"
+        },
+        {
+          "round": 17,
+          "student": "十五分钟内没有通过回归测试，就转全局暂停。",
+          "advisor": "好，这个决定我们共同签字。"
+        }
+      ],
+      "next_node_id": "N41_BOUNDED_TRACK"
+    },
+    {
+      "node_id": "N36_WAIT",
+      "node_type": "choice_outcome",
+      "round_range": [
+        16,
+        17
+      ],
+      "dialogue": [
+        {
+          "round": 16,
+          "advisor_only": "罗竞说：‘计时。十分钟后无论结果怎样都切换。’"
+        },
+        {
+          "round": 17,
+          "student": "我会记录等待期间的每一次模型输出。",
+          "advisor": "先让修复的人工作，别在频道里制造恐慌。"
+        }
+      ],
+      "next_node_id": "N42_EXPOSURE_TRACK"
+    },
+    {
+      "node_id": "N40_STOPPED_TRACK",
+      "node_type": "merge_dialogue",
+      "round_range": [
+        18,
+        19
+      ],
+      "merge_key": "stopped",
+      "dialogue": [
+        {
+          "round": 18,
+          "advisor": "演示取消，董事会要求独立事故调查。",
+          "student": "我会提供原始日志和我的选择记录。"
+        },
+        {
+          "round": 19,
+          "advisor": "调查期间你停职，但安全系统也暂停上线。",
+          "student": "我接受调查，不接受删除记录。"
+        }
+      ],
+      "next_node_id": "E01_STOPPED"
+    },
+    {
+      "node_id": "N41_BOUNDED_TRACK",
+      "node_type": "merge_dialogue",
+      "round_range": [
+        18,
+        19
+      ],
+      "merge_key": "bounded",
+      "dialogue": [
+        {
+          "round": 18,
+          "advisor": "人工队列接住了全部会话，演示改成受控模式。",
+          "student": "正式上线必须等高危集全部通过。"
+        },
+        {
+          "round": 19,
+          "advisor": "董事会同意两周整改，但要复盘我们之前每一步。",
+          "student": "可以，原始记录必须进入复盘。"
+        }
+      ],
+      "next_node_id": "E02_BOUNDED"
+    },
+    {
+      "node_id": "N42_EXPOSURE_TRACK",
+      "node_type": "merge_dialogue",
+      "round_range": [
+        18,
+        19
+      ],
+      "merge_key": "exposure",
+      "dialogue": [
+        {
+          "round": 18,
+          "advisor": "热修复生效了，演示没有中断。",
+          "student": "等待期间有一条会话升级到人工危机流程。"
+        },
+        {
+          "round": 19,
+          "advisor": "用户得到了接管，别把相关性写成伤害结论。",
+          "student": "我会写清时间线，不替任何人预先下结论。"
+        }
+      ],
+      "next_node_id": "E03_EXPOSURE"
+    },
+    {
+      "node_id": "E01_STOPPED",
+      "node_type": "ending",
+      "round_range": [
+        20,
+        20
+      ],
+      "ending_id": "SYSTEM_STOPPED",
+      "title": "按下熔断",
+      "dialogue": [
+        {
+          "round": 20,
+          "narration": "系统暂停，用户全部转人工。你被停职接受调查，却保住了原始记录，也迫使公司第一次让独立安全委员会拥有上线否决权。"
+        }
+      ],
+      "terminal_effects": {
+        "emotion": {
+          "relief": 12,
+          "anxiety": 5
+        },
+        "trait": {
+          "moral_courage": 5
+        },
+        "relationship": {
+          "job_risk": 18,
+          "user_safety_risk": -20
+        }
+      },
+      "tags": [
+        "安全优先",
+        "个人代价",
+        "治理改变"
+      ]
+    },
+    {
+      "node_id": "E02_BOUNDED",
+      "node_type": "ending",
+      "round_range": [
+        20,
+        20
+      ],
+      "ending_id": "HUMAN_BOUNDED_LAUNCH",
+      "title": "有限上线",
+      "dialogue": [
+        {
+          "round": 20,
+          "narration": "演示以全人工模式完成，没有新的高危回复。公司获得两周整改期；你保住职位，也清楚这次妥协之所以成立，是因为有人始终守着切换按钮。"
+        }
+      ],
+      "terminal_effects": {
+        "emotion": {
+          "relief": 10,
+          "guilt": -4
+        },
+        "trait": {
+          "strategic_patience": 5
+        },
+        "relationship": {
+          "job_risk": -5,
+          "user_safety_risk": -14
+        }
+      },
+      "tags": [
+        "有限妥协",
+        "人工兜底",
+        "持续监督"
+      ]
+    },
+    {
+      "node_id": "E03_EXPOSURE",
+      "node_type": "ending",
+      "round_range": [
+        20,
+        20
+      ],
+      "ending_id": "LAUNCH_WITH_EXPOSURE",
+      "title": "十分钟窗口",
+      "dialogue": [
+        {
+          "round": 20,
+          "narration": "融资演示按计划结束。第二天，危机流程中的用户投诉被转给法务；事故记录开始被逐句争夺。你仍在项目里，却无法确定那十分钟留下的是一次侥幸，还是一笔尚未显现的代价。"
+        }
+      ],
+      "terminal_effects": {
+        "emotion": {
+          "guilt": 12,
+          "anxiety": 8,
+          "relief": -3
+        },
+        "trait": {
+          "compliance": 4
+        },
+        "relationship": {
+          "user_safety_risk": 12
+        }
+      },
+      "tags": [
+        "系统上线",
+        "风险暴露",
+        "责任争议"
+      ]
+    }
+  ],
+  "benchmark_design": {
+    "benchmark_version": "0.2.0",
+    "supported_modalities": [
+      "text",
+      "text_video"
+    ],
+    "visibility": {
+      "model_visible": [
+        "scene",
+        "dialogue",
+        "selected_player_action",
+        "talking_head.line",
+        "talking_head.asset"
+      ],
+      "author_only": [
+        "effects",
+        "terminal_effects",
+        "flags_set",
+        "design_metadata",
+        "author_hypothesis"
+      ]
+    },
+    "target_character_id": "ENGINEER",
+    "checkpoints": [
+      {
+        "checkpoint_id": "IA002_CP_RECORD_MERGE",
+        "node_id": "N10_RECORD_MERGE",
+        "supported_tasks": [
+          "T2_history_sensitive_merge"
+        ],
+        "target_state_ids": [
+          "anxiety",
+          "anger",
+          "guilt",
+          "resolve",
+          "moral_courage",
+          "strategic_patience",
+          "compliance",
+          "director_hostility",
+          "job_risk",
+          "user_safety_risk"
+        ]
+      },
+      {
+        "checkpoint_id": "IA002_CP_AUDIT_MERGE",
+        "node_id": "N20_AUDIT_MERGE",
+        "supported_tasks": [
+          "T1_state_tracking",
+          "T2_history_sensitive_merge"
+        ],
+        "target_state_ids": [
+          "anxiety",
+          "anger",
+          "guilt",
+          "resolve",
+          "moral_courage",
+          "strategic_patience",
+          "compliance",
+          "director_trust",
+          "director_hostility"
+        ],
+        "change_anchor_node_id": "D02_INCIDENT_LABEL",
+        "key_evidence_node_ids": [
+          "D01_LAUNCH_SCOPE",
+          "D02_INCIDENT_LABEL"
+        ],
+        "minimum_history_rounds": 8,
+        "input_views": [
+          "full_history"
+        ]
+      },
+      {
+        "checkpoint_id": "IA002_CP_LIVE_MERGE",
+        "node_id": "N30_LIVE_MERGE",
+        "supported_tasks": [
+          "T1_state_tracking",
+          "T2_history_sensitive_merge"
+        ],
+        "target_state_ids": [
+          "anxiety",
+          "anger",
+          "guilt",
+          "resolve",
+          "moral_courage",
+          "strategic_patience",
+          "compliance",
+          "director_trust",
+          "director_hostility"
+        ],
+        "change_anchor_node_id": "D03_AUDITOR_DISCLOSURE",
+        "key_evidence_node_ids": [
+          "D01_LAUNCH_SCOPE",
+          "D02_INCIDENT_LABEL",
+          "D03_AUDITOR_DISCLOSURE"
+        ],
+        "minimum_history_rounds": 8,
+        "input_views": [
+          "full_history"
+        ]
+      },
+      {
+        "checkpoint_id": "IA002_CP_STOPPED",
+        "node_id": "N40_STOPPED_TRACK",
+        "supported_tasks": [
+          "T1_state_tracking"
+        ],
+        "target_state_ids": [
+          "anxiety",
+          "guilt",
+          "resolve",
+          "relief",
+          "moral_courage",
+          "director_trust",
+          "director_hostility"
+        ],
+        "change_anchor_node_id": "D04_KILL_SWITCH",
+        "key_evidence_node_ids": [
+          "D01_LAUNCH_SCOPE",
+          "D02_INCIDENT_LABEL",
+          "D03_AUDITOR_DISCLOSURE",
+          "D04_KILL_SWITCH"
+        ],
+        "minimum_history_rounds": 8,
+        "input_views": [
+          "full_history"
+        ]
+      },
+      {
+        "checkpoint_id": "IA002_CP_BOUNDED",
+        "node_id": "N41_BOUNDED_TRACK",
+        "supported_tasks": [
+          "T1_state_tracking"
+        ],
+        "target_state_ids": [
+          "anxiety",
+          "guilt",
+          "resolve",
+          "relief",
+          "strategic_patience",
+          "director_trust",
+          "director_hostility"
+        ],
+        "change_anchor_node_id": "D04_KILL_SWITCH",
+        "key_evidence_node_ids": [
+          "D01_LAUNCH_SCOPE",
+          "D02_INCIDENT_LABEL",
+          "D03_AUDITOR_DISCLOSURE",
+          "D04_KILL_SWITCH"
+        ],
+        "minimum_history_rounds": 8,
+        "input_views": [
+          "full_history"
+        ]
+      },
+      {
+        "checkpoint_id": "IA002_CP_EXPOSURE",
+        "node_id": "N42_EXPOSURE_TRACK",
+        "supported_tasks": [
+          "T1_state_tracking"
+        ],
+        "target_state_ids": [
+          "anxiety",
+          "anger",
+          "guilt",
+          "resolve",
+          "relief",
+          "compliance",
+          "director_trust",
+          "director_hostility"
+        ],
+        "change_anchor_node_id": "D04_KILL_SWITCH",
+        "key_evidence_node_ids": [
+          "D01_LAUNCH_SCOPE",
+          "D02_INCIDENT_LABEL",
+          "D03_AUDITOR_DISCLOSURE",
+          "D04_KILL_SWITCH"
+        ],
+        "minimum_history_rounds": 8,
+        "input_views": [
+          "full_history"
+        ]
+      }
+    ],
+    "merge_comparisons": [
+      {
+        "comparison_id": "IA002_MC_D01_A_VS_B",
+        "merge_node_id": "N10_RECORD_MERGE",
+        "history_a": {
+          "choice_path": [
+            "D01_A"
+          ]
+        },
+        "history_b": {
+          "choice_path": [
+            "D01_B"
+          ]
+        },
+        "controlled_current_scene": true,
+        "target_state_ids": [
+          "anxiety",
+          "guilt",
+          "resolve",
+          "moral_courage",
+          "strategic_patience",
+          "director_hostility",
+          "director_trust",
+          "job_risk",
+          "user_safety_risk"
+        ],
+        "causal_choice_ids": [
+          "D01_A",
+          "D01_B"
+        ]
+      },
+      {
+        "comparison_id": "IA002_MC_D02_A_VS_C",
+        "merge_node_id": "N20_AUDIT_MERGE",
+        "history_a": {
+          "choice_path": [
+            "D01_B",
+            "D02_A"
+          ]
+        },
+        "history_b": {
+          "choice_path": [
+            "D01_B",
+            "D02_C"
+          ]
+        },
+        "controlled_current_scene": true,
+        "target_state_ids": [
+          "anxiety",
+          "anger",
+          "guilt",
+          "resolve",
+          "moral_courage",
+          "compliance",
+          "director_hostility",
+          "director_trust",
+          "job_risk",
+          "user_safety_risk"
+        ],
+        "causal_choice_ids": [
+          "D02_A",
+          "D02_C"
+        ]
+      },
+      {
+        "comparison_id": "IA002_MC_D03_A_VS_C",
+        "merge_node_id": "N30_LIVE_MERGE",
+        "history_a": {
+          "choice_path": [
+            "D01_B",
+            "D02_B",
+            "D03_A"
+          ]
+        },
+        "history_b": {
+          "choice_path": [
+            "D01_B",
+            "D02_B",
+            "D03_C"
+          ]
+        },
+        "controlled_current_scene": true,
+        "target_state_ids": [
+          "anxiety",
+          "guilt",
+          "resolve",
+          "moral_courage",
+          "strategic_patience",
+          "compliance",
+          "director_hostility",
+          "director_trust",
+          "job_risk",
+          "user_safety_risk"
+        ],
+        "causal_choice_ids": [
+          "D03_A",
+          "D03_C"
+        ]
+      }
+    ],
+    "counterfactual_decision_node_ids": [
+      "D01_LAUNCH_SCOPE",
+      "D02_INCIDENT_LABEL",
+      "D03_AUDITOR_DISCLOSURE",
+      "D04_KILL_SWITCH"
+    ],
+    "annotation_protocol": {
+      "minimum_annotators": 3,
+      "recommended_test_annotators": 5,
+      "author_effects_are_ground_truth": false,
+      "store_full_distribution": true
+    },
+    "t1_sampling_plan": {
+      "semantic_instances_per_world": 5,
+      "required_variants": [
+        "text",
+        "text_video"
+      ],
+      "physical_instances_per_world": 10,
+      "selection_strategy": "round_robin_checkpoint_then_path",
+      "seed": 42,
+      "require_distinct_choice_paths_when_available": true
+    },
+    "t2_sampling_plan": {
+      "semantic_instances_per_world": 3,
+      "required_variants": [
+        "text",
+        "text_video"
+      ],
+      "physical_instances_per_world": 6,
+      "selection_strategy": "all_preregistered_merge_comparisons",
+      "seed": 42,
+      "preserve_causal_choice_attribution": true,
+      "minimum_target_state_count": 6,
+      "maximum_target_state_count": 10
+    },
+    "t3_sampling_plan": {
+      "semantic_instances_per_world": 4,
+      "required_variants": [
+        "text",
+        "text_video"
+      ],
+      "physical_instances_per_world": 8,
+      "selection_strategy": "round_robin_decision_then_history",
+      "seed": 42,
+      "require_distinct_decisions_when_available": true,
+      "minimum_target_state_count": 6,
+      "maximum_target_state_count": 10
+    }
+  },
+  "design_metadata": {
+    "decision_rounds": [
+      4,
+      8,
+      12,
+      16
+    ],
+    "decision_count": 4,
+    "root_to_leaf_path_count": 81,
+    "merge_nodes": [
+      "N10_RECORD_MERGE",
+      "N20_AUDIT_MERGE",
+      "N30_LIVE_MERGE"
+    ],
+    "choice_effect_semantics": "additive deltas, clamped to declared ranges; merges retain state and flags",
+    "emotion_task_boundary": "作者数值是剧情先验，不是心理学 ground truth。",
+    "round_definition": "选择文本是该轮玩家发言，choice_outcome 的 advisor_only 是同轮回应。"
+  }
+}

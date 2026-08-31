@@ -1,0 +1,1092 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://emotree.example/schemas/interactive-story-v0.1.json",
+  "title": "EmoTree Interactive Story DAG",
+  "description": "Schema for a two-character, multi-round interactive story with decisions, branch merging, additive state effects, endings, and talking-head generation directions.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "scenario",
+    "characters",
+    "state_schema",
+    "initial_state",
+    "nodes",
+    "benchmark_design",
+    "design_metadata"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "interactive_story_v0.1.0"
+    },
+    "scenario": {
+      "$ref": "#/$defs/scenario"
+    },
+    "characters": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "#/$defs/character"
+      }
+    },
+    "state_schema": {
+      "type": "object",
+      "minProperties": 2,
+      "additionalProperties": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": {
+          "$ref": "#/$defs/stateDimension"
+        }
+      }
+    },
+    "initial_state": {
+      "type": "object",
+      "minProperties": 2,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 10,
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    },
+    "design_metadata": {
+      "type": "object"
+    },
+    "benchmark_design": {
+      "$ref": "#/$defs/benchmarkDesign"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "scenario": {
+      "type": "object",
+      "required": [
+        "scenario_id",
+        "title",
+        "language",
+        "perspective_character_id",
+        "interaction_partner_id",
+        "root_node_id",
+        "target_rounds_per_path",
+        "max_options_per_decision",
+        "structure",
+        "summary"
+      ],
+      "properties": {
+        "scenario_id": {
+          "type": "string",
+          "pattern": "^IA[0-9]{3,}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "language": {
+          "type": "string",
+          "minLength": 2
+        },
+        "perspective_character_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "interaction_partner_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "root_node_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_rounds_per_path": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_options_per_decision": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 4
+        },
+        "structure": {
+          "const": "directed_acyclic_graph_with_branch_merging"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 20
+        },
+        "content_note": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "character": {
+      "type": "object",
+      "required": [
+        "character_id",
+        "name",
+        "role",
+        "identity",
+        "goals"
+      ],
+      "properties": {
+        "character_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "identity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "performance_direction": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "stateDimension": {
+      "type": "object",
+      "required": [
+        "name",
+        "min",
+        "max"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ontology_ref": {
+          "type": "string",
+          "pattern": "^[a-z_]+\\.[a-z_]+$"
+        },
+        "type": {
+          "enum": [
+            "integer",
+            "number"
+          ]
+        },
+        "min": {
+          "const": 0
+        },
+        "max": {
+          "const": 100
+        },
+        "target_character_id": {
+          "type": "string"
+        },
+        "toward_character_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "roundRange": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "integer",
+          "minimum": 1
+        },
+        {
+          "type": "integer",
+          "minimum": 1
+        }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "dialogueTurn": {
+      "type": "object",
+      "required": [
+        "round"
+      ],
+      "properties": {
+        "round": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "student": {
+          "type": "string"
+        },
+        "advisor": {
+          "type": "string"
+        },
+        "student_only": {
+          "type": "string"
+        },
+        "advisor_only": {
+          "type": "string"
+        },
+        "narration": {
+          "type": "string"
+        },
+        "channel": {
+          "type": "string"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "student",
+            "advisor"
+          ]
+        },
+        {
+          "required": [
+            "student_only"
+          ]
+        },
+        {
+          "required": [
+            "advisor_only"
+          ]
+        },
+        {
+          "required": [
+            "narration"
+          ]
+        }
+      ],
+      "additionalProperties": true
+    },
+    "scene": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string"
+        },
+        "stage_direction": {
+          "type": "string"
+        },
+        "talking_head": {
+          "$ref": "#/$defs/talkingHead"
+        }
+      },
+      "additionalProperties": true
+    },
+    "timedPerformance": {
+      "type": "object",
+      "required": [
+        "time",
+        "performance"
+      ],
+      "properties": {
+        "time": {
+          "type": "string",
+          "pattern": "^[0-9]+(\\.[0-9]+)?-[0-9]+(\\.[0-9]+)?s$"
+        },
+        "performance": {
+          "type": "string",
+          "minLength": 5
+        }
+      },
+      "additionalProperties": false
+    },
+    "timedSpeech": {
+      "type": "object",
+      "required": [
+        "time",
+        "text"
+      ],
+      "properties": {
+        "time": {
+          "type": "string",
+          "pattern": "^[0-9]+(\\.[0-9]+)?-[0-9]+(\\.[0-9]+)?s$"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "talkingHead": {
+      "type": "object",
+      "required": [
+        "required",
+        "duration_seconds",
+        "character_id",
+        "generation_mode",
+        "shot",
+        "initial_pose",
+        "emotion_arc",
+        "line",
+        "speech_timing",
+        "audio_direction",
+        "gesture_constraints",
+        "continuity",
+        "exit_frame",
+        "negative_prompt"
+      ],
+      "properties": {
+        "required": {
+          "const": true
+        },
+        "duration_seconds": {
+          "type": "number",
+          "minimum": 3,
+          "maximum": 8
+        },
+        "character_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generation_mode": {
+          "const": "single_shot_lip_sync"
+        },
+        "shot": {
+          "type": "string",
+          "minLength": 10
+        },
+        "initial_pose": {
+          "type": "string",
+          "minLength": 10
+        },
+        "emotion_arc": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 6,
+          "items": {
+            "$ref": "#/$defs/timedPerformance"
+          }
+        },
+        "line": {
+          "type": "string",
+          "minLength": 1
+        },
+        "speech_timing": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "items": {
+            "$ref": "#/$defs/timedSpeech"
+          }
+        },
+        "audio_direction": {
+          "type": "string",
+          "minLength": 10
+        },
+        "gesture_constraints": {
+          "type": "string",
+          "minLength": 10
+        },
+        "continuity": {
+          "type": "string",
+          "minLength": 10
+        },
+        "exit_frame": {
+          "type": "string",
+          "minLength": 10
+        },
+        "negative_prompt": {
+          "type": "string",
+          "minLength": 10
+        }
+      },
+      "additionalProperties": true
+    },
+    "effects": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": {
+          "type": "number",
+          "minimum": -100,
+          "maximum": 100
+        }
+      }
+    },
+    "option": {
+      "type": "object",
+      "required": [
+        "option_id",
+        "label",
+        "player_action",
+        "effects",
+        "flags_set",
+        "target_node_id"
+      ],
+      "properties": {
+        "option_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "player_action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "effects": {
+          "$ref": "#/$defs/effects"
+        },
+        "flags_set": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$"
+          }
+        },
+        "target_node_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "node": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/dialogueNode"
+        },
+        {
+          "$ref": "#/$defs/decisionNode"
+        },
+        {
+          "$ref": "#/$defs/choiceOutcomeNode"
+        },
+        {
+          "$ref": "#/$defs/mergeNode"
+        },
+        {
+          "$ref": "#/$defs/endingNode"
+        }
+      ]
+    },
+    "baseNodeProperties": {
+      "type": "object",
+      "properties": {
+        "node_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "node_type": {
+          "type": "string"
+        },
+        "round_range": {
+          "$ref": "#/$defs/roundRange"
+        },
+        "scene": {
+          "$ref": "#/$defs/scene"
+        },
+        "dialogue": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/dialogueTurn"
+          }
+        },
+        "next_node_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "dialogueNode": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "node_type",
+        "round_range",
+        "dialogue",
+        "next_node_id"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string"
+        },
+        "node_type": {
+          "const": "dialogue"
+        },
+        "round_range": {
+          "$ref": "#/$defs/roundRange"
+        },
+        "scene": {
+          "$ref": "#/$defs/scene"
+        },
+        "dialogue": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/dialogueTurn"
+          }
+        },
+        "next_node_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "decisionNode": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "node_type",
+        "round_range",
+        "scene",
+        "prompt",
+        "options"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string"
+        },
+        "node_type": {
+          "const": "decision"
+        },
+        "round_range": {
+          "$ref": "#/$defs/roundRange"
+        },
+        "scene": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/scene"
+            },
+            {
+              "required": [
+                "talking_head"
+              ]
+            }
+          ]
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 4,
+          "items": {
+            "$ref": "#/$defs/option"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "choiceOutcomeNode": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "node_type",
+        "round_range",
+        "dialogue",
+        "next_node_id"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string"
+        },
+        "node_type": {
+          "const": "choice_outcome"
+        },
+        "round_range": {
+          "$ref": "#/$defs/roundRange"
+        },
+        "scene": {
+          "$ref": "#/$defs/scene"
+        },
+        "dialogue": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/dialogueTurn"
+          }
+        },
+        "next_node_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "mergeNode": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "node_type",
+        "round_range",
+        "merge_key",
+        "dialogue",
+        "next_node_id"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string"
+        },
+        "node_type": {
+          "const": "merge_dialogue"
+        },
+        "round_range": {
+          "$ref": "#/$defs/roundRange"
+        },
+        "merge_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scene": {
+          "$ref": "#/$defs/scene"
+        },
+        "dialogue": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/dialogueTurn"
+          }
+        },
+        "next_node_id": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "endingNode": {
+      "type": "object",
+      "required": [
+        "node_id",
+        "node_type",
+        "round_range",
+        "ending_id",
+        "title",
+        "dialogue",
+        "terminal_effects",
+        "tags"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string"
+        },
+        "node_type": {
+          "const": "ending"
+        },
+        "round_range": {
+          "$ref": "#/$defs/roundRange"
+        },
+        "ending_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dialogue": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/dialogueTurn"
+          }
+        },
+        "terminal_effects": {
+          "$ref": "#/$defs/effects"
+        },
+        "tags": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "not": {
+        "required": [
+          "next_node_id"
+        ]
+      },
+      "additionalProperties": true
+    },
+    "benchmarkDesign": {
+      "type": "object",
+      "required": [
+        "benchmark_version",
+        "supported_modalities",
+        "visibility",
+        "target_character_id",
+        "checkpoints",
+        "merge_comparisons",
+        "counterfactual_decision_node_ids",
+        "annotation_protocol",
+        "t1_sampling_plan",
+        "t2_sampling_plan",
+        "t3_sampling_plan"
+      ],
+      "properties": {
+        "benchmark_version": {
+          "type": "string"
+        },
+        "supported_modalities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "text",
+              "text_video"
+            ]
+          }
+        },
+        "visibility": {
+          "type": "object",
+          "required": [
+            "model_visible",
+            "author_only"
+          ],
+          "properties": {
+            "model_visible": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "author_only": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "target_character_id": {
+          "type": "string"
+        },
+        "checkpoints": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/checkpoint"
+          }
+        },
+        "merge_comparisons": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "$ref": "#/$defs/mergeComparison"
+          },
+          "maxItems": 3
+        },
+        "counterfactual_decision_node_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "annotation_protocol": {
+          "type": "object",
+          "required": [
+            "minimum_annotators",
+            "recommended_test_annotators",
+            "author_effects_are_ground_truth",
+            "store_full_distribution"
+          ],
+          "properties": {
+            "minimum_annotators": {
+              "type": "integer",
+              "minimum": 3
+            },
+            "recommended_test_annotators": {
+              "type": "integer",
+              "minimum": 3
+            },
+            "author_effects_are_ground_truth": {
+              "const": false
+            },
+            "store_full_distribution": {
+              "const": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "t1_sampling_plan": {
+          "$ref": "#/$defs/t1SamplingPlan"
+        },
+        "t2_sampling_plan": {
+          "$ref": "#/$defs/t2SamplingPlan"
+        },
+        "t3_sampling_plan": {
+          "$ref": "#/$defs/t3SamplingPlan"
+        }
+      },
+      "additionalProperties": true
+    },
+    "checkpoint": {
+      "type": "object",
+      "required": [
+        "checkpoint_id",
+        "node_id",
+        "supported_tasks",
+        "target_state_ids"
+      ],
+      "properties": {
+        "checkpoint_id": {
+          "type": "string"
+        },
+        "node_id": {
+          "type": "string"
+        },
+        "supported_tasks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "T1_state_tracking",
+              "T2_history_sensitive_merge",
+              "T3_counterfactual_choice_effect"
+            ]
+          }
+        },
+        "target_state_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "historySelector": {
+      "type": "object",
+      "required": [
+        "choice_path"
+      ],
+      "properties": {
+        "choice_path": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "mergeComparison": {
+      "type": "object",
+      "required": [
+        "comparison_id",
+        "merge_node_id",
+        "history_a",
+        "history_b",
+        "controlled_current_scene",
+        "target_state_ids",
+        "causal_choice_ids"
+      ],
+      "properties": {
+        "comparison_id": {
+          "type": "string"
+        },
+        "merge_node_id": {
+          "type": "string"
+        },
+        "history_a": {
+          "$ref": "#/$defs/historySelector"
+        },
+        "history_b": {
+          "$ref": "#/$defs/historySelector"
+        },
+        "controlled_current_scene": {
+          "const": true
+        },
+        "target_state_ids": {
+          "type": "array",
+          "minItems": 6,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10
+        },
+        "causal_choice_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "t1SamplingPlan": {
+      "type": "object",
+      "required": [
+        "semantic_instances_per_world",
+        "required_variants",
+        "physical_instances_per_world",
+        "selection_strategy",
+        "seed",
+        "require_distinct_choice_paths_when_available"
+      ],
+      "properties": {
+        "semantic_instances_per_world": {
+          "const": 5
+        },
+        "required_variants": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "text"
+            },
+            {
+              "const": "text_video"
+            }
+          ],
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "physical_instances_per_world": {
+          "const": 10
+        },
+        "selection_strategy": {
+          "const": "round_robin_checkpoint_then_path"
+        },
+        "seed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "require_distinct_choice_paths_when_available": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "t2SamplingPlan": {
+      "type": "object",
+      "required": [
+        "semantic_instances_per_world",
+        "required_variants",
+        "physical_instances_per_world",
+        "selection_strategy",
+        "seed",
+        "preserve_causal_choice_attribution",
+        "minimum_target_state_count",
+        "maximum_target_state_count"
+      ],
+      "properties": {
+        "semantic_instances_per_world": {
+          "const": 3
+        },
+        "required_variants": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "text"
+            },
+            {
+              "const": "text_video"
+            }
+          ],
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "physical_instances_per_world": {
+          "const": 6
+        },
+        "selection_strategy": {
+          "const": "all_preregistered_merge_comparisons"
+        },
+        "seed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "preserve_causal_choice_attribution": {
+          "const": true
+        },
+        "minimum_target_state_count": {
+          "const": 6
+        },
+        "maximum_target_state_count": {
+          "const": 10
+        }
+      },
+      "additionalProperties": false
+    },
+    "t3SamplingPlan": {
+      "type": "object",
+      "required": [
+        "semantic_instances_per_world",
+        "required_variants",
+        "physical_instances_per_world",
+        "selection_strategy",
+        "seed",
+        "require_distinct_decisions_when_available",
+        "minimum_target_state_count",
+        "maximum_target_state_count"
+      ],
+      "properties": {
+        "semantic_instances_per_world": {
+          "const": 4
+        },
+        "required_variants": {
+          "const": [
+            "text",
+            "text_video"
+          ]
+        },
+        "physical_instances_per_world": {
+          "const": 8
+        },
+        "selection_strategy": {
+          "const": "round_robin_decision_then_history"
+        },
+        "seed": {
+          "const": 42
+        },
+        "require_distinct_decisions_when_available": {
+          "const": true
+        },
+        "minimum_target_state_count": {
+          "const": 6
+        },
+        "maximum_target_state_count": {
+          "const": 10
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

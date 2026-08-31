@@ -1,0 +1,283 @@
+{
+  "format": "emotree_pipeline_manifest_v1",
+  "scenario_count": 10,
+  "totals": {
+    "t1": 50,
+    "t2": 30,
+    "t3": 40,
+    "instances": 120
+  },
+  "scenarios": [
+    {
+      "format": "emotree_rollout_manifest_v1",
+      "trajectory_count": 3,
+      "scenario_ids": [
+        "IA_PIPE_001"
+      ],
+      "policy_ids": [
+        "IA_PIPE_001__escalate",
+        "IA_PIPE_001__neutral",
+        "IA_PIPE_001__repair"
+      ],
+      "config": {
+        "t1_candidates": 5,
+        "t2_candidates": 3,
+        "t3_candidates": 4,
+        "delayed_horizon": 5
+      },
+      "trajectory_ids": [
+        "ff977705e16046469759c700f3cf77bf",
+        "4acc2bc0ee3c4109a022c735225eba85",
+        "a4c693fc66254b2cbe2095f04ad2f5d9"
+      ],
+      "scenario_id": "IA_PIPE_001",
+      "t1": 5,
+      "t2": 3,
+      "t3": 4
+    },
+    {
+      "format": "emotree_rollout_manifest_v1",
+      "trajectory_count": 3,
+      "scenario_ids": [
+        "IA_PIPE_002"
+      ],
+      "policy_ids": [
+        "IA_PIPE_002__escalate",
+        "IA_PIPE_002__neutral",
+        "IA_PIPE_002__repair"
+      ],
+      "config": {
+        "t1_candidates": 5,
+        "t2_candidates": 3,
+        "t3_candidates": 4,
+        "delayed_horizon": 5
+      },
+      "trajectory_ids": [
+        "04197ec394614abab871b9f5b184005b",
+        "d3452f4e9b244231b5edb617ee44947d",
+        "91556cc71cd54d1f922d7eac751e9c84"
+      ],
+      "scenario_id": "IA_PIPE_002",
+      "t1": 5,
+      "t2": 3,
+      "t3": 4
+    },
+    {
+      "format": "emotree_rollout_manifest_v1",
+      "trajectory_count": 3,
+      "scenario_ids": [
+        "IA_PIPE_003"
+      ],
+      "policy_ids": [
+        "IA_PIPE_003__escalate",
+        "IA_PIPE_003__neutral",
+        "IA_PIPE_003__repair"
+      ],
+      "config": {
+        "t1_candidates": 5,
+        "t2_candidates": 3,
+        "t3_candidates": 4,
+        "delayed_horizon": 5
+      },
+      "trajectory_ids": [
+        "50addaa7a1cc470ea02b2a0363593438",
+        "5763a608aa7944f993082774e14ca7ab",
+        "2f6108679fc3447c8c5e9aef711d2d55"
+      ],
+      "scenario_id": "IA_PIPE_003",
+      "t1": 5,
+      "t2": 3,
+      "t3": 4
+    },
+    {
+      "format": "emotree_rollout_manifest_v1",
+      "trajectory_count": 3,
+      "scenario_ids": [
+        "IA_PIPE_004"
+      ],
+      "policy_ids": [
+        "IA_PIPE_004__escalate",
+        "IA_PIPE_004__neutral",
+        "IA_PIPE_004__repair"
+      ],
+      "config": {
+        "t1_candidates": 5,
+        "t2_candidates": 3,
+        "t3_candidates": 4,
+        "delayed_horizon": 5
+      },
+      "trajectory_ids": [
+        "34d613e17fa84b6abaa68d52a9c9957d",
+        "4c8868699dc54a17aec33e1a3ece2222",
+        "2de481d258194b188ecd13c3b989d160"
+      ],
+      "scenario_id": "IA_PIPE_004",
+      "t1": 5,
+      "t2": 3,
+      "t3": 4
+    },
+    {
+      "format": "emotree_rollout_manifest_v1",
+      "trajectory_count": 3,
+      "scenario_ids": [
+        "IA_PIPE_005"
+      ],
+      "policy_ids": [
+        "IA_PIPE_005__escalate",
+        "IA_PIPE_005__neutral",
+        "IA_PIPE_005__repair"
+      ],
+      "config": {
+        "t1_candidates": 5,
+        "t2_candidates": 3,
+        "t3_candidates": 4,
+        "delayed_horizon": 5
+      },
+      "trajectory_ids": [
+        "41e12921350b4cbcb72d55c32c4e5032",
+        "85e630bce06c49248fa389bfa863d487",
+        "a650cbc8ed32404a8de770c0a2b28cce"
+      ],
+      "scenario_id": "IA_PIPE_005",
+      "t1": 5,
+      "t2": 3,
+      "t3": 4
+    },
+    {
+      "format": "emotree_rollout_manifest_v1",
+      "trajectory_count": 3,
+      "scenario_ids": [
+        "IA_PIPE_006"
+      ],
+      "policy_ids": [
+        "IA_PIPE_006__escalate",
+        "IA_PIPE_006__neutral",
+        "IA_PIPE_006__repair"
+      ],
+      "config": {
+        "t1_candidates": 5,
+        "t2_candidates": 3,
+        "t3_candidates": 4,
+        "delayed_horizon": 5
+      },
+      "trajectory_ids": [
+        "09be81f5e0b54900b7e286ff8ed56c2b",
+        "e68fab3294584f9e83a0dc3ea051414a",
+        "c0d807ceb72a4ed69e6dbcf427c8efbf"
+      ],
+      "scenario_id": "IA_PIPE_006",
+      "t1": 5,
+      "t2": 3,
+      "t3": 4
+    },
+    {
+      "format": "emotree_rollout_manifest_v1",
+      "trajectory_count": 3,
+      "scenario_ids": [
+        "IA_PIPE_007"
+      ],
+      "policy_ids": [
+        "IA_PIPE_007__escalate",
+        "IA_PIPE_007__neutral",
+        "IA_PIPE_007__repair"
+      ],
+      "config": {
+        "t1_candidates": 5,
+        "t2_candidates": 3,
+        "t3_candidates": 4,
+        "delayed_horizon": 5
+      },
+      "trajectory_ids": [
+        "9f654c05b279480799d8237e84ad7328",
+        "b8bc1d4598414ed08d7b1bb364597f1e",
+        "4c89cb8425124031813f830c0e9a627d"
+      ],
+      "scenario_id": "IA_PIPE_007",
+      "t1": 5,
+      "t2": 3,
+      "t3": 4
+    },
+    {
+      "format": "emotree_rollout_manifest_v1",
+      "trajectory_count": 3,
+      "scenario_ids": [
+        "IA_PIPE_008"
+      ],
+      "policy_ids": [
+        "IA_PIPE_008__escalate",
+        "IA_PIPE_008__neutral",
+        "IA_PIPE_008__repair"
+      ],
+      "config": {
+        "t1_candidates": 5,
+        "t2_candidates": 3,
+        "t3_candidates": 4,
+        "delayed_horizon": 5
+      },
+      "trajectory_ids": [
+        "f192e53d597a4aa98b191bab1bf2d2ed",
+        "65c669609f2446e69fe1ae5c7e8c9a91",
+        "3bdb975378464fd89f2c90807319ae32"
+      ],
+      "scenario_id": "IA_PIPE_008",
+      "t1": 5,
+      "t2": 3,
+      "t3": 4
+    },
+    {
+      "format": "emotree_rollout_manifest_v1",
+      "trajectory_count": 3,
+      "scenario_ids": [
+        "IA_PIPE_009"
+      ],
+      "policy_ids": [
+        "IA_PIPE_009__escalate",
+        "IA_PIPE_009__neutral",
+        "IA_PIPE_009__repair"
+      ],
+      "config": {
+        "t1_candidates": 5,
+        "t2_candidates": 3,
+        "t3_candidates": 4,
+        "delayed_horizon": 5
+      },
+      "trajectory_ids": [
+        "c650061f8708494fa2b1b3ebdbc36023",
+        "8b04a36bc0744c829e089b44c5a2d3db",
+        "b062887826084073a16829055d10ed48"
+      ],
+      "scenario_id": "IA_PIPE_009",
+      "t1": 5,
+      "t2": 3,
+      "t3": 4
+    },
+    {
+      "format": "emotree_rollout_manifest_v1",
+      "trajectory_count": 3,
+      "scenario_ids": [
+        "IA_PIPE_010"
+      ],
+      "policy_ids": [
+        "IA_PIPE_010__escalate",
+        "IA_PIPE_010__neutral",
+        "IA_PIPE_010__repair"
+      ],
+      "config": {
+        "t1_candidates": 5,
+        "t2_candidates": 3,
+        "t3_candidates": 4,
+        "delayed_horizon": 5
+      },
+      "trajectory_ids": [
+        "a801fd30bbd54238a7e9ddba046843c9",
+        "a5ae064f2c3a4934bc905f8f9a42f531",
+        "a358b01b5b6a4351964d3e47e04cca5f"
+      ],
+      "scenario_id": "IA_PIPE_010",
+      "t1": 5,
+      "t2": 3,
+      "t3": 4
+    }
+  ],
+  "ground_truth_status": "pending_human_annotation"
+}
