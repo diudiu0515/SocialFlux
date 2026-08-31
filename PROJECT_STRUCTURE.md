@@ -22,6 +22,7 @@ emotree/
 │   ├── T2/                         # 同样四类文件
 │   └── T3/                         # 同样四类文件
 ├── prompts/                        # 全部固定、版本化的运行/任务/标注 prompt
+├── talkinghead_generation.md        # 状态触发式 Talking Head 设计
 ├── shared/                         # Story World 共用创作规范与兼容入口
 │   ├── interactive_story_generation_prompt.md
 │   ├── STATE_ONTOLOGY_v0.1.md
@@ -33,7 +34,7 @@ emotree/
 │   │   └── annotation_overlay_schema_v0.1.json
 │   └── tests/
 ├── demo/                            # On-Policy 交互环境、状态引擎与三端网站
-├── environment/                     # Phase-A 状态、记忆、响应和终止模块
+├── environment/                     # 状态、记忆、响应、终止和 multimodal 表达层
 ├── providers/                       # 统一模型 provider 与 OpenAI-compatible 适配
 ├── policies/                        # 模型 policy 与 controlled validation policy
 ├── rollout/                         # 完整轨迹 runner 与原子日志
@@ -70,7 +71,7 @@ emotree/
 
 ### `build/`
 
-只保存全局聚合产物。目前共 48 条：T1 20、T2 12、T3 16，text/text_video 各 24。这里的文件由 converter 生成，不手工编辑。
+保存可再生聚合产物。interactive_benchmark_v0.2 的 48 条公开实例由 converter 生成并可提交；pipeline_v1 含私有 master trajectory，默认只在本地生成并由 .gitignore 排除。这里的文件不手工编辑。
 
 ## 新增 world
 

@@ -154,5 +154,85 @@
     "t1_max": 5,
     "t2_max": 3,
     "t3_max": 4
-  }
+  },
+  "observable_expression": {
+    "default": {
+      "facial_expression": "保持克制并注意对方反应",
+      "gaze": "保持自然注视",
+      "speech_style": "正常语速，信息清楚",
+      "prosody": "语气克制",
+      "behavioral_cues": [
+        "根据当前互动调整停顿和回应长度"
+      ]
+    }
+  },
+  "media_generation": {
+    "stage": "structured_expression",
+    "default_media_type": "video",
+    "asset_status": "spec_only",
+    "asset_root": "media/talking_head",
+    "note": "视频资产生成前只输出 observable expression 与 media spec，不伪造 asset。"
+  },
+  "video_triggers": [
+    {
+      "trigger_id": "escalation_confrontation",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.anger": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "relationship.hostility": {
+          "operator": ">=",
+          "threshold": 7
+        },
+        "escalation_risk": {
+          "operator": ">=",
+          "threshold": 8
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "controlled_authority",
+      "duration_seconds": 4,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "表情克制，视线稳定，姿态保持正式",
+        "gaze": "保持直接但克制的注视",
+        "speech_style": "简短、明确、带有管理边界",
+        "prosody": "语气平稳但明显变硬",
+        "behavioral_cues": [
+          "状态达到显著冲突区间后出现一次明显外显变化"
+        ]
+      }
+    },
+    {
+      "trigger_id": "anxious_withdrawal",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.anxiety": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "motivation.repair_intent": {
+          "operator": "<=",
+          "threshold": 2
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "anxious_withdrawal",
+      "duration_seconds": 4,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "表情收缩，显出疲惫或不安",
+        "gaze": "短暂低头后重新看向对方",
+        "speech_style": "回应犹豫，句子变短",
+        "prosody": "音量降低，停顿变长",
+        "behavioral_cues": [
+          "避免夸张哭泣或脸谱化表演"
+        ]
+      }
+    }
+  ]
 }

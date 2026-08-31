@@ -12,6 +12,28 @@ def _bounded(value, path):
         raise ValueError(f"{path} must be numeric in [0, 10]")
 
 
+def _validate_multimodal(scenario):
+    for trigger in scenario.get("video_triggers", []):
+        for key in ("trigger_id", "trigger_mode", "conditions", "cue_template", "observable_expression"):
+            if key not in trigger:
+                raise ValueError(f"video trigger missing {key}")
+        if trigger["trigger_mode"] not in ("threshold", "crossing", "state_change"):
+            raise ValueError("video trigger has unsupported trigger_mode")
+        condition_set = trigger.get("conditions", {})
+        for variable, condition in condition_set.items():
+            if not isinstance(condition, dict) or condition.get("operator") not in (">=", ">", "<=", "<", "=="):
+                raise ValueError(f"invalid condition for video trigger variable {variable}")
+            if not isinstance(condition.get("threshold"), (int, float)):
+                raise ValueError(f"video trigger threshold must be numeric for {variable}")
+        if trigger["trigger_mode"] == "state_change" and not trigger.get("change_conditions"):
+            raise ValueError("state_change trigger requires change_conditions")
+        if trigger.get("cooldown_turns", 0) < 0:
+            raise ValueError("video trigger cooldown_turns must be non-negative")
+        expression = trigger["observable_expression"]
+        if not isinstance(expression, dict) or not expression:
+            raise ValueError("video trigger observable_expression must be a non-empty object")
+
+
 def validate_scenario(scenario):
     required = ("scenario_id", "background", "environment_agent", "evaluated_agent_role",
                 "initial_state", "initial_dynamics", "action_effects", "max_turns")
@@ -26,6 +48,7 @@ def validate_scenario(scenario):
     _bounded(scenario["initial_dynamics"], "initial_dynamics")
     if not isinstance(scenario["max_turns"], int) or scenario["max_turns"] < 1:
         raise ValueError("max_turns must be a positive integer")
+    _validate_multimodal(scenario)
     return scenario
 
 

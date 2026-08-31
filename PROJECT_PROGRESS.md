@@ -21,17 +21,18 @@
 | GitHub 发布 | 已完成 | main 分支已推送到 github.com/diudiu0515/SocialFlux.git |
 | Pipeline acceptance | 部分通过 | State Update Validity 210/210、Controlled Policy Sensitivity 10/10；Persona 未通过，Paraphrase 为 partial，Trajectory 等待人工判断 |
 | 正式 ground truth | 待人工标注 | 需要独立标注与 adjudication，代码不会伪造正式标签 |
-| Talking-head 视频 | 待后续 | 当前保留视频控制结构和 spec-only 资产 |
+| Talking-head 视频 | 结构层已完成 | 10 个 scenario 已注册 state-triggered expression/media 规则；真实视频资产仍为 spec-only |
 | RL policy 训练 | 待后续 | 当前提供 policy/provider 接口，不包含训练过程 |
 
 ## 已验证指标
 
-- 核心测试：12 项通过
+- 核心测试：18 项通过
 - Demo 测试：9 项通过
 - Interactive benchmark 测试：20 项通过
 - Python compileall：通过
 - Pipeline manifest：10 个 scenario，120 条候选实例
 - Interactive benchmark manifest：48 条实例
+- Talking Head trigger tests：2 项通过
 
 ## 下一步优先级
 
@@ -39,14 +40,14 @@
 2. 增加版本化 action interpreter/normalizer，完成自然语言 Paraphrase Robustness。
 3. 为 5–10+ 轮轨迹组织人工 plausibility review，并记录 reviewer、版本和 adjudication。
 4. 为 IA001/IA002 完成人工标注、双人一致性检查和 adjudication。
-2. 增加更多独立 Story World，并沿用同一 schema、prompt 和采样约束。
-3. 接入真实模型 provider，记录 provider/model/prompt version/seed 等可复现实验元数据。
-4. 根据环境 validity scorecard 进行状态转移和反事实一致性审计。
-5. 再考虑 Talking-head 资产和 RL policy，不在正式标注前改变任务定义。
+5. 增加更多独立 Story World，并沿用同一 schema、prompt 和采样约束。
+6. 接入真实模型 provider，记录 provider/model/prompt version/seed 等可复现实验元数据。
+7. 根据 talkinghead_generation.md 接入真实 Talking Head 生成与 media manifest，并完成 trigger validity、expression-state consistency、temporal continuity 和 non-leakage 人工验收。
+8. 再考虑 RL policy，不在正式标注前改变任务定义。
 
 ## 维护规则
 
 - 每完成一项可验证工作，更新本文件的更新时间、状态表和测试结果。
 - 修改任务语义先更新 tasks/，修改固定 prompt 先新增 prompts/ 版本并更新 prompts/manifest.json。
 - 任何正式数据变更都要重新运行三套测试和对应构建脚本。
-- build/ 是可再生产物；demo/data/trajectories/ 只保存本地运行时 session，不提交真实 session。
+- build/ 是可再生产物；interactive benchmark 可提交，含 private master trajectory 的 build/pipeline_v1 只在本地生成并被 .gitignore 排除；demo/data/trajectories/ 只保存本地运行时 session。

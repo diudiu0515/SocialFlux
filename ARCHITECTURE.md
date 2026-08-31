@@ -33,7 +33,7 @@ Annotation overlay -> metrics / leakage / environment validity
 
 | 目录 | 职责 |
 |---|---|
-| environment/ | 状态、记忆、appraisal、response、终止和环境循环 |
+| environment/ | 状态、记忆、appraisal、response、终止、observable expression 和 media trigger |
 | providers/ | 统一 provider 接口及四类模型适配器 |
 | policies/ | ControlledPolicy 和 ModelPolicy |
 | rollout/ | 单策略、多策略、counterfactual、日志和 manifest |
@@ -45,7 +45,15 @@ Annotation overlay -> metrics / leakage / environment validity
 | worlds/ | 交互 Story World、剧情树和 world 级任务实例 |
 | tasks/ | T1/T2/T3 任务定义、输出 schema 和标注 schema |
 | demo/ | 独立的 on-policy 人机交互展示层 |
-| build/ | 可再生的 pipeline 和 benchmark 聚合产物 |
+| build/ | 可再生的 pipeline 和 benchmark 聚合产物；私有 pipeline_v1 默认本地生成 |
+
+## 3. Talking Head / Observable Expression
+
+Talking Head 不再作为独立 decoration 挂在 dialogue node 上。每个 scenario 在 configs/scenarios 中注册 video_triggers、observable_expression 和 media_generation：
+
+State + Dynamics -> trigger conditions -> private trigger event -> public observable expression/media spec
+
+trigger mode 支持 threshold、crossing 和 state_change，显著事件默认使用 crossing，并通过 cooldown_turns 控制重复触发。trigger_variables、阈值和 trigger_id 只保留在私有 trajectory；公开 observation 只包含 observable_expression 和不带触发条件的 media spec。当前 media_generation 为 structured_expression/spec_only 阶段，真实视频资产可后续接入。
 
 ## 3. 隐私边界
 

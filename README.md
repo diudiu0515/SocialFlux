@@ -11,6 +11,7 @@ EmoTree is a stateful social-interaction benchmark pipeline with observable/priv
 - worlds/ and tasks/: interactive story worlds, schemas, and task definitions
 - build/: reproducible benchmark and pipeline outputs
 - demo/: standalone on-policy interactive demo
+- talkinghead_generation.md: state-triggered multimodal observation design
 
 ## Run the full pipeline
 
@@ -18,7 +19,10 @@ EmoTree is a stateful social-interaction benchmark pipeline with observable/priv
 python -m scripts.run_pipeline   --scenarios configs/scenarios   --output build/pipeline_v1
 ~~~
 
-The current checked-in output contains 10 scenarios and 120 candidate instances. Formal ground truth remains pending independent human annotation and adjudication.
+The pipeline is configured for 10 scenarios and 120 candidate instances. Its full pipeline_v1 master trajectories are generated locally and ignored because they contain private environment fields; formal ground truth remains pending independent human annotation and adjudication.
+
+The current scenarios also emit structured observable expression and spec-only Talking Head media events after state updates; trigger internals remain private.
+Run the acceptance command to inspect trigger and trajectory evidence in build/pipeline_v1/acceptance_report.*.
 
 ## Run tests
 

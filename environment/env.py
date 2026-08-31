@@ -4,6 +4,7 @@ from copy import deepcopy
 import uuid
 
 from .memory import MemoryModule
+from .multimodal import ObservableExpressionLayer
 from .initializer import freeze_initialization
 from .response_generator import TemplateResponseGenerator
 from .state_updater import RuleBasedStateUpdater, apply_transition
@@ -16,6 +17,7 @@ class StatefulEnvironment:
         self.state_updater = state_updater or RuleBasedStateUpdater(self.scenario)
         self.response_generator = response_generator or TemplateResponseGenerator(self.scenario)
         self.memory = memory or MemoryModule()
+        self.expression_layer = ObservableExpressionLayer(self.scenario)
         self.session = None
 
     def reset(self, episode_id=None):
@@ -32,6 +34,9 @@ class StatefulEnvironment:
             "ending": None,
             "current_response": self.scenario.get("opening_response", ""),
             "observable_cues": [],
+            "observable_expression": deepcopy(self.expression_layer.default_expression),
+            "media": [],
+            "last_trigger_turns": {},
         }
         return self.observe()
 
@@ -47,6 +52,8 @@ class StatefulEnvironment:
             "history": deepcopy(self.session["history"]),
             "current_response": self.session["current_response"],
             "observable_cues": deepcopy(self.session["observable_cues"]),
+            "observable_expression": deepcopy(self.session["observable_expression"]),
+            "media": deepcopy(self.session["media"]),
             "turn_id": self.session["turn_id"],
             "status": self.session["status"],
         }
@@ -79,6 +86,14 @@ class StatefulEnvironment:
             "dynamics": deepcopy(dynamics_after),
             "history": deepcopy(self.session["history"]),
         })
+        multimodal = self.expression_layer.evaluate(
+            turn_id=turn_id,
+            previous_state=state_before,
+            previous_dynamics=dynamics_before,
+            state=state_after,
+            dynamics=dynamics_after,
+            last_trigger_turns=self.session["last_trigger_turns"],
+        )
         self.session["history"].extend([
             {"turn_id": turn_id, "role": "evaluated_agent", "text": action_text},
             {"turn_id": turn_id, "role": "environment_agent", "text": response},
@@ -86,6 +101,8 @@ class StatefulEnvironment:
         self.session["turn_id"] = turn_id
         self.session["state"], self.session["dynamics"] = state_after, dynamics_after
         self.session["current_response"] = response
+        self.session["observable_expression"] = multimodal["observable_expression"]
+        self.session["media"] = multimodal["media"]
         action_id = action.get("action_id") if isinstance(action, dict) else "default"
         self.session["observable_cues"] = deepcopy(
             self.scenario.get("observable_cues_by_action", {}).get(action_id, [])
@@ -111,6 +128,9 @@ class StatefulEnvironment:
             "numeric_state_delta": state_numeric,
             "numeric_dynamics_delta": dynamics_numeric,
             "environment_response": response,
+            "trigger_events": multimodal["private_events"],
+            "observable_expression": multimodal["observable_expression"],
+            "media": multimodal["media"],
         }
         self.session["turns"].append(log)
         return self.observe(), log

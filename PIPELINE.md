@@ -7,6 +7,7 @@
       -> Memory + appraisal/state update
       -> semantic delta mapper
       -> environment response
+      -> state-triggered observable expression/media spec
       -> complete rollout JSON
       -> T1 / T2 / T3 candidate instances
       -> annotation overlay
@@ -29,6 +30,8 @@
 模型接入统一使用：
 
     action = policy.generate(observation)
+
+Talking Head 状态触发配置位于 configs/scenarios/scenario_*.json。环境在 state/dynamics 更新后计算 trigger，再把公开 expression/media 写入 observation，把 trigger event 写入私有 trajectory；当前资产状态为 spec_only，尚未伪造视频文件。
 
 Provider 支持 OpenAI-compatible、Anthropic、Gemini 和 local/vLLM。没有 API key 时使用 ControlledPolicy 完成环境验证和端到端 smoke test。
 

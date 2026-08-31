@@ -3,28 +3,135 @@
   "$id": "https://emotree.example/schemas/scenario-v1.json",
   "title": "EmoTree Stateful Scenario",
   "type": "object",
-  "required": ["scenario_id", "background", "environment_agent", "evaluated_agent_role", "initial_state", "initial_dynamics", "action_effects", "max_turns"],
+  "required": [
+    "scenario_id",
+    "background",
+    "environment_agent",
+    "evaluated_agent_role",
+    "initial_state",
+    "initial_dynamics",
+    "action_effects",
+    "max_turns"
+  ],
   "properties": {
-    "scenario_id": {"type": "string", "minLength": 1},
-    "background": {"type": "string", "minLength": 1},
-    "environment_agent": {"$ref": "#/$defs/environmentAgent"},
-    "evaluated_agent_role": {"type": "object"},
-    "initial_state": {"$ref": "#/$defs/boundedObject"},
-    "initial_dynamics": {"$ref": "#/$defs/boundedObject"},
-    "action_effects": {"type": "object"},
-    "response_templates": {"type": "object"},
-    "max_turns": {"type": "integer", "minimum": 1},
-    "termination_conditions": {"type": "array"}
+    "scenario_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "background": {
+      "type": "string",
+      "minLength": 1
+    },
+    "environment_agent": {
+      "$ref": "#/$defs/environmentAgent"
+    },
+    "evaluated_agent_role": {
+      "type": "object"
+    },
+    "initial_state": {
+      "$ref": "#/$defs/boundedObject"
+    },
+    "initial_dynamics": {
+      "$ref": "#/$defs/boundedObject"
+    },
+    "action_effects": {
+      "type": "object"
+    },
+    "response_templates": {
+      "type": "object"
+    },
+    "max_turns": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "termination_conditions": {
+      "type": "array"
+    },
+    "observable_expression": {
+      "type": "object"
+    },
+    "media_generation": {
+      "type": "object"
+    },
+    "video_triggers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "trigger_id",
+          "trigger_mode",
+          "conditions",
+          "cue_template",
+          "observable_expression"
+        ],
+        "properties": {
+          "trigger_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "trigger_mode": {
+            "enum": [
+              "threshold",
+              "crossing",
+              "state_change"
+            ]
+          },
+          "conditions": {
+            "type": "object"
+          },
+          "change_conditions": {
+            "type": "object"
+          },
+          "cooldown_turns": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "media_type": {
+            "type": "string"
+          },
+          "cue_template": {
+            "type": "string",
+            "minLength": 1
+          },
+          "duration_seconds": {
+            "type": "number",
+            "minimum": 3,
+            "maximum": 8
+          },
+          "media_asset_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "observable_expression": {
+            "type": "object",
+            "minProperties": 1
+          }
+        },
+        "additionalProperties": true
+      }
+    }
   },
   "additionalProperties": true,
   "$defs": {
     "environmentAgent": {
       "type": "object",
-      "required": ["persona", "explicit_goal", "hidden_intention"],
+      "required": [
+        "persona",
+        "explicit_goal",
+        "hidden_intention"
+      ],
       "properties": {
-        "persona": {"type": "object"},
-        "explicit_goal": {"type": "string"},
-        "hidden_intention": {"type": "string"}
+        "persona": {
+          "type": "object"
+        },
+        "explicit_goal": {
+          "type": "string"
+        },
+        "hidden_intention": {
+          "type": "string"
+        }
       },
       "additionalProperties": true
     },
@@ -32,8 +139,14 @@
       "type": "object",
       "additionalProperties": {
         "oneOf": [
-          {"type": "number", "minimum": 0, "maximum": 10},
-          {"$ref": "#/$defs/boundedObject"}
+          {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          },
+          {
+            "$ref": "#/$defs/boundedObject"
+          }
         ]
       }
     }

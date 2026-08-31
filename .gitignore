@@ -15,6 +15,9 @@ ENV/
 .env.*
 !.env.example
 
+# Generated pipeline outputs contain private master trajectories
+build/pipeline_v1/
+
 # Runtime-generated demo sessions
 demo/data/trajectories/*.json
 
