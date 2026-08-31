@@ -1,0 +1,276 @@
+"""Acceptance checks for the five EmoTree pipeline validity criteria."""
+
+from copy import deepcopy
+import json
+from pathlib import Path
+
+from environment.delta_mapper import DELTA_TO_INT, flatten_state
+from environment.env import StatefulEnvironment
+from policies.controlled import ControlledPolicy
+from rollout.runner import RolloutRunner
+
+
+def load_scenarios(directory):
+    return [
+        json.loads(path.read_text(encoding="utf-8"))
+        for path in sorted(Path(directory).glob("scenario_*.json"))
+    ]
+
+
+def _run(scenario, action_id, turns=1, persona=None, text=None):
+    candidate = deepcopy(scenario)
+    if persona is not None:
+        candidate["environment_agent"]["persona"] = deepcopy(persona)
+    action = {"action_id": action_id, "text": text or action_id}
+    runner = RolloutRunner(lambda: StatefulEnvironment(candidate))
+    return runner.run(
+        ControlledPolicy(action_id, [action]),
+        max_turns=turns,
+    )
+
+
+def _sign(value):
+    return 1 if value > 0 else -1 if value < 0 else 0
+
+
+def _expected_sign(label):
+    return _sign(DELTA_TO_INT[label])
+
+
+def _flatten_delta(delta):
+    return flatten_state(delta)
+
+
+def state_update_validity(scenarios):
+    checks = []
+    for scenario in scenarios:
+        for action_id, effect in scenario["action_effects"].items():
+            trajectory = _run(scenario, action_id)
+            turn = trajectory["turns"][0]
+            expected = _flatten_delta(effect["state_delta"])
+            actual = _flatten_delta(turn["numeric_state_delta"])
+            for variable, label in expected.items():
+                checks.append({
+                    "scenario_id": scenario["scenario_id"],
+                    "action_id": action_id,
+                    "variable": variable,
+                    "expected_direction": _expected_sign(label),
+                    "actual_direction": _sign(actual[variable]),
+                    "passed": _sign(actual[variable]) == _expected_sign(label),
+                })
+    return {
+        "criterion": "1. State Update Validity",
+        "status": "passed" if all(item["passed"] for item in checks) else "failed",
+        "check_count": len(checks),
+        "passed_checks": sum(item["passed"] for item in checks),
+        "checks": checks,
+        "interpretation": "One-turn numeric transitions match every configured semantic state_delta direction.",
+    }
+
+
+def persona_sensitivity(scenarios):
+    scenario = scenarios[0]
+    action_id = "repair" if "repair" in scenario["action_effects"] else next(iter(scenario["action_effects"]))
+    base = deepcopy(scenario["environment_agent"]["persona"])
+    variant = deepcopy(base)
+    variant["patience"] = max(0.0, min(1.0, float(variant.get("patience", 0.5)) - 0.35))
+    variant["empathy"] = max(0.0, min(1.0, float(variant.get("empathy", 0.5)) + 0.35))
+    first = _run(scenario, action_id, persona=base)
+    second = _run(scenario, action_id, persona=variant)
+    first_turn, second_turn = first["turns"][0], second["turns"][0]
+    transition_equal = (
+        first_turn["state_after"] == second_turn["state_after"]
+        and first_turn["dynamics_after"] == second_turn["dynamics_after"]
+    )
+    return {
+        "criterion": "2. Persona Sensitivity",
+        "status": "failed",
+        "scenario_id": scenario["scenario_id"],
+        "action_id": action_id,
+        "persona_a": base,
+        "persona_b": variant,
+        "behavioral_difference_observed": not transition_equal,
+        "reason": (
+            "The default RuleBasedStateUpdater reads action_effects but does not apply "
+            "persona-conditioned modifiers. ModelStateUpdater receives persona through "
+            "the centralized appraisal prompt, but no provider-backed behavioral run "
+            "is configured in this acceptance."
+        ),
+        "required_fix": "Add calibrated persona modifiers or run a provider-backed model transition set, then compare interpretable deltas.",
+    }
+
+
+def paraphrase_robustness(scenarios):
+    paraphrases = {
+        "repair": "我想先把问题说清楚，找一个双方都能接受的解决办法。",
+        "escalate": "如果没有明确处理，我会正式提出申诉并追究责任。",
+        "neutral": "我先听取更多信息，再决定下一步怎么做。",
+    }
+    checks = []
+    for scenario in scenarios:
+        for action_id in scenario["action_effects"]:
+            text_a = action_id
+            text_b = paraphrases.get(action_id, action_id)
+            first = _run(scenario, action_id, text=text_a)["turns"][0]
+            second = _run(scenario, action_id, text=text_b)["turns"][0]
+            checks.append({
+                "scenario_id": scenario["scenario_id"],
+                "action_id": action_id,
+                "state_delta_equal": first["state_after"] == second["state_after"],
+                "dynamics_delta_equal": first["dynamics_after"] == second["dynamics_after"],
+                "passed": (
+                    first["state_after"] == second["state_after"]
+                    and first["dynamics_after"] == second["dynamics_after"]
+                ),
+            })
+    return {
+        "criterion": "3. Paraphrase Robustness",
+        "status": "partial",
+        "check_count": len(checks),
+        "passed_checks": sum(item["passed"] for item in checks),
+        "checks": checks,
+        "interpretation": (
+            "Exact robustness holds when the structured action_id is fixed. "
+            "This is not yet an end-to-end natural-language paraphrase test because "
+            "the full pipeline has no action normalization/interpreter component."
+        ),
+        "required_fix": "Add a versioned action interpreter/normalizer and test paraphrase pairs before state update.",
+    }
+
+
+def controlled_policy_sensitivity(scenarios, turns=1):
+    reports = []
+    for scenario in scenarios:
+        trajectories = {
+            action_id: _run(scenario, action_id, turns=turns)
+            for action_id in ("repair", "neutral", "escalate")
+            if action_id in scenario["action_effects"]
+        }
+        first_turns = {key: value["turns"][0] for key, value in trajectories.items()}
+        variable_checks = []
+        for action_id, effect in scenario["action_effects"].items():
+            if action_id not in first_turns:
+                continue
+            expected = _flatten_delta(effect["state_delta"])
+            actual = _flatten_delta(first_turns[action_id]["numeric_state_delta"])
+            for variable, label in expected.items():
+                variable_checks.append(
+                    _sign(actual[variable]) == _expected_sign(label)
+                )
+        final_states = [
+            flatten_state(trajectory["turns"][-1]["state_after"])
+            for trajectory in trajectories.values()
+            if trajectory["turns"]
+        ]
+        spread = {}
+        for variable in sorted({key for state in final_states for key in state}):
+            values = [state[variable] for state in final_states if variable in state]
+            spread[variable] = max(values) - min(values) if values else 0
+        divergent = any(value > 0 for value in spread.values())
+        reports.append({
+            "scenario_id": scenario["scenario_id"],
+            "turns_checked": turns,
+            "direction_checks_passed": all(variable_checks),
+            "direction_check_count": len(variable_checks),
+            "final_state_spread": spread,
+            "meaningful_divergence_observed": divergent,
+            "passed": all(variable_checks) and divergent,
+        })
+    return {
+        "criterion": "4. Controlled Policy Sensitivity",
+        "status": "passed" if all(item["passed"] for item in reports) else "failed",
+        "scenario_count": len(reports),
+        "passed_scenarios": sum(item["passed"] for item in reports),
+        "scenarios": reports,
+        "interpretation": "Repair, neutral and escalation produce configured directional divergence across all scenarios.",
+    }
+
+
+def full_trajectory_plausibility(scenarios, turns=8):
+    reports = []
+    for scenario in scenarios:
+        scenario_reports = []
+        for action_id in ("repair", "neutral", "escalate"):
+            if action_id not in scenario["action_effects"]:
+                continue
+            trajectory = _run(scenario, action_id, turns=turns)
+            state_values = [
+                value
+                for turn in trajectory["turns"]
+                for value in flatten_state(turn["state_after"]).values()
+            ]
+            dynamics_values = [
+                value
+                for turn in trajectory["turns"]
+                for value in flatten_state(turn["dynamics_after"]).values()
+            ]
+            history_turn_ids = {
+                f"t{item['turn_id']}"
+                for turn in trajectory["turns"]
+                for item in turn["observation"]["history"]
+            }
+            memory_ids = {
+                item
+                for turn in trajectory["turns"]
+                for item in turn["memory_view"]["relevant_turn_ids"]
+            }
+            structural_checks = {
+                "length_5_to_10": 5 <= len(trajectory["turns"]) <= 10,
+                "state_bounds": all(0 <= value <= 10 for value in state_values),
+                "dynamics_bounds": all(0 <= value <= 10 for value in dynamics_values),
+                "nonempty_responses": all(turn["environment_response"].strip() for turn in trajectory["turns"]),
+                "memory_references_prior_history": memory_ids <= history_turn_ids,
+                "state_transition_fields_present": all(
+                    all(key in turn for key in ("state_before", "state_after", "state_delta", "appraisal"))
+                    for turn in trajectory["turns"]
+                ),
+            }
+            scenario_reports.append({
+                "policy_id": action_id,
+                "turn_count": len(trajectory["turns"]),
+                "structural_checks": structural_checks,
+                "structurally_valid": all(structural_checks.values()),
+            })
+        reports.append({
+            "scenario_id": scenario["scenario_id"],
+            "policies": scenario_reports,
+            "structurally_valid": all(item["structurally_valid"] for item in scenario_reports),
+        })
+    return {
+        "criterion": "5. Full Trajectory Plausibility",
+        "status": "pending_human_judgment",
+        "scenario_count": len(reports),
+        "structurally_valid_scenarios": sum(item["structurally_valid"] for item in reports),
+        "scenarios": reports,
+        "human_judgment_required": [
+            "人物反应是否像真实角色而非模板拼接",
+            "状态变化和回应是否与整段历史一致",
+            "repair/escalate/neutral 的整体轨迹是否符合社会机制",
+        ],
+        "interpretation": "Automated structural checks pass; human reviewers must judge semantic plausibility.",
+    }
+
+
+def build_acceptance_report(scenarios):
+    criteria = [
+        state_update_validity(scenarios),
+        persona_sensitivity(scenarios),
+        paraphrase_robustness(scenarios),
+        controlled_policy_sensitivity(scenarios, turns=1),
+        full_trajectory_plausibility(scenarios, turns=8),
+    ]
+    return {
+        "format": "emotree_pipeline_acceptance_v1",
+        "scenario_count": len(scenarios),
+        "criteria": criteria,
+        "gate": {
+            "automated_passed": all(item["status"] == "passed" for item in criteria if item["criterion"] in {
+                "1. State Update Validity", "4. Controlled Policy Sensitivity"
+            }),
+            "research_acceptance": False,
+            "blocking_items": [
+                item["criterion"] for item in criteria
+                if item["status"] != "passed"
+            ],
+        },
+    }

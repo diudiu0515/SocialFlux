@@ -38,4 +38,10 @@ Provider 支持 OpenAI-compatible、Anthropic、Gemini 和 local/vLLM。没有 A
 
 环境 appraisal、memory retrieval、model policy、模型 response、任务转换器和故事生成均从该目录读取；shared/interactive_story_generation_prompt.md 只保留兼容指针。修改 prompt 时新增版本文件、重新生成 manifest、更新调用方的 prompt ID，再运行三套测试。
 
+验收命令：
+
+    python scripts/run_acceptance.py       --scenarios configs/scenarios       --output build/pipeline_v1
+
+当前验收报告位于 build/pipeline_v1/acceptance_report.md 和 acceptance_report.json。工程自动 gate 已通过；Persona Sensitivity、自然语言端到端 Paraphrase Robustness 和 Full Trajectory Plausibility 的研究验收仍未关闭，后两者需要实现/接入对应组件和人工判断。
+
 标注导出入口位于 annotation/overlay.py，指标和泄漏审计位于 evaluation/。旧的 demo/ 保持为人工交互展示层，不承担完整 benchmark pipeline。

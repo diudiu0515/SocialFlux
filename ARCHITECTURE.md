@@ -79,6 +79,18 @@ ModelPolicy、ModelMemoryModule、ModelStateUpdater、ModelResponseGenerator 均
 
 demo/server.py 是展示层，不替代正式 benchmark pipeline。Participant、Researcher、Replay 使用不同视图；研究视图通过 EMOTREE_DEBUG_TOKEN 保护，公网部署还需要反向代理认证。
 
+## 6. 验收门禁
+
+五项验收由 evaluation/pipeline_acceptance.py 和 scripts/run_acceptance.py 固化：
+
+1. State Update Validity：逐场景逐 action 对比配置 semantic delta 与实际数值方向。
+2. Persona Sensitivity：固定 history/action/state，仅改变 persona，要求 transition 出现可解释差异。
+3. Paraphrase Robustness：同义 action 要求 transition 接近；完整验收需要 action normalizer。
+4. Controlled Policy Sensitivity：repair、neutral、escalate 的方向和轨迹必须分化。
+5. Full Trajectory Plausibility：自动检查长度、边界、回应、memory 引用和字段完整性；人物合理性、历史依赖和社会机制一致性由人工审阅。
+
+当前自动工程门禁为通过；研究验收报告会明确记录未完成项，不以自动结构检查替代人工语义判断。
+
 ## 6. 可再生构建
 
 完整 pipeline：

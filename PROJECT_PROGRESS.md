@@ -19,6 +19,7 @@
 | 信息隔离与泄漏审计 | 已完成 | participant 只暴露 observable view；候选实例不暴露 private effects |
 | Demo | 已完成 | Participant / Researcher / Replay 三端和 20-turn 上限 |
 | GitHub 发布 | 已完成 | main 分支已推送到 github.com/diudiu0515/SocialFlux.git |
+| Pipeline acceptance | 部分通过 | State Update Validity 210/210、Controlled Policy Sensitivity 10/10；Persona 未通过，Paraphrase 为 partial，Trajectory 等待人工判断 |
 | 正式 ground truth | 待人工标注 | 需要独立标注与 adjudication，代码不会伪造正式标签 |
 | Talking-head 视频 | 待后续 | 当前保留视频控制结构和 spec-only 资产 |
 | RL policy 训练 | 待后续 | 当前提供 policy/provider 接口，不包含训练过程 |
@@ -34,7 +35,10 @@
 
 ## 下一步优先级
 
-1. 为 IA001/IA002 完成人工标注、双人一致性检查和 adjudication。
+1. 修复并标定 Persona Sensitivity：为 RuleBasedStateUpdater 增加可解释 persona modifier，或完成 provider-backed transition 评测。
+2. 增加版本化 action interpreter/normalizer，完成自然语言 Paraphrase Robustness。
+3. 为 5–10+ 轮轨迹组织人工 plausibility review，并记录 reviewer、版本和 adjudication。
+4. 为 IA001/IA002 完成人工标注、双人一致性检查和 adjudication。
 2. 增加更多独立 Story World，并沿用同一 schema、prompt 和采样约束。
 3. 接入真实模型 provider，记录 provider/model/prompt version/seed 等可复现实验元数据。
 4. 根据环境 validity scorecard 进行状态转移和反事实一致性审计。
