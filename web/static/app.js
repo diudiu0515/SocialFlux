@@ -1,0 +1,40 @@
+const $ = (selector) => document.querySelector(selector);
+const state = {data:null, detail:null, scenarioId:null, policyId:null};
+const esc = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const flat = (obj, prefix='') => Object.entries(obj || {}).flatMap(([key,value]) => typeof value === 'object' && value !== null ? flat(value, prefix ? `${prefix}.${key}` : key) : [[prefix ? `${prefix}.${key}` : key, value]]);
+const label = (id) => ({repair:'REPAIR', neutral:'NEUTRAL', escalate:'ESCALATE'})[id] || id;
+const deltaClass = (value) => value > 0 ? 'up' : value < 0 ? 'down' : '';
+const deltaText = (value) => value > 0 ? `+${value}` : `${value}`;
+
+async function get(path){const response=await fetch(path); if(!response.ok) throw new Error(await response.text()); return response.json();}
+function renderOverview(){
+  const manifest=state.data.pipeline_manifest || {}; const totals=manifest.totals || {}; const gate=state.data.acceptance.gate || {};
+  $('#scenarioCount').textContent=state.data.scenario_count;
+  $('#gateBadge').textContent=gate.automated_passed ? 'AUTOMATED GATE · PASS' : 'AUTOMATED GATE · PENDING';
+  $('#overview').innerHTML=[
+    ['SCENARIOS',state.data.scenario_count,'scenario configs'],
+    ['CANDIDATES',totals.instances ?? '—',`T1 ${totals.t1 ?? '—'} · T2 ${totals.t2 ?? '—'} · T3 ${totals.t3 ?? '—'}`],
+    ['POLICY PATHS',state.data.scenarios.reduce((n,s)=>n+s.action_ids.length,0),'controlled trajectories'],
+    ['TALKING HEAD',state.data.scenarios.reduce((n,s)=>n+s.trigger_count,0),'registered trigger rules']
+  ].map(x=>`<div class="metric"><div class="label">${x[0]}</div><div class="value">${esc(x[1])}</div><div class="label">${esc(x[2])}</div></div>`).join('');
+}
+function renderScenarioList(){
+  $('#scenarioList').innerHTML=state.data.scenarios.map(item=>`<button class="scenario-item ${item.scenario_id===state.scenarioId?'active':''}" data-scenario="${esc(item.scenario_id)}"><strong>${esc(item.scenario_id)}</strong><small>${esc(item.title)}</small></button>`).join('');
+  document.querySelectorAll('[data-scenario]').forEach(el=>el.onclick=()=>selectScenario(el.dataset.scenario));
+}
+function renderHeader(){const s=state.detail.scenario, p=s.environment_agent?.persona||{};
+  $('#scenarioHeader').innerHTML=`<div><div class="eyebrow">${esc(s.scenario_id)} · ${esc(s.mechanism||'social interaction')}</div><div class="scenario-title">${esc(s.title||s.scenario_id)}</div><div class="scenario-meta"><span class="tag">${esc(s.max_turns||20)} turn horizon</span><span class="tag">${Object.keys(s.action_effects||{}).length} policy branches</span><span class="tag">${esc(s.media_generation?.asset_status||'no media')}</span></div><p class="scenario-copy">${esc(s.background||'')}</p></div><div class="persona-box"><div class="eyebrow">ENVIRONMENT PERSONA</div><strong>${esc(p.name||'—')}</strong><p>${esc(p.role||'')}<br>patience ${esc(p.patience??'—')} · empathy ${esc(p.empathy??'—')}<br><span class="muted">goal: ${esc(s.environment_agent?.explicit_goal||'—')}</span></p></div>`;
+  $('#rawScenario').textContent=JSON.stringify(s,null,2);
+}
+function renderPolicyCards(){const effects=state.detail.scenario.action_effects||{};
+  $('#policyCards').innerHTML=Object.entries(effects).map(([id,effect])=>{const deltas=flat(effect.state_delta).filter(([,v])=>v!=='similar').slice(0,5); return `<div class="policy-card ${esc(id)} ${state.policyId===id?'selected':''}" data-policy="${esc(id)}"><h3>${label(id)}</h3><div class="delta-summary">${deltas.map(([k,v])=>`<span class="delta-chip ${deltaClass(v.includes('increase')?1:v.includes('decrease')?-1:0)}">${esc(k.split('.').pop())} · ${esc(v.replace('_',' '))}</span>`).join('')}</div></div>`}).join('');
+  document.querySelectorAll('[data-policy]').forEach(el=>el.onclick=()=>{state.policyId=el.dataset.policy; renderPolicyCards(); renderSelect(); renderTrajectory();});
+}
+function renderSelect(){const rollouts=state.detail.rollouts; $('#policySelect').innerHTML=rollouts.map(t=>`<option value="${esc(t.policy_id)}">${esc(label((t.policy_id||'').split('__').pop()))} · ${esc(t.policy_id)}</option>`).join(''); const selected=rollouts.find(t=>(t.policy_id||'').endsWith(`__${state.policyId}`)); if(selected) $('#policySelect').value=selected.policy_id;}
+function stateRows(obj){return flat(obj).map(([key,value])=>`<div class="state-row"><span class="name">${esc(key)}</span><span class="bar"><i class="${key.includes('anger')||key.includes('hostility')||key.includes('risk')?'hot':key.includes('trust')||key.includes('hope')?'good':''}" style="width:${Math.max(0,Math.min(100,Number(value)*10))}%"></i></span><span>${esc(value)}</span></div>`).join('');}
+function renderState(turn){const initial=turn?.state_after||state.detail.scenario.initial_state; const dynamics=turn?.dynamics_after||state.detail.scenario.initial_dynamics; $('#turnLabel').textContent=turn ? turn.turn_id : 'initial'; $('#statePanel').innerHTML=`<div class="subbox"><div class="subbox-label">state · 0—10</div>${stateRows(initial)}</div><div class="subbox" style="margin-top:10px"><div class="subbox-label">interaction dynamics</div>${stateRows(dynamics)}</div>`;}
+function renderTriggerPanel(){const rules=state.detail.scenario.video_triggers||[]; $('#triggerPanel').innerHTML=rules.length?rules.map(rule=>`<div class="trigger-rule"><strong>${esc(rule.trigger_id)}</strong><p>${esc(rule.trigger_mode)} · cooldown ${esc(rule.cooldown_turns??0)} turns<br>${Object.entries(rule.conditions||{}).map(([k,v])=>`${esc(k)} ${esc(v.operator)} ${esc(v.threshold)}`).join(' · ')}</p></div>`).join(''):'<div class="empty">No trigger rules</div>';}
+function renderTrajectory(){const policy=state.detail.rollouts.find(t=>(t.policy_id||'').endsWith(`__${state.policyId}`)) || state.detail.rollouts[0]; if(!policy){$('#trajectory').innerHTML='<div class="empty">pipeline 产物不存在，请先运行 scripts/run_pipeline.py</div>'; return;} $('#trajectory').innerHTML=policy.turns.map(turn=>{const deltas=flat(turn.numeric_state_delta); const media=(turn.media||[]).length; const expr=turn.observable_expression||{}; return `<article class="turn-card"><div class="turn-head"><strong>${esc(turn.turn_id)}</strong><span class="turn-action">${esc(label(turn.policy_action?.action_id))} · ${esc(turn.policy_action?.text)}</span></div><div class="turn-body"><p class="response">${esc(turn.environment_response)}</p><div class="turn-grid"><div class="subbox"><div class="subbox-label">state transition</div>${deltas.filter(([,v])=>v!==0).slice(0,8).map(([k,v])=>`<span class="delta-chip ${deltaClass(v)}" style="display:inline-block;margin:2px">${esc(k)} ${deltaText(v)}</span>`).join('') || '<span class="muted">no numeric change</span>'}</div><div class="subbox"><div class="subbox-label">observable expression ${media?'· media spec':''}</div><div class="expr"><b>face</b> ${esc(expr.facial_expression||'—')}<br><b>gaze</b> ${esc(expr.gaze||'—')}<br><b>prosody</b> ${esc(expr.prosody||'—')}</div>${(turn.trigger_events||[]).map(e=>`<div class="trigger"><small>TRIGGERED · ${esc(e.trigger_id)}</small>${esc(e.reason||e.cue_template||'state crossing')}</div>`).join('')}</div></div></div></article>`}).join(''); renderState(policy.turns[policy.turns.length-1]);}
+async function selectScenario(id){state.scenarioId=id; renderScenarioList(); state.detail=await get(`/api/scenarios/${encodeURIComponent(id)}`); state.policyId=(state.detail.rollouts[0]?.policy_id||'__neutral').split('__').pop(); renderHeader(); renderPolicyCards(); renderSelect(); renderTriggerPanel(); renderTrajectory();}
+async function boot(){try{state.data=await get('/api/summary'); renderOverview(); state.scenarioId=state.data.scenarios[0]?.scenario_id; renderScenarioList(); if(state.scenarioId) await selectScenario(state.scenarioId); $('#policySelect').onchange=e=>{state.policyId=e.target.value.split('__').pop();renderPolicyCards();renderTrajectory();};}catch(error){document.body.innerHTML=`<main class="main"><div class="panel error">无法加载 pipeline：${esc(error.message)}</div></main>`;}}
+boot();

@@ -10,7 +10,7 @@ EmoTree is a stateful social-interaction benchmark pipeline with observable/priv
 - rollout/ and offline/: trajectory logging and T1/T2/T3 instance extraction
 - tasks/ and interactive_benchmark/: task schemas, conversion tools, and annotation utilities; legacy worlds are optional and currently removed
 - build/: reproducible benchmark and pipeline outputs
-- demo/: standalone on-policy interactive demo
+- web/: read-only scenario and pipeline visualization website
 - talkinghead_generation.md: state-triggered multimodal observation design
 
 ## Run the full pipeline
@@ -28,17 +28,17 @@ Run the acceptance command to inspect trigger and trajectory evidence in build/p
 
 ~~~bash
 python -m unittest discover -s tests -v
-python -m unittest discover -s demo/tests -v
+python -m unittest discover -s web/tests -v
 python -m unittest discover -s interactive_benchmark/tests -v
 ~~~
 
-## Run the demo
+## Run the scenario website
 
 ~~~bash
-python demo/server.py
+python web/server.py --host 127.0.0.1 --port 8000
 ~~~
 
-The participant view exposes only observable information. Researcher and replay views require the runtime debug token.
+The website is a read-only view of the current scenario configs and generated pipeline artifacts. It does not maintain a second environment or demo scenario.
 
 ## Prompt change policy
 
@@ -46,4 +46,4 @@ Every fixed model-facing prompt belongs in prompts/ as a versioned Markdown file
 
 ## Secrets
 
-No GitHub credential or provider key belongs in this repository. Use a GitHub fine-grained personal access token or a repository deploy key created in your own GitHub account, and store provider/demo secrets in local environment variables only. See .env.example for the local variable names.
+No GitHub credential or provider key belongs in this repository. Use a GitHub fine-grained personal access token or a repository deploy key created in your own GitHub account, and store provider secrets in local environment variables only. See .env.example for the local variable names.

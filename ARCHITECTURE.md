@@ -44,7 +44,7 @@ Annotation overlay -> metrics / leakage / environment validity
 | schemas/ | Phase-A scenario/trajectory schema 校验 |
 | worlds/ | 可选的交互 Story World 源文件；当前旧 IA001/IA002 已按项目整理要求移除 |
 | tasks/ | T1/T2/T3 任务定义、输出 schema 和标注 schema |
-| demo/ | 独立的 on-policy 人机交互展示层 |
+| web/ | 只读 scenario/pipeline 可视化网站，不维护第二套状态机 |
 | build/ | 可再生的 pipeline 和 benchmark 聚合产物；私有 pipeline_v1 默认本地生成 |
 
 ## 3. Talking Head / Observable Expression
@@ -69,7 +69,7 @@ prompts/ 是固定 prompt 的唯一源。调用方通过 prompts/loader.py 读�
 2. 更新 manifest；
 3. 修改调用方的 prompt ID；
 4. 重建受影响的 benchmark/build 产物；
-5. 运行 tests、demo/tests 和 interactive_benchmark/tests。
+5. 运行核心 tests、web/tests 和 interactive_benchmark/tests（若保留旧 world 源文件）。
 
 shared/interactive_story_generation_prompt.md 仅保留为旧链接兼容入口。
 
@@ -83,9 +83,9 @@ scripts/run_pipeline.py 使用确定性 ControlledPolicy 运行所有场景，�
 
 ModelPolicy、ModelMemoryModule、ModelStateUpdater、ModelResponseGenerator 均通过 provider.complete() 工作。API key 只能由本地环境变量或外部 secret manager 注入，不能写入 scenario、prompt、build 或 Git 仓库。
 
-### Interactive demo
+### Scenario Observatory
 
-demo/server.py 是展示层，不替代正式 benchmark pipeline。Participant、Researcher、Replay 使用不同视图；研究视图通过 EMOTREE_DEBUG_TOKEN 保护，公网部署还需要反向代理认证。
+web/server.py 是唯一网站入口。它读取 configs/scenarios 和本地 build/pipeline_v1，通过 /api/summary、/api/scenarios/{id} 提供场景、策略轨迹、状态变化、表达层和媒体 trigger 的只读视图。网站不接收用户 action，不生成独立 session，也不复制 environment 状态机。
 
 ## 6. 验收门禁
 
@@ -93,11 +93,11 @@ demo/server.py 是展示层，不替代正式 benchmark pipeline。Participant�
 
 1. State Update Validity：逐场景逐 action 对比配置 semantic delta 与实际数值方向。
 2. Persona Sensitivity：固定 history/action/state，仅改变 persona，要求 transition 出现可解释差异。
-3. Paraphrase Robustness：同义 action 要求 transition 接近；完整验收需要 action normalizer。
+3. Paraphrase Robustness：同义 action 经过 versioned action normalizer 后，要求 transition 接近。
 4. Controlled Policy Sensitivity：repair、neutral、escalate 的方向和轨迹必须分化。
-5. Full Trajectory Plausibility：自动检查长度、边界、回应、memory 引用和字段完整性；人物合理性、历史依赖和社会机制一致性由人工审阅。
+5. Full Trajectory Plausibility：自动检查长度、边界、回应、memory 引用、字段完整性和 configured direction；逐轨迹专家预审通过后，仍由人工审阅人物合理性、历史依赖和社会机制一致性。
 
-当前自动工程门禁为通过；研究验收报告会明确记录未完成项，不以自动结构检查替代人工语义判断。
+当前 automated engineering gate 为通过；研究验收只剩第 5 项的正式人工语义签字，不以自动结构检查或专家预审冒充人工判断。
 
 ## 6. 可再生构建
 
@@ -110,7 +110,6 @@ python -m scripts.run_pipeline   --scenarios configs/scenarios   --output build/
 Interactive benchmark：
 
 ~~~bash
-# 若项目重新加入 Story World，可用以下命令转换：
 # 若项目重新加入 Story World，再执行：
 python interactive_benchmark/scripts/convert_interactive_to_benchmark.py   worlds/IA001/story.json worlds/IA002/story.json   -o build/interactive_benchmark_v0.2/instances.jsonl
 ~~~
@@ -119,6 +118,6 @@ python interactive_benchmark/scripts/convert_interactive_to_benchmark.py   world
 
 ~~~bash
 python -m unittest discover -s tests -v
-python -m unittest discover -s demo/tests -v
+python -m unittest discover -s web/tests -v
 python -m unittest discover -s interactive_benchmark/tests -v
 ~~~

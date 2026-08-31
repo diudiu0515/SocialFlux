@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SocialFlux · Scenario Observatory</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">S</span><div><strong>SocialFlux</strong><small>Scenario Observatory</small></div></div>
+      <div class="side-label">SCENARIOS <span id="scenarioCount"></span></div>
+      <div id="scenarioList" class="scenario-list"></div>
+      <div class="sidebar-foot">
+        <span class="status-dot"></span> pipeline source connected
+        <small>configs/scenarios · build/pipeline_v1</small>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div><div class="eyebrow">PIPELINE VISUALIZER</div><h1>Scenario Observatory</h1></div>
+        <div id="gateBadge" class="gate-badge">loading</div>
+      </header>
+      <section id="overview" class="overview-grid"></section>
+      <section id="scenarioHeader" class="scenario-header panel"></section>
+      <div class="content-grid">
+        <section class="main-column">
+          <div class="section-heading"><div><div class="eyebrow">CONTROLLED TRAJECTORIES</div><h2>策略轨迹</h2></div><select id="policySelect"></select></div>
+          <div id="policyCards" class="policy-cards"></div>
+          <div id="trajectory" class="trajectory"></div>
+        </section>
+        <aside class="right-column">
+          <section class="panel"><div class="section-heading compact"><h2>当前状态</h2><span id="turnLabel" class="muted"></span></div><div id="statePanel"></div></section>
+          <section class="panel"><div class="section-heading compact"><h2>Talking Head</h2><span class="pill purple">state-triggered</span></div><div id="triggerPanel"></div></section>
+          <details class="panel raw-panel"><summary>查看 scenario JSON</summary><pre id="rawScenario"></pre></details>
+        </aside>
+      </div>
+    </main>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>
