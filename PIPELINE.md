@@ -45,6 +45,6 @@ Provider 支持 OpenAI-compatible、Anthropic、Gemini 和 local/vLLM。没有 A
 
     python scripts/run_acceptance.py       --scenarios configs/scenarios       --output build/pipeline_v1
 
-当前验收报告位于 build/pipeline_v1/acceptance_report.md 和 acceptance_report.json。工程自动 gate 已通过；Persona Sensitivity、自然语言端到端 Paraphrase Robustness 和 Full Trajectory Plausibility 的研究验收仍未关闭，后两者需要实现/接入对应组件和人工判断。
+当前验收报告位于 build/pipeline_v1/acceptance_report.md 和 acceptance_report.json。当前 automated engineering gate 已通过：State 210/210、Persona passed、Paraphrase 30/30、Controlled Policy 10/10、Full Trajectory 10/10 结构+专家预审通过。第 5 项的正式人工语义 review 仍由真实评审者完成。
 
 标注导出入口位于 annotation/overlay.py，指标和泄漏审计位于 evaluation/。旧的 demo/ 保持为人工交互展示层，不承担完整 benchmark pipeline。

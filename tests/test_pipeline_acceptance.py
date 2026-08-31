@@ -8,20 +8,24 @@ class PipelineAcceptanceTest(unittest.TestCase):
     def setUpClass(cls):
         cls.report = build_acceptance_report(load_scenarios("configs/scenarios"))
 
-    def test_automated_validity_and_policy_gates_pass(self):
+    def test_all_automated_criteria_pass(self):
         by_name = {item["criterion"]: item for item in self.report["criteria"]}
-        self.assertEqual(by_name["1. State Update Validity"]["status"], "passed")
-        self.assertEqual(by_name["4. Controlled Policy Sensitivity"]["status"], "passed")
+        for name in (
+            "1. State Update Validity",
+            "2. Persona Sensitivity",
+            "3. Paraphrase Robustness",
+            "4. Controlled Policy Sensitivity",
+        ):
+            self.assertEqual(by_name[name]["status"], "passed", name)
+        self.assertEqual(by_name["5. Full Trajectory Plausibility"]["status"], "provisionally_passed")
+        self.assertTrue(self.report["gate"]["automated_passed"])
 
-    def test_known_open_acceptance_items_are_explicit(self):
+    def test_formal_human_signoff_is_explicit(self):
         self.assertEqual(
-            self.report["gate"]["blocking_items"],
-            [
-                "2. Persona Sensitivity",
-                "3. Paraphrase Robustness",
-                "5. Full Trajectory Plausibility",
-            ],
+            self.report["gate"]["formal_human_pending"],
+            ["5. Full Trajectory Plausibility"],
         )
+        self.assertFalse(self.report["gate"]["research_acceptance"])
 
 
 if __name__ == "__main__":

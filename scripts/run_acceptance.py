@@ -40,11 +40,13 @@ def markdown(report):
             lines.append("")
             lines.append("后续：" + item["required_fix"])
         lines.append("")
+    human_pending = report["gate"].get("formal_human_pending", [])
     lines.extend([
         "## Gate",
         "",
         "- Automated engineering checks: " + ("passed" if report["gate"]["automated_passed"] else "failed"),
-        "- Research acceptance: not accepted until persona, paraphrase end-to-end, and human trajectory review are complete.",
+        "- Research acceptance: " + ("passed" if report["gate"]["research_acceptance"] else "pending formal human review"),
+        "- Formal human review pending: " + (", ".join(human_pending) if human_pending else "none"),
         "",
         "完整逐项 evidence 保存在同目录的 acceptance_report.json。",
     ])

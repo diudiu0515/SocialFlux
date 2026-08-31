@@ -33,7 +33,7 @@ Annotation overlay -> metrics / leakage / environment validity
 
 | 目录 | 职责 |
 |---|---|
-| environment/ | 状态、记忆、appraisal、response、终止、observable expression 和 media trigger |
+| environment/ | action normalizer、状态、记忆、appraisal、persona-conditioned update、response、终止、observable expression 和 media trigger |
 | providers/ | 统一 provider 接口及四类模型适配器 |
 | policies/ | ControlledPolicy 和 ModelPolicy |
 | rollout/ | 单策略、多策略、counterfactual、日志和 manifest |
@@ -42,7 +42,7 @@ Annotation overlay -> metrics / leakage / environment validity
 | evaluation/ | 环境有效性、指标和泄漏审计 |
 | prompts/ | 所有固定模型 prompt、版本和 hash manifest |
 | schemas/ | Phase-A scenario/trajectory schema 校验 |
-| worlds/ | 交互 Story World、剧情树和 world 级任务实例 |
+| worlds/ | 可选的交互 Story World 源文件；当前旧 IA001/IA002 已按项目整理要求移除 |
 | tasks/ | T1/T2/T3 任务定义、输出 schema 和标注 schema |
 | demo/ | 独立的 on-policy 人机交互展示层 |
 | build/ | 可再生的 pipeline 和 benchmark 聚合产物；私有 pipeline_v1 默认本地生成 |
@@ -110,6 +110,8 @@ python -m scripts.run_pipeline   --scenarios configs/scenarios   --output build/
 Interactive benchmark：
 
 ~~~bash
+# 若项目重新加入 Story World，可用以下命令转换：
+# 若项目重新加入 Story World，再执行：
 python interactive_benchmark/scripts/convert_interactive_to_benchmark.py   worlds/IA001/story.json worlds/IA002/story.json   -o build/interactive_benchmark_v0.2/instances.jsonl
 ~~~
 

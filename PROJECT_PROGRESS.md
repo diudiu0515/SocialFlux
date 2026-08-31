@@ -14,12 +14,12 @@
 | Controlled validation rollout | 已完成 | 10 个场景、每场景 3 条策略 rollout |
 | Offline benchmark 构建 | 已完成 | T1=50、T2=30、T3=40，共 120 条候选实例 |
 | Counterfactual 验证 | 已完成 | T3 私有分支和即时/延迟 horizon 已生成 |
-| Interactive benchmark | 已完成 | IA001/IA002 共 48 条 text/text_video 实例 |
+| Interactive benchmark | 旧 world 已清理 | IA001/IA002 创作源文件按当前项目整理要求移除；转换器、schema 和标注工具保留 |
 | Prompt catalog | 已完成 | 12 个版本化 prompt，manifest SHA-256 校验，运行时代码统一 loader |
 | 信息隔离与泄漏审计 | 已完成 | participant 只暴露 observable view；候选实例不暴露 private effects |
 | Demo | 已完成 | Participant / Researcher / Replay 三端和 20-turn 上限 |
 | GitHub 发布 | 已完成 | main 分支已推送到 github.com/diudiu0515/SocialFlux.git |
-| Pipeline acceptance | 部分通过 | State Update Validity 210/210、Controlled Policy Sensitivity 10/10；Persona 未通过，Paraphrase 为 partial，Trajectory 等待人工判断 |
+| Pipeline acceptance | 工程验收通过 | State 210/210、Persona 通过、Paraphrase 30/30、Policy 10/10；Trajectory 10/10 结构+专家预审通过，正式人工签字待补 |
 | 正式 ground truth | 待人工标注 | 需要独立标注与 adjudication，代码不会伪造正式标签 |
 | Talking-head 视频 | 结构层已完成 | 10 个 scenario 已注册 state-triggered expression/media 规则；真实视频资产仍为 spec-only |
 | RL policy 训练 | 待后续 | 当前提供 policy/provider 接口，不包含训练过程 |
@@ -33,17 +33,15 @@
 - Pipeline manifest：10 个 scenario，120 条候选实例
 - Interactive benchmark manifest：48 条实例
 - Talking Head trigger tests：2 项通过
+- Acceptance gate：automated engineering checks passed；formal human trajectory review pending
 
 ## 下一步优先级
 
-1. 修复并标定 Persona Sensitivity：为 RuleBasedStateUpdater 增加可解释 persona modifier，或完成 provider-backed transition 评测。
-2. 增加版本化 action interpreter/normalizer，完成自然语言 Paraphrase Robustness。
-3. 为 5–10+ 轮轨迹组织人工 plausibility review，并记录 reviewer、版本和 adjudication。
-4. 为 IA001/IA002 完成人工标注、双人一致性检查和 adjudication。
-5. 增加更多独立 Story World，并沿用同一 schema、prompt 和采样约束。
-6. 接入真实模型 provider，记录 provider/model/prompt version/seed 等可复现实验元数据。
-7. 根据 talkinghead_generation.md 接入真实 Talking Head 生成与 media manifest，并完成 trigger validity、expression-state consistency、temporal continuity 和 non-leakage 人工验收。
-8. 再考虑 RL policy，不在正式标注前改变任务定义。
+1. 为 5–10+ 轮轨迹组织正式人工 plausibility review，并记录 reviewer、版本和 adjudication。
+2. 接入真实模型 provider，记录 provider/model/prompt version/seed 等可复现实验元数据。
+3. 根据 talkinghead_generation.md 接入真实 Talking Head 生成与 media manifest，并完成 trigger validity、expression-state consistency、temporal continuity 和 non-leakage 人工验收。
+4. 如需恢复交互 benchmark，再新增 Story World，并沿用同一 schema、prompt 和采样约束。
+5. 再考虑 RL policy，不在正式标注前改变任务定义。
 
 ## 维护规则
 

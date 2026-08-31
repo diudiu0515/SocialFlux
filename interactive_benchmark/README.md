@@ -1,6 +1,6 @@
 # EmoTree Interactive Benchmark
 
-本目录把 `worlds/*/story.json` 中的完整故事世界转换为模型实际评测的独立实例。故事 JSON 是创作与因果结构层；benchmark JSONL 才是模型输入层；人类标签单独保存在 annotation overlay 中。
+本目录把可选的 `worlds/*/story.json` 完整故事世界转换为模型实际评测的独立实例。当前旧 IA001/IA002 world 源文件已按项目整理要求移除；转换器、schema 和测试工具保留，后续加入新 world 即可复用。故事 JSON 是创作与因果结构层；benchmark JSONL 才是模型输入层；人类标签单独保存在 annotation overlay 中。
 
 ## 三层数据
 

@@ -4,6 +4,7 @@ from copy import deepcopy
 import uuid
 
 from .memory import MemoryModule
+from .action_interpreter import normalize_action
 from .multimodal import ObservableExpressionLayer
 from .initializer import freeze_initialization
 from .response_generator import TemplateResponseGenerator
@@ -64,6 +65,8 @@ class StatefulEnvironment:
         if self.session["status"] != "active":
             raise ValueError("episode is not active")
         observation_before = self.observe()
+        submitted_action = deepcopy(action)
+        action = normalize_action(action, self.scenario)
         turn_id = self.session["turn_id"] + 1
         state_before = deepcopy(self.session["state"])
         dynamics_before = deepcopy(self.session["dynamics"])
@@ -117,6 +120,7 @@ class StatefulEnvironment:
             "turn_id": f"t{turn_id}",
             "observation": observation_before,
             "policy_action": deepcopy(action),
+            "submitted_action": submitted_action,
             "memory_view": memory_view,
             "appraisal": transition["appraisal"],
             "state_before": state_before,
