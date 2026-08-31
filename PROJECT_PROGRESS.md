@@ -18,6 +18,7 @@
 | Prompt catalog | 已完成 | 12 个版本化 prompt，manifest SHA-256 校验，运行时代码统一 loader |
 | 信息隔离与泄漏审计 | 已完成 | participant 只暴露 observable view；候选实例不暴露 private effects |
 | Demo | 已完成 | Participant / Researcher / Replay 三端和 20-turn 上限 |
+| GitHub 发布 | 已完成 | main 分支已推送到 github.com/diudiu0515/SocialFlux.git |
 | 正式 ground truth | 待人工标注 | 需要独立标注与 adjudication，代码不会伪造正式标签 |
 | Talking-head 视频 | 待后续 | 当前保留视频控制结构和 spec-only 资产 |
 | RL policy 训练 | 待后续 | 当前提供 policy/provider 接口，不包含训练过程 |
