@@ -20,6 +20,7 @@ emotree/
 ├── interactive_benchmark/         # 可选 legacy world converter/schema 工具
 ├── shared/                        # scenario 创作规范和状态本体参考
 ├── talkinghead_generation.md      # state-triggered Talking Head 设计
+├── self_check.md                  # 永久 TODO/验收清单；每次任务更新，禁止删除既有项
 ├── build/                         # 可再生构建；pipeline_v1 私有轨迹只本地生成
 ├── ARCHITECTURE.md
 ├── PIPELINE.md

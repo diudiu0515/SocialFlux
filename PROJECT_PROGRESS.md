@@ -27,7 +27,7 @@
 
 ## 已验证指标
 
-- 核心测试：21 项通过
+- 核心测试：22 项通过
 - Web 测试：3 项通过
 - Interactive benchmark 工具测试：12 项通过，旧 IA001/IA002 world 测试按整理要求跳过
 - Python compileall：通过
@@ -46,6 +46,7 @@
 
 ## 维护规则
 
+- 每次任务结束必须读取并更新 self_check.md：完整项打勾，未完成项保留，禁止删除既有 TODO。
 - 每完成一项可验证工作，更新本文件的更新时间、状态表和测试结果。
 - 新增或修改 scenario JSON 后必须运行 `python scripts/scenario_docs.py`；缺失或过期的同名 Markdown 会阻断 pipeline 和 acceptance。
 - 修改任务语义先更新 tasks/，修改固定 prompt 先新增 prompts/ 版本并更新 prompts/manifest.json。
