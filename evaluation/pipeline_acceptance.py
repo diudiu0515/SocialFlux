@@ -8,13 +8,16 @@ from environment.delta_mapper import DELTA_TO_INT, flatten_state
 from environment.env import StatefulEnvironment
 from policies.controlled import ControlledPolicy
 from rollout.runner import RolloutRunner
+from scripts.scenario_docs import assert_document_current, assert_manifest_current
 
 
 def load_scenarios(directory):
-    return [
-        json.loads(path.read_text(encoding="utf-8"))
-        for path in sorted(Path(directory).glob("scenario_*.json"))
-    ]
+    assert_manifest_current(directory)
+    scenarios = []
+    for path in sorted(Path(directory).glob("scenario_*.json")):
+        assert_document_current(path)
+        scenarios.append(json.loads(path.read_text(encoding="utf-8")))
+    return scenarios
 
 
 def _run(scenario, action_id, turns=1, persona=None, text=None):

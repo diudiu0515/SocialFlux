@@ -4,7 +4,7 @@
 
 ```text
 emotree/
-├── configs/scenarios/              # 唯一场景输入；manifest + scenario_*.json
+├── configs/scenarios/              # 唯一场景输入；每个 scenario_*.json 配对同名 .md
 ├── environment/                   # action normalization、状态、记忆、更新、响应、终止、表达层
 ├── policies/                      # ControlledPolicy 与 ModelPolicy
 ├── providers/                     # OpenAI-compatible、Anthropic、Gemini、local/vLLM
@@ -32,10 +32,11 @@ emotree/
 
 1. 在 `configs/scenarios/` 新增 `scenario_*.json`，遵守 `schemas/scenario.schema.json`；
 2. 配置 persona、initial state/dynamics、action effects、response、observable expression 和 video triggers；
-3. 运行 `python -m scripts.run_pipeline --scenarios configs/scenarios --output build/pipeline_v1`；
-4. 运行 `python scripts/run_acceptance.py --scenarios configs/scenarios --output build/pipeline_v1`；
-5. 运行核心测试与 `python -m unittest discover -s web/tests -v`；
-6. 打开 `python web/server.py`，网站会自动发现新场景。
+3. 运行 `python scripts/scenario_docs.py configs/scenarios/scenario_*.json` 生成同名 Markdown；
+4. 生成器会自动重建 manifest；运行 `python scripts/scenario_docs.py --check` 检查全部 JSON/Markdown/source hash/manifest；
+5. 运行 `python -m scripts.run_pipeline --scenarios configs/scenarios --output build/pipeline_v1`；
+6. 运行 acceptance、核心测试与 web/tests；
+7. 打开 `python web/server.py`，网站会自动发现新场景并展示配对文档。
 
 ## 数据边界
 

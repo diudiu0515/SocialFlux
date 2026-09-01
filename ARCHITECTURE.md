@@ -41,11 +41,16 @@ Annotation overlay -> metrics / leakage / environment validity
 | annotation/ | 人工标注 overlay、聚合和导出 |
 | evaluation/ | 环境有效性、指标和泄漏审计 |
 | prompts/ | 所有固定模型 prompt、版本和 hash manifest |
+| configs/scenarios/ | 每个 scenario JSON 与同名、可再生、带 source hash 的自然语言 Markdown |
 | schemas/ | Phase-A scenario/trajectory schema 校验 |
 | worlds/ | 可选的交互 Story World 源文件；当前旧 IA001/IA002 已按项目整理要求移除 |
 | tasks/ | T1/T2/T3 任务定义、输出 schema 和标注 schema |
 | web/ | 只读 scenario/pipeline 可视化网站，不维护第二套状态机 |
 | build/ | 可再生的 pipeline 和 benchmark 聚合产物；私有 pipeline_v1 默认本地生成 |
+
+## 2.1 Scenario 文档契约
+
+Scenario 的机器事实只在 JSON 中维护；同名 Markdown 是由 `scripts/scenario_docs.py` 生成的人类审阅视图。生成器把初始化、状态本体、action delta、Talking Head 表达与视频阈值翻译成自然语言，并记录 JSON SHA-256。生成器也从目录自动重建 scenario manifest。`run_pipeline` 与 acceptance loader 在读取 JSON 时逐个验证 Markdown 和 manifest，因而新增或修改 scenario 后若未再生成文档，构建会失败。Scenario Observatory 同时展示这份 Markdown 和原始 JSON。
 
 ## 3. Talking Head / Observable Expression
 

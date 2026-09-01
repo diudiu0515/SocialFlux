@@ -13,6 +13,15 @@
       -> annotation overlay
       -> metrics / leakage / environment validation
 
+## Scenario 配对文档契约
+
+每个 `configs/scenarios/scenario_*.json` 必须有同名 `.md`。Markdown 由 `scripts/scenario_docs.py` 从 JSON 生成，包含故事初始化、角色目标与隐藏意图、初始 state/dynamics、各 action 的变化方向、默认外显表达、视频触发模式、AND 阈值、cooldown 和采样配置。文档记录源 JSON 的 SHA-256。
+
+    python scripts/scenario_docs.py configs/scenarios/scenario_001.json
+    python scripts/scenario_docs.py --check
+
+生成器同时重建 `configs/scenarios/manifest.json`。`run_pipeline` 和 `run_acceptance` 都会拒绝缺失/过期的 scenario Markdown，以及与目录不一致的 manifest。
+
 运行全部 10 个场景：
 
     python -m scripts.run_pipeline \

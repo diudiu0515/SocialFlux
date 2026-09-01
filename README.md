@@ -5,6 +5,7 @@ EmoTree is a stateful social-interaction benchmark pipeline with observable/priv
 ## Repository map
 
 - prompts/: versioned prompts and SHA-256 manifest
+- configs/scenarios/: each scenario JSON plus a generated same-name Markdown explanation
 - environment/: state, memory, appraisal, response, and termination components
 - policies/ and providers/: policy interface and model-provider adapters
 - rollout/ and offline/: trajectory logging and T1/T2/T3 instance extraction
@@ -12,6 +13,18 @@ EmoTree is a stateful social-interaction benchmark pipeline with observable/priv
 - build/: reproducible benchmark and pipeline outputs
 - web/: read-only scenario and pipeline visualization website
 - talkinghead_generation.md: state-triggered multimodal observation design
+
+## Add or update a scenario
+
+Every `configs/scenarios/scenario_NNN.json` must have a generated `scenario_NNN.md`. The Markdown explains story initialization, initial state/dynamics, action effects, observable expression, and video trigger thresholds.
+
+~~~bash
+python scripts/scenario_docs.py configs/scenarios/scenario_NNN.json
+python scripts/scenario_docs.py --check
+python -m scripts.run_pipeline --scenarios configs/scenarios --output build/pipeline_v1
+~~~
+
+The generator also rebuilds `configs/scenarios/manifest.json`. The pipeline refuses missing/stale Markdown or a manifest that does not match the scenario directory.
 
 ## Run the full pipeline
 

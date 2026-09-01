@@ -15,6 +15,7 @@
 | Offline benchmark 构建 | 已完成 | T1=50、T2=30、T3=40，共 120 条候选实例 |
 | Counterfactual 验证 | 已完成 | T3 私有分支和即时/延迟 horizon 已生成 |
 | Interactive benchmark | 旧 world 已清理 | IA001/IA002 创作源文件按当前项目整理要求移除；转换器、schema 和标注工具保留 |
+| Scenario 配对文档 | 已完成 | 10/10 JSON 均有同名自然语言 Markdown；source hash、自动 manifest、pipeline/acceptance gate 和网站展示已接通 |
 | Prompt catalog | 已完成 | 12 个版本化 prompt，manifest SHA-256 校验，运行时代码统一 loader |
 | 信息隔离与泄漏审计 | 已完成 | participant 只暴露 observable view；候选实例不暴露 private effects |
 | Scenario Observatory | 已完成 | 只读展示当前 scenario、策略轨迹、状态转移和 Talking Head trigger；不维护第二套状态机 |
@@ -26,7 +27,7 @@
 
 ## 已验证指标
 
-- 核心测试：18 项通过
+- 核心测试：20 项通过
 - Web 测试：3 项通过
 - Interactive benchmark 工具测试：12 项通过，旧 IA001/IA002 world 测试按整理要求跳过
 - Python compileall：通过
@@ -46,6 +47,7 @@
 ## 维护规则
 
 - 每完成一项可验证工作，更新本文件的更新时间、状态表和测试结果。
+- 新增或修改 scenario JSON 后必须运行 `python scripts/scenario_docs.py`；缺失或过期的同名 Markdown 会阻断 pipeline 和 acceptance。
 - 修改任务语义先更新 tasks/，修改固定 prompt 先新增 prompts/ 版本并更新 prompts/manifest.json。
 - 任何正式数据变更都要重新运行核心 tests、web/tests 和对应构建脚本；interactive_benchmark/tests 仅在保留旧 world 源文件时运行。
 - build/ 是可再生产物；interactive benchmark 可提交，含 private master trajectory 的 build/pipeline_v1 只在本地生成并被 .gitignore 排除；web/ 只读读取 configs/scenarios 和 build/pipeline_v1；不生成独立 session。

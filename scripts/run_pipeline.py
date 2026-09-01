@@ -14,14 +14,16 @@ from rollout.logger import TrajectoryLogger
 from rollout.manifest import write_manifest
 from rollout.runner import RolloutRunner
 from schemas.validate import validate_scenario
+from scripts.scenario_docs import assert_document_current, assert_manifest_current
 
 
 def load_scenarios(directory):
-    return [
-        json.loads(path.read_text(encoding="utf-8"))
-        for path in sorted(Path(directory).glob("scenario_*.json"))
-        if path.name != "manifest.json"
-    ]
+    assert_manifest_current(directory)
+    scenarios = []
+    for path in sorted(Path(directory).glob("scenario_*.json")):
+        assert_document_current(path)
+        scenarios.append(json.loads(path.read_text(encoding="utf-8")))
+    return scenarios
 
 
 def run_scenario(scenario, output_dir, max_turns=None):

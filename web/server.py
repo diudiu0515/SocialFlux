@@ -82,6 +82,10 @@ def scenario_detail(scenario_id):
     return {
         "summary": scenario_summary(scenario),
         "scenario": scenario,
+        "documentation": (SCENARIO_DIR / next(
+            path.name for path in SCENARIO_DIR.glob("scenario_*.json")
+            if read_json(path, {}).get("scenario_id") == scenario_id
+        )).with_suffix(".md").read_text(encoding="utf-8"),
         "rollouts": load_rollouts(scenario_id),
         "acceptance_review": scenario_review,
     }

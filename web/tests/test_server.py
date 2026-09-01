@@ -14,6 +14,8 @@ class ScenarioWebTest(unittest.TestCase):
         detail = scenario_detail("IA_PIPE_001")
         self.assertEqual(detail["summary"]["scenario_id"], "IA_PIPE_001")
         self.assertIn("video_triggers", detail["scenario"])
+        self.assertIn("## 1. 故事初始化", detail["documentation"])
+        self.assertIn("### 视频触发规则", detail["documentation"])
         self.assertTrue(detail["rollouts"])
 
     def test_unknown_scenario_is_not_found(self):

@@ -24,7 +24,7 @@ function renderScenarioList(){
 }
 function renderHeader(){const s=state.detail.scenario, p=s.environment_agent?.persona||{};
   $('#scenarioHeader').innerHTML=`<div><div class="eyebrow">${esc(s.scenario_id)} · ${esc(s.mechanism||'social interaction')}</div><div class="scenario-title">${esc(s.title||s.scenario_id)}</div><div class="scenario-meta"><span class="tag">${esc(s.max_turns||20)} turn horizon</span><span class="tag">${Object.keys(s.action_effects||{}).length} policy branches</span><span class="tag">${esc(s.media_generation?.asset_status||'no media')}</span></div><p class="scenario-copy">${esc(s.background||'')}</p></div><div class="persona-box"><div class="eyebrow">ENVIRONMENT PERSONA</div><strong>${esc(p.name||'—')}</strong><p>${esc(p.role||'')}<br>patience ${esc(p.patience??'—')} · empathy ${esc(p.empathy??'—')}<br><span class="muted">goal: ${esc(s.environment_agent?.explicit_goal||'—')}</span></p></div>`;
-  $('#rawScenario').textContent=JSON.stringify(s,null,2);
+  $('#scenarioDoc').textContent=state.detail.documentation||'No paired Markdown'; $('#rawScenario').textContent=JSON.stringify(s,null,2);
 }
 function renderPolicyCards(){const effects=state.detail.scenario.action_effects||{};
   $('#policyCards').innerHTML=Object.entries(effects).map(([id,effect])=>{const deltas=flat(effect.state_delta).filter(([,v])=>v!=='similar').slice(0,5); return `<div class="policy-card ${esc(id)} ${state.policyId===id?'selected':''}" data-policy="${esc(id)}"><h3>${label(id)}</h3><div class="delta-summary">${deltas.map(([k,v])=>`<span class="delta-chip ${deltaClass(v.includes('increase')?1:v.includes('decrease')?-1:0)}">${esc(k.split('.').pop())} · ${esc(v.replace('_',' '))}</span>`).join('')}</div></div>`}).join('');
