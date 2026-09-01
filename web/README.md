@@ -2,8 +2,8 @@
 
 这是 SocialFlux pipeline 的唯一网站层，不包含独立状态机、独立 demo scenario 或交互会话。它只读取：
 
-- `configs/scenarios/scenario_*.json` 与同名 `.md`：场景定义及其自然语言初始化/state/视频阈值说明；
-- `build/pipeline_v1/`：本地生成的 rollout、manifest 和 acceptance report。
+- `configs/scenarios/scenario_*/`：场景 JSON、同名自然语言说明，以及 `rollouts/dialogues.md`/trajectory；
+- `build/pipeline_v1/`：本地生成的聚合候选、pipeline manifest 和 acceptance report。
 
 ## 启动
 

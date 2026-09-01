@@ -9,7 +9,7 @@ from environment.env import StatefulEnvironment
 class ActionInterpreterTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.scenario = json.loads(Path("configs/scenarios/scenario_001.json").read_text(encoding="utf-8"))
+        cls.scenario = json.loads(Path("configs/scenarios/scenario_001/scenario_001.json").read_text(encoding="utf-8"))
 
     def test_paraphrases_map_to_same_canonical_action(self):
         first = "我想先把问题说清楚，找一个双方都能接受的解决办法。"

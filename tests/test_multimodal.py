@@ -10,7 +10,7 @@ from schemas.validate import validate_scenario
 
 class MultimodalEnvironmentTest(unittest.TestCase):
     def test_crossing_trigger_is_private_and_public_media_is_safe(self):
-        scenario = json.loads(Path("configs/scenarios/scenario_001.json").read_text())
+        scenario = json.loads(Path("configs/scenarios/scenario_001/scenario_001.json").read_text())
         trajectory = RolloutRunner(lambda: StatefulEnvironment(scenario)).run(
             ControlledPolicy("escalate", [{"action_id": "escalate", "text": "escalate"}]),
             max_turns=3,
@@ -25,7 +25,7 @@ class MultimodalEnvironmentTest(unittest.TestCase):
         self.assertEqual(third["media"], [])
 
     def test_all_scenarios_register_valid_media_rules(self):
-        for path in sorted(Path("configs/scenarios").glob("scenario_*.json")):
+        for path in sorted(Path("configs/scenarios").glob("scenario_*/scenario_*.json")):
             scenario = json.loads(path.read_text())
             validate_scenario(scenario)
             self.assertGreaterEqual(len(scenario["video_triggers"]), 1)

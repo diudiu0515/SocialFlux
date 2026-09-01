@@ -5,7 +5,7 @@ EmoTree is a stateful social-interaction benchmark pipeline with observable/priv
 ## Repository map
 
 - prompts/: versioned prompts and SHA-256 manifest
-- configs/scenarios/: each scenario JSON plus a generated same-name Markdown explanation
+- configs/scenarios/: one bundle per scenario containing JSON, generated Markdown, and local rollout dialogues
 - environment/: state, memory, appraisal, response, and termination components
 - policies/ and providers/: policy interface and model-provider adapters
 - rollout/ and offline/: trajectory logging and T1/T2/T3 instance extraction
@@ -16,10 +16,10 @@ EmoTree is a stateful social-interaction benchmark pipeline with observable/priv
 
 ## Add or update a scenario
 
-Every `configs/scenarios/scenario_NNN.json` must have a generated `scenario_NNN.md`. The Markdown explains story initialization, initial state/dynamics, action effects, observable expression, and video trigger thresholds.
+Every `configs/scenarios/scenario_NNN/` bundle must contain canonical `scenario_NNN.json` and generated `scenario_NNN.md`. The Markdown explains story initialization, initial state/dynamics, action effects, observable expression, and video trigger thresholds.
 
 ~~~bash
-python scripts/scenario_docs.py configs/scenarios/scenario_NNN.json
+python scripts/scenario_docs.py configs/scenarios/scenario_NNN/scenario_NNN.json
 python scripts/scenario_docs.py --check
 python -m scripts.run_pipeline --scenarios configs/scenarios --output build/pipeline_v1
 ~~~
@@ -32,7 +32,7 @@ The generator also rebuilds `configs/scenarios/manifest.json`. The pipeline refu
 python -m scripts.run_pipeline   --scenarios configs/scenarios   --output build/pipeline_v1
 ~~~
 
-The pipeline is configured for 10 scenarios and 120 candidate instances. Its full pipeline_v1 master trajectories are generated locally and ignored because they contain private environment fields; formal ground truth remains pending independent human annotation and adjudication.
+The pipeline is configured for 10 scenarios and 120 candidate instances. Each scenario writes human-readable dialogue to `rollouts/dialogues.md` and private trajectory JSON/manifest in the same bundle; `build/` keeps aggregate offline and validation artifacts. Its full pipeline_v1 master trajectories are generated locally and ignored because they contain private environment fields; formal ground truth remains pending independent human annotation and adjudication.
 
 The current scenarios also emit structured observable expression and spec-only Talking Head media events after state updates; trigger internals remain private.
 Run the acceptance command to inspect trigger and trajectory evidence in build/pipeline_v1/acceptance_report.*. The automated gate covers all five criteria; the full-trajectory criterion also records whether formal human review is still pending.
@@ -59,7 +59,7 @@ At the end of every project task, review self_check.md. Mark only fully evidence
 
 ## Prompt change policy
 
-Every fixed model-facing prompt belongs in prompts/ as a versioned Markdown file. New pipeline scenarios use `scenario_generation_v1`; paired prose is then generated deterministically from the saved JSON. Runtime code must read prompts through prompts/loader.py. After changing a prompt, update prompts/manifest.json and run all tests.
+Every fixed model-facing prompt belongs in prompts/ as a versioned Markdown file. New pipeline scenarios use `scenario_generation_v2`; paired prose is then generated deterministically from the saved JSON. Runtime code must read prompts through prompts/loader.py. After changing a prompt, update prompts/manifest.json and run all tests.
 
 ## Secrets
 

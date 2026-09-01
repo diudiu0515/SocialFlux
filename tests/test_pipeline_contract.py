@@ -23,9 +23,11 @@ class PipelineContractTest(unittest.TestCase):
         )
 
     def test_every_scenario_has_current_markdown(self):
-        for path in sorted(Path("configs/scenarios").glob("scenario_*.json")):
+        for path in sorted(Path("configs/scenarios").glob("scenario_*/scenario_*.json")):
             paired = assert_document_current(path)
             self.assertEqual(paired, path.with_suffix(".md"))
+            self.assertEqual(path.parent.name, path.stem)
+            self.assertEqual(path.parent / "rollouts", paired.parent / "rollouts")
             text = paired.read_text(encoding="utf-8")
             self.assertIn("## 1. 故事初始化", text)
             self.assertIn("### 初始 State（0–10）", text)
@@ -33,7 +35,7 @@ class PipelineContractTest(unittest.TestCase):
             self.assertIn("JSON SHA-256", text)
 
     def test_missing_and_stale_documentation_are_rejected(self):
-        source = Path("configs/scenarios/scenario_001.json")
+        source = Path("configs/scenarios/scenario_001/scenario_001.json")
         with tempfile.TemporaryDirectory() as directory:
             candidate = Path(directory) / "scenario_001.json"
             candidate.write_bytes(source.read_bytes())

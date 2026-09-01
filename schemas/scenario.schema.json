@@ -151,5 +151,5 @@
       }
     }
   },
-  "$comment": "Each scenario_*.json is canonical and requires a generated same-basename Markdown document plus a current configs/scenarios/manifest.json; enforced by scripts/scenario_docs.py."
+  "$comment": "Each configs/scenarios/scenario_NNN/scenario_NNN.json is canonical and requires generated same-basename Markdown, a colocated rollouts directory after pipeline generation, and a current configs/scenarios/manifest.json; enforced by scripts/scenario_docs.py."
 }

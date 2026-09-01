@@ -4,7 +4,7 @@
 
 ## 当前状态
 
-项目已收敛为 scenario 驱动的可复现 pipeline 和 Scenario Observatory 网站，后续主要扩展 scenario 及其配套产物。
+项目已收敛为 scenario 驱动的可复现 pipeline 和 Scenario Observatory 网站。每个 `configs/scenarios/scenario_NNN/` 现在是 JSON、自然语言说明和本地 rollout 对话/轨迹的完整资产包，后续主要扩展此类 bundle。
 
 | 模块 | 状态 | 当前结果 |
 |---|---|---|
@@ -15,11 +15,11 @@
 | Offline benchmark 构建 | 已完成 | T1=50、T2=30、T3=40，共 120 条候选实例 |
 | Counterfactual 验证 | 已完成 | T3 私有分支和即时/延迟 horizon 已生成 |
 | Interactive benchmark | 旧 world 已清理 | IA001/IA002 创作源文件按当前项目整理要求移除；转换器、schema 和标注工具保留 |
-| Scenario 配对文档 | 已完成 | 10/10 JSON 均有同名自然语言 Markdown；source hash、自动 manifest、pipeline/acceptance gate 和网站展示已接通 |
-| Prompt catalog | 已完成 | 13 个版本化 prompt，manifest SHA-256 校验，运行时代码统一 loader |
+| Scenario bundle | 已完成 | 10/10 场景均包含 canonical JSON、同名自然语言 Markdown；pipeline 在同目录 `rollouts/` 生成可读对话、manifest 和 3 条私有轨迹，网站已接通 |
+| Prompt catalog | 已完成 | 14 个版本化 prompt；扩展后的 scenario 生成规范登记为 `scenario_generation_v2`，manifest SHA-256 校验通过 |
 | 信息隔离与泄漏审计 | 已完成 | participant 只暴露 observable view；候选实例不暴露 private effects |
-| Scenario Observatory | 已完成 | 只读展示当前 scenario、策略轨迹、状态转移和 Talking Head trigger；不维护第二套状态机 |
-| GitHub 发布 | 本地已提交 | commit `0f76297` 已完成；推送需先将项目 deploy key 添加到仓库 |
+| Scenario Observatory | 已完成 | 直接读取各 scenario bundle 的配对文档、rollout 对话/轨迹，并展示状态转移和 Talking Head trigger；不维护第二套状态机 |
+| GitHub 发布 | 已同步维护 | 项目专属 deploy key 已配置，`main` 持续同步到 `diudiu0515/SocialFlux` |
 | Pipeline acceptance | 工程验收通过 | State 210/210、Persona 通过、Paraphrase 30/30、Policy 10/10；Trajectory 10/10 结构+专家预审通过，正式人工签字待补 |
 | 正式 ground truth | 待人工标注 | 需要独立标注与 adjudication，代码不会伪造正式标签 |
 | Talking-head 视频 | 结构层已完成 | 10 个 scenario 已注册 state-triggered expression/media 规则；真实视频资产仍为 spec-only |
@@ -29,9 +29,9 @@
 
 - 核心测试：22 项通过
 - Web 测试：3 项通过
-- Interactive benchmark 工具测试：12 项通过，旧 IA001/IA002 world 测试按整理要求跳过
+- Interactive benchmark 工具测试：13 项通过，legacy world suite 按整理要求跳过
 - Python compileall：通过
-- Pipeline manifest：10 个 scenario，120 条候选实例
+- Pipeline manifest：10 个 scenario，120 条候选实例；30 条 master trajectory 分别保存在对应 scenario 的 `rollouts/`
 - Interactive benchmark manifest：48 条实例
 - Talking Head trigger tests：2 项通过
 - Acceptance gate：automated engineering checks passed；formal human trajectory review pending
@@ -51,4 +51,4 @@
 - 新增或修改 scenario JSON 后必须运行 `python scripts/scenario_docs.py`；缺失或过期的同名 Markdown 会阻断 pipeline 和 acceptance。
 - 修改任务语义先更新 tasks/，修改固定 prompt 先新增 prompts/ 版本并更新 prompts/manifest.json。
 - 任何正式数据变更都要重新运行核心 tests、web/tests 和对应构建脚本；interactive_benchmark/tests 仅在保留旧 world 源文件时运行。
-- build/ 是可再生产物；interactive benchmark 可提交，含 private master trajectory 的 build/pipeline_v1 只在本地生成并被 .gitignore 排除；web/ 只读读取 configs/scenarios 和 build/pipeline_v1；不生成独立 session。
+- 每个 `configs/scenarios/scenario_*/rollouts/` 是本场景 private master trajectory 与 `dialogues.md` 的本地生成目录并被 .gitignore 排除；`build/pipeline_v1` 只保存跨场景 offline/validation/acceptance 聚合产物；web/ 只读读取两者，不生成独立 session。

@@ -17,6 +17,7 @@ ENV/
 
 # Generated pipeline outputs contain private master trajectories
 build/pipeline_v1/
+configs/scenarios/scenario_*/rollouts/
 
 
 # Logs and OS files

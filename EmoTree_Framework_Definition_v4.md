@@ -130,8 +130,13 @@ Different policies on the same scenario generate different trajectories.
 Every canonical scenario JSON MUST have a same-basename Markdown document:
 
 ``` text
-configs/scenarios/scenario_001.json
-configs/scenarios/scenario_001.md
+configs/scenarios/scenario_001/
+├── scenario_001.json
+├── scenario_001.md
+└── rollouts/
+    ├── dialogues.md
+    ├── manifest.json
+    └── <trajectory_id>.json
 ```
 
 The JSON is the only machine-authoritative source. The Markdown is a deterministic human-review projection generated from that JSON; it MUST NOT become an independently edited second source of truth. The paired document must explain, in natural language:
@@ -149,7 +154,7 @@ Every video trigger mode, AND-combined threshold, cooldown, duration, and expres
 T1 / T2 / T3 sampling configuration
 ```
 
-The document records the source JSON SHA-256. `scripts/scenario_docs.py` generates the Markdown and the scenario manifest. Pipeline construction, acceptance, and release gates MUST reject missing or stale documents and a manifest that does not match the scenario directory. The research website may display both views, but must identify JSON as canonical and Markdown as generated review material.
+The document records the source JSON SHA-256. Generated rollout conversations and private trajectories MUST live in the same scenario bundle under `rollouts/`; `build/` is reserved for cross-scenario offline, validation, acceptance, and aggregate manifests. `scripts/scenario_docs.py` generates the Markdown and the scenario manifest. Pipeline construction, acceptance, and release gates MUST reject missing or stale documents and a manifest that does not match the scenario directory. The research website may display both views, but must identify JSON as canonical and Markdown as generated review material.
 
 ------------------------------------------------------------------------
 

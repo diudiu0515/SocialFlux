@@ -1,10 +1,10 @@
 # SocialFlux 项目结构
 
-当前仓库只保留 scenario 驱动的 pipeline、固定 prompt、任务产物和只读可视化网站。后续新增场景时，主要新增 `configs/scenarios/scenario_*.json` 及其测试/配套配置。
+当前仓库只保留 scenario 驱动的 pipeline、固定 prompt、任务产物和只读可视化网站。后续新增场景时，主要新增 `configs/scenarios/scenario_*/` bundle 及其测试/配套配置。
 
 ```text
 emotree/
-├── configs/scenarios/              # 唯一场景输入；每个 scenario_*.json 配对同名 .md
+├── configs/scenarios/              # 每个 scenario_* 是 JSON/MD/rollouts 完整 bundle
 ├── environment/                   # action normalization、状态、记忆、更新、响应、终止、表达层
 ├── policies/                      # ControlledPolicy 与 ModelPolicy
 ├── providers/                     # OpenAI-compatible、Anthropic、Gemini、local/vLLM
@@ -31,9 +31,9 @@ emotree/
 
 新增场景：
 
-1. 在 `configs/scenarios/` 新增 `scenario_*.json`，遵守 `schemas/scenario.schema.json`；
+1. 新增 `configs/scenarios/scenario_NNN/scenario_NNN.json`，遵守 `schemas/scenario.schema.json`；
 2. 配置 persona、initial state/dynamics、action effects、response、observable expression 和 video triggers；
-3. 运行 `python scripts/scenario_docs.py configs/scenarios/scenario_*.json` 生成同名 Markdown；
+3. 运行 `python scripts/scenario_docs.py configs/scenarios/scenario_NNN/scenario_NNN.json` 生成同名 Markdown；
 4. 生成器会自动重建 manifest；运行 `python scripts/scenario_docs.py --check` 检查全部 JSON/Markdown/source hash/manifest；
 5. 运行 `python -m scripts.run_pipeline --scenarios configs/scenarios --output build/pipeline_v1`；
 6. 运行 acceptance、核心测试与 web/tests；
@@ -41,4 +41,4 @@ emotree/
 
 ## 数据边界
 
-`configs/scenarios` 是作者侧定义；`build/pipeline_v1` 的 master rollout 含 private state 和 appraisal，默认不提交；`offline` 候选必须通过 `evaluation/leakage.py`。网站是研究/开发可视化层，可展示完整 scenario 与私有 rollout，但不对外模拟 participant 视图。
+每个 `configs/scenarios/scenario_*/rollouts` 保存本场景的 private master trajectory 与可读对话，默认不提交；`build/pipeline_v1` 保存跨场景聚合构建；`offline` 候选必须通过 `evaluation/leakage.py`。网站是研究/开发可视化层，可展示完整 scenario 与私有 rollout，但不对外模拟 participant 视图。

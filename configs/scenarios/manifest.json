@@ -6,71 +6,81 @@
       "scenario_id": "IA_PIPE_001",
       "title": "导师—学生署名冲突",
       "mechanism": "institutional resource control",
-      "source": "scenario_001.json",
-      "documentation": "scenario_001.md"
+      "source": "scenario_001/scenario_001.json",
+      "documentation": "scenario_001/scenario_001.md",
+      "rollouts": "scenario_001/rollouts"
     },
     {
       "scenario_id": "IA_PIPE_002",
       "title": "经理—员工绩效争议",
       "mechanism": "workplace authority",
-      "source": "scenario_002.json",
-      "documentation": "scenario_002.md"
+      "source": "scenario_002/scenario_002.json",
+      "documentation": "scenario_002/scenario_002.md",
+      "rollouts": "scenario_002/rollouts"
     },
     {
       "scenario_id": "IA_PIPE_003",
       "title": "朋友间借款与信任",
       "mechanism": "friendship trust",
-      "source": "scenario_003.json",
-      "documentation": "scenario_003.md"
+      "source": "scenario_003/scenario_003.json",
+      "documentation": "scenario_003/scenario_003.md",
+      "rollouts": "scenario_003/rollouts"
     },
     {
       "scenario_id": "IA_PIPE_004",
       "title": "伴侣照护责任冲突",
       "mechanism": "intimate obligation",
-      "source": "scenario_004.json",
-      "documentation": "scenario_004.md"
+      "source": "scenario_004/scenario_004.json",
+      "documentation": "scenario_004/scenario_004.md",
+      "rollouts": "scenario_004/rollouts"
     },
     {
       "scenario_id": "IA_PIPE_005",
       "title": "家庭养老资源分配",
       "mechanism": "family resource",
-      "source": "scenario_005.json",
-      "documentation": "scenario_005.md"
+      "source": "scenario_005/scenario_005.json",
+      "documentation": "scenario_005/scenario_005.md",
+      "rollouts": "scenario_005/rollouts"
     },
     {
       "scenario_id": "IA_PIPE_006",
       "title": "编辑与记者信息核验",
       "mechanism": "professional ethics",
-      "source": "scenario_006.json",
-      "documentation": "scenario_006.md"
+      "source": "scenario_006/scenario_006.json",
+      "documentation": "scenario_006/scenario_006.md",
+      "rollouts": "scenario_006/rollouts"
     },
     {
       "scenario_id": "IA_PIPE_007",
       "title": "平台申诉与商户责任",
       "mechanism": "information asymmetry",
-      "source": "scenario_007.json",
-      "documentation": "scenario_007.md"
+      "source": "scenario_007/scenario_007.json",
+      "documentation": "scenario_007/scenario_007.md",
+      "rollouts": "scenario_007/rollouts"
     },
     {
       "scenario_id": "IA_PIPE_008",
       "title": "医疗沟通与治疗选择",
       "mechanism": "medical information asymmetry",
-      "source": "scenario_008.json",
-      "documentation": "scenario_008.md"
+      "source": "scenario_008/scenario_008.json",
+      "documentation": "scenario_008/scenario_008.md",
+      "rollouts": "scenario_008/rollouts"
     },
     {
       "scenario_id": "IA_PIPE_009",
       "title": "团队项目贡献冲突",
       "mechanism": "peer collaboration",
-      "source": "scenario_009.json",
-      "documentation": "scenario_009.md"
+      "source": "scenario_009/scenario_009.json",
+      "documentation": "scenario_009/scenario_009.md",
+      "rollouts": "scenario_009/rollouts"
     },
     {
       "scenario_id": "IA_PIPE_010",
       "title": "AI 上线安全与效率",
       "mechanism": "safety-efficiency conflict",
-      "source": "scenario_010.json",
-      "documentation": "scenario_010.md"
+      "source": "scenario_010/scenario_010.json",
+      "documentation": "scenario_010/scenario_010.md",
+      "rollouts": "scenario_010/rollouts"
     }
   ]
 }

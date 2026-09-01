@@ -76,7 +76,7 @@ prompts/ 是固定 prompt 的唯一源。调用方通过 prompts/loader.py 读�
 4. 重建受影响的 benchmark/build 产物；
 5. 运行核心 tests、web/tests 和 interactive_benchmark/tests（若保留旧 world 源文件）。
 
-shared/interactive_story_generation_prompt.md 仅保留为旧链接兼容入口。新 stateful scenario 使用 `prompts/scenario_generation_v1.md` 生成 canonical JSON，再由确定性脚本生成同名 Markdown，模型不直接维护第二份 prose truth。
+shared/interactive_story_generation_prompt.md 仅保留为旧链接兼容入口。新 stateful scenario 使用 `prompts/scenario_generation_v2.md` 生成 canonical JSON，再由确定性脚本生成同名 Markdown，模型不直接维护第二份 prose truth。
 
 ## 5. 运行模式
 
@@ -90,7 +90,7 @@ ModelPolicy、ModelMemoryModule、ModelStateUpdater、ModelResponseGenerator 均
 
 ### Scenario Observatory
 
-web/server.py 是唯一网站入口。它读取 configs/scenarios 和本地 build/pipeline_v1，通过 /api/summary、/api/scenarios/{id} 提供场景、策略轨迹、状态变化、表达层和媒体 trigger 的只读视图。网站不接收用户 action，不生成独立 session，也不复制 environment 状态机。
+web/server.py 是唯一网站入口。它从每个 `configs/scenarios/scenario_*/` bundle 读取定义、说明和 rollout，并从本地 `build/pipeline_v1` 读取聚合验收产物，通过 /api/summary、/api/scenarios/{id} 提供场景、策略轨迹、状态变化、表达层和媒体 trigger 的只读视图。网站不接收用户 action，不生成独立 session，也不复制 environment 状态机。
 
 ## 6. 验收门禁
 

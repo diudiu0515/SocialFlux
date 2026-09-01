@@ -62,6 +62,13 @@ def scenario_hash(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def discover_scenario_paths(directory):
+    """Discover canonical scenario JSON files in bundle directories."""
+    directory = Path(directory)
+    bundled = sorted(directory.glob("scenario_*/scenario_*.json"))
+    return bundled or sorted(directory.glob("scenario_*.json"))
+
+
 def render_scenario_document(scenario, source_name, source_hash):
     agent = scenario["environment_agent"]
     persona = agent.get("persona", {})
@@ -123,8 +130,9 @@ def render_scenario_document(scenario, source_name, source_hash):
                   f"- T3 delayed horizon：`{scenario.get('t3_delayed_horizon', '未配置')}`",
                   f"- 采样：`{sampling.get('selection_strategy', '未配置')}`，seed `{sampling.get('seed', '未配置')}`", "",
                   "修改 JSON 后执行：", "", "```bash",
-                  f"python scripts/scenario_docs.py configs/scenarios/{source_name}",
-                  "python -m scripts.run_pipeline --scenarios configs/scenarios --output build/pipeline_v1", "```", ""])
+                  f"python scripts/scenario_docs.py configs/scenarios/{Path(source_name).stem}/{source_name}",
+                  "python -m scripts.run_pipeline --scenarios configs/scenarios --output build/pipeline_v1", "```", "",
+                  "Rollout 生成后与本场景放在一起：`rollouts/dialogues.md`、`rollouts/manifest.json` 和逐 trajectory JSON。", ""])
     return "\n".join(lines)
 
 
@@ -154,14 +162,15 @@ def assert_document_current(json_path):
 def manifest_payload(directory):
     directory = Path(directory)
     scenarios = []
-    for path in sorted(directory.glob("scenario_*.json")):
+    for path in discover_scenario_paths(directory):
         scenario = json.loads(path.read_text(encoding="utf-8"))
         scenarios.append({
             "scenario_id": scenario["scenario_id"],
             "title": scenario.get("title", scenario["scenario_id"]),
             "mechanism": scenario.get("mechanism", ""),
-            "source": path.name,
-            "documentation": path.with_suffix(".md").name,
+            "source": path.relative_to(directory).as_posix(),
+            "documentation": path.with_suffix(".md").relative_to(directory).as_posix(),
+            "rollouts": (path.parent / "rollouts").relative_to(directory).as_posix(),
         })
     return {
         "format": "emotree_scenario_manifest_v1",
@@ -196,13 +205,18 @@ def main():
     parser.add_argument("paths", nargs="*", type=Path)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
-    paths = args.paths or sorted(Path("configs/scenarios").glob("scenario_*.json"))
+    catalog = Path("configs/scenarios")
+    paths = args.paths or discover_scenario_paths(catalog)
     if not paths:
         parser.error("no scenario JSON files found")
     for path in paths:
         output = assert_document_current(path) if args.check else write_document(path)
         print(f"{'checked' if args.check else 'generated'} {output}")
-    for directory in sorted({path.parent for path in paths}):
+    directories = {
+        path.parent.parent if path.parent.name.startswith("scenario_") else path.parent
+        for path in paths
+    }
+    for directory in sorted(directories):
         manifest = assert_manifest_current(directory) if args.check else write_manifest(directory)
         print(f"{'checked' if args.check else 'generated'} {manifest}")
 
