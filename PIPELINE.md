@@ -46,7 +46,7 @@ Provider 支持 OpenAI-compatible、Anthropic、Gemini 和 local/vLLM。没有 A
 
 ## Prompt catalog
 
-所有固定 prompt 统一位于 prompts/，按用途和版本命名，例如 policy_action_v1.md、environment_appraisal_v1.md、task_t1_v0.2.md。prompts/manifest.json 记录每个文件的 SHA-256，prompts.loader 是运行时代码的唯一读取入口，并会校验 hash。
+所有固定 prompt 统一位于 prompts/，按用途和版本命名，例如 scenario_generation_v1.md、policy_action_v1.md、environment_appraisal_v1.md、task_t1_v0.2.md。prompts/manifest.json 记录每个文件的 SHA-256，prompts.loader 是运行时代码的唯一读取入口，并会校验 hash。
 
 环境 appraisal、memory retrieval、model policy、模型 response、任务转换器和故事生成均从该目录读取；shared/interactive_story_generation_prompt.md 只保留兼容指针。修改 prompt 时新增版本文件、重新生成 manifest、更新调用方的 prompt ID，再运行核心 tests、web/tests 和 interactive_benchmark/tests（若保留旧 world 源文件）。
 

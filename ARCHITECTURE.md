@@ -1,6 +1,6 @@
 # SocialFlux 系统架构
 
-更新时间：2026-08-31
+更新时间：2026-09-01
 
 ## 1. 总体数据流
 
@@ -76,7 +76,7 @@ prompts/ 是固定 prompt 的唯一源。调用方通过 prompts/loader.py 读�
 4. 重建受影响的 benchmark/build 产物；
 5. 运行核心 tests、web/tests 和 interactive_benchmark/tests（若保留旧 world 源文件）。
 
-shared/interactive_story_generation_prompt.md 仅保留为旧链接兼容入口。
+shared/interactive_story_generation_prompt.md 仅保留为旧链接兼容入口。新 stateful scenario 使用 `prompts/scenario_generation_v1.md` 生成 canonical JSON，再由确定性脚本生成同名 Markdown，模型不直接维护第二份 prose truth。
 
 ## 5. 运行模式
 

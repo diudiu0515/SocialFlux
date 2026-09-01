@@ -31,6 +31,11 @@
       "sha256": "2f7b805c92d7c5dd3f9e30afa7079484df64d827f3322cee1e02d3b29a599176",
       "version": "v1"
     },
+    "scenario_generation_v1": {
+      "path": "scenario_generation_v1.md",
+      "sha256": "df0576802c9cc0e3295549b45f432044cc3442b42c00adc0225e9c7ecb469589",
+      "version": "v1"
+    },
     "scenario_initialization_v1": {
       "path": "scenario_initialization_v1.md",
       "sha256": "1884aa1c8eddc4431ab97c7ae2a2ce8f33462b59792a71906c1b99d2e96be71b",

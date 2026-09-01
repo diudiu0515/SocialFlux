@@ -349,7 +349,18 @@ No Threshold
 
 只有当 threshold 能提高 trajectory plausibility、model differentiation 或 adaptation/recovery 分析能力时，才应该保留并强调。
 
-### 5.6 避免变成“越礼貌分越高”
+### 5.6 防止 Scenario 配置与人类说明漂移
+
+Scenario JSON 包含状态、action effect 和视频阈值，单靠人工维护说明文档很容易产生漂移。每个 JSON 因此必须配对由确定性生成器产生的同名 Markdown，并记录 source hash。Pipeline、acceptance 和发布门禁检查：
+
+- JSON/Markdown 是否一一配对；
+- Markdown 是否覆盖故事初始化、S0/D0、action delta 和视频 trigger；
+- SHA-256 是否对应当前 JSON；
+- manifest 是否与目录中的 scenario 集合一致。
+
+Markdown 用于人类审阅和网站展示，但 JSON 始终是唯一 canonical source。
+
+### 5.7 避免变成“越礼貌分越高”
 
 Scenario 必须包含真实 trade-off，例如：
 
@@ -361,7 +372,7 @@ Scenario 必须包含真实 trade-off，例如：
 
 否则 benchmark 最后可能只是在测模型是否会说礼貌的话。
 
-### 5.7 避免只看 Final Score
+### 5.8 避免只看 Final Score
 
 两个模型最终都达到同一个结果，但过程可能完全不同：
 
@@ -372,7 +383,7 @@ Model B：激化冲突 → 补救 → 达成目标
 
 因此 EmoTree 应该评价完整 trajectory，而不仅是 terminal outcome。
 
-### 5.8 避免把 Simulator State 当成人类真实心理
+### 5.9 避免把 Simulator State 当成人类真实心理
 
 EmoTree 应明确定位为：
 

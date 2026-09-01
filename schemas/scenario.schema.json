@@ -150,5 +150,6 @@
         ]
       }
     }
-  }
+  },
+  "$comment": "Each scenario_*.json is canonical and requires a generated same-basename Markdown document plus a current configs/scenarios/manifest.json; enforced by scripts/scenario_docs.py."
 }

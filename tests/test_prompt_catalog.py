@@ -7,7 +7,7 @@ from prompts.loader import get_prompt, prompt_manifest, render_prompt
 class PromptCatalogTest(unittest.TestCase):
     def test_manifest_entries_are_loadable(self):
         manifest = prompt_manifest()
-        self.assertGreaterEqual(len(manifest["prompts"]), 12)
+        self.assertGreaterEqual(len(manifest["prompts"]), 13)
         for prompt_id in manifest["prompts"]:
             self.assertTrue(get_prompt(prompt_id).strip())
 
@@ -15,6 +15,12 @@ class PromptCatalogTest(unittest.TestCase):
         rendered = render_prompt("policy_action_v1", {"turn_id": 3})
         self.assertIn("policy_action_v1", prompt_manifest()["prompts"])
         self.assertIn('"turn_id": 3', rendered)
+
+    def test_scenario_generation_prompt_includes_pair_contract(self):
+        prompt = get_prompt("scenario_generation_v1")
+        self.assertIn("scenario_docs.py", prompt)
+        self.assertIn("JSON remains canonical", prompt)
+        self.assertIn("AND semantics", prompt)
 
     def test_environment_prompt_uses_catalog(self):
         rendered = build_appraisal_prompt(

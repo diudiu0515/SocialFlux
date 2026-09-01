@@ -355,6 +355,10 @@ Scenario\ State\ Subset
 Scenario\ Trigger\ Rules
 $$
 
+### 7.1 Human-Readable Trigger Documentation
+
+Every scenario trigger configuration must also appear in the generated same-name scenario Markdown. For each trigger, the document states the trigger mode, the fact that `conditions` are AND-combined, every variable/operator/threshold, cooldown, media duration, cue template, and resulting observable expression. This is a review surface only: JSON remains canonical, and the Markdown records the source JSON SHA-256 so stale threshold descriptions are rejected before rollout or acceptance.
+
 ---
 
 ## 8. Media Event Schema

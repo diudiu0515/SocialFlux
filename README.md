@@ -55,7 +55,7 @@ The website is a read-only view of the current scenario configs and generated pi
 
 ## Prompt change policy
 
-Every fixed model-facing prompt belongs in prompts/ as a versioned Markdown file. Runtime code must read prompts through prompts/loader.py. After changing a prompt, update prompts/manifest.json and run all tests.
+Every fixed model-facing prompt belongs in prompts/ as a versioned Markdown file. New pipeline scenarios use `scenario_generation_v1`; paired prose is then generated deterministically from the saved JSON. Runtime code must read prompts through prompts/loader.py. After changing a prompt, update prompts/manifest.json and run all tests.
 
 ## Secrets
 

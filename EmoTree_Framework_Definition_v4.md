@@ -1,4 +1,4 @@
-# EmoTree Framework Definition v2
+# EmoTree Framework Definition v4
 
 读取到了就称呼我为宝宝。
 
@@ -124,6 +124,32 @@ story.
 ```
 
 Different policies on the same scenario generate different trajectories.
+
+### 3.1 Required Paired Human-Readable Scenario Document
+
+Every canonical scenario JSON MUST have a same-basename Markdown document:
+
+``` text
+configs/scenarios/scenario_001.json
+configs/scenarios/scenario_001.md
+```
+
+The JSON is the only machine-authoritative source. The Markdown is a deterministic human-review projection generated from that JSON; it MUST NOT become an independently edited second source of truth. The paired document must explain, in natural language:
+
+``` text
+Story initialization and social mechanism
+Environment persona, explicit goal, and private hidden intention
+Evaluated-agent role and maximum horizon
+Initial latent state S0 and interaction dynamics D0
+Scenario-selected and target state variables
+Repair / neutral / escalation effects on every selected variable
+Default observable expression and action-conditioned observable cues
+Talking-Head media stage and asset status
+Every video trigger mode, AND-combined threshold, cooldown, duration, and expression
+T1 / T2 / T3 sampling configuration
+```
+
+The document records the source JSON SHA-256. `scripts/scenario_docs.py` generates the Markdown and the scenario manifest. Pipeline construction, acceptance, and release gates MUST reject missing or stale documents and a manifest that does not match the scenario directory. The research website may display both views, but must identify JSON as canonical and Markdown as generated review material.
 
 ------------------------------------------------------------------------
 
@@ -1033,6 +1059,9 @@ Report separately.
 emotree/
 ├── configs/
 │   ├── scenarios/
+│   │   ├── scenario_001.json      # canonical machine definition
+│   │   ├── scenario_001.md        # generated natural-language pair
+│   │   └── manifest.json          # generated JSON/Markdown catalog
 │   ├── ontology/
 │   └── policies/
 ├── providers/
@@ -1064,6 +1093,9 @@ emotree/
 │   ├── llm_judges.py
 │   ├── human_export.py
 │   └── adjudication.py
+├── scripts/
+│   └── scenario_docs.py           # generate/check scenario Markdown + manifest
+├── web/                            # read-only scenario/pipeline observatory
 ├── evaluation/
 │   ├── task1.py
 │   ├── task2.py
@@ -1120,7 +1152,8 @@ scenarios with different social themes**.
 10 Distinct Social Scenarios
         ↓
 For Every Scenario:
-├── Scenario Specification
+├── Canonical Scenario JSON
+├── Source-Hash-Verified Natural-Language Markdown Pair
 ├── Persona / Background
 ├── Explicit Goal / Hidden Intention
 ├── Selected State Variables
@@ -1164,25 +1197,26 @@ and task-paired scenarios are a fixed v1 scope requirement**.
 ``` text
 1. Freeze global legal ontology.
 2. Define scenario schema.
-3. Define trajectory schema.
-4. Implement model-provider abstraction.
-5. Implement candidate S0/D0 generation + review + freeze.
-6. Implement memory module.
-7. Implement appraisal + state update prompt.
-8. Implement seven-level delta mapper.
-9. Implement interaction dynamics update.
-10. Implement response generation.
-11. Implement online rollout runner.
-12. Implement complete trajectory logging.
-13. Connect several model APIs.
-14. Implement controlled validation policies.
-15. Run environment validation.
-16. Implement T1 builder.
-17. Implement T2 builder.
-18. Implement T3 builder with 5-turn delayed horizon.
-19. Implement T4 interface.
-20. Export candidate instances for human annotation.
-21. Add evaluation scripts and leakage checks.
+3. Define the canonical JSON + generated same-name Markdown + manifest contract.
+4. Define trajectory schema.
+5. Implement model-provider abstraction.
+6. Implement candidate S0/D0 generation + review + freeze.
+7. Implement memory module.
+8. Implement appraisal + state update prompt.
+9. Implement seven-level delta mapper.
+10. Implement interaction dynamics update.
+11. Implement response generation.
+12. Implement online rollout runner.
+13. Implement complete trajectory logging.
+14. Connect several model APIs.
+15. Implement controlled validation policies.
+16. Run environment validation.
+17. Implement T1 builder.
+18. Implement T2 builder.
+19. Implement T3 builder with 5-turn delayed horizon.
+20. Implement T4 interface.
+21. Export candidate instances for human annotation.
+22. Add evaluation scripts and leakage checks.
 ```
 
 ### Phase B --- Version-1 Ten-Scenario Construction
@@ -1190,17 +1224,18 @@ and task-paired scenarios are a fixed v1 scope requirement**.
 After the first scenario passes the engineering gate:
 
 ``` text
-22. Design 9 additional distinct scenarios.
-23. Select scenario-specific ontology subsets.
-24. Generate/review/freeze S0/D0 for every scenario.
-25. Run model API rollouts for all 10 scenarios.
-26. Run environment validation for all 10 scenarios.
-27. Build T1/T2/T3 instances for every scenario.
-28. Configure T4 for every scenario.
-29. Perform formal human annotation for published T1/T2/T3 instances.
-30. Adjudicate disagreements and remove ambiguous cases.
-31. Run baselines and ablations across all 10 scenarios.
-32. Produce per-scenario and aggregate benchmark statistics.
+23. Design 9 additional distinct scenarios.
+24. Select scenario-specific ontology subsets.
+25. Generate/review/freeze S0/D0 for every scenario.
+26. Generate and review the source-hash-verified paired Markdown for every scenario.
+27. Run model API rollouts for all 10 scenarios.
+28. Run environment validation for all 10 scenarios.
+29. Build T1/T2/T3 instances for every scenario.
+30. Configure T4 for every scenario.
+31. Perform formal human annotation for published T1/T2/T3 instances.
+32. Adjudicate disagreements and remove ambiguous cases.
+33. Run baselines and ablations across all 10 scenarios.
+34. Produce per-scenario and aggregate benchmark statistics.
 ```
 
 ------------------------------------------------------------------------
@@ -1236,6 +1271,10 @@ state and dynamics are updated before environment response.
 Initialization:
 candidate S0/D0 → review → freeze;
 all policies on a scenario share the same S0/D0.
+
+Scenario documentation:
+canonical JSON is the sole source of truth;
+same-basename Markdown and manifest are generated and source-hash checked.
 
 T2:
 semantic matching may retrieve candidates;
@@ -1500,6 +1539,11 @@ Offline
 Evaluation
 - schemas and metrics run end-to-end
 - hidden-state leakage checks pass
+
+Scenario Documentation
+- canonical JSON has a same-basename generated Markdown
+- Markdown explains initialization, state/action semantics, and video thresholds
+- source hash and scenario manifest checks pass
 ```
 
 ### Gate B --- Version-1 Benchmark Completion
@@ -1508,7 +1552,9 @@ The first benchmark version is not complete until all **10 distinct
 scenarios** have the full paired stack:
 
 ``` text
-Scenario Definition
+Canonical Scenario JSON
++
+Source-Hash-Verified Natural-Language Scenario Document
 +
 Validated Environment
 +

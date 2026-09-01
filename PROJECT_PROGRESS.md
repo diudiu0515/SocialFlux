@@ -1,6 +1,6 @@
 # SocialFlux 项目进度
 
-更新时间：2026-08-31
+更新时间：2026-09-01
 
 ## 当前状态
 
@@ -16,7 +16,7 @@
 | Counterfactual 验证 | 已完成 | T3 私有分支和即时/延迟 horizon 已生成 |
 | Interactive benchmark | 旧 world 已清理 | IA001/IA002 创作源文件按当前项目整理要求移除；转换器、schema 和标注工具保留 |
 | Scenario 配对文档 | 已完成 | 10/10 JSON 均有同名自然语言 Markdown；source hash、自动 manifest、pipeline/acceptance gate 和网站展示已接通 |
-| Prompt catalog | 已完成 | 12 个版本化 prompt，manifest SHA-256 校验，运行时代码统一 loader |
+| Prompt catalog | 已完成 | 13 个版本化 prompt，manifest SHA-256 校验，运行时代码统一 loader |
 | 信息隔离与泄漏审计 | 已完成 | participant 只暴露 observable view；候选实例不暴露 private effects |
 | Scenario Observatory | 已完成 | 只读展示当前 scenario、策略轨迹、状态转移和 Talking Head trigger；不维护第二套状态机 |
 | GitHub 发布 | 本地已提交 | commit `0f76297` 已完成；推送需先将项目 deploy key 添加到仓库 |
@@ -27,7 +27,7 @@
 
 ## 已验证指标
 
-- 核心测试：20 项通过
+- 核心测试：21 项通过
 - Web 测试：3 项通过
 - Interactive benchmark 工具测试：12 项通过，旧 IA001/IA002 world 测试按整理要求跳过
 - Python compileall：通过
