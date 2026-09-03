@@ -2,30 +2,56 @@
 
 # 医疗沟通与治疗选择
 
-## 文档身份
+## 文档身份与来源
 
 - Scenario ID：`IA_PIPE_008`
 - 配对 JSON：`scenario_008.json`
-- JSON SHA-256：`ae6671af2dbd86cf757b2d5a8b27b096a535ff08e375339a13e989a391a2a58a`
+- JSON SHA-256：`98b3fac5f9617e4560ce4070e4a6bc438b1e9fc082ebe323b59379a7e0bb5ab4`
 - 社会机制：medical information asymmetry
+- 来源类型：`synthetic-script`
+- Provenance ID：`SF-SRC-008`
+- 表层文本策略：`original_surface_text`
+- 来源说明：由社会机制与关系约束先形成原创叙事脚本，再标准化为 scenario。
 
-## 1. 故事初始化
+## 1. 叙事结构与初始化
 
 故事背景：患者家属希望了解治疗方案和风险，医生需要管理不确定性。
 
+关系结构：对话参与者 与 医生 的持续关系
+
+权力结构：医生掌握专业知识与流程解释权，家属掌握患者日常价值和授权信息。
+
+目标冲突：患者家属希望了解治疗方案和风险，医生需要管理不确定性。
+
+信息不对称：保护自身声誉、资源或关系位置，同时避免直接承认失误
+
+### 相关历史
+
+- 家属此前接收到的风险表述不一致，对治疗窗口和预后形成不同预期。
+- 医生掌握临床不确定性，家属掌握患者价值偏好的一部分。
+
+### 非平凡选择空间
+
+- 澄清已知与未知风险
+- 核对患者价值偏好
+- 请求第二意见
+- 讨论时间窗口下的可逆选择
+
 被评估角色：对话参与者（`EVALUATED_AGENT`）。
 
-环境角色：医生 / 医生。耐心 `0.75`，共情 `0.44999999999999996`。
+被评估角色公开目标：获得诚实可理解的方案与风险信息，参与治疗决策。
 
-公开目标：保证安全决策并维持治疗信任
+环境角色：医生 / 医生。
+
+环境角色显式目标（作者侧）：保证安全决策并维持治疗信任
 
 隐藏意图（作者侧私有）：保护自身声誉、资源或关系位置，同时避免直接承认失误
 
-最长互动：`8` 轮。初始回应：未配置，环境从空回应开始。
+最长互动：`8` 轮。
 
 ### 初始 State（0–10）
 
-数值越高表示该状态越强；State 是环境内部变量。
+状态：`candidate_pending_human_freeze`。当前数值是候选配置；只有真实人工审核后才能标记为 human_frozen。
 
 | 状态变量 | 初始值 |
 |---|---|
@@ -52,93 +78,13 @@
 - 信任 (`relationship.trust`)
 - 敌意 (`relationship.hostility`)
 
-## 2. Action 对 State 的影响
+## 2. 自由交互与状态更新契约
 
-语义标签映射到 -3 至 +3，更新后截断在 0–10。Persona modifier 可以改变幅度，但不会反转非零方向。
+Scenario 只定义社会世界，不定义行动策略，也不预写任何 action→state 转移。
 
-### `repair` — 修复 / 合作
+正常 rollout 中，模型产生任意自然语言 action；同一个模型驱动环境按 persona、完整相关历史、S_t/D_t 和 action 独立完成 appraisal、语义 delta 与可观察回应。repair/neutral/escalation 不是 action taxonomy，也不得作为多轮数据生成策略。
 
-目标一致性：`supports_goal`。
-
-State 变化：
-
-| 状态变量 | 变化方向 |
-|---|---|
-| 愤怒 (`emotion.anger`) | 中度下降（约 -2） |
-| 焦虑 (`emotion.anxiety`) | 轻度下降（约 -1） |
-| 希望 (`emotion.hope`) | 轻度上升（约 +1） |
-| 坚持推进意愿 (`motivation.resolve`) | 基本不变（约 0） |
-| 关系修复意愿 (`motivation.repair_intent`) | 中度上升（约 +2） |
-| 信任 (`relationship.trust`) | 轻度上升（约 +1） |
-| 敌意 (`relationship.hostility`) | 中度下降（约 -2） |
-
-Interaction dynamics 变化：
-
-| 状态变量 | 变化方向 |
-|---|---|
-| 目标失败风险 (`goal_failure_risk`) | 轻度下降（约 -1） |
-| 冲突升级风险 (`escalation_risk`) | 中度下降（约 -2） |
-| 协商开放度 (`negotiation_open`) | 中度上升（约 +2） |
-
-可观察线索：语气放缓，愿意继续讨论。
-
-回应模板：我会根据目前的信息继续回应，我们先把具体问题说清楚。
-
-### `escalate` — 升级 / 对抗
-
-目标一致性：`conflicts_with_goal`。
-
-State 变化：
-
-| 状态变量 | 变化方向 |
-|---|---|
-| 愤怒 (`emotion.anger`) | 强烈上升（约 +3） |
-| 焦虑 (`emotion.anxiety`) | 轻度上升（约 +1） |
-| 希望 (`emotion.hope`) | 中度下降（约 -2） |
-| 坚持推进意愿 (`motivation.resolve`) | 轻度上升（约 +1） |
-| 关系修复意愿 (`motivation.repair_intent`) | 强烈下降（约 -3） |
-| 信任 (`relationship.trust`) | 强烈下降（约 -3） |
-| 敌意 (`relationship.hostility`) | 强烈上升（约 +3） |
-
-Interaction dynamics 变化：
-
-| 状态变量 | 变化方向 |
-|---|---|
-| 目标失败风险 (`goal_failure_risk`) | 中度上升（约 +2） |
-| 冲突升级风险 (`escalation_risk`) | 强烈上升（约 +3） |
-| 协商开放度 (`negotiation_open`) | 中度下降（约 -2） |
-
-可观察线索：语气变紧，开始强调程序和责任。
-
-回应模板：我会根据目前的信息继续回应，我们先把具体问题说清楚。
-
-### `neutral` — 中性 / 观望
-
-目标一致性：`uncertain`。
-
-State 变化：
-
-| 状态变量 | 变化方向 |
-|---|---|
-| 愤怒 (`emotion.anger`) | 基本不变（约 0） |
-| 焦虑 (`emotion.anxiety`) | 基本不变（约 0） |
-| 希望 (`emotion.hope`) | 基本不变（约 0） |
-| 坚持推进意愿 (`motivation.resolve`) | 基本不变（约 0） |
-| 关系修复意愿 (`motivation.repair_intent`) | 基本不变（约 0） |
-| 信任 (`relationship.trust`) | 基本不变（约 0） |
-| 敌意 (`relationship.hostility`) | 基本不变（约 0） |
-
-Interaction dynamics 变化：
-
-| 状态变量 | 变化方向 |
-|---|---|
-| 目标失败风险 (`goal_failure_risk`) | 基本不变（约 0） |
-| 冲突升级风险 (`escalation_risk`) | 基本不变（约 0） |
-| 协商开放度 (`negotiation_open`) | 基本不变（约 0） |
-
-可观察线索：保持克制，等待更多信息。
-
-回应模板：我会根据目前的信息继续回应，我们先把具体问题说清楚。
+局部因果验证只能从真实自由轨迹 checkpoint 恢复相同 history/S_t/D_t，再注入若干自然语言替代 action；它不属于 scenario 定义。
 
 ## 3. Talking Head / 视频生成
 
@@ -160,7 +106,7 @@ Interaction dynamics 变化：
 
 ### 视频触发规则
 
-同一规则的 conditions 按 AND 判断，必须全部满足。阈值和 trigger ID 保留在私有 trajectory；公开 observation 只获得 expression 与安全 media spec。
+同一规则 conditions 按 AND 判断。阈值与 trigger ID 仅进入私有 trajectory；公开 observation 只获得安全的 expression/media spec。
 
 #### `escalation_confrontation`
 
@@ -172,7 +118,7 @@ Interaction dynamics 变化：
 - 敌意 (`relationship.hostility`) >= `7`
 - 冲突升级风险 (`escalation_risk`) >= `8`
 
-冷却 `3` 轮；媒体 `video`；时长 `4` 秒；cue template `risk_management`。
+冷却 `3` 轮；媒体 `video`；时长 `4` 秒。
 
 触发后的外显表达：
 
@@ -191,7 +137,7 @@ Interaction dynamics 变化：
 - 焦虑 (`emotion.anxiety`) >= `8`
 - 关系修复意愿 (`motivation.repair_intent`) <= `2`
 
-冷却 `3` 轮；媒体 `video`；时长 `4` 秒；cue template `anxious_withdrawal`。
+冷却 `3` 轮；媒体 `video`；时长 `4` 秒。
 
 触发后的外显表达：
 
@@ -201,17 +147,17 @@ Interaction dynamics 变化：
 - 语气/韵律：音量降低，停顿变长
 - 行为线索：避免夸张哭泣或脸谱化表演
 
-## 4. Pipeline 配套
+## 4. 构建与质量门禁
 
-- T1/T2/T3 最大候选数：`5` / `3` / `4`
+- Normalization：`legacy_migration_pending_human_review`
+- Scenario quality gate：`pending_human_review`
+- 待审核项：`11` / `11`
+- T1/T2/T3 候选上限：`5` / `3` / `4`
 - T3 delayed horizon：`5`
-- 采样：`round_robin_checkpoint_cap`，seed `17`
-
-修改 JSON 后执行：
 
 ```bash
 python scripts/scenario_docs.py configs/scenarios/scenario_008/scenario_008.json
-python -m scripts.run_pipeline --scenarios configs/scenarios --output build/pipeline_v1
+python -m scripts.run_pipeline --rollout-config configs/rollout_pool.example.json
 ```
 
-Rollout 生成后与本场景放在一起：`rollouts/dialogues.md`、`rollouts/manifest.json` 和逐 trajectory JSON。
+自由模型 rollout 生成后与本场景放在 `rollouts/`；`dialogues.md` 是可读投影，manifest 和逐 trajectory JSON 是私有研究产物。

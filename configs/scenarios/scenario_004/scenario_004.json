@@ -2,6 +2,47 @@
   "scenario_id": "IA_PIPE_004",
   "title": "伴侣照护责任冲突",
   "mechanism": "intimate obligation",
+  "source": {
+    "type": "synthetic-script",
+    "provenance_id": "SF-SRC-004",
+    "surface_text_policy": "original_surface_text",
+    "redistribution_status": "original_synthetic",
+    "provenance_note": "由社会机制与关系约束先形成原创叙事脚本，再标准化为 scenario。"
+  },
+  "narrative_design": {
+    "relationship_structure": "对话参与者 与 伴侣 的持续关系",
+    "power_structure": "亲密关系名义对等，时间、照护能力和情感依赖造成情境性不对称。",
+    "goal_conflict": "伴侣因照护分工和承诺落差发生争执。",
+    "information_asymmetry": "保护自身声誉、资源或关系位置，同时避免直接承认失误",
+    "relevant_history": [
+      "一方连续数周承担更多照护工作，几次临时变更安排没有充分沟通。",
+      "双方都认为自己在保护家庭，却对承诺优先级理解不同。"
+    ],
+    "meaningful_choice_space": [
+      "重新列出照护任务和容量",
+      "表达未被看见的负担",
+      "协商临时支持",
+      "重设承诺与边界"
+    ]
+  },
+  "construction_status": {
+    "normalization": "legacy_migration_pending_human_review",
+    "initial_state": "candidate_pending_human_freeze",
+    "quality_gate": "pending_human_review"
+  },
+  "quality_gate": {
+    "social_plausibility": "pending",
+    "real_tradeoff": "pending",
+    "longitudinal_necessity": "pending",
+    "nontrivial_strategy_space": "pending",
+    "character_motivation_coherence": "pending",
+    "information_asymmetry": "pending",
+    "t1_suitability": "pending",
+    "t2_suitability": "pending",
+    "t3_suitability": "pending",
+    "t4_adaptation_opportunity": "pending",
+    "no_universal_script": "pending"
+  },
   "background": "伴侣因照护分工和承诺落差发生争执。",
   "environment_agent": {
     "persona": {
@@ -15,7 +56,8 @@
   },
   "evaluated_agent_role": {
     "character_id": "EVALUATED_AGENT",
-    "name": "对话参与者"
+    "name": "对话参与者",
+    "explicit_goal": "确认双方都能履行的照护分工，并处理承诺落差。"
   },
   "selected_state_variables": {
     "emotion": [
@@ -61,95 +103,10 @@
     "escalation_risk": 2,
     "negotiation_open": 5
   },
-  "action_effects": {
-    "repair": {
-      "state_delta": {
-        "emotion": {
-          "anger": "moderate_decrease",
-          "anxiety": "mild_decrease",
-          "hope": "mild_increase"
-        },
-        "motivation": {
-          "resolve": "similar",
-          "repair_intent": "moderate_increase"
-        },
-        "relationship": {
-          "trust": "mild_increase",
-          "hostility": "moderate_decrease"
-        }
-      },
-      "interaction_dynamics_delta": {
-        "goal_failure_risk": "mild_decrease",
-        "escalation_risk": "moderate_decrease",
-        "negotiation_open": "moderate_increase"
-      },
-      "goal_alignment": "supports_goal"
-    },
-    "escalate": {
-      "state_delta": {
-        "emotion": {
-          "anger": "strong_increase",
-          "anxiety": "mild_increase",
-          "hope": "moderate_decrease"
-        },
-        "motivation": {
-          "resolve": "mild_increase",
-          "repair_intent": "strong_decrease"
-        },
-        "relationship": {
-          "trust": "strong_decrease",
-          "hostility": "strong_increase"
-        }
-      },
-      "interaction_dynamics_delta": {
-        "goal_failure_risk": "moderate_increase",
-        "escalation_risk": "strong_increase",
-        "negotiation_open": "moderate_decrease"
-      },
-      "goal_alignment": "conflicts_with_goal"
-    },
-    "neutral": {
-      "state_delta": {
-        "emotion": {
-          "anger": "similar",
-          "anxiety": "similar",
-          "hope": "similar"
-        },
-        "motivation": {
-          "resolve": "similar",
-          "repair_intent": "similar"
-        },
-        "relationship": {
-          "trust": "similar",
-          "hostility": "similar"
-        }
-      },
-      "interaction_dynamics_delta": {
-        "goal_failure_risk": "similar",
-        "escalation_risk": "similar",
-        "negotiation_open": "similar"
-      },
-      "goal_alignment": "uncertain"
-    }
-  },
-  "response_templates": {
-    "default": "我会根据目前的信息继续回应，我们先把具体问题说清楚。"
-  },
-  "observable_cues_by_action": {
-    "repair": [
-      "语气放缓，愿意继续讨论。"
-    ],
-    "escalate": [
-      "语气变紧，开始强调程序和责任。"
-    ],
-    "neutral": [
-      "保持克制，等待更多信息。"
-    ]
-  },
   "max_turns": 8,
   "t3_delayed_horizon": 5,
   "sampling_plan": {
-    "selection_strategy": "round_robin_checkpoint_cap",
+    "selection_strategy": "natural_trajectory_checkpoint_sampling",
     "seed": 17,
     "t1_max": 5,
     "t2_max": 3,

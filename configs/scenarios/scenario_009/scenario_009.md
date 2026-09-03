@@ -2,30 +2,56 @@
 
 # 团队项目贡献冲突
 
-## 文档身份
+## 文档身份与来源
 
 - Scenario ID：`IA_PIPE_009`
 - 配对 JSON：`scenario_009.json`
-- JSON SHA-256：`a7078162cf1a8e1ec3daf1415e72da9856a1edac7984ed1a1bca01bb85875b05`
+- JSON SHA-256：`13ab0cbc61b75d45b549fbd70b6b8b6ced7641eb96ad308540dccc0b080a96c7`
 - 社会机制：peer collaboration
+- 来源类型：`narrative-derived`
+- Provenance ID：`SF-SRC-009`
+- 表层文本策略：`original_surface_text`
+- 来源说明：抽象自复合叙事结构，仅保留社会机制；未复制具体作品角色、场景或对白。
 
-## 1. 故事初始化
+## 1. 叙事结构与初始化
 
 故事背景：同学团队在截止日期前争论贡献、责任和成果归属。
 
+关系结构：对话参与者 与 项目负责人 的持续关系
+
+权力结构：同伴形式上平等，但任务依赖、成果控制和截止压力造成影响力差异。
+
+目标冲突：同学团队在截止日期前争论贡献、责任和成果归属。
+
+信息不对称：保护自身声誉、资源或关系位置，同时避免直接承认失误
+
+### 相关历史
+
+- 团队成员的贡献记录零散，数次任务重分配没有同步确认。
+- 截止日期临近，成果署名与责任追踪同时成为压力来源。
+
+### 非平凡选择空间
+
+- 重建贡献记录
+- 重新分工并确认交付
+- 调整成果署名
+- 引入课程负责人协调
+
 被评估角色：对话参与者（`EVALUATED_AGENT`）。
 
-环境角色：项目负责人 / 项目负责人。耐心 `0.45`，共情 `0.55`。
+被评估角色公开目标：在按期完成项目的同时厘清贡献、责任与成果归属。
 
-公开目标：按时交付并保持团队合作
+环境角色：项目负责人 / 项目负责人。
+
+环境角色显式目标（作者侧）：按时交付并保持团队合作
 
 隐藏意图（作者侧私有）：保护自身声誉、资源或关系位置，同时避免直接承认失误
 
-最长互动：`8` 轮。初始回应：未配置，环境从空回应开始。
+最长互动：`8` 轮。
 
 ### 初始 State（0–10）
 
-数值越高表示该状态越强；State 是环境内部变量。
+状态：`candidate_pending_human_freeze`。当前数值是候选配置；只有真实人工审核后才能标记为 human_frozen。
 
 | 状态变量 | 初始值 |
 |---|---|
@@ -52,93 +78,13 @@
 - 信任 (`relationship.trust`)
 - 敌意 (`relationship.hostility`)
 
-## 2. Action 对 State 的影响
+## 2. 自由交互与状态更新契约
 
-语义标签映射到 -3 至 +3，更新后截断在 0–10。Persona modifier 可以改变幅度，但不会反转非零方向。
+Scenario 只定义社会世界，不定义行动策略，也不预写任何 action→state 转移。
 
-### `repair` — 修复 / 合作
+正常 rollout 中，模型产生任意自然语言 action；同一个模型驱动环境按 persona、完整相关历史、S_t/D_t 和 action 独立完成 appraisal、语义 delta 与可观察回应。repair/neutral/escalation 不是 action taxonomy，也不得作为多轮数据生成策略。
 
-目标一致性：`supports_goal`。
-
-State 变化：
-
-| 状态变量 | 变化方向 |
-|---|---|
-| 愤怒 (`emotion.anger`) | 中度下降（约 -2） |
-| 焦虑 (`emotion.anxiety`) | 轻度下降（约 -1） |
-| 希望 (`emotion.hope`) | 轻度上升（约 +1） |
-| 坚持推进意愿 (`motivation.resolve`) | 基本不变（约 0） |
-| 关系修复意愿 (`motivation.repair_intent`) | 中度上升（约 +2） |
-| 信任 (`relationship.trust`) | 轻度上升（约 +1） |
-| 敌意 (`relationship.hostility`) | 中度下降（约 -2） |
-
-Interaction dynamics 变化：
-
-| 状态变量 | 变化方向 |
-|---|---|
-| 目标失败风险 (`goal_failure_risk`) | 轻度下降（约 -1） |
-| 冲突升级风险 (`escalation_risk`) | 中度下降（约 -2） |
-| 协商开放度 (`negotiation_open`) | 中度上升（约 +2） |
-
-可观察线索：语气放缓，愿意继续讨论。
-
-回应模板：我会根据目前的信息继续回应，我们先把具体问题说清楚。
-
-### `escalate` — 升级 / 对抗
-
-目标一致性：`conflicts_with_goal`。
-
-State 变化：
-
-| 状态变量 | 变化方向 |
-|---|---|
-| 愤怒 (`emotion.anger`) | 强烈上升（约 +3） |
-| 焦虑 (`emotion.anxiety`) | 轻度上升（约 +1） |
-| 希望 (`emotion.hope`) | 中度下降（约 -2） |
-| 坚持推进意愿 (`motivation.resolve`) | 轻度上升（约 +1） |
-| 关系修复意愿 (`motivation.repair_intent`) | 强烈下降（约 -3） |
-| 信任 (`relationship.trust`) | 强烈下降（约 -3） |
-| 敌意 (`relationship.hostility`) | 强烈上升（约 +3） |
-
-Interaction dynamics 变化：
-
-| 状态变量 | 变化方向 |
-|---|---|
-| 目标失败风险 (`goal_failure_risk`) | 中度上升（约 +2） |
-| 冲突升级风险 (`escalation_risk`) | 强烈上升（约 +3） |
-| 协商开放度 (`negotiation_open`) | 中度下降（约 -2） |
-
-可观察线索：语气变紧，开始强调程序和责任。
-
-回应模板：我会根据目前的信息继续回应，我们先把具体问题说清楚。
-
-### `neutral` — 中性 / 观望
-
-目标一致性：`uncertain`。
-
-State 变化：
-
-| 状态变量 | 变化方向 |
-|---|---|
-| 愤怒 (`emotion.anger`) | 基本不变（约 0） |
-| 焦虑 (`emotion.anxiety`) | 基本不变（约 0） |
-| 希望 (`emotion.hope`) | 基本不变（约 0） |
-| 坚持推进意愿 (`motivation.resolve`) | 基本不变（约 0） |
-| 关系修复意愿 (`motivation.repair_intent`) | 基本不变（约 0） |
-| 信任 (`relationship.trust`) | 基本不变（约 0） |
-| 敌意 (`relationship.hostility`) | 基本不变（约 0） |
-
-Interaction dynamics 变化：
-
-| 状态变量 | 变化方向 |
-|---|---|
-| 目标失败风险 (`goal_failure_risk`) | 基本不变（约 0） |
-| 冲突升级风险 (`escalation_risk`) | 基本不变（约 0） |
-| 协商开放度 (`negotiation_open`) | 基本不变（约 0） |
-
-可观察线索：保持克制，等待更多信息。
-
-回应模板：我会根据目前的信息继续回应，我们先把具体问题说清楚。
+局部因果验证只能从真实自由轨迹 checkpoint 恢复相同 history/S_t/D_t，再注入若干自然语言替代 action；它不属于 scenario 定义。
 
 ## 3. Talking Head / 视频生成
 
@@ -160,7 +106,7 @@ Interaction dynamics 变化：
 
 ### 视频触发规则
 
-同一规则的 conditions 按 AND 判断，必须全部满足。阈值和 trigger ID 保留在私有 trajectory；公开 observation 只获得 expression 与安全 media spec。
+同一规则 conditions 按 AND 判断。阈值与 trigger ID 仅进入私有 trajectory；公开 observation 只获得安全的 expression/media spec。
 
 #### `escalation_confrontation`
 
@@ -172,7 +118,7 @@ Interaction dynamics 变化：
 - 敌意 (`relationship.hostility`) >= `7`
 - 冲突升级风险 (`escalation_risk`) >= `8`
 
-冷却 `3` 轮；媒体 `video`；时长 `4` 秒；cue template `deadline_pressure`。
+冷却 `3` 轮；媒体 `video`；时长 `4` 秒。
 
 触发后的外显表达：
 
@@ -191,7 +137,7 @@ Interaction dynamics 变化：
 - 焦虑 (`emotion.anxiety`) >= `8`
 - 关系修复意愿 (`motivation.repair_intent`) <= `2`
 
-冷却 `3` 轮；媒体 `video`；时长 `4` 秒；cue template `anxious_withdrawal`。
+冷却 `3` 轮；媒体 `video`；时长 `4` 秒。
 
 触发后的外显表达：
 
@@ -201,17 +147,17 @@ Interaction dynamics 变化：
 - 语气/韵律：音量降低，停顿变长
 - 行为线索：避免夸张哭泣或脸谱化表演
 
-## 4. Pipeline 配套
+## 4. 构建与质量门禁
 
-- T1/T2/T3 最大候选数：`5` / `3` / `4`
+- Normalization：`legacy_migration_pending_human_review`
+- Scenario quality gate：`pending_human_review`
+- 待审核项：`11` / `11`
+- T1/T2/T3 候选上限：`5` / `3` / `4`
 - T3 delayed horizon：`5`
-- 采样：`round_robin_checkpoint_cap`，seed `17`
-
-修改 JSON 后执行：
 
 ```bash
 python scripts/scenario_docs.py configs/scenarios/scenario_009/scenario_009.json
-python -m scripts.run_pipeline --scenarios configs/scenarios --output build/pipeline_v1
+python -m scripts.run_pipeline --rollout-config configs/rollout_pool.example.json
 ```
 
-Rollout 生成后与本场景放在一起：`rollouts/dialogues.md`、`rollouts/manifest.json` 和逐 trajectory JSON。
+自由模型 rollout 生成后与本场景放在 `rollouts/`；`dialogues.md` 是可读投影，manifest 和逐 trajectory JSON 是私有研究产物。

@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socialflux.example/schemas/task-t3-output-v1.json",
+  "title": "T3 model output",
+  "type": "object",
+  "required": [
+    "instance_id",
+    "options"
+  ],
+  "properties": {
+    "instance_id": {
+      "type": "string"
+    },
+    "options": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": [
+          "action_index",
+          "state_predictions"
+        ],
+        "properties": {
+          "action_index": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "state_predictions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "state_id",
+                "immediate",
+                "delayed",
+                "evidence_turn_ids"
+              ],
+              "properties": {
+                "state_id": {
+                  "type": "string"
+                },
+                "immediate": {
+                  "$ref": "#/$defs/directions"
+                },
+                "delayed": {
+                  "$ref": "#/$defs/directions"
+                },
+                "evidence_turn_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "directions": {
+      "type": "object",
+      "required": [
+        "increase",
+        "similar",
+        "decrease",
+        "cannot_determine"
+      ],
+      "properties": {
+        "increase": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "similar": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "decrease": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "cannot_determine": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

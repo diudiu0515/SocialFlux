@@ -1,74 +1,99 @@
 {
-  "format": "emotree_prompt_manifest_v1",
+  "format": "socialflux_prompt_manifest_v2",
   "prompts": {
-    "environment_appraisal_v1": {
-      "path": "environment_appraisal_v1.md",
-      "sha256": "106847e29fd5bee0db2631436b16add9ae44308a990960b63e81ef3ffa1c136c",
+    "counterfactual_action_generation_v1": {
+      "path": "counterfactual_action_generation_v1.md",
+      "sha256": "cb529d0441a5086a9cabf1143eb3aa33d213d2ab8c7f52b88a22078c9432ee57",
       "version": "v1"
     },
-    "environment_response_v1": {
-      "path": "environment_response_v1.md",
-      "sha256": "eb43b3e2c235557eb1da874b93dc97ef34cf321053c5ee49c414d85cfff63b0a",
-      "version": "v1"
-    },
-    "environment_validation_v1": {
-      "path": "environment_validation_v1.md",
-      "sha256": "3a8dc6088525b3f31ca414715742985ba31c03ae96445e9cf1050052ec69ff4f",
-      "version": "v1"
-    },
-    "human_annotation_v1": {
-      "path": "human_annotation_v1.md",
-      "sha256": "85dd04e6cc283b19b9c825e64a4e825edbe09f937c9d14342a1247c891b84a06",
-      "version": "v1"
-    },
-    "memory_retrieval_v1": {
-      "path": "memory_retrieval_v1.md",
-      "sha256": "b469d3fea827391ccfd967dd31373d39a44900c674880e2e90fc6a81e777dca5",
-      "version": "v1"
-    },
-    "policy_action_v1": {
-      "path": "policy_action_v1.md",
-      "sha256": "2f7b805c92d7c5dd3f9e30afa7079484df64d827f3322cee1e02d3b29a599176",
-      "version": "v1"
-    },
-    "scenario_generation_v1": {
-      "path": "scenario_generation_v1.md",
-      "sha256": "df0576802c9cc0e3295549b45f432044cc3442b42c00adc0225e9c7ecb469589",
-      "version": "v1"
-    },
-    "scenario_generation_v2": {
-      "path": "scenario_generation_v2.md",
-      "sha256": "4f78423bf2355cfb3b4f9f6cb09be1518c75c068836fb5afc27aa9795792ff0e",
+    "environment_appraisal_v2": {
+      "path": "environment_appraisal_v2.md",
+      "sha256": "d8ed126a25f0ff2f3a57221da44a4ad7c448189c27e44d95889c25e13c5d8726",
       "version": "v2"
     },
-    "scenario_initialization_v1": {
-      "path": "scenario_initialization_v1.md",
-      "sha256": "1884aa1c8eddc4431ab97c7ae2a2ce8f33462b59792a71906c1b99d2e96be71b",
+    "environment_response_v2": {
+      "path": "environment_response_v2.md",
+      "sha256": "2f62f12ad424c87159a39c88d33584676131e3d9bbd6a5921434c80c0ec16121",
+      "version": "v2"
+    },
+    "human_annotation_v2": {
+      "path": "human_annotation_v2.md",
+      "sha256": "ba720679bb9ba6bfffd9789d93c66448f04e9285d334f3a3e7aeec1d6075bd8a",
+      "version": "v2"
+    },
+    "initial_state_configuration_v1": {
+      "path": "initial_state_configuration_v1.md",
+      "sha256": "586949c616d509fc47efb0b91f6a30314d2a2000a85c5ff93c2d3f6fda34f6d6",
       "version": "v1"
     },
-    "story_generation_v0.1": {
-      "path": "story_generation_v0.1.md",
-      "sha256": "23d6460e6c0d0ea0d2b11cb181648b289d94ef62da1c4ff3db8a0f543f3545bf",
-      "version": "v0.1"
+    "local_intervention_validation_v1": {
+      "path": "local_intervention_validation_v1.md",
+      "sha256": "582ddec1471ef6b62e93e9fe2803a22ee97df42d384434e108f8241ea7599b28",
+      "version": "v1"
     },
-    "task_t1_v0.2": {
-      "path": "task_t1_v0.2.md",
-      "sha256": "9fa419dceffedd3428c17923925c6080e927777b75ce689bd4bc78af1e27a67d",
-      "version": "v0.2"
+    "memory_retrieval_v2": {
+      "path": "memory_retrieval_v2.md",
+      "sha256": "80eaf0c24c76b50f1fc9f46b9f60bf3b23b611fe6a3671994fe897bed8530fcc",
+      "version": "v2"
     },
-    "task_t2_v0.2": {
-      "path": "task_t2_v0.2.md",
-      "sha256": "cae1503502d34937d3eae7fcc1f392de9cceccecf9d43160b1731da76cf950df",
-      "version": "v0.2"
+    "observable_expression_v1": {
+      "path": "observable_expression_v1.md",
+      "sha256": "8076fe86343bafb8cf1f86fb351f0c7ce5232d6023a29556f952d4ac886ff964",
+      "version": "v1"
     },
-    "task_t3_v0.2": {
-      "path": "task_t3_v0.2.md",
-      "sha256": "d4010c0b3a76c10bc57ef7f5aa782cecc9014f1e2b8c91eb2ce70506b371618e",
-      "version": "v0.2"
+    "scenario_normalization_v1": {
+      "path": "scenario_normalization_v1.md",
+      "sha256": "ad1799528344b78f3f58af9d3b2e778dc638998553823979008840c91f071e41",
+      "version": "v1"
     },
-    "task_t4_v1": {
-      "path": "task_t4_v1.md",
-      "sha256": "d98118e39dba54549c40bd168c0c9ba254594e64f3863c18eeb16ae59215e89a",
+    "scenario_quality_gate_v1": {
+      "path": "scenario_quality_gate_v1.md",
+      "sha256": "29883c23211475a8acd5c5a6e02e773e05e509acbb44396c77e230d3daeeb5a9",
+      "version": "v1"
+    },
+    "scenario_script_generation_v1": {
+      "path": "scenario_script_generation_v1.md",
+      "sha256": "4de5dd2acbd62b10b117d0bda27fb3a23c9417cbd392ae6627cf66e5f14b240e",
+      "version": "v1"
+    },
+    "state_update_v1": {
+      "path": "state_update_v1.md",
+      "sha256": "bc5074c6e30c637f54065a02c78a44e56230c7cd2ff6680206126888167709be",
+      "version": "v1"
+    },
+    "t2_shared_observation_v1": {
+      "path": "t2_shared_observation_v1.md",
+      "sha256": "ff41134c03a23a027f5257cfa9119c321d24b7f84eac164c4639078bc952017e",
+      "version": "v1"
+    },
+    "t4_judge_v1": {
+      "path": "t4_judge_v1.md",
+      "sha256": "0ded9a2bfa88aeabdb67f04993ea6663a2055baa63e9d21d1597254a34287ec4",
+      "version": "v1"
+    },
+    "talking_head_generation_v1": {
+      "path": "talking_head_generation_v1.md",
+      "sha256": "1e3ba28ab9614b3c12529e0d13dd41727b210a078dcd58ccd38581273e19fa46",
+      "version": "v1"
+    },
+    "task_t1_v1": {
+      "path": "task_t1_v1.md",
+      "sha256": "f8e0e811e84159b9833595704bd39ab9bc8269666f1a4a5eba0ab897ef69339a",
+      "version": "v1"
+    },
+    "task_t2_v1": {
+      "path": "task_t2_v1.md",
+      "sha256": "3f97cfa68bb64a9fae3fb81f06a60cc70503ec814ba6d46ab804b7957fbc4b41",
+      "version": "v1"
+    },
+    "task_t3_v1": {
+      "path": "task_t3_v1.md",
+      "sha256": "270cd8cd265bdf56af50c8af3003b00a27a05549807e56f321e5419a7a3eb0ea",
+      "version": "v1"
+    },
+    "task_t4_action_v1": {
+      "path": "task_t4_action_v1.md",
+      "sha256": "6a2359edc6e5067ab05c7bc757038835733b7e5dfad4891b5a08dfd8f3d3957b",
       "version": "v1"
     }
   }

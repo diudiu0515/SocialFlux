@@ -1,27 +1,18 @@
-# Scenario Catalog Contract
+# Scenario Bundles
 
-本目录是 SocialFlux pipeline 的唯一场景输入。每个场景必须形成：
+每个 `scenario_NNN/` 必须同时包含：
 
-```text
-scenario_NNN/
-├── scenario_NNN.json       # canonical machine definition
-├── scenario_NNN.md         # generated human-readable pair
-└── rollouts/               # generated local/private rollout assets
-    ├── dialogues.md        # readable full conversations
-    ├── manifest.json
-    └── <trajectory_id>.json
-manifest.json               # generated cross-scenario catalog
-```
+- `scenario_NNN.json`：canonical machine truth；
+- `scenario_NNN.md`：确定性生成的自然语言说明；
+- `rollouts/`：本地 natural model trajectory、manifest 与 `dialogues.md`。
 
-同名 Markdown 用自然语言说明故事初始化、角色与目标、S0/D0、目标状态、三类 action 的 state/dynamics 变化、默认外显表达、视频 trigger 的 AND 阈值/crossing/cooldown/时长，以及 T1/T2/T3 配置。文档记录 JSON SHA-256，不允许脱离 JSON 单独维护。
-
-新增或修改场景：
+JSON 更新后运行：
 
 ```bash
-python scripts/scenario_docs.py configs/scenarios/scenario_NNN/scenario_NNN.json
+python scripts/scenario_docs.py
 python scripts/scenario_docs.py --check
-python -m scripts.run_pipeline --scenarios configs/scenarios --output build/pipeline_v1
-python scripts/run_acceptance.py --scenarios configs/scenarios --output build/pipeline_v1
 ```
 
-生成器自动维护 manifest。Rollout 由 pipeline 写回对应 bundle；`build/` 只保留聚合候选、验证和 pipeline manifest。Pipeline、acceptance 和测试会拒绝缺失/过期 Markdown 或与目录不一致的 manifest。
+Catalog `manifest.json` 记录 JSON/Markdown hash、source mix 与 prompt hash；`coverage_matrix.json` 汇总 source、关系、权力、goal conflict、information asymmetry、state family 和 validation suitability。
+
+当前 10 个 scenario 是 revision migration candidate：5 个 narrative-derived、5 个 synthetic-script，但 quality gate 与 S0/D0 均未获得真实审核。正式 rollout 前必须将完整审核记录落实到 scenario status；`--allow-unreviewed` 只能用于开发。

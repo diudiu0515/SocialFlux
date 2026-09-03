@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socialflux.example/schemas/talking-head-request-v1.json",
+  "title": "Sparse talking-head request",
+  "type": "object",
+  "required": [
+    "prompt",
+    "duration_seconds",
+    "continuity_reference",
+    "safety_check"
+  ],
+  "properties": {
+    "prompt": {
+      "type": "string",
+      "minLength": 1
+    },
+    "duration_seconds": {
+      "type": "number",
+      "minimum": 3,
+      "maximum": 8
+    },
+    "continuity_reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "safety_check": {
+      "type": "object",
+      "required": [
+        "contains_private_state",
+        "contains_threshold_logic",
+        "contains_benchmark_answer"
+      ],
+      "properties": {
+        "contains_private_state": {
+          "const": false
+        },
+        "contains_threshold_logic": {
+          "const": false
+        },
+        "contains_benchmark_answer": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

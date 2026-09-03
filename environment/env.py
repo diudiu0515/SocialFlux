@@ -1,24 +1,52 @@
-"""Stateful online environment with public observations and complete private logs."""
+"""The single canonical stateful environment for offline rollouts and online T4."""
 
 from copy import deepcopy
 import uuid
 
-from .memory import MemoryModule
-from .action_interpreter import normalize_action
-from .multimodal import ObservableExpressionLayer
 from .initializer import freeze_initialization
-from .response_generator import TemplateResponseGenerator
-from .state_updater import RuleBasedStateUpdater, apply_transition
+from .memory import MemoryModule
+from .multimodal import ObservableExpressionLayer
+from .state_updater import apply_transition
 from .termination import check_termination
 
 
+def coerce_free_form_action(action):
+    if isinstance(action, str):
+        result = {"text": action}
+    elif isinstance(action, dict):
+        result = deepcopy(action)
+    else:
+        raise TypeError("action must be text or an object containing text")
+    text = str(result.get("text", "")).strip()
+    if not text:
+        raise ValueError("free-form action text must not be empty")
+    if "action_id" in result:
+        raise ValueError("action_id taxonomy is not accepted; submit arbitrary text")
+    result["text"] = text
+    return result
+
+
 class StatefulEnvironment:
-    def __init__(self, scenario, state_updater=None, response_generator=None, memory=None):
+    def __init__(
+        self,
+        scenario,
+        *,
+        state_updater,
+        response_generator,
+        memory=None,
+        provenance=None,
+    ):
+        if state_updater is None or response_generator is None:
+            raise ValueError("canonical environment requires model-backed state and response components")
         self.scenario = deepcopy(scenario)
-        self.state_updater = state_updater or RuleBasedStateUpdater(self.scenario)
-        self.response_generator = response_generator or TemplateResponseGenerator(self.scenario)
+        self.state_updater = state_updater
+        self.response_generator = response_generator
         self.memory = memory or MemoryModule()
         self.expression_layer = ObservableExpressionLayer(self.scenario)
+        self.provenance = deepcopy(provenance or {
+            "state_updater": getattr(state_updater, "provenance", {}),
+            "response_generator": getattr(response_generator, "provenance", {}),
+        })
         self.session = None
 
     def reset(self, episode_id=None):
@@ -49,7 +77,7 @@ class StatefulEnvironment:
             "scenario_id": self.scenario["scenario_id"],
             "role": deepcopy(self.scenario.get("evaluated_agent_role", {})),
             "background": self.scenario.get("background", ""),
-            "explicit_goal": agent.get("explicit_goal", ""),
+            "explicit_goal": self.scenario.get("evaluated_agent_role", {}).get("explicit_goal", ""),
             "history": deepcopy(self.session["history"]),
             "current_response": self.session["current_response"],
             "observable_cues": deepcopy(self.session["observable_cues"]),
@@ -59,18 +87,47 @@ class StatefulEnvironment:
             "status": self.session["status"],
         }
 
+    def snapshot(self):
+        if self.session is None:
+            raise RuntimeError("environment must be reset before snapshot")
+        return deepcopy({
+            key: self.session[key]
+            for key in (
+                "turn_id",
+                "status",
+                "state",
+                "dynamics",
+                "history",
+                "ending",
+                "current_response",
+                "observable_cues",
+                "observable_expression",
+                "media",
+                "last_trigger_turns",
+            )
+        })
+
+    def restore(self, snapshot, episode_id=None):
+        self.reset(episode_id=episode_id)
+        for key, value in deepcopy(snapshot).items():
+            if key in self.session and key not in ("trajectory_id", "scenario_id", "turns"):
+                self.session[key] = value
+        self.session["status"] = "active"
+        self.session["ending"] = None
+        self.session["turns"] = []
+        return self.observe()
+
     def step(self, action):
         if self.session is None:
             raise RuntimeError("environment must be reset before stepping")
         if self.session["status"] != "active":
             raise ValueError("episode is not active")
+        action = coerce_free_form_action(action)
         observation_before = self.observe()
-        submitted_action = deepcopy(action)
-        action = normalize_action(action, self.scenario)
+        snapshot_before = self.snapshot()
         turn_id = self.session["turn_id"] + 1
         state_before = deepcopy(self.session["state"])
         dynamics_before = deepcopy(self.session["dynamics"])
-        action_text = action.get("text", "") if isinstance(action, dict) else str(action)
         memory_view = self.memory.retrieve(self.session["history"], action)
         transition = self.state_updater.update(
             action=action,
@@ -79,16 +136,24 @@ class StatefulEnvironment:
             memory=memory_view,
         )
         state_after, dynamics_after, state_numeric, dynamics_numeric = apply_transition(
-            state_before, dynamics_before, transition
+            state_before,
+            dynamics_before,
+            transition,
         )
-        response = self.response_generator.generate({
+        response_context = {
+            "scenario": {
+                "background": self.scenario["background"],
+                "environment_agent": self.scenario["environment_agent"],
+            },
             "turn_id": turn_id,
             "action": deepcopy(action),
             "memory": deepcopy(memory_view),
+            "appraisal": deepcopy(transition["appraisal"]),
             "state": deepcopy(state_after),
             "dynamics": deepcopy(dynamics_after),
             "history": deepcopy(self.session["history"]),
-        })
+        }
+        response = self.response_generator.generate(response_context)
         multimodal = self.expression_layer.evaluate(
             turn_id=turn_id,
             previous_state=state_before,
@@ -98,20 +163,24 @@ class StatefulEnvironment:
             last_trigger_turns=self.session["last_trigger_turns"],
         )
         self.session["history"].extend([
-            {"turn_id": turn_id, "role": "evaluated_agent", "text": action_text},
+            {"turn_id": turn_id, "role": "evaluated_agent", "text": action["text"]},
             {"turn_id": turn_id, "role": "environment_agent", "text": response},
         ])
         self.session["turn_id"] = turn_id
-        self.session["state"], self.session["dynamics"] = state_after, dynamics_after
+        self.session["state"] = state_after
+        self.session["dynamics"] = dynamics_after
         self.session["current_response"] = response
         self.session["observable_expression"] = multimodal["observable_expression"]
         self.session["media"] = multimodal["media"]
-        action_id = action.get("action_id") if isinstance(action, dict) else "default"
         self.session["observable_cues"] = deepcopy(
-            self.scenario.get("observable_cues_by_action", {}).get(action_id, [])
+            multimodal["observable_expression"].get("behavioral_cues", [])
         )
         ended, reason = check_termination(
-            turn_id, self.scenario.get("max_turns", 20), state_after, dynamics_after, self.scenario
+            turn_id,
+            self.scenario.get("max_turns", 20),
+            state_after,
+            dynamics_after,
+            self.scenario,
         )
         if ended:
             self.session["status"] = "completed"
@@ -120,9 +189,9 @@ class StatefulEnvironment:
             "turn_id": f"t{turn_id}",
             "observation": observation_before,
             "policy_action": deepcopy(action),
-            "submitted_action": submitted_action,
             "memory_view": memory_view,
             "appraisal": transition["appraisal"],
+            "evidence_turn_ids": transition["evidence_turn_ids"],
             "state_before": state_before,
             "state_delta": transition["state_delta"],
             "state_after": state_after,
@@ -135,9 +204,11 @@ class StatefulEnvironment:
             "trigger_events": multimodal["private_events"],
             "observable_expression": multimodal["observable_expression"],
             "media": multimodal["media"],
+            "environment_snapshot_before": snapshot_before,
         }
+        log["observation_after"] = self.observe()
         self.session["turns"].append(log)
-        return self.observe(), log
+        return deepcopy(log["observation_after"]), log
 
     def private_trajectory(self):
         if self.session is None:
@@ -146,6 +217,8 @@ class StatefulEnvironment:
             "trajectory_id": self.session["trajectory_id"],
             "scenario_id": self.session["scenario_id"],
             "policy_id": None,
+            "policy_provenance": {},
+            "environment_provenance": self.provenance,
             "initial_state": self.scenario["initial_state"],
             "initial_dynamics": self.scenario.get("initial_dynamics", {}),
             "turns": self.session["turns"],

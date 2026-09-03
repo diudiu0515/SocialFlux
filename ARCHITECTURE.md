@@ -1,128 +1,76 @@
-# SocialFlux 系统架构
+# SocialFlux Architecture
 
-更新时间：2026-09-01
+## 总体数据流
 
-## 1. 总体数据流
+```text
+source structure / synthetic brief
+        ↓
+narrative or script
+        ↓
+source quality report → real reviewer approval
+        ↓
+canonical blueprint (no S0/D0)
+        ↓
+candidate S0/D0 + trigger specification → real reviewer freeze
+        ↓
+one canonical StatefulEnvironment
+        ├── natural multi-model / multi-seed rollout
+        ├── T1 natural checkpoints
+        ├── T2 naturally divergent histories + exact shared O*
+        ├── T3 local branches from one real checkpoint
+        └── T4 online free interaction
+        ↓
+nine-criterion acceptance + human annotation
+```
 
-~~~text
-Scenario JSON
-    |
-    v
-StatefulEnvironment
-    +--> Initialization: frozen initial state / dynamics
-    +--> Memory: observable history retrieval
-    +--> Appraisal + State Update: private transition
-    +--> Semantic Delta Mapper: -3..3 -> bounded 0..10 values
-    +--> Response Generator: observable response
-    +--> Termination: threshold / priority / horizon
-    |
-    v
-RolloutRunner + TrajectoryLogger
-    |
-    +--> complete trajectory with private transition fields
-    +--> Offline builders
-            +--> T1 state tracking
-            +--> T2 history-sensitive merge
-            +--> T3 counterfactual choice effect
-    |
-    v
-Annotation overlay -> metrics / leakage / environment validity
-~~~
+## 唯一环境
 
-## 2. 目录职责
+`ModelEnvironmentFactory` 同时服务离线 rollout 与 T4，每轮严格按以下顺序执行：
 
-| 目录 | 职责 |
-|---|---|
-| environment/ | action normalizer、状态、记忆、appraisal、persona-conditioned update、response、终止、observable expression 和 media trigger |
-| providers/ | 统一 provider 接口及四类模型适配器 |
-| policies/ | ControlledPolicy 和 ModelPolicy |
-| rollout/ | 单策略、多策略、counterfactual、日志和 manifest |
-| offline/ | 从私有 rollout 生成不含作者机制的公开候选 |
-| annotation/ | 人工标注 overlay、聚合和导出 |
-| evaluation/ | 环境有效性、指标和泄漏审计 |
-| prompts/ | 所有固定模型 prompt、版本和 hash manifest |
-| configs/scenarios/ | 每个 scenario JSON 与同名、可再生、带 source hash 的自然语言 Markdown |
-| schemas/ | Phase-A scenario/trajectory schema 校验 |
-| worlds/ | 可选的交互 Story World 源文件；当前旧 IA001/IA002 已按项目整理要求移除 |
-| tasks/ | T1/T2/T3 任务定义、输出 schema 和标注 schema |
-| web/ | 只读 scenario/pipeline 可视化网站，不维护第二套状态机 |
-| build/ | 可再生的 pipeline 和 benchmark 聚合产物；私有 pipeline_v1 默认本地生成 |
+1. 向 evaluated model 暴露 observable observation。
+2. 接收任意自由文本 action。
+3. 从可观察历史检索 memory；完整原始历史始终是权威记录。
+4. `ModelAppraiser` 私下结合 persona、目标、hidden intention、S_t/D_t 与历史解释 action。
+5. `ModelStateUpdater` 仅根据 appraisal 输出七级 semantic delta；确定性 mapper 将其映射到 0–10。
+6. `ModelResponseGenerator` 在更新后的状态上生成自然回应。
+7. trigger engine 检测 threshold/crossing/state-change，并只公开安全 expression/media。
+8. logger 保存 private master trajectory；公开 task builder 必须通过 leakage audit。
 
-## 2.1 Scenario 文档契约
+环境没有 action interpreter、action effects 表、response template 或固定策略 runner。
 
-Scenario 的机器事实只在 JSON 中维护；同名 Markdown 是由 `scripts/scenario_docs.py` 生成的人类审阅视图。生成器把初始化、状态本体、action delta、Talking Head 表达与视频阈值翻译成自然语言，并记录 JSON SHA-256。生成器也从目录自动重建 scenario manifest。`run_pipeline` 与 acceptance loader 在读取 JSON 时逐个验证 Markdown 和 manifest，因而新增或修改 scenario 后若未再生成文档，构建会失败。Scenario Observatory 同时展示这份 Markdown 和原始 JSON。
+## 信息边界
 
-## 3. Talking Head / Observable Expression
+| 层 | 可见 | 禁止进入 |
+|---|---|---|
+| Evaluated policy / T4 | 角色、背景、显式目标、可观察历史、回应、expression、media | hidden intention、S/D、appraisal、delta、阈值、未来 |
+| T1/T2/T3 输入 | 任务所需可观察历史/checkpoint/候选自由文本 | private trajectory fields、作者假设、模型生成答案 |
+| Author-side environment | persona、hidden intention、S/D、相关 observable memory、action | 未来轨迹或预设 action 结果 |
+| Human annotation | 冻结的公开实例、rubric、独立证据要求 | simulator delta 作为 ground truth |
+| Website | 研究者视角 scenario 与本地 private rollout | 写入或第二套状态机 |
 
-Talking Head 不再作为独立 decoration 挂在 dialogue node 上。每个 scenario 在 configs/scenarios 中注册 video_triggers、observable_expression 和 media_generation：
+## 轨迹和局部干预
 
-State + Dynamics -> trigger conditions -> private trigger event -> public observable expression/media spec
+自然轨迹的多样性来自模型、temperature、seed 和自然历史，不来自策略类别。T2 先从同场景同深度的自然轨迹检索不同历史，再生成一个对双方都合理且字节级共享的 O*。T3 从真实 checkpoint restore 同一 private snapshot，为 2–4 个自由文本行动各执行一次局部 intervention，随后继续使用与源轨迹匹配的同一模型配置。受控 intervention 是实验工具，不是多轮 rollout policy。
 
-trigger mode 支持 threshold、crossing 和 state_change，显著事件默认使用 crossing，并通过 cooldown_turns 控制重复触发。trigger_variables、阈值和 trigger_id 只保留在私有 trajectory；公开 observation 只包含 observable_expression 和不带触发条件的 media spec。当前 media_generation 为 structured_expression/spec_only 阶段，真实视频资产可后续接入。
+## Scenario bundle
 
-## 3. 隐私边界
+每个 `scenario_NNN/` 的 JSON 是机器事实源，同名 Markdown 是确定性生成的人类说明，含故事初始化、S0/D0、视频阈值、质量状态与 rollout 位置。JSON 改动后必须运行 `scripts/scenario_docs.py`；`--check` 校验 Markdown 内 SHA-256 与 catalog/coverage matrix。
 
-环境内部维护 latent state、hidden intention、traits、appraisal、action effects 和 internal log。participant observation 只包含 observable cue、external signal、公开对话和可见轮次；研究视图才允许读取调试信息。
+## Prompt 和 schema
 
-Offline T1/T2/T3 实例只保留模型应该看到的 history、scene、candidate options 和 target specification。作者设定、private effects、hidden intention 和内部 appraisal 不进入候选输入。evaluation/leakage.py 对该边界做自动检查。
+所有固定模型指令只放在 `prompts/`，文件名以 `_vN.md` 结尾。运行时代码通过 `prompts.loader` 加载并校验 manifest hash；`scripts/update_prompt_manifest.py` 是唯一登记命令。模型结构化输出分别由 `schemas/` 合同和 Python validator 约束。完整职责映射见 `PROMPT_AUDIT.md`。
 
-## 4. Prompt 版本策略
+## 验收
 
-prompts/ 是固定 prompt 的唯一源。调用方通过 prompts/loader.py 读取，loader 根据 prompts/manifest.json 校验 SHA-256。修改 prompt 时：
+当前 gate 固定为九项：State-Update Human Agreement、Persona Sensitivity、Paraphrase Robustness、History Intervention、Local Action Intervention、Neutral-State Stability、Response-State Consistency、Full-Trajectory Plausibility、Seed Robustness。自动结构证据只能标为 pending/evidence_ready/provisionally_ready；需要真人的项目没有评审记录不得标 pass。
 
-1. 新增带版本号的 Markdown 文件；
-2. 更新 manifest；
-3. 修改调用方的 prompt ID；
-4. 重建受影响的 benchmark/build 产物；
-5. 运行核心 tests、web/tests 和 interactive_benchmark/tests（若保留旧 world 源文件）。
+## 架构不变量
 
-shared/interactive_story_generation_prompt.md 仅保留为旧链接兼容入口。新 stateful scenario 使用 `prompts/scenario_generation_v2.md` 生成 canonical JSON，再由确定性脚本生成同名 Markdown，模型不直接维护第二份 prose truth。
-
-## 5. 运行模式
-
-### Controlled validation
-
-scripts/run_pipeline.py 使用确定性 ControlledPolicy 运行所有场景，用于检查 action sensitivity、history sensitivity、state bounds、termination、counterfactual 和 leakage。
-
-### Model-backed execution
-
-ModelPolicy、ModelMemoryModule、ModelStateUpdater、ModelResponseGenerator 均通过 provider.complete() 工作。API key 只能由本地环境变量或外部 secret manager 注入，不能写入 scenario、prompt、build 或 Git 仓库。
-
-### Scenario Observatory
-
-web/server.py 是唯一网站入口。它从每个 `configs/scenarios/scenario_*/` bundle 读取定义、说明和 rollout，并从本地 `build/pipeline_v1` 读取聚合验收产物，通过 /api/summary、/api/scenarios/{id} 提供场景、策略轨迹、状态变化、表达层和媒体 trigger 的只读视图。网站不接收用户 action，不生成独立 session，也不复制 environment 状态机。
-
-## 6. 验收门禁
-
-五项验收由 evaluation/pipeline_acceptance.py 和 scripts/run_acceptance.py 固化：
-
-1. State Update Validity：逐场景逐 action 对比配置 semantic delta 与实际数值方向。
-2. Persona Sensitivity：固定 history/action/state，仅改变 persona，要求 transition 出现可解释差异。
-3. Paraphrase Robustness：同义 action 经过 versioned action normalizer 后，要求 transition 接近。
-4. Controlled Policy Sensitivity：repair、neutral、escalate 的方向和轨迹必须分化。
-5. Full Trajectory Plausibility：自动检查长度、边界、回应、memory 引用、字段完整性和 configured direction；逐轨迹专家预审通过后，仍由人工审阅人物合理性、历史依赖和社会机制一致性。
-
-当前 automated engineering gate 为通过；研究验收只剩第 5 项的正式人工语义签字，不以自动结构检查或专家预审冒充人工判断。
-
-## 6. 可再生构建
-
-完整 pipeline：
-
-~~~bash
-python -m scripts.run_pipeline   --scenarios configs/scenarios   --output build/pipeline_v1
-~~~
-
-Interactive benchmark：
-
-~~~bash
-# 若项目重新加入 Story World，再执行：
-python interactive_benchmark/scripts/convert_interactive_to_benchmark.py   worlds/IA001/story.json worlds/IA002/story.json   -o build/interactive_benchmark_v0.2/instances.jsonl
-~~~
-
-测试：
-
-~~~bash
-python -m unittest discover -s tests -v
-python -m unittest discover -s web/tests -v
-python -m unittest discover -s interactive_benchmark/tests -v
-~~~
+- 正常生成不得出现固定 action taxonomy 或 scripted trajectory。
+- 同一 canonical environment 必须用于离线和 T4。
+- T1/T2/T3 必须由自然轨迹派生。
+- T3 干预必须 restore 同一真实 checkpoint。
+- LLM judge 不是 human ground truth。
+- 公开实例不得泄漏 private fields。
+- 未批准 scenario 默认拒绝正式 rollout。
+- secrets 只来自环境变量，公开 manifest 删除 secret 及环境变量名。

@@ -1,34 +1,65 @@
-"""Transparent scorecard helpers for the environment validation gate."""
+"""Evidence helpers for natural trajectories and local checkpoint interventions."""
 
 from environment.delta_mapper import flatten_state
 
 
-def _direction(before, after, key):
-    delta = after[key] - before[key]
-    return 1 if delta > 0 else -1 if delta < 0 else 0
+def trajectory_structure(trajectory):
+    turns = trajectory.get("turns", [])
+    state_values = [
+        value
+        for turn in turns
+        for value in flatten_state(turn.get("state_after", {})).values()
+    ]
+    dynamics_values = [
+        value
+        for turn in turns
+        for value in flatten_state(turn.get("dynamics_after", {})).values()
+    ]
+    checks = {
+        "free_form_actions": all(
+            isinstance(turn.get("policy_action"), dict)
+            and bool(turn["policy_action"].get("text", "").strip())
+            and "action_id" not in turn["policy_action"]
+            for turn in turns
+        ),
+        "state_bounds": all(0 <= value <= 10 for value in state_values),
+        "dynamics_bounds": all(0 <= value <= 10 for value in dynamics_values),
+        "nonempty_responses": all(turn.get("environment_response", "").strip() for turn in turns),
+        "ordered_turns": [turn.get("turn_id") for turn in turns]
+        == [f"t{index}" for index in range(1, len(turns) + 1)],
+        "model_provenance": bool(trajectory.get("policy_provenance"))
+        and bool(trajectory.get("environment_provenance")),
+    }
+    return {"checks": checks, "passed": bool(turns) and all(checks.values())}
 
 
-def validate_controlled_policies(trajectories, expectations):
-    report = {}
-    for policy_id, expected in expectations.items():
-        rows = [row for row in trajectories if row["policy_id"] == policy_id]
-        if not rows or not rows[0]["turns"]:
-            report[policy_id] = {"passed": False, "reason": "missing rollout"}
-            continue
-        final = rows[0]["turns"][-1]
-        before = flatten_state(rows[0]["initial_state"])
-        after = flatten_state(final["state_after"])
-        checks = {key: _direction(before, after, key) == sign for key, sign in expected.items()}
-        report[policy_id] = {"passed": all(checks.values()), "checks": checks}
-    return report
+def local_action_intervention_evidence(branches):
+    if len(branches) < 2:
+        return {"branch_count": len(branches), "divergent": False, "spread": {}}
+    states = [flatten_state(branch["state_after_immediate"]) for branch in branches]
+    variables = sorted(set().union(*(set(state) for state in states)))
+    spread = {
+        variable: max(state[variable] for state in states)
+        - min(state[variable] for state in states)
+        for variable in variables
+        if all(variable in state for state in states)
+    }
+    return {
+        "branch_count": len(branches),
+        "divergent": any(value > 0 for value in spread.values()),
+        "spread": spread,
+    }
 
 
-def controlled_policy_sensitivity(trajectories, variable):
-    """Report the final spread induced by controlled interventions."""
-    values = []
+def seed_coverage(trajectories):
+    groups = {}
     for trajectory in trajectories:
-        if trajectory.get("turns"):
-            values.append(flatten_state(trajectory["turns"][-1]["state_after"]).get(variable))
-    values = [value for value in values if value is not None]
-    return {"variable": variable, "n": len(values), "spread": max(values) - min(values) if values else 0,
-            "sensitive": len(set(values)) > 1}
+        provenance = trajectory.get("policy_provenance", {})
+        key = (trajectory.get("scenario_id"), provenance.get("provider"), provenance.get("model"))
+        groups.setdefault(key, set()).add(provenance.get("sampling", {}).get("seed"))
+    comparable = {
+        "|".join(str(item) for item in key): sorted(seed for seed in seeds if seed is not None)
+        for key, seeds in groups.items()
+        if len({seed for seed in seeds if seed is not None}) >= 2
+    }
+    return {"comparable_groups": comparable, "ready": bool(comparable)}

@@ -1,31 +1,43 @@
+import json
 import unittest
+from pathlib import Path
 
-from evaluation.pipeline_acceptance import build_acceptance_report, load_scenarios
+from evaluation.pipeline_acceptance import (
+    CRITERIA,
+    build_acceptance_report,
+    load_scenarios,
+)
+from rollout.runner import RolloutRunner
+from tests.support import TextPolicy, environment_factory
 
 
 class PipelineAcceptanceTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.report = build_acceptance_report(load_scenarios("configs/scenarios"))
+        cls.scenarios = load_scenarios("configs/scenarios")
 
-    def test_all_automated_criteria_pass(self):
-        by_name = {item["criterion"]: item for item in self.report["criteria"]}
-        for name in (
-            "1. State Update Validity",
-            "2. Persona Sensitivity",
-            "3. Paraphrase Robustness",
-            "4. Controlled Policy Sensitivity",
-        ):
-            self.assertEqual(by_name[name]["status"], "passed", name)
-        self.assertEqual(by_name["5. Full Trajectory Plausibility"]["status"], "provisionally_passed")
-        self.assertTrue(self.report["gate"]["automated_passed"])
+    def test_report_has_nine_revision_criteria_and_no_fake_pass(self):
+        report = build_acceptance_report(self.scenarios)
+        self.assertEqual(tuple(item["criterion"] for item in report["criteria"]), CRITERIA)
+        self.assertEqual(len(report["criteria"]), 9)
+        self.assertFalse(report["gate"]["automated_artifacts_ready"])
+        self.assertFalse(report["gate"]["research_acceptance"])
+        self.assertIn("multi-turn repair/neutral/escalation controlled-policy sensitivity",
+                      report["gate"]["deprecated_checks"])
 
-    def test_formal_human_signoff_is_explicit(self):
-        self.assertEqual(
-            self.report["gate"]["formal_human_pending"],
-            ["5. Full Trajectory Plausibility"],
+    def test_natural_trajectory_structure_is_recognized(self):
+        scenario = self.scenarios[0]
+        trajectory = RolloutRunner(environment_factory(scenario)).run(
+            TextPolicy("model-a-seed-1", ["请解释贡献证据。"], seed=1),
+            max_turns=1,
         )
-        self.assertFalse(self.report["gate"]["research_acceptance"])
+        report = build_acceptance_report(self.scenarios, [trajectory])
+        criterion = next(
+            item for item in report["criteria"]
+            if item["criterion"] == "8. Full-Trajectory Plausibility"
+        )
+        self.assertEqual(criterion["status"], "provisionally_ready")
+        self.assertEqual(criterion["formal_human_judgment"], "pending")
 
 
 if __name__ == "__main__":

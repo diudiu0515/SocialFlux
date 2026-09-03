@@ -1,21 +1,18 @@
-# Scenario Observatory
+# SocialFlux Scenario Visualizer
 
-这是 SocialFlux pipeline 的唯一网站层，不包含独立状态机、独立 demo scenario 或交互会话。它只读取：
+网站是当前 canonical scenario 与自然 rollout 的只读研究者视图。它读取 `configs/scenarios/scenario_NNN/`、`build/pipeline_v2/` 和 `build/acceptance_v2/`；不接受 action，不维护 session，也不复制环境状态机。
 
-- `configs/scenarios/scenario_*/`：场景 JSON、同名自然语言说明，以及 `rollouts/dialogues.md`/trajectory；
-- `build/pipeline_v1/`：本地生成的聚合候选、pipeline manifest 和 acceptance report。
-
-## 启动
+启动：
 
 ```bash
-python web/server.py --host 127.0.0.1 --port 8000
+python -m web.server --host 0.0.0.0 --port 8000
 ```
 
-打开 <http://127.0.0.1:8000/>。新增 scenario 后运行：
+本机访问 `http://127.0.0.1:8000/`；远程服务器可做 SSH 端口转发。没有自然 rollout 时仍可查看 10 个 scenario、来源、质量/S0 状态、初始 state、视频阈值和配套 Markdown；界面会明确显示 rollout pending。
+
+验证：
 
 ```bash
-python -m scripts.run_pipeline --scenarios configs/scenarios --output build/pipeline_v1
-python scripts/run_acceptance.py --scenarios configs/scenarios --output build/pipeline_v1
+python -m unittest discover -s web/tests -v
+curl http://127.0.0.1:8000/api/health
 ```
-
-网站会自动从目录发现新 scenario；没有 pipeline 构建产物时仍可查看 scenario 配置，但轨迹区会提示先运行构建。

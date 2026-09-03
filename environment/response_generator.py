@@ -1,4 +1,4 @@
-'''State-conditioned environment response generation.'''
+"""Model-generated, state-conditioned environment responses."""
 
 from prompts.loader import render_prompt
 
@@ -8,22 +8,25 @@ class ResponseGenerator:
         raise NotImplementedError
 
 
-class TemplateResponseGenerator(ResponseGenerator):
-    def __init__(self, scenario):
-        self.scenario = scenario
-
-    def generate(self, context):
-        action = context['action']
-        action_id = action.get('action_id') if isinstance(action, dict) else 'default'
-        templates = self.scenario.get('response_templates', {})
-        template = templates.get(action_id) or templates.get('default') or '我听到了。我们继续把这件事具体化。'
-        return template.format(action_id=action_id, turn_id=context['turn_id'], memory_summary=context['memory'].get('memory_summary', ''))
-
-
 class ModelResponseGenerator(ResponseGenerator):
-    def __init__(self, provider):
+    def __init__(self, provider, sampling=None):
         self.provider = provider
+        self.sampling = dict(sampling or {})
+
+    @property
+    def provenance(self):
+        return {
+            **getattr(self.provider, "provenance", {}),
+            "prompt_id": "environment_response_v2",
+            "sampling": dict(self.sampling),
+        }
 
     def generate(self, context):
-        prompt = render_prompt('environment_response_v1', context)
-        return self.provider.complete([{'role': 'user', 'content': prompt}])
+        prompt = render_prompt("environment_response_v2", context)
+        response = self.provider.complete(
+            [{"role": "user", "content": prompt}],
+            **self.sampling,
+        ).strip()
+        if not response:
+            raise ValueError("environment response model returned empty text")
+        return response

@@ -1,53 +1,24 @@
+import json
 import unittest
+from pathlib import Path
 
 from environment.delta_mapper import apply_semantic_deltas
-from environment.env import StatefulEnvironment
-from evaluation.environment_validity import validate_controlled_policies
-from offline.rollout_builders import build_t2_pairs, build_t3_candidates
-from policies.controlled import ControlledPolicy
+from offline.rollout_builders import (
+    build_t2_pairs,
+    build_t3_candidates,
+    retrieve_divergent_history_pairs,
+)
+from rollout.counterfactual import branch_counterfactuals
 from rollout.runner import RolloutRunner
+from tests.support import TextPolicy, environment_factory
 
 
-SCENARIO = {
-    "scenario_id": "mvp_001",
-    "background": "A student asks an advisor to revisit a decision.",
-    "environment_agent": {
-        "persona": {"name": "Advisor", "patience": 0.6},
-        "explicit_goal": "keep the work moving",
-        "hidden_intention": "avoid admitting a mistake",
-    },
-    "evaluated_agent_role": {"character_id": "STUDENT", "name": "Student"},
-    "initial_state": {
-        "emotion": {"anger": 3, "anxiety": 4},
-        "relationship": {"trust": 7, "hostility": 2},
-    },
-    "initial_dynamics": {"escalation_risk": 2, "negotiation_open": 5},
-    "action_effects": {
-        "repair": {
-            "state_delta": {
-                "emotion": {"anger": "moderate_decrease", "anxiety": "mild_decrease"},
-                "relationship": {"trust": "mild_increase", "hostility": "moderate_decrease"},
-            },
-            "interaction_dynamics_delta": {
-                "escalation_risk": "moderate_decrease", "negotiation_open": "mild_increase"
-            },
-        },
-        "escalate": {
-            "state_delta": {
-                "emotion": {"anger": "strong_increase", "anxiety": "mild_increase"},
-                "relationship": {"trust": "strong_decrease", "hostility": "strong_increase"},
-            },
-            "interaction_dynamics_delta": {
-                "escalation_risk": "strong_increase", "negotiation_open": "moderate_decrease"
-            },
-        },
-    },
-    "response_templates": {"default": "我会根据当前情况继续回应。"},
-    "max_turns": 5,
-}
+SCENARIO = json.loads(
+    Path("configs/scenarios/scenario_001/scenario_001.json").read_text(encoding="utf-8")
+)
 
 
-class PhaseATest(unittest.TestCase):
+class CanonicalEnvironmentTest(unittest.TestCase):
     def test_delta_mapping_and_bounds(self):
         state, delta = apply_semantic_deltas(
             {"emotion": {"anger": 0}},
@@ -57,66 +28,93 @@ class PhaseATest(unittest.TestCase):
         self.assertEqual(delta["emotion"]["anger"], 0)
 
     def test_rollout_has_private_transition_and_public_observation(self):
-        runner = RolloutRunner(lambda: StatefulEnvironment(SCENARIO))
-        trajectory = runner.run(
-            ControlledPolicy("repair", [{"action_id": "repair", "text": "repair"}]),
+        trajectory = RolloutRunner(environment_factory(SCENARIO)).run(
+            TextPolicy("model-a-seed-1", ["请解释现有证据。"]),
             max_turns=1,
         )
         turn = trajectory["turns"][0]
         self.assertNotIn("state_after", turn["observation"])
         self.assertIn("state_after", turn)
-        self.assertEqual(turn["state_after"]["emotion"]["anger"], 1)
+        self.assertNotIn("action_id", turn["policy_action"])
+        self.assertEqual(
+            trajectory["policy_provenance"]["sampling"]["seed"],
+            1,
+        )
 
-    def test_same_frozen_initialization_for_policies(self):
-        runner = RolloutRunner(lambda: StatefulEnvironment(SCENARIO))
+    def test_same_environment_supports_different_free_form_model_policies(self):
+        runner = RolloutRunner(environment_factory(SCENARIO))
         trajectories = runner.run_many([
-            ControlledPolicy("repair", [{"action_id": "repair", "text": "repair"}]),
-            ControlledPolicy("escalate", [{"action_id": "escalate", "text": "escalate"}]),
+            TextPolicy("model-a-seed-1", ["请解释贡献证据。"], seed=1),
+            TextPolicy("model-b-seed-9", ["我会启动正式程序追究责任。"], model="model-b", seed=9),
         ], max_turns=1)
         self.assertEqual(trajectories[0]["initial_state"], trajectories[1]["initial_state"])
-        self.assertEqual(trajectories[0]["initial_dynamics"], trajectories[1]["initial_dynamics"])
+        self.assertNotEqual(
+            trajectories[0]["turns"][0]["state_after"],
+            trajectories[1]["turns"][0]["state_after"],
+        )
 
-
-    def test_t2_requires_different_public_history(self):
-        runner = RolloutRunner(lambda: StatefulEnvironment(SCENARIO))
+    def test_t2_uses_natural_divergent_histories_and_exact_shared_observation(self):
+        runner = RolloutRunner(environment_factory(SCENARIO))
         left = runner.run(
-            ControlledPolicy("repair", [{"action_id": "repair", "text": "same"}]),
-            max_turns=1,
+            TextPolicy("model-a-seed-1", ["请解释贡献证据。", "请继续解释证据。"]),
+            max_turns=2,
         )
         right = runner.run(
-            ControlledPolicy("escalate", [{"action_id": "escalate", "text": "different"}]),
+            TextPolicy("model-b-seed-2", ["我要追究责任。", "我会启动正式程序。"], seed=2),
+            max_turns=2,
+        )
+        candidates = retrieve_divergent_history_pairs([left, right])
+        self.assertTrue(candidates)
+        shared = {
+            "current_response": "我们先确认彼此掌握的事实。",
+            "observable_cues": [],
+            "observable_expression": {},
+            "media": [],
+        }
+        pairs = build_t2_pairs([left, right], lambda a, b: shared, 1)
+        self.assertEqual(pairs[0]["input"]["shared_current_observation"], shared)
+        self.assertTrue(pairs[0]["metadata"]["shared_observation_injected"])
+
+    def test_t3_requires_free_form_actions_and_real_checkpoint(self):
+        trajectory = RolloutRunner(environment_factory(SCENARIO)).run(
+            TextPolicy("model-a-seed-1", ["请解释贡献证据。"]),
             max_turns=1,
         )
-        left["turns"][0]["observation"]["current_response"] = "shared"
-        right["turns"][0]["observation"]["current_response"] = "shared"
-        pairs = build_t2_pairs([left, right])
-        self.assertEqual(len(pairs), 1)
-        self.assertEqual(pairs[0]["input"]["shared_current_observation"]["current_response"], "shared")
-
-    def test_t3_horizon_gate(self):
+        turn = trajectory["turns"][0]
+        checkpoint = {
+            **turn,
+            "trajectory_id": trajectory["trajectory_id"],
+            "scenario_id": trajectory["scenario_id"],
+        }
+        actions = [{"text": "先核对记录。"}, {"text": "请第三方一起确认。"}]
+        item = build_t3_candidates(checkpoint, actions, delayed_horizon=5)
+        self.assertEqual(item["input"]["candidate_actions"], actions)
         with self.assertRaises(ValueError):
             build_t3_candidates(
-                {"trajectory_id": "x", "turn_id": 1, "observation": {}},
-                [],
-                delayed_horizon=4,
+                checkpoint,
+                [{"text": "x", "action_id": "repair"}],
+                delayed_horizon=5,
             )
-        item = build_t3_candidates(
-            {"trajectory_id": "x", "turn_id": 1, "observation": {}},
-            [],
-            delayed_horizon=5,
-        )
-        self.assertEqual(item["target_spec"]["delayed_horizon"], 5)
 
-    def test_validation_scorecard(self):
-        runner = RolloutRunner(lambda: StatefulEnvironment(SCENARIO))
-        trajectory = runner.run(
-            ControlledPolicy("escalate", [{"action_id": "escalate", "text": "escalate"}]),
+    def test_local_intervention_restores_identical_checkpoint(self):
+        trajectory = RolloutRunner(environment_factory(SCENARIO)).run(
+            TextPolicy("model-a-seed-1", ["请先听我说明。"]),
             max_turns=1,
         )
-        report = validate_controlled_policies(
-            [trajectory], {"escalate": {"emotion.anger": 1}}
+        turn = trajectory["turns"][0]
+        actions = [{"text": "请解释贡献证据。"}, {"text": "我会启动正式程序。"}]
+        branches = branch_counterfactuals(
+            environment_factory(SCENARIO),
+            turn,
+            actions,
+            lambda: TextPolicy("continuation-model", ["我们继续核对事实。"]),
+            delayed_horizon=5,
         )
-        self.assertTrue(report["escalate"]["passed"])
+        self.assertEqual(branches[0]["state_before"], branches[1]["state_before"])
+        self.assertNotEqual(
+            branches[0]["state_after_immediate"],
+            branches[1]["state_after_immediate"],
+        )
 
 
 if __name__ == "__main__":

@@ -1,11 +1,18 @@
 {
-  "format": "emotree_scenario_manifest_v1",
+  "format": "socialflux_scenario_manifest_v2",
   "scenario_count": 10,
+  "source_counts": {
+    "narrative-derived": 5,
+    "synthetic-script": 5
+  },
   "scenarios": [
     {
       "scenario_id": "IA_PIPE_001",
       "title": "导师—学生署名冲突",
       "mechanism": "institutional resource control",
+      "source_type": "narrative-derived",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_001/scenario_001.json",
       "documentation": "scenario_001/scenario_001.md",
       "rollouts": "scenario_001/rollouts"
@@ -14,6 +21,9 @@
       "scenario_id": "IA_PIPE_002",
       "title": "经理—员工绩效争议",
       "mechanism": "workplace authority",
+      "source_type": "synthetic-script",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_002/scenario_002.json",
       "documentation": "scenario_002/scenario_002.md",
       "rollouts": "scenario_002/rollouts"
@@ -22,6 +32,9 @@
       "scenario_id": "IA_PIPE_003",
       "title": "朋友间借款与信任",
       "mechanism": "friendship trust",
+      "source_type": "narrative-derived",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_003/scenario_003.json",
       "documentation": "scenario_003/scenario_003.md",
       "rollouts": "scenario_003/rollouts"
@@ -30,6 +43,9 @@
       "scenario_id": "IA_PIPE_004",
       "title": "伴侣照护责任冲突",
       "mechanism": "intimate obligation",
+      "source_type": "synthetic-script",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_004/scenario_004.json",
       "documentation": "scenario_004/scenario_004.md",
       "rollouts": "scenario_004/rollouts"
@@ -38,6 +54,9 @@
       "scenario_id": "IA_PIPE_005",
       "title": "家庭养老资源分配",
       "mechanism": "family resource",
+      "source_type": "narrative-derived",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_005/scenario_005.json",
       "documentation": "scenario_005/scenario_005.md",
       "rollouts": "scenario_005/rollouts"
@@ -46,6 +65,9 @@
       "scenario_id": "IA_PIPE_006",
       "title": "编辑与记者信息核验",
       "mechanism": "professional ethics",
+      "source_type": "synthetic-script",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_006/scenario_006.json",
       "documentation": "scenario_006/scenario_006.md",
       "rollouts": "scenario_006/rollouts"
@@ -54,6 +76,9 @@
       "scenario_id": "IA_PIPE_007",
       "title": "平台申诉与商户责任",
       "mechanism": "information asymmetry",
+      "source_type": "narrative-derived",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_007/scenario_007.json",
       "documentation": "scenario_007/scenario_007.md",
       "rollouts": "scenario_007/rollouts"
@@ -62,6 +87,9 @@
       "scenario_id": "IA_PIPE_008",
       "title": "医疗沟通与治疗选择",
       "mechanism": "medical information asymmetry",
+      "source_type": "synthetic-script",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_008/scenario_008.json",
       "documentation": "scenario_008/scenario_008.md",
       "rollouts": "scenario_008/rollouts"
@@ -70,6 +98,9 @@
       "scenario_id": "IA_PIPE_009",
       "title": "团队项目贡献冲突",
       "mechanism": "peer collaboration",
+      "source_type": "narrative-derived",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_009/scenario_009.json",
       "documentation": "scenario_009/scenario_009.md",
       "rollouts": "scenario_009/rollouts"
@@ -78,6 +109,9 @@
       "scenario_id": "IA_PIPE_010",
       "title": "AI 上线安全与效率",
       "mechanism": "safety-efficiency conflict",
+      "source_type": "synthetic-script",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_010/scenario_010.json",
       "documentation": "scenario_010/scenario_010.md",
       "rollouts": "scenario_010/rollouts"

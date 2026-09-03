@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socialflux.example/schemas/local-intervention-review-v1.json",
+  "title": "Local intervention review",
+  "type": "object",
+  "required": [
+    "checkpoint_provenance",
+    "action_texts",
+    "controlled_variables",
+    "observed_transition_comparison",
+    "uncertainty",
+    "human_review_status"
+  ],
+  "properties": {
+    "checkpoint_provenance": {
+      "type": "object"
+    },
+    "action_texts": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "string"
+      }
+    },
+    "controlled_variables": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "observed_transition_comparison": {
+      "type": "array"
+    },
+    "uncertainty": {
+      "type": "string"
+    },
+    "human_review_status": {
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

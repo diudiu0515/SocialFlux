@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socialflux.example/schemas/initial-state-proposal-v1.json",
+  "title": "SocialFlux Candidate Initial State",
+  "type": "object",
+  "required": [
+    "initial_state",
+    "initial_dynamics",
+    "observable_expression",
+    "media_generation",
+    "video_triggers",
+    "max_turns",
+    "t3_delayed_horizon",
+    "sampling_plan",
+    "rationale",
+    "trigger_reachability",
+    "status"
+  ],
+  "properties": {
+    "initial_state": {
+      "type": "object"
+    },
+    "initial_dynamics": {
+      "type": "object"
+    },
+    "observable_expression": {
+      "type": "object"
+    },
+    "media_generation": {
+      "type": "object"
+    },
+    "video_triggers": {
+      "type": "array"
+    },
+    "max_turns": {
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 30
+    },
+    "t3_delayed_horizon": {
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 10
+    },
+    "sampling_plan": {
+      "type": "object"
+    },
+    "rationale": {
+      "type": "object"
+    },
+    "trigger_reachability": {
+      "type": "array"
+    },
+    "status": {
+      "const": "candidate_pending_human_freeze"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socialflux.example/schemas/task-t1-output-v1.json",
+  "title": "T1 model output",
+  "type": "object",
+  "required": [
+    "instance_id",
+    "predictions"
+  ],
+  "properties": {
+    "instance_id": {
+      "type": "string"
+    },
+    "predictions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "state_id",
+          "intensity_probabilities",
+          "change_probabilities",
+          "evidence_turn_ids",
+          "confidence"
+        ],
+        "properties": {
+          "state_id": {
+            "type": "string"
+          },
+          "intensity_probabilities": {
+            "$ref": "#/$defs/probabilities"
+          },
+          "change_probabilities": {
+            "$ref": "#/$defs/probabilities"
+          },
+          "evidence_turn_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "probabilities": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "minProperties": 2
+    }
+  },
+  "additionalProperties": false
+}

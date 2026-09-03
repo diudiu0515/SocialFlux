@@ -1,7 +1,8 @@
-"""Observable-history memory retrieval; it never reads hidden state."""
+"""Observable-history retrieval; full raw history remains authoritative."""
 
 import json
 import re
+
 from prompts.loader import render_prompt
 
 
@@ -10,6 +11,8 @@ def _tokens(text):
 
 
 class MemoryModule:
+    """Dependency-free observable retrieval used when no model retriever is configured."""
+
     def __init__(self, max_events=4):
         self.max_events = max_events
 
@@ -22,7 +25,7 @@ class MemoryModule:
             recency = item.get("turn_id", 0) / max(1, len(history))
             scored.append((overlap * 2 + recency, item.get("turn_id", 0), item))
         scored.sort(key=lambda row: (row[0], row[1]), reverse=True)
-        selected = [item for _, _, item in scored[:self.max_events]]
+        selected = [item for _, _, item in scored[: self.max_events]]
         selected.sort(key=lambda item: item.get("turn_id", 0))
         return {
             "relevant_turn_ids": [f"t{x['turn_id']}" for x in selected],
@@ -34,20 +37,21 @@ class MemoryModule:
 
 
 class ModelMemoryModule:
-    """Provider-backed retrieval using the versioned memory prompt catalog."""
-
-    def __init__(self, provider, max_events=4):
+    def __init__(self, provider, max_events=4, sampling=None):
         self.provider = provider
         self.max_events = max_events
+        self.sampling = dict(sampling or {})
 
     def retrieve(self, history, current_action):
-        payload = {
+        prompt = render_prompt("memory_retrieval_v2", {
             "history": history,
             "current_action": current_action,
             "max_events": self.max_events,
-        }
-        prompt = render_prompt("memory_retrieval_v1", payload)
-        raw = self.provider.complete([{"role": "user", "content": prompt}])
+        })
+        raw = self.provider.complete(
+            [{"role": "user", "content": prompt}],
+            **self.sampling,
+        )
         try:
             result = json.loads(raw)
         except json.JSONDecodeError as exc:
@@ -55,4 +59,7 @@ class ModelMemoryModule:
         required = {"relevant_turn_ids", "memory_summary", "important_unresolved_events"}
         if set(result) != required:
             raise ValueError("model memory module returned an invalid memory object")
+        available = {f"t{item['turn_id']}" for item in history}
+        if not set(result["relevant_turn_ids"]) <= available:
+            raise ValueError("memory module referenced unavailable history")
         return result

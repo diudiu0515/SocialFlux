@@ -15,8 +15,8 @@ ENV/
 .env.*
 !.env.example
 
-# Generated pipeline outputs contain private master trajectories
-build/pipeline_v1/
+# Generated outputs contain private model trajectories and review artifacts
+build/
 configs/scenarios/scenario_*/rollouts/
 
 

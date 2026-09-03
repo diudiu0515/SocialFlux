@@ -1,0 +1,76 @@
+{
+  "format": "socialflux_rollout_pool_v1",
+  "environment": {
+    "provider": {
+      "provider": "openai_compatible",
+      "endpoint": "https://YOUR_ENVIRONMENT_ENDPOINT/v1/chat/completions",
+      "model": "YOUR_ENVIRONMENT_MODEL",
+      "api_key_env": "SOCIALFLUX_ENV_API_KEY",
+      "timeout": 60
+    },
+    "sampling": {
+      "temperature": 0.2,
+      "seed": 4100
+    }
+  },
+  "construction": {
+    "provider": {
+      "provider": "openai_compatible",
+      "endpoint": "https://YOUR_CONSTRUCTION_ENDPOINT/v1/chat/completions",
+      "model": "YOUR_CONSTRUCTION_MODEL",
+      "api_key_env": "SOCIALFLUX_CONSTRUCTION_API_KEY",
+      "timeout": 60
+    },
+    "sampling": {
+      "temperature": 0.5,
+      "seed": 5100
+    }
+  },
+  "policies": [
+    {
+      "policy_id": "model_a_seed_1",
+      "provider": {
+        "provider": "openai_compatible",
+        "endpoint": "https://YOUR_MODEL_A_ENDPOINT/v1/chat/completions",
+        "model": "YOUR_MODEL_A",
+        "api_key_env": "SOCIALFLUX_MODEL_A_API_KEY",
+        "timeout": 60
+      },
+      "sampling": {
+        "temperature": 0.4,
+        "seed": 101
+      },
+      "runs": 1
+    },
+    {
+      "policy_id": "model_a_seed_2",
+      "provider": {
+        "provider": "openai_compatible",
+        "endpoint": "https://YOUR_MODEL_A_ENDPOINT/v1/chat/completions",
+        "model": "YOUR_MODEL_A",
+        "api_key_env": "SOCIALFLUX_MODEL_A_API_KEY",
+        "timeout": 60
+      },
+      "sampling": {
+        "temperature": 0.8,
+        "seed": 202
+      },
+      "runs": 1
+    },
+    {
+      "policy_id": "model_b_seed_1",
+      "provider": {
+        "provider": "openai_compatible",
+        "endpoint": "https://YOUR_MODEL_B_ENDPOINT/v1/chat/completions",
+        "model": "YOUR_MODEL_B",
+        "api_key_env": "SOCIALFLUX_MODEL_B_API_KEY",
+        "timeout": 60
+      },
+      "sampling": {
+        "temperature": 0.6,
+        "seed": 303
+      },
+      "runs": 1
+    }
+  ]
+}

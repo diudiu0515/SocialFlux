@@ -1,19 +1,16 @@
-"""Appraisal and state-update contracts for the Phase-A environment."""
+"""Semantic state updates derived from an independent model appraisal."""
 
 import json
 from copy import deepcopy
-from .delta_mapper import DELTA_LABELS, DELTA_TO_INT, apply_semantic_deltas
-from .prompts import build_appraisal_prompt
+
+from prompts.loader import render_prompt
+
+from .appraisal import ModelAppraiser
+from .delta_mapper import DELTA_LABELS, apply_semantic_deltas
 
 
 class TransitionValidationError(ValueError):
     pass
-
-
-def _fill_like(state, value="similar"):
-    if any(isinstance(v, dict) for v in state.values()):
-        return {group: _fill_like(values, value) for group, values in state.items()}
-    return {key: value for key in state}
 
 
 def _validate_delta_shape(state, delta, path=""):
@@ -36,11 +33,17 @@ def _validate_delta_shape(state, delta, path=""):
 def validate_transition(transition, state, dynamics):
     if not isinstance(transition, dict):
         raise TransitionValidationError("transition must be an object")
-    for key in ("appraisal", "state_delta", "interaction_dynamics_delta"):
+    for key in ("appraisal", "state_delta", "interaction_dynamics_delta", "evidence_turn_ids"):
         if key not in transition:
             raise TransitionValidationError(f"transition missing {key}")
     _validate_delta_shape(state, transition["state_delta"], "state_delta")
-    _validate_delta_shape(dynamics, transition["interaction_dynamics_delta"], "interaction_dynamics_delta")
+    _validate_delta_shape(
+        dynamics,
+        transition["interaction_dynamics_delta"],
+        "interaction_dynamics_delta",
+    )
+    if not isinstance(transition["appraisal"], dict):
+        raise TransitionValidationError("appraisal must be an object")
     return transition
 
 
@@ -48,106 +51,53 @@ def apply_transition(state, dynamics, transition):
     validate_transition(transition, state, dynamics)
     new_state, state_numeric = apply_semantic_deltas(state, transition["state_delta"])
     new_dynamics, dynamics_numeric = apply_semantic_deltas(
-        dynamics, transition["interaction_dynamics_delta"]
+        dynamics,
+        transition["interaction_dynamics_delta"],
     )
     return new_state, new_dynamics, state_numeric, dynamics_numeric
 
 
-class RuleBasedStateUpdater:
-    """Deterministic fallback; production rollouts can replace this component."""
-
-    def __init__(self, scenario):
-        self.scenario = scenario
-
-    @staticmethod
-    def _persona_conditioned_label(label, action_id, persona):
-        """Apply small, interpretable persona modifiers to configured directions."""
-        base = DELTA_TO_INT[label]
-        if base == 0:
-            return "similar"
-        magnitude = abs(base)
-        if action_id == "repair":
-            # Empathy makes repair attempts more emotionally consequential.
-            magnitude += int(float(persona.get("empathy", 0.5)) >= 0.6)
-            magnitude += int(float(persona.get("patience", 0.5)) >= 0.75)
-            magnitude -= int(float(persona.get("empathy", 0.5)) <= 0.3)
-        elif action_id == "escalate":
-            # Low patience/empathy makes escalation land more harshly.
-            magnitude += int(float(persona.get("patience", 0.5)) <= 0.35)
-            magnitude += int(float(persona.get("empathy", 0.5)) <= 0.3)
-            magnitude -= int(float(persona.get("patience", 0.5)) >= 0.75)
-        magnitude = max(0, min(3, magnitude))
-        if base != 0:
-            magnitude = max(1, magnitude)
-        signed = magnitude if base >= 0 else -magnitude
-        return next(label_name for label_name, value in DELTA_TO_INT.items() if value == signed)
-
-    def _conditioned_delta(self, delta, action_id, persona):
-        if not isinstance(delta, dict):
-            return delta
-        return {
-            key: self._conditioned_delta(value, action_id, persona)
-            if isinstance(value, dict)
-            else self._persona_conditioned_label(value, action_id, persona)
-            for key, value in delta.items()
-        }
-
-    def update(self, *, action, previous_state, previous_dynamics, memory):
-        action_id = action.get("action_id") if isinstance(action, dict) else "default"
-        effect = self.scenario.get("action_effects", {}).get(action_id or "default", {})
-        persona = self.scenario["environment_agent"].get("persona", {})
-        state_delta = self._conditioned_delta(
-            deepcopy(effect.get("state_delta", _fill_like(previous_state))), action_id, persona
-        )
-        dynamics_delta = self._conditioned_delta(
-            deepcopy(effect.get("interaction_dynamics_delta", _fill_like(previous_dynamics))), action_id, persona
-        )
-        transition = {
-            "appraisal": {
-                "other_party_intent": action.get("text", "") if isinstance(action, dict) else str(action),
-                "goal_alignment": effect.get("goal_alignment", "unknown"),
-                "hidden_intention_effect": effect.get("hidden_intention_effect", "unknown"),
-                "persona_conditioned_interpretation": (
-                    f"{effect.get('interpretation', 'rule_based')}; "
-                    f"persona_modifier(action={action_id}, empathy={persona.get('empathy', 0.5)}, "
-                    f"patience={persona.get('patience', 0.5)})"
-                ),
-                "persona_modifier": {
-                    "action_id": action_id,
-                    "empathy": persona.get("empathy", 0.5),
-                    "patience": persona.get("patience", 0.5),
-                },
-                "relevant_history": memory.get("relevant_turn_ids", []),
-            },
-            "state_delta": state_delta,
-            "interaction_dynamics_delta": dynamics_delta,
-            "evidence_turn_ids": memory.get("relevant_turn_ids", []),
-        }
-        return validate_transition(transition, previous_state, previous_dynamics)
-
-
 class ModelStateUpdater:
-    """Provider-backed updater using the versioned appraisal prompt catalog."""
-
-    def __init__(self, scenario, provider):
-        self.scenario = scenario
+    def __init__(self, scenario, provider, sampling=None, appraiser=None):
+        self.scenario = deepcopy(scenario)
         self.provider = provider
+        self.sampling = dict(sampling or {})
+        self.appraiser = appraiser or ModelAppraiser(scenario, provider, sampling)
+
+    @property
+    def provenance(self):
+        return {
+            **getattr(self.provider, "provenance", {}),
+            "appraisal_prompt_id": "environment_appraisal_v2",
+            "state_update_prompt_id": "state_update_v1",
+            "sampling": dict(self.sampling),
+        }
 
     def update(self, *, action, previous_state, previous_dynamics, memory):
-        agent = self.scenario["environment_agent"]
-        prompt = build_appraisal_prompt(
-            persona=agent["persona"],
-            background=agent["background"],
-            explicit_goal=agent["explicit_goal"],
-            hidden_intention=agent["hidden_intention"],
+        appraisal = self.appraiser.appraise(
+            action=action,
             previous_state=previous_state,
             previous_dynamics=previous_dynamics,
             memory=memory,
-            action=action,
         )
-        raw = self.provider.complete([{"role": "user", "content": prompt}])
+        prompt = render_prompt("state_update_v1", {
+            "previous_state": previous_state,
+            "previous_dynamics": previous_dynamics,
+            "appraisal": appraisal["appraisal"],
+            "relevant_memory": memory,
+        })
+        raw = self.provider.complete(
+            [{"role": "user", "content": prompt}],
+            **self.sampling,
+        )
         try:
-            transition = json.loads(raw)
+            deltas = json.loads(raw)
         except json.JSONDecodeError as exc:
             raise TransitionValidationError("model state updater returned invalid JSON") from exc
+        transition = {
+            "appraisal": appraisal["appraisal"],
+            "evidence_turn_ids": appraisal["evidence_turn_ids"],
+            "state_delta": deltas.get("state_delta"),
+            "interaction_dynamics_delta": deltas.get("interaction_dynamics_delta"),
+        }
         return validate_transition(transition, previous_state, previous_dynamics)

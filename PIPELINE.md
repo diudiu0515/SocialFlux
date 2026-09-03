@@ -1,59 +1,99 @@
-# EmoTree 完整 Pipeline
+# SocialFlux Pipeline v2
 
-实现对应框架文档的工程链路：
+## 1. 创建 scenario
 
-    Scenario config
-      -> StatefulEnvironment
-      -> Memory + appraisal/state update
-      -> semantic delta mapper
-      -> environment response
-      -> state-triggered observable expression/media spec
-      -> complete rollout JSON
-      -> T1 / T2 / T3 candidate instances
-      -> annotation overlay
-      -> metrics / leakage / environment validation
+Synthetic 来源先从 brief 生成自然剧本；narrative-derived 来源直接准备抽象社会结构文本。不要复制无授权台词或表面内容。
 
-## Scenario 配对文档契约
+```bash
+python scripts/scenario_sources.py generate-script \
+  --input brief.json --provider-config provider.local.json \
+  --output build/scenario_work/script.md
+```
 
-每个 `configs/scenarios/scenario_NNN/` 是一个完整 bundle，其中 `scenario_NNN.json` 必须有同名 `.md`。Markdown 由 `scripts/scenario_docs.py` 从 JSON 生成，包含故事初始化、角色目标与隐藏意图、初始 state/dynamics、各 action 的变化方向、默认外显表达、视频触发模式、AND 阈值、cooldown 和采样配置。文档记录源 JSON 的 SHA-256。
+两类来源都先经过质量门：
 
-    python scripts/scenario_docs.py configs/scenarios/scenario_001/scenario_001.json
-    python scripts/scenario_docs.py --check
+```bash
+python scripts/scenario_sources.py quality-check \
+  --input build/scenario_work/script.md \
+  --source-type synthetic-script \
+  --provenance-id internal-script-011 \
+  --provider-config provider.local.json \
+  --output build/scenario_work/quality.json
+```
 
-生成器同时重建 `configs/scenarios/manifest.json`。`run_pipeline` 和 `run_acceptance` 都会拒绝缺失/过期的 scenario Markdown，以及与目录不一致的 manifest。
+模型只能写 `pending_human_review`。真人确认 11 项均为 `pass` 后，才可把 `review_status` 改为 `approved`。随后 normalization：
 
-运行全部 10 个场景：
+```bash
+python scripts/scenario_sources.py normalize \
+  --input build/scenario_work/script.md \
+  --quality-report build/scenario_work/quality.json \
+  --source-type synthetic-script \
+  --provenance-id internal-script-011 \
+  --provider-config provider.local.json \
+  --output build/scenario_work/blueprint.json
+```
 
-    python -m scripts.run_pipeline \
-      --scenarios configs/scenarios \
-      --output build/pipeline_v1
+最后单独生成候选 S0/D0、expression 和稀疏视频阈值：
 
-产物包括：
+```bash
+python scripts/scenario_sources.py initialize \
+  --input build/scenario_work/blueprint.json \
+  --provider-config provider.local.json \
+  --output configs/scenarios/scenario_011/scenario_011.json
+python scripts/scenario_docs.py
+python scripts/scenario_docs.py --check
+```
 
-- 每个场景 bundle 的 `rollouts/dialogues.md`、`rollouts/manifest.json` 和逐 trajectory 私有 JSON；`build/` 内保留 pipeline manifest、offline 与 validation 聚合产物；
-- 全局 build/pipeline_v1/instances.jsonl；
-- T1/T2/T3 候选均不含作者 effects、隐藏意图、appraisal 或内部状态；
-- validation/counterfactual_effects.json 保存环境验证用的私有 T3 分支；
-- 默认 10 场景、每场景 T1=5、T2=3、T3=4，共 120 条候选；ground_truth_status 明确为 pending_human_annotation，正式 GT 必须由独立人工标注和 adjudication 产生。
+候选仍必须由真人 freeze。每个 scenario JSON 必须有同目录同名 Markdown；rollout 后的 `dialogues.md` 和 trajectory JSON 放在该 bundle 的 `rollouts/`。
 
-模型接入统一使用：
+## 2. 配置模型池
 
-    action = policy.generate(observation)
+`configs/rollout_pool.example.json` 定义：
 
-Talking Head 状态触发配置位于 `configs/scenarios/scenario_*/scenario_*.json`。环境在 state/dynamics 更新后计算 trigger，再把公开 expression/media 写入 observation，把 trigger event 写入私有 trajectory；当前资产状态为 spec_only，尚未伪造视频文件。
+- 一个固定 environment model/config；
+- 一个 T2/T3 construction model/config；
+- 至少两个不同 model/sampling policy specs；
+- 每个 spec 的 temperature、seed 与 runs。
 
-Provider 支持 OpenAI-compatible、Anthropic、Gemini 和 local/vLLM。没有 API key 时使用 ControlledPolicy 完成环境验证和端到端 smoke test。
+密钥只通过 `api_key_env` 指向环境变量。日志和公开 manifest 不记录密钥或环境变量名。
 
-## Prompt catalog
+## 3. 生成自然轨迹与离线任务
 
-所有固定 prompt 统一位于 prompts/，按用途和版本命名，例如 scenario_generation_v2.md、policy_action_v1.md、environment_appraisal_v1.md、task_t1_v0.2.md。prompts/manifest.json 记录每个文件的 SHA-256，prompts.loader 是运行时代码的唯一读取入口，并会校验 hash。
+```bash
+python -m scripts.run_pipeline \
+  --scenarios configs/scenarios \
+  --rollout-config configs/rollout_pool.local.json \
+  --output build/pipeline_v2
+```
 
-环境 appraisal、memory retrieval、model policy、模型 response、任务转换器和故事生成均从该目录读取；shared/interactive_story_generation_prompt.md 只保留兼容指针。修改 prompt 时新增版本文件、重新生成 manifest、更新调用方的 prompt ID，再运行核心 tests、web/tests 和 interactive_benchmark/tests（若保留旧 world 源文件）。
+正式运行会拒绝未通过质量门或未 human_frozen 的场景。开发联调可显式加 `--allow-unreviewed`，产物不可视为正式数据。`--build-only` 只复用 provenance 为 `free_form_model_interaction` 且能与当前 model config 匹配的轨迹。
 
-验收命令：
+产物：
 
-    python scripts/run_acceptance.py       --scenarios configs/scenarios       --output build/pipeline_v1
+- `configs/scenarios/scenario_NNN/rollouts/`：private master trajectories、manifest、`dialogues.md`。
+- `build/pipeline_v2/scenario_NNN/offline/instances.jsonl`：T1/T2/T3 candidate。
+- `build/pipeline_v2/scenario_NNN/validation/local_action_interventions.json`：局部 checkpoint 分支。
+- `build/pipeline_v2/manifest.json`：去密钥的聚合 provenance 与计数。
 
-当前验收报告位于 build/pipeline_v1/acceptance_report.md 和 acceptance_report.json。当前 automated engineering gate 已通过：State 210/210、Persona passed、Paraphrase 30/30、Controlled Policy 10/10、Full Trajectory 10/10 结构+专家预审通过。第 5 项的正式人工语义 review 仍由真实评审者完成。
+## 4. 验收
 
-标注导出入口位于 annotation/overlay.py，指标和泄漏审计位于 evaluation/。web/ 是唯一网站层，只读展示当前 scenario、rollout、状态转移、策略分支和 Talking Head 事件；不维护第二套状态机。
+```bash
+python scripts/run_acceptance.py \
+  --scenarios configs/scenarios \
+  --pipeline-output build/pipeline_v2 \
+  --output build/acceptance_v2
+```
+
+报告固定列出九项验收。代码可准备结构、seed 与局部干预证据，但 State Update、Persona、Paraphrase、History、Neutral Stability、Response-State 与完整轨迹合理性仍需规定的人类评审。任何 pending 都不能改写成 passed。
+
+## 5. 开发检查与网站
+
+```bash
+python scripts/update_prompt_manifest.py
+python scripts/scenario_docs.py --check
+python -m unittest discover -s tests -v
+python -m unittest discover -s web/tests -v
+python -m web.server --host 0.0.0.0 --port 8000
+```
+
+网站只读当前 scenario、质量状态、自然轨迹、状态变化和 Talking Head trigger，不生成另一个 session。

@@ -1,19 +1,29 @@
 #!/usr/bin/env python3
-"""Build the scenario -> rollout -> T1/T2/T3 candidate pipeline."""
+"""Generate free-form model trajectories and derive SocialFlux T1/T2/T3."""
 
 import argparse
+from copy import deepcopy
 import json
 from pathlib import Path
+import sys
 
-from environment.env import StatefulEnvironment
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from environment.factory import ModelEnvironmentFactory
 from evaluation.leakage import assert_no_leaks
-from offline.rollout_builders import build_t1_checkpoints, build_t2_pairs, build_t3_candidates
-from policies.controlled import ControlledPolicy
+from offline.candidate_generation import ModelCandidateGenerator
+from offline.rollout_builders import (
+    build_t1_checkpoints,
+    build_t2_pairs,
+    build_t3_candidates,
+)
+from policies.model_policy import ModelPolicy
+from providers.factory import build_provider, public_provider_config
 from rollout.counterfactual import branch_counterfactuals
 from rollout.logger import TrajectoryLogger
 from rollout.manifest import write_manifest
 from rollout.runner import RolloutRunner
-from schemas.validate import validate_scenario
+from schemas.validate import validate_scenario, validate_trajectory
 from scripts.scenario_docs import (
     assert_document_current,
     assert_manifest_current,
@@ -27,7 +37,9 @@ def load_scenario_records(directory):
     records = []
     for path in discover_scenario_paths(directory):
         assert_document_current(path)
-        records.append((path, json.loads(path.read_text(encoding="utf-8"))))
+        scenario = json.loads(path.read_text(encoding="utf-8"))
+        validate_scenario(scenario)
+        records.append((path, scenario))
     return records
 
 
@@ -35,8 +47,54 @@ def load_scenarios(directory):
     return [scenario for _, scenario in load_scenario_records(directory)]
 
 
+def load_rollout_config(path):
+    config = json.loads(Path(path).read_text(encoding="utf-8"))
+    if config.get("format") != "socialflux_rollout_pool_v1":
+        raise ValueError("rollout config format must be socialflux_rollout_pool_v1")
+    if "environment" not in config or "provider" not in config["environment"]:
+        raise ValueError("rollout config requires one canonical environment provider")
+    if "construction" not in config or "provider" not in config["construction"]:
+        raise ValueError("rollout config requires a construction provider for T2/T3")
+    policies = config.get("policies", [])
+    if len(policies) < 2:
+        raise ValueError("trajectory diversity requires at least two model/sampling policy specs")
+    identities = {
+        (
+            item.get("policy_id"),
+            item.get("provider", {}).get("model"),
+            json.dumps(item.get("sampling", {}), sort_keys=True),
+        )
+        for item in policies
+    }
+    if len(identities) < 2:
+        raise ValueError("rollout policy specs must differ by model and/or sampling")
+    return config
+
+
+def _public_config(config):
+    return {
+        "format": config["format"],
+        "environment": {
+            "provider": public_provider_config(config["environment"]["provider"]),
+            "sampling": config["environment"].get("sampling", {}),
+        },
+        "construction": {
+            "provider": public_provider_config(config["construction"]["provider"]),
+            "sampling": config["construction"].get("sampling", {}),
+        },
+        "policies": [
+            {
+                "policy_id": item["policy_id"],
+                "provider": public_provider_config(item["provider"]),
+                "sampling": item.get("sampling", {}),
+                "runs": item.get("runs", 1),
+            }
+            for item in config["policies"]
+        ],
+    }
+
+
 def _prepare_rollout_directory(path):
-    """Remove only known generated rollout artifacts before rebuilding."""
     path = Path(path)
     path.mkdir(parents=True, exist_ok=True)
     for candidate in path.glob("*.json"):
@@ -49,157 +107,306 @@ def _prepare_rollout_directory(path):
 
 def _write_dialogues(path, scenario, trajectories):
     lines = [
-        f"# {scenario.get('title', scenario['scenario_id'])} — Rollout Dialogues",
+        f"# {scenario['title']} — Free-form Rollout Dialogues",
         "",
-        "> Generated private research artifact. Regenerate with `python -m scripts.run_pipeline`; do not edit manually.",
+        "> Generated from open-ended model interaction. No predefined strategy labels or scripted action paths.",
         "",
         f"- Scenario ID: `{scenario['scenario_id']}`",
         f"- Trajectories: `{len(trajectories)}`",
         "",
     ]
     for trajectory in trajectories:
-        action_id = trajectory["policy_id"].split("__")[-1]
+        provenance = trajectory.get("policy_provenance", {})
         lines.extend([
-            f"## {action_id} — `{trajectory['policy_id']}`",
+            f"## `{trajectory['policy_id']}`",
+            "",
+            f"Model: `{provenance.get('model', 'unknown')}` · sampling: `{json.dumps(provenance.get('sampling', {}), ensure_ascii=False, sort_keys=True)}`",
             "",
         ])
         for turn in trajectory["turns"]:
-            action = turn.get("policy_action", {})
             lines.extend([
                 f"### {turn['turn_id']}",
                 "",
-                f"**Evaluated agent:** {action.get('text', action.get('action_id', ''))}",
+                f"**Evaluated model:** {turn['policy_action']['text']}",
                 "",
-                f"**Environment agent:** {turn.get('environment_response', '')}",
+                f"**Environment character:** {turn['environment_response']}",
                 "",
             ])
             expression = turn.get("observable_expression", {})
             if expression:
                 lines.extend([
-                    f"_Expression: {expression.get('facial_expression', '—')}; "
-                    f"gaze: {expression.get('gaze', '—')}; "
-                    f"prosody: {expression.get('prosody', '—')}._",
-                    "",
-                ])
-            for event in turn.get("trigger_events", []):
-                lines.extend([
-                    f"_Talking Head trigger: `{event.get('trigger_id', 'unknown')}`._",
+                    f"_Expression: {expression.get('facial_expression', '—')}; gaze: {expression.get('gaze', '—')}; prosody: {expression.get('prosody', '—')}._",
                     "",
                 ])
     Path(path).write_text("\n".join(lines), encoding="utf-8")
 
 
-def run_scenario(scenario, output_dir, scenario_path, max_turns=None):
-    validate_scenario(scenario)
+def _policy_from_spec(spec, run_index=0):
+    sampling = deepcopy(spec.get("sampling", {}))
+    if isinstance(sampling.get("seed"), int):
+        sampling["seed"] += run_index
+    policy_id = spec["policy_id"]
+    if spec.get("runs", 1) > 1:
+        policy_id = f"{policy_id}__run_{run_index + 1}"
+    return ModelPolicy(
+        policy_id,
+        build_provider(spec["provider"]),
+        sampling=sampling,
+    )
+
+
+def _policy_specs(config):
+    for spec in config["policies"]:
+        runs = spec.get("runs", 1)
+        if not isinstance(runs, int) or runs < 1:
+            raise ValueError("policy runs must be a positive integer")
+        for run_index in range(runs):
+            yield spec, run_index
+
+
+def _require_reviewed(scenario, allow_unreviewed):
+    status = scenario["construction_status"]
+    if allow_unreviewed:
+        return
+    if status["quality_gate"] != "approved":
+        raise ValueError(
+            f"{scenario['scenario_id']} has no approved scenario quality gate; "
+            "use --allow-unreviewed only for development"
+        )
+    if status["initial_state"] != "human_frozen":
+        raise ValueError(
+            f"{scenario['scenario_id']} S0/D0 is not human_frozen; "
+            "use --allow-unreviewed only for development"
+        )
+
+
+def _load_existing_rollouts(rollout_dir):
+    trajectories = []
+    manifest_path = Path(rollout_dir) / "manifest.json"
+    if not manifest_path.exists():
+        return trajectories
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if (
+        manifest.get("format") != "socialflux_rollout_manifest_v2"
+        or manifest.get("config", {}).get("origin") != "free_form_model_interaction"
+    ):
+        raise ValueError(f"rollout bundle is not a v2 free-form pool: {rollout_dir}")
+    for trajectory_id in manifest.get("trajectory_ids", []):
+        path = Path(rollout_dir) / f"{trajectory_id}.json"
+        trajectory = json.loads(path.read_text(encoding="utf-8"))
+        validate_trajectory(trajectory)
+        trajectories.append(trajectory)
+    return trajectories
+
+
+def _write_offline(path, records):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as handle:
+        for record in records:
+            assert_no_leaks(record)
+            handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
+def _round_robin(groups, limit):
+    selected = []
+    depth = 0
+    while len(selected) < limit and any(depth < len(group) for group in groups):
+        for group in groups:
+            if depth < len(group):
+                selected.append(group[depth])
+                if len(selected) >= limit:
+                    break
+        depth += 1
+    return selected
+
+
+def _round_robin_turns(trajectories):
+    depth = 0
+    while any(depth < len(trajectory.get("turns", [])) for trajectory in trajectories):
+        for trajectory in trajectories:
+            if depth < len(trajectory.get("turns", [])):
+                yield trajectory, trajectory["turns"][depth]
+        depth += 1
+
+
+def run_scenario(scenario, scenario_path, output_dir, config, *, build_only=False, allow_unreviewed=False):
+    _require_reviewed(scenario, allow_unreviewed)
     scenario_id = scenario["scenario_id"]
     scenario_output = Path(output_dir) / scenario_id
-    rollout_dir = _prepare_rollout_directory(Path(scenario_path).parent / "rollouts")
-    logger = TrajectoryLogger(rollout_dir)
-    factory = lambda: StatefulEnvironment(scenario)
-    policies = [
-        ControlledPolicy(
-            f"{scenario_id}__{action_id}",
-            [{"action_id": action_id, "text": action_id}],
-        )
-        for action_id in scenario["action_effects"]
-    ]
-    runner = RolloutRunner(factory, logger=logger)
-    trajectories = runner.run_many(policies, max_turns=max_turns)
-    _write_dialogues(rollout_dir / "dialogues.md", scenario, trajectories)
-
-    t1_candidates = []
-    for trajectory in trajectories:
-        t1_candidates.extend(build_t1_checkpoints(trajectory, scenario.get("target_state_ids", [])))
-    t1 = t1_candidates[: scenario.get("sampling_plan", {}).get("t1_max", 5)]
-    t2_candidates = build_t2_pairs(trajectories)
-    t2 = t2_candidates[: scenario.get("sampling_plan", {}).get("t2_max", 3)]
-    t3, branches = [], []
-    candidates = [{"action_id": action_id, "text": action_id}
-                  for action_id in scenario["action_effects"]]
-    checkpoint_limit = scenario.get("sampling_plan", {}).get("t3_max", 4)
-    if trajectories and trajectories[0]["turns"]:
-        source = trajectories[0]
-        for index, turn in enumerate(source["turns"][:checkpoint_limit]):
-            checkpoint = dict(turn)
-            checkpoint["trajectory_id"] = source["trajectory_id"]
-            checkpoint["scenario_id"] = scenario_id
-            t3.append(build_t3_candidates(
-                checkpoint, candidates, scenario.get("t3_delayed_horizon", 5),
-                scenario.get("target_state_ids", []),
-            ))
-            branches.extend(branch_counterfactuals(
-                factory, source["turns"][:index], candidates,
-                [candidates[0]], scenario.get("t3_delayed_horizon", 5),
-            ))
-
-    for collection in (t1, t2, t3):
-        for record in collection:
-            assert_no_leaks(record)
-    (scenario_output / "offline").mkdir(parents=True, exist_ok=True)
-    with (scenario_output / "offline" / "instances.jsonl").open("w", encoding="utf-8") as handle:
-        for record in t1 + t2 + t3:
-            handle.write(json.dumps(record, ensure_ascii=False) + "\n")
-    (scenario_output / "validation").mkdir(parents=True, exist_ok=True)
-    (scenario_output / "validation" / "counterfactual_effects.json").write_text(
-        json.dumps(branches, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    rollout_dir = Path(scenario_path).parent / "rollouts"
+    environment_factory = ModelEnvironmentFactory(
+        scenario,
+        config["environment"]["provider"],
+        config["environment"].get("sampling", {}),
     )
 
-    manifest = write_manifest(rollout_dir / "manifest.json", trajectories, {
-        "t1_candidates": len(t1),
-        "t2_candidates": len(t2),
-        "t3_candidates": len(t3),
-        "delayed_horizon": scenario.get("t3_delayed_horizon", 5),
-        "dialogues": "dialogues.md",
-    })
-    bundle_path = Path("configs/scenarios") / Path(scenario_path).parent.name
-    manifest.update({
+    policy_lookup = {}
+    if build_only:
+        trajectories = _load_existing_rollouts(rollout_dir)
+        if not trajectories:
+            raise ValueError(f"no valid free-form trajectory pool found for {scenario_id}")
+    else:
+        rollout_dir = _prepare_rollout_directory(rollout_dir)
+        logger = TrajectoryLogger(rollout_dir)
+        trajectories = []
+        for spec, run_index in _policy_specs(config):
+            policy = _policy_from_spec(spec, run_index)
+            policy_lookup[policy.policy_id] = (spec, run_index)
+            trajectories.append(
+                RolloutRunner(environment_factory, logger=logger).run(policy)
+            )
+        _write_dialogues(rollout_dir / "dialogues.md", scenario, trajectories)
+        write_manifest(
+            rollout_dir / "manifest.json",
+            trajectories,
+            {
+                "origin": "free_form_model_interaction",
+                "rollout_config": _public_config(config),
+                "dialogues": "dialogues.md",
+            },
+        )
+
+    t1_limit = scenario.get("sampling_plan", {}).get("t1_max", 5)
+    t1_groups = [
+        build_t1_checkpoints(trajectory, scenario.get("target_state_ids", []))
+        for trajectory in trajectories
+    ]
+    t1_candidates = _round_robin(t1_groups, t1_limit)
+
+    construction = ModelCandidateGenerator(
+        build_provider(config["construction"]["provider"]),
+        config["construction"].get("sampling", {}),
+    )
+    t2_limit = scenario.get("sampling_plan", {}).get("t2_max", 3)
+    t2 = build_t2_pairs(
+        trajectories,
+        construction.shared_observation,
+        t2_limit,
+    )
+
+    t3_limit = scenario.get("sampling_plan", {}).get("t3_max", 4)
+    t3 = []
+    branches = []
+    for trajectory, turn in _round_robin_turns(trajectories):
+        if len(t3) >= t3_limit:
+            break
+        actions = construction.candidate_actions(turn["observation"], count=3)
+        checkpoint = {
+            **turn,
+            "trajectory_id": trajectory["trajectory_id"],
+            "scenario_id": scenario_id,
+        }
+        t3.append(build_t3_candidates(
+            checkpoint,
+            actions,
+            scenario.get("t3_delayed_horizon", 5),
+            scenario.get("target_state_ids", []),
+        ))
+        spec_run = policy_lookup.get(trajectory["policy_id"])
+        if spec_run is None:
+            provenance = trajectory.get("policy_provenance", {})
+            for candidate_spec, candidate_run in _policy_specs(config):
+                candidate = _policy_from_spec(candidate_spec, candidate_run)
+                if (
+                    candidate.provenance.get("model") == provenance.get("model")
+                    and candidate.provenance.get("sampling") == provenance.get("sampling")
+                ):
+                    spec_run = (candidate_spec, candidate_run)
+                    break
+        if spec_run is None:
+            raise ValueError(
+                f"no rollout-config policy matches trajectory {trajectory['trajectory_id']}"
+            )
+        spec, run_index = spec_run
+        new_branches = branch_counterfactuals(
+            environment_factory,
+            turn,
+            actions,
+            lambda spec=spec, run_index=run_index: _policy_from_spec(spec, run_index),
+            scenario.get("t3_delayed_horizon", 5),
+        )
+        for branch in new_branches:
+            branch["scenario_id"] = scenario_id
+            branch["source_trajectory_id"] = trajectory["trajectory_id"]
+        branches.extend(new_branches)
+
+    _write_offline(
+        scenario_output / "offline" / "instances.jsonl",
+        t1_candidates + t2 + t3,
+    )
+    validation_dir = scenario_output / "validation"
+    validation_dir.mkdir(parents=True, exist_ok=True)
+    (validation_dir / "local_action_interventions.json").write_text(
+        json.dumps(branches, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    summary = {
         "scenario_id": scenario_id,
-        "scenario_bundle": bundle_path.as_posix(),
-        "rollout_bundle": (bundle_path / "rollouts").as_posix(),
-        "t1": len(t1),
+        "trajectory_count": len(trajectories),
+        "trajectory_origin": "free_form_model_interaction",
+        "rollout_bundle": f"configs/scenarios/{Path(scenario_path).parent.name}/rollouts",
+        "t1": len(t1_candidates),
         "t2": len(t2),
         "t3": len(t3),
-    })
+        "local_intervention_branches": len(branches),
+        "ground_truth_status": "pending_human_annotation",
+    }
+    scenario_output.mkdir(parents=True, exist_ok=True)
     (scenario_output / "pipeline_manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
     )
-    return manifest
+    return summary
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--scenarios", type=Path, default=Path("configs/scenarios"))
-    parser.add_argument("--output", type=Path, default=Path("build/pipeline_v1"))
-    parser.add_argument("--turns", type=int, default=None)
+    parser.add_argument("--output", type=Path, default=Path("build/pipeline_v2"))
+    parser.add_argument("--rollout-config", type=Path, required=True)
+    parser.add_argument("--build-only", action="store_true")
+    parser.add_argument("--allow-unreviewed", action="store_true")
     args = parser.parse_args()
+    config = load_rollout_config(args.rollout_config)
     summaries = [
-        run_scenario(scenario, args.output, path, args.turns)
+        run_scenario(
+            scenario,
+            path,
+            args.output,
+            config,
+            build_only=args.build_only,
+            allow_unreviewed=args.allow_unreviewed,
+        )
         for path, scenario in load_scenario_records(args.scenarios)
     ]
-    total = {key: sum(item.get(key, 0) for item in summaries) for key in ("t1", "t2", "t3")}
-    result = {
-        "format": "emotree_pipeline_manifest_v1",
-        "scenario_count": len(summaries),
-        "totals": total,
-        "scenarios": summaries,
-        "ground_truth_status": "pending_human_annotation",
-    }
-    args.output.mkdir(parents=True, exist_ok=True)
     instances = []
     for summary in summaries:
         source = args.output / summary["scenario_id"] / "offline" / "instances.jsonl"
-        if source.exists():
-            instances.extend(
-                json.loads(line)
-                for line in source.read_text(encoding="utf-8").splitlines()
-                if line
-            )
-    with (args.output / "instances.jsonl").open("w", encoding="utf-8") as handle:
-        for instance in instances:
-            handle.write(json.dumps(instance, ensure_ascii=False) + "\n")
-    result["totals"]["instances"] = len(instances)
+        instances.extend(
+            json.loads(line)
+            for line in source.read_text(encoding="utf-8").splitlines()
+            if line
+        )
+    args.output.mkdir(parents=True, exist_ok=True)
+    _write_offline(args.output / "instances.jsonl", instances)
+    result = {
+        "format": "socialflux_pipeline_manifest_v2",
+        "scenario_count": len(summaries),
+        "trajectory_origin": "free_form_model_interaction",
+        "totals": {
+            "trajectories": sum(item["trajectory_count"] for item in summaries),
+            "t1": sum(item["t1"] for item in summaries),
+            "t2": sum(item["t2"] for item in summaries),
+            "t3": sum(item["t3"] for item in summaries),
+            "instances": len(instances),
+        },
+        "scenarios": summaries,
+        "rollout_config": _public_config(config),
+        "ground_truth_status": "pending_human_annotation",
+    }
     (args.output / "manifest.json").write_text(
-        json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        json.dumps(result, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
     )
     print(json.dumps(result, ensure_ascii=False, indent=2))
 

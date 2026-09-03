@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socialflux.example/schemas/t4-judge-output-v1.json",
+  "title": "T4 judge output",
+  "type": "object",
+  "required": [
+    "dimensions",
+    "overall_uncertainty",
+    "human_validation_status"
+  ],
+  "properties": {
+    "dimensions": {
+      "type": "object",
+      "required": [
+        "goal_achievement",
+        "state_adaptation",
+        "risk_management",
+        "recovery",
+        "relationship_outcome"
+      ],
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "score",
+          "evidence_turn_ids",
+          "rationale",
+          "uncertainty",
+          "insufficient_evidence"
+        ],
+        "properties": {
+          "score": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 10
+          },
+          "evidence_turn_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "rationale": {
+            "type": "string"
+          },
+          "uncertainty": {
+            "type": "string"
+          },
+          "insufficient_evidence": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "overall_uncertainty": {
+      "type": "string"
+    },
+    "human_validation_status": {
+      "const": "not_human_validated"
+    }
+  },
+  "additionalProperties": false
+}

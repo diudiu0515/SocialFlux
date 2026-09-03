@@ -6,7 +6,7 @@ from pathlib import Path
 
 def write_manifest(path, trajectories, config=None):
     payload = {
-        "format": "emotree_rollout_manifest_v1",
+        "format": "socialflux_rollout_manifest_v2",
         "trajectory_count": len(trajectories),
         "scenario_ids": sorted({x["scenario_id"] for x in trajectories}),
         "policy_ids": sorted({x["policy_id"] for x in trajectories}),

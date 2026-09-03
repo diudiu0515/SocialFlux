@@ -1,0 +1,208 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socialflux.example/schemas/scenario-blueprint-v1.json",
+  "title": "SocialFlux Normalized Scenario Blueprint",
+  "type": "object",
+  "required": [
+    "scenario_id",
+    "title",
+    "mechanism",
+    "source",
+    "narrative_design",
+    "background",
+    "environment_agent",
+    "evaluated_agent_role",
+    "selected_state_variables",
+    "target_state_ids"
+  ],
+  "properties": {
+    "scenario_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mechanism": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "type",
+        "provenance_id",
+        "surface_text_policy",
+        "redistribution_status"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "narrative-derived",
+            "synthetic-script"
+          ]
+        },
+        "provenance_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "surface_text_policy": {
+          "const": "original_surface_text"
+        },
+        "redistribution_status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provenance_note": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "narrative_design": {
+      "type": "object",
+      "required": [
+        "relationship_structure",
+        "power_structure",
+        "goal_conflict",
+        "information_asymmetry",
+        "relevant_history",
+        "meaningful_choice_space"
+      ],
+      "properties": {
+        "relationship_structure": {
+          "type": "string",
+          "minLength": 1
+        },
+        "power_structure": {
+          "type": "string",
+          "minLength": 1
+        },
+        "goal_conflict": {
+          "type": "string",
+          "minLength": 1
+        },
+        "information_asymmetry": {
+          "type": "string",
+          "minLength": 1
+        },
+        "relevant_history": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "meaningful_choice_space": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "background": {
+      "type": "string",
+      "minLength": 1
+    },
+    "environment_agent": {
+      "$ref": "#/$defs/environmentAgent"
+    },
+    "evaluated_agent_role": {
+      "type": "object",
+      "required": [
+        "character_id",
+        "name",
+        "explicit_goal"
+      ],
+      "properties": {
+        "character_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "explicit_goal": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "selected_state_variables": {
+      "type": "object"
+    },
+    "target_state_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "multimodal_event_concepts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "suggested_horizon": {
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 20
+    }
+  },
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "initial_state"
+        ]
+      },
+      {
+        "required": [
+          "initial_dynamics"
+        ]
+      },
+      {
+        "required": [
+          "action_effects"
+        ]
+      },
+      {
+        "required": [
+          "response_templates"
+        ]
+      }
+    ]
+  },
+  "additionalProperties": false,
+  "$comment": "Normalization produces social structure first. State configuration and numeric triggers happen only after quality review.",
+  "$defs": {
+    "environmentAgent": {
+      "type": "object",
+      "required": [
+        "persona",
+        "explicit_goal",
+        "hidden_intention"
+      ],
+      "properties": {
+        "persona": {
+          "type": "object"
+        },
+        "explicit_goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hidden_intention": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

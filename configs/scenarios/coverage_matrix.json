@@ -1,0 +1,227 @@
+{
+  "format": "socialflux_scenario_coverage_v1",
+  "dimensions": [
+    "relationship_type",
+    "social_mechanism",
+    "power_asymmetry",
+    "goal_conflict",
+    "information_asymmetry",
+    "temporal_history_pattern",
+    "relevant_state_families",
+    "repair_possibility",
+    "failure_mode",
+    "scenario_source"
+  ],
+  "rows": [
+    {
+      "scenario_id": "IA_PIPE_001",
+      "relationship_type": "对话参与者 与 导师 的持续关系",
+      "social_mechanism": "institutional resource control",
+      "power_asymmetry": "导师拥有署名、资源和毕业支持上的制度性权力，学生拥有贡献证据与申诉选择。",
+      "goal_conflict": "博士生与导师围绕论文署名和毕业安排协商。",
+      "information_asymmetry": "保护自身声誉、资源或关系位置，同时避免直接承认失误",
+      "temporal_history_pattern": [
+        "学生已多次提交核心实验与写作贡献，但署名排序一直没有形成书面共识。",
+        "毕业节点临近，导师掌握推荐与资源分配权。"
+      ],
+      "relevant_state_families": [
+        "emotion",
+        "motivation",
+        "relationship",
+        "risk"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "narrative-derived"
+    },
+    {
+      "scenario_id": "IA_PIPE_002",
+      "relationship_type": "对话参与者 与 部门经理 的持续关系",
+      "social_mechanism": "workplace authority",
+      "power_asymmetry": "经理掌握绩效与晋升建议，员工拥有工作记录和离职/申诉选择。",
+      "goal_conflict": "员工质疑绩效评级与晋升机会受到不透明影响。",
+      "information_asymmetry": "保护自身声誉、资源或关系位置，同时避免直接承认失误",
+      "temporal_history_pattern": [
+        "员工过去两个周期承担了额外项目，但评价标准数次改变。",
+        "经理掌握晋升推荐，员工只看到最终评级而不了解校准会议。"
+      ],
+      "relevant_state_families": [
+        "emotion",
+        "motivation",
+        "relationship",
+        "risk"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "synthetic-script"
+    },
+    {
+      "scenario_id": "IA_PIPE_003",
+      "relationship_type": "对话参与者 与 朋友 的持续关系",
+      "social_mechanism": "friendship trust",
+      "power_asymmetry": "关系权力总体对等，但借款事实造成临时责任不对称。",
+      "goal_conflict": "朋友迟迟未归还借款，双方讨论责任和关系边界。",
+      "information_asymmetry": "保护自身声誉、资源或关系位置，同时避免直接承认失误",
+      "temporal_history_pattern": [
+        "借款原定数月前归还，期间出现过几次含糊延期。",
+        "双方都珍惜多年友谊，但对责任和体谅的理解不同。"
+      ],
+      "relevant_state_families": [
+        "emotion",
+        "motivation",
+        "relationship",
+        "risk"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "narrative-derived"
+    },
+    {
+      "scenario_id": "IA_PIPE_004",
+      "relationship_type": "对话参与者 与 伴侣 的持续关系",
+      "social_mechanism": "intimate obligation",
+      "power_asymmetry": "亲密关系名义对等，时间、照护能力和情感依赖造成情境性不对称。",
+      "goal_conflict": "伴侣因照护分工和承诺落差发生争执。",
+      "information_asymmetry": "保护自身声誉、资源或关系位置，同时避免直接承认失误",
+      "temporal_history_pattern": [
+        "一方连续数周承担更多照护工作，几次临时变更安排没有充分沟通。",
+        "双方都认为自己在保护家庭，却对承诺优先级理解不同。"
+      ],
+      "relevant_state_families": [
+        "emotion",
+        "motivation",
+        "relationship",
+        "risk"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "synthetic-script"
+    },
+    {
+      "scenario_id": "IA_PIPE_005",
+      "relationship_type": "对话参与者 与 家庭成员 的持续关系",
+      "social_mechanism": "family resource",
+      "power_asymmetry": "法律与亲属身份相近，但经济能力、居住距离和父母信任分布不均。",
+      "goal_conflict": "兄弟姐妹讨论父母照护、费用与时间分配。",
+      "information_asymmetry": "保护自身声誉、资源或关系位置，同时避免直接承认失误",
+      "temporal_history_pattern": [
+        "兄弟姐妹过去的照护投入不均，旧有家庭角色影响当前协商。",
+        "每个人掌握的时间、经济压力和父母偏好信息并不完整。"
+      ],
+      "relevant_state_families": [
+        "emotion",
+        "motivation",
+        "relationship",
+        "risk"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "narrative-derived"
+    },
+    {
+      "scenario_id": "IA_PIPE_006",
+      "relationship_type": "对话参与者 与 编辑 的持续关系",
+      "social_mechanism": "professional ethics",
+      "power_asymmetry": "编辑拥有发布决定权，记者掌握采访细节与来源关系。",
+      "goal_conflict": "编辑要求记者处理来源不完整的调查材料。",
+      "information_asymmetry": "保护自身声誉、资源或关系位置，同时避免直接承认失误",
+      "temporal_history_pattern": [
+        "记者已投入数周调查，但关键来源仍拒绝具名。",
+        "编辑同时承受时效、法律风险和公共利益压力。"
+      ],
+      "relevant_state_families": [
+        "emotion",
+        "motivation",
+        "relationship",
+        "risk"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "synthetic-script"
+    },
+    {
+      "scenario_id": "IA_PIPE_007",
+      "relationship_type": "对话参与者 与 平台客服 的持续关系",
+      "social_mechanism": "information asymmetry",
+      "power_asymmetry": "平台掌握账户与规则执行权，商户掌握交易现场证据。",
+      "goal_conflict": "商户与平台客服争论退款、证据和账户限制。",
+      "information_asymmetry": "保护自身声誉、资源或关系位置，同时避免直接承认失误",
+      "temporal_history_pattern": [
+        "商户经历过多次自动审核，申诉理由和平台证据标准始终不透明。",
+        "客服能看到部分风控信号，但无权公开完整规则。"
+      ],
+      "relevant_state_families": [
+        "emotion",
+        "motivation",
+        "relationship",
+        "risk"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "narrative-derived"
+    },
+    {
+      "scenario_id": "IA_PIPE_008",
+      "relationship_type": "对话参与者 与 医生 的持续关系",
+      "social_mechanism": "medical information asymmetry",
+      "power_asymmetry": "医生掌握专业知识与流程解释权，家属掌握患者日常价值和授权信息。",
+      "goal_conflict": "患者家属希望了解治疗方案和风险，医生需要管理不确定性。",
+      "information_asymmetry": "保护自身声誉、资源或关系位置，同时避免直接承认失误",
+      "temporal_history_pattern": [
+        "家属此前接收到的风险表述不一致，对治疗窗口和预后形成不同预期。",
+        "医生掌握临床不确定性，家属掌握患者价值偏好的一部分。"
+      ],
+      "relevant_state_families": [
+        "emotion",
+        "motivation",
+        "relationship",
+        "risk"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "synthetic-script"
+    },
+    {
+      "scenario_id": "IA_PIPE_009",
+      "relationship_type": "对话参与者 与 项目负责人 的持续关系",
+      "social_mechanism": "peer collaboration",
+      "power_asymmetry": "同伴形式上平等，但任务依赖、成果控制和截止压力造成影响力差异。",
+      "goal_conflict": "同学团队在截止日期前争论贡献、责任和成果归属。",
+      "information_asymmetry": "保护自身声誉、资源或关系位置，同时避免直接承认失误",
+      "temporal_history_pattern": [
+        "团队成员的贡献记录零散，数次任务重分配没有同步确认。",
+        "截止日期临近，成果署名与责任追踪同时成为压力来源。"
+      ],
+      "relevant_state_families": [
+        "emotion",
+        "motivation",
+        "relationship",
+        "risk"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "narrative-derived"
+    },
+    {
+      "scenario_id": "IA_PIPE_010",
+      "relationship_type": "对话参与者 与 产品负责人 的持续关系",
+      "social_mechanism": "safety-efficiency conflict",
+      "power_asymmetry": "产品负责人掌握排期与资源，工程师掌握技术风险证据和上线阻断建议。",
+      "goal_conflict": "产品负责人在上线压力下处理工程师提出的安全风险。",
+      "information_asymmetry": "保护自身声誉、资源或关系位置，同时避免直接承认失误",
+      "temporal_history_pattern": [
+        "工程师此前提出过风险但被延期处理，产品团队已经对外承诺上线日期。",
+        "双方掌握不同的事故概率、商业代价与修复成本信息。"
+      ],
+      "relevant_state_families": [
+        "emotion",
+        "motivation",
+        "relationship",
+        "risk"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "synthetic-script"
+    }
+  ]
+}

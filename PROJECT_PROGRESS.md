@@ -1,54 +1,32 @@
-# SocialFlux 项目进度
+# SocialFlux Project Progress
 
-更新时间：2026-09-01
+更新时间：2026-09-03
 
-## 当前状态
-
-项目已收敛为 scenario 驱动的可复现 pipeline 和 Scenario Observatory 网站。每个 `configs/scenarios/scenario_NNN/` 现在是 JSON、自然语言说明和本地 rollout 对话/轨迹的完整资产包，后续主要扩展此类 bundle。
-
-| 模块 | 状态 | 当前结果 |
+| 模块 | 状态 | 证据/限制 |
 |---|---|---|
-| 框架定义与状态本体 | 已完成 | 0–10 连续状态、离散语义 delta、状态边界与终止契约已实现 |
-| Stateful Environment | 已完成 | 初始化、记忆、appraisal/state update、响应、终止和轨迹日志已连通 |
-| Provider / Policy 接口 | 已完成 | OpenAI-compatible、Anthropic、Gemini、local/vLLM 适配器已统一 |
-| Controlled validation rollout | 已完成 | 10 个场景、每场景 3 条策略 rollout |
-| Offline benchmark 构建 | 已完成 | T1=50、T2=30、T3=40，共 120 条候选实例 |
-| Counterfactual 验证 | 已完成 | T3 私有分支和即时/延迟 horizon 已生成 |
-| Interactive benchmark | 旧 world 已清理 | IA001/IA002 创作源文件按当前项目整理要求移除；转换器、schema 和标注工具保留 |
-| Scenario bundle | 已完成 | 10/10 场景均包含 canonical JSON、同名自然语言 Markdown；pipeline 在同目录 `rollouts/` 生成可读对话、manifest 和 3 条私有轨迹，网站已接通 |
-| Prompt catalog | 已完成 | 14 个版本化 prompt；扩展后的 scenario 生成规范登记为 `scenario_generation_v2`，manifest SHA-256 校验通过 |
-| 信息隔离与泄漏审计 | 已完成 | participant 只暴露 observable view；候选实例不暴露 private effects |
-| Scenario Observatory | 已完成 | 直接读取各 scenario bundle 的配对文档、rollout 对话/轨迹，并展示状态转移和 Talking Head trigger；不维护第二套状态机 |
-| GitHub 发布 | 已同步维护 | 项目专属 deploy key 已配置，`main` 持续同步到 `diudiu0515/SocialFlux` |
-| Pipeline acceptance | 工程验收通过 | State 210/210、Persona 通过、Paraphrase 30/30、Policy 10/10；Trajectory 10/10 结构+专家预审通过，正式人工签字待补 |
-| 正式 ground truth | 待人工标注 | 需要独立标注与 adjudication，代码不会伪造正式标签 |
-| Talking-head 视频 | 结构层已完成 | 10 个 scenario 已注册 state-triggered expression/media 规则；真实视频资产仍为 spec-only |
-| RL policy 训练 | 待后续 | 当前提供 policy/provider 接口，不包含训练过程 |
+| v2 架构迁移 | 已完成 | 自由 action、单一环境、自然 rollout、局部 intervention |
+| Hybrid scenario source | 结构已完成 | 5 narrative-derived + 5 synthetic-script；来源真实性与质量仍待真人复核 |
+| 两阶段 scenario 创建 | 已完成 | source quality approval → normalization → candidate S0/D0 |
+| 10 个 scenario bundle | 候选完成 | JSON + 同名 Markdown + coverage；全部 S0/D0 尚未 human_frozen |
+| Prompt catalog | 已完成 | 19 个版本化 prompt、SHA-256 manifest、职责与边界审计 |
+| Provider/model pool | 已完成 | OpenAI-compatible、Anthropic、Gemini、vLLM；真实密钥/endpoint 由本地配置提供 |
+| 自然 rollout | 待运行 | 仓库没有伪造 API 轨迹；需先完成 scenario review 与模型配置 |
+| T1/T2/T3 builders | 已完成 | natural checkpoint、natural divergent history + O*、local branch |
+| T4 | 核心交互已完成 | 与离线共用环境；正式 judge/human 校准待完成 |
+| Talking Head | trigger/spec 已完成 | 稀疏 threshold/crossing 与安全 media spec；真实视频生成/人工检查待接入 |
+| 九项验收 | 框架已完成 | 当前正式结果为 pending；需要自然轨迹、模型实验与真人评审 |
+| 网站 | 已完成 | 只读展示当前 scenario、自然轨迹、状态与 trigger |
+| 清理 | 已完成 | 删除 demo、controlled policy、旧 world benchmark、旧 prompt/schema/build |
+| 测试 | 已通过 | core 42/42，web 4/4，10 scenario JSON Schema 与 paired Markdown 全通过 |
 
-## 已验证指标
+## 不能提前宣称完成的研究工作
 
-- 核心测试：22 项通过
-- Web 测试：3 项通过
-- Interactive benchmark 工具测试：13 项通过，legacy world suite 按整理要求跳过
-- Python compileall：通过
-- Pipeline manifest：10 个 scenario，120 条候选实例；30 条 master trajectory 分别保存在对应 scenario 的 `rollouts/`
-- Interactive benchmark manifest：48 条实例
-- Talking Head trigger tests：2 项通过
-- Acceptance gate：automated engineering checks passed；formal human trajectory review pending
+- 10 个 scenario 的来源、质量门与 S0/D0 人工审核；
+- 多模型、多 seed 的真实自然 rollout pool；
+- 30–50 transition 的三人 state-update 标注；
+- 15–20 完整轨迹的三人 plausibility 评审；
+- Persona、Paraphrase、History、Neutral、Response-State 和 Seed 实验结果；
+- T1/T2/T3 正式 human ground truth 与 T4 judge 校准；
+- Talking Head 实际资产及 temporal/semantic 人工检查。
 
-## 下一步优先级
-
-1. 为 5–10+ 轮轨迹组织正式人工 plausibility review，并记录 reviewer、版本和 adjudication。
-2. 接入真实模型 provider，记录 provider/model/prompt version/seed 等可复现实验元数据。
-3. 根据 talkinghead_generation.md 接入真实 Talking Head 生成与 media manifest，并完成 trigger validity、expression-state consistency、temporal continuity 和 non-leakage 人工验收。
-4. 如需恢复交互 benchmark，再新增 Story World，并沿用同一 schema、prompt 和采样约束。
-5. 再考虑 RL policy，不在正式标注前改变任务定义。
-
-## 维护规则
-
-- 每次任务结束必须读取并更新 self_check.md：完整项打勾，未完成项保留，禁止删除既有 TODO。
-- 每完成一项可验证工作，更新本文件的更新时间、状态表和测试结果。
-- 新增或修改 scenario JSON 后必须运行 `python scripts/scenario_docs.py`；缺失或过期的同名 Markdown 会阻断 pipeline 和 acceptance。
-- 修改任务语义先更新 tasks/，修改固定 prompt 先新增 prompts/ 版本并更新 prompts/manifest.json。
-- 任何正式数据变更都要重新运行核心 tests、web/tests 和对应构建脚本；interactive_benchmark/tests 仅在保留旧 world 源文件时运行。
-- 每个 `configs/scenarios/scenario_*/rollouts/` 是本场景 private master trajectory 与 `dialogues.md` 的本地生成目录并被 .gitignore 排除；`build/pipeline_v1` 只保存跨场景 offline/validation/acceptance 聚合产物；web/ 只读读取两者，不生成独立 session。
+工程完成与研究验收分开记录；没有证据时状态保持 pending。

@@ -1,37 +1,39 @@
 import json
-import unittest
 import tempfile
+import unittest
 from pathlib import Path
 
 from evaluation.leakage import assert_no_leaks
-from evaluation.metrics import macro_f1
 from providers.factory import build_provider
-from scripts.run_pipeline import load_scenarios
-from scripts.scenario_docs import assert_document_current, assert_manifest_current, write_document
+from scripts.run_pipeline import load_rollout_config, load_scenarios
+from scripts.scenario_docs import (
+    assert_document_current,
+    assert_manifest_current,
+    write_document,
+)
 
 
 class PipelineContractTest(unittest.TestCase):
-    def test_scenario_manifest_matches_catalog(self):
+    def test_scenario_catalog_has_both_sources_and_coverage(self):
         directory = Path("configs/scenarios")
         scenarios = load_scenarios(directory)
         manifest = json.loads(assert_manifest_current(directory).read_text(encoding="utf-8"))
-        self.assertGreaterEqual(len(scenarios), 10)
-        self.assertEqual(manifest["scenario_count"], len(scenarios))
-        self.assertEqual(
-            {item["scenario_id"] for item in manifest["scenarios"]},
-            {item["scenario_id"] for item in scenarios},
-        )
+        coverage = json.loads((directory / "coverage_matrix.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(scenarios), 10)
+        self.assertGreater(manifest["source_counts"]["narrative-derived"], 0)
+        self.assertGreater(manifest["source_counts"]["synthetic-script"], 0)
+        self.assertEqual(len(coverage["rows"]), len(scenarios))
 
-    def test_every_scenario_has_current_markdown(self):
+    def test_every_scenario_has_current_markdown_and_no_action_taxonomy(self):
         for path in sorted(Path("configs/scenarios").glob("scenario_*/scenario_*.json")):
             paired = assert_document_current(path)
-            self.assertEqual(paired, path.with_suffix(".md"))
+            scenario = json.loads(path.read_text(encoding="utf-8"))
             self.assertEqual(path.parent.name, path.stem)
-            self.assertEqual(path.parent / "rollouts", paired.parent / "rollouts")
+            self.assertNotIn("action_effects", scenario)
             text = paired.read_text(encoding="utf-8")
-            self.assertIn("## 1. 故事初始化", text)
-            self.assertIn("### 初始 State（0–10）", text)
-            self.assertIn("### 视频触发规则", text)
+            self.assertIn("## 1. 叙事结构与初始化", text)
+            self.assertIn("## 2. 自由交互与状态更新契约", text)
+            self.assertIn("candidate_pending_human_freeze", text)
             self.assertIn("JSON SHA-256", text)
 
     def test_missing_and_stale_documentation_are_rejected(self):
@@ -47,6 +49,21 @@ class PipelineContractTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 assert_document_current(candidate)
 
+    def test_rollout_config_requires_model_sampling_diversity(self):
+        config = load_rollout_config("configs/rollout_pool.example.json")
+        self.assertGreaterEqual(len(config["policies"]), 2)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "bad.json"
+            bad = {
+                "format": "socialflux_rollout_pool_v1",
+                "environment": {"provider": {}},
+                "construction": {"provider": {}},
+                "policies": [{"policy_id": "only-one", "provider": {"model": "x"}}],
+            }
+            path.write_text(json.dumps(bad), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                load_rollout_config(path)
+
     def test_provider_factory_contracts(self):
         configs = [
             {"provider": "openai_compatible", "endpoint": "http://localhost/v1/chat/completions", "model": "x"},
@@ -57,9 +74,8 @@ class PipelineContractTest(unittest.TestCase):
         for config in configs:
             self.assertIsNotNone(build_provider(config))
 
-    def test_leakage_audit_and_macro_f1(self):
+    def test_leakage_audit(self):
         assert_no_leaks({"input": {"history": []}, "ground_truth": None})
-        self.assertEqual(macro_f1(["a", "b"], ["a", "b"], ["a", "b"]), 1.0)
 
 
 if __name__ == "__main__":

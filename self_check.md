@@ -4,13 +4,27 @@
 
 > 勾选标准：必须有可复核的代码、产物或测试证据。标明需要真人审核、标注员、真实模型 API 或视频资产的条目，在没有对应记录前不勾选。
 
-> 最后自查：2026-09-01。
+> 最后自查：2026-09-03。
 
-> 本轮记录：已完成 scenario bundle 与 rollout 对话同目录迁移并通过回归；本清单没有因该目录整理而新增达到完整证据标准的待勾选项，原有未完成项全部保留。
+> 本轮记录：已按 revision.md 与 prompt_check.md 完成 v2 架构迁移、legacy 清理、prompt/schema 审计和 42+4 项测试；真实模型 rollout 与九项人工研究验收仍保持未完成。
+
+## Revision v2 工程自查
+
+| 条目 | 完成标准 | 自查 |
+| --- | --- | --- |
+| R1 自由 action | 生产环境拒绝 action_id，不存在固定 action taxonomy/effect table | [x] |
+| R2 单一环境 | offline rollout 与 T4 共用 StatefulEnvironment/ModelEnvironmentFactory | [x] |
+| R3 Hybrid source | narrative-derived 与 synthetic-script 进入同一 blueprint/scenario schema | [x] |
+| R4 Scenario review gates | quality 人工批准后 normalization，S0/D0 单独 candidate→freeze | [x] |
+| R5 Rollout-derived tasks | T1 natural checkpoint、T2 natural histories+O*、T3 real checkpoint local branch | [x] |
+| R6 九项验收 scaffold | 报告固定九项且无证据不标 pass | [x] |
+| R7 Prompt/schema audit | 19 个固定 prompt、hash manifest、职责/边界/schema linkage | [x] |
+| R8 真实自然 trajectory pool | 多模型、多 temperature/seed API rollout | [ ] |
+| R9 正式研究验收 | 九项真人/模型实验与 adjudication 全部完成 | [ ] |
 
 | Phase | 模块 | 具体要做什么 | 产物 | 是否人工 | 优先级 | 自查 |
 | --- | --- | --- | --- | --- | --- | --- |
-| **0** | 核心定义 | 最终确定项目名、construct、T1–T4 定义 | Framework vFinal | 否 | 🔴 | [ ] |
+| **0** | 核心定义 | 最终确定项目名、construct、T1–T4 定义 | Framework vFinal | 否 | 🔴 | [x] |
 | 0 | Global Ontology | freeze Emotion / Behavioral Disposition / Relationship / Dynamics 全局变量池 | `ontology.yaml` | 人工设计 | 🔴 | [ ] |
 | 0 | 数值体系 | freeze state range、7-level delta → numeric mapping | state spec | 否 | 🔴 | [x] |
 | 0 | T3 Horizon | 默认 delayed = 5 turns，最长 10；确定 continuation protocol | T3 spec | 否 | 🔴 | [x] |
@@ -24,9 +38,9 @@
 | 2 | Memory | full history / retrieval / summary 第一版实现 | memory module | 否 | 🔴 | [x] |
 | 2 | Appraisal | 实现当前确定的 appraisal prompt | appraisal JSON | 否 | 🔴 | [x] |
 | 2 | State Update | semantic delta → deterministic numeric update | transition module | 否 | 🔴 | [x] |
-| 2 | Dynamics | escalation / breakdown / viability 更新 | dynamics module | 否 | 🔴 | [ ] |
+| 2 | Dynamics | escalation / breakdown / viability 更新 | dynamics module | 否 | 🔴 | [x] |
 | 2 | Response | updated state → environment response | response module | 否 | 🔴 | [x] |
-| 2 | Logging | 保存完整 hidden + observable trajectory | trajectory JSONL | 否 | 🔴 | [ ] |
+| 2 | Logging | 保存完整 hidden + observable trajectory | trajectory JSONL | 否 | 🔴 | [x] |
 | **3** | Video Trigger | 实现 state threshold / crossing trigger | trigger engine | 否 | 🟠 | [x] |
 | 3 | Expression Layer | state → facial/prosody/behavioral cue specification | expression JSON | 人工抽查 | 🟠 | [ ] |
 | 3 | Sparse Media | 普通节点 text；达到条件触发 multimodal event | multimodal event schema | 否 | 🟠 | [x] |
@@ -34,10 +48,10 @@
 | **4** | Smoke Test | 手工输入若干 actions 看 state 是否更新 | debug logs | 人工 | 🔴 | [ ] |
 | 4 | Long Rollout | 跑 5 / 10 / 20 turns 检查有没有 state 爆炸、锁死、循环 | debug trajectories | 人工抽查 | 🔴 | [ ] |
 | 4 | API Rollout | 多个模型从相同 \(S_0,D_0\) 正常跑通 | trajectories | 否 | 🔴 | [ ] |
-| **5A** | **Controlled Sensitivity** | 同起点跑 Escalation / Neutral / Repair policies | 三类 trajectories | 人工+自动 | 🔴 | [ ] |
-| 5A | Controlled Sensitivity | 验证 hostility/trust/escalation 等是否按预期分化 | sensitivity results | 是 | 🔴 | [ ] |
+| **5A** | **Deprecated Controlled Sensitivity** | revision 已废弃固定三策略多轮 rollout；仅保留局部 checkpoint intervention | 不再执行 | — | — | [ ] |
+| 5A | Deprecated Controlled Sensitivity | 不用 authored expected direction 验证 environment | 不再执行 | — | — | [ ] |
 | **5B** | **Paraphrase Robustness** | 同 history/state，输入语义等价 action pairs | paired transitions | 是 | 🔴 | [ ] |
-| 5B | Paraphrase Robustness | 比较 \(\Delta S_A\approx\Delta S_B\) | similarity metric | 自动 | 🔴 | [x] |
+| 5B | Paraphrase Robustness | 比较 \(\Delta S_A\approx\Delta S_B\) | similarity metric | 自动 | 🔴 | [ ] |
 | **5C** | **Persona Sensitivity** | 固定 H/S/A，只改变 persona trait | paired transitions | 是 | 🔴 | [ ] |
 | 5C | Persona Sensitivity | 验证 persona → appraisal → transition 真有作用 | sensitivity result | 是+自动 | 🔴 | [ ] |
 | **5D** | **State Update Human Validation** | 抽 30–50 transitions | annotation set | 3 annotators | 🔴 | [ ] |
@@ -56,7 +70,7 @@
 | 7 | Trigger Rules | 每 scenario 定义 relevant multimodal triggers | trigger configs | 人工 | 🟠 | [ ] |
 | **8** | Rollout Generation | 每个 scenario × 多个 model policies × seeds | master trajectory pool | 否 | 🔴 | [ ] |
 | 8 | Quality Filter | malformed / incoherent / terminated-too-early trajectories 清洗 | clean pool | 自动+抽查 | 🔴 | [ ] |
-| **9** | 10-Scenario Validation | 每个 scenario 都做 controlled intervention | validation results | 是+自动 | 🔴 | [ ] |
+| **9** | 10-Scenario Validation | 每个 scenario 都做 local checkpoint intervention | validation results | 是+自动 | 🔴 | [ ] |
 | 9 | 10-Scenario Validation | 每个 scenario 抽 state updates 人工验 | validation set | 是 | 🔴 | [ ] |
 | 9 | 10-Scenario Validation | 每个 scenario 抽完整 trajectories 人工验 | validation set | 是 | 🔴 | [ ] |
 | **10** | T1 Builder | 从普通 rollout checkpoints 抽 T1 | candidate T1 | 否 | 🔴 | [x] |
@@ -106,9 +120,9 @@
 
 | # | 实验 | 操纵什么 | 理想结果 | 证明什么 | 自查 |
 | --- | --- | --- | --- | --- | --- |
-| V1 | **Controlled Policy Sensitivity** | Escalation / Neutral / Repair | state trajectories 显著合理分化 | Environment 对真实策略敏感 | [x] |
-| V2 | **Paraphrase Robustness** | 语义相同、表述不同 | \(\Delta S\) 高度相似 | 不是关键词触发器 | [x] |
-| V3 | **Persona Sensitivity** | Persona 改，H/S/A 不变 | appraisal/state 按 persona 合理变化 | Persona 真正在工作 | [x] |
+| V1 | **Deprecated Controlled Policy Sensitivity** | revision 已废弃三策略多轮 rollout | 不纳入当前 gate | 保留历史条目 | [ ] |
+| V2 | **Paraphrase Robustness** | 语义相同、表述不同 | \(\Delta S\) 高度相似 | 不是关键词触发器 | [ ] |
+| V3 | **Persona Sensitivity** | Persona 改，H/S/A 不变 | appraisal/state 按 persona 合理变化 | Persona 真正在工作 | [ ] |
 | V4 | **Human State-Update Agreement** | 人 vs simulator | transition direction 高 agreement | state transition 有人类合理性 | [ ] |
 | V5 | **Trajectory Plausibility** | 人看完整 rollout | continuity/coherence 高 | 长期 dynamics 合理 | [ ] |
 | V6 | **Response-State Consistency** | context 固定、state 改变 | response 随 state 合理变化 | state 不是 decorative logging | [ ] |

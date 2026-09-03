@@ -1,12 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://emotree.example/schemas/trajectory-v1.json",
-  "title": "EmoTree Complete Rollout",
+  "$id": "https://socialflux.example/schemas/trajectory-v2.json",
+  "title": "SocialFlux Free-form Model Trajectory",
   "type": "object",
   "required": [
     "trajectory_id",
     "scenario_id",
     "policy_id",
+    "policy_provenance",
+    "environment_provenance",
     "initial_state",
     "initial_dynamics",
     "turns",
@@ -14,13 +16,29 @@
   ],
   "properties": {
     "trajectory_id": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "scenario_id": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "policy_id": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
+    },
+    "policy_provenance": {
+      "type": "object",
+      "required": [
+        "policy_id",
+        "provider",
+        "model",
+        "prompt_id",
+        "sampling"
+      ]
+    },
+    "environment_provenance": {
+      "type": "object"
     },
     "initial_state": {
       "type": "object"
@@ -30,9 +48,38 @@
     },
     "turns": {
       "type": "array",
+      "minItems": 1,
       "items": {
         "type": "object",
+        "required": [
+          "turn_id",
+          "policy_action",
+          "appraisal",
+          "state_before",
+          "state_delta",
+          "state_after",
+          "dynamics_before",
+          "dynamics_delta",
+          "dynamics_after",
+          "environment_response",
+          "observation",
+          "observation_after"
+        ],
         "properties": {
+          "policy_action": {
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "minLength": 1
+              },
+              "action_id": false
+            },
+            "additionalProperties": true
+          },
           "trigger_events": {
             "type": "array"
           },
@@ -41,6 +88,15 @@
           },
           "media": {
             "type": "array"
+          },
+          "environment_snapshot_before": {
+            "type": "object"
+          },
+          "observation": {
+            "type": "object"
+          },
+          "observation_after": {
+            "type": "object"
           }
         },
         "additionalProperties": true
@@ -53,5 +109,6 @@
       ]
     }
   },
-  "additionalProperties": true
+  "additionalProperties": true,
+  "$comment": "Every action is arbitrary model-generated text. policy_id identifies a model/sampling run, never a behavioral strategy."
 }
