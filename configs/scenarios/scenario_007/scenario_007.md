@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_007`
 - 配对 JSON：`scenario_007.json`
-- JSON SHA-256：`1bc0609fe3375843067289f76ce7d8d0d89924c6b4f15560fc4864f6fa7ca043`
+- JSON SHA-256：`1fcf8f02df7a83b499aa2acb5aa981f1b6a389a23919ca0dc50095300efe13d4`
 - 社会机制：information asymmetry
 - 来源类型：`narrative-derived`
 - Provenance ID：`SF-SRC-007`
@@ -70,6 +70,16 @@
 | 目标失败风险 (`goal_failure_risk`) | 5 |
 | 冲突升级风险 (`escalation_risk`) | 2 |
 | 协商开放度 (`negotiation_open`) | 5 |
+
+### 初始化依据
+
+- migration：These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.
+- state_selection：Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed.
+
+### Trigger 可达性
+
+- No configured trigger is active at S0/D0.
+- Threshold reachability within the episode remains pending human review.
 
 ### 重点预测状态
 

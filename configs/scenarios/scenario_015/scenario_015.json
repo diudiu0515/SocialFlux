@@ -1,0 +1,210 @@
+{
+  "scenario_id": "IA_PIPE_015",
+  "title": "城市供水异常的公开通报",
+  "mechanism": "institutional denial under public-risk uncertainty",
+  "source": {
+    "type": "narrative-derived",
+    "provenance_id": "screen-structure-015",
+    "surface_text_policy": "original_surface_text",
+    "redistribution_status": "transformed_structural_abstraction",
+    "provenance_note": "High-level social mechanism inspired by Chernobyl (television); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+  },
+  "narrative_design": {
+    "relationship_structure": "技术工程师与危机协调主任",
+    "power_structure": "主任控制通报、采样资源与对外口径；工程师控制原始数据解释并承担专业责任",
+    "goal_conflict": "主任要在证据未闭合前维持公共秩序；工程师要及时预警并扩大检测",
+    "information_asymmetry": "主任知道上级已经要求压低事件等级；工程师知道备用传感器也出现相似异常",
+    "relevant_history": [
+      "此前一次误报导致部门被公开批评",
+      "主任曾要求所有异常先走内部复核",
+      "社区医院出现的症状数据尚未正式关联供水"
+    ],
+    "meaningful_choice_space": [
+      "明确区分已知事实、不确定性和预防建议",
+      "提出分级通报与同步复检",
+      "要求把原始数据和决策责任共同记录"
+    ]
+  },
+  "construction_status": {
+    "normalization": "originalized_screen_structure_pending_human_review",
+    "initial_state": "candidate_pending_human_freeze",
+    "quality_gate": "pending_human_review"
+  },
+  "quality_gate": {
+    "social_plausibility": "pending",
+    "real_tradeoff": "pending",
+    "longitudinal_necessity": "pending",
+    "nontrivial_strategy_space": "pending",
+    "character_motivation_coherence": "pending",
+    "information_asymmetry": "pending",
+    "t1_suitability": "pending",
+    "t2_suitability": "pending",
+    "t3_suitability": "pending",
+    "t4_adaptation_opportunity": "pending",
+    "no_universal_script": "pending"
+  },
+  "background": "市政供水监测出现异常，实验室工程师要求立即扩大检测并向公众发布风险提示。危机协调主任担心未经确认的通报引发恐慌和政治问责。",
+  "environment_agent": {
+    "persona": {
+      "name": "杜启明",
+      "role": "城市危机协调主任",
+      "authority_orientation": 0.84,
+      "uncertainty_aversion": 0.78,
+      "public_duty": 0.58,
+      "face_sensitivity": 0.74
+    },
+    "explicit_goal": "控制信息发布节奏，在避免恐慌的同时完成内部核验",
+    "hidden_intention": "担心事件升级会暴露自己先前削减监测预算的决定"
+  },
+  "evaluated_agent_role": {
+    "character_id": "EVALUATED_AGENT",
+    "name": "供水实验室工程师",
+    "explicit_goal": "推动及时、可核验的风险处置，避免不确定性被当作无风险"
+  },
+  "selected_state_variables": {
+    "emotion": [
+      "fear",
+      "moral_distress",
+      "defensiveness"
+    ],
+    "motivation": [
+      "truth_commitment",
+      "denial_pressure"
+    ],
+    "relationship": [
+      "expert_trust",
+      "institutional_hostility"
+    ],
+    "dynamics": [
+      "public_harm_risk",
+      "accountability_risk",
+      "deliberation_open"
+    ]
+  },
+  "target_state_ids": [
+    "emotion.moral_distress",
+    "motivation.truth_commitment",
+    "relationship.expert_trust",
+    "public_harm_risk"
+  ],
+  "initial_state": {
+    "emotion": {
+      "fear": 4,
+      "moral_distress": 5,
+      "defensiveness": 4
+    },
+    "motivation": {
+      "truth_commitment": 6,
+      "denial_pressure": 6
+    },
+    "relationship": {
+      "expert_trust": 4,
+      "institutional_hostility": 2
+    }
+  },
+  "initial_dynamics": {
+    "public_harm_risk": 7,
+    "accountability_risk": 6,
+    "deliberation_open": 4
+  },
+  "opening_response": "在复检完成前，任何对外表述都可能制造比异常本身更大的问题。",
+  "max_turns": 14,
+  "t3_delayed_horizon": 5,
+  "sampling_plan": {
+    "selection_strategy": "natural_trajectory_checkpoint_sampling",
+    "seed": 115,
+    "t1_max": 5,
+    "t2_max": 3,
+    "t3_max": 4
+  },
+  "observable_expression": {
+    "default": {
+      "facial_expression": "面部克制，持续压低情绪外露",
+      "gaze": "频繁看向数据摘要和通讯设备",
+      "speech_style": "强调确认流程与措辞边界",
+      "prosody": "语调稳定但回避假设性问题",
+      "behavioral_cues": [
+        "要求每个判断附带责任人"
+      ]
+    }
+  },
+  "media_generation": {
+    "stage": "structured_expression",
+    "default_media_type": "video",
+    "asset_status": "spec_only",
+    "asset_root": "media/talking_head",
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed."
+  },
+  "video_triggers": [
+    {
+      "trigger_id": "institutional_defensiveness",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.defensiveness": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "motivation.denial_pressure": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "accountability_risk": {
+          "operator": ">=",
+          "threshold": 8
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "institutional_defensiveness",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "面部肌肉收紧，几乎不眨眼",
+        "gaze": "把视线固定在发言者身上",
+        "speech_style": "反复要求停止推测",
+        "prosody": "语调变冷，停顿减少",
+        "behavioral_cues": [
+          "开始以权限限制讨论范围"
+        ]
+      }
+    },
+    {
+      "trigger_id": "truth_shift",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "motivation.truth_commitment": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "deliberation_open": {
+          "operator": ">=",
+          "threshold": 7
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "truth_shift",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "深呼吸后表情显出压力",
+        "gaze": "重新查看原始数据",
+        "speech_style": "开始区分事实与未知项",
+        "prosody": "语速放慢，语调更坦诚",
+        "behavioral_cues": [
+          "主动讨论预防性通报的措辞"
+        ]
+      }
+    }
+  ],
+  "initialization_notes": {
+    "rationale": {
+      "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+      "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+    },
+    "trigger_reachability": [
+      "No threshold/crossing trigger is active at S0/D0.",
+      "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+    ]
+  }
+}

@@ -1,8 +1,9 @@
 {
   "format": "socialflux_scenario_manifest_v2",
-  "scenario_count": 10,
+  "scenario_count": 20,
+  "prompt_manifest_sha256": "d9641443fcce40452dd074a526b161e834cd97a22bd825cf224bf77388a24520",
   "source_counts": {
-    "narrative-derived": 5,
+    "narrative-derived": 15,
     "synthetic-script": 5
   },
   "scenarios": [
@@ -14,7 +15,9 @@
       "quality_gate": "pending_human_review",
       "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_001/scenario_001.json",
+      "scenario_sha256": "819ad6203caaaee56b9517e7ce427a03be537f55cb6fedc71500955d2bc79382",
       "documentation": "scenario_001/scenario_001.md",
+      "documentation_sha256": "08d683f2f61592c8ae1dbcd32d70f62ba0e745af6bedb1fedbc33ff0741a65f4",
       "rollouts": "scenario_001/rollouts"
     },
     {
@@ -25,7 +28,9 @@
       "quality_gate": "pending_human_review",
       "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_002/scenario_002.json",
+      "scenario_sha256": "71ad44e8dd65aff3e63ab3320a18be0914eff6faf83957887cef7e110ab45b6d",
       "documentation": "scenario_002/scenario_002.md",
+      "documentation_sha256": "7ac9a460f80a8fbf31f01006370b13ca56958d08977983ef0b2792067650c6a4",
       "rollouts": "scenario_002/rollouts"
     },
     {
@@ -36,7 +41,9 @@
       "quality_gate": "pending_human_review",
       "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_003/scenario_003.json",
+      "scenario_sha256": "bac279a290ac95af119f64affe9345d37593e8576a6e1fd37c8e4e910a20cc49",
       "documentation": "scenario_003/scenario_003.md",
+      "documentation_sha256": "0b697373e9ea2ceb94e9eda7d16e7e82dbc34184cdb28b49c317f4c1230cf4ca",
       "rollouts": "scenario_003/rollouts"
     },
     {
@@ -47,7 +54,9 @@
       "quality_gate": "pending_human_review",
       "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_004/scenario_004.json",
+      "scenario_sha256": "8ddb8e62f733e8c013da00086193276a28093767be28bd6d7d65cae87e3564ec",
       "documentation": "scenario_004/scenario_004.md",
+      "documentation_sha256": "2c9394ba51f987fb9ef5075d65637223a8401054b8aa6653fed95488b9dddfbf",
       "rollouts": "scenario_004/rollouts"
     },
     {
@@ -58,7 +67,9 @@
       "quality_gate": "pending_human_review",
       "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_005/scenario_005.json",
+      "scenario_sha256": "0aa6497f7632b64fcbe5dfe13dd84a4508f6c2881ca316d09348616eeb2c3af5",
       "documentation": "scenario_005/scenario_005.md",
+      "documentation_sha256": "4c33838688d603e12960082cc4e1b9555cafd47141805c265d83dd5b84865473",
       "rollouts": "scenario_005/rollouts"
     },
     {
@@ -69,7 +80,9 @@
       "quality_gate": "pending_human_review",
       "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_006/scenario_006.json",
+      "scenario_sha256": "1f8d89910b03fd87d09ea54a7c7da80e7bbc67836b2ccdb36441f117099993bd",
       "documentation": "scenario_006/scenario_006.md",
+      "documentation_sha256": "b54ceec5c7c6e11bcf13eb0dcbd8671617b65d5eecc7a95be5cacbf5f612146f",
       "rollouts": "scenario_006/rollouts"
     },
     {
@@ -80,7 +93,9 @@
       "quality_gate": "pending_human_review",
       "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_007/scenario_007.json",
+      "scenario_sha256": "1fcf8f02df7a83b499aa2acb5aa981f1b6a389a23919ca0dc50095300efe13d4",
       "documentation": "scenario_007/scenario_007.md",
+      "documentation_sha256": "2886e8cdc588615511c861cf2818f996af225065eca4dad381f9b06523ad3af0",
       "rollouts": "scenario_007/rollouts"
     },
     {
@@ -91,7 +106,9 @@
       "quality_gate": "pending_human_review",
       "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_008/scenario_008.json",
+      "scenario_sha256": "228c37a20c26c67aee00c4e24ba4f1a0e9652e37dd983ce54ede055b79e3528b",
       "documentation": "scenario_008/scenario_008.md",
+      "documentation_sha256": "2cf8e5389a5cfeaa4e99dd67531c5e01c8b7c7ac424ceae6ca293ccfae4f2e7d",
       "rollouts": "scenario_008/rollouts"
     },
     {
@@ -102,7 +119,9 @@
       "quality_gate": "pending_human_review",
       "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_009/scenario_009.json",
+      "scenario_sha256": "0bf559fa95674066be74b6ec07dbf8da1afe15dce3190074bd63a12bec86ead9",
       "documentation": "scenario_009/scenario_009.md",
+      "documentation_sha256": "1ffde3d3f966386ac67c021cee5aaf8d3e3e3ea9a37ee1d50b2baab5d60b90de",
       "rollouts": "scenario_009/rollouts"
     },
     {
@@ -113,8 +132,140 @@
       "quality_gate": "pending_human_review",
       "initial_state_status": "candidate_pending_human_freeze",
       "source": "scenario_010/scenario_010.json",
+      "scenario_sha256": "89b8b94e7ddfe6513fc3979e3fc4f4b78edefd3b219e68137ba8af2ef7413732",
       "documentation": "scenario_010/scenario_010.md",
+      "documentation_sha256": "e355ab87143dce12598c13ff33b4f2ec02e00372ebcb5d8c40a8da1826c22923",
       "rollouts": "scenario_010/rollouts"
+    },
+    {
+      "scenario_id": "IA_PIPE_011",
+      "title": "高端展会的临时撤展决定",
+      "mechanism": "status gatekeeping under sponsor pressure",
+      "source_type": "narrative-derived",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
+      "source": "scenario_011/scenario_011.json",
+      "scenario_sha256": "0b89aa966fee9f2d98b3a5860ecbe89825bf5385479ee557b16017d64d05c4ac",
+      "documentation": "scenario_011/scenario_011.md",
+      "documentation_sha256": "875c7e64449c67eb88d6c6e7452030c7e3f7fa0c1b33b05c540a6da55bada513",
+      "rollouts": "scenario_011/rollouts"
+    },
+    {
+      "scenario_id": "IA_PIPE_012",
+      "title": "异地搬迁前的共同照护安排",
+      "mechanism": "co-parenting negotiation under legal shadow",
+      "source_type": "narrative-derived",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
+      "source": "scenario_012/scenario_012.json",
+      "scenario_sha256": "c2a9e5700793437181fa1b33892236852ca33e4bd7b7737d658a3d9b4567b2bf",
+      "documentation": "scenario_012/scenario_012.md",
+      "documentation_sha256": "ab46e6a941c61d21797ecb44c1d9f097aa4e2c3cc45d09f349ae70c79fa59195",
+      "rollouts": "scenario_012/rollouts"
+    },
+    {
+      "scenario_id": "IA_PIPE_013",
+      "title": "事故复盘委员会的少数意见",
+      "mechanism": "group conformity versus evidence revision",
+      "source_type": "narrative-derived",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
+      "source": "scenario_013/scenario_013.json",
+      "scenario_sha256": "71fd1952ca1dc60fa0ea5b942a897dc2a6b54e3b5e195d5357bb2ec3105ba6eb",
+      "documentation": "scenario_013/scenario_013.md",
+      "documentation_sha256": "7142e1e58256bfe75ef01780551cf1354703e083e3b4bab9434f3483ab3f87ad",
+      "rollouts": "scenario_013/rollouts"
+    },
+    {
+      "scenario_id": "IA_PIPE_014",
+      "title": "家族公益基金的接班表决",
+      "mechanism": "family loyalty entangled with institutional succession",
+      "source_type": "narrative-derived",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
+      "source": "scenario_014/scenario_014.json",
+      "scenario_sha256": "5ceeb0fa741b1f9361841d4c7c9ad7e7456e42c0b734dbb8c68ee30ef17195cb",
+      "documentation": "scenario_014/scenario_014.md",
+      "documentation_sha256": "5d7317f406890f6017aebf14cf6efc17a80a4c49a4f38d7f49aa05dc6dc6501c",
+      "rollouts": "scenario_014/rollouts"
+    },
+    {
+      "scenario_id": "IA_PIPE_015",
+      "title": "城市供水异常的公开通报",
+      "mechanism": "institutional denial under public-risk uncertainty",
+      "source_type": "narrative-derived",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
+      "source": "scenario_015/scenario_015.json",
+      "scenario_sha256": "75943e6d7325592cfceb784fd486603e6feb53fb0103371c17b9746ab590418a",
+      "documentation": "scenario_015/scenario_015.md",
+      "documentation_sha256": "43ccab178cf290a0b9cd02256e83d4a0cf3bdeb205de864273729571f7670378",
+      "rollouts": "scenario_015/rollouts"
+    },
+    {
+      "scenario_id": "IA_PIPE_016",
+      "title": "社区餐馆改造前夜的运营冲突",
+      "mechanism": "grief, expertise, and informal authority in a failing workplace",
+      "source_type": "narrative-derived",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
+      "source": "scenario_016/scenario_016.json",
+      "scenario_sha256": "862a4b23a9b7420b88e5c5d01ee88ff28228fe20da69f732ded11439d4d5d050",
+      "documentation": "scenario_016/scenario_016.md",
+      "documentation_sha256": "0c7e43c35a3f938fb0c07616748ebcc991883f6575af91ccdd581e9e47949573",
+      "rollouts": "scenario_016/rollouts"
+    },
+    {
+      "scenario_id": "IA_PIPE_017",
+      "title": "家庭是否披露长辈病情",
+      "mechanism": "collective care versus individual truth rights",
+      "source_type": "narrative-derived",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
+      "source": "scenario_017/scenario_017.json",
+      "scenario_sha256": "929a1f4506692794f04eca712ec05d0fa6de8505c17cc73eb469b050e660a89e",
+      "documentation": "scenario_017/scenario_017.md",
+      "documentation_sha256": "8cb3f861d7047489fadb622281d851692d452eb14fddeb14c0d329282e1b29c0",
+      "rollouts": "scenario_017/rollouts"
+    },
+    {
+      "scenario_id": "IA_PIPE_018",
+      "title": "未知信号事件中的解释权",
+      "mechanism": "cross-domain trust under radical uncertainty",
+      "source_type": "narrative-derived",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
+      "source": "scenario_018/scenario_018.json",
+      "scenario_sha256": "175d382301269fb301b1799e4d45260d1bd0ce4d08a3c1df299e4586f68c51e5",
+      "documentation": "scenario_018/scenario_018.md",
+      "documentation_sha256": "780298bcd5a2d7d14e8dce96fac08fb7f8be71932360823508b19b53142a0462",
+      "rollouts": "scenario_018/rollouts"
+    },
+    {
+      "scenario_id": "IA_PIPE_019",
+      "title": "创业公司股权稀释争议",
+      "mechanism": "friendship contribution conflict under rapid scaling",
+      "source_type": "narrative-derived",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
+      "source": "scenario_019/scenario_019.json",
+      "scenario_sha256": "21d273b8b852eeba144b9fb8ee0a3dc1d155d841619cdf07888c290ba8baad6d",
+      "documentation": "scenario_019/scenario_019.md",
+      "documentation_sha256": "0b9c86efad7b3bee524824000fbd4f0472cefc90536e968446ceb3d6a461874a",
+      "rollouts": "scenario_019/rollouts"
+    },
+    {
+      "scenario_id": "IA_PIPE_020",
+      "title": "公益法律中心的保密和解",
+      "mechanism": "professional loyalty versus client-centered ethics",
+      "source_type": "narrative-derived",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
+      "source": "scenario_020/scenario_020.json",
+      "scenario_sha256": "85f0b9197ddd11ab5446fecff1bdb40dc8de09d7714236f4943350e59d895e98",
+      "documentation": "scenario_020/scenario_020.md",
+      "documentation_sha256": "c9aa5a015d3fb16fa2c07b3ebb2167d0f0230f2a7be52d5b900d2e9e3bfe114b",
+      "rollouts": "scenario_020/rollouts"
     }
   ]
 }

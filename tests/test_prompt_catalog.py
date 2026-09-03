@@ -58,6 +58,20 @@ class PromptCatalogTest(unittest.TestCase):
         self.assertNotIn("initial_state", normalize_prompt)
         self.assertIn("candidate S0/D0", initialize_prompt)
 
+    def test_narrative_source_prompt_enforces_originality_and_variety(self):
+        extraction = get_prompt("narrative_structure_extraction_v1")
+        script = get_prompt("scenario_script_generation_v1")
+        quality = get_prompt("scenario_quality_gate_v1")
+        normalization = get_prompt("scenario_normalization_v1")
+        initialization = get_prompt("initial_state_configuration_v1")
+        self.assertIn("do not reproduce dialogue", extraction)
+        self.assertIn("new setting, new characters, new events, new stakes", extraction)
+        self.assertIn("narrative_structure.schema.json", extraction)
+        self.assertIn("vary domain, relationship, temporal structure", script)
+        self.assertIn("reject template artifacts", quality)
+        self.assertIn("do not normalize every source into the same state set", normalization)
+        self.assertIn("never copy a default state bundle or trigger pair", initialization)
+
     def test_environment_prompt_rejects_action_taxonomy(self):
         rendered = build_appraisal_prompt(
             persona={"name": "A"},

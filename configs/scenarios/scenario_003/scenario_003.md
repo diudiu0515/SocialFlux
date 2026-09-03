@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_003`
 - 配对 JSON：`scenario_003.json`
-- JSON SHA-256：`e8eeaf2a8a0590459132ca2030244f1f90267293ad29516c6e1bc2383c0fc89a`
+- JSON SHA-256：`bac279a290ac95af119f64affe9345d37593e8576a6e1fd37c8e4e910a20cc49`
 - 社会机制：friendship trust
 - 来源类型：`narrative-derived`
 - Provenance ID：`SF-SRC-003`
@@ -70,6 +70,16 @@
 | 目标失败风险 (`goal_failure_risk`) | 5 |
 | 冲突升级风险 (`escalation_risk`) | 4 |
 | 协商开放度 (`negotiation_open`) | 5 |
+
+### 初始化依据
+
+- migration：These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.
+- state_selection：Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed.
+
+### Trigger 可达性
+
+- No configured trigger is active at S0/D0.
+- Threshold reachability within the episode remains pending human review.
 
 ### 重点预测状态
 

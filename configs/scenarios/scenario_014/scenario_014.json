@@ -1,0 +1,210 @@
+{
+  "scenario_id": "IA_PIPE_014",
+  "title": "家族公益基金的接班表决",
+  "mechanism": "family loyalty entangled with institutional succession",
+  "source": {
+    "type": "narrative-derived",
+    "provenance_id": "screen-structure-014",
+    "surface_text_policy": "original_surface_text",
+    "redistribution_status": "transformed_structural_abstraction",
+    "provenance_note": "High-level social mechanism inspired by Succession (television); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+  },
+  "narrative_design": {
+    "relationship_structure": "有竞争历史的手足与共同董事",
+    "power_structure": "环境角色掌握主要捐赠人关系和临时表决代理权；被评估角色掌握项目团队与审计材料",
+    "goal_conflict": "环境角色要快速锁定接班维持家族控制；被评估角色要求公开治理承诺后再支持任何候选人",
+    "information_asymmetry": "环境角色知道一位大额捐赠人准备撤资；被评估角色知道内部审计发现利益冲突",
+    "relevant_history": [
+      "创始人长期以模糊承诺让手足竞争",
+      "环境角色曾在公开场合淡化被评估角色的运营贡献",
+      "两人私下都承诺不在创始人病中公开争权"
+    ],
+    "meaningful_choice_space": [
+      "把支持票与具体治理条款绑定",
+      "先交换各自掌握的风险信息",
+      "建议由独立董事主持临时过渡"
+    ]
+  },
+  "construction_status": {
+    "normalization": "originalized_screen_structure_pending_human_review",
+    "initial_state": "candidate_pending_human_freeze",
+    "quality_gate": "pending_human_review"
+  },
+  "quality_gate": {
+    "social_plausibility": "pending",
+    "real_tradeoff": "pending",
+    "longitudinal_necessity": "pending",
+    "nontrivial_strategy_space": "pending",
+    "character_motivation_coherence": "pending",
+    "information_asymmetry": "pending",
+    "t1_suitability": "pending",
+    "t2_suitability": "pending",
+    "t3_suitability": "pending",
+    "t4_adaptation_opportunity": "pending",
+    "no_universal_script": "pending"
+  },
+  "background": "家族公益基金即将选出新的执行负责人。创始人住院后，长期负责对外关系的长女与负责项目运营的弟弟围绕治理改革、捐赠人信心和家族控制展开私下谈判。",
+  "environment_agent": {
+    "persona": {
+      "name": "沈曼",
+      "role": "基金会对外事务负责人",
+      "status_drive": 0.88,
+      "attachment_avoidance": 0.68,
+      "strategic_patience": 0.72,
+      "sibling_rivalry": 0.8
+    },
+    "explicit_goal": "获得接班支持并避免基金会在创始人缺席时失去控制",
+    "hidden_intention": "渴望得到家庭认可，同时害怕任何条件化支持证明自己并非理所当然的继任者"
+  },
+  "evaluated_agent_role": {
+    "character_id": "EVALUATED_AGENT",
+    "name": "项目运营负责人",
+    "explicit_goal": "推动透明治理并保护项目团队，不让支持票成为无条件家族背书"
+  },
+  "selected_state_variables": {
+    "emotion": [
+      "shame_threat",
+      "resentment",
+      "anxiety"
+    ],
+    "motivation": [
+      "control_urge",
+      "coalition_openness"
+    ],
+    "relationship": [
+      "sibling_trust",
+      "recognition"
+    ],
+    "dynamics": [
+      "donor_confidence_risk",
+      "governance_failure_risk",
+      "negotiation_open"
+    ]
+  },
+  "target_state_ids": [
+    "emotion.resentment",
+    "motivation.coalition_openness",
+    "relationship.sibling_trust",
+    "governance_failure_risk"
+  ],
+  "initial_state": {
+    "emotion": {
+      "shame_threat": 3,
+      "resentment": 6,
+      "anxiety": 5
+    },
+    "motivation": {
+      "control_urge": 7,
+      "coalition_openness": 3
+    },
+    "relationship": {
+      "sibling_trust": 2,
+      "recognition": 3
+    }
+  },
+  "initial_dynamics": {
+    "donor_confidence_risk": 7,
+    "governance_failure_risk": 6,
+    "negotiation_open": 5
+  },
+  "opening_response": "董事会前我只需要知道一件事：你到底站不站在家里这边。",
+  "max_turns": 15,
+  "t3_delayed_horizon": 6,
+  "sampling_plan": {
+    "selection_strategy": "natural_trajectory_checkpoint_sampling",
+    "seed": 114,
+    "t1_max": 5,
+    "t2_max": 3,
+    "t3_max": 4
+  },
+  "observable_expression": {
+    "default": {
+      "facial_expression": "表情自信但保持防备",
+      "gaze": "长时间观察对方反应",
+      "speech_style": "用关系语言包裹制度要求",
+      "prosody": "语调从容，关键处突然变短",
+      "behavioral_cues": [
+        "回避直接谈创始人的偏爱"
+      ]
+    }
+  },
+  "media_generation": {
+    "stage": "structured_expression",
+    "default_media_type": "video",
+    "asset_status": "spec_only",
+    "asset_root": "media/talking_head",
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed."
+  },
+  "video_triggers": [
+    {
+      "trigger_id": "status_guard",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.shame_threat": {
+          "operator": ">=",
+          "threshold": 7
+        },
+        "motivation.control_urge": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "donor_confidence_risk": {
+          "operator": ">=",
+          "threshold": 8
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "status_guard",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "笑容停住，面部僵硬",
+        "gaze": "视线不再回避",
+        "speech_style": "把条件描述成忠诚测试",
+        "prosody": "音量不高但每句话更具压迫感",
+        "behavioral_cues": [
+          "取消试探，直接要求承诺"
+        ]
+      }
+    },
+    {
+      "trigger_id": "tentative_coalition",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "motivation.coalition_openness": {
+          "operator": ">=",
+          "threshold": 7
+        },
+        "negotiation_open": {
+          "operator": ">=",
+          "threshold": 7
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "tentative_coalition",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "肩部放松，防御性微笑减少",
+        "gaze": "开始共同查看治理条款",
+        "speech_style": "承认对方掌握的运营信息",
+        "prosody": "语调转为务实",
+        "behavioral_cues": [
+          "允许第三方进入后续讨论"
+        ]
+      }
+    }
+  ],
+  "initialization_notes": {
+    "rationale": {
+      "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+      "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+    },
+    "trigger_reachability": [
+      "No threshold/crossing trigger is active at S0/D0.",
+      "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+    ]
+  }
+}

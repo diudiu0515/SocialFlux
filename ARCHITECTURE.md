@@ -3,9 +3,9 @@
 ## 总体数据流
 
 ```text
-source structure / synthetic brief
+film/TV analysis request / synthetic brief
         ↓
-narrative or script
+originalized structure extraction / original script
         ↓
 source quality report → real reviewer approval
         ↓
@@ -55,6 +55,8 @@ nine-criterion acceptance + human annotation
 ## Scenario bundle
 
 每个 `scenario_NNN/` 的 JSON 是机器事实源，同名 Markdown 是确定性生成的人类说明，含故事初始化、S0/D0、视频阈值、质量状态与 rollout 位置。JSON 改动后必须运行 `scripts/scenario_docs.py`；`--check` 校验 Markdown 内 SHA-256 与 catalog/coverage matrix。
+
+影视来源只允许贡献高层社会机制。`extract-structure` 的结构合同强制记录必须丢弃的表层元素以及原创化要求；后续 source 必须使用新人物、新场域、新事件、新 stakes 和原创语言，不复制台词、角色或标志性情节序列。
 
 ## Prompt 和 schema
 

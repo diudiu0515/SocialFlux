@@ -32,21 +32,54 @@ def _bounded(value, path):
 
 
 def _validate_multimodal(scenario):
+    values = {}
+
+    def collect(node, prefix=""):
+        for key, value in node.items():
+            path = f"{prefix}.{key}" if prefix else key
+            if isinstance(value, dict):
+                collect(value, path)
+            else:
+                values[path] = value
+
+    collect(scenario.get("initial_state", {}))
+    collect(scenario.get("initial_dynamics", {}))
+    operators = {
+        ">=": lambda value, threshold: value >= threshold,
+        ">": lambda value, threshold: value > threshold,
+        "<=": lambda value, threshold: value <= threshold,
+        "<": lambda value, threshold: value < threshold,
+        "==": lambda value, threshold: value == threshold,
+    }
     for trigger in scenario.get("video_triggers", []):
         for key in ("trigger_id", "trigger_mode", "conditions", "cue_template", "observable_expression"):
             if key not in trigger:
                 raise ValueError(f"video trigger missing {key}")
         if trigger["trigger_mode"] not in ("threshold", "crossing", "state_change"):
             raise ValueError("video trigger has unsupported trigger_mode")
-        for variable, condition in trigger.get("conditions", {}).items():
-            if not isinstance(condition, dict) or condition.get("operator") not in (
-                ">=", ">", "<=", "<", "=="
-            ):
+        conditions = trigger.get("conditions", {})
+        for variable, condition in conditions.items():
+            if variable not in values:
+                raise ValueError(f"video trigger references unknown variable: {variable}")
+            if not isinstance(condition, dict) or condition.get("operator") not in operators:
                 raise ValueError(f"invalid condition for video trigger variable {variable}")
             if not isinstance(condition.get("threshold"), (int, float)):
                 raise ValueError(f"video trigger threshold must be numeric for {variable}")
-        if trigger["trigger_mode"] == "state_change" and not trigger.get("change_conditions"):
+        if trigger["trigger_mode"] != "state_change" and conditions and all(
+            operators[condition["operator"]](values[variable], condition["threshold"])
+            for variable, condition in conditions.items()
+        ):
+            raise ValueError(f"video trigger {trigger['trigger_id']} is active at S0/D0")
+        change_conditions = trigger.get("change_conditions", {})
+        if trigger["trigger_mode"] == "state_change" and not change_conditions:
             raise ValueError("state_change trigger requires change_conditions")
+        for variable, condition in change_conditions.items():
+            if variable not in values:
+                raise ValueError(f"video change trigger references unknown variable: {variable}")
+            if not isinstance(condition, dict) or condition.get("operator") not in operators:
+                raise ValueError(f"invalid change condition for video trigger variable {variable}")
+            if not isinstance(condition.get("threshold"), (int, float)):
+                raise ValueError(f"video change threshold must be numeric for {variable}")
         if trigger.get("cooldown_turns", 0) < 0:
             raise ValueError("video trigger cooldown_turns must be non-negative")
         if not isinstance(trigger["observable_expression"], dict) or not trigger["observable_expression"]:
@@ -81,6 +114,50 @@ def validate_blueprint(blueprint):
     if blueprint["source"].get("type") not in ("narrative-derived", "synthetic-script"):
         raise ValueError("blueprint requires a supported source type")
     return blueprint
+
+
+def validate_narrative_structure(structure):
+    required = {
+        "source_work", "abstract_mechanism", "relationship_structure",
+        "power_structure", "goal_conflict", "information_asymmetry",
+        "longitudinal_dependency", "adaptation_boundaries",
+        "elements_to_discard", "originalization_requirements",
+        "redistribution_policy",
+    }
+    if set(structure) != required:
+        raise ValueError("narrative structure fields do not match the schema")
+    source = structure["source_work"]
+    if (
+        not isinstance(source, dict)
+        or set(source) != {"title", "medium"}
+        or not isinstance(source["title"], str)
+        or not source["title"].strip()
+        or source["medium"] not in ("film", "television")
+    ):
+        raise ValueError("narrative source work must provide title and film/television medium")
+    for key in (
+        "abstract_mechanism", "relationship_structure", "power_structure",
+        "goal_conflict", "information_asymmetry",
+    ):
+        if not isinstance(structure[key], str) or not structure[key].strip():
+            raise ValueError(f"narrative structure {key} must be non-empty text")
+    for key in ("longitudinal_dependency", "adaptation_boundaries"):
+        if (
+            not isinstance(structure[key], list)
+            or len(structure[key]) < 2
+            or not all(isinstance(item, str) and item.strip() for item in structure[key])
+        ):
+            raise ValueError(f"narrative structure {key} requires at least two text items")
+    for key in ("elements_to_discard", "originalization_requirements"):
+        if (
+            not isinstance(structure[key], list)
+            or len(structure[key]) < 4
+            or not all(isinstance(item, str) and item.strip() for item in structure[key])
+        ):
+            raise ValueError(f"narrative structure {key} requires at least four text items")
+    if structure["redistribution_policy"] != "structural_abstraction_only_original_surface_text":
+        raise ValueError("narrative structure must require original surface text")
+    return structure
 
 
 def validate_quality_report(report):

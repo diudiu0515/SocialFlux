@@ -1,12 +1,13 @@
 # SocialFlux Prompt Audit
 
-审计日期：2026-09-03。范围：`prompts/*.md`、`prompts/manifest.json`、对应 schema 与 Python caller。共保留 19 个版本化 prompt；未登记 Markdown 数为 0。
+审计日期：2026-09-03。范围：`prompts/*.md`、`prompts/manifest.json`、对应 schema 与 Python caller。共保留 20 个版本化 prompt；未登记 Markdown 数为 0。
 
 ## Prompt 逐项审计
 
 | Prompt | 层 / 当前职责与调用方 | 输入与隐藏信息权限 | 输出合同 | 发现的问题与本次处理 |
 |---|---|---|---|---|
 | `scenario_script_generation_v1` | author-side；`scenario_sources generate-script` 生成原创新社会剧本 | 只读机制、关系、权力、冲突、信息差 brief；不读 state/task | Markdown narrative | 拆出旧“直接生成 benchmark JSON”，明确不考虑 schema/S0/任务 |
+| `narrative_structure_extraction_v1` | author-side；`scenario_sources extract-structure` 从影视作品提取高层社会机制 | 只读作品标题、媒介与分析请求；不读 state/task | `narrative_structure.schema.json` | 只保留关系、权力、目标与信息差结构；强制丢弃角色、台词、标志性物件、机构及情节序列，并要求原创表层文本 |
 | `scenario_quality_gate_v1` | validation；`scenario_sources quality-check` 在 normalization 前审 source | 只读 source/provenance | `scenario_quality_report.schema.json` | 修正昨日的错误顺序；LLM 只能 pending，真人才能 approved |
 | `scenario_normalization_v1` | author-side；`scenario_sources normalize` | 只读已批准 source 与 quality report | `scenario_blueprint.schema.json` | 不再同时生成 S0/D0、阈值、action effects 或 checkpoint |
 | `initial_state_configuration_v1` | author-side；`scenario_sources initialize` | 读 approved blueprint 与 private design fields | `initial_state_proposal.schema.json` | 从 normalization 分离；输出 candidate，模型不能 human-freeze |
@@ -28,7 +29,7 @@
 
 ## Conceptual problems 与修复
 
-删除了旧版 direct scenario generation、story world、合并 appraisal/update、旧 response、旧 memory、旧 T1/T2/T3/T4、policy action 和 human annotation prompt。同步删除 action interpreter、controlled policy、template response、world benchmark schema 与旧任务合同。
+删除了旧版 direct scenario generation、story world、合并 appraisal/update、旧 response、旧 memory、旧 T1/T2/T3/T4、policy action 和 human annotation prompt。同步删除 action interpreter、controlled policy、template response、world benchmark schema 与旧任务合同。`prompt_check.md` 第 16 节关于 escalation/neutral/repair 三种多轮 policy 的旧建议与更新后的 `revision.md` 冲突；按较新的 revision，三类固定策略不进入生成 pipeline，只保留真实 checkpoint 上的局部自由文本 intervention。
 
 所有当前 prompt 已采用 task-first、quality/constraints 居中、output/schema-last。Appraisal → semantic state update → deterministic numeric mapping → response 的顺序已在代码和测试中固定。Source quality → normalization → initial state 的顺序也已在 CLI、schema 和文档中固定。
 
@@ -46,11 +47,11 @@
 
 ## Schema 与 caller 修改
 
-新增 blueprint、source quality、candidate initial state、T1/T2/T3 输出、T4 judge、observable expression、Talking Head request 与 local intervention review schemas。更新 canonical scenario/trajectory schema，删除 action effects/action ID 合同。更新 `scenario_sources.py`、`environment/appraisal.py`、`environment/state_updater.py`、`environment/response_generator.py`、`environment/memory.py`、`offline/candidate_generation.py`、`policies/model_policy.py` 与 `scripts/run_pipeline.py`。
+新增 narrative structure、blueprint、source quality、candidate initial state、T1/T2/T3 输出、T4 judge、observable expression、Talking Head request 与 local intervention review schemas。更新 canonical scenario/trajectory schema，删除 action effects/action ID 合同。更新 `scenario_sources.py`（含 `extract-structure`）、`environment/appraisal.py`、`environment/state_updater.py`、`environment/response_generator.py`、`environment/memory.py`、`offline/candidate_generation.py`、`policies/model_policy.py` 与 `scripts/run_pipeline.py`。
 
 ## 未决设计问题
 
-- 10 个现有 scenario 的 provenance/quality/S0-D0 仍需真人审核，不得自动批准。
+- 20 个现有 scenario 的 provenance/quality/S0-D0 仍需真人审核，不得自动批准。
 - task 输出概率和为 1 需要运行时 validator；JSON Schema 只能约束单值范围。
 - `observable_expression_v1` 与 `talking_head_generation_v1` 已固定协议，但真实视频 provider、资产存储和人工连续性审核尚未接入。
 - human annotation 的具体字段按 T1/T2/T3 packet supplied schema 冻结；正式标注平台与 adjudication 尚未执行。

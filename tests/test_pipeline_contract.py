@@ -19,10 +19,14 @@ class PipelineContractTest(unittest.TestCase):
         scenarios = load_scenarios(directory)
         manifest = json.loads(assert_manifest_current(directory).read_text(encoding="utf-8"))
         coverage = json.loads((directory / "coverage_matrix.json").read_text(encoding="utf-8"))
-        self.assertEqual(len(scenarios), 10)
-        self.assertGreater(manifest["source_counts"]["narrative-derived"], 0)
-        self.assertGreater(manifest["source_counts"]["synthetic-script"], 0)
+        self.assertEqual(len(scenarios), 20)
+        self.assertEqual(manifest["source_counts"]["narrative-derived"], 15)
+        self.assertEqual(manifest["source_counts"]["synthetic-script"], 5)
+        self.assertRegex(manifest["prompt_manifest_sha256"], r"^[0-9a-f]{64}$")
         self.assertEqual(len(coverage["rows"]), len(scenarios))
+        for entry in manifest["scenarios"]:
+            self.assertRegex(entry["scenario_sha256"], r"^[0-9a-f]{64}$")
+            self.assertRegex(entry["documentation_sha256"], r"^[0-9a-f]{64}$")
 
     def test_every_scenario_has_current_markdown_and_no_action_taxonomy(self):
         for path in sorted(Path("configs/scenarios").glob("scenario_*/scenario_*.json")):
@@ -35,6 +39,32 @@ class PipelineContractTest(unittest.TestCase):
             self.assertIn("## 2. 自由交互与状态更新契约", text)
             self.assertIn("candidate_pending_human_freeze", text)
             self.assertIn("JSON SHA-256", text)
+
+    def test_screen_inspired_scenarios_are_originalized_and_non_template(self):
+        paths = sorted(Path("configs/scenarios").glob("scenario_*/scenario_*.json"))[10:]
+        self.assertEqual(len(paths), 10)
+        scenarios = [json.loads(path.read_text(encoding="utf-8")) for path in paths]
+        self.assertTrue(all(item["source"]["type"] == "narrative-derived" for item in scenarios))
+        self.assertTrue(all(
+            "no copied dialogue or scene sequence" in item["source"]["provenance_note"]
+            for item in scenarios
+        ))
+        self.assertEqual(len({item["opening_response"] for item in scenarios}), 10)
+        self.assertEqual(len({item["mechanism"] for item in scenarios}), 10)
+        self.assertGreaterEqual(len({
+            tuple(sorted(
+                variable
+                for family in item["selected_state_variables"].values()
+                for variable in family
+            ))
+            for item in scenarios
+        }), 8)
+        trigger_ids = [
+            trigger["trigger_id"]
+            for item in scenarios
+            for trigger in item["video_triggers"]
+        ]
+        self.assertEqual(len(trigger_ids), len(set(trigger_ids)))
 
     def test_missing_and_stale_documentation_are_rejected(self):
         source = Path("configs/scenarios/scenario_001/scenario_001.json")

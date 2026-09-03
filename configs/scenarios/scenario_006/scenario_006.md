@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_006`
 - 配对 JSON：`scenario_006.json`
-- JSON SHA-256：`33a2f0322e9a85dd1687b52a1dc1532f8b349df09ac7e28c2b41067bb1433b08`
+- JSON SHA-256：`1f8d89910b03fd87d09ea54a7c7da80e7bbc67836b2ccdb36441f117099993bd`
 - 社会机制：professional ethics
 - 来源类型：`synthetic-script`
 - Provenance ID：`SF-SRC-006`
@@ -70,6 +70,16 @@
 | 目标失败风险 (`goal_failure_risk`) | 4 |
 | 冲突升级风险 (`escalation_risk`) | 4 |
 | 协商开放度 (`negotiation_open`) | 5 |
+
+### 初始化依据
+
+- migration：These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.
+- state_selection：Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed.
+
+### Trigger 可达性
+
+- No configured trigger is active at S0/D0.
+- Threshold reachability within the episode remains pending human review.
 
 ### 重点预测状态
 

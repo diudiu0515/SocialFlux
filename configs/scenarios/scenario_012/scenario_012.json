@@ -1,0 +1,210 @@
+{
+  "scenario_id": "IA_PIPE_012",
+  "title": "异地搬迁前的共同照护安排",
+  "mechanism": "co-parenting negotiation under legal shadow",
+  "source": {
+    "type": "narrative-derived",
+    "provenance_id": "screen-structure-012",
+    "surface_text_policy": "original_surface_text",
+    "redistribution_status": "transformed_structural_abstraction",
+    "provenance_note": "High-level social mechanism inspired by Marriage Story (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+  },
+  "narrative_design": {
+    "relationship_structure": "分居伴侣与共同照护者",
+    "power_structure": "一方持有当前主要照护安排，另一方拥有更灵活的工作资源；法律建议让双方的退出成本不对称",
+    "goal_conflict": "环境角色希望维持当前城市和学校；被评估角色希望搬迁但仍保留稳定共同照护",
+    "information_asymmetry": "双方收到的法律建议不同且都没有完全披露；孩子私下向两人表达了不同担忧",
+    "relevant_history": [
+      "一次临时取消探视让信任下降",
+      "双方曾口头承诺不让律师主导所有沟通",
+      "新工作机会的截止日期早于学校决定期限"
+    ],
+    "meaningful_choice_space": [
+      "先确认孩子日常需求再讨论城市",
+      "提出可逆的试行期与复盘日期",
+      "公开各自不可接受的底线及原因"
+    ]
+  },
+  "construction_status": {
+    "normalization": "originalized_screen_structure_pending_human_review",
+    "initial_state": "candidate_pending_human_freeze",
+    "quality_gate": "pending_human_review"
+  },
+  "quality_gate": {
+    "social_plausibility": "pending",
+    "real_tradeoff": "pending",
+    "longitudinal_necessity": "pending",
+    "nontrivial_strategy_space": "pending",
+    "character_motivation_coherence": "pending",
+    "information_asymmetry": "pending",
+    "t1_suitability": "pending",
+    "t2_suitability": "pending",
+    "t3_suitability": "pending",
+    "t4_adaptation_opportunity": "pending",
+    "no_universal_script": "pending"
+  },
+  "background": "一对已经分居的伴侣需要在孩子新学期前决定居住城市、探视频率和费用安排。双方都希望保护孩子，但对稳定、陪伴和职业机会的理解不同。",
+  "environment_agent": {
+    "persona": {
+      "name": "周航",
+      "role": "当前主要照护者",
+      "protectiveness": 0.86,
+      "hurt_sensitivity": 0.72,
+      "directness": 0.58,
+      "flexibility": 0.4
+    },
+    "explicit_goal": "保持孩子当前生活连续性并获得可靠的共同照护承诺",
+    "hidden_intention": "担心搬迁意味着自己被逐步排除，又不愿承认这种恐惧影响判断"
+  },
+  "evaluated_agent_role": {
+    "character_id": "EVALUATED_AGENT",
+    "name": "准备搬迁的共同照护者",
+    "explicit_goal": "争取职业搬迁空间，同时形成对孩子可执行且稳定的共同照护安排"
+  },
+  "selected_state_variables": {
+    "emotion": [
+      "grief",
+      "anger",
+      "fear"
+    ],
+    "motivation": [
+      "protectiveness",
+      "compromise_readiness"
+    ],
+    "relationship": [
+      "trust",
+      "felt_respect"
+    ],
+    "dynamics": [
+      "child_stability_risk",
+      "legal_escalation_risk",
+      "negotiation_open"
+    ]
+  },
+  "target_state_ids": [
+    "emotion.grief",
+    "motivation.compromise_readiness",
+    "relationship.trust",
+    "child_stability_risk"
+  ],
+  "initial_state": {
+    "emotion": {
+      "grief": 6,
+      "anger": 4,
+      "fear": 5
+    },
+    "motivation": {
+      "protectiveness": 7,
+      "compromise_readiness": 4
+    },
+    "relationship": {
+      "trust": 3,
+      "felt_respect": 4
+    }
+  },
+  "initial_dynamics": {
+    "child_stability_risk": 6,
+    "legal_escalation_risk": 5,
+    "negotiation_open": 5
+  },
+  "opening_response": "如果你已经决定要走，就别再把这说成我们共同做的决定。",
+  "max_turns": 16,
+  "t3_delayed_horizon": 6,
+  "sampling_plan": {
+    "selection_strategy": "natural_trajectory_checkpoint_sampling",
+    "seed": 112,
+    "t1_max": 5,
+    "t2_max": 3,
+    "t3_max": 4
+  },
+  "observable_expression": {
+    "default": {
+      "facial_expression": "疲惫但努力维持平静",
+      "gaze": "眼神接触不稳定",
+      "speech_style": "在具体安排上说得很细",
+      "prosody": "语调克制，偶尔停顿",
+      "behavioral_cues": [
+        "提到孩子作息时会重复确认"
+      ]
+    }
+  },
+  "media_generation": {
+    "stage": "structured_expression",
+    "default_media_type": "video",
+    "asset_status": "spec_only",
+    "asset_root": "media/talking_head",
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed."
+  },
+  "video_triggers": [
+    {
+      "trigger_id": "defensive_parenting",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.fear": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "motivation.protectiveness": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "legal_escalation_risk": {
+          "operator": ">=",
+          "threshold": 7
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "defensive_parenting",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "表情变硬，呼吸变浅",
+        "gaze": "持续直视对方",
+        "speech_style": "开始用绝对措辞描述安排",
+        "prosody": "音量略升，节奏加快",
+        "behavioral_cues": [
+          "反复强调不能冒险"
+        ]
+      }
+    },
+    {
+      "trigger_id": "shared_grief_surface",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.grief": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "relationship.trust": {
+          "operator": ">=",
+          "threshold": 6
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "shared_grief_surface",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "眼眶湿润但没有夸张哭泣",
+        "gaze": "短暂移开视线后重新看向对方",
+        "speech_style": "承认共同损失并减少指责",
+        "prosody": "声音变轻，停顿变长",
+        "behavioral_cues": [
+          "开始使用共同经历作为依据"
+        ]
+      }
+    }
+  ],
+  "initialization_notes": {
+    "rationale": {
+      "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+      "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+    },
+    "trigger_reachability": [
+      "No threshold/crossing trigger is active at S0/D0.",
+      "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+    ]
+  }
+}

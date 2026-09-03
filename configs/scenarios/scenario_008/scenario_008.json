@@ -191,5 +191,15 @@
         ]
       }
     }
-  ]
+  ],
+  "initialization_notes": {
+    "rationale": {
+      "migration": "These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.",
+      "state_selection": "Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed."
+    },
+    "trigger_reachability": [
+      "No configured trigger is active at S0/D0.",
+      "Threshold reachability within the episode remains pending human review."
+    ]
+  }
 }

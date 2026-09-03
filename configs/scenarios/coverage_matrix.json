@@ -222,6 +222,226 @@
       "repair_possibility": "human_review_pending",
       "failure_mode": "human_review_pending",
       "scenario_source": "synthetic-script"
+    },
+    {
+      "scenario_id": "IA_PIPE_011",
+      "relationship_type": "高标准总监与试用期策展助理",
+      "social_mechanism": "status gatekeeping under sponsor pressure",
+      "power_asymmetry": "总监控制合同续签、行业推荐与现场调度；助理掌握撤展流程中的证据和一线关系",
+      "goal_conflict": "总监要在不惊动赞助方的情况下准时开幕；助理要避免无依据撤展并提出可执行替代方案",
+      "information_asymmetry": "总监知道赞助方附加条件但没有公开；助理知道被撤设计师已经完成合规复核",
+      "temporal_history_pattern": [
+        "总监此前两次在最后时刻改变布展要求",
+        "助理曾因指出流程漏洞而被评价为不够灵活",
+        "赞助方的口头要求尚未进入正式合同"
+      ],
+      "relevant_state_families": [
+        "dynamics",
+        "emotion",
+        "motivation",
+        "relationship"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "narrative-derived"
+    },
+    {
+      "scenario_id": "IA_PIPE_012",
+      "relationship_type": "分居伴侣与共同照护者",
+      "social_mechanism": "co-parenting negotiation under legal shadow",
+      "power_asymmetry": "一方持有当前主要照护安排，另一方拥有更灵活的工作资源；法律建议让双方的退出成本不对称",
+      "goal_conflict": "环境角色希望维持当前城市和学校；被评估角色希望搬迁但仍保留稳定共同照护",
+      "information_asymmetry": "双方收到的法律建议不同且都没有完全披露；孩子私下向两人表达了不同担忧",
+      "temporal_history_pattern": [
+        "一次临时取消探视让信任下降",
+        "双方曾口头承诺不让律师主导所有沟通",
+        "新工作机会的截止日期早于学校决定期限"
+      ],
+      "relevant_state_families": [
+        "dynamics",
+        "emotion",
+        "motivation",
+        "relationship"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "narrative-derived"
+    },
+    {
+      "scenario_id": "IA_PIPE_013",
+      "relationship_type": "委员会主席与持少数意见的外部评审",
+      "social_mechanism": "group conformity versus evidence revision",
+      "power_asymmetry": "主席控制议程、发言顺序和报告提交；评审拥有专业证据但没有组织表决权",
+      "goal_conflict": "主席要按时形成统一结论恢复公众信心；评审要延后定责并核验矛盾证据",
+      "information_asymmetry": "主席知道上级要求当晚发布；评审发现一份未进入摘要的维护记录",
+      "temporal_history_pattern": [
+        "委员会已经连续开会十小时",
+        "评审先前一次质疑被认为拖延流程",
+        "一名沉默成员曾私下表示结论证据不足"
+      ],
+      "relevant_state_families": [
+        "dynamics",
+        "emotion",
+        "motivation",
+        "relationship"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "narrative-derived"
+    },
+    {
+      "scenario_id": "IA_PIPE_014",
+      "relationship_type": "有竞争历史的手足与共同董事",
+      "social_mechanism": "family loyalty entangled with institutional succession",
+      "power_asymmetry": "环境角色掌握主要捐赠人关系和临时表决代理权；被评估角色掌握项目团队与审计材料",
+      "goal_conflict": "环境角色要快速锁定接班维持家族控制；被评估角色要求公开治理承诺后再支持任何候选人",
+      "information_asymmetry": "环境角色知道一位大额捐赠人准备撤资；被评估角色知道内部审计发现利益冲突",
+      "temporal_history_pattern": [
+        "创始人长期以模糊承诺让手足竞争",
+        "环境角色曾在公开场合淡化被评估角色的运营贡献",
+        "两人私下都承诺不在创始人病中公开争权"
+      ],
+      "relevant_state_families": [
+        "dynamics",
+        "emotion",
+        "motivation",
+        "relationship"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "narrative-derived"
+    },
+    {
+      "scenario_id": "IA_PIPE_015",
+      "relationship_type": "技术工程师与危机协调主任",
+      "social_mechanism": "institutional denial under public-risk uncertainty",
+      "power_asymmetry": "主任控制通报、采样资源与对外口径；工程师控制原始数据解释并承担专业责任",
+      "goal_conflict": "主任要在证据未闭合前维持公共秩序；工程师要及时预警并扩大检测",
+      "information_asymmetry": "主任知道上级已经要求压低事件等级；工程师知道备用传感器也出现相似异常",
+      "temporal_history_pattern": [
+        "此前一次误报导致部门被公开批评",
+        "主任曾要求所有异常先走内部复核",
+        "社区医院出现的症状数据尚未正式关联供水"
+      ],
+      "relevant_state_families": [
+        "dynamics",
+        "emotion",
+        "motivation",
+        "relationship"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "narrative-derived"
+    },
+    {
+      "scenario_id": "IA_PIPE_016",
+      "relationship_type": "共同承担遗产压力的亲属与工作搭档",
+      "social_mechanism": "grief, expertise, and informal authority in a failing workplace",
+      "power_asymmetry": "主厨拥有专业方案和最终菜单权；运营负责人掌握员工信任、供应商关系和日常现金流",
+      "goal_conflict": "主厨要按专业标准完成改造；运营负责人要避免团队和现金流在转型中崩溃",
+      "information_asymmetry": "主厨没有公开一笔即将到期的设备款；运营负责人隐瞒两名老员工准备离职",
+      "temporal_history_pattern": [
+        "两人都把餐馆与已故亲人的期待联系在一起",
+        "一次公开训斥让后厨团队分裂",
+        "此前的临时改进曾因缺少执行计划失败"
+      ],
+      "relevant_state_families": [
+        "dynamics",
+        "emotion",
+        "motivation",
+        "relationship"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "narrative-derived"
+    },
+    {
+      "scenario_id": "IA_PIPE_017",
+      "relationship_type": "家族事务组织者与返乡晚辈",
+      "social_mechanism": "collective care versus individual truth rights",
+      "power_asymmetry": "组织者控制医疗信息、探视安排和家族共识；晚辈与长辈关系亲密但缺少本地决策权",
+      "goal_conflict": "环境角色要维持长辈情绪和家庭共同照护；被评估角色要推动诚实且不粗暴的信息披露",
+      "information_asymmetry": "组织者知道长辈曾要求家人不要替自己做决定；晚辈不知道医生实际给出的不确定性范围",
+      "temporal_history_pattern": [
+        "家族过去习惯由集体承担坏消息",
+        "晚辈曾因长期不在场而被质疑只讲原则",
+        "长辈近期察觉家人行为异常并多次追问"
+      ],
+      "relevant_state_families": [
+        "dynamics",
+        "emotion",
+        "motivation",
+        "relationship"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "narrative-derived"
+    },
+    {
+      "scenario_id": "IA_PIPE_018",
+      "relationship_type": "临时征召的语言研究员与安全指挥官",
+      "social_mechanism": "cross-domain trust under radical uncertainty",
+      "power_asymmetry": "指挥官控制接触权限、数据发布和行动节奏；研究员掌握解释方法但无法单独验证对方意图",
+      "goal_conflict": "指挥官要在时间压力下形成可执行威胁判断；研究员要保留语境并避免把未知直接解释为敌意",
+      "information_asymmetry": "指挥官掌握其他地区的未公开警报；研究员发现关键符号的时间含义可能与线性指令不同",
+      "temporal_history_pattern": [
+        "一次机器翻译把模糊信号误报为命令",
+        "研究员先前要求延长观察窗口被拒绝",
+        "不同地区的数据共享正在中断"
+      ],
+      "relevant_state_families": [
+        "dynamics",
+        "emotion",
+        "motivation",
+        "relationship"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "narrative-derived"
+    },
+    {
+      "scenario_id": "IA_PIPE_019",
+      "relationship_type": "由朋友转为权责不对等的创业合伙人",
+      "social_mechanism": "friendship contribution conflict under rapid scaling",
+      "power_asymmetry": "环境角色控制产品、投资人和董事席位；被评估角色掌握早期资金记录与共同创立证据",
+      "goal_conflict": "环境角色要保持融资与决策效率；被评估角色要恢复合理权益并获得真实治理位置",
+      "information_asymmetry": "环境角色知道投资条款针对被评估角色设计；被评估角色保留了早期承诺和转账记录",
+      "temporal_history_pattern": [
+        "双方曾口头约定重要股权变化需共同确认",
+        "公司增长后被评估角色逐渐被排除在产品会议外",
+        "一次未及时到账的运营款被环境角色视为背叛"
+      ],
+      "relevant_state_families": [
+        "dynamics",
+        "emotion",
+        "motivation",
+        "relationship"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "narrative-derived"
+    },
+    {
+      "scenario_id": "IA_PIPE_020",
+      "relationship_type": "资深督导律师与初级承办律师",
+      "social_mechanism": "professional loyalty versus client-centered ethics",
+      "power_asymmetry": "督导控制案件分配、职业推荐和和解签署；初级律师掌握当事人沟通记录并直接承担告知义务",
+      "goal_conflict": "环境角色要用和解资金维持中心和多数案件；被评估角色要确保受影响当事人充分知情并保留选择",
+      "information_asymmetry": "环境角色知道若错过截止中心可能裁员；被评估角色知道一名关键当事人明确拒绝被统一代表",
+      "temporal_history_pattern": [
+        "督导曾为保护团队替初级律师承担程序失误",
+        "初级律师曾承诺不会绕过当事人同意",
+        "资助方把本案结果与下一年度拨款绑定"
+      ],
+      "relevant_state_families": [
+        "dynamics",
+        "emotion",
+        "motivation",
+        "relationship"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "narrative-derived"
     }
   ]
 }

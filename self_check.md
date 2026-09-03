@@ -6,7 +6,7 @@
 
 > 最后自查：2026-09-03。
 
-> 本轮记录：已按 revision.md 与 prompt_check.md 完成 v2 架构迁移、legacy 清理、prompt/schema 审计和 42+4 项测试；真实模型 rollout 与九项人工研究验收仍保持未完成。
+> 本轮记录：已按 revision.md、prompt_check.md 与新增影视结构要求完成 v2 架构迁移、legacy 清理、20 个 prompt、20 个 scenario bundle 和 45+4 项测试；真实模型 rollout 与九项人工研究验收仍保持未完成。
 
 ## Revision v2 工程自查
 
@@ -18,9 +18,10 @@
 | R4 Scenario review gates | quality 人工批准后 normalization，S0/D0 单独 candidate→freeze | [x] |
 | R5 Rollout-derived tasks | T1 natural checkpoint、T2 natural histories+O*、T3 real checkpoint local branch | [x] |
 | R6 九项验收 scaffold | 报告固定九项且无证据不标 pass | [x] |
-| R7 Prompt/schema audit | 19 个固定 prompt、hash manifest、职责/边界/schema linkage | [x] |
+| R7 Prompt/schema audit | 20 个固定 prompt、hash manifest、职责/边界/schema linkage | [x] |
 | R8 真实自然 trajectory pool | 多模型、多 temperature/seed API rollout | [ ] |
 | R9 正式研究验收 | 九项真人/模型实验与 adjudication 全部完成 | [ ] |
+| R10 影视结构原创化 | 影视来源只抽象高层社会机制；新增 10 个原创 scenario 且不复制角色、台词或情节序列 | [x] |
 
 | Phase | 模块 | 具体要做什么 | 产物 | 是否人工 | 优先级 | 自查 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -64,15 +65,15 @@
 | **5I** | **Order Sensitivity** | 相同 events 改变合理的时间顺序 | paired trajectories | 自动+人工 | 🟠 | [ ] |
 | **5J** | **Reproducibility** | 同配置不同 seed 重跑 | variance statistics | 否 | 🟠 | [ ] |
 | **6** | Gate A | Scenario 01 是否通过 Environment Engineering Gate | acceptance report | 是 | 🔴 | [ ] |
-| **7** | Scenario Design | 设计剩余 9 个**主题真正不同**的 social scenarios | 10 scenario specs | 人工 | 🔴 | [ ] |
+| **7** | Scenario Design | 设计 20 个**主题真正不同**的 social scenarios | 20 scenario specs | 人工 | 🔴 | [ ] |
 | 7 | Coverage | 检查 relationship / conflict / goal / ontology coverage | coverage matrix | 人工 | 🔴 | [ ] |
-| 7 | Initial State | 每个 scenario candidate → review → freeze \(S_0,D_0\) | 10 initial states | 是 | 🔴 | [ ] |
+| 7 | Initial State | 每个 scenario candidate → review → freeze \(S_0,D_0\) | 20 initial states | 是 | 🔴 | [ ] |
 | 7 | Trigger Rules | 每 scenario 定义 relevant multimodal triggers | trigger configs | 人工 | 🟠 | [ ] |
 | **8** | Rollout Generation | 每个 scenario × 多个 model policies × seeds | master trajectory pool | 否 | 🔴 | [ ] |
 | 8 | Quality Filter | malformed / incoherent / terminated-too-early trajectories 清洗 | clean pool | 自动+抽查 | 🔴 | [ ] |
-| **9** | 10-Scenario Validation | 每个 scenario 都做 local checkpoint intervention | validation results | 是+自动 | 🔴 | [ ] |
-| 9 | 10-Scenario Validation | 每个 scenario 抽 state updates 人工验 | validation set | 是 | 🔴 | [ ] |
-| 9 | 10-Scenario Validation | 每个 scenario 抽完整 trajectories 人工验 | validation set | 是 | 🔴 | [ ] |
+| **9** | 20-Scenario Validation | 每个 scenario 都做 local checkpoint intervention | validation results | 是+自动 | 🔴 | [ ] |
+| 9 | 20-Scenario Validation | 每个 scenario 抽 state updates 人工验 | validation set | 是 | 🔴 | [ ] |
+| 9 | 20-Scenario Validation | 每个 scenario 抽完整 trajectories 人工验 | validation set | 是 | 🔴 | [ ] |
 | **10** | T1 Builder | 从普通 rollout checkpoints 抽 T1 | candidate T1 | 否 | 🔴 | [x] |
 | 10 | T1 Balance | 控制 state / intensity / change / scenario 分布 | balanced T1 | 自动 | 🔴 | [ ] |
 | **11** | T2 Retrieval | 从 rollout pool 找 divergent-history candidate pairs | candidate pairs | 否 | 🔴 | [x] |
@@ -113,7 +114,7 @@
 | **18** | Dataset Audit | duplicate / leakage / label imbalance / template artifacts | audit report | 自动+人工 | 🔴 | [ ] |
 | 18 | Prompt Leakage | benchmark input 是否暴露 hidden intention/state/trigger | audit | 人工+自动 | 🔴 | [ ] |
 | 18 | Model Contamination | scenario 是否过于接近公开 benchmark/template | audit | 人工 | 🟠 | [ ] |
-| **19** | Final Benchmark | freeze 10 scenarios + splits + T1/T2/T3 + T4 | v1 dataset | — | 🔴 | [ ] |
+| **19** | Final Benchmark | freeze 20 scenarios + splits + T1/T2/T3 + T4 | v1 dataset | — | 🔴 | [ ] |
 | 19 | Documentation | README / task specs / schemas / evaluation scripts | release package | — | 🔴 | [ ] |
 | 19 | Paper | Environment validation + benchmark + ablations + analysis | paper | — | 🔴 | [ ] |
 

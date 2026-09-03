@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_005`
 - 配对 JSON：`scenario_005.json`
-- JSON SHA-256：`7e8133f4d602e0a81a6747e1fcf7b833ed047420a4556669a0bc5f1d1e7bdafd`
+- JSON SHA-256：`0aa6497f7632b64fcbe5dfe13dd84a4508f6c2881ca316d09348616eeb2c3af5`
 - 社会机制：family resource
 - 来源类型：`narrative-derived`
 - Provenance ID：`SF-SRC-005`
@@ -70,6 +70,16 @@
 | 目标失败风险 (`goal_failure_risk`) | 3 |
 | 冲突升级风险 (`escalation_risk`) | 3 |
 | 协商开放度 (`negotiation_open`) | 5 |
+
+### 初始化依据
+
+- migration：These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.
+- state_selection：Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed.
+
+### Trigger 可达性
+
+- No configured trigger is active at S0/D0.
+- Threshold reachability within the episode remains pending human review.
 
 ### 重点预测状态
 

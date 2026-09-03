@@ -20,6 +20,8 @@ Constraints:
 
 - use only supplied source material and provenance;
 - identify concrete weaknesses instead of inventing missing facts;
+- reject template artifacts such as identical state sets, copied trigger patterns, interchangeable personas, generic conflict wording, or one reusable conversation script;
+- confirm the narrative has a source-specific causal mechanism rather than conflict for its own sake;
 - do not create S0/D0, state deltas, action categories, response templates, checkpoints, trajectories, labels, or ground truth;
 - an LLM recommendation is quality-control evidence, never human approval;
 - set review_status to pending_human_review. Only a real reviewer may later change it to approved or rejected.

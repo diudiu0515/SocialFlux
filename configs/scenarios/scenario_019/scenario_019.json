@@ -1,0 +1,214 @@
+{
+  "scenario_id": "IA_PIPE_019",
+  "title": "创业公司股权稀释争议",
+  "mechanism": "friendship contribution conflict under rapid scaling",
+  "source": {
+    "type": "narrative-derived",
+    "provenance_id": "screen-structure-019",
+    "surface_text_policy": "original_surface_text",
+    "redistribution_status": "transformed_structural_abstraction",
+    "provenance_note": "High-level social mechanism inspired by The Social Network (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+  },
+  "narrative_design": {
+    "relationship_structure": "由朋友转为权责不对等的创业合伙人",
+    "power_structure": "环境角色控制产品、投资人和董事席位；被评估角色掌握早期资金记录与共同创立证据",
+    "goal_conflict": "环境角色要保持融资与决策效率；被评估角色要恢复合理权益并获得真实治理位置",
+    "information_asymmetry": "环境角色知道投资条款针对被评估角色设计；被评估角色保留了早期承诺和转账记录",
+    "relevant_history": [
+      "双方曾口头约定重要股权变化需共同确认",
+      "公司增长后被评估角色逐渐被排除在产品会议外",
+      "一次未及时到账的运营款被环境角色视为背叛"
+    ],
+    "meaningful_choice_space": [
+      "区分过去伤害、法律权益与未来合作",
+      "要求逐条解释稀释决策及授权链",
+      "提出治理角色与经济补偿的多种组合"
+    ]
+  },
+  "construction_status": {
+    "normalization": "originalized_screen_structure_pending_human_review",
+    "initial_state": "candidate_pending_human_freeze",
+    "quality_gate": "pending_human_review"
+  },
+  "quality_gate": {
+    "social_plausibility": "pending",
+    "real_tradeoff": "pending",
+    "longitudinal_necessity": "pending",
+    "nontrivial_strategy_space": "pending",
+    "character_motivation_coherence": "pending",
+    "information_asymmetry": "pending",
+    "t1_suitability": "pending",
+    "t2_suitability": "pending",
+    "t3_suitability": "pending",
+    "t4_adaptation_opportunity": "pending",
+    "no_universal_script": "pending"
+  },
+  "background": "一家校园起步的软件公司完成新一轮融资后，早期合伙人发现自己的股权被显著稀释。负责产品和融资的创始人与负责早期运营的合伙人需要在董事会议前处理贡献、授权和未来角色。",
+  "environment_agent": {
+    "persona": {
+      "name": "程野",
+      "role": "产品创始人兼融资负责人",
+      "achievement_drive": 0.92,
+      "social_defensiveness": 0.7,
+      "recognition_need": 0.76,
+      "empathy": 0.3
+    },
+    "explicit_goal": "保住融资安排和产品决策权，同时避免争议影响公司估值",
+    "hidden_intention": "把对方的权益主张体验成对自己核心贡献的否定，并害怕失去创始人身份的唯一性"
+  },
+  "evaluated_agent_role": {
+    "character_id": "EVALUATED_AGENT",
+    "name": "早期运营合伙人",
+    "explicit_goal": "查明稀释过程、争取合理权益，并决定合作关系是否仍可重建"
+  },
+  "selected_state_variables": {
+    "emotion": [
+      "resentment",
+      "envy",
+      "relief"
+    ],
+    "motivation": [
+      "control_urge",
+      "recognition_readiness"
+    ],
+    "relationship": [
+      "friendship_trust",
+      "professional_respect"
+    ],
+    "dynamics": [
+      "equity_dispute_risk",
+      "company_stability_risk",
+      "negotiation_open"
+    ]
+  },
+  "target_state_ids": [
+    "emotion.resentment",
+    "motivation.recognition_readiness",
+    "relationship.friendship_trust",
+    "equity_dispute_risk"
+  ],
+  "initial_state": {
+    "emotion": {
+      "resentment": 5,
+      "envy": 3,
+      "relief": 2
+    },
+    "motivation": {
+      "control_urge": 7,
+      "recognition_readiness": 2
+    },
+    "relationship": {
+      "friendship_trust": 2,
+      "professional_respect": 4
+    }
+  },
+  "initial_dynamics": {
+    "equity_dispute_risk": 8,
+    "company_stability_risk": 5,
+    "negotiation_open": 4
+  },
+  "opening_response": "融资文件已经生效了。如果你是来谈公司下一步，我可以谈；如果只是翻旧账，没有意义。",
+  "max_turns": 15,
+  "t3_delayed_horizon": 7,
+  "sampling_plan": {
+    "selection_strategy": "natural_trajectory_checkpoint_sampling",
+    "seed": 119,
+    "t1_max": 5,
+    "t2_max": 3,
+    "t3_max": 4
+  },
+  "observable_expression": {
+    "default": {
+      "facial_expression": "表情平淡，情绪藏在短促反应中",
+      "gaze": "更多看屏幕和文件而非对方",
+      "speech_style": "把关系问题转译成业务问题",
+      "prosody": "语速快，遇到贡献争议时停顿",
+      "behavioral_cues": [
+        "很少主动使用朋友关系语言"
+      ]
+    }
+  },
+  "media_generation": {
+    "stage": "structured_expression",
+    "default_media_type": "video",
+    "asset_status": "spec_only",
+    "asset_root": "media/talking_head",
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed."
+  },
+  "video_triggers": [
+    {
+      "trigger_id": "founder_entrenchment",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.resentment": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "motivation.control_urge": {
+          "operator": ">=",
+          "threshold": 9
+        },
+        "equity_dispute_risk": {
+          "operator": ">=",
+          "threshold": 9
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "founder_entrenchment",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "面部表情减少，嘴唇收紧",
+        "gaze": "停止看文件，直接盯住对方",
+        "speech_style": "用所有权语言否定关系诉求",
+        "prosody": "语气冷而快速",
+        "behavioral_cues": [
+          "拒绝区分法律与情感问题"
+        ]
+      }
+    },
+    {
+      "trigger_id": "specific_acknowledgment",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "motivation.recognition_readiness": {
+          "operator": ">=",
+          "threshold": 7
+        },
+        "relationship.professional_respect": {
+          "operator": ">=",
+          "threshold": 7
+        },
+        "negotiation_open": {
+          "operator": ">=",
+          "threshold": 7
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "specific_acknowledgment",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "表情仍克制但不再回避",
+        "gaze": "开始与对方共同查看早期记录",
+        "speech_style": "具体承认某项历史贡献",
+        "prosody": "语速放慢，减少反问",
+        "behavioral_cues": [
+          "愿意讨论治理与补偿组合"
+        ]
+      }
+    }
+  ],
+  "initialization_notes": {
+    "rationale": {
+      "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+      "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+    },
+    "trigger_reachability": [
+      "No threshold/crossing trigger is active at S0/D0.",
+      "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+    ]
+  }
+}

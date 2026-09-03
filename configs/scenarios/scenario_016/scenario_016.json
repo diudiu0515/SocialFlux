@@ -1,0 +1,210 @@
+{
+  "scenario_id": "IA_PIPE_016",
+  "title": "社区餐馆改造前夜的运营冲突",
+  "mechanism": "grief, expertise, and informal authority in a failing workplace",
+  "source": {
+    "type": "narrative-derived",
+    "provenance_id": "screen-structure-016",
+    "surface_text_policy": "original_surface_text",
+    "redistribution_status": "transformed_structural_abstraction",
+    "provenance_note": "High-level social mechanism inspired by The Bear (television); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+  },
+  "narrative_design": {
+    "relationship_structure": "共同承担遗产压力的亲属与工作搭档",
+    "power_structure": "主厨拥有专业方案和最终菜单权；运营负责人掌握员工信任、供应商关系和日常现金流",
+    "goal_conflict": "主厨要按专业标准完成改造；运营负责人要避免团队和现金流在转型中崩溃",
+    "information_asymmetry": "主厨没有公开一笔即将到期的设备款；运营负责人隐瞒两名老员工准备离职",
+    "relevant_history": [
+      "两人都把餐馆与已故亲人的期待联系在一起",
+      "一次公开训斥让后厨团队分裂",
+      "此前的临时改进曾因缺少执行计划失败"
+    ],
+    "meaningful_choice_space": [
+      "把开业目标拆成必须项与可延期项",
+      "先处理未公开的债务和人员风险",
+      "邀请员工代表参与调整工作流程"
+    ]
+  },
+  "construction_status": {
+    "normalization": "originalized_screen_structure_pending_human_review",
+    "initial_state": "candidate_pending_human_freeze",
+    "quality_gate": "pending_human_review"
+  },
+  "quality_gate": {
+    "social_plausibility": "pending",
+    "real_tradeoff": "pending",
+    "longitudinal_necessity": "pending",
+    "nontrivial_strategy_space": "pending",
+    "character_motivation_coherence": "pending",
+    "information_asymmetry": "pending",
+    "t1_suitability": "pending",
+    "t2_suitability": "pending",
+    "t3_suitability": "pending",
+    "t4_adaptation_opportunity": "pending",
+    "no_universal_script": "pending"
+  },
+  "background": "一家继承来的社区餐馆准备停业改造，但欠款、旧员工习惯和新菜单试运行同时失控。新任主厨与负责日常运营的表亲必须决定是否缩减开业计划。",
+  "environment_agent": {
+    "persona": {
+      "name": "唐越",
+      "role": "餐馆运营负责人",
+      "loyalty": 0.82,
+      "change_resistance": 0.66,
+      "grief_avoidance": 0.76,
+      "practicality": 0.8
+    },
+    "explicit_goal": "让餐馆和原团队在改造中继续生存",
+    "hidden_intention": "害怕新标准抹去已故亲人的痕迹，也害怕自己在专业化后变得多余"
+  },
+  "evaluated_agent_role": {
+    "character_id": "EVALUATED_AGENT",
+    "name": "新任主厨",
+    "explicit_goal": "建立可持续的专业流程，同时保住现金流和团队合作"
+  },
+  "selected_state_variables": {
+    "emotion": [
+      "grief",
+      "frustration",
+      "panic"
+    ],
+    "motivation": [
+      "change_resistance",
+      "shared_ownership"
+    ],
+    "relationship": [
+      "family_trust",
+      "professional_respect"
+    ],
+    "dynamics": [
+      "cashflow_risk",
+      "team_breakdown_risk",
+      "coordination_open"
+    ]
+  },
+  "target_state_ids": [
+    "emotion.grief",
+    "motivation.shared_ownership",
+    "relationship.professional_respect",
+    "team_breakdown_risk"
+  ],
+  "initial_state": {
+    "emotion": {
+      "grief": 6,
+      "frustration": 5,
+      "panic": 3
+    },
+    "motivation": {
+      "change_resistance": 6,
+      "shared_ownership": 3
+    },
+    "relationship": {
+      "family_trust": 4,
+      "professional_respect": 3
+    }
+  },
+  "initial_dynamics": {
+    "cashflow_risk": 8,
+    "team_breakdown_risk": 6,
+    "coordination_open": 5
+  },
+  "opening_response": "你又改了明天的流程，可真正要留下来收拾残局的是我们这些人。",
+  "max_turns": 15,
+  "t3_delayed_horizon": 6,
+  "sampling_plan": {
+    "selection_strategy": "natural_trajectory_checkpoint_sampling",
+    "seed": 116,
+    "t1_max": 5,
+    "t2_max": 3,
+    "t3_max": 4
+  },
+  "observable_expression": {
+    "default": {
+      "facial_expression": "忙碌中压着疲惫和烦躁",
+      "gaze": "视线不断扫过工作区",
+      "speech_style": "说话夹杂具体运营细节",
+      "prosody": "节奏快，偶尔用玩笑缓冲",
+      "behavioral_cues": [
+        "很少直接谈悲伤"
+      ]
+    }
+  },
+  "media_generation": {
+    "stage": "structured_expression",
+    "default_media_type": "video",
+    "asset_status": "spec_only",
+    "asset_root": "media/talking_head",
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed."
+  },
+  "video_triggers": [
+    {
+      "trigger_id": "kitchen_overload",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.frustration": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "emotion.panic": {
+          "operator": ">=",
+          "threshold": 7
+        },
+        "team_breakdown_risk": {
+          "operator": ">=",
+          "threshold": 8
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "kitchen_overload",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "额头出汗，动作明显变急",
+        "gaze": "难以维持稳定眼神接触",
+        "speech_style": "同时追问多个执行问题",
+        "prosody": "音量升高，呼吸变快",
+        "behavioral_cues": [
+          "开始替别人完成手头动作"
+        ]
+      }
+    },
+    {
+      "trigger_id": "shared_grief_acknowledged",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.grief": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "motivation.shared_ownership": {
+          "operator": ">=",
+          "threshold": 7
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "shared_grief_acknowledged",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "动作停下来，表情不再用忙碌遮掩",
+        "gaze": "短暂看向旧物后回到对方",
+        "speech_style": "第一次直接谈共同失去的东西",
+        "prosody": "声音变轻且停顿明显",
+        "behavioral_cues": [
+          "愿意区分纪念与低效习惯"
+        ]
+      }
+    }
+  ],
+  "initialization_notes": {
+    "rationale": {
+      "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+      "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+    },
+    "trigger_reachability": [
+      "No threshold/crossing trigger is active at S0/D0.",
+      "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+    ]
+  }
+}

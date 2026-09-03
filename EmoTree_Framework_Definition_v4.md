@@ -36,7 +36,7 @@ Persona 不是 mutable state。S_t/D_t 使用 0–10 数值，但模型 state up
 
 来源至少包含 narrative-derived 与 synthetic-script 两类。
 
-Narrative-derived 只提取抽象社会结构：关系、权力、冲突目标、信息不对称、关键历史与选择空间。未经许可不得发布原作台词、人物、场景表面细节。
+Narrative-derived 先用 `narrative_structure_extraction_v1` 只提取抽象社会结构：关系、权力、冲突目标、信息不对称、关键历史与选择空间；随后必须换成全新的场域、人物、事件、利害关系与语言。不得复制原作台词、人物名、标志性物件/机构或情节序列，作品标题与媒介仅作为内部 provenance。结构抽取结果由 `narrative_structure.schema.json` 校验，再进入与 synthetic-script 相同的 quality gate。
 
 Synthetic-script 的模型先写连贯社会叙事，不同时考虑 JSON、S0/D0、阈值、T1/T2/T3 或答案。两类来源执行相同流程：
 
@@ -76,7 +76,8 @@ Appraisal 与 state update 是两个不同 prompt/call。Response 只能在更�
 
 所有固定 prompt 位于 `prompts/` 并登记 SHA-256。基本写法是 task-first、constraints/quality checks 居中、schema-last。职责边界：
 
-- scenario script：只负责社会叙事；
+- scenario script：只负责原创社会叙事；
+- narrative structure extraction：只抽象影视作品的社会机制并列出必须丢弃与必须原创化的元素；
 - source quality：只做归一化前质量判断；
 - normalization：只产 blueprint，不产 S0/D0；
 - initialization：只产候选 S0/D0、threshold 与 expression；
@@ -130,7 +131,7 @@ T4 让被测模型直接进入 canonical environment，自由输出行动。评�
 
 ## 14. Coverage 与发布
 
-10 个 scenario 应覆盖不同关系、权力、目标冲突、信息不对称、state 子集、trigger 类型与两类 source。Coverage matrix 不能用自动推断冒充真人结论。
+20 个 scenario 应覆盖不同关系、权力、目标冲突、信息不对称、state 子集、trigger 类型与两类 source。Coverage matrix 不能用自动推断冒充真人结论。
 
 正式发布前必须完成：scenario source/quality/S0 freeze、自然 rollout pool、九项验收、人类 ground truth、泄漏与 contamination audit、T4 judge validation、multimodal validity。代码能运行不等于 research acceptance。
 

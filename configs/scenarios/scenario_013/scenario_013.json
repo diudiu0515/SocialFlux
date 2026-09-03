@@ -1,0 +1,210 @@
+{
+  "scenario_id": "IA_PIPE_013",
+  "title": "事故复盘委员会的少数意见",
+  "mechanism": "group conformity versus evidence revision",
+  "source": {
+    "type": "narrative-derived",
+    "provenance_id": "screen-structure-013",
+    "surface_text_policy": "original_surface_text",
+    "redistribution_status": "transformed_structural_abstraction",
+    "provenance_note": "High-level social mechanism inspired by 12 Angry Men (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+  },
+  "narrative_design": {
+    "relationship_structure": "委员会主席与持少数意见的外部评审",
+    "power_structure": "主席控制议程、发言顺序和报告提交；评审拥有专业证据但没有组织表决权",
+    "goal_conflict": "主席要按时形成统一结论恢复公众信心；评审要延后定责并核验矛盾证据",
+    "information_asymmetry": "主席知道上级要求当晚发布；评审发现一份未进入摘要的维护记录",
+    "relevant_history": [
+      "委员会已经连续开会十小时",
+      "评审先前一次质疑被认为拖延流程",
+      "一名沉默成员曾私下表示结论证据不足"
+    ],
+    "meaningful_choice_space": [
+      "逐项重建证据链而不先争结论",
+      "要求沉默成员说明其保留意见",
+      "提出限定时间的复核而非无限延期"
+    ]
+  },
+  "construction_status": {
+    "normalization": "originalized_screen_structure_pending_human_review",
+    "initial_state": "candidate_pending_human_freeze",
+    "quality_gate": "pending_human_review"
+  },
+  "quality_gate": {
+    "social_plausibility": "pending",
+    "real_tradeoff": "pending",
+    "longitudinal_necessity": "pending",
+    "nontrivial_strategy_space": "pending",
+    "character_motivation_coherence": "pending",
+    "information_asymmetry": "pending",
+    "t1_suitability": "pending",
+    "t2_suitability": "pending",
+    "t3_suitability": "pending",
+    "t4_adaptation_opportunity": "pending",
+    "no_universal_script": "pending"
+  },
+  "background": "公共交通事故复盘委员会准备在当晚发布责任结论。多数成员倾向快速归因于一名操作员，外部技术评审认为关键传感记录仍有矛盾。",
+  "environment_agent": {
+    "persona": {
+      "name": "罗衡",
+      "role": "复盘委员会主席",
+      "certainty_need": 0.8,
+      "procedural_loyalty": 0.76,
+      "fatigue_sensitivity": 0.7,
+      "fairness": 0.55
+    },
+    "explicit_goal": "在截止前形成可公开、可执行的事故责任结论",
+    "hidden_intention": "担心承认证据不足会被视为失去领导力并触发上级问责"
+  },
+  "evaluated_agent_role": {
+    "character_id": "EVALUATED_AGENT",
+    "name": "外部技术评审",
+    "explicit_goal": "阻止证据不足的定责，同时提出有时限、可执行的核验路径"
+  },
+  "selected_state_variables": {
+    "emotion": [
+      "frustration",
+      "uncertainty",
+      "moral_concern"
+    ],
+    "motivation": [
+      "certainty_seeking",
+      "evidence_openness"
+    ],
+    "relationship": [
+      "credibility_trust",
+      "antagonism"
+    ],
+    "dynamics": [
+      "consensus_pressure",
+      "decision_error_risk",
+      "deliberation_open"
+    ]
+  },
+  "target_state_ids": [
+    "emotion.uncertainty",
+    "motivation.evidence_openness",
+    "relationship.credibility_trust",
+    "decision_error_risk"
+  ],
+  "initial_state": {
+    "emotion": {
+      "frustration": 5,
+      "uncertainty": 3,
+      "moral_concern": 5
+    },
+    "motivation": {
+      "certainty_seeking": 7,
+      "evidence_openness": 4
+    },
+    "relationship": {
+      "credibility_trust": 5,
+      "antagonism": 3
+    }
+  },
+  "initial_dynamics": {
+    "consensus_pressure": 8,
+    "decision_error_risk": 6,
+    "deliberation_open": 4
+  },
+  "opening_response": "你的异议已经记录了，现在委员会需要的是结论，不是再开一轮调查。",
+  "max_turns": 13,
+  "t3_delayed_horizon": 5,
+  "sampling_plan": {
+    "selection_strategy": "natural_trajectory_checkpoint_sampling",
+    "seed": 113,
+    "t1_max": 5,
+    "t2_max": 3,
+    "t3_max": 4
+  },
+  "observable_expression": {
+    "default": {
+      "facial_expression": "眉头紧锁，显出长时间会议后的疲劳",
+      "gaze": "先看报告再看发言者",
+      "speech_style": "倾向用程序和时间约束回应",
+      "prosody": "语气正式而不耐",
+      "behavioral_cues": [
+        "发言后立即推动表决"
+      ]
+    }
+  },
+  "media_generation": {
+    "stage": "structured_expression",
+    "default_media_type": "video",
+    "asset_status": "spec_only",
+    "asset_root": "media/talking_head",
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed."
+  },
+  "video_triggers": [
+    {
+      "trigger_id": "consensus_lock",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "motivation.certainty_seeking": {
+          "operator": ">=",
+          "threshold": 9
+        },
+        "relationship.antagonism": {
+          "operator": ">=",
+          "threshold": 7
+        },
+        "consensus_pressure": {
+          "operator": ">=",
+          "threshold": 9
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "consensus_lock",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "双眉压低，面部动作减少",
+        "gaze": "不再环视其他委员",
+        "speech_style": "只接受是或否的短答",
+        "prosody": "语调平直而封闭",
+        "behavioral_cues": [
+          "把文件合上准备结束讨论"
+        ]
+      }
+    },
+    {
+      "trigger_id": "evidence_reconsideration",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "motivation.evidence_openness": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "deliberation_open": {
+          "operator": ">=",
+          "threshold": 7
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "evidence_reconsideration",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "眉头松开并重新翻开记录",
+        "gaze": "视线停在新证据上",
+        "speech_style": "开始提出可证伪的问题",
+        "prosody": "语速放慢并允许插入说明",
+        "behavioral_cues": [
+          "主动调整原定表决顺序"
+        ]
+      }
+    }
+  ],
+  "initialization_notes": {
+    "rationale": {
+      "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+      "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+    },
+    "trigger_reachability": [
+      "No threshold/crossing trigger is active at S0/D0.",
+      "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+    ]
+  }
+}

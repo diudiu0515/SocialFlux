@@ -34,6 +34,50 @@ class ScenarioCreationSmokeTest(unittest.TestCase):
             "seed": 7,
         }
 
+    def test_narrative_structure_extraction_contract(self):
+        structure = {
+            "source_work": {"title": "Example Work", "medium": "film"},
+            "abstract_mechanism": "authority under incomplete evidence",
+            "relationship_structure": "expert adviser and accountable decision maker",
+            "power_structure": "one controls action while the other controls interpretation",
+            "goal_conflict": "speed conflicts with evidentiary confidence",
+            "information_asymmetry": "each party holds different operational facts",
+            "longitudinal_dependency": [
+                "an earlier warning changed trust",
+                "a delayed disclosure changes later interpretations",
+            ],
+            "adaptation_boundaries": [
+                "confidence must be calibrated over time",
+                "neither total compliance nor refusal always succeeds",
+            ],
+            "elements_to_discard": [
+                "character names", "dialogue", "distinctive objects", "plot sequence",
+            ],
+            "originalization_requirements": [
+                "new setting", "new characters", "new events", "new stakes",
+            ],
+            "redistribution_policy": "structural_abstraction_only_original_surface_text",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            request = root / "request.json"
+            request.write_text(
+                json.dumps({"title": "Example Work", "medium": "film"}),
+                encoding="utf-8",
+            )
+            output = root / "structure.json"
+            args = SimpleNamespace(**self._common(request, output))
+            with patch.object(
+                scenario_sources,
+                "_provider",
+                return_value=StaticProvider(structure),
+            ):
+                scenario_sources.extract_structure(args)
+            self.assertEqual(
+                json.loads(output.read_text(encoding="utf-8")),
+                structure,
+            )
+
     def test_quality_normalization_initialization_sequence(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

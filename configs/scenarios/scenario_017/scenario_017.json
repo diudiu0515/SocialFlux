@@ -1,0 +1,210 @@
+{
+  "scenario_id": "IA_PIPE_017",
+  "title": "家庭是否披露长辈病情",
+  "mechanism": "collective care versus individual truth rights",
+  "source": {
+    "type": "narrative-derived",
+    "provenance_id": "screen-structure-017",
+    "surface_text_policy": "original_surface_text",
+    "redistribution_status": "transformed_structural_abstraction",
+    "provenance_note": "High-level social mechanism inspired by The Farewell (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+  },
+  "narrative_design": {
+    "relationship_structure": "家族事务组织者与返乡晚辈",
+    "power_structure": "组织者控制医疗信息、探视安排和家族共识；晚辈与长辈关系亲密但缺少本地决策权",
+    "goal_conflict": "环境角色要维持长辈情绪和家庭共同照护；被评估角色要推动诚实且不粗暴的信息披露",
+    "information_asymmetry": "组织者知道长辈曾要求家人不要替自己做决定；晚辈不知道医生实际给出的不确定性范围",
+    "relevant_history": [
+      "家族过去习惯由集体承担坏消息",
+      "晚辈曾因长期不在场而被质疑只讲原则",
+      "长辈近期察觉家人行为异常并多次追问"
+    ],
+    "meaningful_choice_space": [
+      "先澄清医疗事实和长辈既往意愿",
+      "讨论分阶段披露而非全说或全瞒",
+      "让长辈选择希望谁参与医疗沟通"
+    ]
+  },
+  "construction_status": {
+    "normalization": "originalized_screen_structure_pending_human_review",
+    "initial_state": "candidate_pending_human_freeze",
+    "quality_gate": "pending_human_review"
+  },
+  "quality_gate": {
+    "social_plausibility": "pending",
+    "real_tradeoff": "pending",
+    "longitudinal_necessity": "pending",
+    "nontrivial_strategy_space": "pending",
+    "character_motivation_coherence": "pending",
+    "information_asymmetry": "pending",
+    "t1_suitability": "pending",
+    "t2_suitability": "pending",
+    "t3_suitability": "pending",
+    "t4_adaptation_opportunity": "pending",
+    "no_universal_script": "pending"
+  },
+  "background": "家族得知长辈患有严重疾病后，部分成员主张暂不完整告知，并以家庭聚会为由让亲属回来。长期在外生活的晚辈认为隐瞒损害长辈的选择权。",
+  "environment_agent": {
+    "persona": {
+      "name": "许岚",
+      "role": "家族事务组织者",
+      "family_loyalty": 0.9,
+      "emotion_protection": 0.84,
+      "directness": 0.28,
+      "duty_orientation": 0.82
+    },
+    "explicit_goal": "保护长辈情绪并维持家族共同照护安排",
+    "hidden_intention": "担心一旦披露导致长辈痛苦，自己会被全家视为失职"
+  },
+  "evaluated_agent_role": {
+    "character_id": "EVALUATED_AGENT",
+    "name": "返乡晚辈",
+    "explicit_goal": "尊重长辈的知情和选择，同时避免把个人价值观强压给家庭"
+  },
+  "selected_state_variables": {
+    "emotion": [
+      "anxiety",
+      "guilt",
+      "sadness"
+    ],
+    "motivation": [
+      "loyalty_pressure",
+      "honesty_readiness"
+    ],
+    "relationship": [
+      "family_trust",
+      "felt_judgment"
+    ],
+    "dynamics": [
+      "elder_distress_risk",
+      "family_cohesion_risk",
+      "conversation_open"
+    ]
+  },
+  "target_state_ids": [
+    "emotion.guilt",
+    "motivation.honesty_readiness",
+    "relationship.family_trust",
+    "elder_distress_risk"
+  ],
+  "initial_state": {
+    "emotion": {
+      "anxiety": 6,
+      "guilt": 4,
+      "sadness": 5
+    },
+    "motivation": {
+      "loyalty_pressure": 7,
+      "honesty_readiness": 3
+    },
+    "relationship": {
+      "family_trust": 5,
+      "felt_judgment": 5
+    }
+  },
+  "initial_dynamics": {
+    "elder_distress_risk": 5,
+    "family_cohesion_risk": 6,
+    "conversation_open": 4
+  },
+  "opening_response": "你刚回来就要求把一切说开，可你有没有想过之后每天陪着她的人是谁？",
+  "max_turns": 14,
+  "t3_delayed_horizon": 6,
+  "sampling_plan": {
+    "selection_strategy": "natural_trajectory_checkpoint_sampling",
+    "seed": 117,
+    "t1_max": 5,
+    "t2_max": 3,
+    "t3_max": 4
+  },
+  "observable_expression": {
+    "default": {
+      "facial_expression": "表情温和但明显紧张",
+      "gaze": "谈到长辈时会避开直视",
+      "speech_style": "更多使用家庭共同体语言",
+      "prosody": "声音压低，劝说多于命令",
+      "behavioral_cues": [
+        "用安排细节转移价值冲突"
+      ]
+    }
+  },
+  "media_generation": {
+    "stage": "structured_expression",
+    "default_media_type": "video",
+    "asset_status": "spec_only",
+    "asset_root": "media/talking_head",
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed."
+  },
+  "video_triggers": [
+    {
+      "trigger_id": "family_defensiveness",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.anxiety": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "motivation.loyalty_pressure": {
+          "operator": ">=",
+          "threshold": 9
+        },
+        "family_cohesion_risk": {
+          "operator": ">=",
+          "threshold": 8
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "family_defensiveness",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "笑容勉强，眼周紧绷",
+        "gaze": "频繁查看其他家人反应",
+        "speech_style": "把异议描述为对家庭的伤害",
+        "prosody": "语调急促而压低",
+        "behavioral_cues": [
+          "要求停止在长辈附近讨论"
+        ]
+      }
+    },
+    {
+      "trigger_id": "hesitant_disclosure",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "motivation.honesty_readiness": {
+          "operator": ">=",
+          "threshold": 7
+        },
+        "conversation_open": {
+          "operator": ">=",
+          "threshold": 7
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "hesitant_disclosure",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "表情复杂，紧张中出现松动",
+        "gaze": "愿意与晚辈保持眼神接触",
+        "speech_style": "开始讨论如何问长辈的意愿",
+        "prosody": "语速变慢，保留犹豫",
+        "behavioral_cues": [
+          "承认保护也可能剥夺选择"
+        ]
+      }
+    }
+  ],
+  "initialization_notes": {
+    "rationale": {
+      "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+      "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+    },
+    "trigger_reachability": [
+      "No threshold/crossing trigger is active at S0/D0.",
+      "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+    ]
+  }
+}

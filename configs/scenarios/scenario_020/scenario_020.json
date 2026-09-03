@@ -1,0 +1,210 @@
+{
+  "scenario_id": "IA_PIPE_020",
+  "title": "公益法律中心的保密和解",
+  "mechanism": "professional loyalty versus client-centered ethics",
+  "source": {
+    "type": "narrative-derived",
+    "provenance_id": "screen-structure-020",
+    "surface_text_policy": "original_surface_text",
+    "redistribution_status": "transformed_structural_abstraction",
+    "provenance_note": "High-level social mechanism inspired by Better Call Saul (television); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+  },
+  "narrative_design": {
+    "relationship_structure": "资深督导律师与初级承办律师",
+    "power_structure": "督导控制案件分配、职业推荐和和解签署；初级律师掌握当事人沟通记录并直接承担告知义务",
+    "goal_conflict": "环境角色要用和解资金维持中心和多数案件；被评估角色要确保受影响当事人充分知情并保留选择",
+    "information_asymmetry": "环境角色知道若错过截止中心可能裁员；被评估角色知道一名关键当事人明确拒绝被统一代表",
+    "relevant_history": [
+      "督导曾为保护团队替初级律师承担程序失误",
+      "初级律师曾承诺不会绕过当事人同意",
+      "资助方把本案结果与下一年度拨款绑定"
+    ],
+    "meaningful_choice_space": [
+      "提出按当事人风险分组而非一刀切和解",
+      "明确资金压力与告知义务的边界",
+      "寻求独立伦理审查并争取短期延期"
+    ]
+  },
+  "construction_status": {
+    "normalization": "originalized_screen_structure_pending_human_review",
+    "initial_state": "candidate_pending_human_freeze",
+    "quality_gate": "pending_human_review"
+  },
+  "quality_gate": {
+    "social_plausibility": "pending",
+    "real_tradeoff": "pending",
+    "longitudinal_necessity": "pending",
+    "nontrivial_strategy_space": "pending",
+    "character_motivation_coherence": "pending",
+    "information_asymmetry": "pending",
+    "t1_suitability": "pending",
+    "t2_suitability": "pending",
+    "t3_suitability": "pending",
+    "t4_adaptation_opportunity": "pending",
+    "no_universal_script": "pending"
+  },
+  "background": "公益法律中心准备接受一项能缓解资金危机的批量和解，但初级律师发现条款可能限制部分当事人的后续权利。负责中心生存的资深律师要求在截止前统一立场。",
+  "environment_agent": {
+    "persona": {
+      "name": "韩知远",
+      "role": "公益法律中心督导律师",
+      "institutional_loyalty": 0.86,
+      "pragmatism": 0.84,
+      "mentoring_attachment": 0.62,
+      "rule_flexibility": 0.68
+    },
+    "explicit_goal": "在截止前完成可维持中心运转的和解",
+    "hidden_intention": "担心拒绝和解会让整个团队失业，也害怕承认自己把机构生存放在个别当事人之前"
+  },
+  "evaluated_agent_role": {
+    "character_id": "EVALUATED_AGENT",
+    "name": "初级承办律师",
+    "explicit_goal": "保护当事人的知情与选择，同时提出不让中心立即失去运转能力的替代路径"
+  },
+  "selected_state_variables": {
+    "emotion": [
+      "guilt",
+      "anxiety",
+      "disappointment"
+    ],
+    "motivation": [
+      "institutional_loyalty",
+      "moral_resolve"
+    ],
+    "relationship": [
+      "mentor_trust",
+      "professional_safety"
+    ],
+    "dynamics": [
+      "client_harm_risk",
+      "funding_collapse_risk",
+      "negotiation_open"
+    ]
+  },
+  "target_state_ids": [
+    "emotion.guilt",
+    "motivation.moral_resolve",
+    "relationship.mentor_trust",
+    "client_harm_risk"
+  ],
+  "initial_state": {
+    "emotion": {
+      "guilt": 4,
+      "anxiety": 6,
+      "disappointment": 3
+    },
+    "motivation": {
+      "institutional_loyalty": 7,
+      "moral_resolve": 5
+    },
+    "relationship": {
+      "mentor_trust": 6,
+      "professional_safety": 4
+    }
+  },
+  "initial_dynamics": {
+    "client_harm_risk": 7,
+    "funding_collapse_risk": 8,
+    "negotiation_open": 5
+  },
+  "opening_response": "我理解你的顾虑，但如果今晚不签，明天需要解释的不只是这几个条款，而是为什么整个中心发不出工资。",
+  "max_turns": 14,
+  "t3_delayed_horizon": 6,
+  "sampling_plan": {
+    "selection_strategy": "natural_trajectory_checkpoint_sampling",
+    "seed": 120,
+    "t1_max": 5,
+    "t2_max": 3,
+    "t3_max": 4
+  },
+  "observable_expression": {
+    "default": {
+      "facial_expression": "神情疲惫但努力保持指导者姿态",
+      "gaze": "谈到机构时保持直接注视",
+      "speech_style": "把伦理问题放进资源约束中讨论",
+      "prosody": "语调耐心，关键期限处变得坚决",
+      "behavioral_cues": [
+        "偶尔以过往帮助提醒彼此关系"
+      ]
+    }
+  },
+  "media_generation": {
+    "stage": "structured_expression",
+    "default_media_type": "video",
+    "asset_status": "spec_only",
+    "asset_root": "media/talking_head",
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed."
+  },
+  "video_triggers": [
+    {
+      "trigger_id": "ethical_withdrawal",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.guilt": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "relationship.professional_safety": {
+          "operator": "<=",
+          "threshold": 2
+        },
+        "client_harm_risk": {
+          "operator": ">=",
+          "threshold": 9
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "ethical_withdrawal",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "眼神回避，表情显出沉重",
+        "gaze": "开始整理文件而减少对视",
+        "speech_style": "用程序结束替代价值讨论",
+        "prosody": "声音变低，句子变短",
+        "behavioral_cues": [
+          "暗示将案件交给他人处理"
+        ]
+      }
+    },
+    {
+      "trigger_id": "principled_reengagement",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "motivation.moral_resolve": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "negotiation_open": {
+          "operator": ">=",
+          "threshold": 7
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "principled_reengagement",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "疲惫中恢复专注",
+        "gaze": "重新看向当事人记录",
+        "speech_style": "主动比较分组方案的代价",
+        "prosody": "语调务实且不再压制异议",
+        "behavioral_cues": [
+          "同意把伦理审查写入时间表"
+        ]
+      }
+    }
+  ],
+  "initialization_notes": {
+    "rationale": {
+      "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+      "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+    },
+    "trigger_reachability": [
+      "No threshold/crossing trigger is active at S0/D0.",
+      "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+    ]
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "scenario_id": "IA_PIPE_018",
+  "title": "未知信号事件中的解释权",
+  "mechanism": "cross-domain trust under radical uncertainty",
+  "source": {
+    "type": "narrative-derived",
+    "provenance_id": "screen-structure-018",
+    "surface_text_policy": "original_surface_text",
+    "redistribution_status": "transformed_structural_abstraction",
+    "provenance_note": "High-level social mechanism inspired by Arrival (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+  },
+  "narrative_design": {
+    "relationship_structure": "临时征召的语言研究员与安全指挥官",
+    "power_structure": "指挥官控制接触权限、数据发布和行动节奏；研究员掌握解释方法但无法单独验证对方意图",
+    "goal_conflict": "指挥官要在时间压力下形成可执行威胁判断；研究员要保留语境并避免把未知直接解释为敌意",
+    "information_asymmetry": "指挥官掌握其他地区的未公开警报；研究员发现关键符号的时间含义可能与线性指令不同",
+    "relevant_history": [
+      "一次机器翻译把模糊信号误报为命令",
+      "研究员先前要求延长观察窗口被拒绝",
+      "不同地区的数据共享正在中断"
+    ],
+    "meaningful_choice_space": [
+      "展示不同解释各自依赖的假设",
+      "设计低风险可逆的澄清信号",
+      "提出共享原始数据而非只交换结论"
+    ]
+  },
+  "construction_status": {
+    "normalization": "originalized_screen_structure_pending_human_review",
+    "initial_state": "candidate_pending_human_freeze",
+    "quality_gate": "pending_human_review"
+  },
+  "quality_gate": {
+    "social_plausibility": "pending",
+    "real_tradeoff": "pending",
+    "longitudinal_necessity": "pending",
+    "nontrivial_strategy_space": "pending",
+    "character_motivation_coherence": "pending",
+    "information_asymmetry": "pending",
+    "t1_suitability": "pending",
+    "t2_suitability": "pending",
+    "t3_suitability": "pending",
+    "t4_adaptation_opportunity": "pending",
+    "no_universal_script": "pending"
+  },
+  "background": "沿海观测站收到无法解释的重复信号。语言研究员认为信号具有协商结构，安全指挥官担心延误会让其他地区率先采取敌对行动。",
+  "environment_agent": {
+    "persona": {
+      "name": "秦峥",
+      "role": "联合安全指挥官",
+      "threat_sensitivity": 0.86,
+      "discipline": 0.82,
+      "curiosity": 0.42,
+      "loss_aversion": 0.78
+    },
+    "explicit_goal": "在信息窗口关闭前形成可执行的安全响应",
+    "hidden_intention": "害怕因等待而承担不可逆后果，也不愿暴露其他地区已经接近失控"
+  },
+  "evaluated_agent_role": {
+    "character_id": "EVALUATED_AGENT",
+    "name": "语言研究员",
+    "explicit_goal": "争取足够语境完成可靠解释，并提出可逆、可协调的安全行动"
+  },
+  "selected_state_variables": {
+    "emotion": [
+      "threat_alert",
+      "uncertainty",
+      "curiosity"
+    ],
+    "motivation": [
+      "action_urgency",
+      "interpretive_patience"
+    ],
+    "relationship": [
+      "expert_trust",
+      "distrust"
+    ],
+    "dynamics": [
+      "crisis_escalation_risk",
+      "data_fragmentation_risk",
+      "coordination_open"
+    ]
+  },
+  "target_state_ids": [
+    "emotion.uncertainty",
+    "emotion.curiosity",
+    "relationship.expert_trust",
+    "crisis_escalation_risk"
+  ],
+  "initial_state": {
+    "emotion": {
+      "threat_alert": 6,
+      "uncertainty": 5,
+      "curiosity": 4
+    },
+    "motivation": {
+      "action_urgency": 7,
+      "interpretive_patience": 3
+    },
+    "relationship": {
+      "expert_trust": 4,
+      "distrust": 4
+    }
+  },
+  "initial_dynamics": {
+    "crisis_escalation_risk": 7,
+    "data_fragmentation_risk": 6,
+    "coordination_open": 5
+  },
+  "opening_response": "其他地区正在中断联络，你需要给我一个能行动的解释，而不是更多可能性。",
+  "max_turns": 13,
+  "t3_delayed_horizon": 5,
+  "sampling_plan": {
+    "selection_strategy": "natural_trajectory_checkpoint_sampling",
+    "seed": 118,
+    "t1_max": 5,
+    "t2_max": 3,
+    "t3_max": 4
+  },
+  "observable_expression": {
+    "default": {
+      "facial_expression": "身体保持高度警觉",
+      "gaze": "注视研究员时很少移开",
+      "speech_style": "持续要求概率、时间和行动含义",
+      "prosody": "语气简洁，容忍停顿较低",
+      "behavioral_cues": [
+        "收到新消息时会立刻收紧讨论"
+      ]
+    }
+  },
+  "media_generation": {
+    "stage": "structured_expression",
+    "default_media_type": "video",
+    "asset_status": "spec_only",
+    "asset_root": "media/talking_head",
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed."
+  },
+  "video_triggers": [
+    {
+      "trigger_id": "security_shutdown",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.threat_alert": {
+          "operator": ">=",
+          "threshold": 9
+        },
+        "relationship.distrust": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "crisis_escalation_risk": {
+          "operator": ">=",
+          "threshold": 9
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "security_shutdown",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "表情凝固，身体前倾",
+        "gaze": "视线固定且不再看数据细节",
+        "speech_style": "只允许回答行动相关问题",
+        "prosody": "语调快速而命令化",
+        "behavioral_cues": [
+          "示意人员准备终止接触"
+        ]
+      }
+    },
+    {
+      "trigger_id": "cautious_curiosity",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.curiosity": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "relationship.expert_trust": {
+          "operator": ">=",
+          "threshold": 7
+        },
+        "coordination_open": {
+          "operator": ">=",
+          "threshold": 7
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "cautious_curiosity",
+      "duration_seconds": 5,
+      "media_asset_id": null,
+      "observable_expression": {
+        "facial_expression": "警觉仍在但眉间张力减弱",
+        "gaze": "在符号与研究员之间来回确认",
+        "speech_style": "开始询问解释方法而非只要结论",
+        "prosody": "语速放慢，允许思考停顿",
+        "behavioral_cues": [
+          "批准一次可逆的澄清尝试"
+        ]
+      }
+    }
+  ],
+  "initialization_notes": {
+    "rationale": {
+      "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+      "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+    },
+    "trigger_reachability": [
+      "No threshold/crossing trigger is active at S0/D0.",
+      "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+    ]
+  }
+}

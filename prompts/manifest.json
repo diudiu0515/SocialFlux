@@ -23,7 +23,7 @@
     },
     "initial_state_configuration_v1": {
       "path": "initial_state_configuration_v1.md",
-      "sha256": "586949c616d509fc47efb0b91f6a30314d2a2000a85c5ff93c2d3f6fda34f6d6",
+      "sha256": "9ab4aca6554ea3f76328095feb4dfe8d3f3ff116a3711de1d1e52df8a860d4d8",
       "version": "v1"
     },
     "local_intervention_validation_v1": {
@@ -36,6 +36,11 @@
       "sha256": "80eaf0c24c76b50f1fc9f46b9f60bf3b23b611fe6a3671994fe897bed8530fcc",
       "version": "v2"
     },
+    "narrative_structure_extraction_v1": {
+      "path": "narrative_structure_extraction_v1.md",
+      "sha256": "4cef0d200fda9473610e080e83130c2c6ef9f526d2771146e7f78389a81b7c09",
+      "version": "v1"
+    },
     "observable_expression_v1": {
       "path": "observable_expression_v1.md",
       "sha256": "8076fe86343bafb8cf1f86fb351f0c7ce5232d6023a29556f952d4ac886ff964",
@@ -43,17 +48,17 @@
     },
     "scenario_normalization_v1": {
       "path": "scenario_normalization_v1.md",
-      "sha256": "ad1799528344b78f3f58af9d3b2e778dc638998553823979008840c91f071e41",
+      "sha256": "5992ae70c6e709f6cc466dad7e89ca1109f7fcf726b64bec5c891685a91883a0",
       "version": "v1"
     },
     "scenario_quality_gate_v1": {
       "path": "scenario_quality_gate_v1.md",
-      "sha256": "29883c23211475a8acd5c5a6e02e773e05e509acbb44396c77e230d3daeeb5a9",
+      "sha256": "29f91412124c19ccb15334d4ee8141922d2d614c2510c0343889d116bc2463a5",
       "version": "v1"
     },
     "scenario_script_generation_v1": {
       "path": "scenario_script_generation_v1.md",
-      "sha256": "4de5dd2acbd62b10b117d0bda27fb3a23c9417cbd392ae6627cf66e5f14b240e",
+      "sha256": "d90673b1c7d3bdd6085b18abb61e12d6cc21ea7d6ad6cf4ea214b5627ebe6877",
       "version": "v1"
     },
     "state_update_v1": {

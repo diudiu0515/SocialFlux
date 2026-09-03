@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_001`
 - 配对 JSON：`scenario_001.json`
-- JSON SHA-256：`d05929c247522d98b5e14a1e8bf74d61312f9923eb2e76d46238410d6bc7b493`
+- JSON SHA-256：`819ad6203caaaee56b9517e7ce427a03be537f55cb6fedc71500955d2bc79382`
 - 社会机制：institutional resource control
 - 来源类型：`narrative-derived`
 - Provenance ID：`SF-SRC-001`
@@ -70,6 +70,16 @@
 | 目标失败风险 (`goal_failure_risk`) | 3 |
 | 冲突升级风险 (`escalation_risk`) | 2 |
 | 协商开放度 (`negotiation_open`) | 5 |
+
+### 初始化依据
+
+- migration：These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.
+- state_selection：Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed.
+
+### Trigger 可达性
+
+- No configured trigger is active at S0/D0.
+- Threshold reachability within the episode remains pending human review.
 
 ### 重点预测状态
 

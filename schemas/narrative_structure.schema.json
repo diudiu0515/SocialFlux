@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socialflux.example/schemas/narrative-structure-v1.json",
+  "title": "SocialFlux Narrative-Derived Source Structure",
+  "type": "object",
+  "required": [
+    "source_work", "abstract_mechanism", "relationship_structure",
+    "power_structure", "goal_conflict", "information_asymmetry",
+    "longitudinal_dependency", "adaptation_boundaries",
+    "elements_to_discard", "originalization_requirements",
+    "redistribution_policy"
+  ],
+  "properties": {
+    "source_work": {
+      "type": "object",
+      "required": ["title", "medium"],
+      "properties": {
+        "title": {"type": "string", "minLength": 1},
+        "medium": {"enum": ["film", "television"]}
+      },
+      "additionalProperties": false
+    },
+    "abstract_mechanism": {"type": "string", "minLength": 1},
+    "relationship_structure": {"type": "string", "minLength": 1},
+    "power_structure": {"type": "string", "minLength": 1},
+    "goal_conflict": {"type": "string", "minLength": 1},
+    "information_asymmetry": {"type": "string", "minLength": 1},
+    "longitudinal_dependency": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 1}},
+    "adaptation_boundaries": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 1}},
+    "elements_to_discard": {"type": "array", "minItems": 4, "items": {"type": "string", "minLength": 1}},
+    "originalization_requirements": {"type": "array", "minItems": 4, "items": {"type": "string", "minLength": 1}},
+    "redistribution_policy": {"const": "structural_abstraction_only_original_surface_text"}
+  },
+  "additionalProperties": false
+}

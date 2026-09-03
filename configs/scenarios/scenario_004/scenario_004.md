@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_004`
 - 配对 JSON：`scenario_004.json`
-- JSON SHA-256：`3a5fc329d567cb1bb41afd25cf8f1fb6cac71661d37d9a55c49fd5838878bf11`
+- JSON SHA-256：`8ddb8e62f733e8c013da00086193276a28093767be28bd6d7d65cae87e3564ec`
 - 社会机制：intimate obligation
 - 来源类型：`synthetic-script`
 - Provenance ID：`SF-SRC-004`
@@ -70,6 +70,16 @@
 | 目标失败风险 (`goal_failure_risk`) | 6 |
 | 冲突升级风险 (`escalation_risk`) | 2 |
 | 协商开放度 (`negotiation_open`) | 5 |
+
+### 初始化依据
+
+- migration：These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.
+- state_selection：Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed.
+
+### Trigger 可达性
+
+- No configured trigger is active at S0/D0.
+- Threshold reachability within the episode remains pending human review.
 
 ### 重点预测状态
 

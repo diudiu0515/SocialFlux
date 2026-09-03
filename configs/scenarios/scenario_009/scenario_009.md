@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_009`
 - 配对 JSON：`scenario_009.json`
-- JSON SHA-256：`13ab0cbc61b75d45b549fbd70b6b8b6ced7641eb96ad308540dccc0b080a96c7`
+- JSON SHA-256：`0bf559fa95674066be74b6ec07dbf8da1afe15dce3190074bd63a12bec86ead9`
 - 社会机制：peer collaboration
 - 来源类型：`narrative-derived`
 - Provenance ID：`SF-SRC-009`
@@ -70,6 +70,16 @@
 | 目标失败风险 (`goal_failure_risk`) | 3 |
 | 冲突升级风险 (`escalation_risk`) | 4 |
 | 协商开放度 (`negotiation_open`) | 5 |
+
+### 初始化依据
+
+- migration：These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.
+- state_selection：Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed.
+
+### Trigger 可达性
+
+- No configured trigger is active at S0/D0.
+- Threshold reachability within the episode remains pending human review.
 
 ### 重点预测状态
 

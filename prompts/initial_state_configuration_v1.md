@@ -7,6 +7,8 @@ Inputs: approved normalized persona, background, goals, hidden intention, select
 Constraints:
 
 - initialize only selected variables on the 0–10 scale;
+- use scenario-specific variables and values; never copy a default state bundle or trigger pair across unrelated scenarios;
+- derive expression and trigger concepts from this scenario’s distinctive social mechanism, not from a generic anger/withdrawal template;
 - persona traits remain stable context, never state;
 - values must follow from persona + background + goals + hidden intention + initial situation;
 - avoid unjustified extremes and leave room for multiple natural trajectories;

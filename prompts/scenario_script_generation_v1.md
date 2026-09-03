@@ -12,7 +12,9 @@ Focus only on narrative quality:
 - create a real trade-off and multiple meaningful choices;
 - make later interpretation depend on earlier interaction;
 - avoid one universally optimal scripted response;
-- use original characters, setting, events, and dialogue.
+- use original characters, setting, events, and dialogue;
+- vary domain, relationship, temporal structure, stakes, and opening conditions instead of reusing a generic confrontation template;
+- allow ambiguity, mixed motives, delayed disclosure, silence, practical constraints, and asymmetric options where the mechanism supports them.
 
 Do not mention JSON schema, latent state variables, S0/D0, video thresholds, benchmark tasks, or sampling. Return a coherent narrative script in Markdown.
 

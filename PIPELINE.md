@@ -2,7 +2,7 @@
 
 ## 1. 创建 scenario
 
-Synthetic 来源先从 brief 生成自然剧本；narrative-derived 来源直接准备抽象社会结构文本。不要复制无授权台词或表面内容。
+Synthetic 来源先从 brief 生成原创自然剧本：
 
 ```bash
 python scripts/scenario_sources.py generate-script \
@@ -10,13 +10,21 @@ python scripts/scenario_sources.py generate-script \
   --output build/scenario_work/script.md
 ```
 
-两类来源都先经过质量门：
+Narrative-derived 来源先提交只含作品标题、媒介和分析目标的 JSON 请求，再抽取高层社会机制：
+
+```bash
+python scripts/scenario_sources.py extract-structure \
+  --input source_request.json --provider-config provider.local.json \
+  --output build/scenario_work/structure.json
+```
+
+结构抽取必须丢弃原作角色、台词、标志性物件/机构及情节序列，并要求新场域、新人物、新事件、新 stakes 与原创语言。两类来源都先经过质量门；下面以 narrative-derived 为例：
 
 ```bash
 python scripts/scenario_sources.py quality-check \
-  --input build/scenario_work/script.md \
-  --source-type synthetic-script \
-  --provenance-id internal-script-011 \
+  --input build/scenario_work/structure.json \
+  --source-type narrative-derived \
+  --provenance-id screen-structure-021 \
   --provider-config provider.local.json \
   --output build/scenario_work/quality.json
 ```
@@ -25,10 +33,10 @@ python scripts/scenario_sources.py quality-check \
 
 ```bash
 python scripts/scenario_sources.py normalize \
-  --input build/scenario_work/script.md \
+  --input build/scenario_work/structure.json \
   --quality-report build/scenario_work/quality.json \
-  --source-type synthetic-script \
-  --provenance-id internal-script-011 \
+  --source-type narrative-derived \
+  --provenance-id screen-structure-021 \
   --provider-config provider.local.json \
   --output build/scenario_work/blueprint.json
 ```

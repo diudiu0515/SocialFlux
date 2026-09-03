@@ -15,4 +15,4 @@ python scripts/scenario_docs.py --check
 
 Catalog `manifest.json` 记录 JSON/Markdown hash、source mix 与 prompt hash；`coverage_matrix.json` 汇总 source、关系、权力、goal conflict、information asymmetry、state family 和 validation suitability。
 
-当前 10 个 scenario 是 revision migration candidate：5 个 narrative-derived、5 个 synthetic-script，但 quality gate 与 S0/D0 均未获得真实审核。正式 rollout 前必须将完整审核记录落实到 scenario status；`--allow-unreviewed` 只能用于开发。
+当前 20 个 scenario 均为 candidate：保留原 10 个，并新增 10 个经影视作品高层社会结构启发、完成原创改写的 narrative-derived scenario；当前来源组合为 15 个 narrative-derived、5 个 synthetic-script，但 quality gate 与 S0/D0 均未获得真实审核。正式 rollout 前必须将完整审核记录落实到 scenario status；`--allow-unreviewed` 只能用于开发。

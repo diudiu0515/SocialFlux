@@ -14,6 +14,7 @@ from providers.factory import build_provider
 from schemas.validate import (
     validate_blueprint,
     validate_initial_state_proposal,
+    validate_narrative_structure,
     validate_quality_report,
     validate_scenario,
 )
@@ -42,6 +43,29 @@ def generate_script(args):
         "seed": args.seed,
     })
     _write(args.output, text.strip() + "\n")
+
+
+def extract_structure(args):
+    request = json.loads(args.input.read_text(encoding="utf-8"))
+    required = {"title", "medium"}
+    allowed = required | {"analysis_goal"}
+    if not isinstance(request, dict) or not required <= set(request) or set(request) - allowed:
+        raise ValueError("source request requires title/medium and optional analysis_goal only")
+    if not str(request["title"]).strip() or request["medium"] not in ("film", "television"):
+        raise ValueError("source request requires a title and film/television medium")
+    structure = json.loads(_complete(
+        _provider(args.provider_config),
+        "narrative_structure_extraction_v1",
+        request,
+        {"temperature": args.temperature, "seed": args.seed},
+    ))
+    validate_narrative_structure(structure)
+    if structure["source_work"] != {
+        "title": request["title"],
+        "medium": request["medium"],
+    }:
+        raise ValueError("extracted source provenance does not match the request")
+    _write(args.output, json.dumps(structure, ensure_ascii=False, indent=2) + "\n")
 
 
 def quality_check(args):
@@ -162,6 +186,9 @@ def main():
 
     script_parser = subparsers.add_parser("generate-script", parents=[common])
     script_parser.set_defaults(func=generate_script)
+
+    extract_parser = subparsers.add_parser("extract-structure", parents=[common])
+    extract_parser.set_defaults(func=extract_structure)
 
     gate_parser = subparsers.add_parser("quality-check", parents=[common])
     _add_source_args(gate_parser)

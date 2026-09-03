@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_008`
 - 配对 JSON：`scenario_008.json`
-- JSON SHA-256：`98b3fac5f9617e4560ce4070e4a6bc438b1e9fc082ebe323b59379a7e0bb5ab4`
+- JSON SHA-256：`228c37a20c26c67aee00c4e24ba4f1a0e9652e37dd983ce54ede055b79e3528b`
 - 社会机制：medical information asymmetry
 - 来源类型：`synthetic-script`
 - Provenance ID：`SF-SRC-008`
@@ -70,6 +70,16 @@
 | 目标失败风险 (`goal_failure_risk`) | 6 |
 | 冲突升级风险 (`escalation_risk`) | 3 |
 | 协商开放度 (`negotiation_open`) | 5 |
+
+### 初始化依据
+
+- migration：These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.
+- state_selection：Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed.
+
+### Trigger 可达性
+
+- No configured trigger is active at S0/D0.
+- Threshold reachability within the episode remains pending human review.
 
 ### 重点预测状态
 

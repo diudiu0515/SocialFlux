@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_010`
 - 配对 JSON：`scenario_010.json`
-- JSON SHA-256：`38bf9df272a7ed7cd16fcdda109a92b0e0c14b91bf6b9a8076506487fb24b04b`
+- JSON SHA-256：`89b8b94e7ddfe6513fc3979e3fc4f4b78edefd3b219e68137ba8af2ef7413732`
 - 社会机制：safety-efficiency conflict
 - 来源类型：`synthetic-script`
 - Provenance ID：`SF-SRC-010`
@@ -70,6 +70,16 @@
 | 目标失败风险 (`goal_failure_risk`) | 4 |
 | 冲突升级风险 (`escalation_risk`) | 2 |
 | 协商开放度 (`negotiation_open`) | 5 |
+
+### 初始化依据
+
+- migration：These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.
+- state_selection：Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed.
+
+### Trigger 可达性
+
+- No configured trigger is active at S0/D0.
+- Threshold reachability within the episode remains pending human review.
 
 ### 重点预测状态
 

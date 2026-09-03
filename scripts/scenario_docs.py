@@ -20,6 +20,83 @@ VARIABLE_LABELS = {
 }
 
 
+VARIABLE_LABELS.update({
+    'irritation': '烦躁',
+    'control_urge': '控制冲动',
+    'openness': '接纳替代方案意愿',
+    'professional_respect': '专业尊重',
+    'schedule_pressure': '进度压力',
+    'reputational_risk': '声誉风险',
+    'grief': '悲伤',
+    'fear': '恐惧',
+    'protectiveness': '保护意愿',
+    'compromise_readiness': '妥协准备度',
+    'felt_respect': '被尊重感',
+    'child_stability_risk': '儿童生活稳定风险',
+    'legal_escalation_risk': '法律升级风险',
+    'frustration': '挫败',
+    'uncertainty': '不确定感',
+    'moral_concern': '道德关切',
+    'certainty_seeking': '确定性追求',
+    'evidence_openness': '证据开放度',
+    'credibility_trust': '专业可信度信任',
+    'antagonism': '对立倾向',
+    'consensus_pressure': '共识压力',
+    'decision_error_risk': '错误决策风险',
+    'deliberation_open': '审议开放度',
+    'shame_threat': '羞耻威胁感',
+    'resentment': '怨愤',
+    'coalition_openness': '合作联盟开放度',
+    'sibling_trust': '手足信任',
+    'recognition': '被认可感',
+    'donor_confidence_risk': '捐赠人信心风险',
+    'governance_failure_risk': '治理失败风险',
+    'moral_distress': '道德压力',
+    'defensiveness': '防御感',
+    'truth_commitment': '真相承诺',
+    'denial_pressure': '否认压力',
+    'expert_trust': '专业信任',
+    'institutional_hostility': '制度性敌意',
+    'public_harm_risk': '公共伤害风险',
+    'accountability_risk': '问责风险',
+    'panic': '惊慌',
+    'change_resistance': '变革阻力',
+    'shared_ownership': '共同承担意愿',
+    'family_trust': '家人信任',
+    'cashflow_risk': '现金流风险',
+    'team_breakdown_risk': '团队崩解风险',
+    'coordination_open': '协调开放度',
+    'guilt': '内疚',
+    'sadness': '难过',
+    'loyalty_pressure': '忠诚压力',
+    'honesty_readiness': '诚实披露准备度',
+    'felt_judgment': '被评判感',
+    'elder_distress_risk': '长辈痛苦风险',
+    'family_cohesion_risk': '家庭凝聚风险',
+    'conversation_open': '对话开放度',
+    'threat_alert': '威胁警觉',
+    'curiosity': '好奇',
+    'action_urgency': '行动紧迫感',
+    'interpretive_patience': '解释耐心',
+    'distrust': '不信任',
+    'crisis_escalation_risk': '危机升级风险',
+    'data_fragmentation_risk': '数据碎片化风险',
+    'envy': '嫉妒',
+    'recognition_readiness': '承认贡献准备度',
+    'friendship_trust': '友谊信任',
+    'equity_dispute_risk': '股权争议风险',
+    'company_stability_risk': '公司稳定风险',
+    'disappointment': '失望',
+    'institutional_loyalty': '机构忠诚',
+    'moral_resolve': '道德决心',
+    'mentor_trust': '导师信任',
+    'professional_safety': '职业安全感',
+    'client_harm_risk': '当事人伤害风险',
+    'funding_collapse_risk': '资金崩溃风险',
+    'dynamics': '互动动力',
+})
+
+
 def _flatten(values, prefix=""):
     rows = []
     for key, value in (values or {}).items():
@@ -54,12 +131,27 @@ def _expression(expression):
     return lines or ["- 未配置。"]
 
 
+def _initialization_notes(notes):
+    rationale = notes.get("rationale", {}) if isinstance(notes, dict) else {}
+    reachability = notes.get("trigger_reachability", []) if isinstance(notes, dict) else []
+    rationale_lines = [
+        f"- {key}：{value}" for key, value in rationale.items()
+    ] or ["- 未配置；需在人工 freeze 前补充。"]
+    reachability_lines = [f"- {item}" for item in reachability] or [
+        "- 未配置；需验证 S0 不触发且 episode horizon 内合理可达。"
+    ]
+    return rationale_lines, reachability_lines
+
+
 def _mode_text(mode):
     return {
         "crossing": "前一轮尚未满足、当前轮首次满足全部阈值时触发",
         "threshold": "当前状态满足全部阈值时触发，并受冷却轮次限制",
         "state_change": "本轮变化量满足 change_conditions 时触发",
     }.get(mode, mode)
+
+
+PROMPT_MANIFEST = Path(__file__).resolve().parents[1] / "prompts" / "manifest.json"
 
 
 def scenario_hash(path):
@@ -136,6 +228,14 @@ def render_scenario_document(scenario, source_name, source_hash):
         "### 初始 Interaction Dynamics（0–10）",
         "",
         *_state_table(scenario["initial_dynamics"]),
+        "",
+        "### 初始化依据",
+        "",
+        *_initialization_notes(scenario.get("initialization_notes", {}))[0],
+        "",
+        "### Trigger 可达性",
+        "",
+        *_initialization_notes(scenario.get("initialization_notes", {}))[1],
         "",
         "### 重点预测状态",
         "",
@@ -253,7 +353,9 @@ def manifest_payload(directory):
             "quality_gate": scenario["construction_status"]["quality_gate"],
             "initial_state_status": scenario["construction_status"]["initial_state"],
             "source": path.relative_to(directory).as_posix(),
+            "scenario_sha256": scenario_hash(path),
             "documentation": path.with_suffix(".md").relative_to(directory).as_posix(),
+            "documentation_sha256": scenario_hash(path.with_suffix(".md")),
             "rollouts": (path.parent / "rollouts").relative_to(directory).as_posix(),
         }
         for path, scenario in rows
@@ -261,6 +363,7 @@ def manifest_payload(directory):
     return {
         "format": "socialflux_scenario_manifest_v2",
         "scenario_count": len(scenarios),
+        "prompt_manifest_sha256": scenario_hash(PROMPT_MANIFEST),
         "source_counts": dict(sorted(source_counts.items())),
         "scenarios": scenarios,
     }

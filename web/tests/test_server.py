@@ -7,7 +7,7 @@ class ScenarioWebTest(unittest.TestCase):
     def test_scenario_catalog_reads_hybrid_sources(self):
         payload = api_payload("/api/scenarios")
         self.assertEqual(len(payload["scenarios"]), len(load_scenarios()))
-        self.assertEqual(len(payload["scenarios"]), 10)
+        self.assertEqual(len(payload["scenarios"]), 20)
         self.assertTrue(all(item["source_type"] for item in payload["scenarios"]))
         self.assertTrue(all("action_ids" not in item for item in payload["scenarios"]))
 

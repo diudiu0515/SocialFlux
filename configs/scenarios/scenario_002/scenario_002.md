@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_002`
 - 配对 JSON：`scenario_002.json`
-- JSON SHA-256：`5cd689f5f3da3f5e633719d379abad296227b15f461d5193f9c3894d34b04eb0`
+- JSON SHA-256：`71ad44e8dd65aff3e63ab3320a18be0914eff6faf83957887cef7e110ab45b6d`
 - 社会机制：workplace authority
 - 来源类型：`synthetic-script`
 - Provenance ID：`SF-SRC-002`
@@ -70,6 +70,16 @@
 | 目标失败风险 (`goal_failure_risk`) | 4 |
 | 冲突升级风险 (`escalation_risk`) | 3 |
 | 协商开放度 (`negotiation_open`) | 5 |
+
+### 初始化依据
+
+- migration：These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.
+- state_selection：Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed.
+
+### Trigger 可达性
+
+- No configured trigger is active at S0/D0.
+- Threshold reachability within the episode remains pending human review.
 
 ### 重点预测状态
 
