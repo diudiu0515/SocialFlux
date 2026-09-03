@@ -1,6 +1,6 @@
 # SocialFlux Prompt Audit
 
-审计日期：2026-09-03。范围：`prompts/*.md`、`prompts/manifest.json`、对应 schema 与 Python caller。共保留 20 个版本化 prompt；未登记 Markdown 数为 0。
+审计日期：2026-09-03。范围：`prompts/*.md`、`prompts/manifest.json`、对应 schema 与 Python caller。共保留 21 个版本化 prompt；未登记 Markdown 数为 0。
 
 ## Prompt 逐项审计
 
@@ -12,18 +12,19 @@
 | `scenario_normalization_v1` | author-side；`scenario_sources normalize` | 只读已批准 source 与 quality report | `scenario_blueprint.schema.json` | 不再同时生成 S0/D0、阈值、action effects 或 checkpoint |
 | `initial_state_configuration_v1` | author-side；`scenario_sources initialize` | 读 approved blueprint 与 private design fields | `initial_state_proposal.schema.json` | 从 normalization 分离；输出 candidate，模型不能 human-freeze |
 | `environment_appraisal_v2` | author-side runtime；`ModelAppraiser` | 可读 persona、goal、hidden intention、S/D、observable memory、exact action | inline strict JSON | 从旧单步 transition 拆出解释；禁止分类/关键词 lookup，不更新 state |
-| `state_update_v1` | author-side runtime；`ModelStateUpdater` | 读 previous S/D、已完成 appraisal、observable memory；不直接读 action | inline strict JSON delta | 与 appraisal 分离；只允许七级 delta、全变量等形状 |
-| `environment_response_v2` | author-side runtime；`ModelResponseGenerator` | 读 persona/private intent、history、appraisal、updated S/D、action | observable text only | 强制 state update 后响应；禁止输出私有字段或模板 |
+| `state_update_v2` | author-side runtime；`ModelStateUpdater` | 读 previous S/D、已完成 appraisal、observable memory；不直接读 action | inline strict JSON delta | 加入单轮惯性、强变化稀缺与边界校准；caller 将裁剪后的语义标签归一到真实数值变化 |
+| `environment_response_v3` | author-side runtime；`ModelResponseGenerator` | 读 persona/private intent、evaluated role、history、appraisal、updated S/D、action | observable text only | 实测后加入 environment-only 身份锁、单轮长度、无舞台说明与非重复约束 |
 | `memory_retrieval_v2` | author-side optional；`ModelMemoryModule` | 只读 observable history/action | inline memory JSON | 移除 private-state access；校验 ID 均来自历史。默认 runtime 可用等价确定性 retriever |
 | `observable_expression_v1` | author-side media specification；媒体接入协议 | 读 updated private social context | `observable_expression.schema.json` | 从视频生成中拆出可观察表达；禁止一对一刻板编码和私有标签 |
 | `talking_head_generation_v1` | media-side；外部视频 adapter 协议，当前尚未接真实供应商 | 只读安全人物外观、observable response/expression | `talking_head_request.schema.json` | 改为 trigger 后稀疏生成；禁止 latent/threshold/答案泄漏 |
 | `counterfactual_action_generation_v1` | benchmark construction；`ModelCandidateGenerator` | 只读真实 checkpoint 的 public observation | string array，经 caller 转 `{"text": ...}` | 移除策略标签与显然好/坏二分；只生成局部可行动自由文本 |
-| `t2_shared_observation_v1` | benchmark construction；`ModelCandidateGenerator` | 读两段 public natural histories | inline O* JSON | 强制完全共享 O*；禁止 private state 与 trajectory provenance 泄漏 |
+| `t2_shared_observation_v2` | benchmark construction；`ModelCandidateGenerator` | 读显式 target/evaluated 身份与两段 public natural histories | inline O* JSON | 实测修复 O* 角色互换；强制由 environment target 发话、双历史兼容且禁止 private provenance 泄漏 |
 | `local_intervention_validation_v1` | author-side validation protocol | 可读真实 checkpoint private experiment packet | `local_intervention_review.schema.json` | controlled 只保留为局部实验，不再驱动多轮策略 |
+| `instance_quality_judge_v2` | validation；`evaluate_instance_quality --judge-provider-config` 对 T1/T2/T3 做盲化质量诊断 | 只读去除 model/provider/trajectory/private state/metadata 后的 participant-visible packet | `instance_quality_judge.schema.json` | 评估 history dependency、证据、社会合理性、非平凡性和可回答性；明确不是 human GT，不能单独宣布模型胜负 |
 | `task_t1_v1` | evaluated-agent-side；T1 baseline/evaluation | 只读 public longitudinal instance | `task_t1_output.schema.json` | 移除作者 effects/oracle；证据 ID 必须可见 |
 | `task_t2_v1` | evaluated-agent-side；T2 baseline/evaluation | 只读 A/B history 与相同 O* | `task_t2_output.schema.json` | 明确 O* byte-identical，禁止构建 metadata/private state |
 | `task_t3_v1` | evaluated-agent-side；T3 baseline/evaluation | 只读 public checkpoint、2–4 action、horizon | `task_t3_output.schema.json` | 主任务禁止 oracle state/未来分支；所有 option 同 protocol/horizon |
-| `task_t4_action_v1` | evaluated-agent-side；`ModelPolicy` 用于自然 rollout/T4 | 只读 policy observation | natural-language action only | 替换旧 policy prompt；不返回分析或策略 label |
+| `task_t4_action_v2` | evaluated-agent-side；`ModelPolicy` 用于自然 rollout/T4 | 只读 policy observation | natural-language action only | 实测后加入 evaluated-only 身份锁、1–3 句、无舞台说明/多角色与非重复约束 |
 | `t4_judge_v1` | validation；T4 judge protocol | 只读 packet 明示的 allowed evidence | `t4_judge_output.schema.json` | 多维评分，不把低冲突当目标；明确 not human GT |
 | `human_annotation_v2` | human-facing validation/GT protocol | 只读冻结 annotation packet；author-side 实验必须显式标识 | packet-supplied schema / overlay | simulator candidate 仅是假设；人类标签、证据、不确定性独立记录 |
 
@@ -47,7 +48,7 @@
 
 ## Schema 与 caller 修改
 
-新增 narrative structure、blueprint、source quality、candidate initial state、T1/T2/T3 输出、T4 judge、observable expression、Talking Head request 与 local intervention review schemas。更新 canonical scenario/trajectory schema，删除 action effects/action ID 合同。更新 `scenario_sources.py`（含 `extract-structure`）、`environment/appraisal.py`、`environment/state_updater.py`、`environment/response_generator.py`、`environment/memory.py`、`offline/candidate_generation.py`、`policies/model_policy.py` 与 `scripts/run_pipeline.py`。
+新增 narrative structure、blueprint、source quality、candidate initial state、T1/T2/T3 输出、instance quality judge、T4 judge、observable expression、Talking Head request 与 local intervention review schemas。更新 canonical scenario/trajectory schema，删除 action effects/action ID 合同。更新 `scenario_sources.py`（含 `extract-structure`）、`environment/appraisal.py`、`environment/state_updater.py`、`environment/response_generator.py`、`environment/memory.py`、`offline/candidate_generation.py`、`policies/model_policy.py` 与 `scripts/run_pipeline.py`。
 
 ## 未决设计问题
 

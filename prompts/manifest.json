@@ -11,10 +11,10 @@
       "sha256": "d8ed126a25f0ff2f3a57221da44a4ad7c448189c27e44d95889c25e13c5d8726",
       "version": "v2"
     },
-    "environment_response_v2": {
-      "path": "environment_response_v2.md",
-      "sha256": "2f62f12ad424c87159a39c88d33584676131e3d9bbd6a5921434c80c0ec16121",
-      "version": "v2"
+    "environment_response_v3": {
+      "path": "environment_response_v3.md",
+      "sha256": "51cff39b8df65281d49fa8382b36a33995abffc7c8fb436089be69c50dacf65d",
+      "version": "v3"
     },
     "human_annotation_v2": {
       "path": "human_annotation_v2.md",
@@ -25,6 +25,11 @@
       "path": "initial_state_configuration_v1.md",
       "sha256": "9ab4aca6554ea3f76328095feb4dfe8d3f3ff116a3711de1d1e52df8a860d4d8",
       "version": "v1"
+    },
+    "instance_quality_judge_v2": {
+      "path": "instance_quality_judge_v2.md",
+      "sha256": "aa327448a5a771669fbe07e9be89cb0b7bbc76d56e0c40b96a817569aca499dd",
+      "version": "v2"
     },
     "local_intervention_validation_v1": {
       "path": "local_intervention_validation_v1.md",
@@ -61,15 +66,15 @@
       "sha256": "d90673b1c7d3bdd6085b18abb61e12d6cc21ea7d6ad6cf4ea214b5627ebe6877",
       "version": "v1"
     },
-    "state_update_v1": {
-      "path": "state_update_v1.md",
-      "sha256": "bc5074c6e30c637f54065a02c78a44e56230c7cd2ff6680206126888167709be",
-      "version": "v1"
+    "state_update_v2": {
+      "path": "state_update_v2.md",
+      "sha256": "0dd81b0e7695a927eae13b2beede94b96aa03a3211570740ca8454e84fe7ed56",
+      "version": "v2"
     },
-    "t2_shared_observation_v1": {
-      "path": "t2_shared_observation_v1.md",
-      "sha256": "ff41134c03a23a027f5257cfa9119c321d24b7f84eac164c4639078bc952017e",
-      "version": "v1"
+    "t2_shared_observation_v2": {
+      "path": "t2_shared_observation_v2.md",
+      "sha256": "cfecee2d9344a5ec851f26e865db434c16e7faf9cc945844d60da6fe9f941432",
+      "version": "v2"
     },
     "t4_judge_v1": {
       "path": "t4_judge_v1.md",
@@ -96,10 +101,10 @@
       "sha256": "270cd8cd265bdf56af50c8af3003b00a27a05549807e56f321e5419a7a3eb0ea",
       "version": "v1"
     },
-    "task_t4_action_v1": {
-      "path": "task_t4_action_v1.md",
-      "sha256": "6a2359edc6e5067ab05c7bc757038835733b7e5dfad4891b5a08dfd8f3d3957b",
-      "version": "v1"
+    "task_t4_action_v2": {
+      "path": "task_t4_action_v2.md",
+      "sha256": "cc40eae0075e82e5e227afccfb749063f9ab61dfb8402e77d400b2b4f7684816",
+      "version": "v2"
     }
   }
 }

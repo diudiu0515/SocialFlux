@@ -51,6 +51,15 @@ def _pipeline_summary(scenario_id):
 def scenario_summary(scenario, source_path):
     pipeline = _pipeline_summary(scenario["scenario_id"])
     bundle = source_path.parent
+    rollout_manifest = read_json(bundle / "rollouts" / "manifest.json", {}) or {}
+    local_rollout_ready = (
+        rollout_manifest.get("config", {}).get("origin")
+        == "free_form_model_interaction"
+    )
+    trajectory_count = pipeline.get(
+        "trajectory_count",
+        rollout_manifest.get("trajectory_count", 0) if local_rollout_ready else 0,
+    )
     return {
         "scenario_id": scenario["scenario_id"],
         "title": scenario["title"],
@@ -66,11 +75,14 @@ def scenario_summary(scenario, source_path):
         "scenario_bundle": bundle.relative_to(ROOT).as_posix(),
         "rollout_bundle": (bundle / "rollouts").relative_to(ROOT).as_posix(),
         "pipeline": {
-            "trajectory_count": pipeline.get("trajectory_count", 0),
+            "trajectory_count": trajectory_count,
             "t1": pipeline.get("t1", 0),
             "t2": pipeline.get("t2", 0),
             "t3": pipeline.get("t3", 0),
-            "available": pipeline.get("trajectory_origin") == "free_form_model_interaction",
+            "available": (
+                pipeline.get("trajectory_origin") == "free_form_model_interaction"
+                or local_rollout_ready
+            ),
         },
     }
 

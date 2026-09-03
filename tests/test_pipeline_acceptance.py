@@ -25,6 +25,31 @@ class PipelineAcceptanceTest(unittest.TestCase):
         self.assertIn("multi-turn repair/neutral/escalation controlled-policy sensitivity",
                       report["gate"]["deprecated_checks"])
 
+    def test_failed_trajectory_quality_blocks_provisional_acceptance(self):
+        scenario = self.scenarios[0]
+        trajectory = RolloutRunner(environment_factory(scenario)).run(
+            TextPolicy("model-a-seed-1", ["请解释贡献证据。"], seed=1),
+            max_turns=1,
+        )
+        quality = {
+            "trajectory_quality": {
+                "trajectory_count": 1,
+                "passed": 0,
+                "trajectories": [],
+            }
+        }
+        report = build_acceptance_report(
+            self.scenarios,
+            [trajectory],
+            instance_quality=quality,
+        )
+        criterion = next(
+            item for item in report["criteria"]
+            if item["criterion"] == "8. Full-Trajectory Plausibility"
+        )
+        self.assertEqual(criterion["status"], "pending")
+        self.assertFalse(report["gate"]["automated_artifacts_ready"])
+
     def test_natural_trajectory_structure_is_recognized(self):
         scenario = self.scenarios[0]
         trajectory = RolloutRunner(environment_factory(scenario)).run(

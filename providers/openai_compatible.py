@@ -13,9 +13,16 @@ class OpenAICompatibleProvider(ModelProvider):
         self.api_key = api_key
         self.timeout = timeout
         self.generation_defaults = generation_defaults
+        self._call_index = 0
+
+    def reset(self):
+        self._call_index = 0
 
     def complete(self, messages, **generation):
         options = {**self.generation_defaults, **generation}
+        if isinstance(options.get("seed"), int):
+            options["seed"] += self._call_index
+        self._call_index += 1
         payload = json.dumps({
             "model": self.model,
             "messages": messages,

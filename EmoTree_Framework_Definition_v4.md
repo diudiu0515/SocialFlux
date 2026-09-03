@@ -95,11 +95,11 @@ Appraisal 与 state update 是两个不同 prompt/call。Response 只能在更�
 
 ## 8. T1
 
-T1 从自然 trajectory checkpoint 提取完整可观察历史与当前 observation，让被测模型估计目标人物当前状态及变化。Ground truth 由独立人类标注；simulator state 仅可作为诊断参考，不自动成为答案。不得预先在 scenario 中编写 T1 checkpoint。
+T1 从自然 trajectory checkpoint 提取完整可观察历史与当前 observation，让被测模型估计持有 latent state 的 environment character 当前状态及变化；不得把输出 action 的 evaluated model 误设为 target。Ground truth 由独立人类标注；simulator state 仅可作为诊断参考，不自动成为答案。不得预先在 scenario 中编写 T1 checkpoint。
 
 ## 9. T2
 
-T2 从自然轨迹池检索同 scenario、同深度且历史与 private state 已分化的 A/B。随后构造一个对两段历史都自然的完全相同 O*。实例必须保留 O* 一致性证明、来源 trajectory IDs 和 compatibility pending 状态。若 O* 自身泄漏历史差异或对任一历史不自然，实例删除。
+T2 从自然轨迹池检索同 scenario、同深度且历史与 private state 已分化的 A/B，并显式携带 environment-character target 与 target state IDs。模型质量对比时 A/B 必须来自同一 source model，并按 source model 分层取样。随后显式传入 target/evaluated 双方身份，构造一个由 environment character 发出、对两段历史都自然的完全相同 O*。实例必须保留 O* 一致性证明、来源 trajectory IDs 和 compatibility pending 状态。若 O* 角色互换、自身泄漏历史差异、包含重复历史或对任一历史不自然，实例删除。
 
 ## 10. T3
 

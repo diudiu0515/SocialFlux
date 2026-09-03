@@ -27,4 +27,4 @@ def build_appraisal_prompt(
 
 
 def build_response_prompt(context):
-    return render_prompt("environment_response_v2", context)
+    return render_prompt("environment_response_v3", context)

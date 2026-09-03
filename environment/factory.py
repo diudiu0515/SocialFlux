@@ -21,8 +21,8 @@ class ModelEnvironmentFactory:
             "environment": public_provider_config(self.provider_config),
             "sampling": dict(self.sampling),
             "appraisal_prompt": "environment_appraisal_v2",
-            "state_update_prompt": "state_update_v1",
-            "response_prompt": "environment_response_v2",
+            "state_update_prompt": "state_update_v2",
+            "response_prompt": "environment_response_v3",
         }
 
     def __call__(self):

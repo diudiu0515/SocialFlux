@@ -4,11 +4,16 @@ from prompts.loader import render_prompt
 
 
 class ModelPolicy:
-    def __init__(self, policy_id, provider, prompt_id="task_t4_action_v1", sampling=None):
+    def __init__(self, policy_id, provider, prompt_id="task_t4_action_v2", sampling=None):
         self.policy_id = policy_id
         self.provider = provider
         self.prompt_id = prompt_id
         self.sampling = dict(sampling or {})
+
+    def reset(self):
+        reset = getattr(self.provider, "reset", None)
+        if reset:
+            reset()
 
     @property
     def provenance(self):

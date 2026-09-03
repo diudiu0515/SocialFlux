@@ -40,7 +40,7 @@ def build_t1_checkpoints(trajectory, target_state_ids=None):
             "split": "unassigned",
             "modality": "text",
             "input": {
-                "target_character_id": turn["observation"].get("role", {}).get("character_id"),
+                "target_character_id": turn["observation"].get("target_character", {}).get("character_id"),
                 "history": _public_history(trajectory, index),
                 "current_checkpoint": _shared_observation(turn["observation_after"]),
             },
@@ -74,12 +74,18 @@ def _state_distance(left_turn, right_turn):
     return sum(abs(left[key] - right[key]) for key in shared)
 
 
-def retrieve_divergent_history_pairs(trajectories):
+def _source_model(trajectory):
+    return trajectory.get("policy_provenance", {}).get("model")
+
+
+def retrieve_divergent_history_pairs(trajectories, same_source_model=False):
     """Rank same-scenario, same-depth checkpoints by private state divergence."""
     candidates = []
     for left_index, left in enumerate(trajectories):
         for right in trajectories[left_index + 1:]:
             if left["scenario_id"] != right["scenario_id"]:
+                continue
+            if same_source_model and _source_model(left) != _source_model(right):
                 continue
             max_depth = min(len(left.get("turns", [])), len(right.get("turns", [])))
             for depth in range(1, max_depth):
@@ -98,7 +104,7 @@ def retrieve_divergent_history_pairs(trajectories):
     return sorted(candidates, key=lambda item: item["state_distance"], reverse=True)
 
 
-def build_t2_pair(candidate, shared_observation):
+def build_t2_pair(candidate, shared_observation, target_state_ids=None):
     left = candidate["left"]
     right = candidate["right"]
     left_index = candidate["left_index"]
@@ -115,12 +121,19 @@ def build_t2_pair(candidate, shared_observation):
         "split": "unassigned",
         "modality": "text",
         "input": {
+            "target_character": deepcopy(
+                left["turns"][0]["observation"].get("target_character", {})
+            ),
             "history_a": history_a,
             "history_b": history_b,
             "shared_current_observation": deepcopy(shared_observation),
         },
         "target_spec": {
             "prediction_format": "pairwise_state_difference_v1",
+            "target_character_id": left["turns"][0]["observation"].get(
+                "target_character", {}
+            ).get("character_id"),
+            "target_state_ids": list(target_state_ids or []),
             "direction_labels": [
                 "higher_in_a",
                 "similar",
@@ -141,13 +154,41 @@ def build_t2_pair(candidate, shared_observation):
     }
 
 
-def build_t2_pairs(trajectories, shared_observation_factory, max_pairs):
+def build_t2_pairs(
+    trajectories,
+    shared_observation_factory,
+    max_pairs,
+    target_state_ids=None,
+    same_source_model=False,
+):
     pairs = []
-    for candidate in retrieve_divergent_history_pairs(trajectories):
+    candidates = retrieve_divergent_history_pairs(
+        trajectories,
+        same_source_model=same_source_model,
+    )
+    if same_source_model:
+        grouped = {}
+        for candidate in candidates:
+            model = _source_model(candidate["left"])
+            grouped.setdefault(model, []).append(candidate)
+        candidates = []
+        depth = 0
+        while any(depth < len(group) for group in grouped.values()):
+            for group in grouped.values():
+                if depth < len(group):
+                    candidates.append(group[depth])
+            depth += 1
+    for candidate in candidates:
         history_a = _public_history(candidate["left"], candidate["left_index"])
         history_b = _public_history(candidate["right"], candidate["right_index"])
-        shared = shared_observation_factory(history_a, history_b)
-        pairs.append(build_t2_pair(candidate, shared))
+        first_observation = candidate["left"]["turns"][0]["observation"]
+        shared = shared_observation_factory(
+            history_a,
+            history_b,
+            first_observation.get("target_character", {}),
+            first_observation.get("role", {}),
+        )
+        pairs.append(build_t2_pair(candidate, shared, target_state_ids))
         if len(pairs) >= max_pairs:
             break
     return pairs
@@ -174,6 +215,9 @@ def build_t3_candidates(checkpoint, candidate_actions, delayed_horizon=5, target
         },
         "target_spec": {
             "prediction_format": "counterfactual_option_effects_v1",
+            "target_character_id": checkpoint["observation"].get(
+                "target_character", {}
+            ).get("character_id"),
             "time_horizons": ["immediate", "delayed"],
             "delayed_horizon": delayed_horizon,
             "continuation_protocol": "free_form_same_model_policy",
@@ -184,6 +228,7 @@ def build_t3_candidates(checkpoint, candidate_actions, delayed_horizon=5, target
         "label_status": "pending_human_annotation",
         "metadata": {
             "source_trajectory_id": checkpoint["trajectory_id"],
+            "checkpoint_turn_id": checkpoint["turn_id"],
             "checkpoint_origin": "free_form_model_interaction",
             "local_intervention": True,
             "private_state_exposed": False,

@@ -5,7 +5,12 @@ from pathlib import Path
 
 from evaluation.leakage import assert_no_leaks
 from providers.factory import build_provider
-from scripts.run_pipeline import load_rollout_config, load_scenarios
+from scripts.run_pipeline import (
+    load_rollout_config,
+    load_scenario_records,
+    load_scenarios,
+    select_scenario_records,
+)
 from scripts.scenario_docs import (
     assert_document_current,
     assert_manifest_current,
@@ -79,6 +84,16 @@ class PipelineContractTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 assert_document_current(candidate)
 
+    def test_pipeline_can_select_a_reproducible_scenario_subset(self):
+        records = load_scenario_records("configs/scenarios")
+        selected = select_scenario_records(records, ["IA_PIPE_011", "IA_PIPE_018"])
+        self.assertEqual(
+            [scenario["scenario_id"] for _, scenario in selected],
+            ["IA_PIPE_011", "IA_PIPE_018"],
+        )
+        with self.assertRaises(ValueError):
+            select_scenario_records(records, ["IA_PIPE_UNKNOWN"])
+
     def test_rollout_config_requires_model_sampling_diversity(self):
         config = load_rollout_config("configs/rollout_pool.example.json")
         self.assertGreaterEqual(len(config["policies"]), 2)
@@ -93,6 +108,32 @@ class PipelineContractTest(unittest.TestCase):
             path.write_text(json.dumps(bad), encoding="utf-8")
             with self.assertRaises(ValueError):
                 load_rollout_config(path)
+            bad["policies"].append({
+                "policy_id": "second",
+                "provider": {"model": "y"},
+            })
+            bad["pilot_limits"] = {"t3_horizon": 2}
+            path.write_text(json.dumps(bad), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                load_rollout_config(path)
+
+    def test_model_comparison_config_is_a_matched_pilot(self):
+        config = load_rollout_config("configs/rollout_comparison.example.json")
+        self.assertEqual(config["pilot_limits"]["rollout_turns"], 6)
+        self.assertEqual(config["pilot_limits"]["t1"], 8)
+        self.assertEqual(config["pilot_limits"]["t3"], 4)
+        self.assertEqual(config["t2_pairing"], "within_source_model")
+        self.assertEqual(
+            [item["policy_id"] for item in config["policies"]],
+            ["qwen35_seed_101", "gpt_seed_101", "qwen35_seed_202", "gpt_seed_202"],
+        )
+        models = [item["provider"]["model"] for item in config["policies"]]
+        self.assertEqual(sum("Qwen3.5-9B" in model for model in models), 2)
+        self.assertEqual(sum(model == "YOUR_GPT_MODEL" for model in models), 2)
+        self.assertEqual(
+            {item["sampling"]["temperature"] for item in config["policies"]},
+            {0.6},
+        )
 
     def test_provider_factory_contracts(self):
         configs = [

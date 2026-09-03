@@ -17,12 +17,12 @@ class ModelResponseGenerator(ResponseGenerator):
     def provenance(self):
         return {
             **getattr(self.provider, "provenance", {}),
-            "prompt_id": "environment_response_v2",
+            "prompt_id": "environment_response_v3",
             "sampling": dict(self.sampling),
         }
 
     def generate(self, context):
-        prompt = render_prompt("environment_response_v2", context)
+        prompt = render_prompt("environment_response_v3", context)
         response = self.provider.complete(
             [{"role": "user", "content": prompt}],
             **self.sampling,

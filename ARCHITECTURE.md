@@ -31,7 +31,7 @@ nine-criterion acceptance + human annotation
 2. 接收任意自由文本 action。
 3. 从可观察历史检索 memory；完整原始历史始终是权威记录。
 4. `ModelAppraiser` 私下结合 persona、目标、hidden intention、S_t/D_t 与历史解释 action。
-5. `ModelStateUpdater` 仅根据 appraisal 输出七级 semantic delta；确定性 mapper 将其映射到 0–10。
+5. `ModelStateUpdater` 仅根据 appraisal 输出七级 semantic delta；确定性 mapper 将其映射到 0–10，并把边界裁剪后的标签归一到真实数值变化。
 6. `ModelResponseGenerator` 在更新后的状态上生成自然回应。
 7. trigger engine 检测 threshold/crossing/state-change，并只公开安全 expression/media。
 8. logger 保存 private master trajectory；公开 task builder 必须通过 leakage audit。
@@ -50,7 +50,7 @@ nine-criterion acceptance + human annotation
 
 ## 轨迹和局部干预
 
-自然轨迹的多样性来自模型、temperature、seed 和自然历史，不来自策略类别。T2 先从同场景同深度的自然轨迹检索不同历史，再生成一个对双方都合理且字节级共享的 O*。T3 从真实 checkpoint restore 同一 private snapshot，为 2–4 个自由文本行动各执行一次局部 intervention，随后继续使用与源轨迹匹配的同一模型配置。受控 intervention 是实验工具，不是多轮 rollout policy。
+自然轨迹的多样性来自模型、temperature、seed 和自然历史，不来自策略类别。每条 run 保存 base seed；OpenAI-compatible provider 按 base seed + call index 推进随机流，既可复现又避免每回合重置同一采样。T2 先从同场景同深度的自然轨迹检索不同历史，再生成一个对双方都合理且字节级共享的 O*；模型对比时只在同来源模型内配对，并按来源模型分层轮询。T3 从真实 checkpoint restore 同一 private snapshot，为 2–4 个自由文本行动各执行一次局部 intervention，随后继续使用与源轨迹匹配的同一模型配置。受控 intervention 是实验工具，不是多轮 rollout policy。
 
 ## Scenario bundle
 
@@ -61,6 +61,10 @@ nine-criterion acceptance + human annotation
 ## Prompt 和 schema
 
 所有固定模型指令只放在 `prompts/`，文件名以 `_vN.md` 结尾。运行时代码通过 `prompts.loader` 加载并校验 manifest hash；`scripts/update_prompt_manifest.py` 是唯一登记命令。模型结构化输出分别由 `schemas/` 合同和 Python validator 约束。完整职责映射见 `PROMPT_AUDIT.md`。
+
+## Instance 质量
+
+T1/T2/T3 均绑定持有 latent state 的环境角色，而不是输出 action 的 evaluated model。结构审计检查无泄漏、目标 state、历史形状、精确重复、T2 双方角色与 private-state 分化、T3 checkpoint/branch 完整性；轨迹审计另报 action/response 唯一率、简洁性和 latent 边界占比。语义质量采用移除 model/provider/trajectory provenance 的盲化 packet。九项验收自动读取该质量报告；轨迹质量未过时不得标 Full-Trajectory provisionally ready。自动或 LLM 分数均不能替代 human answerability 与标签有效性评审。
 
 ## 验收
 

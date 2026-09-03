@@ -71,9 +71,40 @@ class CanonicalEnvironmentTest(unittest.TestCase):
             "observable_expression": {},
             "media": [],
         }
-        pairs = build_t2_pairs([left, right], lambda a, b: shared, 1)
+        pairs = build_t2_pairs(
+            [left, right],
+            lambda a, b, target, evaluated: shared,
+            1,
+            SCENARIO["target_state_ids"],
+        )
         self.assertEqual(pairs[0]["input"]["shared_current_observation"], shared)
         self.assertTrue(pairs[0]["metadata"]["shared_observation_injected"])
+
+    def test_t2_can_restrict_pairs_to_one_source_model(self):
+        runner = RolloutRunner(environment_factory(SCENARIO))
+        trajectories = [
+            runner.run(
+                TextPolicy("model-a-seed-1", ["请解释贡献证据。", "请继续说明。"], model="model-a", seed=1),
+                max_turns=2,
+            ),
+            runner.run(
+                TextPolicy("model-a-seed-2", ["我要追究责任。", "我会启动正式程序。"], model="model-a", seed=2),
+                max_turns=2,
+            ),
+            runner.run(
+                TextPolicy("model-b-seed-3", ["请先核对记录。", "我们找第三方确认。"], model="model-b", seed=3),
+                max_turns=2,
+            ),
+        ]
+        candidates = retrieve_divergent_history_pairs(
+            trajectories,
+            same_source_model=True,
+        )
+        self.assertTrue(candidates)
+        for candidate in candidates:
+            left_model = candidate["left"]["policy_provenance"]["model"]
+            right_model = candidate["right"]["policy_provenance"]["model"]
+            self.assertEqual(left_model, right_model)
 
     def test_t3_requires_free_form_actions_and_real_checkpoint(self):
         trajectory = RolloutRunner(environment_factory(SCENARIO)).run(
@@ -89,6 +120,10 @@ class CanonicalEnvironmentTest(unittest.TestCase):
         actions = [{"text": "先核对记录。"}, {"text": "请第三方一起确认。"}]
         item = build_t3_candidates(checkpoint, actions, delayed_horizon=5)
         self.assertEqual(item["input"]["candidate_actions"], actions)
+        self.assertEqual(
+            item["target_spec"]["target_character_id"],
+            f"{SCENARIO['scenario_id']}_ENVIRONMENT_AGENT",
+        )
         with self.assertRaises(ValueError):
             build_t3_candidates(
                 checkpoint,

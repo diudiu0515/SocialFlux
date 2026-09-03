@@ -52,7 +52,18 @@ def main():
     scenarios = load_scenarios(args.scenarios)
     trajectories = load_trajectory_pool(args.scenarios)
     interventions = load_local_interventions(args.pipeline_output)
-    report = build_acceptance_report(scenarios, trajectories, interventions)
+    quality_path = args.pipeline_output / "instance_quality_report.json"
+    instance_quality = (
+        json.loads(quality_path.read_text(encoding="utf-8"))
+        if quality_path.exists()
+        else None
+    )
+    report = build_acceptance_report(
+        scenarios,
+        trajectories,
+        interventions,
+        instance_quality,
+    )
     args.output.mkdir(parents=True, exist_ok=True)
     (args.output / "acceptance_report.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2) + "\n",

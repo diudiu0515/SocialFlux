@@ -2,7 +2,7 @@ import json
 import unittest
 from pathlib import Path
 
-from environment.state_updater import ModelStateUpdater
+from environment.state_updater import ModelStateUpdater, canonicalize_bounded_transition
 
 
 SCENARIO = json.loads(
@@ -43,6 +43,25 @@ class SequencedProvider:
 
 
 class ModelEnvironmentBoundaryTest(unittest.TestCase):
+    def test_semantic_delta_matches_bounded_numeric_effect(self):
+        transition = {
+            "appraisal": {},
+            "evidence_turn_ids": [],
+            "state_delta": {"at_ceiling": "strong_increase", "near_floor": "strong_decrease"},
+            "interaction_dynamics_delta": {"near_ceiling": "moderate_increase"},
+        }
+        normalized = canonicalize_bounded_transition(
+            transition,
+            {"at_ceiling": 10, "near_floor": 1},
+            {"near_ceiling": 9},
+        )
+        self.assertEqual(normalized["state_delta"]["at_ceiling"], "similar")
+        self.assertEqual(normalized["state_delta"]["near_floor"], "mild_decrease")
+        self.assertEqual(
+            normalized["interaction_dynamics_delta"]["near_ceiling"],
+            "mild_increase",
+        )
+
     def test_appraisal_and_state_update_are_separate_model_calls(self):
         provider = SequencedProvider()
         updater = ModelStateUpdater(SCENARIO, provider, {"temperature": 0})

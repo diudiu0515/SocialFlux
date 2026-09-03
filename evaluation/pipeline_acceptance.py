@@ -69,7 +69,12 @@ def _pending(criterion, requirement):
     }
 
 
-def build_acceptance_report(scenarios, trajectories=None, interventions=None):
+def build_acceptance_report(
+    scenarios,
+    trajectories=None,
+    interventions=None,
+    instance_quality=None,
+):
     trajectories = list(trajectories or [])
     interventions = list(interventions or [])
     structures = [
@@ -80,6 +85,14 @@ def build_acceptance_report(scenarios, trajectories=None, interventions=None):
         for trajectory in trajectories
     ]
     structural_ready = bool(structures) and all(item["passed"] for item in structures)
+    trajectory_quality = (instance_quality or {}).get("trajectory_quality")
+    quality_ready = True
+    if trajectory_quality is not None:
+        quality_ready = (
+            trajectory_quality.get("trajectory_count") == len(trajectories)
+            and trajectory_quality.get("passed") == len(trajectories)
+        )
+    trajectory_ready = structural_ready and quality_ready
     intervention_groups = {}
     for branch in interventions:
         key = (
@@ -132,9 +145,10 @@ def build_acceptance_report(scenarios, trajectories=None, interventions=None):
         ),
         {
             "criterion": CRITERIA[7],
-            "status": "provisionally_ready" if structural_ready else "pending",
+            "status": "provisionally_ready" if trajectory_ready else "pending",
             "trajectory_count": len(trajectories),
             "structural_checks": structures,
+            "quality_checks": trajectory_quality,
             "formal_human_judgment": "pending",
             "requirement": "15–20 complete natural trajectories reviewed by three annotators",
         },
@@ -153,7 +167,7 @@ def build_acceptance_report(scenarios, trajectories=None, interventions=None):
         "trajectory_origin_required": "free_form_model_interaction",
         "criteria": criteria,
         "gate": {
-            "automated_artifacts_ready": structural_ready and local_ready and seeds["ready"],
+            "automated_artifacts_ready": trajectory_ready and local_ready and seeds["ready"],
             "research_acceptance": all(item["status"] == "passed" for item in criteria),
             "formal_human_pending": [item["criterion"] for item in criteria],
             "deprecated_checks": [

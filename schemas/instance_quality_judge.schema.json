@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socialflux.example/schemas/instance-quality-judge-v1.json",
+  "title": "SocialFlux Blinded Instance Quality Judgment",
+  "type": "object",
+  "required": ["task_type", "scores", "fatal_issues", "summary", "recommendation"],
+  "properties": {
+    "task_type": {"enum": ["T1_state_tracking", "T2_history_sensitive_merge", "T3_counterfactual_choice_effect"]},
+    "scores": {
+      "type": "object",
+      "required": ["history_dependency", "evidence_sufficiency", "social_plausibility", "nontriviality", "answerability"],
+      "properties": {
+        "history_dependency": {"type": "integer", "minimum": 1, "maximum": 5},
+        "evidence_sufficiency": {"type": "integer", "minimum": 1, "maximum": 5},
+        "social_plausibility": {"type": "integer", "minimum": 1, "maximum": 5},
+        "nontriviality": {"type": "integer", "minimum": 1, "maximum": 5},
+        "answerability": {"type": "integer", "minimum": 1, "maximum": 5}
+      },
+      "additionalProperties": false
+    },
+    "fatal_issues": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "summary": {"type": "string", "minLength": 1},
+    "recommendation": {"enum": ["use", "revise", "reject"]}
+  },
+  "additionalProperties": false
+}

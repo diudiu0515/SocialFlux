@@ -73,9 +73,16 @@ class StatefulEnvironment:
         if self.session is None:
             raise RuntimeError("environment must be reset before observing")
         agent = self.scenario["environment_agent"]
+        persona = agent.get("persona", {})
+        target_character = {
+            "character_id": f"{self.scenario['scenario_id']}_ENVIRONMENT_AGENT",
+            "name": persona.get("name", "environment agent"),
+            "role": persona.get("role", "environment agent"),
+        }
         return {
             "scenario_id": self.scenario["scenario_id"],
             "role": deepcopy(self.scenario.get("evaluated_agent_role", {})),
+            "target_character": target_character,
             "background": self.scenario.get("background", ""),
             "explicit_goal": self.scenario.get("evaluated_agent_role", {}).get("explicit_goal", ""),
             "history": deepcopy(self.session["history"]),
@@ -144,6 +151,7 @@ class StatefulEnvironment:
             "scenario": {
                 "background": self.scenario["background"],
                 "environment_agent": self.scenario["environment_agent"],
+                "evaluated_agent_role": self.scenario["evaluated_agent_role"],
             },
             "turn_id": turn_id,
             "action": deepcopy(action),

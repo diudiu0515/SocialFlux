@@ -6,7 +6,7 @@
 
 > 最后自查：2026-09-03。
 
-> 本轮记录：已按 revision.md、prompt_check.md 与新增影视结构要求完成 v2 架构迁移、legacy 清理、20 个 prompt、20 个 scenario bundle 和 45+4 项测试；真实模型 rollout 与九项人工研究验收仍保持未完成。
+> 本轮记录：已完成 Qwen3.5-9B 开发 pilot、T1/T2/T3 实际提取、目标角色/seed/边界/重复/盲审修复及网站接入；7 个实例中 6 个过结构门，2 条完整轨迹均因重复未过质量门；core 54/54、web 4/4。GPT 凭据未设置，GPT–Qwen 胜负与九项人工研究验收保持未完成。
 
 ## Revision v2 工程自查
 
@@ -18,10 +18,13 @@
 | R4 Scenario review gates | quality 人工批准后 normalization，S0/D0 单独 candidate→freeze | [x] |
 | R5 Rollout-derived tasks | T1 natural checkpoint、T2 natural histories+O*、T3 real checkpoint local branch | [x] |
 | R6 九项验收 scaffold | 报告固定九项且无证据不标 pass | [x] |
-| R7 Prompt/schema audit | 20 个固定 prompt、hash manifest、职责/边界/schema linkage | [x] |
+| R7 Prompt/schema audit | 21 个固定 prompt、hash manifest、职责/边界/schema linkage | [x] |
 | R8 真实自然 trajectory pool | 多模型、多 temperature/seed API rollout | [ ] |
 | R9 正式研究验收 | 九项真人/模型实验与 adjudication 全部完成 | [ ] |
 | R10 影视结构原创化 | 影视来源只抽象高层社会机制；新增 10 个原创 scenario 且不复制角色、台词或情节序列 | [x] |
+| R11 Instance target/quality | T1/T2/T3 指向 environment character；结构审计与盲化语义质量协议可运行 | [x] |
+| R12 GPT–Qwen rollout 对照 | 同 environment/construction、匹配 scenario/seed 后比较任务质量；Qwen 已跑，GPT 凭据缺失 | [ ] |
+| R13 Qwen rollout pilot | IA_PIPE_011 两个 seeds、6 turns、T1/T2/T3、质量报告与九项 gate 可复核 | [x] |
 
 | Phase | 模块 | 具体要做什么 | 产物 | 是否人工 | 优先级 | 自查 |
 | --- | --- | --- | --- | --- | --- | --- |

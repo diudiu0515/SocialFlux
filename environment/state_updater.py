@@ -6,7 +6,7 @@ from copy import deepcopy
 from prompts.loader import render_prompt
 
 from .appraisal import ModelAppraiser
-from .delta_mapper import DELTA_LABELS, apply_semantic_deltas
+from .delta_mapper import DELTA_LABELS, DELTA_TO_INT, apply_semantic_deltas
 
 
 class TransitionValidationError(ValueError):
@@ -47,6 +47,38 @@ def validate_transition(transition, state, dynamics):
     return transition
 
 
+def _canonicalize_bounded_deltas(values, deltas, minimum=0, maximum=10):
+    canonical = {}
+    int_to_label = {value: key for key, value in DELTA_TO_INT.items()}
+    for key, value in values.items():
+        if isinstance(value, dict):
+            canonical[key] = _canonicalize_bounded_deltas(
+                value,
+                deltas[key],
+                minimum,
+                maximum,
+            )
+            continue
+        requested = DELTA_TO_INT[deltas[key]]
+        applied = max(minimum, min(maximum, value + requested)) - value
+        canonical[key] = int_to_label[applied]
+    return canonical
+
+
+def canonicalize_bounded_transition(transition, state, dynamics):
+    """Make semantic labels agree with the numeric effect after 0–10 clipping."""
+    normalized = deepcopy(transition)
+    normalized["state_delta"] = _canonicalize_bounded_deltas(
+        state,
+        normalized["state_delta"],
+    )
+    normalized["interaction_dynamics_delta"] = _canonicalize_bounded_deltas(
+        dynamics,
+        normalized["interaction_dynamics_delta"],
+    )
+    return normalized
+
+
 def apply_transition(state, dynamics, transition):
     validate_transition(transition, state, dynamics)
     new_state, state_numeric = apply_semantic_deltas(state, transition["state_delta"])
@@ -69,7 +101,7 @@ class ModelStateUpdater:
         return {
             **getattr(self.provider, "provenance", {}),
             "appraisal_prompt_id": "environment_appraisal_v2",
-            "state_update_prompt_id": "state_update_v1",
+            "state_update_prompt_id": "state_update_v2",
             "sampling": dict(self.sampling),
         }
 
@@ -80,7 +112,7 @@ class ModelStateUpdater:
             previous_dynamics=previous_dynamics,
             memory=memory,
         )
-        prompt = render_prompt("state_update_v1", {
+        prompt = render_prompt("state_update_v2", {
             "previous_state": previous_state,
             "previous_dynamics": previous_dynamics,
             "appraisal": appraisal["appraisal"],
@@ -100,4 +132,9 @@ class ModelStateUpdater:
             "state_delta": deltas.get("state_delta"),
             "interaction_dynamics_delta": deltas.get("interaction_dynamics_delta"),
         }
-        return validate_transition(transition, previous_state, previous_dynamics)
+        validate_transition(transition, previous_state, previous_dynamics)
+        return canonicalize_bounded_transition(
+            transition,
+            previous_state,
+            previous_dynamics,
+        )

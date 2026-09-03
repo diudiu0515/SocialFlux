@@ -47,6 +47,17 @@ def load_scenarios(directory):
     return [scenario for _, scenario in load_scenario_records(directory)]
 
 
+def select_scenario_records(records, scenario_ids=None):
+    if not scenario_ids:
+        return list(records)
+    requested = list(dict.fromkeys(scenario_ids))
+    by_id = {scenario["scenario_id"]: (path, scenario) for path, scenario in records}
+    missing = [scenario_id for scenario_id in requested if scenario_id not in by_id]
+    if missing:
+        raise ValueError(f"unknown scenario IDs: {missing}")
+    return [by_id[scenario_id] for scenario_id in requested]
+
+
 def load_rollout_config(path):
     config = json.loads(Path(path).read_text(encoding="utf-8"))
     if config.get("format") != "socialflux_rollout_pool_v1":
@@ -68,6 +79,19 @@ def load_rollout_config(path):
     }
     if len(identities) < 2:
         raise ValueError("rollout policy specs must differ by model and/or sampling")
+    limits = config.get("pilot_limits")
+    if limits is not None:
+        allowed = {"rollout_turns", "t1", "t2", "t3", "t3_horizon"}
+        if not isinstance(limits, dict) or set(limits) - allowed:
+            raise ValueError("pilot_limits contains unsupported fields")
+        for key in ("rollout_turns", "t1", "t2", "t3"):
+            if key in limits and (not isinstance(limits[key], int) or limits[key] < 1):
+                raise ValueError(f"pilot_limits.{key} must be a positive integer")
+        horizon = limits.get("t3_horizon", 5)
+        if not isinstance(horizon, int) or not 5 <= horizon <= 10:
+            raise ValueError("pilot_limits.t3_horizon must be between 5 and 10")
+    if config.get("t2_pairing", "all") not in {"all", "within_source_model"}:
+        raise ValueError("t2_pairing must be all or within_source_model")
     return config
 
 
@@ -91,6 +115,8 @@ def _public_config(config):
             }
             for item in config["policies"]
         ],
+        "pilot_limits": deepcopy(config.get("pilot_limits")),
+        "t2_pairing": config.get("t2_pairing", "all"),
     }
 
 
@@ -241,6 +267,7 @@ def run_scenario(scenario, scenario_path, output_dir, config, *, build_only=Fals
     )
 
     policy_lookup = {}
+    pilot_limits = config.get("pilot_limits", {})
     if build_only:
         trajectories = _load_existing_rollouts(rollout_dir)
         if not trajectories:
@@ -253,7 +280,10 @@ def run_scenario(scenario, scenario_path, output_dir, config, *, build_only=Fals
             policy = _policy_from_spec(spec, run_index)
             policy_lookup[policy.policy_id] = (spec, run_index)
             trajectories.append(
-                RolloutRunner(environment_factory, logger=logger).run(policy)
+                RolloutRunner(environment_factory, logger=logger).run(
+                    policy,
+                    max_turns=pilot_limits.get("rollout_turns"),
+                )
             )
         _write_dialogues(rollout_dir / "dialogues.md", scenario, trajectories)
         write_manifest(
@@ -266,7 +296,10 @@ def run_scenario(scenario, scenario_path, output_dir, config, *, build_only=Fals
             },
         )
 
-    t1_limit = scenario.get("sampling_plan", {}).get("t1_max", 5)
+    t1_limit = pilot_limits.get(
+        "t1",
+        scenario.get("sampling_plan", {}).get("t1_max", 5),
+    )
     t1_groups = [
         build_t1_checkpoints(trajectory, scenario.get("target_state_ids", []))
         for trajectory in trajectories
@@ -277,14 +310,26 @@ def run_scenario(scenario, scenario_path, output_dir, config, *, build_only=Fals
         build_provider(config["construction"]["provider"]),
         config["construction"].get("sampling", {}),
     )
-    t2_limit = scenario.get("sampling_plan", {}).get("t2_max", 3)
+    t2_limit = pilot_limits.get(
+        "t2",
+        scenario.get("sampling_plan", {}).get("t2_max", 3),
+    )
     t2 = build_t2_pairs(
         trajectories,
         construction.shared_observation,
         t2_limit,
+        scenario.get("target_state_ids", []),
+        same_source_model=config.get("t2_pairing") == "within_source_model",
     )
 
-    t3_limit = scenario.get("sampling_plan", {}).get("t3_max", 4)
+    t3_limit = pilot_limits.get(
+        "t3",
+        scenario.get("sampling_plan", {}).get("t3_max", 4),
+    )
+    t3_horizon = pilot_limits.get(
+        "t3_horizon",
+        scenario.get("t3_delayed_horizon", 5),
+    )
     t3 = []
     branches = []
     for trajectory, turn in _round_robin_turns(trajectories):
@@ -299,7 +344,7 @@ def run_scenario(scenario, scenario_path, output_dir, config, *, build_only=Fals
         t3.append(build_t3_candidates(
             checkpoint,
             actions,
-            scenario.get("t3_delayed_horizon", 5),
+            t3_horizon,
             scenario.get("target_state_ids", []),
         ))
         spec_run = policy_lookup.get(trajectory["policy_id"])
@@ -323,7 +368,7 @@ def run_scenario(scenario, scenario_path, output_dir, config, *, build_only=Fals
             turn,
             actions,
             lambda spec=spec, run_index=run_index: _policy_from_spec(spec, run_index),
-            scenario.get("t3_delayed_horizon", 5),
+            t3_horizon,
         )
         for branch in new_branches:
             branch["scenario_id"] = scenario_id
@@ -350,6 +395,8 @@ def run_scenario(scenario, scenario_path, output_dir, config, *, build_only=Fals
         "t3": len(t3),
         "local_intervention_branches": len(branches),
         "ground_truth_status": "pending_human_annotation",
+        "run_scope": "pilot" if pilot_limits else "full_scenario",
+        "pilot_limits": deepcopy(pilot_limits) if pilot_limits else None,
     }
     scenario_output.mkdir(parents=True, exist_ok=True)
     (scenario_output / "pipeline_manifest.json").write_text(
@@ -363,11 +410,21 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--scenarios", type=Path, default=Path("configs/scenarios"))
     parser.add_argument("--output", type=Path, default=Path("build/pipeline_v2"))
+    parser.add_argument(
+        "--scenario-id",
+        dest="scenario_ids",
+        action="append",
+        help="Run only this canonical scenario ID; repeat to select multiple scenarios.",
+    )
     parser.add_argument("--rollout-config", type=Path, required=True)
     parser.add_argument("--build-only", action="store_true")
     parser.add_argument("--allow-unreviewed", action="store_true")
     args = parser.parse_args()
     config = load_rollout_config(args.rollout_config)
+    records = select_scenario_records(
+        load_scenario_records(args.scenarios),
+        args.scenario_ids,
+    )
     summaries = [
         run_scenario(
             scenario,
@@ -377,7 +434,7 @@ def main():
             build_only=args.build_only,
             allow_unreviewed=args.allow_unreviewed,
         )
-        for path, scenario in load_scenario_records(args.scenarios)
+        for path, scenario in records
     ]
     instances = []
     for summary in summaries:

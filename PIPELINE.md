@@ -65,6 +65,8 @@ python scripts/scenario_docs.py --check
 
 密钥只通过 `api_key_env` 指向环境变量。日志和公开 manifest 不记录密钥或环境变量名。
 
+GPT–Qwen 匹配 pilot 使用 `configs/rollout_comparison.example.json`：固定同一个 environment/construction model、scenario、turns、temperature 与 seeds，Qwen/GPT 轨迹交错排列；T2 设置 `within_source_model` 并按来源模型分层轮询，避免交叉模型 history pair。把 Qwen 绝对路径和 `YOUR_GPT_MODEL` 替换为本机值，并在 shell 设置 `OPENAI_API_KEY`。本地 Transformers server 必须确认 sampling 已开启；provider 会按 base seed + call index 推进请求 seed。
+
 ## 3. 生成自然轨迹与离线任务
 
 ```bash
@@ -72,6 +74,13 @@ python -m scripts.run_pipeline \
   --scenarios configs/scenarios \
   --rollout-config configs/rollout_pool.local.json \
   --output build/pipeline_v2
+
+# 可重复 --scenario-id 做可复现实验子集
+python -m scripts.run_pipeline \
+  --scenario-id IA_PIPE_011 \
+  --rollout-config configs/rollout_pool.local.json \
+  --output build/pipeline_v2 \
+  --allow-unreviewed
 ```
 
 正式运行会拒绝未通过质量门或未 human_frozen 的场景。开发联调可显式加 `--allow-unreviewed`，产物不可视为正式数据。`--build-only` 只复用 provenance 为 `free_form_model_interaction` 且能与当前 model config 匹配的轨迹。
@@ -82,6 +91,15 @@ python -m scripts.run_pipeline \
 - `build/pipeline_v2/scenario_NNN/offline/instances.jsonl`：T1/T2/T3 candidate。
 - `build/pipeline_v2/scenario_NNN/validation/local_action_interventions.json`：局部 checkpoint 分支。
 - `build/pipeline_v2/manifest.json`：去密钥的聚合 provenance 与计数。
+
+T1 的 target 必须是持有 latent state 的环境角色；T2/T3 也必须显式携带同一 target character 与目标 state IDs。生成后运行结构质量审计：
+
+```bash
+python scripts/evaluate_instance_quality.py \
+  --pipeline-output build/pipeline_v2
+```
+
+自动分数检查合同、泄漏、重复历史、T2 双方角色/private divergence、T3 分支完整性，并另报完整轨迹的 action/response 唯一率与 latent 边界占比。可用 `--judge-provider-config` 增加去 model/provenance 的盲化语义诊断，但同模型自评可能明显偏乐观，仍不是 human ground truth。`run_acceptance.py` 会自动读取同一 pipeline output 下的质量报告；轨迹质量失败时不能把 Full-Trajectory 标为 provisionally ready。
 
 ## 4. 验收
 

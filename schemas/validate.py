@@ -160,6 +160,32 @@ def validate_narrative_structure(structure):
     return structure
 
 
+def validate_instance_quality_judgment(judgment, expected_task_type=None):
+    required = {"task_type", "scores", "fatal_issues", "summary", "recommendation"}
+    if set(judgment) != required:
+        raise ValueError("instance quality judgment fields do not match the schema")
+    if expected_task_type and judgment["task_type"] != expected_task_type:
+        raise ValueError("instance quality judgment task type mismatch")
+    score_keys = {
+        "history_dependency", "evidence_sufficiency", "social_plausibility",
+        "nontriviality", "answerability",
+    }
+    if set(judgment["scores"]) != score_keys or not all(
+        isinstance(value, int) and 1 <= value <= 5
+        for value in judgment["scores"].values()
+    ):
+        raise ValueError("instance quality judgment requires five integer scores in [1, 5]")
+    if not isinstance(judgment["fatal_issues"], list) or not all(
+        isinstance(item, str) and item.strip() for item in judgment["fatal_issues"]
+    ):
+        raise ValueError("instance quality fatal issues must be non-empty strings")
+    if not isinstance(judgment["summary"], str) or not judgment["summary"].strip():
+        raise ValueError("instance quality judgment summary must be non-empty")
+    if judgment["recommendation"] not in ("use", "revise", "reject"):
+        raise ValueError("invalid instance quality recommendation")
+    return judgment
+
+
 def validate_quality_report(report):
     required = {"format", "source_type", "checks", "recommendation", "summary", "review_status"}
     if set(report) != required:

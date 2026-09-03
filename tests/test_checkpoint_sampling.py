@@ -29,6 +29,14 @@ class CheckpointSamplingTest(unittest.TestCase):
             instance["input"]["history"][-1]["environment_response"],
             turn["environment_response"],
         )
+        self.assertEqual(
+            instance["input"]["target_character_id"],
+            f"{SCENARIO['scenario_id']}_ENVIRONMENT_AGENT",
+        )
+        self.assertNotEqual(
+            instance["input"]["target_character_id"],
+            SCENARIO["evaluated_agent_role"]["character_id"],
+        )
         self.assertEqual(turn["observation_after"]["turn_id"], 1)
         self.assertEqual(
             turn["observation"]["explicit_goal"],

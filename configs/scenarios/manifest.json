@@ -1,7 +1,7 @@
 {
   "format": "socialflux_scenario_manifest_v2",
   "scenario_count": 20,
-  "prompt_manifest_sha256": "d9641443fcce40452dd074a526b161e834cd97a22bd825cf224bf77388a24520",
+  "prompt_manifest_sha256": "cc37c68f5f0744aa6eba8876f060e616bf58e857a7d17b1ea1eb135c30e51eea",
   "source_counts": {
     "narrative-derived": 15,
     "synthetic-script": 5

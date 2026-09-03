@@ -42,8 +42,16 @@ class ModelCandidateGenerator:
             raise ValueError("counterfactual actions must contain at least two distinct options")
         return [{"text": item} for item in unique[:count]]
 
-    def shared_observation(self, history_a, history_b):
-        prompt = render_prompt("t2_shared_observation_v1", {
+    def shared_observation(
+        self,
+        history_a,
+        history_b,
+        target_character=None,
+        evaluated_character=None,
+    ):
+        prompt = render_prompt("t2_shared_observation_v2", {
+            "target_character": deepcopy(target_character or {}),
+            "evaluated_character": deepcopy(evaluated_character or {}),
             "history_a": deepcopy(history_a),
             "history_b": deepcopy(history_b),
         })

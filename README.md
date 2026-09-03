@@ -2,7 +2,7 @@
 
 SocialFlux 是一个用于长期社会互动推理的 stateful benchmark pipeline。它用同一套私有状态环境生成自然模型轨迹、构建 T1/T2/T3 离线任务，并提供 T4 在线交互；正常生成过程不含预定义 repair/neutral/escalation 策略，也不查 action transition table。
 
-当前代码架构、20 个 scenario bundle（原 10 个保留，新增 10 个影视高层结构启发的原创场景）、prompt catalog、可视化网站和九项验收框架已经迁移到 v2。现有 20 个 scenario 的质量门与 S0/D0 仍标记为待真人复核，因此仓库不会伪造正式模型 rollout 或研究验收结论。
+当前代码架构、20 个 scenario bundle（原 10 个保留，新增 10 个影视高层结构启发的原创场景）、21 个固定 prompt、可视化网站和九项验收框架已经迁移到 v2。IA_PIPE_011 已完成 Qwen3.5-9B 双 seed 开发 pilot 和 T1/T2/T3 实际提取，但现有 scenario 的质量门与 S0/D0 仍待真人复核，pilot 轨迹也未通过重复质量门，因此仓库不会把它伪装成正式数据或研究验收结论。
 
 ## 核心约束
 
@@ -21,6 +21,7 @@ python scripts/scenario_docs.py --check
 python -m unittest discover -s tests -v
 python -m unittest discover -s web/tests -v
 python scripts/run_acceptance.py
+python scripts/evaluate_instance_quality.py --pipeline-output build/pipeline_v2
 ```
 
 启动只读可视化：
