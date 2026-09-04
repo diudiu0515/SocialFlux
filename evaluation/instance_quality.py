@@ -263,6 +263,7 @@ def audit_instance(instance, trajectories=None, branch_groups=None):
     score = sum(checks.values()) / len(checks) if checks else 0.0
     return {
         "instance_id": instance.get("instance_id"),
+        "scenario_id": instance.get("story_id"),
         "task_type": task_type,
         "source_model_group": _model_group(instance, trajectories),
         "structural_score": round(score, 4),
@@ -297,6 +298,25 @@ def build_instance_quality_report(instances, trajectories=None, interventions=No
                 4,
             ),
         }
+    scenario_groups = defaultdict(list)
+    for item in audited:
+        scenario_groups[(item["scenario_id"], item["task_type"])].append(item)
+    by_scenario = {}
+    for (scenario_id, task), items in sorted(scenario_groups.items()):
+        by_scenario.setdefault(scenario_id, {})[task] = {
+            "count": len(items),
+            "passed": sum(item["passed"] for item in items),
+            "mean_structural_score": round(
+                sum(item["structural_score"] for item in items) / len(items),
+                4,
+            ),
+        }
+    trajectory_by_scenario = {}
+    for item, audit in zip(trajectories, trajectory_audits):
+        scenario_id = item.get("scenario_id", "unknown")
+        entry = trajectory_by_scenario.setdefault(scenario_id, {"count": 0, "passed": 0})
+        entry["count"] += 1
+        entry["passed"] += int(audit["passed"])
     return {
         "format": "socialflux_instance_quality_v1",
         "instance_count": len(audited),
@@ -306,9 +326,11 @@ def build_instance_quality_report(instances, trajectories=None, interventions=No
             4,
         ) if audited else 0.0,
         "by_source_model": by_model,
+        "by_scenario": by_scenario,
         "trajectory_quality": {
             "trajectory_count": len(trajectory_audits),
             "passed": sum(item["passed"] for item in trajectory_audits),
+            "by_scenario": trajectory_by_scenario,
             "trajectories": trajectory_audits,
         },
         "instances": audited,

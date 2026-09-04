@@ -4,7 +4,7 @@
 
 - `scenario_NNN.json`：canonical machine truth；
 - `scenario_NNN.md`：确定性生成的自然语言说明；
-- `rollouts/`：本地 natural model trajectory、manifest 与 `dialogues.md`。
+- `rollouts/`：本地 private natural trajectories、manifest、逐轮自然语言 `dialogues.md` 与逐 instance 的 T1/T2/T3 人工抽查包 `tasks.md`。
 
 JSON 更新后运行：
 

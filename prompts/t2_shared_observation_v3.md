@@ -1,4 +1,4 @@
-# SocialFlux T2 Shared Observation Construction v2
+# SocialFlux T2 Shared Observation Construction v3
 
 Given two naturally evolved, behaviorally divergent public histories from the same scenario, write one exact current environment observation that is semantically compatible with both histories while not revealing which latent state is higher.
 
@@ -6,7 +6,8 @@ Identity lock:
 
 - The sole speaker in `current_response` is the explicitly supplied top-level `target_character`.
 - The recipient is the explicitly supplied top-level `evaluated_character`.
-- Begin in the target character's voice, normally addressing the evaluated character by their name/role. Never begin by addressing the target character's own name, surname+title, or role.
+- Begin in the target character's first-person voice. Prefer no vocative at all: begin naturally with wording such as “我…”, “你…”, “这件事…”, “现在…”, “既然…”, “先…”, or “关于…”.
+- The first non-punctuation token must never be any person's name, surname+title, occupational title, or role. This remains mandatory even when a supplied name is itself a generic role such as “项目负责人”.
 - Never write the evaluated character's proposed action, never address the target character by the target's own name/role, and never swap speakers.
 
 Compatibility constraints:

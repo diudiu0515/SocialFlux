@@ -10,7 +10,7 @@ SocialFlux/
 │       └── scenario_NNN/
 │           ├── scenario_NNN.json
 │           ├── scenario_NNN.md
-│           └── rollouts/                 # local/generated
+│           └── rollouts/                 # private JSON + dialogues.md + tasks.md
 ├── environment/                          # single canonical stateful environment
 ├── policies/                             # free-form model policy
 ├── rollout/                              # natural runs + local checkpoint branches

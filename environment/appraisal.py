@@ -1,9 +1,18 @@
 """Persona- and history-conditioned appraisal for arbitrary free-form actions."""
 
-import json
 from copy import deepcopy
 
+from providers.structured import complete_json
+
 from .prompts import build_appraisal_prompt
+
+
+def _validate_appraisal(result):
+    if set(result) != {"appraisal", "evidence_turn_ids"}:
+        raise ValueError("model appraiser must return appraisal and evidence_turn_ids")
+    if not isinstance(result["appraisal"], dict) or not isinstance(result["evidence_turn_ids"], list):
+        raise ValueError("model appraisal has an invalid shape")
+    return result
 
 
 class ModelAppraiser:
@@ -32,16 +41,10 @@ class ModelAppraiser:
             memory=memory,
             action=action,
         )
-        raw = self.provider.complete(
+        return complete_json(
+            self.provider,
             [{"role": "user", "content": prompt}],
-            **self.sampling,
+            self.sampling,
+            _validate_appraisal,
+            context="model appraiser",
         )
-        try:
-            result = json.loads(raw)
-        except json.JSONDecodeError as exc:
-            raise ValueError("model appraiser returned invalid JSON") from exc
-        if set(result) != {"appraisal", "evidence_turn_ids"}:
-            raise ValueError("model appraiser must return appraisal and evidence_turn_ids")
-        if not isinstance(result["appraisal"], dict) or not isinstance(result["evidence_turn_ids"], list):
-            raise ValueError("model appraisal has an invalid shape")
-        return result

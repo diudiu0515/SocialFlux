@@ -117,6 +117,14 @@ class PipelineContractTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 load_rollout_config(path)
 
+    def test_qwen_full_config_extracts_all_three_tasks(self):
+        config = load_rollout_config("configs/rollout_qwen35_full.example.json")
+        self.assertEqual(len(config["policies"]), 3)
+        self.assertEqual(config["pilot_limits"], {
+            "rollout_turns": 6, "t1": 6, "t2": 2, "t3": 1, "t3_horizon": 5,
+        })
+        self.assertEqual(config["t2_pairing"], "within_source_model")
+
     def test_model_comparison_config_is_a_matched_pilot(self):
         config = load_rollout_config("configs/rollout_comparison.example.json")
         self.assertEqual(config["pilot_limits"]["rollout_turns"], 6)

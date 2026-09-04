@@ -119,6 +119,7 @@ def scenario_detail(scenario_id):
         return None
     source_path, scenario = record
     dialogue_path = source_path.parent / "rollouts" / "dialogues.md"
+    task_review_path = source_path.parent / "rollouts" / "tasks.md"
     return {
         "summary": scenario_summary(scenario, source_path),
         "scenario": scenario,
@@ -127,6 +128,12 @@ def scenario_detail(scenario_id):
             dialogue_path.read_text(encoding="utf-8")
             if dialogue_path.exists()
             and "Free-form Rollout Dialogues" in dialogue_path.read_text(encoding="utf-8")
+            else ""
+        ),
+        "task_review": (
+            task_review_path.read_text(encoding="utf-8")
+            if task_review_path.exists()
+            and "T1/T2/T3 人工抽查包" in task_review_path.read_text(encoding="utf-8")
             else ""
         ),
         "rollouts": load_rollouts(scenario_id),

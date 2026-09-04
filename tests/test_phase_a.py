@@ -80,6 +80,22 @@ class CanonicalEnvironmentTest(unittest.TestCase):
         self.assertEqual(pairs[0]["input"]["shared_current_observation"], shared)
         self.assertTrue(pairs[0]["metadata"]["shared_observation_injected"])
 
+    def test_t2_retrieval_skips_histories_with_exact_repeated_turns(self):
+        runner = RolloutRunner(environment_factory(SCENARIO))
+        left = runner.run(
+            TextPolicy("left", ["请解释证据。", "请继续解释证据。", "再说明一次。"]),
+            max_turns=3,
+        )
+        right = runner.run(
+            TextPolicy("right", ["我要追究责任。", "我会启动程序。", "现在确认。"], seed=2),
+            max_turns=3,
+        )
+        left["turns"][1]["policy_action"] = left["turns"][0]["policy_action"]
+        left["turns"][1]["environment_response"] = left["turns"][0]["environment_response"]
+        candidates = retrieve_divergent_history_pairs([left, right])
+        self.assertTrue(candidates)
+        self.assertTrue(all(item["left_index"] == 0 for item in candidates))
+
     def test_t2_can_restrict_pairs_to_one_source_model(self):
         runner = RolloutRunner(environment_factory(SCENARIO))
         trajectories = [

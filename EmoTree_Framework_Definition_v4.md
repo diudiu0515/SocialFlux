@@ -137,4 +137,4 @@ T4 让被测模型直接进入 canonical environment，自由输出行动。评�
 
 ## 15. 文件与可复现性
 
-Canonical scenario 位于 `configs/scenarios/scenario_NNN/scenario_NNN.json`；同名 Markdown 是确定性可读投影。Rollout JSON、manifest 和 `dialogues.md` 与 scenario 同目录。跨场景构建位于 `build/pipeline_v2`，验收位于 `build/acceptance_v2`。所有本地产物可再生且默认 gitignored；secrets 只来自环境变量。
+Canonical scenario 位于 `configs/scenarios/scenario_NNN/scenario_NNN.json`；同名 Markdown 是确定性可读投影。每次生成后，private rollout JSON、manifest、自然语言完整对话 `dialogues.md` 和自然语言 T1/T2/T3 人工抽查包 `tasks.md` 必须共同位于该 scenario 的 `rollouts/`。`tasks.md` 必须逐 instance 展示公开题面，并把 simulator 私有诊断明确隔离为研究抽查信息，禁止当作模型输入或人工 GT。跨场景构建位于 `build/pipeline_v2`，验收位于 `build/acceptance_v2`。所有本地产物可再生且默认 gitignored；secrets 只来自环境变量。

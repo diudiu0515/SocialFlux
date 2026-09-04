@@ -18,7 +18,7 @@
 | `observable_expression_v1` | author-side media specification；媒体接入协议 | 读 updated private social context | `observable_expression.schema.json` | 从视频生成中拆出可观察表达；禁止一对一刻板编码和私有标签 |
 | `talking_head_generation_v1` | media-side；外部视频 adapter 协议，当前尚未接真实供应商 | 只读安全人物外观、observable response/expression | `talking_head_request.schema.json` | 改为 trigger 后稀疏生成；禁止 latent/threshold/答案泄漏 |
 | `counterfactual_action_generation_v1` | benchmark construction；`ModelCandidateGenerator` | 只读真实 checkpoint 的 public observation | string array，经 caller 转 `{"text": ...}` | 移除策略标签与显然好/坏二分；只生成局部可行动自由文本 |
-| `t2_shared_observation_v2` | benchmark construction；`ModelCandidateGenerator` | 读显式 target/evaluated 身份与两段 public natural histories | inline O* JSON | 实测修复 O* 角色互换；强制由 environment target 发话、双历史兼容且禁止 private provenance 泄漏 |
+| `t2_shared_observation_v3` | benchmark construction；`ModelCandidateGenerator` | 读显式 target/evaluated 身份与两段 public natural histories | inline O* JSON | 实测修复 O* 角色互换；强制由 environment target 发话、双历史兼容且禁止 private provenance 泄漏 |
 | `local_intervention_validation_v1` | author-side validation protocol | 可读真实 checkpoint private experiment packet | `local_intervention_review.schema.json` | controlled 只保留为局部实验，不再驱动多轮策略 |
 | `instance_quality_judge_v2` | validation；`evaluate_instance_quality --judge-provider-config` 对 T1/T2/T3 做盲化质量诊断 | 只读去除 model/provider/trajectory/private state/metadata 后的 participant-visible packet | `instance_quality_judge.schema.json` | 评估 history dependency、证据、社会合理性、非平凡性和可回答性；明确不是 human GT，不能单独宣布模型胜负 |
 | `task_t1_v1` | evaluated-agent-side；T1 baseline/evaluation | 只读 public longitudinal instance | `task_t1_output.schema.json` | 移除作者 effects/oracle；证据 ID 必须可见 |

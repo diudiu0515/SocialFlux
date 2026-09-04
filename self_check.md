@@ -4,9 +4,9 @@
 
 > 勾选标准：必须有可复核的代码、产物或测试证据。标明需要真人审核、标注员、真实模型 API 或视频资产的条目，在没有对应记录前不勾选。
 
-> 最后自查：2026-09-03。
+> 最后自查：2026-09-04。
 
-> 本轮记录：已完成 Qwen3.5-9B 开发 pilot、T1/T2/T3 实际提取、目标角色/seed/边界/重复/盲审修复及网站接入；7 个实例中 6 个过结构门，2 条完整轨迹均因重复未过质量门；core 54/54、web 4/4。GPT 凭据未设置，GPT–Qwen 胜负与九项人工研究验收保持未完成。
+> 本轮记录：20/20 scenario 已完成 Qwen3.5-9B 三 seed 自然 rollout 与 T1/T2/T3 实际提取；共 60 条轨迹、180 个 instance、60 条局部分支，20/20 均有 `dialogues.md` 和 `tasks.md`。T2 speaker/history 缺陷已定向修复，instance 结构门 180/180；完整轨迹严格零重复门 22/60，故人工合理性与正式研究验收仍保持未完成。core 66/66、web 4/4。
 
 ## Revision v2 工程自查
 
@@ -25,6 +25,7 @@
 | R11 Instance target/quality | T1/T2/T3 指向 environment character；结构审计与盲化语义质量协议可运行 | [x] |
 | R12 GPT–Qwen rollout 对照 | 同 environment/construction、匹配 scenario/seed 后比较任务质量；Qwen 已跑，GPT 凭据缺失 | [ ] |
 | R13 Qwen rollout pilot | IA_PIPE_011 两个 seeds、6 turns、T1/T2/T3、质量报告与九项 gate 可复核 | [x] |
+| R14 20-scenario 抽查包 | 每个 scenario 3 seeds rollout、T1/T2/T3、dialogues.md、tasks.md 与逐场景 bundle audit | [x] |
 
 | Phase | 模块 | 具体要做什么 | 产物 | 是否人工 | 优先级 | 自查 |
 | --- | --- | --- | --- | --- | --- | --- |

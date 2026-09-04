@@ -108,6 +108,19 @@ def _markdown(report):
             )
     lines.extend([
         "",
+        "## By scenario",
+        "",
+        "| Scenario | Task | Count | Passed | Mean structural score |",
+        "|---|---:|---:|---:|---:|",
+    ])
+    for scenario_id, tasks in report["by_scenario"].items():
+        for task, values in tasks.items():
+            lines.append(
+                f"| {scenario_id} | {task} | {values['count']} | "
+                f"{values['passed']} | {values['mean_structural_score']} |"
+            )
+    lines.extend([
+        "",
         "## Interpretation boundary",
         "",
         "该分数只覆盖合同、泄漏、证据形状和分支完整性，不把社会合理性、O* 自然度、候选行动的策略意义、人类可回答性或标签有效性伪装成自动结论。模型优劣必须使用匹配配置的 rollout，并做盲化语义评审。",
@@ -150,6 +163,7 @@ def main():
         "structurally_passed": report["structurally_passed"],
         "mean_structural_score": report["mean_structural_score"],
         "by_source_model": report["by_source_model"],
+        "by_scenario": report["by_scenario"],
         "trajectory_quality": report["trajectory_quality"],
         "blind_semantic_review": report.get("blind_semantic_review"),
     }, ensure_ascii=False, indent=2))

@@ -89,7 +89,14 @@ def retrieve_divergent_history_pairs(trajectories, same_source_model=False):
                 continue
             max_depth = min(len(left.get("turns", [])), len(right.get("turns", [])))
             for depth in range(1, max_depth):
-                if _history_signature(left, depth - 1) == _history_signature(right, depth - 1):
+                left_signature = _history_signature(left, depth - 1)
+                right_signature = _history_signature(right, depth - 1)
+                if left_signature == right_signature:
+                    continue
+                if (
+                    len(left_signature) != len(set(left_signature))
+                    or len(right_signature) != len(set(right_signature))
+                ):
                     continue
                 distance = _state_distance(left["turns"][depth], right["turns"][depth])
                 if distance <= 0:

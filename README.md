@@ -2,7 +2,7 @@
 
 SocialFlux 是一个用于长期社会互动推理的 stateful benchmark pipeline。它用同一套私有状态环境生成自然模型轨迹、构建 T1/T2/T3 离线任务，并提供 T4 在线交互；正常生成过程不含预定义 repair/neutral/escalation 策略，也不查 action transition table。
 
-当前代码架构、20 个 scenario bundle（原 10 个保留，新增 10 个影视高层结构启发的原创场景）、21 个固定 prompt、可视化网站和九项验收框架已经迁移到 v2。IA_PIPE_011 已完成 Qwen3.5-9B 双 seed 开发 pilot 和 T1/T2/T3 实际提取，但现有 scenario 的质量门与 S0/D0 仍待真人复核，pilot 轨迹也未通过重复质量门，因此仓库不会把它伪装成正式数据或研究验收结论。
+当前代码架构、20 个 scenario bundle（原 10 个保留，新增 10 个影视高层结构启发的原创场景）、21 个固定 prompt、可视化网站和九项验收框架已经迁移到 v2。20 个 scenario 均已完成 Qwen3.5-9B 三 seed 开发 rollout 与 T1/T2/T3 实际提取，共 60 条轨迹、180 个结构合格 instance；每个 bundle 都有完整对话和人工抽查 Markdown。现有 scenario 的质量门与 S0/D0 仍待真人复核，完整轨迹严格零重复门仅 22/60，因此仓库不会把开发产物伪装成正式数据或研究验收结论。
 
 ## 核心约束
 
@@ -30,7 +30,7 @@ python scripts/evaluate_instance_quality.py --pipeline-output build/pipeline_v2
 python -m web.server --host 0.0.0.0 --port 8000
 ```
 
-浏览器访问 `http://<服务器地址>:8000/`。SSH 环境可用端口转发：`ssh -L 8000:127.0.0.1:8000 <host>`。
+浏览器访问 `http://<服务器地址>:8000/`。SSH 环境可用端口转发：`ssh -L 8000:127.0.0.1:8000 <host>`。网站只读展示 scenario、自然轨迹、Talking Head trigger，以及该 scenario 的 T1/T2/T3 人工抽查文档。
 
 ## 运行真实 rollout
 
@@ -51,7 +51,7 @@ python scripts/run_acceptance.py \
 
 ## 目录
 
-- `configs/scenarios/scenario_NNN/`：canonical JSON、同名自然语言说明、该场景的本地 rollout 与对话。
+- `configs/scenarios/scenario_NNN/`：canonical JSON、同名自然语言说明，以及 `rollouts/` 内的本地轨迹、完整对话和 T1/T2/T3 人工抽查包。
 - `environment/`：唯一状态环境、appraisal、state update、response、memory、termination 与 multimodal trigger。
 - `rollout/`、`offline/`：自然轨迹与 T1/T2/T3 构建。
 - `evaluation/`、`annotation/`：九项验收、泄漏审计与人工标注 overlay。

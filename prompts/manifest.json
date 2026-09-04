@@ -71,10 +71,10 @@
       "sha256": "0dd81b0e7695a927eae13b2beede94b96aa03a3211570740ca8454e84fe7ed56",
       "version": "v2"
     },
-    "t2_shared_observation_v2": {
-      "path": "t2_shared_observation_v2.md",
-      "sha256": "cfecee2d9344a5ec851f26e865db434c16e7faf9cc945844d60da6fe9f941432",
-      "version": "v2"
+    "t2_shared_observation_v3": {
+      "path": "t2_shared_observation_v3.md",
+      "sha256": "57d8a8c1c41545e7c48935816c64ec92eef9c7bd6a4869722c5f4023d306955d",
+      "version": "v3"
     },
     "t4_judge_v1": {
       "path": "t4_judge_v1.md",

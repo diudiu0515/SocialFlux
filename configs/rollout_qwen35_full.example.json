@@ -1,0 +1,84 @@
+{
+  "format": "socialflux_rollout_pool_v1",
+  "t2_pairing": "within_source_model",
+  "pilot_limits": {
+    "rollout_turns": 6,
+    "t1": 6,
+    "t2": 2,
+    "t3": 1,
+    "t3_horizon": 5
+  },
+  "environment": {
+    "provider": {
+      "provider": "local_vllm",
+      "endpoint": "http://127.0.0.1:8101/v1/chat/completions",
+      "model": "/ABSOLUTE/PATH/TO/Qwen3.5-9B",
+      "timeout": 300,
+      "max_tokens": 768
+    },
+    "sampling": {
+      "temperature": 0.2,
+      "seed": 4100
+    }
+  },
+  "construction": {
+    "provider": {
+      "provider": "local_vllm",
+      "endpoint": "http://127.0.0.1:8101/v1/chat/completions",
+      "model": "/ABSOLUTE/PATH/TO/Qwen3.5-9B",
+      "timeout": 300,
+      "max_tokens": 768
+    },
+    "sampling": {
+      "temperature": 0.3,
+      "seed": 5100
+    }
+  },
+  "policies": [
+    {
+      "policy_id": "qwen35_seed_101",
+      "provider": {
+        "provider": "local_vllm",
+        "endpoint": "http://127.0.0.1:8101/v1/chat/completions",
+        "model": "/ABSOLUTE/PATH/TO/Qwen3.5-9B",
+        "timeout": 300,
+        "max_tokens": 160
+      },
+      "sampling": {
+        "temperature": 0.6,
+        "seed": 101
+      },
+      "runs": 1
+    },
+    {
+      "policy_id": "qwen35_seed_202",
+      "provider": {
+        "provider": "local_vllm",
+        "endpoint": "http://127.0.0.1:8101/v1/chat/completions",
+        "model": "/ABSOLUTE/PATH/TO/Qwen3.5-9B",
+        "timeout": 300,
+        "max_tokens": 160
+      },
+      "sampling": {
+        "temperature": 0.6,
+        "seed": 202
+      },
+      "runs": 1
+    },
+    {
+      "policy_id": "qwen35_seed_303",
+      "provider": {
+        "provider": "local_vllm",
+        "endpoint": "http://127.0.0.1:8101/v1/chat/completions",
+        "model": "/ABSOLUTE/PATH/TO/Qwen3.5-9B",
+        "timeout": 300,
+        "max_tokens": 160
+      },
+      "sampling": {
+        "temperature": 0.6,
+        "seed": 303
+      },
+      "runs": 1
+    }
+  ]
+}

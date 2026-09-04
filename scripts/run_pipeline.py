@@ -29,6 +29,7 @@ from scripts.scenario_docs import (
     assert_manifest_current,
     discover_scenario_paths,
 )
+from scripts.task_docs import write_task_review
 
 
 def load_scenario_records(directory):
@@ -125,9 +126,10 @@ def _prepare_rollout_directory(path):
     path.mkdir(parents=True, exist_ok=True)
     for candidate in path.glob("*.json"):
         candidate.unlink()
-    dialogue = path / "dialogues.md"
-    if dialogue.exists():
-        dialogue.unlink()
+    for document_name in ("dialogues.md", "tasks.md"):
+        document = path / document_name
+        if document.exists():
+            document.unlink()
     return path
 
 
@@ -293,6 +295,7 @@ def run_scenario(scenario, scenario_path, output_dir, config, *, build_only=Fals
                 "origin": "free_form_model_interaction",
                 "rollout_config": _public_config(config),
                 "dialogues": "dialogues.md",
+                "task_review": "tasks.md",
             },
         )
 
@@ -385,6 +388,13 @@ def run_scenario(scenario, scenario_path, output_dir, config, *, build_only=Fals
         json.dumps(branches, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
+    write_task_review(
+        rollout_dir / "tasks.md",
+        scenario,
+        t1_candidates + t2 + t3,
+        trajectories,
+        branches,
+    )
     summary = {
         "scenario_id": scenario_id,
         "trajectory_count": len(trajectories),
@@ -394,6 +404,7 @@ def run_scenario(scenario, scenario_path, output_dir, config, *, build_only=Fals
         "t2": len(t2),
         "t3": len(t3),
         "local_intervention_branches": len(branches),
+        "task_review": f"configs/scenarios/{Path(scenario_path).parent.name}/rollouts/tasks.md",
         "ground_truth_status": "pending_human_annotation",
         "run_scope": "pilot" if pilot_limits else "full_scenario",
         "pilot_limits": deepcopy(pilot_limits) if pilot_limits else None,

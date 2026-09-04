@@ -1,9 +1,9 @@
 """Semantic state updates derived from an independent model appraisal."""
 
-import json
 from copy import deepcopy
 
 from prompts.loader import render_prompt
+from providers.structured import complete_json
 
 from .appraisal import ModelAppraiser
 from .delta_mapper import DELTA_LABELS, DELTA_TO_INT, apply_semantic_deltas
@@ -118,23 +118,24 @@ class ModelStateUpdater:
             "appraisal": appraisal["appraisal"],
             "relevant_memory": memory,
         })
-        raw = self.provider.complete(
+        def validate_deltas(deltas):
+            transition = {
+                "appraisal": appraisal["appraisal"],
+                "evidence_turn_ids": appraisal["evidence_turn_ids"],
+                "state_delta": deltas.get("state_delta"),
+                "interaction_dynamics_delta": deltas.get("interaction_dynamics_delta"),
+            }
+            validate_transition(transition, previous_state, previous_dynamics)
+            return canonicalize_bounded_transition(
+                transition,
+                previous_state,
+                previous_dynamics,
+            )
+
+        return complete_json(
+            self.provider,
             [{"role": "user", "content": prompt}],
-            **self.sampling,
-        )
-        try:
-            deltas = json.loads(raw)
-        except json.JSONDecodeError as exc:
-            raise TransitionValidationError("model state updater returned invalid JSON") from exc
-        transition = {
-            "appraisal": appraisal["appraisal"],
-            "evidence_turn_ids": appraisal["evidence_turn_ids"],
-            "state_delta": deltas.get("state_delta"),
-            "interaction_dynamics_delta": deltas.get("interaction_dynamics_delta"),
-        }
-        validate_transition(transition, previous_state, previous_dynamics)
-        return canonicalize_bounded_transition(
-            transition,
-            previous_state,
-            previous_dynamics,
+            self.sampling,
+            validate_deltas,
+            context="model state updater",
         )

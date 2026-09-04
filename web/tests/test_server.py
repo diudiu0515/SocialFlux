@@ -18,7 +18,8 @@ class ScenarioWebTest(unittest.TestCase):
         self.assertNotIn("action_effects", detail["scenario"])
         self.assertIn("## 1. 叙事结构与初始化", detail["documentation"])
         self.assertIn("## 2. 自由交互与状态更新契约", detail["documentation"])
-        self.assertFalse(detail["rollouts"])
+        self.assertIsInstance(detail["rollouts"], list)
+        self.assertIn("task_review", detail)
 
     def test_health_reports_pipeline_v2(self):
         self.assertEqual(api_payload("/api/health")["pipeline_version"], "v2")

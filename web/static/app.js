@@ -23,7 +23,7 @@ function renderScenarioList(){
 }
 function renderHeader(){const s=state.detail.scenario, p=s.environment_agent?.persona||{}, summary=state.detail.summary;
   $('#scenarioHeader').innerHTML=`<div><div class="eyebrow">${esc(s.scenario_id)} · ${esc(s.mechanism||'social interaction')}</div><div class="scenario-title">${esc(s.title||s.scenario_id)}</div><div class="scenario-meta"><span class="tag">${esc(s.source?.type||'unknown source')}</span><span class="tag">${esc(s.construction_status?.initial_state||'unknown S0')}</span><span class="tag">${esc(s.max_turns||20)} turn horizon</span><span class="tag">${esc(summary.rollout_bundle)}</span></div><p class="scenario-copy">${esc(s.background||'')}</p></div><div class="persona-box"><div class="eyebrow">ENVIRONMENT PERSONA</div><strong>${esc(p.name||'—')}</strong><p>${esc(p.role||'')}<br><span class="muted">goal: ${esc(s.environment_agent?.explicit_goal||'—')}</span></p></div>`;
-  $('#scenarioDoc').textContent=state.detail.documentation||'No paired Markdown'; $('#rawScenario').textContent=JSON.stringify(s,null,2);
+  $('#scenarioDoc').textContent=state.detail.documentation||'No paired Markdown'; $('#rolloutDialogues').textContent=state.detail.rollout_dialogues||'尚无完整 rollout 对话文档'; $('#taskReview').textContent=state.detail.task_review||'尚无 T1/T2/T3 人工抽查文档'; $('#rawScenario').textContent=JSON.stringify(s,null,2);
 }
 function renderSelect(){
   const rollouts=state.detail.rollouts;
