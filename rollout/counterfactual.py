@@ -18,18 +18,31 @@ def branch_counterfactuals(
     branches = []
     for branch_index, candidate in enumerate(candidate_actions):
         environment = environment_factory()
-        environment.restore(snapshot, episode_id=f"local-branch-{branch_index}")
-        state_before = deepcopy(environment.session["state"])
-        dynamics_before = deepcopy(environment.session["dynamics"])
-        _, immediate_log = environment.step(deepcopy(candidate))
         policy = continuation_policy_factory()
-        continuation_steps = 0
-        while (
-            continuation_steps < delayed_horizon - 1
-            and environment.session["status"] == "active"
-        ):
-            environment.step(policy.generate(environment.observe()))
-            continuation_steps += 1
+        last_error = None
+        for branch_attempt in range(6):
+            environment.restore(
+                snapshot,
+                episode_id=f"local-branch-{branch_index}-attempt-{branch_attempt}",
+            )
+            state_before = deepcopy(environment.session["state"])
+            dynamics_before = deepcopy(environment.session["dynamics"])
+            try:
+                _, immediate_log = environment.step(deepcopy(candidate))
+                continuation_steps = 0
+                while (
+                    continuation_steps < delayed_horizon - 1
+                    and environment.session["status"] == "active"
+                ):
+                    environment.step(policy.generate(environment.observe()))
+                    continuation_steps += 1
+                break
+            except ValueError as exc:
+                last_error = exc
+        else:
+            raise RuntimeError(
+                f"counterfactual branch {branch_index} exhausted retries"
+            ) from last_error
         branches.append({
             "experiment": "local_action_intervention",
             "checkpoint_turn_id": checkpoint_turn["turn_id"],

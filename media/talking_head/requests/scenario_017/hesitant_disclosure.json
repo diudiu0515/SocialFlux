@@ -1,0 +1,10 @@
+{
+  "prompt": "写实电影感中近景，固定机位，单人出镜，保持参考肖像身份、服装与背景一致。角色是家族事务组织者，自然地说普通话：‘我需要一点时间，也请你把关键事实说清楚。’面部：表情复杂，紧张中出现松动；视线：愿意与晚辈保持眼神接触；说话方式：开始讨论如何问长辈的意愿；韵律：语速变慢，保留犹豫；动作：承认保护也可能剥夺选择。口型同步，动作细微连续，不夸张，不切镜，无字幕、标签、水印或其他人物。",
+  "duration_seconds": 5.0,
+  "continuity_reference": "media/talking_head/assets/scenario_017/reference.png",
+  "safety_check": {
+    "contains_private_state": false,
+    "contains_threshold_logic": false,
+    "contains_benchmark_answer": false
+  }
+}

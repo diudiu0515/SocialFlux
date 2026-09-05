@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_014`
 - 配对 JSON：`scenario_014.json`
-- JSON SHA-256：`5ceeb0fa741b1f9361841d4c7c9ad7e7456e42c0b734dbb8c68ee30ef17195cb`
+- JSON SHA-256：`74bd3a8eb9552f37efbe84d97a678af8d897b50110974410b4a3fc5b23b01cbd`
 - 社会机制：family loyalty entangled with institutional succession
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-014`
@@ -110,7 +110,7 @@ Scenario 只定义社会世界，不定义行动策略，也不预写任何 acti
 
 - 阶段：`structured_expression`
 - 默认媒体类型：`video`
-- 资产状态：`spec_only`
+- 资产状态：`generated`
 - 资产根目录：`media/talking_head`
 - 说明：Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.
 

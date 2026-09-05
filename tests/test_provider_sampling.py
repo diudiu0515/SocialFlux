@@ -17,8 +17,9 @@ class FakeResponse:
 
 
 class ProviderSamplingTest(unittest.TestCase):
-    @patch("providers.openai_compatible.urlopen", return_value=FakeResponse())
+    @patch("providers.openai_compatible.build_opener")
     def test_seed_advances_per_call_and_reset_restores_base(self, mocked):
+        mocked.return_value.open.return_value = FakeResponse()
         provider = OpenAICompatibleProvider(
             "http://localhost/v1/chat/completions",
             "model",
@@ -30,7 +31,7 @@ class ProviderSamplingTest(unittest.TestCase):
         provider.complete(messages, temperature=0.6, seed=7)
         seeds = [
             json.loads(call.args[0].data)["seed"]
-            for call in mocked.call_args_list
+            for call in mocked.return_value.open.call_args_list
         ]
         self.assertEqual(seeds, [7, 8, 7])
 

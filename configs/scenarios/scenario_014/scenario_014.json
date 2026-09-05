@@ -131,9 +131,10 @@
   "media_generation": {
     "stage": "structured_expression",
     "default_media_type": "video",
-    "asset_status": "spec_only",
+    "asset_status": "generated",
     "asset_root": "media/talking_head",
-    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed."
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.",
+    "provider": "BadToBest/EchoMimicV2"
   },
   "video_triggers": [
     {
@@ -157,7 +158,7 @@
       "media_type": "video",
       "cue_template": "status_guard",
       "duration_seconds": 5,
-      "media_asset_id": null,
+      "media_asset_id": "IA_PIPE_014--status_guard",
       "observable_expression": {
         "facial_expression": "笑容停住，面部僵硬",
         "gaze": "视线不再回避",
@@ -185,7 +186,7 @@
       "media_type": "video",
       "cue_template": "tentative_coalition",
       "duration_seconds": 5,
-      "media_asset_id": null,
+      "media_asset_id": "IA_PIPE_014--tentative_coalition",
       "observable_expression": {
         "facial_expression": "肩部放松，防御性微笑减少",
         "gaze": "开始共同查看治理条款",

@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_020`
 - 配对 JSON：`scenario_020.json`
-- JSON SHA-256：`85f0b9197ddd11ab5446fecff1bdb40dc8de09d7714236f4943350e59d895e98`
+- JSON SHA-256：`79d36c814c2f378799a3d9f3e7436f9d914f0100a2cda39a0f1fceb400034c90`
 - 社会机制：professional loyalty versus client-centered ethics
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-020`
@@ -110,7 +110,7 @@ Scenario 只定义社会世界，不定义行动策略，也不预写任何 acti
 
 - 阶段：`structured_expression`
 - 默认媒体类型：`video`
-- 资产状态：`spec_only`
+- 资产状态：`generated`
 - 资产根目录：`media/talking_head`
 - 说明：Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.
 

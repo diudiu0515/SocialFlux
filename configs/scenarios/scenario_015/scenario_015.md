@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_015`
 - 配对 JSON：`scenario_015.json`
-- JSON SHA-256：`75943e6d7325592cfceb784fd486603e6feb53fb0103371c17b9746ab590418a`
+- JSON SHA-256：`a79d84eb50b3f024867ae7e02ab0338a832f644cf12c932d478a46c0907b627f`
 - 社会机制：institutional denial under public-risk uncertainty
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-015`
@@ -110,7 +110,7 @@ Scenario 只定义社会世界，不定义行动策略，也不预写任何 acti
 
 - 阶段：`structured_expression`
 - 默认媒体类型：`video`
-- 资产状态：`spec_only`
+- 资产状态：`generated`
 - 资产根目录：`media/talking_head`
 - 说明：Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.
 

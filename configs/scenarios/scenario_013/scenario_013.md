@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_013`
 - 配对 JSON：`scenario_013.json`
-- JSON SHA-256：`71fd1952ca1dc60fa0ea5b942a897dc2a6b54e3b5e195d5357bb2ec3105ba6eb`
+- JSON SHA-256：`313e1a7bb500738b229488e0cf09a9a8e4596d6255e0737805955c90595a33ff`
 - 社会机制：group conformity versus evidence revision
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-013`
@@ -110,7 +110,7 @@ Scenario 只定义社会世界，不定义行动策略，也不预写任何 acti
 
 - 阶段：`structured_expression`
 - 默认媒体类型：`video`
-- 资产状态：`spec_only`
+- 资产状态：`generated`
 - 资产根目录：`media/talking_head`
 - 说明：Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.
 

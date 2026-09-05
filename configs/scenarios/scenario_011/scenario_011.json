@@ -129,9 +129,10 @@
   "media_generation": {
     "stage": "structured_expression",
     "default_media_type": "video",
-    "asset_status": "spec_only",
+    "asset_status": "generated",
     "asset_root": "media/talking_head",
-    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed."
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.",
+    "provider": "BadToBest/EchoMimicV2"
   },
   "video_triggers": [
     {
@@ -155,7 +156,7 @@
       "media_type": "video",
       "cue_template": "visible_microcontrol",
       "duration_seconds": 5,
-      "media_asset_id": null,
+      "media_asset_id": "IA_PIPE_011--visible_microcontrol",
       "observable_expression": {
         "facial_expression": "下颌绷紧，反复抿唇",
         "gaze": "注视清单多于对方",
@@ -183,7 +184,7 @@
       "media_type": "video",
       "cue_template": "guarded_reconsideration",
       "duration_seconds": 5,
-      "media_asset_id": null,
+      "media_asset_id": "IA_PIPE_011--guarded_reconsideration",
       "observable_expression": {
         "facial_expression": "眉间张力缓和",
         "gaze": "重新看向助理并保持注视",

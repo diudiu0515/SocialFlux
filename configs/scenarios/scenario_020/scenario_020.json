@@ -131,9 +131,10 @@
   "media_generation": {
     "stage": "structured_expression",
     "default_media_type": "video",
-    "asset_status": "spec_only",
+    "asset_status": "generated",
     "asset_root": "media/talking_head",
-    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed."
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.",
+    "provider": "BadToBest/EchoMimicV2"
   },
   "video_triggers": [
     {
@@ -157,7 +158,7 @@
       "media_type": "video",
       "cue_template": "ethical_withdrawal",
       "duration_seconds": 5,
-      "media_asset_id": null,
+      "media_asset_id": "IA_PIPE_020--ethical_withdrawal",
       "observable_expression": {
         "facial_expression": "眼神回避，表情显出沉重",
         "gaze": "开始整理文件而减少对视",
@@ -185,7 +186,7 @@
       "media_type": "video",
       "cue_template": "principled_reengagement",
       "duration_seconds": 5,
-      "media_asset_id": null,
+      "media_asset_id": "IA_PIPE_020--principled_reengagement",
       "observable_expression": {
         "facial_expression": "疲惫中恢复专注",
         "gaze": "重新看向当事人记录",

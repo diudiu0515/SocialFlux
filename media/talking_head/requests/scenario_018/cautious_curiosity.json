@@ -1,0 +1,10 @@
+{
+  "prompt": "写实电影感中近景，固定机位，单人出镜，保持参考肖像身份、服装与背景一致。角色是联合安全指挥官，自然地说普通话：‘我听见你的顾虑了，请把方案具体说清楚。’面部：警觉仍在但眉间张力减弱；视线：在符号与研究员之间来回确认；说话方式：开始询问解释方法而非只要结论；韵律：语速放慢，允许思考停顿；动作：批准一次可逆的澄清尝试。口型同步，动作细微连续，不夸张，不切镜，无字幕、标签、水印或其他人物。",
+  "duration_seconds": 5.0,
+  "continuity_reference": "media/talking_head/assets/scenario_018/reference.png",
+  "safety_check": {
+    "contains_private_state": false,
+    "contains_threshold_logic": false,
+    "contains_benchmark_answer": false
+  }
+}

@@ -126,9 +126,10 @@
   "media_generation": {
     "stage": "structured_expression",
     "default_media_type": "video",
-    "asset_status": "spec_only",
+    "asset_status": "generated",
     "asset_root": "media/talking_head",
-    "note": "视频资产生成前只输出 observable expression 与 media spec，不伪造 asset。"
+    "note": "视频资产生成前只输出 observable expression 与 media spec，不伪造 asset。",
+    "provider": "BadToBest/EchoMimicV2"
   },
   "video_triggers": [
     {
@@ -152,7 +153,7 @@
       "media_type": "video",
       "cue_template": "fatigued_boundary",
       "duration_seconds": 4,
-      "media_asset_id": null,
+      "media_asset_id": "IA_PIPE_005--escalation_confrontation",
       "observable_expression": {
         "facial_expression": "疲惫地呼气，目光游移后重新注视",
         "gaze": "保持直接但克制的注视",
@@ -180,7 +181,7 @@
       "media_type": "video",
       "cue_template": "anxious_withdrawal",
       "duration_seconds": 4,
-      "media_asset_id": null,
+      "media_asset_id": "IA_PIPE_005--anxious_withdrawal",
       "observable_expression": {
         "facial_expression": "表情收缩，显出疲惫或不安",
         "gaze": "短暂低头后重新看向对方",

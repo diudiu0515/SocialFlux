@@ -131,9 +131,10 @@
   "media_generation": {
     "stage": "structured_expression",
     "default_media_type": "video",
-    "asset_status": "spec_only",
+    "asset_status": "generated",
     "asset_root": "media/talking_head",
-    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed."
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.",
+    "provider": "BadToBest/EchoMimicV2"
   },
   "video_triggers": [
     {
@@ -157,7 +158,7 @@
       "media_type": "video",
       "cue_template": "institutional_defensiveness",
       "duration_seconds": 5,
-      "media_asset_id": null,
+      "media_asset_id": "IA_PIPE_015--institutional_defensiveness",
       "observable_expression": {
         "facial_expression": "面部肌肉收紧，几乎不眨眼",
         "gaze": "把视线固定在发言者身上",
@@ -185,7 +186,7 @@
       "media_type": "video",
       "cue_template": "truth_shift",
       "duration_seconds": 5,
-      "media_asset_id": null,
+      "media_asset_id": "IA_PIPE_015--truth_shift",
       "observable_expression": {
         "facial_expression": "深呼吸后表情显出压力",
         "gaze": "重新查看原始数据",

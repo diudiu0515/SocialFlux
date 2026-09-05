@@ -1,6 +1,7 @@
 """Model-generated, state-conditioned environment responses."""
 
 from prompts.loader import render_prompt
+from providers.text import complete_distinct_text
 
 
 class ResponseGenerator:
@@ -23,10 +24,16 @@ class ModelResponseGenerator(ResponseGenerator):
 
     def generate(self, context):
         prompt = render_prompt("environment_response_v3", context)
-        response = self.provider.complete(
+        prior_responses = [
+            item.get("text", "")
+            for item in context.get("history", [])
+            if item.get("role") == "environment_agent"
+        ]
+        return complete_distinct_text(
+            self.provider,
             [{"role": "user", "content": prompt}],
-            **self.sampling,
-        ).strip()
-        if not response:
-            raise ValueError("environment response model returned empty text")
-        return response
+            self.sampling,
+            prior_responses,
+            context="environment response",
+            max_attempts=12,
+        )

@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_012`
 - 配对 JSON：`scenario_012.json`
-- JSON SHA-256：`c2a9e5700793437181fa1b33892236852ca33e4bd7b7737d658a3d9b4567b2bf`
+- JSON SHA-256：`99d1e36b3adb360d431e753a2f068b2555a80f72145c961ea32dc54f929f6619`
 - 社会机制：co-parenting negotiation under legal shadow
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-012`
@@ -110,7 +110,7 @@ Scenario 只定义社会世界，不定义行动策略，也不预写任何 acti
 
 - 阶段：`structured_expression`
 - 默认媒体类型：`video`
-- 资产状态：`spec_only`
+- 资产状态：`generated`
 - 资产根目录：`media/talking_head`
 - 说明：Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.
 

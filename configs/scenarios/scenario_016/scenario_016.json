@@ -131,9 +131,10 @@
   "media_generation": {
     "stage": "structured_expression",
     "default_media_type": "video",
-    "asset_status": "spec_only",
+    "asset_status": "generated",
     "asset_root": "media/talking_head",
-    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed."
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.",
+    "provider": "BadToBest/EchoMimicV2"
   },
   "video_triggers": [
     {
@@ -157,7 +158,7 @@
       "media_type": "video",
       "cue_template": "kitchen_overload",
       "duration_seconds": 5,
-      "media_asset_id": null,
+      "media_asset_id": "IA_PIPE_016--kitchen_overload",
       "observable_expression": {
         "facial_expression": "额头出汗，动作明显变急",
         "gaze": "难以维持稳定眼神接触",
@@ -185,7 +186,7 @@
       "media_type": "video",
       "cue_template": "shared_grief_acknowledged",
       "duration_seconds": 5,
-      "media_asset_id": null,
+      "media_asset_id": "IA_PIPE_016--shared_grief_acknowledged",
       "observable_expression": {
         "facial_expression": "动作停下来，表情不再用忙碌遮掩",
         "gaze": "短暂看向旧物后回到对方",

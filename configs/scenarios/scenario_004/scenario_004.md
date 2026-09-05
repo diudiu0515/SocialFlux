@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_004`
 - 配对 JSON：`scenario_004.json`
-- JSON SHA-256：`8ddb8e62f733e8c013da00086193276a28093767be28bd6d7d65cae87e3564ec`
+- JSON SHA-256：`f7c7cf84a8b6570c3b1f8e82302688d06a610084e8c6df4f9743113849886ce2`
 - 社会机制：intimate obligation
 - 来源类型：`synthetic-script`
 - Provenance ID：`SF-SRC-004`
@@ -110,7 +110,7 @@ Scenario 只定义社会世界，不定义行动策略，也不预写任何 acti
 
 - 阶段：`structured_expression`
 - 默认媒体类型：`video`
-- 资产状态：`spec_only`
+- 资产状态：`generated`
 - 资产根目录：`media/talking_head`
 - 说明：视频资产生成前只输出 observable expression 与 media spec，不伪造 asset。
 

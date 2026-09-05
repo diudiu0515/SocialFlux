@@ -18,6 +18,9 @@ ENV/
 # Generated outputs contain private model trajectories and review artifacts
 build/
 configs/scenarios/scenario_*/rollouts/
+media/talking_head/assets/
+.local_models/
+.local_tools/
 
 
 # Logs and OS files

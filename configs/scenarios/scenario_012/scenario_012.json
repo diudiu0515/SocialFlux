@@ -131,9 +131,10 @@
   "media_generation": {
     "stage": "structured_expression",
     "default_media_type": "video",
-    "asset_status": "spec_only",
+    "asset_status": "generated",
     "asset_root": "media/talking_head",
-    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed."
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.",
+    "provider": "BadToBest/EchoMimicV2"
   },
   "video_triggers": [
     {
@@ -157,7 +158,7 @@
       "media_type": "video",
       "cue_template": "defensive_parenting",
       "duration_seconds": 5,
-      "media_asset_id": null,
+      "media_asset_id": "IA_PIPE_012--defensive_parenting",
       "observable_expression": {
         "facial_expression": "表情变硬，呼吸变浅",
         "gaze": "持续直视对方",
@@ -185,7 +186,7 @@
       "media_type": "video",
       "cue_template": "shared_grief_surface",
       "duration_seconds": 5,
-      "media_asset_id": null,
+      "media_asset_id": "IA_PIPE_012--shared_grief_surface",
       "observable_expression": {
         "facial_expression": "眼眶湿润但没有夸张哭泣",
         "gaze": "短暂移开视线后重新看向对方",

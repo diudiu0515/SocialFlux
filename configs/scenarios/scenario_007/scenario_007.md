@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_007`
 - 配对 JSON：`scenario_007.json`
-- JSON SHA-256：`1fcf8f02df7a83b499aa2acb5aa981f1b6a389a23919ca0dc50095300efe13d4`
+- JSON SHA-256：`143796a120290b704729c3e57a4adfa1aebeedacf7304f81af1e6e38fcdc1c14`
 - 社会机制：information asymmetry
 - 来源类型：`narrative-derived`
 - Provenance ID：`SF-SRC-007`
@@ -110,7 +110,7 @@ Scenario 只定义社会世界，不定义行动策略，也不预写任何 acti
 
 - 阶段：`structured_expression`
 - 默认媒体类型：`video`
-- 资产状态：`spec_only`
+- 资产状态：`generated`
 - 资产根目录：`media/talking_head`
 - 说明：视频资产生成前只输出 observable expression 与 media spec，不伪造 asset。
 

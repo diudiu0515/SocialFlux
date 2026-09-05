@@ -131,9 +131,10 @@
   "media_generation": {
     "stage": "structured_expression",
     "default_media_type": "video",
-    "asset_status": "spec_only",
+    "asset_status": "generated",
     "asset_root": "media/talking_head",
-    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed."
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.",
+    "provider": "BadToBest/EchoMimicV2"
   },
   "video_triggers": [
     {
@@ -157,7 +158,7 @@
       "media_type": "video",
       "cue_template": "family_defensiveness",
       "duration_seconds": 5,
-      "media_asset_id": null,
+      "media_asset_id": "IA_PIPE_017--family_defensiveness",
       "observable_expression": {
         "facial_expression": "笑容勉强，眼周紧绷",
         "gaze": "频繁查看其他家人反应",
@@ -185,7 +186,7 @@
       "media_type": "video",
       "cue_template": "hesitant_disclosure",
       "duration_seconds": 5,
-      "media_asset_id": null,
+      "media_asset_id": "IA_PIPE_017--hesitant_disclosure",
       "observable_expression": {
         "facial_expression": "表情复杂，紧张中出现松动",
         "gaze": "愿意与晚辈保持眼神接触",

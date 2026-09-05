@@ -1,7 +1,8 @@
 """Dependency-free OpenAI-compatible chat-completions provider."""
 
 import json
-from urllib.request import Request, urlopen
+from urllib.parse import urlparse
+from urllib.request import ProxyHandler, Request, build_opener, urlopen
 
 from .base import ModelProvider
 
@@ -32,7 +33,10 @@ class OpenAICompatibleProvider(ModelProvider):
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"
         request = Request(self.endpoint, data=payload, headers=headers, method="POST")
-        with urlopen(request, timeout=self.timeout) as response:
+        hostname = urlparse(self.endpoint).hostname
+        opener = build_opener(ProxyHandler({})) if hostname in {"127.0.0.1", "localhost", "::1"} else None
+        response_context = opener.open(request, timeout=self.timeout) if opener else urlopen(request, timeout=self.timeout)
+        with response_context as response:
             data = json.loads(response.read().decode("utf-8"))
         try:
             return data["choices"][0]["message"]["content"]

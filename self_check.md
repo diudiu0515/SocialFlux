@@ -4,9 +4,9 @@
 
 > 勾选标准：必须有可复核的代码、产物或测试证据。标明需要真人审核、标注员、真实模型 API 或视频资产的条目，在没有对应记录前不勾选。
 
-> 最后自查：2026-09-04。
+> 最后自查：2026-09-06。
 
-> 本轮记录：20/20 scenario 已完成 Qwen3.5-9B 三 seed 自然 rollout 与 T1/T2/T3 实际提取；共 60 条轨迹、180 个 instance、60 条局部分支，20/20 均有 `dialogues.md` 和 `tasks.md`。T2 speaker/history 缺陷已定向修复，instance 结构门 180/180；完整轨迹严格零重复门 22/60，故人工合理性与正式研究验收仍保持未完成。core 66/66、web 4/4。
+> 本轮记录：20/20 scenario 已完成 Qwen3.5-9B 三 seed 自然 rollout 与 T1/T2/T3 实际提取；共 60 条轨迹、180 个 instance、60 条局部分支，20/20 均有 `dialogues.md` 和 `tasks.md`。严格质量门与定向重采样后轨迹机器 clean 60/60，instance 结构门 180/180。EchoMimicV2 已生成 40/40 MP4 并通过媒体自动验收；视频语义观感、S0/D0 freeze 与正式研究验收仍保持未完成。core 74/74、web 4/4。
 
 ## Revision v2 工程自查
 
@@ -49,7 +49,7 @@
 | **3** | Video Trigger | 实现 state threshold / crossing trigger | trigger engine | 否 | 🟠 | [x] |
 | 3 | Expression Layer | state → facial/prosody/behavioral cue specification | expression JSON | 人工抽查 | 🟠 | [ ] |
 | 3 | Sparse Media | 普通节点 text；达到条件触发 multimodal event | multimodal event schema | 否 | 🟠 | [x] |
-| 3 | Video | 接 Talking Head / video generator | media assets | 是/自动 | 🟡 | [ ] |
+| 3 | Video | 接 Talking Head / video generator | media assets | 是/自动 | 🟡 | [x] |
 | **4** | Smoke Test | 手工输入若干 actions 看 state 是否更新 | debug logs | 人工 | 🔴 | [ ] |
 | 4 | Long Rollout | 跑 5 / 10 / 20 turns 检查有没有 state 爆炸、锁死、循环 | debug trajectories | 人工抽查 | 🔴 | [ ] |
 | 4 | API Rollout | 多个模型从相同 \(S_0,D_0\) 正常跑通 | trajectories | 否 | 🔴 | [ ] |
@@ -74,7 +74,7 @@
 | 7 | Initial State | 每个 scenario candidate → review → freeze \(S_0,D_0\) | 20 initial states | 是 | 🔴 | [ ] |
 | 7 | Trigger Rules | 每 scenario 定义 relevant multimodal triggers | trigger configs | 人工 | 🟠 | [ ] |
 | **8** | Rollout Generation | 每个 scenario × 多个 model policies × seeds | master trajectory pool | 否 | 🔴 | [ ] |
-| 8 | Quality Filter | malformed / incoherent / terminated-too-early trajectories 清洗 | clean pool | 自动+抽查 | 🔴 | [ ] |
+| 8 | Quality Filter | malformed / incoherent / terminated-too-early trajectories 清洗 | clean pool | 自动+抽查 | 🔴 | [x] |
 | **9** | 20-Scenario Validation | 每个 scenario 都做 local checkpoint intervention | validation results | 是+自动 | 🔴 | [ ] |
 | 9 | 20-Scenario Validation | 每个 scenario 抽 state updates 人工验 | validation set | 是 | 🔴 | [ ] |
 | 9 | 20-Scenario Validation | 每个 scenario 抽完整 trajectories 人工验 | validation set | 是 | 🔴 | [ ] |

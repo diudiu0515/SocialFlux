@@ -5,6 +5,7 @@ from copy import deepcopy
 
 from environment.delta_mapper import flatten_state
 from evaluation.leakage import find_leaks
+from providers.text import follows_dialogue_format, text_similarity
 
 
 def blind_instance_packet(instance):
@@ -64,6 +65,16 @@ def audit_trajectory(trajectory):
     total = len(turns)
     action_unique_ratio = len(set(actions)) / total if total else 0.0
     response_unique_ratio = len(set(responses)) / total if total else 0.0
+    action_similarities = [
+        text_similarity(actions[left], actions[right])
+        for left in range(total)
+        for right in range(left + 1, total)
+    ]
+    response_similarities = [
+        text_similarity(responses[left], responses[right])
+        for left in range(total)
+        for right in range(left + 1, total)
+    ]
     boundary_fraction = (
         sum(value in (0, 10) for value in state_values) / len(state_values)
         if state_values else 0.0
@@ -74,6 +85,10 @@ def audit_trajectory(trajectory):
         "responses_nonempty": bool(responses) and all(responses),
         "actions_no_exact_repetition": action_unique_ratio == 1.0,
         "responses_no_exact_repetition": response_unique_ratio == 1.0,
+        "actions_no_near_repetition": not action_similarities or max(action_similarities) < 0.92,
+        "responses_no_near_repetition": not response_similarities or max(response_similarities) < 0.92,
+        "actions_follow_dialogue_format": all(map(follows_dialogue_format, actions)),
+        "responses_follow_dialogue_format": all(map(follows_dialogue_format, responses)),
         "responses_concise": bool(responses) and max(map(len, responses)) <= 240,
     }
     return {
@@ -85,6 +100,8 @@ def audit_trajectory(trajectory):
         "diagnostics": {
             "action_unique_ratio": round(action_unique_ratio, 4),
             "response_unique_ratio": round(response_unique_ratio, 4),
+            "max_action_similarity": round(max(action_similarities), 4) if action_similarities else 0.0,
+            "max_response_similarity": round(max(response_similarities), 4) if response_similarities else 0.0,
             "latent_value_boundary_fraction": round(boundary_fraction, 4),
         },
     }

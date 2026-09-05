@@ -268,7 +268,10 @@ def run_scenario(scenario, scenario_path, output_dir, config, *, build_only=Fals
         config["environment"].get("sampling", {}),
     )
 
-    policy_lookup = {}
+    policy_lookup = {
+        _policy_from_spec(spec, run_index).policy_id: (spec, run_index)
+        for spec, run_index in _policy_specs(config)
+    }
     pilot_limits = config.get("pilot_limits", {})
     if build_only:
         trajectories = _load_existing_rollouts(rollout_dir)
@@ -280,7 +283,6 @@ def run_scenario(scenario, scenario_path, output_dir, config, *, build_only=Fals
         trajectories = []
         for spec, run_index in _policy_specs(config):
             policy = _policy_from_spec(spec, run_index)
-            policy_lookup[policy.policy_id] = (spec, run_index)
             trajectories.append(
                 RolloutRunner(environment_factory, logger=logger).run(
                     policy,

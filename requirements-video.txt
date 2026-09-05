@@ -1,0 +1,18 @@
+# Optional local runtime for scripts/generate_talking_head_videos.py.
+# Install torch/torchvision matching the host CUDA version first.
+diffusers==0.31.0
+transformers==4.46.3
+huggingface_hub==0.26.2
+accelerate==1.1.1
+numpy==1.26.4
+scipy==1.14.1
+Pillow==10.2.0
+einops==0.8.0
+omegaconf==2.3.0
+opencv-contrib-python==4.10.0.84
+decord==0.6.0
+imageio==2.36.0
+imageio-ffmpeg==0.5.1
+moviepy==1.0.3
+ffmpeg-python==0.2.0
+soundfile>=0.12

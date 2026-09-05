@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_011`
 - 配对 JSON：`scenario_011.json`
-- JSON SHA-256：`0b89aa966fee9f2d98b3a5860ecbe89825bf5385479ee557b16017d64d05c4ac`
+- JSON SHA-256：`cb69086681c66e44e4ce3912fa433cd3f92d8d39024de556b9bb0feefc98baa2`
 - 社会机制：status gatekeeping under sponsor pressure
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-011`
@@ -109,7 +109,7 @@ Scenario 只定义社会世界，不定义行动策略，也不预写任何 acti
 
 - 阶段：`structured_expression`
 - 默认媒体类型：`video`
-- 资产状态：`spec_only`
+- 资产状态：`generated`
 - 资产根目录：`media/talking_head`
 - 说明：Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.
 

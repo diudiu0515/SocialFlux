@@ -1,0 +1,10 @@
+{
+  "prompt": "写实电影感中近景，固定机位，单人出镜，保持参考肖像身份、服装与背景一致。角色是平台客服，自然地说普通话：‘我听见你的顾虑了，请把方案具体说清楚。’面部：表情收缩，显出疲惫或不安；视线：短暂低头后重新看向对方；说话方式：回应犹豫，句子变短；韵律：音量降低，停顿变长；动作：避免夸张哭泣或脸谱化表演。口型同步，动作细微连续，不夸张，不切镜，无字幕、标签、水印或其他人物。",
+  "duration_seconds": 4.0,
+  "continuity_reference": "media/talking_head/assets/scenario_007/reference.png",
+  "safety_check": {
+    "contains_private_state": false,
+    "contains_threshold_logic": false,
+    "contains_benchmark_answer": false
+  }
+}

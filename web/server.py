@@ -3,6 +3,7 @@
 import argparse
 import json
 from pathlib import Path
+import shutil
 import sys
 from urllib.parse import unquote, urlparse
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -17,6 +18,7 @@ SCENARIO_DIR = ROOT / "configs" / "scenarios"
 PIPELINE_DIR = ROOT / "build" / "pipeline_v2"
 ACCEPTANCE_DIR = ROOT / "build" / "acceptance_v2"
 STATIC_DIR = Path(__file__).resolve().parent / "static"
+MEDIA_MANIFEST = ROOT / "media" / "talking_head" / "manifest.json"
 
 
 def read_json(path, default=None):
@@ -31,6 +33,11 @@ def load_scenario_records():
 
 def load_scenarios():
     return [scenario for _, scenario in load_scenario_records()]
+
+
+def load_media_assets():
+    manifest = read_json(MEDIA_MANIFEST, {}) or {}
+    return manifest.get("assets", [])
 
 
 def _scenario_record(scenario_id):
@@ -137,6 +144,14 @@ def scenario_detail(scenario_id):
             else ""
         ),
         "rollouts": load_rollouts(scenario_id),
+        "media_assets": [
+            {
+                **asset,
+                "url": f"/media/{asset['asset_id']}",
+            }
+            for asset in load_media_assets()
+            if asset.get("scenario_id") == scenario_id
+        ],
     }
 
 
@@ -181,6 +196,28 @@ class App(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         parsed = urlparse(self.path)
+        if parsed.path.startswith("/media/"):
+            asset_id = unquote(parsed.path.removeprefix("/media/"))
+            asset = next(
+                (item for item in load_media_assets() if item.get("asset_id") == asset_id),
+                None,
+            )
+            if not asset or asset.get("status") != "generated":
+                self.send_error(404, "media asset not found")
+                return
+            target = (ROOT / asset["video_path"]).resolve()
+            asset_root = (ROOT / "media" / "talking_head" / "assets").resolve()
+            if asset_root not in target.parents or not target.is_file():
+                self.send_error(404, "media asset not found")
+                return
+            self.send_response(200)
+            self.send_header("Content-Type", "video/mp4")
+            self.send_header("Content-Length", str(target.stat().st_size))
+            self.send_header("Cache-Control", "public, max-age=3600")
+            self.end_headers()
+            with target.open("rb") as stream:
+                shutil.copyfileobj(stream, self.wfile)
+            return
         if parsed.path.startswith("/api/"):
             payload = api_payload(parsed.path)
             self.send_json(payload if payload is not None else {"error": "not found"},

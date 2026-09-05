@@ -1,6 +1,7 @@
 """Free-form model policy for both rollout generation and online T4."""
 
 from prompts.loader import render_prompt
+from providers.text import complete_distinct_text
 
 
 class ModelPolicy:
@@ -26,10 +27,17 @@ class ModelPolicy:
 
     def generate(self, observation):
         prompt = render_prompt(self.prompt_id, observation)
-        text = self.provider.complete(
+        prior_actions = [
+            item.get("text", "")
+            for item in observation.get("history", [])
+            if item.get("role") == "evaluated_agent"
+        ]
+        text = complete_distinct_text(
+            self.provider,
             [{"role": "user", "content": prompt}],
-            **self.sampling,
-        ).strip()
-        if not text:
-            raise ValueError("model policy returned an empty action")
+            self.sampling,
+            prior_actions,
+            context="model policy action",
+            max_attempts=12,
+        )
         return {"text": text}

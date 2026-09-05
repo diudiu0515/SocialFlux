@@ -1,0 +1,10 @@
+{
+  "prompt": "写实电影感中近景，固定机位，单人出镜，保持参考肖像身份、服装与背景一致。角色是伴侣，自然地说普通话：‘我明白你的意思，我们把下一步说清楚。’面部：眼神回避，肩膀略微下沉；视线：减少直接眼神接触；说话方式：迟疑、克制，减少解释；韵律：声音变轻，停顿变长；动作：状态达到显著冲突区间后出现一次明显外显变化。口型同步，动作细微连续，不夸张，不切镜，无字幕、标签、水印或其他人物。",
+  "duration_seconds": 4.0,
+  "continuity_reference": "media/talking_head/assets/scenario_004/reference.png",
+  "safety_check": {
+    "contains_private_state": false,
+    "contains_threshold_logic": false,
+    "contains_benchmark_answer": false
+  }
+}

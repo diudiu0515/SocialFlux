@@ -56,6 +56,8 @@ nine-criterion acceptance + human annotation
 
 每个 `scenario_NNN/` 的 JSON 是机器事实源，同名 Markdown 是确定性生成的人类说明，含故事初始化、S0/D0、视频阈值、质量状态与 rollout 位置。每次 rollout 后，同目录 `rollouts/dialogues.md` 逐轮描述完整自然对话，`rollouts/tasks.md` 逐 instance 描述 T1/T2/T3 公开题面和隔离的私有诊断，供人工抽查。JSON 改动后必须运行 `scripts/scenario_docs.py`；`--check` 校验 Markdown 内 SHA-256 与 catalog/coverage matrix。
 
+S0/D0 的候选值与真人冻结协议见 `S0_D0_REVIEW.md`。Talking Head 使用 `media/talking_head/manifest.json` 作为媒体事实源：每个 scenario 两条状态触发视频，请求只含公开表演指令，不泄漏 hidden state、阈值或任务答案；生成后由收集器验证视频流、音轨、时长、分辨率和帧率，再将 media ID 回填 scenario。网站通过受限 `/media/<asset_id>` 路由读取清单中的 MP4，不接受任意文件路径。
+
 影视来源只允许贡献高层社会机制。`extract-structure` 的结构合同强制记录必须丢弃的表层元素以及原创化要求；后续 source 必须使用新人物、新场域、新事件、新 stakes 和原创语言，不复制台词、角色或标志性情节序列。
 
 ## Prompt 和 schema
