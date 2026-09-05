@@ -9,7 +9,13 @@ import uuid
 
 from fastapi import FastAPI, HTTPException
 import torch
-from transformers import AutoModelForImageTextToText, AutoProcessor
+from transformers import (
+    AutoConfig,
+    AutoModelForCausalLM,
+    AutoModelForImageTextToText,
+    AutoProcessor,
+    AutoTokenizer,
+)
 import uvicorn
 
 
@@ -20,18 +26,39 @@ def _final_text(value):
     return text
 
 
-def create_app(model_path):
+def _load_backend(model_path, architecture):
+    if architecture == "auto":
+        config = AutoConfig.from_pretrained(model_path, trust_remote_code=True)
+        names = " ".join(getattr(config, "architectures", [])).lower()
+        architecture = "image_text" if any(
+            token in names for token in ("conditionalgeneration", "imagetotext")
+        ) else "causal_lm"
+    if architecture == "image_text":
+        tokenizer = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
+        model = AutoModelForImageTextToText.from_pretrained(
+            model_path,
+            torch_dtype=torch.bfloat16,
+            device_map="cuda",
+            trust_remote_code=True,
+        ).eval()
+    else:
+        tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+        model = AutoModelForCausalLM.from_pretrained(
+            model_path,
+            torch_dtype=torch.bfloat16,
+            device_map="cuda",
+            trust_remote_code=True,
+        ).eval()
+    return tokenizer, model
+
+
+def create_app(model_path, architecture="auto"):
     state = {}
     lock = threading.Lock()
 
     @asynccontextmanager
     async def lifespan(app):
-        state["processor"] = AutoProcessor.from_pretrained(model_path)
-        state["model"] = AutoModelForImageTextToText.from_pretrained(
-            model_path,
-            torch_dtype=torch.bfloat16,
-            device_map="cuda",
-        ).eval()
+        state["processor"], state["model"] = _load_backend(model_path, architecture)
         yield
         state.clear()
 
@@ -49,14 +76,23 @@ def create_app(model_path):
         processor = state["processor"]
         model = state["model"]
         try:
-            inputs = processor.apply_chat_template(
-                messages,
-                add_generation_prompt=True,
-                enable_thinking=False,
-                tokenize=True,
-                return_dict=True,
-                return_tensors="pt",
-            ).to(model.device)
+            template_options = {
+                "add_generation_prompt": True,
+                "tokenize": True,
+                "return_dict": True,
+                "return_tensors": "pt",
+            }
+            try:
+                inputs = processor.apply_chat_template(
+                    messages,
+                    enable_thinking=False,
+                    **template_options,
+                )
+            except (TypeError, ValueError):
+                inputs = processor.apply_chat_template(messages, **template_options)
+            if not isinstance(inputs, dict):
+                inputs = {"input_ids": inputs}
+            inputs = {key: value.to(model.device) for key, value in inputs.items()}
             temperature = float(payload.get("temperature", 0.7))
             generation = {
                 "max_new_tokens": int(payload.get("max_tokens", 512)),
@@ -98,8 +134,18 @@ def main():
     parser.add_argument("--model", required=True)
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, required=True)
+    parser.add_argument(
+        "--architecture",
+        choices=("auto", "causal_lm", "image_text"),
+        default="auto",
+    )
     args = parser.parse_args()
-    uvicorn.run(create_app(args.model), host=args.host, port=args.port, log_level="info")
+    uvicorn.run(
+        create_app(args.model, args.architecture),
+        host=args.host,
+        port=args.port,
+        log_level="info",
+    )
 
 
 if __name__ == "__main__":

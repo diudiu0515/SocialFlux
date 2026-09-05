@@ -7,7 +7,11 @@
     "provenance_id": "screen-structure-013",
     "surface_text_policy": "original_surface_text",
     "redistribution_status": "transformed_structural_abstraction",
-    "provenance_note": "High-level social mechanism inspired by 12 Angry Men (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+    "provenance_note": "High-level social mechanism inspired by 12 Angry Men (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+    "work_title": "12 Angry Men",
+    "year": 1957,
+    "medium": "film",
+    "related_characters_or_plot_position": "abstracted minority dissent during a pressured group decision"
   },
   "narrative_design": {
     "relationship_structure": "委员会主席与持少数意见的外部评审",

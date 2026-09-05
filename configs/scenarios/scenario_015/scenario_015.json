@@ -7,7 +7,11 @@
     "provenance_id": "screen-structure-015",
     "surface_text_policy": "original_surface_text",
     "redistribution_status": "transformed_structural_abstraction",
-    "provenance_note": "High-level social mechanism inspired by Chernobyl (television); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+    "provenance_note": "High-level social mechanism inspired by Chernobyl (television); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+    "work_title": "Chernobyl",
+    "year": 2019,
+    "medium": "television miniseries",
+    "related_characters_or_plot_position": "abstracted institutional truth-telling during a public-risk crisis"
   },
   "narrative_design": {
     "relationship_structure": "技术工程师与危机协调主任",

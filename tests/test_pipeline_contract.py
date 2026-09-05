@@ -19,14 +19,40 @@ from scripts.scenario_docs import (
 
 
 class PipelineContractTest(unittest.TestCase):
+    def test_formal_pool_config_meets_gate_md_sampling_contract(self):
+        from scripts.run_pipeline import load_rollout_config
+
+        config = load_rollout_config("configs/formal_rollout_pool.local.json")
+        self.assertEqual(config["pool_stage"], "formal_raw")
+        self.assertEqual(sum(item["runs"] for item in config["policies"]), 12)
+        self.assertEqual(
+            {item["model_family"] for item in config["policies"]},
+            {"glm", "qwen", "deepseek"},
+        )
+        self.assertTrue(any(
+            20 <= item.get("model_parameters_billion", 0) <= 40
+            for item in config["policies"]
+        ))
+        environment_model = config["environment"]["provider"]["model"]
+        self.assertTrue(all(
+            item["provider"]["model"] != environment_model
+            for item in config["policies"]
+        ))
+
+    def test_formal_raw_generation_cannot_build_tasks_before_quality_gate(self):
+        source = Path("scripts/run_pipeline.py").read_text(encoding="utf-8")
+        self.assertIn('"not_built_before_rollout_quality_gate"', source)
+        self.assertIn('config.get("pool_stage") == "formal_raw"', source)
+        self.assertIn('formal_raw rollout requires --environment-evidence', source)
+
     def test_scenario_catalog_has_both_sources_and_coverage(self):
         directory = Path("configs/scenarios")
         scenarios = load_scenarios(directory)
         manifest = json.loads(assert_manifest_current(directory).read_text(encoding="utf-8"))
         coverage = json.loads((directory / "coverage_matrix.json").read_text(encoding="utf-8"))
         self.assertEqual(len(scenarios), 20)
-        self.assertEqual(manifest["source_counts"]["narrative-derived"], 15)
-        self.assertEqual(manifest["source_counts"]["synthetic-script"], 5)
+        self.assertEqual(manifest["source_counts"]["narrative-derived"], 10)
+        self.assertEqual(manifest["source_counts"]["synthetic-script"], 10)
         self.assertRegex(manifest["prompt_manifest_sha256"], r"^[0-9a-f]{64}$")
         self.assertEqual(len(coverage["rows"]), len(scenarios))
         for entry in manifest["scenarios"]:

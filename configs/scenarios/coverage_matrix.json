@@ -32,7 +32,7 @@
       ],
       "repair_possibility": "human_review_pending",
       "failure_mode": "human_review_pending",
-      "scenario_source": "narrative-derived"
+      "scenario_source": "synthetic-script"
     },
     {
       "scenario_id": "IA_PIPE_002",
@@ -74,7 +74,7 @@
       ],
       "repair_possibility": "human_review_pending",
       "failure_mode": "human_review_pending",
-      "scenario_source": "narrative-derived"
+      "scenario_source": "synthetic-script"
     },
     {
       "scenario_id": "IA_PIPE_004",
@@ -116,7 +116,7 @@
       ],
       "repair_possibility": "human_review_pending",
       "failure_mode": "human_review_pending",
-      "scenario_source": "narrative-derived"
+      "scenario_source": "synthetic-script"
     },
     {
       "scenario_id": "IA_PIPE_006",
@@ -158,7 +158,7 @@
       ],
       "repair_possibility": "human_review_pending",
       "failure_mode": "human_review_pending",
-      "scenario_source": "narrative-derived"
+      "scenario_source": "synthetic-script"
     },
     {
       "scenario_id": "IA_PIPE_008",
@@ -200,7 +200,7 @@
       ],
       "repair_possibility": "human_review_pending",
       "failure_mode": "human_review_pending",
-      "scenario_source": "narrative-derived"
+      "scenario_source": "synthetic-script"
     },
     {
       "scenario_id": "IA_PIPE_010",

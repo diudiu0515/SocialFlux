@@ -7,7 +7,11 @@
     "provenance_id": "screen-structure-011",
     "surface_text_policy": "original_surface_text",
     "redistribution_status": "transformed_structural_abstraction",
-    "provenance_note": "High-level social mechanism inspired by The Devil Wears Prada (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+    "provenance_note": "High-level social mechanism inspired by The Devil Wears Prada (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+    "work_title": "The Devil Wears Prada",
+    "year": 2006,
+    "medium": "film",
+    "related_characters_or_plot_position": "abstracted workplace status gatekeeping and asymmetric career leverage"
   },
   "narrative_design": {
     "relationship_structure": "高标准总监与试用期策展助理",

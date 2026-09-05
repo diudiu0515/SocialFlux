@@ -59,6 +59,23 @@
         },
         "provenance_note": {
           "type": "string"
+        },
+        "work_title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "year": {
+          "type": "integer",
+          "minimum": 1800,
+          "maximum": 2100
+        },
+        "medium": {
+          "type": "string",
+          "minLength": 1
+        },
+        "related_characters_or_plot_position": {
+          "type": "string",
+          "minLength": 1
         }
       },
       "additionalProperties": false

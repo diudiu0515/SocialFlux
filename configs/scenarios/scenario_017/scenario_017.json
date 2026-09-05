@@ -7,7 +7,11 @@
     "provenance_id": "screen-structure-017",
     "surface_text_policy": "original_surface_text",
     "redistribution_status": "transformed_structural_abstraction",
-    "provenance_note": "High-level social mechanism inspired by The Farewell (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+    "provenance_note": "High-level social mechanism inspired by The Farewell (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+    "work_title": "The Farewell",
+    "year": 2019,
+    "medium": "film",
+    "related_characters_or_plot_position": "abstracted family secrecy conflict framed as collective protection"
   },
   "narrative_design": {
     "relationship_structure": "家族事务组织者与返乡晚辈",

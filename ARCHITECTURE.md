@@ -72,6 +72,8 @@ T1/T2/T3 均绑定持有 latent state 的环境角色，而不是输出 action �
 
 当前 gate 固定为九项：State-Update Human Agreement、Persona Sensitivity、Paraphrase Robustness、History Intervention、Local Action Intervention、Neutral-State Stability、Response-State Consistency、Full-Trajectory Plausibility、Seed Robustness。自动结构证据只能标为 pending/evidence_ready/provisionally_ready；需要真人的项目没有评审记录不得标 pass。
 
+`gate.md` 在九项环境验收之外约束正式数据来源：每场景至少 12 条、至少三种本地模型族、至少一个 20–40B 本地模型、API 不超过 30%、environment/policy 模型分离、六维质量评分、八类 hard reject、post-hoc outcome 去重后保留 4–6 条。主 Judge 覆盖全池，跨模型族第二 Judge 覆盖分层样本和争议/边缘项；`formal_selected` 的 manifest、轨迹文件与逐条质量 audit 必须 ID 完全一致，并绑定真人 scenario/S0-D0 签名、历史干预证据与双 Judge 合并记录。历史干预在同一 checkpoint 下同时比较 evaluated action 和 environment appraisal/state-delta interpretation。骨干敏感性通过同 checkpoint/action 在两个 environment backbone 下重放并比较 state-delta 方向。Gate 4 使用 T1/T2/T3 各自的实名、时间戳、实例哈希绑定人工清单；正式 GT 始终是三人标注→agreement→真人 adjudication。
+
 ## 架构不变量
 
 - 正常生成不得出现固定 action taxonomy 或 scripted trajectory。
@@ -81,4 +83,7 @@ T1/T2/T3 均绑定持有 latent state 的环境角色，而不是输出 action �
 - LLM judge 不是 human ground truth。
 - 公开实例不得泄漏 private fields。
 - 未批准 scenario 默认拒绝正式 rollout。
+- 正式 rollout 必须写入隔离的 `data/formal/`，不得复用开发轨迹。
+- 单 Judge、同模型族双 Judge 或缺失历史/骨干证据不能生成 formal_selected。
+- selected manifest、文件或 quality-audit ID 不一致时不得构建任务。
 - secrets 只来自环境变量，公开 manifest 删除 secret 及环境变量名。

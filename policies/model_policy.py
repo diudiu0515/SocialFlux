@@ -5,11 +5,19 @@ from providers.text import complete_distinct_text
 
 
 class ModelPolicy:
-    def __init__(self, policy_id, provider, prompt_id="task_t4_action_v2", sampling=None):
+    def __init__(
+        self,
+        policy_id,
+        provider,
+        prompt_id="task_t4_action_v2",
+        sampling=None,
+        provenance_extra=None,
+    ):
         self.policy_id = policy_id
         self.provider = provider
         self.prompt_id = prompt_id
         self.sampling = dict(sampling or {})
+        self.provenance_extra = dict(provenance_extra or {})
 
     def reset(self):
         reset = getattr(self.provider, "reset", None)
@@ -23,6 +31,7 @@ class ModelPolicy:
             **getattr(self.provider, "provenance", {}),
             "prompt_id": self.prompt_id,
             "sampling": dict(self.sampling),
+            **self.provenance_extra,
         }
 
     def generate(self, observation):

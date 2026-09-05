@@ -7,7 +7,11 @@
     "provenance_id": "screen-structure-016",
     "surface_text_policy": "original_surface_text",
     "redistribution_status": "transformed_structural_abstraction",
-    "provenance_note": "High-level social mechanism inspired by The Bear (television); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+    "provenance_note": "High-level social mechanism inspired by The Bear (television); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+    "work_title": "The Bear",
+    "year": 2022,
+    "medium": "television series",
+    "related_characters_or_plot_position": "abstracted high-pressure team coordination and contested operational authority"
   },
   "narrative_design": {
     "relationship_structure": "共同承担遗产压力的亲属与工作搭档",

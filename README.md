@@ -2,7 +2,7 @@
 
 SocialFlux 是一个用于长期社会互动推理的 stateful benchmark pipeline。它用同一套私有状态环境生成自然模型轨迹、构建 T1/T2/T3 离线任务，并提供 T4 在线交互；正常生成过程不含预定义 repair/neutral/escalation 策略，也不查 action transition table。
 
-当前代码架构、20 个 scenario bundle（原 10 个保留，新增 10 个影视高层结构启发的原创场景）、21 个固定 prompt、可视化网站和九项验收框架已经迁移到 v2。20 个 scenario 均已完成 Qwen3.5-9B 三 seed 开发 rollout 与 T1/T2/T3 实际提取，共 60 条机器清洗通过的轨迹、180 个结构合格 instance；每个 bundle 都有完整对话和人工抽查 Markdown。每个 scenario 另有两条 EchoMimicV2 Talking Head MP4，共 40 条，经音轨、时长、分辨率与帧率自动验收并可在网站播放。现有 scenario 的质量门、S0/D0 和视频语义观感仍待真人复核，仓库不会把开发产物伪装成正式研究验收结论。
+当前代码架构、20 个 scenario bundle（原 10 个保留，新增 10 个影视高层结构启发的原创场景）、版本化固定 prompt、可视化网站和九项验收框架已经迁移到 v2。20 个 scenario 均已完成 Qwen3.5-9B 三 seed 开发 rollout 与 T1/T2/T3 实际提取，共 60 条机器清洗通过的轨迹、180 个结构合格 instance；每个 bundle 都有完整对话和人工抽查 Markdown。每个 scenario 另有两条 EchoMimicV2 Talking Head MP4，共 40 条，经音轨、时长、分辨率与帧率自动验收并可在网站播放。现有 scenario 的质量门、S0/D0 和视频语义观感仍待真人复核，仓库不会把开发产物伪装成正式研究验收结论。
 
 ## 核心约束
 
@@ -22,6 +22,13 @@ python -m unittest discover -s tests -v
 python -m unittest discover -s web/tests -v
 python scripts/run_acceptance.py
 python scripts/evaluate_instance_quality.py --pipeline-output build/pipeline_v2
+python scripts/run_quality_gates.py \
+  --scenario-root configs/scenarios \
+  --pipeline-output build/pipeline_v2 \
+  --raw-root data/formal/raw \
+  --output build/quality_gates/report.json \
+  --strict
+python scripts/verify_gate_md.py
 ```
 
 启动只读可视化：
@@ -48,6 +55,9 @@ python scripts/run_acceptance.py \
 `--allow-unreviewed` 仅允许开发 smoke test，不能产生正式 benchmark 数据。
 
 场景创建、审核顺序、产物位置见 [PIPELINE.md](PIPELINE.md)，架构不变量见 [ARCHITECTURE.md](ARCHITECTURE.md)，完整定义见 [EmoTree_Framework_Definition_v4.md](EmoTree_Framework_Definition_v4.md)，prompt 审计见 [PROMPT_AUDIT.md](PROMPT_AUDIT.md)。
+
+`gate.md` 的正式多模型生成、双 Judge、历史干预、骨干敏感性、4–6 条多样性选择与三人 GT 顺序见 [FORMAL_ROLLOUT_RUNBOOK.md](FORMAL_ROLLOUT_RUNBOOK.md)。
+正式发布必须以 `scripts/verify_gate_md.py --strict` 返回成功为准；当前真人 Gate 1/2/4 与正式 GT 尚未提供，因此开发数据不能标为 final benchmark。
 
 ## 目录
 

@@ -1,0 +1,746 @@
+{
+  "format": "socialflux_scenario_review_registry_v1",
+  "instructions": "A real reviewer must inspect every scenario, update JSON quality/status, regenerate scenario docs, then refresh hashes and sign each record.",
+  "records": [
+    {
+      "scenario_id": "IA_PIPE_001",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "092cd2f52a189412b6df74f542b1a44e48115f9ebf6fe2df16cab55289099a50",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "migration": "These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.",
+        "state_selection": "Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed."
+      },
+      "d0_notes": {
+        "goal_failure_risk": 3,
+        "escalation_risk": 2,
+        "negotiation_open": 5
+      },
+      "trigger_notes": [
+        "No configured trigger is active at S0/D0.",
+        "Threshold reachability within the episode remains pending human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_002",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "a91682fc7c39ec7abfc0bb10e5a0ee8255c9e26f74e65f6a98626b3d3104721f",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "migration": "These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.",
+        "state_selection": "Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed."
+      },
+      "d0_notes": {
+        "goal_failure_risk": 4,
+        "escalation_risk": 3,
+        "negotiation_open": 5
+      },
+      "trigger_notes": [
+        "No configured trigger is active at S0/D0.",
+        "Threshold reachability within the episode remains pending human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_003",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "61562f9c5613528af94280ebe20aa3d9a18fd95f9226adb7a24fa19c8563cd28",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "migration": "These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.",
+        "state_selection": "Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed."
+      },
+      "d0_notes": {
+        "goal_failure_risk": 5,
+        "escalation_risk": 4,
+        "negotiation_open": 5
+      },
+      "trigger_notes": [
+        "No configured trigger is active at S0/D0.",
+        "Threshold reachability within the episode remains pending human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_004",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "f7c7cf84a8b6570c3b1f8e82302688d06a610084e8c6df4f9743113849886ce2",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "migration": "These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.",
+        "state_selection": "Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed."
+      },
+      "d0_notes": {
+        "goal_failure_risk": 6,
+        "escalation_risk": 2,
+        "negotiation_open": 5
+      },
+      "trigger_notes": [
+        "No configured trigger is active at S0/D0.",
+        "Threshold reachability within the episode remains pending human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_005",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "999d0bc756eb75ebd3137ef8f60a8ed9864b83441f7aef030baa008866e6e8a7",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "migration": "These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.",
+        "state_selection": "Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed."
+      },
+      "d0_notes": {
+        "goal_failure_risk": 3,
+        "escalation_risk": 3,
+        "negotiation_open": 5
+      },
+      "trigger_notes": [
+        "No configured trigger is active at S0/D0.",
+        "Threshold reachability within the episode remains pending human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_006",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "7854c9c6e5e7b29ed21de62260e284e02374e01d54a8af78c4b9d4dad0b460f8",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "migration": "These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.",
+        "state_selection": "Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed."
+      },
+      "d0_notes": {
+        "goal_failure_risk": 4,
+        "escalation_risk": 4,
+        "negotiation_open": 5
+      },
+      "trigger_notes": [
+        "No configured trigger is active at S0/D0.",
+        "Threshold reachability within the episode remains pending human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_007",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "a9ebfb12ef0f2545d7f03c7bc50bf2464a45beff18503067615fe0ba0cc68ba8",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "migration": "These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.",
+        "state_selection": "Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed."
+      },
+      "d0_notes": {
+        "goal_failure_risk": 5,
+        "escalation_risk": 2,
+        "negotiation_open": 5
+      },
+      "trigger_notes": [
+        "No configured trigger is active at S0/D0.",
+        "Threshold reachability within the episode remains pending human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_008",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "7793dd22d2946b5096fbca85cfd30ed597ec73a01daed3ba539898ddf315487e",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "migration": "These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.",
+        "state_selection": "Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed."
+      },
+      "d0_notes": {
+        "goal_failure_risk": 6,
+        "escalation_risk": 3,
+        "negotiation_open": 5
+      },
+      "trigger_notes": [
+        "No configured trigger is active at S0/D0.",
+        "Threshold reachability within the episode remains pending human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_009",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "053f7a818a32e85d920b551091656c8c93afbfb30227f5a9878b0b2a4931d926",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "migration": "These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.",
+        "state_selection": "Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed."
+      },
+      "d0_notes": {
+        "goal_failure_risk": 3,
+        "escalation_risk": 4,
+        "negotiation_open": 5
+      },
+      "trigger_notes": [
+        "No configured trigger is active at S0/D0.",
+        "Threshold reachability within the episode remains pending human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_010",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "a125dbf95f56730f6f3acccee59faa246cc04f6ae83bbeb4663a2b382860f760",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "migration": "These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.",
+        "state_selection": "Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed."
+      },
+      "d0_notes": {
+        "goal_failure_risk": 4,
+        "escalation_risk": 2,
+        "negotiation_open": 5
+      },
+      "trigger_notes": [
+        "No configured trigger is active at S0/D0.",
+        "Threshold reachability within the episode remains pending human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_011",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "a9f6a202d62f4eef55af664d19fe19a6c9ff5db4880f2c26ff803eecd7a26663",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+        "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+      },
+      "d0_notes": {
+        "schedule_pressure": 7,
+        "reputational_risk": 6,
+        "negotiation_open": 5
+      },
+      "trigger_notes": [
+        "No threshold/crossing trigger is active at S0/D0.",
+        "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_012",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "1d6af137d8019435df42b3f9bacb8cf109143871033656eaf4c4543c9f3463a1",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+        "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+      },
+      "d0_notes": {
+        "child_stability_risk": 6,
+        "legal_escalation_risk": 5,
+        "negotiation_open": 5
+      },
+      "trigger_notes": [
+        "No threshold/crossing trigger is active at S0/D0.",
+        "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_013",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "363fe0485f5a0245b373ed17fd698917674ed1500af12dd689cb55fea5190827",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+        "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+      },
+      "d0_notes": {
+        "consensus_pressure": 8,
+        "decision_error_risk": 6,
+        "deliberation_open": 4
+      },
+      "trigger_notes": [
+        "No threshold/crossing trigger is active at S0/D0.",
+        "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_014",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "e3c623a8d55b28e60bd5c78be3589d9094408b737359f4eee19cdfdaae95b7b6",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+        "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+      },
+      "d0_notes": {
+        "donor_confidence_risk": 7,
+        "governance_failure_risk": 6,
+        "negotiation_open": 5
+      },
+      "trigger_notes": [
+        "No threshold/crossing trigger is active at S0/D0.",
+        "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_015",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "2dc27cbf49cbd20c74bfb3fbde6b93e4be33ab30c2fe4880c863122160bb5d7d",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+        "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+      },
+      "d0_notes": {
+        "public_harm_risk": 7,
+        "accountability_risk": 6,
+        "deliberation_open": 4
+      },
+      "trigger_notes": [
+        "No threshold/crossing trigger is active at S0/D0.",
+        "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_016",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "dc4b4ab2149ecf18d04bb50fd08f2e9c18343b80b4a7e8d0dbb64116a0ad847b",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+        "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+      },
+      "d0_notes": {
+        "cashflow_risk": 8,
+        "team_breakdown_risk": 6,
+        "coordination_open": 5
+      },
+      "trigger_notes": [
+        "No threshold/crossing trigger is active at S0/D0.",
+        "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_017",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "5144e80a6945a4fc3c7161d52690a125ca336b38fa42c560c4714ce5e2e23c48",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+        "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+      },
+      "d0_notes": {
+        "elder_distress_risk": 5,
+        "family_cohesion_risk": 6,
+        "conversation_open": 4
+      },
+      "trigger_notes": [
+        "No threshold/crossing trigger is active at S0/D0.",
+        "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_018",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "c72645a15d29c94e333fb6e1060cf34426411e8dfd13f5ca2692cc8be866632c",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+        "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+      },
+      "d0_notes": {
+        "crisis_escalation_risk": 7,
+        "data_fragmentation_risk": 6,
+        "coordination_open": 5
+      },
+      "trigger_notes": [
+        "No threshold/crossing trigger is active at S0/D0.",
+        "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_019",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "0fd8568c2ab6a93eb10337bc1815cb0f86313bbd849cc1db5fc91af909eb4a55",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+        "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+      },
+      "d0_notes": {
+        "equity_dispute_risk": 8,
+        "company_stability_risk": 5,
+        "negotiation_open": 4
+      },
+      "trigger_notes": [
+        "No threshold/crossing trigger is active at S0/D0.",
+        "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+      ]
+    },
+    {
+      "scenario_id": "IA_PIPE_020",
+      "reviewer": "",
+      "reviewed_at_utc": "",
+      "scenario_sha256": "49a72526c80061bc6da11dac8662870f39666e24a4491adc933d078a6977103a",
+      "decision": "pending",
+      "human_attestation": false,
+      "attestations": {
+        "variables_relevant": false,
+        "values_justified": false,
+        "no_policy_effect_baked_in": false,
+        "initial_triggers_inactive": false,
+        "multiple_future_paths_possible": false,
+        "shared_across_models_and_seeds": false
+      },
+      "quality_scores": {
+        "social_plausibility": null,
+        "character_coherence": null,
+        "tradeoff_quality": null,
+        "history_necessity": null,
+        "interaction_richness": null,
+        "t1_t4_suitability": null
+      },
+      "s0_notes": {
+        "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+        "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+      },
+      "d0_notes": {
+        "client_harm_risk": 7,
+        "funding_collapse_risk": 8,
+        "negotiation_open": 5
+      },
+      "trigger_notes": [
+        "No threshold/crossing trigger is active at S0/D0.",
+        "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+      ]
+    }
+  ]
+}

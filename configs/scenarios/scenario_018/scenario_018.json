@@ -7,7 +7,11 @@
     "provenance_id": "screen-structure-018",
     "surface_text_policy": "original_surface_text",
     "redistribution_status": "transformed_structural_abstraction",
-    "provenance_note": "High-level social mechanism inspired by Arrival (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+    "provenance_note": "High-level social mechanism inspired by Arrival (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+    "work_title": "Arrival",
+    "year": 2016,
+    "medium": "film",
+    "related_characters_or_plot_position": "abstracted ambiguous-signal interpretation under escalation risk"
   },
   "narrative_design": {
     "relationship_structure": "临时征召的语言研究员与安全指挥官",

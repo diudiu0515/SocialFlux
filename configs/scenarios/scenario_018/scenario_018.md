@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_018`
 - 配对 JSON：`scenario_018.json`
-- JSON SHA-256：`290ae4e7cba2c16d43b8412e4f6ebe1098f0e5293a5873fece365633e20d5150`
+- JSON SHA-256：`c72645a15d29c94e333fb6e1060cf34426411e8dfd13f5ca2692cc8be866632c`
 - 社会机制：cross-domain trust under radical uncertainty
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-018`

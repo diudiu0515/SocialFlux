@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_017`
 - 配对 JSON：`scenario_017.json`
-- JSON SHA-256：`07be7fd0852a0ba52840717c824ffa6c6e09df10b4194a94121d4b0cd8387274`
+- JSON SHA-256：`5144e80a6945a4fc3c7161d52690a125ca336b38fa42c560c4714ce5e2e23c48`
 - 社会机制：collective care versus individual truth rights
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-017`

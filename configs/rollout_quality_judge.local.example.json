@@ -1,0 +1,13 @@
+{
+  "provider": {
+    "provider": "local_vllm",
+    "endpoint": "http://127.0.0.1:8310/v1/chat/completions",
+    "model": "Qwen/Qwen3-32B-AWQ",
+    "timeout": 300,
+    "max_tokens": 768
+  },
+  "sampling": {
+    "temperature": 0.1,
+    "seed": 7401
+  }
+}

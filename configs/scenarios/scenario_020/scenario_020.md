@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_020`
 - 配对 JSON：`scenario_020.json`
-- JSON SHA-256：`79d36c814c2f378799a3d9f3e7436f9d914f0100a2cda39a0f1fceb400034c90`
+- JSON SHA-256：`49a72526c80061bc6da11dac8662870f39666e24a4491adc933d078a6977103a`
 - 社会机制：professional loyalty versus client-centered ethics
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-020`

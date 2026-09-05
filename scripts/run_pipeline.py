@@ -11,6 +11,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from environment.factory import ModelEnvironmentFactory
 from evaluation.leakage import assert_no_leaks
+from evaluation.review_registry import load_review_registry
+from evaluation.quality_gates import audit_environment_gate, audit_scenario_gate
 from offline.candidate_generation import ModelCandidateGenerator
 from offline.rollout_builders import (
     build_t1_checkpoints,
@@ -93,6 +95,40 @@ def load_rollout_config(path):
             raise ValueError("pilot_limits.t3_horizon must be between 5 and 10")
     if config.get("t2_pairing", "all") not in {"all", "within_source_model"}:
         raise ValueError("t2_pairing must be all or within_source_model")
+    pool_stage = config.get("pool_stage", "development")
+    if pool_stage not in {"development", "formal_raw", "formal_selected"}:
+        raise ValueError("pool_stage must be development, formal_raw or formal_selected")
+    if pool_stage in {"formal_raw", "formal_selected"}:
+        if any(
+            item.get("source_type") not in {"local", "api"}
+            or not item.get("model_family")
+            for item in policies
+        ):
+            raise ValueError("formal policy specs require source_type and model_family")
+        local_families = {
+            item["model_family"] for item in policies if item["source_type"] == "local"
+        }
+        total_runs = sum(item.get("runs", 1) for item in policies)
+        api_runs = sum(
+            item.get("runs", 1) for item in policies if item["source_type"] == "api"
+        )
+        if len(local_families) < 3:
+            raise ValueError("formal rollout requires at least three local model families")
+        if not any(
+            item["source_type"] == "local"
+            and isinstance(item.get("model_parameters_billion"), (int, float))
+            and not isinstance(item.get("model_parameters_billion"), bool)
+            and 20 <= item["model_parameters_billion"] <= 40
+            for item in policies
+        ):
+            raise ValueError("formal rollout requires at least one prioritized 20–40B local model")
+        if total_runs < 12:
+            raise ValueError("formal rollout requires at least 12 raw trajectories per scenario")
+        if api_runs / total_runs > 0.30:
+            raise ValueError("formal API trajectory fraction must not exceed 30%")
+        environment_model = config["environment"]["provider"].get("model")
+        if any(item["provider"].get("model") == environment_model for item in policies):
+            raise ValueError("formal rollout policy model must differ from environment model")
     return config
 
 
@@ -113,11 +149,15 @@ def _public_config(config):
                 "provider": public_provider_config(item["provider"]),
                 "sampling": item.get("sampling", {}),
                 "runs": item.get("runs", 1),
+                "source_type": item.get("source_type", "unknown"),
+                "model_family": item.get("model_family", "unknown"),
+                "model_parameters_billion": item.get("model_parameters_billion"),
             }
             for item in config["policies"]
         ],
         "pilot_limits": deepcopy(config.get("pilot_limits")),
         "t2_pairing": config.get("t2_pairing", "all"),
+        "pool_stage": config.get("pool_stage", "development"),
     }
 
 
@@ -180,6 +220,11 @@ def _policy_from_spec(spec, run_index=0):
         policy_id,
         build_provider(spec["provider"]),
         sampling=sampling,
+        provenance_extra={
+            "source_type": spec.get("source_type", "unknown"),
+            "model_family": spec.get("model_family", "unknown"),
+            "model_parameters_billion": spec.get("model_parameters_billion"),
+        },
     )
 
 
@@ -219,6 +264,18 @@ def _load_existing_rollouts(rollout_dir):
         or manifest.get("config", {}).get("origin") != "free_form_model_interaction"
     ):
         raise ValueError(f"rollout bundle is not a v2 free-form pool: {rollout_dir}")
+    quality_audits = manifest.get("config", {}).get("quality_audits")
+    if manifest.get("config", {}).get("pool_stage") == "formal_selected":
+        if not isinstance(quality_audits, list):
+            raise ValueError("formal_selected bundle requires quality_audits")
+        by_id = {item.get("trajectory_id"): item for item in quality_audits}
+        missing = [item for item in manifest.get("trajectory_ids", []) if item not in by_id]
+        failed = [item for item, audit in by_id.items() if audit.get("passed") is not True]
+        if missing or failed:
+            raise ValueError(
+                "formal_selected bundle contains unpassed or unaudited trajectories: "
+                + ", ".join(missing + failed)
+            )
     for trajectory_id in manifest.get("trajectory_ids", []):
         path = Path(rollout_dir) / f"{trajectory_id}.json"
         trajectory = json.loads(path.read_text(encoding="utf-8"))
@@ -257,11 +314,23 @@ def _round_robin_turns(trajectories):
         depth += 1
 
 
-def run_scenario(scenario, scenario_path, output_dir, config, *, build_only=False, allow_unreviewed=False):
+def run_scenario(
+    scenario,
+    scenario_path,
+    output_dir,
+    config,
+    *,
+    build_only=False,
+    allow_unreviewed=False,
+    rollout_root=None,
+):
     _require_reviewed(scenario, allow_unreviewed)
     scenario_id = scenario["scenario_id"]
     scenario_output = Path(output_dir) / scenario_id
-    rollout_dir = Path(scenario_path).parent / "rollouts"
+    rollout_dir = (
+        Path(rollout_root) / Path(scenario_path).parent.name
+        if rollout_root else Path(scenario_path).parent / "rollouts"
+    )
     environment_factory = ModelEnvironmentFactory(
         scenario,
         config["environment"]["provider"],
@@ -295,11 +364,34 @@ def run_scenario(scenario, scenario_path, output_dir, config, *, build_only=Fals
             trajectories,
             {
                 "origin": "free_form_model_interaction",
+                "pool_stage": config.get("pool_stage", "development"),
                 "rollout_config": _public_config(config),
                 "dialogues": "dialogues.md",
                 "task_review": "tasks.md",
             },
         )
+
+    if not build_only and config.get("pool_stage") == "formal_raw":
+        summary = {
+            "scenario_id": scenario_id,
+            "trajectory_count": len(trajectories),
+            "trajectory_origin": "free_form_model_interaction",
+            "rollout_bundle": str(rollout_dir),
+            "t1": 0,
+            "t2": 0,
+            "t3": 0,
+            "local_intervention_branches": 0,
+            "task_review": None,
+            "ground_truth_status": "not_built_before_rollout_quality_gate",
+            "run_scope": "formal_raw",
+            "pilot_limits": deepcopy(pilot_limits) if pilot_limits else None,
+        }
+        scenario_output.mkdir(parents=True, exist_ok=True)
+        (scenario_output / "pipeline_manifest.json").write_text(
+            json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        return summary
 
     t1_limit = pilot_limits.get(
         "t1",
@@ -397,18 +489,26 @@ def run_scenario(scenario, scenario_path, output_dir, config, *, build_only=Fals
         trajectories,
         branches,
     )
+    bundle_stage = config.get("pool_stage", "development")
+    if build_only:
+        bundle_manifest = json.loads(
+            (rollout_dir / "manifest.json").read_text(encoding="utf-8")
+        )
+        bundle_stage = bundle_manifest.get("config", {}).get(
+            "pool_stage", bundle_stage
+        )
     summary = {
         "scenario_id": scenario_id,
         "trajectory_count": len(trajectories),
         "trajectory_origin": "free_form_model_interaction",
-        "rollout_bundle": f"configs/scenarios/{Path(scenario_path).parent.name}/rollouts",
+        "rollout_bundle": str(rollout_dir),
         "t1": len(t1_candidates),
         "t2": len(t2),
         "t3": len(t3),
         "local_intervention_branches": len(branches),
-        "task_review": f"configs/scenarios/{Path(scenario_path).parent.name}/rollouts/tasks.md",
+        "task_review": str(rollout_dir / "tasks.md"),
         "ground_truth_status": "pending_human_annotation",
-        "run_scope": "pilot" if pilot_limits else "full_scenario",
+        "run_scope": bundle_stage,
         "pilot_limits": deepcopy(pilot_limits) if pilot_limits else None,
     }
     scenario_output.mkdir(parents=True, exist_ok=True)
@@ -432,12 +532,50 @@ def main():
     parser.add_argument("--rollout-config", type=Path, required=True)
     parser.add_argument("--build-only", action="store_true")
     parser.add_argument("--allow-unreviewed", action="store_true")
+    parser.add_argument(
+        "--rollout-root",
+        type=Path,
+        help="Optional isolated rollout root; required for formal raw pools.",
+    )
+    parser.add_argument(
+        "--review-registry",
+        type=Path,
+        help="Human-signed scenario registry required for formal_raw.",
+    )
+    parser.add_argument(
+        "--environment-evidence",
+        type=Path,
+        help="Gate 2 E1-E6 evidence directory required for formal_raw.",
+    )
     args = parser.parse_args()
     config = load_rollout_config(args.rollout_config)
+    if config.get("pool_stage") in {"formal_raw", "formal_selected"} and args.rollout_root is None:
+        raise ValueError("formal rollout stages require --rollout-root isolation")
+    if config.get("pool_stage") == "formal_raw" and args.allow_unreviewed:
+        raise ValueError("formal_raw rollout can never use --allow-unreviewed")
+    if config.get("pool_stage") == "formal_raw" and args.review_registry is None:
+        raise ValueError("formal_raw rollout requires --review-registry")
+    if config.get("pool_stage") == "formal_raw" and args.environment_evidence is None:
+        raise ValueError("formal_raw rollout requires --environment-evidence")
     records = select_scenario_records(
         load_scenario_records(args.scenarios),
         args.scenario_ids,
     )
+    if config.get("pool_stage") == "formal_raw":
+        registry = load_review_registry(args.review_registry)
+        for scenario_path, scenario in records:
+            scenario_gate = audit_scenario_gate(
+                scenario, scenario_path, registry
+            )
+            if not scenario_gate["passed"]:
+                raise ValueError(
+                    f"formal_raw rollout requires passed Gate 1 for {scenario['scenario_id']}"
+                )
+        environment_gate = audit_environment_gate(
+            [scenario for _, scenario in records], args.environment_evidence
+        )
+        if not environment_gate["passed"]:
+            raise ValueError("formal_raw rollout requires passed Gate 2 environment evidence")
     summaries = [
         run_scenario(
             scenario,
@@ -446,12 +584,15 @@ def main():
             config,
             build_only=args.build_only,
             allow_unreviewed=args.allow_unreviewed,
+            rollout_root=args.rollout_root,
         )
         for path, scenario in records
     ]
     instances = []
     for summary in summaries:
         source = args.output / summary["scenario_id"] / "offline" / "instances.jsonl"
+        if not source.exists():
+            continue
         instances.extend(
             json.loads(line)
             for line in source.read_text(encoding="utf-8").splitlines()
@@ -472,7 +613,11 @@ def main():
         },
         "scenarios": summaries,
         "rollout_config": _public_config(config),
-        "ground_truth_status": "pending_human_annotation",
+        "ground_truth_status": (
+            "not_built_before_rollout_quality_gate"
+            if config.get("pool_stage") == "formal_raw" and not args.build_only
+            else "pending_human_annotation"
+        ),
     }
     (args.output / "manifest.json").write_text(
         json.dumps(result, ensure_ascii=False, indent=2) + "\n",

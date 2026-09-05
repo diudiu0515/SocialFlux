@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_019`
 - 配对 JSON：`scenario_019.json`
-- JSON SHA-256：`f51da43297a8ce0f75c7ea47695c8cda19a41982bced7cfe7790e441705ec3ea`
+- JSON SHA-256：`0fd8568c2ab6a93eb10337bc1815cb0f86313bbd849cc1db5fc91af909eb4a55`
 - 社会机制：friendship contribution conflict under rapid scaling
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-019`

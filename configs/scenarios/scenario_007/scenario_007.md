@@ -6,12 +6,12 @@
 
 - Scenario ID：`IA_PIPE_007`
 - 配对 JSON：`scenario_007.json`
-- JSON SHA-256：`143796a120290b704729c3e57a4adfa1aebeedacf7304f81af1e6e38fcdc1c14`
+- JSON SHA-256：`a9ebfb12ef0f2545d7f03c7bc50bf2464a45beff18503067615fe0ba0cc68ba8`
 - 社会机制：information asymmetry
-- 来源类型：`narrative-derived`
+- 来源类型：`synthetic-script`
 - Provenance ID：`SF-SRC-007`
 - 表层文本策略：`original_surface_text`
-- 来源说明：抽象自复合叙事结构，仅保留社会机制；未复制具体作品角色、场景或对白。
+- 来源说明：由多种通用社会互动机制组合成原创剧本；没有使用可识别的具体作品角色、场景、事件序列或对白。
 
 ## 1. 叙事结构与初始化
 

@@ -5,10 +5,10 @@
 | 模块 | 状态 | 证据/限制 |
 |---|---|---|
 | v2 架构迁移 | 已完成 | 自由 action、单一环境、自然 rollout、局部 intervention |
-| Hybrid scenario source | 结构已完成 | 15 narrative-derived + 5 synthetic-script；来源真实性、原创性与质量仍待真人复核 |
+| Hybrid scenario source | 结构已完成 | 10 narrative-derived + 10 synthetic-script；影视十场景已有作品/年份/媒介/抽象位置 provenance，来源与原创性最终判断仍待真人复核 |
 | 两阶段 scenario 创建 | 已完成 | source quality approval → normalization → candidate S0/D0 |
 | 20 个 scenario bundle | 候选完成 | 保留原 10 个并新增 10 个影视结构启发场景；全部带 JSON、同名 Markdown、coverage，S0/D0 尚未 human_frozen |
-| Prompt catalog | 已完成 | 21 个版本化 prompt、SHA-256 manifest、职责与边界审计 |
+| Prompt catalog | 已完成 | 23 个版本化 prompt、SHA-256 manifest、职责与边界审计 |
 | Provider/model pool | 已完成 | OpenAI-compatible、Anthropic、Gemini、vLLM；真实密钥/endpoint 由本地配置提供 |
 | 自然 rollout | 20 场景开发运行已完成 | Qwen3.5-9B；每 scenario 3 seeds × 6 turns，共 60 条自然轨迹；scenario 未 human-freeze，不能作为正式数据 |
 | T1/T2/T3 builders | 已完成 | natural checkpoint、natural divergent history + O*、local branch |
@@ -17,9 +17,11 @@
 | T4 | 核心交互已完成 | 与离线共用环境；正式 judge/human 校准待完成 |
 | Talking Head | 机器生成与验收已完成 | EchoMimicV2 四卡生成 40/40 MP4；音轨、时长、分辨率与帧率自动校验通过，表达—状态与时序自然度待真人检查 |
 | 九项验收 | 框架已完成 | 当前正式结果为 pending；需要自然轨迹、模型实验与真人评审 |
+| gate.md 正式池约束 | 工程完成、正式证据待生成 | 20×12 三模型族（含 32B）配置、六维/hard reject、post-hoc 4–6 选择、history、跨族双 Judge、backbone sensitivity、三人 GT 与 12 条总闸门均已实现；真人 freeze 尚未签名，因此 formal raw 不得启动 |
+| 正式本地模型准备 | 下载中 | GLM-4-9B 与 Qwen3-32B-AWQ 正在 `.local_models/formal/` 下载；DeepSeek 正式源已改为适合多轮指令对话的 V2-Lite-Chat，Qwen3.5-9B 环境模型已存在。模型目录不提交 Git，且 Gate 1/2 未经真人签署前不得启动 formal raw |
 | 网站 | 已完成 | 只读展示 scenario、自然轨迹、完整对话、T1/T2/T3 人工抽查文档、状态、trigger 与 Talking Head 视频 |
 | 清理 | 已完成 | 删除 demo、controlled policy、旧 world benchmark、旧 prompt/schema/build |
-| 测试 | 已通过 | core 74/74、web 4/4；20 scenario paired Markdown、40 media request/video、prompt/scenario manifests 全部一致 |
+| 测试 | 已通过 | core 106/106、web 4/4；含 raw/selected manifest 绑定、rollout gate、双 Judge、history action+environment interpretation、backbone、任务专属真人清单、T1/T2/T3 人工标签/公开证据合同、真人签名/GT、prompt/scenario hash 与网站回归 |
 
 ## Qwen3.5-9B 20-scenario 开发运行
 
@@ -35,6 +37,7 @@
 ## 不能提前宣称完成的研究工作
 
 - 20 个 scenario 的来源、质量门与 S0/D0 人工审核；
+- Gate 2 E1/E2 的三名实名评审及 E3–E5 的实名人工有效性确认；
 - 多模型、多 seed 的真实自然 rollout pool；
 - 30–50 transition 的三人 state-update 标注；
 - 15–20 完整轨迹的三人 plausibility 评审；

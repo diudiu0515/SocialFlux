@@ -20,6 +20,8 @@ candidate_pending_human_freeze 表示模型或作者已经提出候选值，但�
 
 确认后，reviewer 记录姓名、UTC 时间、scenario JSON SHA-256 和备注，才可把状态改为 human_frozen。脚本校验通过、模型自评通过或已经生成 rollout，都不能代替真人签字。
 
+同一签名记录还必须填写 Gate 1 的六项 1–5 分真人评分：Social Plausibility、Character Coherence、Trade-off Quality、History Necessity、Interaction Richness、T1–T4 Suitability。Social Plausibility、Trade-off Quality、History Necessity 必须 ≥4，其余必须 ≥3，且总均值必须 ≥4.0；任一未达标不能签为 approved。
+
 ## 当前项目状态
 
 20 个 scenario 的 S0/D0 仍是候选值。开发 rollout 可以显式使用 --allow-unreviewed，但产物只能进入开发池；在真人冻结与 source quality approval 完成前，不能发布为正式 benchmark 或 human ground truth。

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socialflux.example/schemas/history-dependence-result-v1.json",
+  "type": "object",
+  "required": [
+    "trajectory_id",
+    "checkpoint_turn_id",
+    "full_history_action",
+    "recent_k_action",
+    "critical_event_removed_action",
+    "critical_event_turn_ids",
+    "full_vs_recent_similarity",
+    "full_vs_removed_similarity",
+    "environment_interpretation",
+    "score",
+    "passed"
+  ],
+  "properties": {
+    "trajectory_id": {"type": "string", "minLength": 1},
+    "checkpoint_turn_id": {"type": "string", "minLength": 1},
+    "full_history_action": {"type": "string", "minLength": 1},
+    "recent_k_action": {"type": "string", "minLength": 1},
+    "critical_event_removed_action": {"type": "string", "minLength": 1},
+    "critical_event_turn_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "full_vs_recent_similarity": {"type": "number", "minimum": 0, "maximum": 1},
+    "full_vs_removed_similarity": {"type": "number", "minimum": 0, "maximum": 1},
+    "environment_interpretation": {
+      "type": "object",
+      "required": ["full_vs_recent", "full_vs_critical_removed"],
+      "properties": {
+        "full_vs_recent": {"$ref": "#/$defs/interpretationComparison"},
+        "full_vs_critical_removed": {"$ref": "#/$defs/interpretationComparison"}
+      },
+      "additionalProperties": false
+    },
+    "score": {"type": "number", "minimum": 0, "maximum": 1},
+    "passed": {"type": "boolean"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "interpretationComparison": {
+      "type": "object",
+      "required": ["state_direction_agreement", "dynamics_direction_agreement", "appraisal_similarity", "change_score"],
+      "properties": {
+        "state_direction_agreement": {"type": "number", "minimum": 0, "maximum": 1},
+        "dynamics_direction_agreement": {"type": "number", "minimum": 0, "maximum": 1},
+        "appraisal_similarity": {"type": "number", "minimum": 0, "maximum": 1},
+        "change_score": {"type": "number", "minimum": 0, "maximum": 1}
+      },
+      "additionalProperties": false
+    }
+  }
+}

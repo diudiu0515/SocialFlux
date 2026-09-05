@@ -6,12 +6,12 @@
 
 - Scenario ID：`IA_PIPE_003`
 - 配对 JSON：`scenario_003.json`
-- JSON SHA-256：`8e580a424d66a03de915fcb503c53eadad39df040f02ac01b4998a982d3acc06`
+- JSON SHA-256：`61562f9c5613528af94280ebe20aa3d9a18fd95f9226adb7a24fa19c8563cd28`
 - 社会机制：friendship trust
-- 来源类型：`narrative-derived`
+- 来源类型：`synthetic-script`
 - Provenance ID：`SF-SRC-003`
 - 表层文本策略：`original_surface_text`
-- 来源说明：抽象自复合叙事结构，仅保留社会机制；未复制具体作品角色、场景或对白。
+- 来源说明：由多种通用社会互动机制组合成原创剧本；没有使用可识别的具体作品角色、场景、事件序列或对白。
 
 ## 1. 叙事结构与初始化
 

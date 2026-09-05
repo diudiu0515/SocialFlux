@@ -7,7 +7,11 @@
     "provenance_id": "screen-structure-012",
     "surface_text_policy": "original_surface_text",
     "redistribution_status": "transformed_structural_abstraction",
-    "provenance_note": "High-level social mechanism inspired by Marriage Story (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+    "provenance_note": "High-level social mechanism inspired by Marriage Story (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+    "work_title": "Marriage Story",
+    "year": 2019,
+    "medium": "film",
+    "related_characters_or_plot_position": "abstracted separation negotiation under conflicting family and career goals"
   },
   "narrative_design": {
     "relationship_structure": "分居伴侣与共同照护者",

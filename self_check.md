@@ -6,7 +6,7 @@
 
 > 最后自查：2026-09-06。
 
-> 本轮记录：20/20 scenario 已完成 Qwen3.5-9B 三 seed 自然 rollout 与 T1/T2/T3 实际提取；共 60 条轨迹、180 个 instance、60 条局部分支，20/20 均有 `dialogues.md` 和 `tasks.md`。严格质量门与定向重采样后轨迹机器 clean 60/60，instance 结构门 180/180。EchoMimicV2 已生成 40/40 MP4 并通过媒体自动验收；视频语义观感、S0/D0 freeze 与正式研究验收仍保持未完成。core 74/74、web 4/4。
+> 本轮记录：20/20 scenario 已完成 Qwen3.5-9B 三 seed 自然 rollout 与 T1/T2/T3 实际提取；共 60 条轨迹、180 个 instance、60 条局部分支，20/20 均有 `dialogues.md` 和 `tasks.md`。严格质量门与定向重采样后轨迹机器 clean 60/60，instance 结构门 180/180。EchoMimicV2 已生成 40/40 MP4 并通过媒体自动验收；视频语义观感、S0/D0 freeze 与正式研究验收仍保持未完成。本轮已完成 gate.md 工程约束、来源修正、raw/selected 防绕过、history action+environment interpretation 干预、任务专属人工清单与 T1/T2/T3 正式标签/公开证据合同；最终全量结果为 core 106/106、web 4/4。
 
 ## Revision v2 工程自查
 
@@ -18,7 +18,7 @@
 | R4 Scenario review gates | quality 人工批准后 normalization，S0/D0 单独 candidate→freeze | [x] |
 | R5 Rollout-derived tasks | T1 natural checkpoint、T2 natural histories+O*、T3 real checkpoint local branch | [x] |
 | R6 九项验收 scaffold | 报告固定九项且无证据不标 pass | [x] |
-| R7 Prompt/schema audit | 21 个固定 prompt、hash manifest、职责/边界/schema linkage | [x] |
+| R7 Prompt/schema audit | 23 个固定 prompt、hash manifest、职责/边界/schema linkage | [x] |
 | R8 真实自然 trajectory pool | 多模型、多 temperature/seed API rollout | [ ] |
 | R9 正式研究验收 | 九项真人/模型实验与 adjudication 全部完成 | [ ] |
 | R10 影视结构原创化 | 影视来源只抽象高层社会机制；新增 10 个原创 scenario 且不复制角色、台词或情节序列 | [x] |
@@ -26,6 +26,23 @@
 | R12 GPT–Qwen rollout 对照 | 同 environment/construction、匹配 scenario/seed 后比较任务质量；Qwen 已跑，GPT 凭据缺失 | [ ] |
 | R13 Qwen rollout pilot | IA_PIPE_011 两个 seeds、6 turns、T1/T2/T3、质量报告与九项 gate 可复核 | [x] |
 | R14 20-scenario 抽查包 | 每个 scenario 3 seeds rollout、T1/T2/T3、dialogues.md、tasks.md 与逐场景 bundle audit | [x] |
+
+## gate.md 正式数据约束自查
+
+| 条目 | 完成标准 | 自查 |
+| --- | --- | --- |
+| G1 自由轨迹来源 | 同一 stateful environment、无预定义策略、T1/T2/T3 只从完整轨迹派生 | [x] |
+| G2 模型池合同 | 至少三本地模型族、至少一个 20–40B、每场景 12 runs、API ≤30% | [x] |
+| G3 开发/正式隔离 | formal_raw 独立目录、旧 Qwen3.5 开发轨迹不能进入 final | [x] |
+| G4 六维与 hard reject | 六维独立评分、缺证据 pending、七类 gate.md hard reject 及更严格逻辑错误拒绝 | [x] |
+| G5 Post-hoc diversity | rollout 后 outcome 标注、近重复过滤、每场景保留 4–6 条 | [x] |
+| G6 History dependence | 同 checkpoint 的 Full / Recent-k / Critical-event-removed 同时比较 evaluated action 与 environment interpretation，正式轨迹必须有证据 | [x] |
+| G7 双 Judge | 全量主审 + 跨模型族分层/边缘二审，缺二审不能合并完成 | [x] |
+| G8 Backbone sensitivity | 同 checkpoint/action 在两个 environment backbone 重放并设方向阈值 | [x] |
+| G9 真人签名边界 | scenario/S0-D0 与精确 JSON hash 绑定；Gate 2 要求实名/时间戳；自动化不能签名 | [x] |
+| G10 Gate 4 + Formal human GT | T1/T2/T3 专属逐项人工清单；三人盲标、agreement、分歧真人 adjudication 的工具与强制校验 | [x] |
+| G11 正式异构 raw pool | 20 × 12 本地真实 rollout 产物通过配置/来源审计 | [ ] |
+| G12 正式发布证据 | 4–6 selected、双 Judge、history/backbone、human GT 全部通过 `verify_gate_md.py --strict` | [ ] |
 
 | Phase | 模块 | 具体要做什么 | 产物 | 是否人工 | 优先级 | 自查 |
 | --- | --- | --- | --- | --- | --- | --- |

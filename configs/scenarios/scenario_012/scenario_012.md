@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_012`
 - 配对 JSON：`scenario_012.json`
-- JSON SHA-256：`99d1e36b3adb360d431e753a2f068b2555a80f72145c961ea32dc54f929f6619`
+- JSON SHA-256：`1d6af137d8019435df42b3f9bacb8cf109143871033656eaf4c4543c9f3463a1`
 - 社会机制：co-parenting negotiation under legal shadow
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-012`

@@ -1,0 +1,13 @@
+{
+  "provider": {
+    "provider": "local_vllm",
+    "endpoint": "http://127.0.0.1:8300/v1/chat/completions",
+    "model": "zai-org/glm-4-9b-chat-hf",
+    "timeout": 300,
+    "max_tokens": 768
+  },
+  "sampling": {
+    "temperature": 0.1,
+    "seed": 8401
+  }
+}

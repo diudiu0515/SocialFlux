@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_011`
 - 配对 JSON：`scenario_011.json`
-- JSON SHA-256：`cb69086681c66e44e4ce3912fa433cd3f92d8d39024de556b9bb0feefc98baa2`
+- JSON SHA-256：`a9f6a202d62f4eef55af664d19fe19a6c9ff5db4880f2c26ff803eecd7a26663`
 - 社会机制：status gatekeeping under sponsor pressure
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-011`

@@ -1,6 +1,6 @@
 # SocialFlux Prompt Audit
 
-审计日期：2026-09-03。范围：`prompts/*.md`、`prompts/manifest.json`、对应 schema 与 Python caller。共保留 21 个版本化 prompt；未登记 Markdown 数为 0。
+审计日期：2026-09-06。范围：`prompts/*.md`、`prompts/manifest.json`、对应 schema 与 Python caller。共保留 23 个版本化 prompt；未登记 Markdown 数为 0。
 
 ## Prompt 逐项审计
 
@@ -21,6 +21,8 @@
 | `t2_shared_observation_v3` | benchmark construction；`ModelCandidateGenerator` | 读显式 target/evaluated 身份与两段 public natural histories | inline O* JSON | 实测修复 O* 角色互换；强制由 environment target 发话、双历史兼容且禁止 private provenance 泄漏 |
 | `local_intervention_validation_v1` | author-side validation protocol | 可读真实 checkpoint private experiment packet | `local_intervention_review.schema.json` | controlled 只保留为局部实验，不再驱动多轮策略 |
 | `instance_quality_judge_v2` | validation；`evaluate_instance_quality --judge-provider-config` 对 T1/T2/T3 做盲化质量诊断 | 只读去除 model/provider/trajectory/private state/metadata 后的 participant-visible packet | `instance_quality_judge.schema.json` | 评估 history dependency、证据、社会合理性、非平凡性和可回答性；明确不是 human GT，不能单独宣布模型胜负 |
+| `rollout_quality_judge_v1` | validation；`run_rollout_quality_judge` 的全量主审与分层二审 | 只读 state-free 场景参考（背景、角色、显式目标、persona）和 observable action/response/expression；不读 hidden intention、private state、provenance 或阈值 | `rollout_quality_judgment.schema.json` | 固定 gate.md 六维评分与 hard reject；给 character consistency 提供明确参照，跨模型族二审缺失时不能形成正式合并记录 |
+| `history_dependence_probe_v1` | evaluated-policy-side counterfactual；`run_history_dependence` | policy prompt 只读 full/recent-k/critical-event-removed 三种 public observation；同一脚本另外在 author-side restore 相同 S/D/action 做环境解释重放 | natural-language action only；脚本把 action 差异与 environment appraisal/state-delta 差异写入 `history_dependence_result.schema.json` | 同一 checkpoint 同时检验关键历史删除是否改变行为与 environment interpretation；policy 不读取 latent state，干预强度不覆盖 Judge 六维评分 |
 | `task_t1_v1` | evaluated-agent-side；T1 baseline/evaluation | 只读 public longitudinal instance | `task_t1_output.schema.json` | 移除作者 effects/oracle；证据 ID 必须可见 |
 | `task_t2_v1` | evaluated-agent-side；T2 baseline/evaluation | 只读 A/B history 与相同 O* | `task_t2_output.schema.json` | 明确 O* byte-identical，禁止构建 metadata/private state |
 | `task_t3_v1` | evaluated-agent-side；T3 baseline/evaluation | 只读 public checkpoint、2–4 action、horizon | `task_t3_output.schema.json` | 主任务禁止 oracle state/未来分支；所有 option 同 protocol/horizon |

@@ -6,12 +6,12 @@
 
 - Scenario ID：`IA_PIPE_005`
 - 配对 JSON：`scenario_005.json`
-- JSON SHA-256：`5a7dd49af669c3fbd2e6b45a292db1babe08fddf769984dc122d3356cf53739b`
+- JSON SHA-256：`999d0bc756eb75ebd3137ef8f60a8ed9864b83441f7aef030baa008866e6e8a7`
 - 社会机制：family resource
-- 来源类型：`narrative-derived`
+- 来源类型：`synthetic-script`
 - Provenance ID：`SF-SRC-005`
 - 表层文本策略：`original_surface_text`
-- 来源说明：抽象自复合叙事结构，仅保留社会机制；未复制具体作品角色、场景或对白。
+- 来源说明：由多种通用社会互动机制组合成原创剧本；没有使用可识别的具体作品角色、场景、事件序列或对白。
 
 ## 1. 叙事结构与初始化
 

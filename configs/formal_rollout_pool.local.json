@@ -1,0 +1,79 @@
+{
+  "format": "socialflux_rollout_pool_v1",
+  "pool_stage": "formal_raw",
+  "environment": {
+    "provider": {
+      "provider": "local_vllm",
+      "endpoint": "http://127.0.0.1:8303/v1/chat/completions",
+      "model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+      "timeout": 300,
+      "max_tokens": 768
+    },
+    "sampling": {"temperature": 0.2, "seed": 4100}
+  },
+  "construction": {
+    "provider": {
+      "provider": "local_vllm",
+      "endpoint": "http://127.0.0.1:8303/v1/chat/completions",
+      "model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+      "timeout": 300,
+      "max_tokens": 768
+    },
+    "sampling": {"temperature": 0.5, "seed": 5100}
+  },
+  "policies": [
+    {
+      "policy_id": "glm4_local",
+      "source_type": "local",
+      "model_family": "glm",
+      "model_parameters_billion": 9,
+      "provider": {
+        "provider": "local_vllm",
+        "endpoint": "http://127.0.0.1:8300/v1/chat/completions",
+        "model": "zai-org/glm-4-9b-chat-hf",
+        "timeout": 300,
+        "max_tokens": 256
+      },
+      "sampling": {"temperature": 0.45, "top_p": 0.9, "seed": 1101},
+      "runs": 4
+    },
+    {
+      "policy_id": "qwen3_32b_awq_local",
+      "source_type": "local",
+      "model_family": "qwen",
+      "model_parameters_billion": 32,
+      "provider": {
+        "provider": "local_vllm",
+        "endpoint": "http://127.0.0.1:8301/v1/chat/completions",
+        "model": "Qwen/Qwen3-32B-AWQ",
+        "timeout": 300,
+        "max_tokens": 256
+      },
+      "sampling": {"temperature": 0.5, "top_p": 0.9, "seed": 2201},
+      "runs": 4
+    },
+    {
+      "policy_id": "deepseek_v2_local",
+      "source_type": "local",
+      "model_family": "deepseek",
+      "model_parameters_billion": 16,
+      "provider": {
+        "provider": "local_vllm",
+        "endpoint": "http://127.0.0.1:8302/v1/chat/completions",
+        "model": "deepseek-ai/DeepSeek-V2-Lite-Chat",
+        "timeout": 300,
+        "max_tokens": 256
+      },
+      "sampling": {"temperature": 0.6, "top_p": 0.9, "seed": 3301},
+      "runs": 4
+    }
+  ],
+  "pilot_limits": {
+    "rollout_turns": 6,
+    "t1": 6,
+    "t2": 2,
+    "t3": 1,
+    "t3_horizon": 5
+  },
+  "t2_pairing": "within_source_model"
+}

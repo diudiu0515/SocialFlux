@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://socialflux.example/schemas/rollout-quality-judgment-v1.json",
+  "type": "object",
+  "required": ["trajectory_id", "scores", "hard_reject_reasons", "rationale"],
+  "properties": {
+    "trajectory_id": {"type": "string", "minLength": 1},
+    "scores": {
+      "type": "object",
+      "required": [
+        "dialogue_coherence",
+        "history_dependence",
+        "character_consistency",
+        "state_response_consistency",
+        "interaction_progression",
+        "naturalness"
+      ],
+      "properties": {
+        "dialogue_coherence": {"type": "integer", "minimum": 1, "maximum": 5},
+        "history_dependence": {"type": "integer", "minimum": 1, "maximum": 5},
+        "character_consistency": {"type": "integer", "minimum": 1, "maximum": 5},
+        "state_response_consistency": {"type": "integer", "minimum": 1, "maximum": 5},
+        "interaction_progression": {"type": "integer", "minimum": 1, "maximum": 5},
+        "naturalness": {"type": "integer", "minimum": 1, "maximum": 5}
+      },
+      "additionalProperties": false
+    },
+    "hard_reject_reasons": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "hidden_state_leakage",
+          "malformed_output",
+          "repetitive_loop",
+          "severe_character_contradiction",
+          "broken_dialogue_logic",
+          "meaningless_premature_ending",
+          "nonsensical_state_oscillation",
+          "implementation_induced_state_saturation"
+        ]
+      }
+    },
+    "rationale": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}

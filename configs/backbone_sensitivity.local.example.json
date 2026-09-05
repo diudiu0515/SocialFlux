@@ -1,0 +1,23 @@
+{
+  "format": "socialflux_backbone_sensitivity_config_v1",
+  "backbones": [
+    {
+      "model_family": "qwen",
+      "provider": {
+        "provider": "local_vllm",
+        "endpoint": "http://127.0.0.1:8303/v1/chat/completions",
+        "model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope"
+      },
+      "sampling": {"temperature": 0.1, "seed": 901, "max_tokens": 1600}
+    },
+    {
+      "model_family": "glm",
+      "provider": {
+        "provider": "local_vllm",
+        "endpoint": "http://127.0.0.1:8300/v1/chat/completions",
+        "model": "ZhipuAI/glm-4-9b-chat-hf"
+      },
+      "sampling": {"temperature": 0.1, "seed": 901, "max_tokens": 1600}
+    }
+  ]
+}

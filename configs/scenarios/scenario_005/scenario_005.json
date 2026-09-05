@@ -3,11 +3,11 @@
   "title": "家庭养老资源分配",
   "mechanism": "family resource",
   "source": {
-    "type": "narrative-derived",
+    "type": "synthetic-script",
     "provenance_id": "SF-SRC-005",
     "surface_text_policy": "original_surface_text",
-    "redistribution_status": "internal_structure_only",
-    "provenance_note": "抽象自复合叙事结构，仅保留社会机制；未复制具体作品角色、场景或对白。"
+    "redistribution_status": "original_synthetic",
+    "provenance_note": "由多种通用社会互动机制组合成原创剧本；没有使用可识别的具体作品角色、场景、事件序列或对白。"
   },
   "narrative_design": {
     "relationship_structure": "对话参与者 与 家庭成员 的持续关系",

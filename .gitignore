@@ -17,6 +17,8 @@ ENV/
 
 # Generated outputs contain private model trajectories and review artifacts
 build/
+data/formal/
+reviews/*signed*.json
 configs/scenarios/scenario_*/rollouts/
 media/talking_head/assets/
 .local_models/

@@ -7,7 +7,11 @@
     "provenance_id": "screen-structure-020",
     "surface_text_policy": "original_surface_text",
     "redistribution_status": "transformed_structural_abstraction",
-    "provenance_note": "High-level social mechanism inspired by Better Call Saul (television); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+    "provenance_note": "High-level social mechanism inspired by Better Call Saul (television); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+    "work_title": "Better Call Saul",
+    "year": 2015,
+    "medium": "television series",
+    "related_characters_or_plot_position": "abstracted ethical boundary negotiation under professional loyalty and pressure"
   },
   "narrative_design": {
     "relationship_structure": "资深督导律师与初级承办律师",

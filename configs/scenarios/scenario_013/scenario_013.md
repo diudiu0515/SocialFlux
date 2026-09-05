@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_013`
 - 配对 JSON：`scenario_013.json`
-- JSON SHA-256：`313e1a7bb500738b229488e0cf09a9a8e4596d6255e0737805955c90595a33ff`
+- JSON SHA-256：`363fe0485f5a0245b373ed17fd698917674ed1500af12dd689cb55fea5190827`
 - 社会机制：group conformity versus evidence revision
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-013`

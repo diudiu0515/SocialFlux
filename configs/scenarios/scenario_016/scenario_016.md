@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_016`
 - 配对 JSON：`scenario_016.json`
-- JSON SHA-256：`cc8507937c12ae4e831549248adb1ef44cfeb37ca3e7d8dfd7bb7dc568ad661b`
+- JSON SHA-256：`dc4b4ab2149ecf18d04bb50fd08f2e9c18343b80b4a7e8d0dbb64116a0ad847b`
 - 社会机制：grief, expertise, and informal authority in a failing workplace
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-016`

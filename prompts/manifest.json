@@ -16,6 +16,11 @@
       "sha256": "51cff39b8df65281d49fa8382b36a33995abffc7c8fb436089be69c50dacf65d",
       "version": "v3"
     },
+    "history_dependence_probe_v1": {
+      "path": "history_dependence_probe_v1.md",
+      "sha256": "b156cc1c4beb13ef664aa28042ababc651b3051da312a959a2821e899854d84e",
+      "version": "v1"
+    },
     "human_annotation_v2": {
       "path": "human_annotation_v2.md",
       "sha256": "ba720679bb9ba6bfffd9789d93c66448f04e9285d334f3a3e7aeec1d6075bd8a",
@@ -49,6 +54,11 @@
     "observable_expression_v1": {
       "path": "observable_expression_v1.md",
       "sha256": "8076fe86343bafb8cf1f86fb351f0c7ce5232d6023a29556f952d4ac886ff964",
+      "version": "v1"
+    },
+    "rollout_quality_judge_v1": {
+      "path": "rollout_quality_judge_v1.md",
+      "sha256": "5717980908b9d110d65d7516284f14bd31a00aabfa1ca87d549ab9bed9fe761b",
       "version": "v1"
     },
     "scenario_normalization_v1": {

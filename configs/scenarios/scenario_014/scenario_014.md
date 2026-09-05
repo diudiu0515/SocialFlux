@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_014`
 - 配对 JSON：`scenario_014.json`
-- JSON SHA-256：`74bd3a8eb9552f37efbe84d97a678af8d897b50110974410b4a3fc5b23b01cbd`
+- JSON SHA-256：`e3c623a8d55b28e60bd5c78be3589d9094408b737359f4eee19cdfdaae95b7b6`
 - 社会机制：family loyalty entangled with institutional succession
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-014`

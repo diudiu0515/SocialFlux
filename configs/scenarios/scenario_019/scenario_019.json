@@ -7,7 +7,11 @@
     "provenance_id": "screen-structure-019",
     "surface_text_policy": "original_surface_text",
     "redistribution_status": "transformed_structural_abstraction",
-    "provenance_note": "High-level social mechanism inspired by The Social Network (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence."
+    "provenance_note": "High-level social mechanism inspired by The Social Network (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+    "work_title": "The Social Network",
+    "year": 2010,
+    "medium": "film",
+    "related_characters_or_plot_position": "abstracted founder-credit dispute under friendship and ownership tension"
   },
   "narrative_design": {
     "relationship_structure": "由朋友转为权责不对等的创业合伙人",

@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_015`
 - 配对 JSON：`scenario_015.json`
-- JSON SHA-256：`a79d84eb50b3f024867ae7e02ab0338a832f644cf12c932d478a46c0907b627f`
+- JSON SHA-256：`2dc27cbf49cbd20c74bfb3fbde6b93e4be33ab30c2fe4880c863122160bb5d7d`
 - 社会机制：institutional denial under public-risk uncertainty
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-015`
