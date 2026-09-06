@@ -46,7 +46,7 @@ nine-criterion acceptance + human annotation
 | T1/T2/T3 输入 | 任务所需可观察历史/checkpoint/候选自由文本 | private trajectory fields、作者假设、模型生成答案 |
 | Author-side environment | persona、hidden intention、S/D、相关 observable memory、action | 未来轨迹或预设 action 结果 |
 | Human annotation | 冻结的公开实例、rubric、独立证据要求 | simulator delta 作为 ground truth |
-| Website | 研究者视角 scenario 与本地 private rollout | 写入或第二套状态机 |
+| Annotation website | scenario、rollout、task 公开题面与研究者诊断视图 | 写入正式文件、伪造签名或维护第二套状态机 |
 
 ## 轨迹和局部干预
 
@@ -88,6 +88,10 @@ History dependence 的 Full / Recent-k / Critical-event-removed 三个 policy
 和 state update，因为后续 response 不影响已经得到的解释/delta，且不属于该
 指标。脚本逐条落盘、支持断点续跑和按 trajectory ID 定向复验；证据合并器
 拒绝任何缺失活跃 ID 的结果。
+
+## 人工标注工作台
+
+`web/` 直接读取 canonical scenario、当前活跃 rollout、`pipeline_v2` task instance 与 Talking Head 资产，并按 Gate 1、rollout 六维/hard reject、Gate 4 T1/T2/T3 专属合同生成可视化表单。草稿只写入浏览器 `localStorage`，支持 JSON 导出；它不自动修改 scenario、签署 S0/D0 freeze 或生成正式 human GT。部署默认仅绑定 `127.0.0.1:8000`，远程访问通过 SSH 隧道完成，避免向公网暴露完整研究材料。
 
 ## 验收
 

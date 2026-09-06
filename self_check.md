@@ -4,9 +4,9 @@
 
 > 勾选标准：必须有可复核的代码、产物或测试证据。标明需要真人审核、标注员、真实模型 API 或视频资产的条目，在没有对应记录前不勾选。
 
-> 最后自查：2026-09-06。
+> 最后自查：2026-09-07。
 
-> 本轮记录：20/20 scenario 的开发池已完成自然 rollout、筛选与 T1/T2/T3 实际提取；活跃池共 60 条轨迹（Qwen3.5-9B 42、Qwen3-32B 16、GLM-4-9B 2），最终双 Judge 与受控 history probe 为 60/60，按最终 ID 重建 180 个 instance（T1=120、T2=40、T3=20），结构门 180/180，20/20 均有 `dialogues.md` 和 `tasks.md`。EchoMimicV2 已生成 40/40 MP4 并通过媒体自动验收；视频语义观感、S0/D0 freeze、Gate 2 人工证据、正式 20×12 异构池与正式研究验收仍保持未完成。本轮全量结果为 core 138/138、web 4/4。
+> 本轮记录：20/20 scenario 的开发池已完成自然 rollout、筛选与 T1/T2/T3 实际提取；活跃池共 60 条轨迹（Qwen3.5-9B 42、Qwen3-32B 16、GLM-4-9B 2），最终双 Judge 与受控 history probe 为 60/60，按最终 ID 重建 180 个 instance（T1=120、T2=40、T3=20），结构门 180/180，20/20 均有 `dialogues.md` 和 `tasks.md`。EchoMimicV2 已生成 40/40 MP4 并通过媒体自动验收；视频语义观感、S0/D0 freeze、Gate 2 人工证据、正式 20×12 异构池与正式研究验收仍保持未完成。本轮全量结果为 core 138/138、web 5/5；scenario/rollout/task 标注网站已部署在 127.0.0.1:8000，草稿本地保存并可导出 JSON。
 
 ## Revision v2 工程自查
 
@@ -26,6 +26,7 @@
 | R12 GPT–Qwen rollout 对照 | 同 environment/construction、匹配 scenario/seed 后比较任务质量；Qwen 已跑，GPT 凭据缺失 | [ ] |
 | R13 Qwen rollout pilot | IA_PIPE_011 两个 seeds、6 turns、T1/T2/T3、质量报告与九项 gate 可复核 | [x] |
 | R14 20-scenario 抽查包 | 每个 scenario 3 seeds rollout、T1/T2/T3、dialogues.md、tasks.md 与逐场景 bundle audit | [x] |
+| R15 人工标注网站 | 可视化 20 个情节、60 条 rollout、180 个 T1/T2/T3 与视频；本地草稿、进度和 JSON 导出 | [x] |
 
 ## gate.md 正式数据约束自查
 

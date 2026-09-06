@@ -1,6 +1,21 @@
-# SocialFlux Scenario Visualizer
+# SocialFlux Annotation Studio
 
-网站是当前 canonical scenario 与自然 rollout 的只读研究者视图。它读取 `configs/scenarios/scenario_NNN/`、`build/pipeline_v2/` 和 `build/acceptance_v2/`；不接受 action，不维护 session，也不复制环境状态机。
+网站是当前 20 个 canonical scenario、60 条自然 rollout 与 180 个 T1/T2/T3
+实例的只读可视化和人工标注草稿工作台。它读取
+`configs/scenarios/scenario_NNN/`、`build/pipeline_v2/` 和 Talking Head
+资产，不复制或修改环境状态机。
+
+界面包含：
+
+- Scenario 情节、双方目标、关键历史、选择空间、S0/D0 与视频阈值审核；
+- Rollout 逐轮对话、状态变化、六维质量和 hard-reject 标注；
+- T1/T2/T3 逐实例题面、专属 Gate 4 检查和人工标签草稿；
+- 自然语言 scenario、完整 rollout 与 task 抽查文档；
+- 浏览器自动保存、审核进度和 JSON 导出。
+
+浏览器记录只是本机草稿，不会写入仓库，也不构成真人签名、Gate 通过或正式
+human GT。导出的 JSON 仍需走项目中的 hash 绑定、多人 agreement 和
+adjudication 流程。
 
 启动：
 
@@ -8,11 +23,18 @@
 python -m web.server --host 0.0.0.0 --port 8000
 ```
 
-本机访问 `http://127.0.0.1:8000/`；远程服务器可做 SSH 端口转发。没有自然 rollout 时仍可查看 20 个 scenario、来源、质量/S0 状态、初始 state、视频阈值和配套 Markdown；界面会明确显示 rollout pending。
+本机访问 `http://127.0.0.1:8000/`。远程服务器推荐端口转发：
+
+```bash
+ssh -L 8000:127.0.0.1:8000 <host>
+```
+
+然后访问 `http://127.0.0.1:8000/`。
 
 验证：
 
 ```bash
 python -m unittest discover -s web/tests -v
 curl http://127.0.0.1:8000/api/health
+curl http://127.0.0.1:8000/api/annotation-contract
 ```

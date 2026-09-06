@@ -1,6 +1,6 @@
 # SocialFlux Project Progress
 
-更新时间：2026-09-06
+更新时间：2026-09-07
 
 | 模块 | 状态 | 证据/限制 |
 |---|---|---|
@@ -19,9 +19,9 @@
 | 九项验收 | 框架已完成 | 当前正式结果为 pending；需要自然轨迹、模型实验与真人评审 |
 | gate.md 正式池约束 | 工程完成、正式证据待生成 | 20×12 三模型族（含 32B）配置、六维/hard reject、post-hoc 4–6 选择、history、跨族双 Judge、backbone sensitivity、三人 GT 与 12 条总闸门均已实现；真人 freeze 尚未签名，因此 formal raw 不得启动 |
 | 正式本地模型准备 | 模型服务可用、正式运行受 Gate 阻塞 | Qwen3-32B-AWQ、GLM-4-9B、DeepSeek-V2-Lite-Chat 与 Qwen3.5-9B 环境服务已完成本地部署实验。模型目录不提交 Git；Gate 1 真人 freeze 与 Gate 2 通过前不得启动 formal raw |
-| 网站 | 已完成 | 只读展示 scenario、自然轨迹、完整对话、T1/T2/T3 人工抽查文档、状态、trigger 与 Talking Head 视频 |
+| 网站 | 已部署 | 标注工作台覆盖 20 个 scenario 情节/S0-D0/阈值、60 条 rollout 六维与 hard reject、180 个 T1/T2/T3 专属表单、40 个视频；浏览器本地自动保存并导出 JSON，当前安全监听 127.0.0.1:8000 |
 | 清理 | 已完成 | 删除 demo、controlled policy、旧 world benchmark、旧 prompt/schema/build |
-| 测试 | 已通过 | 全量 core 138/138、web 4/4；另有 scenario 文档 20/20、bundle 20/20 与 `git diff --check` 通过 |
+| 测试 | 已通过 | 全量 core 138/138、web 5/5；另有 scenario 文档 20/20、bundle 20/20 与 `git diff --check` 通过 |
 
 ## 20-scenario development pool
 

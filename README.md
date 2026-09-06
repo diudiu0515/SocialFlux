@@ -31,13 +31,13 @@ python scripts/run_quality_gates.py \
 python scripts/verify_gate_md.py
 ```
 
-启动只读可视化：
+启动人工标注工作台：
 
 ```bash
-python -m web.server --host 0.0.0.0 --port 8000
+python -m web.server --host 127.0.0.1 --port 8000
 ```
 
-浏览器访问 `http://<服务器地址>:8000/`。SSH 环境可用端口转发：`ssh -L 8000:127.0.0.1:8000 <host>`。网站只读展示 scenario、自然轨迹、Talking Head trigger，以及该 scenario 的 T1/T2/T3 人工抽查文档。
+服务器本机访问 `http://127.0.0.1:8000/`。远程浏览先执行 `ssh -L 8000:127.0.0.1:8000 <host>`，再打开同一地址。网站可视化全部 scenario 情节、S0/D0、视频阈值、自然 rollout 和 180 个 T1/T2/T3 待标注实例；标注草稿仅保存在浏览器并可导出 JSON。
 
 ## 运行真实 rollout
 
@@ -67,5 +67,5 @@ python scripts/run_acceptance.py \
 - `evaluation/`、`annotation/`：九项验收、泄漏审计与人工标注 overlay。
 - `prompts/`：全部固定模型 prompt 及 SHA-256 manifest。
 - `schemas/`：scenario、blueprint、质量报告、初始状态与 trajectory 合同。
-- `web/`：只读 scenario/trajectory 可视化。
+- `web/`：scenario/rollout/task 人工标注工作台；浏览器本地草稿与 JSON 导出。
 - `build/`：可再生且默认不提交的聚合产物。

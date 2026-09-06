@@ -1,4 +1,4 @@
-"""Read-only visualizer for canonical scenarios and natural model trajectories."""
+"""Read-only annotation visualizer for scenarios, rollouts, and tasks."""
 
 import argparse
 import json
@@ -12,6 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from evaluation.quality_gates import SCENARIO_CHECKS, TASK_REVIEW_RATINGS
+from evaluation.rollout_gate import HARD_REJECT_REASONS, QUALITY_DIMENSIONS
 from scripts.scenario_docs import discover_scenario_paths
 
 SCENARIO_DIR = ROOT / "configs" / "scenarios"
@@ -25,6 +27,58 @@ def read_json(path, default=None):
     if not path.exists():
         return default
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def read_jsonl(path):
+    if not path.exists():
+        return []
+    return [
+        json.loads(line)
+        for line in path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+
+
+def annotation_contract():
+    return {
+        "format": "socialflux_annotation_ui_v1",
+        "storage": "browser_local_draft",
+        "scenario_checks": list(SCENARIO_CHECKS),
+        "scenario_rating_scale": {
+            "minimum": 1,
+            "maximum": 5,
+            "dimensions": [
+                "social_plausibility",
+                "tradeoff_quality",
+                "history_necessity",
+                "strategy_space",
+                "motivation_coherence",
+                "surface_originality",
+            ],
+        },
+        "rollout_quality_dimensions": list(QUALITY_DIMENSIONS),
+        "rollout_hard_reject_reasons": list(HARD_REJECT_REASONS),
+        "task_review_ratings": {
+            task_type: sorted(ratings)
+            for task_type, ratings in TASK_REVIEW_RATINGS.items()
+        },
+        "task_label_contracts": {
+            "T1_state_tracking": {"value_scale": [0, 10], "requires_evidence": True},
+            "T2_history_sensitive_merge": {
+                "choices": ["A_higher", "similar", "B_higher", "cannot_determine"],
+                "requires_evidence": True,
+            },
+            "T3_counterfactual_choice_effect": {
+                "choices": ["decrease", "similar", "increase", "cannot_determine"],
+                "horizons": ["immediate", "delayed"],
+                "requires_evidence": True,
+            },
+        },
+        "warning": (
+            "Browser records are review drafts only. They are not signed Gate 1 "
+            "approval or formal human ground truth."
+        ),
+    }
 
 
 def load_scenario_records():
@@ -50,6 +104,9 @@ def _scenario_record(scenario_id):
         None,
     )
 
+
+def load_instances(scenario_id):
+    return read_jsonl(PIPELINE_DIR / scenario_id / "offline" / "instances.jsonl")
 
 def _pipeline_summary(scenario_id):
     return read_json(PIPELINE_DIR / scenario_id / "pipeline_manifest.json", {}) or {}
@@ -79,6 +136,7 @@ def scenario_summary(scenario, source_path):
         "selected_state_variables": scenario.get("selected_state_variables", {}),
         "trigger_count": len(scenario.get("video_triggers", [])),
         "max_turns": scenario["max_turns"],
+        "task_count": sum(pipeline.get(key, 0) for key in ("t1", "t2", "t3")),
         "scenario_bundle": bundle.relative_to(ROOT).as_posix(),
         "rollout_bundle": (bundle / "rollouts").relative_to(ROOT).as_posix(),
         "pipeline": {
@@ -144,6 +202,7 @@ def scenario_detail(scenario_id):
             else ""
         ),
         "rollouts": load_rollouts(scenario_id),
+        "instances": load_instances(scenario_id),
         "media_assets": [
             {
                 **asset,
@@ -160,7 +219,9 @@ def api_payload(path):
     records = load_scenario_records()
     catalog = read_json(SCENARIO_DIR / "manifest.json", {}) or {}
     if parts == ["api", "health"]:
-        return {"ok": True, "scenario_count": len(records), "pipeline_version": "v2"}
+        return {"ok": True, "scenario_count": len(records), "pipeline_version": "v2", "site_mode": "annotation_workbench"}
+    if parts == ["api", "annotation-contract"]:
+        return annotation_contract()
     if parts == ["api", "summary"]:
         return {
             "scenario_count": len(records),
@@ -232,12 +293,12 @@ class App(SimpleHTTPRequestHandler):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Serve the SocialFlux scenario visualizer")
+    parser = argparse.ArgumentParser(description="Serve the SocialFlux annotation workbench")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8000)
     args = parser.parse_args()
     server = ThreadingHTTPServer((args.host, args.port), App)
-    print(f"SocialFlux Scenario Visualizer: http://{args.host}:{args.port}/")
+    print(f"SocialFlux Annotation Studio: http://{args.host}:{args.port}/")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
