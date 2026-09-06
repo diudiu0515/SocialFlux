@@ -2,6 +2,8 @@
 """Minimal OpenAI-compatible local Transformers server for reproducible rollouts."""
 
 import argparse
+import logging
+from collections.abc import Mapping
 from contextlib import asynccontextmanager
 import threading
 import time
@@ -16,7 +18,12 @@ from transformers import (
     AutoProcessor,
     AutoTokenizer,
 )
+from transformers.cache_utils import DynamicCache
+from transformers.utils import import_utils as transformers_import_utils
 import uvicorn
+
+LOGGER = logging.getLogger(__name__)
+_ORIGINAL_DYNAMIC_CACHE_GET_MAX_LENGTH = DynamicCache.get_max_length
 
 
 def _final_text(value):
@@ -26,7 +33,35 @@ def _final_text(value):
     return text
 
 
+def _legacy_get_max_length(cache):
+    try:
+        return _ORIGINAL_DYNAMIC_CACHE_GET_MAX_LENGTH(cache)
+    except ValueError:
+        return None
+
+
+def _legacy_get_usable_length(cache, new_seq_length, layer_idx=0):
+    previous_length = cache.get_seq_length(layer_idx)
+    maximum_length = cache.get_max_length()
+    if maximum_length is not None and previous_length + new_seq_length > maximum_length:
+        return maximum_length - new_seq_length
+    return previous_length
+
+
+def _install_transformers_compatibility_shims():
+    # DeepSeek-V2-Lite remote code still imports this Transformers 4 helper.
+    # FX wrapping is optional for inference, so a false fallback is safe.
+    if not hasattr(transformers_import_utils, "is_torch_fx_available"):
+        transformers_import_utils.is_torch_fx_available = lambda: False
+    if not hasattr(DynamicCache, "seen_tokens"):
+        DynamicCache.seen_tokens = property(lambda cache: cache.get_seq_length())
+    DynamicCache.get_max_length = _legacy_get_max_length
+    if not hasattr(DynamicCache, "get_usable_length"):
+        DynamicCache.get_usable_length = _legacy_get_usable_length
+
+
 def _load_backend(model_path, architecture):
+    _install_transformers_compatibility_shims()
     if architecture == "auto":
         config = AutoConfig.from_pretrained(model_path, trust_remote_code=True)
         names = " ".join(getattr(config, "architectures", [])).lower()
@@ -37,7 +72,7 @@ def _load_backend(model_path, architecture):
         tokenizer = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
         model = AutoModelForImageTextToText.from_pretrained(
             model_path,
-            torch_dtype=torch.bfloat16,
+            dtype=torch.bfloat16,
             device_map="cuda",
             trust_remote_code=True,
         ).eval()
@@ -45,14 +80,14 @@ def _load_backend(model_path, architecture):
         tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
         model = AutoModelForCausalLM.from_pretrained(
             model_path,
-            torch_dtype=torch.bfloat16,
+            dtype=torch.bfloat16,
             device_map="cuda",
             trust_remote_code=True,
         ).eval()
     return tokenizer, model
 
 
-def create_app(model_path, architecture="auto"):
+def create_app(model_path, architecture="auto", use_cache=True):
     state = {}
     lock = threading.Lock()
 
@@ -90,15 +125,19 @@ def create_app(model_path, architecture="auto"):
                 )
             except (TypeError, ValueError):
                 inputs = processor.apply_chat_template(messages, **template_options)
-            if not isinstance(inputs, dict):
+            if isinstance(inputs, Mapping):
+                inputs = dict(inputs)
+            else:
                 inputs = {"input_ids": inputs}
             inputs = {key: value.to(model.device) for key, value in inputs.items()}
             temperature = float(payload.get("temperature", 0.7))
             generation = {
                 "max_new_tokens": int(payload.get("max_tokens", 512)),
                 "do_sample": temperature > 0,
-                "temperature": max(temperature, 1e-5),
+                "use_cache": use_cache,
             }
+            if temperature > 0:
+                generation["temperature"] = temperature
             for key in ("top_p", "top_k", "repetition_penalty"):
                 if payload.get(key) is not None:
                     generation[key] = payload[key]
@@ -113,6 +152,7 @@ def create_app(model_path, architecture="auto"):
                 skip_special_tokens=True,
             ))
         except Exception as exc:
+            LOGGER.exception("chat completion failed")
             raise HTTPException(status_code=500, detail=str(exc)) from exc
         return {
             "id": f"chatcmpl-{uuid.uuid4().hex}",
@@ -139,9 +179,10 @@ def main():
         choices=("auto", "causal_lm", "image_text"),
         default="auto",
     )
+    parser.add_argument("--disable-cache", action="store_true")
     args = parser.parse_args()
     uvicorn.run(
-        create_app(args.model, args.architecture),
+        create_app(args.model, args.architecture, use_cache=not args.disable_cache),
         host=args.host,
         port=args.port,
         log_level="info",

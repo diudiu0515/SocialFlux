@@ -91,6 +91,11 @@ class RolloutGateTest(unittest.TestCase):
         )
         self.assertFalse(result["passed"])
         self.assertIn("character_consistency", result["diagnostics"]["threshold_failures"])
+        without_history = audit_rollout(
+            item,
+            {**judgment(item), "scores": scores},
+        )
+        self.assertEqual(without_history["status"], "rejected")
 
     def test_hidden_state_leakage_hard_rejects(self):
         item = trajectory()

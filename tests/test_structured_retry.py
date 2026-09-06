@@ -26,6 +26,23 @@ class StructuredRetryTest(unittest.TestCase):
         self.assertEqual(result, {"ok": True})
         self.assertEqual(provider.calls, 3)
 
+    def test_accepts_fenced_json_with_redundant_closers(self):
+        provider = SequenceProvider(['```json\n{"ok": true}]}\n```'])
+        result = complete_json(
+            provider, [], {}, lambda value: value, context="test"
+        )
+        self.assertEqual(result, {"ok": True})
+        self.assertEqual(provider.calls, 1)
+
+    def test_trailing_prose_is_not_silently_accepted(self):
+        provider = SequenceProvider([
+            '{"ok": true} trailing', '{"ok": true} trailing', '{"ok": true}'
+        ])
+        result = complete_json(provider, [], {}, lambda value: value, context="test")
+        self.assertEqual(result, {"ok": True})
+        self.assertEqual(provider.calls, 3)
+
+
     def test_fails_after_bounded_attempts(self):
         provider = SequenceProvider(["{}", "{}", "{}"] )
         with self.assertRaisesRegex(ValueError, "after 3 attempts"):

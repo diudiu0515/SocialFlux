@@ -8,12 +8,12 @@
     },
     "environment_appraisal_v2": {
       "path": "environment_appraisal_v2.md",
-      "sha256": "d8ed126a25f0ff2f3a57221da44a4ad7c448189c27e44d95889c25e13c5d8726",
+      "sha256": "615f61268208ce2841c2480a0e7af062db028d689f827891769d9f2f3a2e75cd",
       "version": "v2"
     },
     "environment_response_v3": {
       "path": "environment_response_v3.md",
-      "sha256": "51cff39b8df65281d49fa8382b36a33995abffc7c8fb436089be69c50dacf65d",
+      "sha256": "5198766add72cd721e66b40ec1a99b72311485ec79ca342a9bfbf80eabad2283",
       "version": "v3"
     },
     "history_dependence_probe_v1": {
@@ -58,7 +58,7 @@
     },
     "rollout_quality_judge_v1": {
       "path": "rollout_quality_judge_v1.md",
-      "sha256": "5717980908b9d110d65d7516284f14bd31a00aabfa1ca87d549ab9bed9fe761b",
+      "sha256": "67dada818a3ee3275bc46e11846ab438edd0593a684ba93db83687f393be116f",
       "version": "v1"
     },
     "scenario_normalization_v1": {
@@ -78,7 +78,7 @@
     },
     "state_update_v2": {
       "path": "state_update_v2.md",
-      "sha256": "0dd81b0e7695a927eae13b2beede94b96aa03a3211570740ca8454e84fe7ed56",
+      "sha256": "09a35b5632fece898d3be18c725cf68893c1860999fe2f471faee67e422bd1ea",
       "version": "v2"
     },
     "t2_shared_observation_v3": {
@@ -113,7 +113,7 @@
     },
     "task_t4_action_v2": {
       "path": "task_t4_action_v2.md",
-      "sha256": "cc40eae0075e82e5e227afccfb749063f9ab61dfb8402e77d400b2b4f7684816",
+      "sha256": "52c88af4f503cee09b420e3a2f17cc9e7f822a7d712288153f4f4a83248b7cde",
       "version": "v2"
     }
   }

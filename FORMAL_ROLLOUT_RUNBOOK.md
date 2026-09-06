@@ -83,7 +83,7 @@ CUDA_VISIBLE_DEVICES=0 python scripts/local_transformers_chat_server.py \
 CUDA_VISIBLE_DEVICES=1 python scripts/local_transformers_chat_server.py \
   --model .local_models/formal/qwen3-32b-awq --port 8301
 CUDA_VISIBLE_DEVICES=2 python scripts/local_transformers_chat_server.py \
-  --model .local_models/formal/deepseek-v2-lite-chat --port 8302
+  --model .local_models/formal/deepseek-v2-lite-chat --disable-cache --port 8302
 CUDA_VISIBLE_DEVICES=3 python scripts/local_transformers_chat_server.py \
   --model /root/autodl-tmp/models/Qwen3.5-9B-modelscope \
   --architecture image_text --port 8303
@@ -138,17 +138,46 @@ python scripts/merge_rollout_judgments.py \
 python scripts/run_history_dependence.py \
   --raw-root data/formal/raw \
   --rollout-config configs/formal_rollout_pool.local.json \
-  --output data/formal/history_dependence.json
+  --output data/formal/history_dependence.json \
+  --resume
 ```
 
 The primary judges every trajectory. The secondary is a different model
 family and receives a deterministic stratified subset plus all primary hard
 reject/borderline cases. Missing required second judgments keep the bundle
 incomplete. Judge input contains only observable dialogue/expression. The
-history probe also replays the same action/state checkpoint through full,
-recent-k and critical-event-removed histories, recording changes in environment
-appraisal and state/dynamics directions; this intervention score does not
-replace the judge's History Dependence rating.
+history probe generates Full, Recent-k and Critical-event-removed policy actions
+with the same model configuration and seed. It separately restores the same
+private checkpoint and action to compare environment appraisal and
+state/dynamics directions. The response-generation call is intentionally
+skipped in that environment-only probe because it occurs after, and cannot
+change, the recorded appraisal/delta. Results are written after every
+trajectory and `--resume` validates completed IDs before continuing. This
+intervention score does not replace the judge's History Dependence rating.
+
+If an interrupted or repaired pool needs targeted evidence, repeat
+`--trajectory-id TRAJECTORY_ID` for the new active IDs and write to a separate
+file. Merge only after replacement with:
+
+```bash
+python scripts/merge_history_dependence.py \
+  --raw-root data/formal/raw \
+  --input data/formal/history_dependence.before_repair.json \
+  --input data/formal/history_dependence.replacements.json \
+  --output data/formal/history_dependence.json
+
+python scripts/merge_rollout_quality_evidence.py \
+  --raw-root data/formal/raw \
+  --input data/formal/judgments.primary.before_repair.json \
+  --input data/formal/judgments.primary.replacements.json \
+  --output data/formal/judgments.primary.json
+```
+
+Run the equivalent command for secondary evidence, then rerun
+`merge_rollout_judgments.py`. Both evidence merge tools require exact coverage
+of the active manifest and refuse missing IDs. Candidate prefilter judgments
+from `repair_failed_rollouts.py` are audit traces, not substitutes for these
+formal primary/secondary files.
 
 ## 4. Formal selection
 

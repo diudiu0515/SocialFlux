@@ -2,6 +2,8 @@
 """Run an independent schema-constrained judge over observable trajectories."""
 
 import argparse
+from copy import deepcopy
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -18,10 +20,13 @@ from scripts.run_pipeline import load_scenarios
 
 
 def validate(value, trajectory_id):
-    if set(value) != {"trajectory_id", "scores", "hard_reject_reasons", "rationale"}:
+    semantic_fields = {"scores", "hard_reject_reasons", "rationale"}
+    if set(value) not in (semantic_fields, semantic_fields | {"trajectory_id"}):
         raise ValueError("quality judgment fields mismatch")
-    if value["trajectory_id"] != trajectory_id:
-        raise ValueError("quality judgment trajectory mismatch")
+    # Record identity is caller-owned provenance. Never trust or require the
+    # model to transcribe a long identifier.
+    value = dict(value)
+    value["trajectory_id"] = trajectory_id
     if set(value["scores"]) != set(QUALITY_DIMENSIONS):
         raise ValueError("quality judgment score dimensions mismatch")
     if not all(isinstance(item, int) and 1 <= item <= 5 for item in value["scores"].values()):
@@ -49,6 +54,15 @@ def validate_model_family(model, declared_family):
         raise ValueError(
             f"declared model family {declared_family!r} does not match model {model!r}"
         )
+
+
+def deterministic_judge_sampling(sampling, trajectory_id):
+    """Make a judgment seed independent of pool ordering and prior calls."""
+    result = deepcopy(sampling)
+    if isinstance(result.get("seed"), int):
+        digest = int(hashlib.sha256(trajectory_id.encode("utf-8")).hexdigest()[:8], 16)
+        result["seed"] = (result["seed"] + digest) % 2_147_483_647
+    return result
 
 
 def main():
@@ -86,10 +100,13 @@ def main():
             "rollout_quality_judge_v1",
             public_judge_packet(trajectory, scenarios[trajectory["scenario_id"]]),
         )
+        reset = getattr(provider, "reset", None)
+        if reset:
+            reset()
         records.append(complete_json(
             provider,
             [{"role": "user", "content": prompt}],
-            sampling,
+            deterministic_judge_sampling(sampling, trajectory_id),
             lambda value, trajectory_id=trajectory_id: validate(value, trajectory_id),
             context=f"quality judgment {trajectory_id}",
             max_attempts=5,

@@ -68,6 +68,27 @@ S0/D0 的候选值与真人冻结协议见 `S0_D0_REVIEW.md`。Talking Head 使�
 
 T1/T2/T3 均绑定持有 latent state 的环境角色，而不是输出 action 的 evaluated model。结构审计检查无泄漏、目标 state、历史形状、精确重复、T2 双方角色与 private-state 分化、T3 checkpoint/branch 完整性，并按 source model 与 scenario 双重汇总；轨迹审计另按 scenario 报 action/response 唯一率、简洁性和 latent 边界占比。语义质量采用移除 model/provider/trajectory provenance 的盲化 packet。九项验收自动读取该质量报告；轨迹质量未过时不得标 Full-Trajectory provisionally ready。自动或 LLM 分数均不能替代 human answerability 与标签有效性评审。
 
+开发池修复采用事务式 replacement：只有四 Gate 报告中明确 `rejected` 的
+trajectory ID 才进入自动重采样；新候选先过结构门，再由 Qwen 与 GLM
+跨模型族双预筛。候选通过后先写新文件与新 manifest，再把旧文件移动到
+bundle 内的 `rollouts/rejected/` 并记录 old/new ID、原因、尝试次数和 judge
+证据。失败候选逐条写 JSONL，包含人工可见的完整对话，不会静默丢弃。
+同模型 T2 配对需要的非质量替换使用独立原因 `t2_pairing_rebalance`，不得伪装
+成 Gate reject。
+
+正式 rollout judge 的采样 seed 由基础 seed 与 trajectory ID 的 SHA-256
+确定，因此同一轨迹在单条、批量或不同排序下得到相同判定。开发筛选的最终
+证据采用 100% Qwen3-32B 主审和 100% GLM 二审；正常正式流程仍可按
+`gate.md` 使用全量主审加确定性分层/争议二审。合并器对 hard reject 取并集、
+对维度分数取均值，并要求证据 ID 与当前活跃 manifest 完全一致。
+
+History dependence 的 Full / Recent-k / Critical-event-removed 三个 policy
+条件使用同一模型配置与同一 seed 重新采样；原 rollout action 只作为审计字段，
+不参与受控差异计算。环境侧在相同 S/D 与 action 上只执行 canonical appraisal
+和 state update，因为后续 response 不影响已经得到的解释/delta，且不属于该
+指标。脚本逐条落盘、支持断点续跑和按 trajectory ID 定向复验；证据合并器
+拒绝任何缺失活跃 ID 的结果。
+
 ## 验收
 
 当前 gate 固定为九项：State-Update Human Agreement、Persona Sensitivity、Paraphrase Robustness、History Intervention、Local Action Intervention、Neutral-State Stability、Response-State Consistency、Full-Trajectory Plausibility、Seed Robustness。自动结构证据只能标为 pending/evidence_ready/provisionally_ready；需要真人的项目没有评审记录不得标 pass。
@@ -86,4 +107,5 @@ T1/T2/T3 均绑定持有 latent state 的环境角色，而不是输出 action �
 - 正式 rollout 必须写入隔离的 `data/formal/`，不得复用开发轨迹。
 - 单 Judge、同模型族双 Judge 或缺失历史/骨干证据不能生成 formal_selected。
 - selected manifest、文件或 quality-audit ID 不一致时不得构建任务。
+- 开发池逐轨迹筛选通过不等于正式池合同通过；3 条/场景或少于三模型族时不得标为 formal clean pool。
 - secrets 只来自环境变量，公开 manifest 删除 secret 及环境变量名。

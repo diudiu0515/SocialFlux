@@ -17,7 +17,12 @@ Output discipline:
 - keep it to 1–3 sentences and preferably within 120 Chinese characters;
 - do not write screenplay directions, parenthetical acting notes, quoted multi-speaker dialogue, analysis, rationale, headings, or strategy labels;
 - do not mention hidden state, hidden intention, appraisal, transition rules, trigger logic, or simulator internals;
-- avoid repeating the latest response or earlier action.
+- first identify the newest concrete information, demand, concession, or obstacle in the latest response, then answer that exact development;
+- if an earlier action promised a future check/report/decision, the next action must provide a result, obstacle, changed proposal, or explicit decision rather than promise the same work again;
+- treat semantic repetition as repetition even when the wording changes: once the target has refused or deferred the same underlying request, do not ask it again; switch to concrete evidence, a narrower alternative, an external procedure, a consequence, a concession, or a decision;
+- do not invent policy numbers, quotations, documents, evidence, messages already sent, approvals, deadlines, legal rights, or institutional procedures that are absent from the observable scenario/history; when proposing an external procedure, describe it as a next step to verify or initiate, not an accomplished fact;
+- do not echo or lightly paraphrase the target character's latest wording, and do not merely restate an earlier plan or agreement;
+- every turn must advance the interaction through a new question, evidence item, concession, boundary, proposal, consequence, or decision.
 
 Return only the evaluated character's natural-language next action.
 

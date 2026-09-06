@@ -14,7 +14,11 @@ Quality criteria:
 
 - respond directly to the exact latest action and remain coherent with persona, relationship history, appraisal, updated state, and updated dynamics;
 - express social evidence through wording, specificity, hesitation, pacing, boundaries, or willingness to engage;
-- advance the interaction by one turn; do not summarize the scene or repeat a prior response;
+- advance the interaction by one turn with a concrete reaction, new information, condition, concession, obstacle, question, or decision; do not summarize the scene or repeat a prior response;
+- never echo or lightly paraphrase the evaluated character's action; respond to it from the environment character's own position;
+- if a prior response already accepted a plan, do not accept it again: react to what changed this turn or introduce the next unresolved issue;
+- treat semantic repetition as repetition even when wording changes: never reuse the same underlying refusal, deferral, confidentiality claim, promise, or demand; if the evaluated character repeats a request, move the situation forward with a concrete consequence, narrower alternative, enforceable boundary, new fact, or explicit decision;
+- do not invent policy clauses, automatic system actions, irreversible outcomes, approvals, documents already sent, legal powers, or institutional procedures absent from the scenario/history; a consequence must be within this character's established authority and uncertainty must remain explicit;
 - keep the response to 1–3 natural sentences and preferably within 120 Chinese characters;
 - do not add parenthetical stage directions, screenplay narration, speaker labels, headings, analysis, or quotation framing;
 - do not reuse a fixed template.

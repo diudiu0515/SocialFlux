@@ -1,6 +1,6 @@
 import unittest
 
-from evaluation.backbone_sensitivity import compare_transitions, summarize_backbone_sensitivity
+from evaluation.backbone_sensitivity import compare_transitions, failed_comparison, summarize_backbone_sensitivity
 
 
 class BackboneSensitivityTest(unittest.TestCase):
@@ -12,6 +12,15 @@ class BackboneSensitivityTest(unittest.TestCase):
         self.assertEqual(comparison["severe_reversal_fraction"], 0.0)
         summary = summarize_backbone_sensitivity([{"scenario_id": "s1", "comparison": comparison}])
         self.assertTrue(summary["passed"])
+
+    def test_failed_replay_is_preserved_and_conservatively_rejected(self):
+        failed = failed_comparison()
+        self.assertTrue(failed["replay_failed"])
+        summary = summarize_backbone_sensitivity([
+            {"scenario_id": "s1", "comparison": failed},
+        ])
+        self.assertFalse(summary["passed"])
+        self.assertEqual(summary["replay_failure_count"], 1)
 
     def test_empty_evidence_never_passes(self):
         self.assertFalse(summarize_backbone_sensitivity([])["passed"])

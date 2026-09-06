@@ -28,6 +28,18 @@ def compare_transitions(left, right):
     }
 
 
+def failed_comparison():
+    """Conservatively score an unusable matched replay without hiding it."""
+    return {
+        "variable_count": 0,
+        "direction_agreement": 0.0,
+        "severe_reversal_fraction": 1.0,
+        "left_numeric_delta": {},
+        "right_numeric_delta": {},
+        "replay_failed": True,
+    }
+
+
 def summarize_backbone_sensitivity(records, minimum_direction_agreement=0.70, maximum_reversal_fraction=0.20):
     if not records:
         return {
@@ -44,6 +56,10 @@ def summarize_backbone_sensitivity(records, minimum_direction_agreement=0.70, ma
         for item in records
     )
     record_pass_fraction = record_pass_count / len(records)
+    replay_failure_count = sum(
+        bool(item["comparison"].get("replay_failed"))
+        for item in records
+    )
     passed = (
         direction >= minimum_direction_agreement
         and reversals <= maximum_reversal_fraction
@@ -56,6 +72,7 @@ def summarize_backbone_sensitivity(records, minimum_direction_agreement=0.70, ma
         "mean_direction_agreement": round(direction, 4),
         "mean_severe_reversal_fraction": round(reversals, 4),
         "record_pass_fraction": round(record_pass_fraction, 4),
+        "replay_failure_count": replay_failure_count,
         "thresholds": {
             "minimum_direction_agreement": minimum_direction_agreement,
             "maximum_reversal_fraction": maximum_reversal_fraction,

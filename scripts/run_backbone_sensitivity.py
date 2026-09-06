@@ -8,9 +8,10 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from environment.factory import ModelEnvironmentFactory
-from evaluation.backbone_sensitivity import compare_transitions, summarize_backbone_sensitivity
-from providers.factory import public_provider_config
+from environment.memory import MemoryModule
+from environment.state_updater import ModelStateUpdater, apply_transition
+from evaluation.backbone_sensitivity import compare_transitions, failed_comparison, summarize_backbone_sensitivity
+from providers.factory import build_provider, public_provider_config
 from scripts.audit_formal_rollout_pool import load_records
 from scripts.run_pipeline import load_scenarios
 
@@ -28,6 +29,34 @@ def select_checkpoints(trajectories, scenario_limit=None):
         if scenario_limit and len(selected) >= scenario_limit:
             break
     return selected
+
+
+def replay_transition(scenario, backbone, checkpoint):
+    """Replay only appraisal/state transition, the quantity E6 compares."""
+    snapshot = checkpoint["environment_snapshot_before"]
+    action = checkpoint["policy_action"]
+    memory = MemoryModule().retrieve(snapshot.get("history", []), action)
+    transition = ModelStateUpdater(
+        scenario,
+        build_provider(backbone["provider"]),
+        backbone.get("sampling", {}),
+    ).update(
+        action=action,
+        previous_state=snapshot["state"],
+        previous_dynamics=snapshot["dynamics"],
+        memory=memory,
+    )
+    _, _, numeric_state_delta, numeric_dynamics_delta = apply_transition(
+        snapshot["state"],
+        snapshot["dynamics"],
+        transition,
+    )
+    return {
+        "appraisal": transition["appraisal"],
+        "evidence_turn_ids": transition["evidence_turn_ids"],
+        "numeric_state_delta": numeric_state_delta,
+        "numeric_dynamics_delta": numeric_dynamics_delta,
+    }
 
 
 def main():
@@ -49,26 +78,48 @@ def main():
     records = []
     for trajectory, checkpoint in select_checkpoints(load_records(args.raw_root), args.scenario_limit):
         outputs = []
+        replay_errors = []
         for backbone in backbones:
-            environment = ModelEnvironmentFactory(
-                scenarios[trajectory["scenario_id"]],
-                backbone["provider"],
-                backbone.get("sampling", {}),
-            )()
-            environment.restore(checkpoint["environment_snapshot_before"])
-            _, replay = environment.step(checkpoint["policy_action"])
-            outputs.append(replay)
+            try:
+                outputs.append(replay_transition(
+                    scenarios[trajectory["scenario_id"]],
+                    backbone,
+                    checkpoint,
+                ))
+            except (ValueError, OSError, TimeoutError) as exc:
+                outputs.append(None)
+                replay_errors.append({
+                    "model_family": backbone["model_family"],
+                    "error_type": type(exc).__name__,
+                    "error": str(exc),
+                })
+        comparison = (
+            failed_comparison()
+            if replay_errors
+            else compare_transitions(outputs[0], outputs[1])
+        )
         records.append({
             "scenario_id": trajectory["scenario_id"],
             "source_trajectory_id": trajectory["trajectory_id"],
             "checkpoint_turn_id": checkpoint["turn_id"],
             "action": checkpoint["policy_action"]["text"],
-            "comparison": compare_transitions(outputs[0], outputs[1]),
-            "responses": [output["environment_response"] for output in outputs],
+            "comparison": comparison,
+            "appraisals": [
+                output["appraisal"] if output is not None else None
+                for output in outputs
+            ],
+            "replay_errors": replay_errors,
+            "replay_scope": "appraisal_and_state_transition",
         })
+        print(json.dumps({
+            "progress": len(records),
+            "scenario_id": trajectory["scenario_id"],
+            "replay_error_count": len(replay_errors),
+        }, ensure_ascii=False), file=sys.stderr, flush=True)
     summary = summarize_backbone_sensitivity(records)
     result = {
         "format": "socialflux_backbone_sensitivity_v1",
+        "replay_scope": "appraisal_and_state_transition",
         "backbones": [
             {
                 "model_family": item["model_family"],

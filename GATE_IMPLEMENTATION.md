@@ -34,7 +34,18 @@ The primary judge covers the whole raw pool. A deterministic stratified subset
 plus every borderline or primary-rejected case goes to a second judge from a
 different model family. The merge remains incomplete if any required second
 judgment is missing; material score/reject disagreements are explicitly
-reported and merged conservatively.
+reported and merged conservatively. Judge sampling is derived from the
+trajectory ID, so running one item alone or in another batch order cannot
+change its score merely by shifting the random stream.
+
+For development-pool cleanup, `scripts/repair_failed_rollouts.py` accepts a
+four-gate report and replaces only IDs whose Gate 3 audit is explicitly
+`rejected`. Every candidate must pass structural checks and independent Qwen +
+GLM prefilters before publication. The active manifest is replaced before the
+old file is moved into `rollouts/rejected/`, and every failed candidate is
+preserved as an observable-dialogue JSONL audit record. A non-quality
+replacement needed to preserve within-source-model T2 pairing must use the
+separate `t2_pairing_rebalance` reason.
 
 ## Diversity
 
@@ -50,7 +61,11 @@ Probe records compare both the evaluated participant's next action and the
 environment's appraisal/state-delta interpretation, identify removed turn IDs,
 and preserve persona, state and current action. A trajectory without completed
 evidence cannot enter formal_selected. Intervention strength is independent
-evidence and never overwrites the six-dimension judge score.
+evidence and never overwrites the six-dimension judge score. Full, recent-k and
+critical-removed policy actions are regenerated with the same model
+configuration and seed; comparing an old rollout sample with a new sample is
+not accepted as controlled evidence. History and judge evidence merge tools
+require exact coverage of current manifest IDs after any replacement.
 
 `formal_selected` manifests bind the exact trajectory IDs to exact all-passing
 quality-audit IDs. Missing, extra or mismatched files block task construction.

@@ -228,7 +228,12 @@ def audit_rollout(trajectory, judgment=None, history_evidence=None):
         and not missing
         and not threshold_failures
     )
-    pending = bool(missing or judge_errors) and not history_evidence_failed
+    definitive_quality_failure = bool(hard_rejects or threshold_failures)
+    pending = (
+        bool(missing or judge_errors)
+        and not history_evidence_failed
+        and not definitive_quality_failure
+    )
     return {
         "trajectory_id": trajectory.get("trajectory_id"),
         "scenario_id": trajectory.get("scenario_id"),

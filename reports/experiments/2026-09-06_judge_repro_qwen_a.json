@@ -1,0 +1,32 @@
+{
+  "format": "socialflux_rollout_quality_judgments_v1",
+  "judge_role": "primary",
+  "model": "Qwen/Qwen3-32B-AWQ",
+  "model_family": "qwen",
+  "provider": {
+    "provider": "local_vllm",
+    "endpoint": "http://127.0.0.1:8301/v1/chat/completions",
+    "model": "Qwen/Qwen3-32B-AWQ",
+    "timeout": 300,
+    "max_tokens": 768
+  },
+  "sampling": {
+    "temperature": 0.1,
+    "seed": 7401
+  },
+  "records": [
+    {
+      "scores": {
+        "dialogue_coherence": 4,
+        "history_dependence": 4,
+        "character_consistency": 4,
+        "state_response_consistency": 4,
+        "interaction_progression": 4,
+        "naturalness": 4
+      },
+      "hard_reject_reasons": [],
+      "rationale": "对话整体连贯，角色行为一致，且互动逐步推进。部门经理始终遵循其角色设定（维持制度权威、避免泄露细节），而对话参与者则持续争取透明反馈。回应与行为表达（语气、注视等）与角色设定和情境逻辑一致。虽有轻微重复（如多次提及‘通用指引’和‘会前无法提供材料’），但未影响整体质量。",
+      "trajectory_id": "c2648135da074a27bd4875ee87583e6d"
+    }
+  ]
+}

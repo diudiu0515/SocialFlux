@@ -28,7 +28,9 @@ class MemoryModule:
         selected = [item for _, _, item in scored[: self.max_events]]
         selected.sort(key=lambda item: item.get("turn_id", 0))
         return {
-            "relevant_turn_ids": [f"t{x['turn_id']}" for x in selected],
+            "relevant_turn_ids": list(dict.fromkeys(
+                f"t{x['turn_id']}" for x in selected
+            )),
             "memory_summary": " ".join(
                 f"{x.get('role', 'unknown')}: {x.get('text', '')}" for x in selected
             ),

@@ -2,6 +2,7 @@ import json
 import unittest
 from pathlib import Path
 
+from environment.appraisal import _validate_appraisal
 from environment.state_updater import ModelStateUpdater, canonicalize_bounded_transition
 
 
@@ -76,6 +77,17 @@ class ModelEnvironmentBoundaryTest(unittest.TestCase):
         self.assertIn("convert a completed appraisal", provider.calls[1])
         self.assertNotIn("我想先核对双方记录", provider.calls[1])
         self.assertEqual(transition["state_delta"]["emotion"]["anger"], "similar")
+
+    def test_appraisal_evidence_must_come_from_retrieved_memory(self):
+        appraisal = {
+            "appraisal": {},
+            "evidence_turn_ids": ["t2"],
+        }
+        self.assertEqual(
+            _validate_appraisal(appraisal, ["t2", "t3"]), appraisal
+        )
+        with self.assertRaisesRegex(ValueError, "invented"):
+            _validate_appraisal(appraisal, ["t3"])
 
 
 if __name__ == "__main__":

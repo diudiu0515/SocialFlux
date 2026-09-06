@@ -1,0 +1,3695 @@
+{
+  "format": "socialflux_formal_rollout_gate_v1",
+  "stage": "development",
+  "raw_trajectory_count": 60,
+  "passed_quality_count": 60,
+  "selected_trajectory_count": 60,
+  "pool_contract": {
+    "passed": false,
+    "checks": {
+      "nonempty": true,
+      "at_least_three_local_model_families": false,
+      "prioritized_20_to_40b_local_model_present": true,
+      "api_fraction_at_most_30_percent": true,
+      "each_scenario_has_at_least_12_raw": false,
+      "each_scenario_selects_4_to_6": false,
+      "environment_policy_separated": false
+    },
+    "trajectory_count": 60,
+    "scenario_count": 20,
+    "source_counts": {
+      "local": 35,
+      "unknown": 25
+    },
+    "api_fraction": 0.0,
+    "local_model_families": [
+      "glm",
+      "qwen"
+    ]
+  },
+  "environment_gate": null,
+  "judge_protocol": {
+    "passed": true,
+    "reason": "development stage does not require dual judges"
+  },
+  "all_scenarios_selection_passed": false,
+  "research_ready": false,
+  "selections": {
+    "IA_PIPE_001": {
+      "passed": false,
+      "selected_ids": [
+        "b9d80695890c4a47b4a2508798ff74f2",
+        "1d33ccc8ca734174b362c2cc6e71fadf",
+        "cf89abb0225f4406aa77d143e843e85b"
+      ],
+      "observed_outcomes": [
+        "strategy_change_during_interaction",
+        "gradual_deterioration",
+        "gradual_deterioration"
+      ],
+      "model_families": [
+        "qwen",
+        "unknown"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 2,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_002": {
+      "passed": false,
+      "selected_ids": [
+        "09b6344cc85242e9af7393d4b47b2ebe",
+        "aade48fb8fad4d5fb83a66d9a895ca0d",
+        "c2648135da074a27bd4875ee87583e6d"
+      ],
+      "observed_outcomes": [
+        "successful_repair",
+        "withdrawal",
+        "successful_repair"
+      ],
+      "model_families": [
+        "glm",
+        "qwen"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 2,
+      "eligible_model_family_count": 2
+    },
+    "IA_PIPE_003": {
+      "passed": false,
+      "selected_ids": [
+        "e7d688c4f36545a4a52f2031fa42a3e0",
+        "68158c13d73d453a990589e78a7df192",
+        "bc2504244b094c339c2b76b0843582aa"
+      ],
+      "observed_outcomes": [
+        "successful_repair",
+        "gradual_deterioration",
+        "successful_repair"
+      ],
+      "model_families": [
+        "qwen",
+        "unknown"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 2,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_004": {
+      "passed": false,
+      "selected_ids": [
+        "519b5efaaeee4dc289a76cbac81a5e5c",
+        "dcdb5dc88c9d4048a01808e50b730d46",
+        "443aa0ec8e2c443eb02085cc23de5cac"
+      ],
+      "observed_outcomes": [
+        "successful_repair",
+        "withdrawal",
+        "gradual_deterioration"
+      ],
+      "model_families": [
+        "qwen",
+        "unknown"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 3,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_005": {
+      "passed": false,
+      "selected_ids": [
+        "15d655b74db943d494ba7980b51c67d6",
+        "cb5412cbce1644498b73bf6499d4b89b",
+        "ba223f2f831843038a93357f35055ad6"
+      ],
+      "observed_outcomes": [
+        "successful_repair",
+        "successful_repair",
+        "successful_repair"
+      ],
+      "model_families": [
+        "qwen",
+        "unknown"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 1,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_006": {
+      "passed": false,
+      "selected_ids": [
+        "e91acf1d2b8a4617a761887a480ec427",
+        "1e99cf8bdd1549a29bb5cd01ca15cb9b",
+        "16a5998cb7bb445ab037feea37f526e8"
+      ],
+      "observed_outcomes": [
+        "successful_repair",
+        "successful_repair",
+        "successful_repair"
+      ],
+      "model_families": [
+        "qwen",
+        "unknown"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 1,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_007": {
+      "passed": false,
+      "selected_ids": [
+        "2621368e97d54b329e52f9c1e979fab3",
+        "4087ad12d218446fb5c4c7fd8a30b4cc",
+        "b00cf5e9b4934711bf3b956e7b01b61a"
+      ],
+      "observed_outcomes": [
+        "withdrawal",
+        "successful_negotiation",
+        "withdrawal"
+      ],
+      "model_families": [
+        "qwen",
+        "unknown"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 2,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_008": {
+      "passed": false,
+      "selected_ids": [
+        "2a0002aa592d4099b60072b9134710ab",
+        "e968976aa4474cdb98e4a901d3dca59a",
+        "7520346259324869886ad1bb2f1cd639"
+      ],
+      "observed_outcomes": [
+        "successful_repair",
+        "gradual_deterioration",
+        "gradual_deterioration"
+      ],
+      "model_families": [
+        "unknown"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 2,
+      "eligible_model_family_count": 0
+    },
+    "IA_PIPE_009": {
+      "passed": false,
+      "selected_ids": [
+        "5f926a29878d47c89a1618b13ad531c2",
+        "8ecb25cda2414004baade7a6976691b1",
+        "7f6e7d88e58f4604b61e117a0f1f21ad"
+      ],
+      "observed_outcomes": [
+        "successful_repair",
+        "successful_repair",
+        "successful_repair"
+      ],
+      "model_families": [
+        "qwen",
+        "unknown"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 1,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_010": {
+      "passed": false,
+      "selected_ids": [
+        "3c250d2171c3413d8bc1228950e51074",
+        "65156cb232fd4c9fab373ed57704fda2",
+        "9ea708b1d3a840118782533a455098ee"
+      ],
+      "observed_outcomes": [
+        "withdrawal",
+        "gradual_deterioration",
+        "withdrawal"
+      ],
+      "model_families": [
+        "qwen"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 2,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_011": {
+      "passed": false,
+      "selected_ids": [
+        "54866cb065dd4401a4d172956cf71e7f",
+        "e7f8a2d4d8814e94ad081d37d902d4d5",
+        "ea459a788bd94289ba2a66d79ebe0c14"
+      ],
+      "observed_outcomes": [
+        "successful_negotiation",
+        "relationship_preservation_with_partial_goal_failure",
+        "successful_negotiation"
+      ],
+      "model_families": [
+        "glm",
+        "unknown"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 2,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_012": {
+      "passed": false,
+      "selected_ids": [
+        "82dedf6ce8b7420bbfdd35c30cacf13a",
+        "c642d13bffe24fd69a81e2f373d5d324",
+        "754928a7831b427ea66d39d12eb3a16a"
+      ],
+      "observed_outcomes": [
+        "successful_repair",
+        "successful_repair",
+        "successful_negotiation"
+      ],
+      "model_families": [
+        "qwen",
+        "unknown"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 2,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_013": {
+      "passed": false,
+      "selected_ids": [
+        "a099cb0a8a534b88b235e7e5604fd64e",
+        "8f0161faaacd432fae1edf1c7648a043",
+        "89b0709c9d6f4a8daa1b028c085002bb"
+      ],
+      "observed_outcomes": [
+        "withdrawal",
+        "successful_repair",
+        "withdrawal"
+      ],
+      "model_families": [
+        "qwen"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 2,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_014": {
+      "passed": false,
+      "selected_ids": [
+        "7e50a92b9c2244a48ff36706ac110263",
+        "c082e88d993340928f311b5298ac087d",
+        "192bf9be7fc04ae8acf47785bce41d72"
+      ],
+      "observed_outcomes": [
+        "successful_negotiation",
+        "gradual_deterioration",
+        "successful_negotiation"
+      ],
+      "model_families": [
+        "qwen"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 2,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_015": {
+      "passed": false,
+      "selected_ids": [
+        "f908e9fbbd1f48558c1f8389d2f1fd74",
+        "2b7fbe05a7d9499abbf6e45a6afde7e4",
+        "ba9eccf1de214de19d88282af699f042"
+      ],
+      "observed_outcomes": [
+        "gradual_deterioration",
+        "gradual_deterioration",
+        "gradual_deterioration"
+      ],
+      "model_families": [
+        "qwen",
+        "unknown"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 1,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_016": {
+      "passed": false,
+      "selected_ids": [
+        "43e4009ccbbd437a95776fd870ca2fa9",
+        "e85a62bcf42445f983689a6352b48c4a",
+        "f0f1f9da343944d79ad505f331db2ba7"
+      ],
+      "observed_outcomes": [
+        "successful_negotiation",
+        "successful_repair",
+        "withdrawal"
+      ],
+      "model_families": [
+        "qwen",
+        "unknown"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 3,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_017": {
+      "passed": false,
+      "selected_ids": [
+        "e28017b180d74a39a2a41d42b6e03217",
+        "4cf387db7e994ba99fbe380f6e0aa3f4",
+        "8095ef6ca8474b4ea88f3470168cabfc"
+      ],
+      "observed_outcomes": [
+        "successful_negotiation",
+        "successful_negotiation",
+        "successful_repair"
+      ],
+      "model_families": [
+        "qwen",
+        "unknown"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 2,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_018": {
+      "passed": false,
+      "selected_ids": [
+        "1cf7b1a2cddd4ebe90039b1711e0bab2",
+        "d0b2ccea13804acc88f9b9eab3017887",
+        "424bae60fd324e46bafdd7813cba2e9f"
+      ],
+      "observed_outcomes": [
+        "successful_repair",
+        "strategy_change_during_interaction",
+        "successful_repair"
+      ],
+      "model_families": [
+        "qwen"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 2,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_019": {
+      "passed": false,
+      "selected_ids": [
+        "d7fb464268f64007b7ed18d14554e094",
+        "2f2752b53af94da3b0510f4b19f38706",
+        "b152eb79f61246bfb224a7b86445452d"
+      ],
+      "observed_outcomes": [
+        "withdrawal",
+        "gradual_deterioration",
+        "gradual_deterioration"
+      ],
+      "model_families": [
+        "qwen"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 2,
+      "eligible_model_family_count": 1
+    },
+    "IA_PIPE_020": {
+      "passed": false,
+      "selected_ids": [
+        "ed27ca41665c452c933b496c3120ae99",
+        "b9e0184dbf1c40298487e903ff28958b",
+        "ede63883236c43f9b42addd64181ac90"
+      ],
+      "observed_outcomes": [
+        "successful_repair",
+        "successful_repair",
+        "successful_repair"
+      ],
+      "model_families": [
+        "qwen",
+        "unknown"
+      ],
+      "eligible_count": 3,
+      "diversity_passed": false,
+      "eligible_outcome_count": 1,
+      "eligible_model_family_count": 1
+    }
+  },
+  "trajectory_audits": [
+    {
+      "trajectory_id": "b9d80695890c4a47b4a2508798ff74f2",
+      "scenario_id": "IA_PIPE_001",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.8,
+        "character_consistency": 0.8,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.8,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.8,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9771,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "b9d80695890c4a47b4a2508798ff74f2",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.2174,
+            "max_response_similarity": 0.3385,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "1d33ccc8ca734174b362c2cc6e71fadf",
+      "scenario_id": "IA_PIPE_001",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.8,
+        "character_consistency": 0.8,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.7,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.7833,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9801,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "1d33ccc8ca734174b362c2cc6e71fadf",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1134,
+            "max_response_similarity": 0.2857,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "cf89abb0225f4406aa77d143e843e85b",
+      "scenario_id": "IA_PIPE_001",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.8,
+        "character_consistency": 0.8,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.7,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.7833,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9919,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "cf89abb0225f4406aa77d143e843e85b",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.6981,
+            "max_response_similarity": 0.8113,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "c2648135da074a27bd4875ee87583e6d",
+      "scenario_id": "IA_PIPE_002",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.8,
+        "character_consistency": 0.8,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.8,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.8,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9819,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0238,
+        "structural_gate": {
+          "trajectory_id": "c2648135da074a27bd4875ee87583e6d",
+          "source_model": "Qwen/Qwen3-32B-AWQ",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.2097,
+            "max_response_similarity": 0.6133,
+            "latent_value_boundary_fraction": 0.0238
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "aade48fb8fad4d5fb83a66d9a895ca0d",
+      "scenario_id": "IA_PIPE_002",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.8,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.8333,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9945,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.2381,
+        "structural_gate": {
+          "trajectory_id": "aade48fb8fad4d5fb83a66d9a895ca0d",
+          "source_model": "Qwen/Qwen3-32B-AWQ",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.3889,
+            "max_response_similarity": 0.5079,
+            "latent_value_boundary_fraction": 0.2381
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "09b6344cc85242e9af7393d4b47b2ebe",
+      "scenario_id": "IA_PIPE_002",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 1.0,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0714,
+        "structural_gate": {
+          "trajectory_id": "09b6344cc85242e9af7393d4b47b2ebe",
+          "source_model": "zai-org/glm-4-9b-chat-hf",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.2456,
+            "max_response_similarity": 0.3253,
+            "latent_value_boundary_fraction": 0.0714
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "e7d688c4f36545a4a52f2031fa42a3e0",
+      "scenario_id": "IA_PIPE_003",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.87,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0476,
+        "structural_gate": {
+          "trajectory_id": "e7d688c4f36545a4a52f2031fa42a3e0",
+          "source_model": "Qwen/Qwen3-32B-AWQ",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1714,
+            "max_response_similarity": 0.4658,
+            "latent_value_boundary_fraction": 0.0476
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "bc2504244b094c339c2b76b0843582aa",
+      "scenario_id": "IA_PIPE_003",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 1.0,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.2857,
+        "structural_gate": {
+          "trajectory_id": "bc2504244b094c339c2b76b0843582aa",
+          "source_model": "Qwen/Qwen3-32B-AWQ",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.2083,
+            "max_response_similarity": 0.2958,
+            "latent_value_boundary_fraction": 0.2857
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "68158c13d73d453a990589e78a7df192",
+      "scenario_id": "IA_PIPE_003",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 1.0,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.1667,
+        "structural_gate": {
+          "trajectory_id": "68158c13d73d453a990589e78a7df192",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1333,
+            "max_response_similarity": 0.4915,
+            "latent_value_boundary_fraction": 0.1667
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "443aa0ec8e2c443eb02085cc23de5cac",
+      "scenario_id": "IA_PIPE_004",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.9,
+        "character_consistency": 0.8,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.8,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.8167,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 1.0,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "443aa0ec8e2c443eb02085cc23de5cac",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.0723,
+            "max_response_similarity": 0.5059,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "519b5efaaeee4dc289a76cbac81a5e5c",
+      "scenario_id": "IA_PIPE_004",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.8649,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.381,
+        "structural_gate": {
+          "trajectory_id": "519b5efaaeee4dc289a76cbac81a5e5c",
+          "source_model": "Qwen/Qwen3-32B-AWQ",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.3939,
+            "max_response_similarity": 0.2353,
+            "latent_value_boundary_fraction": 0.381
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "dcdb5dc88c9d4048a01808e50b730d46",
+      "scenario_id": "IA_PIPE_004",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9869,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "dcdb5dc88c9d4048a01808e50b730d46",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.4583,
+            "max_response_similarity": 0.1359,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "15d655b74db943d494ba7980b51c67d6",
+      "scenario_id": "IA_PIPE_005",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.8,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.8667,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9837,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.3333,
+        "structural_gate": {
+          "trajectory_id": "15d655b74db943d494ba7980b51c67d6",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.5636,
+            "max_response_similarity": 0.4167,
+            "latent_value_boundary_fraction": 0.3333
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "cb5412cbce1644498b73bf6499d4b89b",
+      "scenario_id": "IA_PIPE_005",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.8,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.8,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.8667,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.8467,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.2619,
+        "structural_gate": {
+          "trajectory_id": "cb5412cbce1644498b73bf6499d4b89b",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.6545,
+            "max_response_similarity": 0.9149,
+            "latent_value_boundary_fraction": 0.2619
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "ba223f2f831843038a93357f35055ad6",
+      "scenario_id": "IA_PIPE_005",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.8,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.8667,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.74,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.2619,
+        "structural_gate": {
+          "trajectory_id": "ba223f2f831843038a93357f35055ad6",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.6078,
+            "max_response_similarity": 0.589,
+            "latent_value_boundary_fraction": 0.2619
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "1e99cf8bdd1549a29bb5cd01ca15cb9b",
+      "scenario_id": "IA_PIPE_006",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9958,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0476,
+        "structural_gate": {
+          "trajectory_id": "1e99cf8bdd1549a29bb5cd01ca15cb9b",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.0862,
+            "max_response_similarity": 0.6585,
+            "latent_value_boundary_fraction": 0.0476
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "16a5998cb7bb445ab037feea37f526e8",
+      "scenario_id": "IA_PIPE_006",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.8,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.8833,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.98,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0476,
+        "structural_gate": {
+          "trajectory_id": "16a5998cb7bb445ab037feea37f526e8",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.8824,
+            "max_response_similarity": 0.8261,
+            "latent_value_boundary_fraction": 0.0476
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "e91acf1d2b8a4617a761887a480ec427",
+      "scenario_id": "IA_PIPE_006",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.8,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.8833,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.87,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0952,
+        "structural_gate": {
+          "trajectory_id": "e91acf1d2b8a4617a761887a480ec427",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.8788,
+            "max_response_similarity": 0.375,
+            "latent_value_boundary_fraction": 0.0952
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "4087ad12d218446fb5c4c7fd8a30b4cc",
+      "scenario_id": "IA_PIPE_007",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9927,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "4087ad12d218446fb5c4c7fd8a30b4cc",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.6667,
+            "max_response_similarity": 0.8158,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "b00cf5e9b4934711bf3b956e7b01b61a",
+      "scenario_id": "IA_PIPE_007",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.8,
+        "character_consistency": 0.8,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.7,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.7833,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.74,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.1429,
+        "structural_gate": {
+          "trajectory_id": "b00cf5e9b4934711bf3b956e7b01b61a",
+          "source_model": "Qwen/Qwen3-32B-AWQ",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1613,
+            "max_response_similarity": 0.5156,
+            "latent_value_boundary_fraction": 0.1429
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "2621368e97d54b329e52f9c1e979fab3",
+      "scenario_id": "IA_PIPE_007",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.8,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.8833,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9781,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "2621368e97d54b329e52f9c1e979fab3",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.2895,
+            "max_response_similarity": 0.8367,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "e968976aa4474cdb98e4a901d3dca59a",
+      "scenario_id": "IA_PIPE_008",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 1.0,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9167,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9828,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.5,
+        "state_saturation_fraction": 0.0714,
+        "structural_gate": {
+          "trajectory_id": "e968976aa4474cdb98e4a901d3dca59a",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1848,
+            "max_response_similarity": 0.4921,
+            "latent_value_boundary_fraction": 0.0714
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "7520346259324869886ad1bb2f1cd639",
+      "scenario_id": "IA_PIPE_008",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9764,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.119,
+        "structural_gate": {
+          "trajectory_id": "7520346259324869886ad1bb2f1cd639",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.3676,
+            "max_response_similarity": 0.1118,
+            "latent_value_boundary_fraction": 0.119
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "2a0002aa592d4099b60072b9134710ab",
+      "scenario_id": "IA_PIPE_008",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 1.0,
+        "history_dependence": 1.0,
+        "character_consistency": 1.0,
+        "state_response_consistency": 1.0,
+        "interaction_progression": 1.0,
+        "naturalness": 1.0
+      },
+      "overall_score": 1.0,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9911,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "2a0002aa592d4099b60072b9134710ab",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.0541,
+            "max_response_similarity": 0.1348,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "5f926a29878d47c89a1618b13ad531c2",
+      "scenario_id": "IA_PIPE_009",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 1.0,
+        "state_response_consistency": 1.0,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9333,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.74,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.2143,
+        "structural_gate": {
+          "trajectory_id": "5f926a29878d47c89a1618b13ad531c2",
+          "source_model": "Qwen/Qwen3-32B-AWQ",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.439,
+            "max_response_similarity": 0.62,
+            "latent_value_boundary_fraction": 0.2143
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "8ecb25cda2414004baade7a6976691b1",
+      "scenario_id": "IA_PIPE_009",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.991,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.1667,
+        "structural_gate": {
+          "trajectory_id": "8ecb25cda2414004baade7a6976691b1",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.3818,
+            "max_response_similarity": 0.5,
+            "latent_value_boundary_fraction": 0.1667
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "7f6e7d88e58f4604b61e117a0f1f21ad",
+      "scenario_id": "IA_PIPE_009",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.8,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.8833,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.87,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.2619,
+        "structural_gate": {
+          "trajectory_id": "7f6e7d88e58f4604b61e117a0f1f21ad",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.7119,
+            "max_response_similarity": 0.6719,
+            "latent_value_boundary_fraction": 0.2619
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "3c250d2171c3413d8bc1228950e51074",
+      "scenario_id": "IA_PIPE_010",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 1.0,
+        "history_dependence": 1.0,
+        "character_consistency": 1.0,
+        "state_response_consistency": 1.0,
+        "interaction_progression": 1.0,
+        "naturalness": 1.0
+      },
+      "overall_score": 1.0,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.99,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "3c250d2171c3413d8bc1228950e51074",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.4571,
+            "max_response_similarity": 0.5862,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "9ea708b1d3a840118782533a455098ee",
+      "scenario_id": "IA_PIPE_010",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.8,
+        "character_consistency": 0.8,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.7,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.7833,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9787,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "9ea708b1d3a840118782533a455098ee",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.7455,
+            "max_response_similarity": 0.8684,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "65156cb232fd4c9fab373ed57704fda2",
+      "scenario_id": "IA_PIPE_010",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.8,
+        "character_consistency": 0.8,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.8,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.8,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9926,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "65156cb232fd4c9fab373ed57704fda2",
+          "source_model": "Qwen/Qwen3-32B-AWQ",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.2143,
+            "max_response_similarity": 0.3736,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "ea459a788bd94289ba2a66d79ebe0c14",
+      "scenario_id": "IA_PIPE_011",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.8,
+        "character_consistency": 0.8,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.7,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.7833,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.979,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.1944,
+        "structural_gate": {
+          "trajectory_id": "ea459a788bd94289ba2a66d79ebe0c14",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.7826,
+            "max_response_similarity": 0.4583,
+            "latent_value_boundary_fraction": 0.1944
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "54866cb065dd4401a4d172956cf71e7f",
+      "scenario_id": "IA_PIPE_011",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.8833,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.8631,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "54866cb065dd4401a4d172956cf71e7f",
+          "source_model": "zai-org/glm-4-9b-chat-hf",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.3373,
+            "max_response_similarity": 0.2167,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "e7f8a2d4d8814e94ad081d37d902d4d5",
+      "scenario_id": "IA_PIPE_011",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.8,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.8667,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9796,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.3056,
+        "structural_gate": {
+          "trajectory_id": "e7f8a2d4d8814e94ad081d37d902d4d5",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1667,
+            "max_response_similarity": 0.5823,
+            "latent_value_boundary_fraction": 0.3056
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "82dedf6ce8b7420bbfdd35c30cacf13a",
+      "scenario_id": "IA_PIPE_012",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.8,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.8833,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.8586,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.2143,
+        "structural_gate": {
+          "trajectory_id": "82dedf6ce8b7420bbfdd35c30cacf13a",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.7692,
+            "max_response_similarity": 0.7213,
+            "latent_value_boundary_fraction": 0.2143
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "754928a7831b427ea66d39d12eb3a16a",
+      "scenario_id": "IA_PIPE_012",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.8,
+        "character_consistency": 0.8,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.7,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.7833,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9962,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "754928a7831b427ea66d39d12eb3a16a",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1197,
+            "max_response_similarity": 0.1385,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "c642d13bffe24fd69a81e2f373d5d324",
+      "scenario_id": "IA_PIPE_012",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.986,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0476,
+        "structural_gate": {
+          "trajectory_id": "c642d13bffe24fd69a81e2f373d5d324",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1149,
+            "max_response_similarity": 0.8,
+            "latent_value_boundary_fraction": 0.0476
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "89b0709c9d6f4a8daa1b028c085002bb",
+      "scenario_id": "IA_PIPE_013",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.8,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.8,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.8167,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9735,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "89b0709c9d6f4a8daa1b028c085002bb",
+          "source_model": "Qwen/Qwen3-32B-AWQ",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.2125,
+            "max_response_similarity": 0.6413,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "a099cb0a8a534b88b235e7e5604fd64e",
+      "scenario_id": "IA_PIPE_013",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 1.0,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9167,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9968,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "a099cb0a8a534b88b235e7e5604fd64e",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1184,
+            "max_response_similarity": 0.1545,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "8f0161faaacd432fae1edf1c7648a043",
+      "scenario_id": "IA_PIPE_013",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.8346,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.2143,
+        "structural_gate": {
+          "trajectory_id": "8f0161faaacd432fae1edf1c7648a043",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.2703,
+            "max_response_similarity": 0.2793,
+            "latent_value_boundary_fraction": 0.2143
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "c082e88d993340928f311b5298ac087d",
+      "scenario_id": "IA_PIPE_014",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 1.0,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9167,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9838,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.3571,
+        "structural_gate": {
+          "trajectory_id": "c082e88d993340928f311b5298ac087d",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.29,
+            "max_response_similarity": 0.0838,
+            "latent_value_boundary_fraction": 0.3571
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "7e50a92b9c2244a48ff36706ac110263",
+      "scenario_id": "IA_PIPE_014",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 1.0,
+        "history_dependence": 1.0,
+        "character_consistency": 1.0,
+        "state_response_consistency": 1.0,
+        "interaction_progression": 1.0,
+        "naturalness": 1.0
+      },
+      "overall_score": 1.0,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 1.0,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.119,
+        "structural_gate": {
+          "trajectory_id": "7e50a92b9c2244a48ff36706ac110263",
+          "source_model": "Qwen/Qwen3-32B-AWQ",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1067,
+            "max_response_similarity": 0.3704,
+            "latent_value_boundary_fraction": 0.119
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "192bf9be7fc04ae8acf47785bce41d72",
+      "scenario_id": "IA_PIPE_014",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.8,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.85,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 1.0,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.119,
+        "structural_gate": {
+          "trajectory_id": "192bf9be7fc04ae8acf47785bce41d72",
+          "source_model": "Qwen/Qwen3-32B-AWQ",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1127,
+            "max_response_similarity": 0.6744,
+            "latent_value_boundary_fraction": 0.119
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "2b7fbe05a7d9499abbf6e45a6afde7e4",
+      "scenario_id": "IA_PIPE_015",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9935,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.119,
+        "structural_gate": {
+          "trajectory_id": "2b7fbe05a7d9499abbf6e45a6afde7e4",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1562,
+            "max_response_similarity": 0.2162,
+            "latent_value_boundary_fraction": 0.119
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "f908e9fbbd1f48558c1f8389d2f1fd74",
+      "scenario_id": "IA_PIPE_015",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.7262,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.6667,
+        "structural_gate": {
+          "trajectory_id": "f908e9fbbd1f48558c1f8389d2f1fd74",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.3934,
+            "max_response_similarity": 0.3043,
+            "latent_value_boundary_fraction": 0.6667
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "ba9eccf1de214de19d88282af699f042",
+      "scenario_id": "IA_PIPE_015",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.8833,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9862,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "ba9eccf1de214de19d88282af699f042",
+          "source_model": "Qwen/Qwen3-32B-AWQ",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1429,
+            "max_response_similarity": 0.1832,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "f0f1f9da343944d79ad505f331db2ba7",
+      "scenario_id": "IA_PIPE_016",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.8,
+        "character_consistency": 0.8,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.8,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.8,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.992,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0714,
+        "structural_gate": {
+          "trajectory_id": "f0f1f9da343944d79ad505f331db2ba7",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.5,
+            "max_response_similarity": 0.4416,
+            "latent_value_boundary_fraction": 0.0714
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "43e4009ccbbd437a95776fd870ca2fa9",
+      "scenario_id": "IA_PIPE_016",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.8,
+        "character_consistency": 0.8,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.8,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.8,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9773,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "43e4009ccbbd437a95776fd870ca2fa9",
+          "source_model": "Qwen/Qwen3-32B-AWQ",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1585,
+            "max_response_similarity": 0.1474,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "e85a62bcf42445f983689a6352b48c4a",
+      "scenario_id": "IA_PIPE_016",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.993,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0,
+        "structural_gate": {
+          "trajectory_id": "e85a62bcf42445f983689a6352b48c4a",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.25,
+            "max_response_similarity": 0.2621,
+            "latent_value_boundary_fraction": 0.0
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "e28017b180d74a39a2a41d42b6e03217",
+      "scenario_id": "IA_PIPE_017",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 1.0,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0714,
+        "structural_gate": {
+          "trajectory_id": "e28017b180d74a39a2a41d42b6e03217",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.0978,
+            "max_response_similarity": 0.1062,
+            "latent_value_boundary_fraction": 0.0714
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "8095ef6ca8474b4ea88f3470168cabfc",
+      "scenario_id": "IA_PIPE_017",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.8,
+        "character_consistency": 0.8,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.7,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.7833,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9916,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.119,
+        "structural_gate": {
+          "trajectory_id": "8095ef6ca8474b4ea88f3470168cabfc",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.587,
+            "max_response_similarity": 0.8413,
+            "latent_value_boundary_fraction": 0.119
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "4cf387db7e994ba99fbe380f6e0aa3f4",
+      "scenario_id": "IA_PIPE_017",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.8,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.8833,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9864,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.1667,
+        "structural_gate": {
+          "trajectory_id": "4cf387db7e994ba99fbe380f6e0aa3f4",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.5439,
+            "max_response_similarity": 0.6316,
+            "latent_value_boundary_fraction": 0.1667
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "1cf7b1a2cddd4ebe90039b1711e0bab2",
+      "scenario_id": "IA_PIPE_018",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 1.0,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0714,
+        "structural_gate": {
+          "trajectory_id": "1cf7b1a2cddd4ebe90039b1711e0bab2",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.2558,
+            "max_response_similarity": 0.1293,
+            "latent_value_boundary_fraction": 0.0714
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "d0b2ccea13804acc88f9b9eab3017887",
+      "scenario_id": "IA_PIPE_018",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.8,
+        "character_consistency": 0.8,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.8,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.8,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9837,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0952,
+        "structural_gate": {
+          "trajectory_id": "d0b2ccea13804acc88f9b9eab3017887",
+          "source_model": "Qwen/Qwen3-32B-AWQ",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1094,
+            "max_response_similarity": 0.1852,
+            "latent_value_boundary_fraction": 0.0952
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "424bae60fd324e46bafdd7813cba2e9f",
+      "scenario_id": "IA_PIPE_018",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9842,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.3095,
+        "structural_gate": {
+          "trajectory_id": "424bae60fd324e46bafdd7813cba2e9f",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1413,
+            "max_response_similarity": 0.7255,
+            "latent_value_boundary_fraction": 0.3095
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "2f2752b53af94da3b0510f4b19f38706",
+      "scenario_id": "IA_PIPE_019",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.8,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.8,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.8167,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9918,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.5,
+        "structural_gate": {
+          "trajectory_id": "2f2752b53af94da3b0510f4b19f38706",
+          "source_model": "Qwen/Qwen3-32B-AWQ",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1714,
+            "max_response_similarity": 0.3267,
+            "latent_value_boundary_fraction": 0.5
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "b152eb79f61246bfb224a7b86445452d",
+      "scenario_id": "IA_PIPE_019",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.8,
+        "history_dependence": 0.8,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.8,
+        "interaction_progression": 0.7,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.8,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 1.0,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.4762,
+        "structural_gate": {
+          "trajectory_id": "b152eb79f61246bfb224a7b86445452d",
+          "source_model": "Qwen/Qwen3-32B-AWQ",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1852,
+            "max_response_similarity": 0.25,
+            "latent_value_boundary_fraction": 0.4762
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "d7fb464268f64007b7ed18d14554e094",
+      "scenario_id": "IA_PIPE_019",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 1.0,
+        "character_consistency": 1.0,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.8
+      },
+      "overall_score": 0.9167,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9779,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.4286,
+        "structural_gate": {
+          "trajectory_id": "d7fb464268f64007b7ed18d14554e094",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.25,
+            "max_response_similarity": 0.1863,
+            "latent_value_boundary_fraction": 0.4286
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "b9e0184dbf1c40298487e903ff28958b",
+      "scenario_id": "IA_PIPE_020",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9936,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.1667,
+        "structural_gate": {
+          "trajectory_id": "b9e0184dbf1c40298487e903ff28958b",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.5714,
+            "max_response_similarity": 0.803,
+            "latent_value_boundary_fraction": 0.1667
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "ed27ca41665c452c933b496c3120ae99",
+      "scenario_id": "IA_PIPE_020",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9895,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0714,
+        "structural_gate": {
+          "trajectory_id": "ed27ca41665c452c933b496c3120ae99",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.1491,
+            "max_response_similarity": 0.2623,
+            "latent_value_boundary_fraction": 0.0714
+          }
+        }
+      }
+    },
+    {
+      "trajectory_id": "ede63883236c43f9b42addd64181ac90",
+      "scenario_id": "IA_PIPE_020",
+      "passed": true,
+      "status": "passed",
+      "scores": {
+        "dialogue_coherence": 0.9,
+        "history_dependence": 0.9,
+        "character_consistency": 0.9,
+        "state_response_consistency": 0.9,
+        "interaction_progression": 0.9,
+        "naturalness": 0.9
+      },
+      "overall_score": 0.9,
+      "missing_evidence": [],
+      "judge_errors": [],
+      "hard_reject_reasons": [],
+      "diagnostics": {
+        "turn_count": 6,
+        "heuristic_scores": {
+          "dialogue_coherence": 1.0,
+          "interaction_progression": 0.9731,
+          "naturalness": 1.0
+        },
+        "threshold_failures": [],
+        "state_oscillation_fraction": 0.0,
+        "state_saturation_fraction": 0.0476,
+        "structural_gate": {
+          "trajectory_id": "ede63883236c43f9b42addd64181ac90",
+          "source_model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+          "turn_count": 6,
+          "passed": true,
+          "checks": {
+            "has_at_least_five_turns": true,
+            "actions_nonempty": true,
+            "responses_nonempty": true,
+            "actions_no_exact_repetition": true,
+            "responses_no_exact_repetition": true,
+            "actions_no_near_repetition": true,
+            "responses_no_near_repetition": true,
+            "actions_follow_dialogue_format": true,
+            "responses_follow_dialogue_format": true,
+            "responses_concise": true
+          },
+          "diagnostics": {
+            "action_unique_ratio": 1.0,
+            "response_unique_ratio": 1.0,
+            "max_action_similarity": 0.8095,
+            "max_response_similarity": 0.1682,
+            "latent_value_boundary_fraction": 0.0476
+          }
+        }
+      }
+    }
+  ]
+}

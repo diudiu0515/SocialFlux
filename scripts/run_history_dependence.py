@@ -10,7 +10,9 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from environment.delta_mapper import flatten_state
+from environment.env import coerce_free_form_action
 from environment.factory import ModelEnvironmentFactory
+from environment.state_updater import apply_transition
 from prompts.loader import render_prompt
 from providers.factory import build_provider
 from providers.text import complete_distinct_text, text_similarity
@@ -49,10 +51,46 @@ def observation_variants(trajectory, recent_k):
 
 
 def provider_specs(config):
-    return {
-        item["model_family"]: item
-        for item in config["policies"]
-    }
+    """Index effective policy specs by the trajectory policy ID.
+
+    A model family can contain several seeds/policies, so family alone is not a
+    stable lookup key. Expanding runs here mirrors run_pipeline's policy ID and
+    seed rules without constructing a provider.
+    """
+    result = {}
+    for item in config["policies"]:
+        runs = item.get("runs", 1)
+        if not isinstance(runs, int) or runs < 1:
+            raise ValueError("policy runs must be a positive integer")
+        for run_index in range(runs):
+            effective = deepcopy(item)
+            policy_id = item["policy_id"]
+            if runs > 1:
+                policy_id = f"{policy_id}__run_{run_index + 1}"
+            sampling = deepcopy(item.get("sampling", {}))
+            if isinstance(sampling.get("seed"), int):
+                sampling["seed"] += run_index
+            effective["sampling"] = sampling
+            result[policy_id] = effective
+    return result
+
+
+def resolve_policy_spec(trajectory, specs):
+    policy_id = trajectory.get("policy_id")
+    if policy_id in specs:
+        return policy_id, specs[policy_id]
+    family = trajectory.get("policy_provenance", {}).get("model_family")
+    matches = [
+        (candidate_id, spec)
+        for candidate_id, spec in specs.items()
+        if spec.get("model_family") == family
+    ]
+    if len(matches) == 1:
+        return matches[0]
+    raise ValueError(
+        f"cannot resolve policy spec for trajectory {trajectory.get('trajectory_id')}: "
+        f"policy_id={policy_id!r}, model_family={family!r}, family_matches={len(matches)}"
+    )
 
 
 def generate(provider, observation, sampling):
@@ -118,7 +156,10 @@ def _replay_interpretations(factory, trajectory, recent_k, critical):
     for name, snapshot in snapshots.items():
         environment = factory()
         environment.restore(snapshot)
-        _, outputs[name] = environment.step(checkpoint["policy_action"])
+        outputs[name] = _interpret_without_response(
+            environment,
+            checkpoint["policy_action"],
+        )
     return {
         "full_vs_recent": _interpretation_comparison(outputs["full"], outputs["recent_k"]),
         "full_vs_critical_removed": _interpretation_comparison(
@@ -127,18 +168,71 @@ def _replay_interpretations(factory, trajectory, recent_k, critical):
     }
 
 
+def _interpret_without_response(environment, action):
+    """Run the canonical appraisal/update path without an unused response call."""
+    action = coerce_free_form_action(action)
+    state_before = deepcopy(environment.session["state"])
+    dynamics_before = deepcopy(environment.session["dynamics"])
+    memory_view = environment.memory.retrieve(environment.session["history"], action)
+    transition = environment.state_updater.update(
+        action=action,
+        previous_state=state_before,
+        previous_dynamics=dynamics_before,
+        memory=memory_view,
+    )
+    _, _, state_numeric, dynamics_numeric = apply_transition(
+        state_before,
+        dynamics_before,
+        transition,
+    )
+    return {
+        "appraisal": transition["appraisal"],
+        "numeric_state_delta": state_numeric,
+        "numeric_dynamics_delta": dynamics_numeric,
+    }
+
+
+def write_records(path, records):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps({"records": records}, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def resumable_records(path, enabled):
+    if not enabled or not path.exists():
+        return []
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    records = payload.get("records")
+    if not isinstance(records, list) or any(
+        not isinstance(item, dict) or not item.get("trajectory_id")
+        for item in records
+    ):
+        raise ValueError("history resume output must contain trajectory records")
+    ids = [item["trajectory_id"] for item in records]
+    if len(ids) != len(set(ids)):
+        raise ValueError("history resume output contains duplicate trajectory IDs")
+    return records
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--raw-root", type=Path, required=True)
     parser.add_argument("--rollout-config", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--recent-k", type=int, default=2)
+    parser.add_argument("--trajectory-limit", type=int)
+    parser.add_argument("--trajectory-id", dest="trajectory_ids", action="append")
+    parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
+    if args.trajectory_limit is not None and args.trajectory_limit < 1:
+        raise ValueError("trajectory-limit must be positive")
     config = load_rollout_config(args.rollout_config)
     specs = provider_specs(config)
     providers = {
-        family: build_provider(spec["provider"])
-        for family, spec in specs.items()
+        policy_id: build_provider(spec["provider"])
+        for policy_id, spec in specs.items()
     }
     scenarios = {
         item["scenario_id"]: item
@@ -152,15 +246,44 @@ def main():
         )
         for scenario_id, scenario in scenarios.items()
     }
-    records = []
-    for trajectory in load_records(args.raw_root):
-        family = trajectory["policy_provenance"]["model_family"]
-        spec = specs[family]
-        provider = providers[family]
+    records = resumable_records(args.output, args.resume)
+    completed_ids = {item["trajectory_id"] for item in records}
+    trajectories = sorted(
+        load_records(args.raw_root),
+        key=lambda item: (item["scenario_id"], item["trajectory_id"]),
+    )
+    if args.trajectory_ids:
+        requested_ids = set(args.trajectory_ids)
+        trajectories = [
+            item for item in trajectories
+            if item["trajectory_id"] in requested_ids
+        ]
+        found_ids = {item["trajectory_id"] for item in trajectories}
+        missing_ids = requested_ids - found_ids
+        if missing_ids:
+            raise ValueError(
+                "requested history trajectories were not found: "
+                + ", ".join(sorted(missing_ids))
+            )
+    if args.trajectory_limit is not None:
+        trajectories = trajectories[:args.trajectory_limit]
+    expected_ids = {item["trajectory_id"] for item in trajectories}
+    unexpected_ids = completed_ids - expected_ids
+    if unexpected_ids:
+        raise ValueError(
+            "history resume output contains trajectories outside current input: "
+            + ", ".join(sorted(unexpected_ids))
+        )
+    for trajectory in trajectories:
+        if trajectory["trajectory_id"] in completed_ids:
+            continue
+        policy_id, spec = resolve_policy_spec(trajectory, specs)
+        provider = providers[policy_id]
         full, recent, removed, critical = observation_variants(
             trajectory, args.recent_k
         )
-        full_action = trajectory["turns"][-1]["policy_action"]["text"]
+        observed_checkpoint_action = trajectory["turns"][-1]["policy_action"]["text"]
+        full_action = generate(provider, full, spec.get("sampling", {}))
         recent_action = generate(provider, recent, spec.get("sampling", {}))
         removed_action = generate(provider, removed, spec.get("sampling", {}))
         recent_similarity = text_similarity(full_action, recent_action)
@@ -183,6 +306,7 @@ def main():
         records.append({
             "trajectory_id": trajectory["trajectory_id"],
             "checkpoint_turn_id": trajectory["turns"][-1]["turn_id"],
+            "observed_checkpoint_action": observed_checkpoint_action,
             "full_history_action": full_action,
             "recent_k_action": recent_action,
             "critical_event_removed_action": removed_action,
@@ -196,11 +320,14 @@ def main():
                 or interpretation["full_vs_critical_removed"]["change_score"] >= 0.15
             ),
         })
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(
-        json.dumps({"records": records}, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+        write_records(args.output, records)
+        print(json.dumps({
+            "progress": len(records),
+            "total": len(trajectories),
+            "trajectory_id": trajectory["trajectory_id"],
+            "passed": records[-1]["passed"],
+        }, ensure_ascii=False), file=sys.stderr, flush=True)
+    write_records(args.output, records)
     print(json.dumps({
         "trajectory_count": len(records),
         "passed": sum(item["passed"] for item in records),

@@ -10,6 +10,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from environment.factory import ModelEnvironmentFactory
+from evaluation.instance_quality import build_instance_quality_report
 from evaluation.leakage import assert_no_leaks
 from evaluation.review_registry import load_review_registry
 from evaluation.quality_gates import audit_environment_gate, audit_scenario_gate
@@ -314,6 +315,46 @@ def _round_robin_turns(trajectories):
         depth += 1
 
 
+def _load_reusable_t3(build_root, scenario_id, trajectories):
+    if build_root is None:
+        return None
+    scenario_root = Path(build_root) / scenario_id
+    instance_path = scenario_root / "offline" / "instances.jsonl"
+    branch_path = scenario_root / "validation" / "local_action_interventions.json"
+    if not instance_path.exists() or not branch_path.exists():
+        return None
+    instances = [
+        json.loads(line)
+        for line in instance_path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    candidates = [
+        item for item in instances
+        if item.get("task_type") == "T3_counterfactual_choice_effect"
+    ]
+    if len(candidates) != 1:
+        return None
+    candidate = candidates[0]
+    metadata = candidate.get("metadata", {})
+    source_id = metadata.get("source_trajectory_id")
+    checkpoint_id = metadata.get("checkpoint_turn_id")
+    active_ids = {item["trajectory_id"] for item in trajectories}
+    if source_id not in active_ids or not checkpoint_id:
+        return None
+    branches = json.loads(branch_path.read_text(encoding="utf-8"))
+    branches = [
+        item for item in branches
+        if item.get("source_trajectory_id") == source_id
+        and item.get("checkpoint_turn_id") == checkpoint_id
+    ]
+    report = build_instance_quality_report(
+        [candidate], trajectories=trajectories, interventions=branches
+    )
+    if report["structurally_passed"] != 1:
+        return None
+    return deepcopy(candidate), deepcopy(branches)
+
+
 def run_scenario(
     scenario,
     scenario_path,
@@ -323,6 +364,7 @@ def run_scenario(
     build_only=False,
     allow_unreviewed=False,
     rollout_root=None,
+    reuse_t3_from=None,
 ):
     _require_reviewed(scenario, allow_unreviewed)
     scenario_id = scenario["scenario_id"]
@@ -427,50 +469,55 @@ def run_scenario(
         "t3_horizon",
         scenario.get("t3_delayed_horizon", 5),
     )
-    t3 = []
-    branches = []
-    for trajectory, turn in _round_robin_turns(trajectories):
-        if len(t3) >= t3_limit:
-            break
-        actions = construction.candidate_actions(turn["observation"], count=3)
-        checkpoint = {
-            **turn,
-            "trajectory_id": trajectory["trajectory_id"],
-            "scenario_id": scenario_id,
-        }
-        t3.append(build_t3_candidates(
-            checkpoint,
-            actions,
-            t3_horizon,
-            scenario.get("target_state_ids", []),
-        ))
-        spec_run = policy_lookup.get(trajectory["policy_id"])
-        if spec_run is None:
-            provenance = trajectory.get("policy_provenance", {})
-            for candidate_spec, candidate_run in _policy_specs(config):
-                candidate = _policy_from_spec(candidate_spec, candidate_run)
-                if (
-                    candidate.provenance.get("model") == provenance.get("model")
-                    and candidate.provenance.get("sampling") == provenance.get("sampling")
-                ):
-                    spec_run = (candidate_spec, candidate_run)
-                    break
-        if spec_run is None:
-            raise ValueError(
-                f"no rollout-config policy matches trajectory {trajectory['trajectory_id']}"
+    reused_t3 = _load_reusable_t3(reuse_t3_from, scenario_id, trajectories)
+    if reused_t3 is not None:
+        reused_instance, branches = reused_t3
+        t3 = [reused_instance]
+    else:
+        t3 = []
+        branches = []
+        for trajectory, turn in _round_robin_turns(trajectories):
+            if len(t3) >= t3_limit:
+                break
+            actions = construction.candidate_actions(turn["observation"], count=3)
+            checkpoint = {
+                **turn,
+                "trajectory_id": trajectory["trajectory_id"],
+                "scenario_id": scenario_id,
+            }
+            t3.append(build_t3_candidates(
+                checkpoint,
+                actions,
+                t3_horizon,
+                scenario.get("target_state_ids", []),
+            ))
+            spec_run = policy_lookup.get(trajectory["policy_id"])
+            if spec_run is None:
+                provenance = trajectory.get("policy_provenance", {})
+                for candidate_spec, candidate_run in _policy_specs(config):
+                    candidate = _policy_from_spec(candidate_spec, candidate_run)
+                    if (
+                        candidate.provenance.get("model") == provenance.get("model")
+                        and candidate.provenance.get("sampling") == provenance.get("sampling")
+                    ):
+                        spec_run = (candidate_spec, candidate_run)
+                        break
+            if spec_run is None:
+                raise ValueError(
+                    f"no rollout-config policy matches trajectory {trajectory['trajectory_id']}"
+                )
+            spec, run_index = spec_run
+            new_branches = branch_counterfactuals(
+                environment_factory,
+                turn,
+                actions,
+                lambda spec=spec, run_index=run_index: _policy_from_spec(spec, run_index),
+                t3_horizon,
             )
-        spec, run_index = spec_run
-        new_branches = branch_counterfactuals(
-            environment_factory,
-            turn,
-            actions,
-            lambda spec=spec, run_index=run_index: _policy_from_spec(spec, run_index),
-            t3_horizon,
-        )
-        for branch in new_branches:
-            branch["scenario_id"] = scenario_id
-            branch["source_trajectory_id"] = trajectory["trajectory_id"]
-        branches.extend(new_branches)
+            for branch in new_branches:
+                branch["scenario_id"] = scenario_id
+                branch["source_trajectory_id"] = trajectory["trajectory_id"]
+            branches.extend(new_branches)
 
     _write_offline(
         scenario_output / "offline" / "instances.jsonl",
@@ -506,6 +553,7 @@ def run_scenario(
         "t2": len(t2),
         "t3": len(t3),
         "local_intervention_branches": len(branches),
+        "t3_reused_after_active_source_audit": reused_t3 is not None,
         "task_review": str(rollout_dir / "tasks.md"),
         "ground_truth_status": "pending_human_annotation",
         "run_scope": bundle_stage,
@@ -547,6 +595,11 @@ def main():
         type=Path,
         help="Gate 2 E1-E6 evidence directory required for formal_raw.",
     )
+    parser.add_argument(
+        "--reuse-t3-from",
+        type=Path,
+        help="Reuse an existing T3 only when its source remains active and its full branch audit passes.",
+    )
     args = parser.parse_args()
     config = load_rollout_config(args.rollout_config)
     if config.get("pool_stage") in {"formal_raw", "formal_selected"} and args.rollout_root is None:
@@ -576,18 +629,25 @@ def main():
         )
         if not environment_gate["passed"]:
             raise ValueError("formal_raw rollout requires passed Gate 2 environment evidence")
-    summaries = [
-        run_scenario(
+    summaries = []
+    for scenario_path, scenario in records:
+        summary = run_scenario(
             scenario,
-            path,
+            scenario_path,
             args.output,
             config,
             build_only=args.build_only,
             allow_unreviewed=args.allow_unreviewed,
             rollout_root=args.rollout_root,
+            reuse_t3_from=args.reuse_t3_from,
         )
-        for path, scenario in records
-    ]
+        summaries.append(summary)
+        print(json.dumps({
+            "progress_scenario_id": summary["scenario_id"],
+            "completed": len(summaries),
+            "total": len(records),
+            "instances": summary["t1"] + summary["t2"] + summary["t3"],
+        }, ensure_ascii=False), file=sys.stderr, flush=True)
     instances = []
     for summary in summaries:
         source = args.output / summary["scenario_id"] / "offline" / "instances.jsonl"

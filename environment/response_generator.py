@@ -1,7 +1,7 @@
 """Model-generated, state-conditioned environment responses."""
 
 from prompts.loader import render_prompt
-from providers.text import complete_distinct_text
+from providers.text import avoids_unsupported_offscreen_claim, complete_distinct_text
 
 
 class ResponseGenerator:
@@ -29,11 +29,17 @@ class ModelResponseGenerator(ResponseGenerator):
             for item in context.get("history", [])
             if item.get("role") == "environment_agent"
         ]
+        forbidden_echoes = prior_responses + [context.get("action", {}).get("text", "")]
         return complete_distinct_text(
             self.provider,
             [{"role": "user", "content": prompt}],
             self.sampling,
-            prior_responses,
+            forbidden_echoes,
             context="environment response",
             max_attempts=12,
+            similarity_threshold=0.72,
+            validator=lambda value: avoids_unsupported_offscreen_claim(
+                value,
+                environment=True,
+            ),
         )
