@@ -1,5 +1,7 @@
 # Four-Gate development filtering log — 2026-09-06
 
+> 本表引用的中间快照和 candidate-attempt 原始记录保存在 [`archive/development-filtering/`](archive/development-filtering/)；顶层目录只保留当前结论级报告。
+
 ## Scope and non-claims
 
 This run screens the 20-scenario **development** pool. It does not turn that

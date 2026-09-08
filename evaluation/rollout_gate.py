@@ -36,6 +36,8 @@ HARD_REJECT_REASONS = (
     "meaningless_premature_ending",
     "nonsensical_state_oscillation",
     "implementation_induced_state_saturation",
+    "future_information_leakage",
+    "unusable_trajectory",
 )
 
 _PRIVATE_MARKERS = (
@@ -328,14 +330,13 @@ def trajectory_similarity(left, right):
     return round(0.7 * text_score + 0.3 * state_score, 4)
 
 
-def select_diverse_trajectories(trajectories, audits, minimum=4, maximum=6, threshold=0.88):
-    """Greedy quality-first selection with outcome and model-family coverage."""
+def select_diverse_trajectories(trajectories, audits, minimum=1, maximum=1, threshold=0.88):
+    """Quality-first selection with behavioral coverage and no model quota."""
     by_id = {item["trajectory_id"]: item for item in trajectories}
     eligible = [item for item in audits if item.get("passed") and item["trajectory_id"] in by_id]
     eligible.sort(key=lambda item: item.get("overall_score") or 0.0, reverse=True)
     selected = []
     covered_outcomes = set()
-    covered_families = set()
     eligible_rows = []
     for audit in eligible:
         trajectory = by_id[audit["trajectory_id"]]
@@ -348,13 +349,10 @@ def select_diverse_trajectories(trajectories, audits, minimum=4, maximum=6, thre
             return False
         selected.append(trajectory)
         covered_outcomes.add(outcome)
-        covered_families.add(family)
         return True
 
-    for family in sorted({row[3] for row in eligible_rows}):
-        row = next(item for item in eligible_rows if item[3] == family)
-        if len(selected) < maximum and row[1] not in selected:
-            add(row, coverage=True)
+    if maximum == 1 and eligible_rows:
+        add(eligible_rows[0], coverage=True)
     for outcome in sorted({row[2] for row in eligible_rows}):
         row = next(item for item in eligible_rows if item[2] == outcome)
         if len(selected) < maximum and row[1] not in selected:
@@ -374,10 +372,8 @@ def select_diverse_trajectories(trajectories, audits, minimum=4, maximum=6, thre
     eligible_families = {row[3] for row in eligible_rows if row[3] != "unknown"}
     eligible_outcomes = {row[2] for row in eligible_rows}
     diversity_passed = (
-        len(covered_families - {"unknown"}) >= min(3, len(eligible_families))
-        and len(eligible_families) >= 3
-        and len(covered_outcomes) >= 2
-        and len(eligible_outcomes) >= 2
+        bool(selected) if maximum == 1
+        else len(covered_outcomes) >= 2 and len(eligible_outcomes) >= 2
     )
     return {
         "passed": minimum <= len(selected) <= maximum and diversity_passed,
@@ -392,6 +388,8 @@ def select_diverse_trajectories(trajectories, audits, minimum=4, maximum=6, thre
         "diversity_passed": diversity_passed,
         "eligible_outcome_count": len(eligible_outcomes),
         "eligible_model_family_count": len(eligible_families),
+        "model_quota": False,
+        "model_family_role": "audit_only",
     }
 
 
@@ -434,10 +432,10 @@ def audit_pool_contract(
             not require_raw_minimum
             or (bool(scenarios) and all(len(items) >= 12 for items in scenarios.values()))
         ),
-        "each_scenario_selects_4_to_6": (
+        "each_scenario_selects_exactly_one": (
             not selection_supplied
             or (bool(selected_by_scenario) and all(
-                4 <= len(items) <= 6 for items in selected_by_scenario.values()
+                len(items) == 1 for items in selected_by_scenario.values()
             ))
         ),
         "environment_policy_separated": all(

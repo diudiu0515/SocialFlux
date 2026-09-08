@@ -78,8 +78,13 @@ def _source_model(trajectory):
     return trajectory.get("policy_provenance", {}).get("model")
 
 
-def retrieve_divergent_history_pairs(trajectories, same_source_model=False):
-    """Rank same-scenario, same-depth checkpoints by private state divergence."""
+def retrieve_divergent_history_pairs(
+    trajectories,
+    same_source_model=False,
+    trajectory_quality=None,
+):
+    """Rank same-scenario checkpoints by T2 quality and private-state divergence."""
+    trajectory_quality = trajectory_quality or {}
     candidates = []
     for left_index, left in enumerate(trajectories):
         for right in trajectories[left_index + 1:]:
@@ -107,8 +112,22 @@ def retrieve_divergent_history_pairs(trajectories, same_source_model=False):
                     "left_index": depth - 1,
                     "right_index": depth - 1,
                     "state_distance": distance,
+                    "source_quality": round((
+                        float(trajectory_quality.get(left["trajectory_id"], 0.0))
+                        + float(trajectory_quality.get(right["trajectory_id"], 0.0))
+                    ) / 2, 4),
                 })
-    return sorted(candidates, key=lambda item: item["state_distance"], reverse=True)
+    max_distance = max((item["state_distance"] for item in candidates), default=1.0)
+    for item in candidates:
+        normalized_distance = item["state_distance"] / max_distance
+        item["selection_score"] = round(
+            0.55 * item["source_quality"] + 0.45 * normalized_distance,
+            4,
+        )
+    return sorted(
+        candidates,
+        key=lambda item: (-item["selection_score"], -item["state_distance"]),
+    )
 
 
 def build_t2_pair(candidate, shared_observation, target_state_ids=None):
@@ -157,6 +176,7 @@ def build_t2_pair(candidate, shared_observation, target_state_ids=None):
             "shared_observation_injected": True,
             "compatibility_status": "pending_human_validation",
             "private_state_exposed": False,
+            "selection_method": "task_specific_quality_plus_private_distance",
         },
     }
 
@@ -167,11 +187,13 @@ def build_t2_pairs(
     max_pairs,
     target_state_ids=None,
     same_source_model=False,
+    trajectory_quality=None,
 ):
     pairs = []
     candidates = retrieve_divergent_history_pairs(
         trajectories,
         same_source_model=same_source_model,
+        trajectory_quality=trajectory_quality,
     )
     if same_source_model:
         grouped = {}

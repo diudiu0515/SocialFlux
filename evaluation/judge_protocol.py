@@ -32,6 +32,12 @@ def _index_records(bundle, role):
         unknown = set(item.get("hard_reject_reasons", [])) - set(HARD_REJECT_REASONS)
         if unknown or not str(item.get("rationale", "")).strip():
             raise ValueError(f"{role} judge hard reject or rationale is invalid")
+        if bundle.get("format") == "socialflux_rollout_quality_judgments_v2":
+            evidence = item.get("evidence", {})
+            if set(evidence) != set(QUALITY_DIMENSIONS) or any(
+                not isinstance(ids, list) or not ids for ids in evidence.values()
+            ):
+                raise ValueError(f"{role} judge v2 evidence is incomplete")
     return {item["trajectory_id"]: item for item in records}
 
 
@@ -131,6 +137,13 @@ def merge_judgments(trajectories, primary_bundle, secondary_bundle, fraction=0.2
                 "score_gaps": score_gaps,
                 "resolution": "conservative_union_and_mean",
             })
+        combined_evidence = {
+            key: list(dict.fromkeys(
+                list(left.get("evidence", {}).get(key, []))
+                + list(right.get("evidence", {}).get(key, []))
+            ))[:3]
+            for key in QUALITY_DIMENSIONS
+        }
         merged.append({
             "trajectory_id": trajectory_id,
             "scores": {
@@ -138,11 +151,16 @@ def merge_judgments(trajectories, primary_bundle, secondary_bundle, fraction=0.2
                 for key in QUALITY_DIMENSIONS
             },
             "hard_reject_reasons": sorted(set(left.get("hard_reject_reasons", [])) | set(right.get("hard_reject_reasons", []))),
+            **({"evidence": combined_evidence} if all(combined_evidence.values()) else {}),
             "rationale": "Primary: " + left["rationale"] + " Secondary: " + right["rationale"],
         })
     complete = not missing_secondary and len(merged) == len(trajectories)
     return {
-        "format": "socialflux_dual_judge_merge_v1",
+        "format": (
+            "socialflux_dual_judge_merge_v2"
+            if primary_bundle.get("format") == secondary_bundle.get("format") == "socialflux_rollout_quality_judgments_v2"
+            else "socialflux_dual_judge_merge_v1"
+        ),
         "complete": complete,
         "trajectory_count": len(trajectories),
         "secondary_required_count": len(reasons),

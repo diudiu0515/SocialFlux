@@ -93,9 +93,11 @@ class PromptCatalogTest(unittest.TestCase):
         self.assertIn("every leaf in both delta objects", state_update)
         self.assertIn("values such as `-2`, `0`, or `1` are invalid", state_update)
 
-        rollout_judge = get_prompt("rollout_quality_judge_v1")
-        self.assertIn("these three top-level fields", rollout_judge)
+        rollout_judge = get_prompt("rollout_quality_judge_v2")
+        self.assertIn("four top-level fields", rollout_judge)
         self.assertIn('"hard_reject_reasons":[]', rollout_judge)
+        self.assertIn('"history_dependence":["t2"]', rollout_judge)
+        self.assertIn("future_information_leakage", rollout_judge)
 
 if __name__ == "__main__":
     unittest.main()

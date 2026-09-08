@@ -15,6 +15,14 @@ class RolloutQualityJudgeValidationTest(unittest.TestCase):
                 "naturalness": 4,
             },
             "hard_reject_reasons": [],
+            "evidence": {
+                "dialogue_coherence": ["t1"],
+                "history_dependence": ["t2"],
+                "character_consistency": ["t1"],
+                "state_response_consistency": ["t2"],
+                "interaction_progression": ["t2"],
+                "naturalness": ["t1"],
+            },
             "rationale": "observable evidence supports the ratings",
         }
 
@@ -28,6 +36,12 @@ class RolloutQualityJudgeValidationTest(unittest.TestCase):
     def test_caller_adds_missing_trajectory_id(self):
         result = validate(self.judgment(), "caller-owned-id")
         self.assertEqual(result["trajectory_id"], "caller-owned-id")
+
+    def test_turn_evidence_must_exist_in_trajectory(self):
+        with self.assertRaisesRegex(ValueError, "invalid turn evidence"):
+            validate(self.judgment(), "caller-owned-id", {"t1"})
+        result = validate(self.judgment(), "caller-owned-id", {"t1", "t2"})
+        self.assertEqual(result["evidence"]["history_dependence"], ["t2"])
 
     def test_extra_model_field_is_rejected(self):
         value = self.judgment()

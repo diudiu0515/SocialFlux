@@ -69,7 +69,11 @@ class ObservableExpressionLayer:
         }
         private_events = []
         public_expression = deepcopy(self.default_expression)
-        for trigger in self.scenario.get("video_triggers", []):
+        triggers = sorted(
+            self.scenario.get("video_triggers", []),
+            key=lambda item: item.get("priority", 999),
+        )
+        for trigger in triggers:
             conditions = trigger.get("conditions", {})
             currently_active = _condition_matches(current_values, conditions)
             mode = trigger.get("trigger_mode", "crossing")
@@ -106,6 +110,8 @@ class ObservableExpressionLayer:
             private_events.append(event)
             public_expression = expression
             last_trigger_turns[trigger["trigger_id"]] = turn_id
+            # docs/source-notes/multimodel.md: at most one highest-priority event per turn.
+            break
         return {
             "private_events": private_events,
             "observable_expression": public_expression,

@@ -61,6 +61,11 @@
       "sha256": "67dada818a3ee3275bc46e11846ab438edd0593a684ba93db83687f393be116f",
       "version": "v1"
     },
+    "rollout_quality_judge_v2": {
+      "path": "rollout_quality_judge_v2.md",
+      "sha256": "218572f6c6f049b2f7613c4550ad7dde5956b8b0c74fa4602f72f53f7ac7bd89",
+      "version": "v2"
+    },
     "scenario_normalization_v1": {
       "path": "scenario_normalization_v1.md",
       "sha256": "5992ae70c6e709f6cc466dad7e89ca1109f7fcf726b64bec5c891685a91883a0",

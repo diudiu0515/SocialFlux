@@ -51,7 +51,7 @@ def main():
         "--rollout-stage",
         choices=("raw", "selected"),
         default="raw",
-        help="selected skips raw >=12 and requires 4–6 trajectories per scenario",
+        help="selected skips raw >=12 and requires exactly one trajectory per scenario",
     )
     parser.add_argument("--pipeline-output", type=Path, default=Path("build/pipeline_v2"))
     parser.add_argument("--environment-evidence", type=Path)

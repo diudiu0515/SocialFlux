@@ -4,7 +4,6 @@ import unittest
 
 from offline.rollout_builders import build_t1_checkpoints
 from rollout.runner import RolloutRunner
-from scripts.run_pipeline import _round_robin, _round_robin_turns
 from tests.support import TextPolicy, environment_factory
 
 
@@ -46,18 +45,6 @@ class CheckpointSamplingTest(unittest.TestCase):
             turn["observation"]["explicit_goal"],
             SCENARIO["environment_agent"]["explicit_goal"],
         )
-
-    def test_round_robin_sampling_covers_trajectories_before_depth(self):
-        self.assertEqual(_round_robin([["a1", "a2"], ["b1", "b2"]], 3), ["a1", "b1", "a2"])
-        trajectories = [
-            {"trajectory_id": "a", "turns": [{"turn_id": "t1"}, {"turn_id": "t2"}]},
-            {"trajectory_id": "b", "turns": [{"turn_id": "t1"}, {"turn_id": "t2"}]},
-        ]
-        sampled = [
-            (trajectory["trajectory_id"], turn["turn_id"])
-            for trajectory, turn in _round_robin_turns(trajectories)
-        ]
-        self.assertEqual(sampled, [("a", "t1"), ("b", "t1"), ("a", "t2"), ("b", "t2")])
 
 
 if __name__ == "__main__":

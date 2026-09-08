@@ -51,6 +51,8 @@ const LABELS = {
   meaningless_premature_ending: '无意义提前结束',
   nonsensical_state_oscillation: '状态无意义振荡',
   implementation_induced_state_saturation: '实现导致状态饱和',
+  future_information_leakage: '未来信息泄漏',
+  unusable_trajectory: '无法形成历史依赖片段',
   from_free_form_rollout: '来自自由 rollout',
   target_state_meaningful: '目标状态有意义',
   history_evidence_present: '历史证据充分',
@@ -148,9 +150,11 @@ function renderProgress() {
   if (!state.data) return;
   const records = Object.values(state.drafts.records);
   const done = records.filter((item) => statusDone(item.status)).length;
-  const expected = state.data.scenario_count
-    + state.data.scenarios.reduce((sum, item) => sum + item.pipeline.trajectory_count + item.task_count, 0);
-  $('#localProgress').textContent = `${done} / ${expected} 条已处理 · 本机草稿`;
+  const categories = state.data.manual_review?.categories || [];
+  const tracked = new Set(['gate1_scenario', 'gate3_rollout', 'gate4_tasks', 'media']);
+  const expected = categories.filter((item) => tracked.has(item.id))
+    .reduce((sum, item) => sum + Number(item.available || 0), 0);
+  $('#localProgress').textContent = `${done} / ${expected} 个可用审核单元 · 本机草稿`;
 }
 
 function renderOverview() {
@@ -159,9 +163,11 @@ function renderOverview() {
   const gate = state.data.acceptance.gate || {};
   $('#scenarioCount').textContent = state.data.scenario_count;
   $('#gateBadge').textContent = gate.research_acceptance ? 'RESEARCH GATE · PASS' : 'RESEARCH GATE · PENDING';
+  const screening = state.data.screening || {};
   const values = [
     ['SCENARIOS', state.data.scenario_count, '情节与 S0/D0'],
-    ['ROLLOUTS', totals.trajectories ?? 0, '六维质量与 hard reject'],
+    ['AUDIT QUEUE', screening.human_review_queue_count ?? 0, `库存 ${screening.inventory_count ?? 0} · 每场景最终 1 条`],
+    ['PROVISIONAL WINNERS', screening.provisional_selected_count ?? 0, '待人工逐场景确认'],
     ['TASKS', totals.instances ?? 0, `T1 ${totals.t1 ?? 0} · T2 ${totals.t2 ?? 0} · T3 ${totals.t3 ?? 0}`],
     ['LOCAL DRAFTS', Object.keys(state.drafts.records).length, '仅当前浏览器']
   ];
@@ -205,7 +211,7 @@ function renderHeader() {
       <span class="mini-label">TARGET PERSONA</span>
       <strong>${esc(persona.name || '—')}</strong>
       <p>${esc(persona.role || '')} · patience ${esc(persona.patience)} · empathy ${esc(persona.empathy)}</p>
-      <div class="header-counts"><b>${summary.pipeline.trajectory_count}</b> rollout <b>${summary.task_count}</b> task <b>${summary.trigger_count}</b> video</div>
+      <div class="header-counts"><b>1</b> 最终 rollout <b>${state.detail.rollouts?.length || 0}</b> 人工候选 <b>${summary.task_count}</b> task <b>${summary.trigger_count}</b> video</div>
     </div>`;
 }
 
@@ -266,8 +272,11 @@ function renderScenarioView() {
         const conditions = Object.entries(trigger.conditions || {}).map(([key, value]) =>
           `<span>${esc(key)} ${esc(value.operator)} <b>${esc(value.threshold)}</b></span>`
         ).join('');
+        const changes = Object.entries(trigger.change_conditions || {}).map(([key, value]) =>
+          `<span>Δ ${esc(key)} ${esc(value.operator)} <b>${esc(value.threshold)}</b></span>`
+        ).join('');
         return `<article class="trigger-card"><div class="trigger-title"><strong>${esc(trigger.trigger_id)}</strong><span>${esc(trigger.trigger_mode)}</span></div>
-          <div class="condition-list">${conditions}</div>
+          <div class="condition-list">${conditions}${changes}</div>
           <p>${esc(trigger.observable_expression?.facial_expression)} · ${esc(trigger.observable_expression?.prosody)}</p>
           ${asset ? `<video controls preload="metadata" src="${esc(asset.url)}"></video><small>${esc(asset.utterance)} · ${esc(asset.duration_seconds)}s</small>` : '<div class="media-pending">视频未生成</div>'}
         </article>`;
@@ -292,32 +301,67 @@ function deltaChips(delta) {
     : '<span class="muted">本轮无数值变化</span>';
 }
 
+function scoreGrid(screening) {
+  const scores = screening?.scores || {};
+  return `<div class="score-grid">${Object.entries(scores).map(([key, value]) =>
+    `<div><span>${esc(label(key))}</span><strong>${esc(value)}</strong><small>/ 5</small></div>`
+  ).join('')}</div>`;
+}
+
+function screeningEvidence(screening) {
+  if (!screening) return '<div class="empty">该轨迹没有协议筛选记录</div>';
+  const evidence = screening.turn_evidence || {};
+  const reasons = screening.human_review_reasons || [];
+  return `<section class="panel content-panel screening-panel">
+    <div class="screening-title">
+      <div><div class="section-kicker">SCREENING PROTOCOL V1</div><h3>自动筛选证据</h3></div>
+      <div class="screening-badges">
+        <span class="decision ${esc(screening.automatic_decision?.toLowerCase())}">${esc(screening.automatic_decision)}</span>
+        ${screening.provisional_selected ? '<span class="decision winner">建议赢家 · 待人工确认</span>' : ''}
+      </div>
+    </div>
+    ${scoreGrid(screening)}
+    <div class="screening-facts">
+      <div><span>均分</span><strong>${esc(screening.mean_quality_score ?? '缺失')}</strong></div>
+      <div><span>来源阶段</span><strong>${esc(screening.source_stage)}</strong></div>
+      <div><span>演化结果</span><strong>${esc(screening.observed_outcome)}</strong></div>
+      <div><span>Judge 证据</span><strong>${evidence.judge_turn_evidence_complete ? 'turn-ID 完整' : '缺 turn-ID'}</strong></div>
+    </div>
+    <div class="evidence-copy"><b>Judge 理由</b><p>${esc(screening.judge_rationale || '没有可用 Judge 理由')}</p></div>
+    <div class="evidence-copy"><b>历史证据</b><p>关键事件：${esc((evidence.history_probe_critical_events || []).join(', ') || '缺失')} · checkpoint：${esc(evidence.history_probe_checkpoint || '缺失')}</p></div>
+    <div class="audit-callout"><b>为什么需要人工看</b>${reasons.length ? `<ul>${reasons.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>` : '<p>不在协议人工队列。</p>'}</div>
+    ${(screening.hard_failures || []).length ? `<div class="hard-list"><b>Hard reject</b>${screening.hard_failures.map((item) => `<span>${esc(label(item))}</span>`).join('')}</div>` : ''}
+  </section>`;
+}
+
 function renderRolloutView() {
   const rollouts = state.detail.rollouts || [];
   const trajectory = rollouts.find((item) => item.trajectory_id === state.trajectoryId) || rollouts[0];
   if (!trajectory) {
     $('#viewToolbar').innerHTML = '';
-    $('#viewContent').innerHTML = '<div class="empty">没有 rollout</div>';
+    $('#viewContent').innerHTML = '<div class="empty">没有需要人工审核的 rollout</div>';
     $('#annotationPanel').innerHTML = '';
     return;
   }
   state.trajectoryId = trajectory.trajectory_id;
   const index = rollouts.indexOf(trajectory);
   const provenance = trajectory.policy_provenance || {};
+  const screening = trajectory.screening || {};
   $('#viewToolbar').innerHTML = `
     <div class="toolbar-group">
       <button class="icon-button" data-nav-rollout="-1" ${index === 0 ? 'disabled' : ''}>←</button>
-      <select id="trajectorySelect">${rollouts.map((item, i) => `<option value="${esc(item.trajectory_id)}" ${item.trajectory_id === trajectory.trajectory_id ? 'selected' : ''}>轨迹 ${i + 1} · ${esc(item.policy_id || item.policy_provenance?.model)}</option>`).join('')}</select>
+      <select id="trajectorySelect">${rollouts.map((item, i) => `<option value="${esc(item.trajectory_id)}" ${item.trajectory_id === trajectory.trajectory_id ? 'selected' : ''}>${i + 1}/${rollouts.length} · ${item.screening?.provisional_selected ? '★ ' : ''}${esc(item.screening?.automatic_decision || 'PENDING')} · ${esc(item.policy_id || item.policy_provenance?.model)}</option>`).join('')}</select>
       <button class="icon-button" data-nav-rollout="1" ${index === rollouts.length - 1 ? 'disabled' : ''}>→</button>
     </div>
-    <div class="toolbar-note mono">${esc(trajectory.trajectory_id)} · seed ${esc(provenance.sampling?.seed ?? '—')}</div>`;
+    <div class="toolbar-note mono">全部人工候选均在此 · ${esc(trajectory.trajectory_id)}</div>`;
   $('#viewContent').innerHTML = `
     <section class="rollout-summary panel">
       <div><span>模型</span><strong>${esc(provenance.model || trajectory.policy_id)}</strong></div>
       <div><span>轮数</span><strong>${trajectory.turns?.length || 0}</strong></div>
-      <div><span>终止状态</span><strong>${esc(trajectory.status || trajectory.termination_reason || 'active')}</strong></div>
-      <div><span>来源</span><strong>free-form</strong></div>
+      <div><span>自动决策</span><strong>${esc(screening.automatic_decision || 'PENDING')}</strong></div>
+      <div><span>最终池</span><strong>${screening.provisional_selected ? '建议保留 1 条' : '候选/审计档案'}</strong></div>
     </section>
+    ${screeningEvidence(screening)}
     <section class="trajectory">${(trajectory.turns || []).map((turn) => `
       <article class="turn-card">
         <header><b>${esc(turn.turn_id)}</b><span>${(turn.trigger_events || []).length ? 'VIDEO TRIGGER' : 'STATEFUL TURN'}</span></header>
@@ -361,8 +405,13 @@ function observationCard(observation, title = '当前可观察信息') {
 function renderTaskBody(task) {
   const input = task.input || {};
   const targets = task.target_spec?.target_state_ids || [];
+  const selection = state.detail.task_source_selection || {};
+  const taskKey = task.task_type.startsWith("T1_") ? "t1" : task.task_type.startsWith("T2_") ? "t2" : "t3";
+  const sourceIds = task.metadata?.source_trajectory_ids || [task.metadata?.source_trajectory_id].filter(Boolean);
+  const sourceScores = selection.scores?.[taskKey] || {};
+  const sourceAudit = "<div class=\"task-source-note\"><b>任务专项选源</b><span>先过质量门；模型不计分、无配额</span><small>" + sourceIds.map((id) => esc(id) + " · " + esc(sourceScores[id] ?? "pair-level")).join("<br>") + "</small></div>";
   const heading = `<div class="task-heading"><div><div class="section-kicker">${esc(task.task_type)}</div><h3>${esc(task.instance_id)}</h3></div>
-    <div class="target-chips">${targets.map((item) => `<span>${esc(item)}</span>`).join('')}</div></div>`;
+    <div class="target-chips">${targets.map((item) => `<span>${esc(item)}</span>`).join('')}</div></div>` + sourceAudit;
 
   if (task.task_type === 'T1_state_tracking') {
     return `<section class="panel content-panel">${heading}<p class="instruction">阅读截至检查点的公开对话，判断目标环境角色当前各状态的强度，并写出对话证据。</p>
@@ -452,6 +501,15 @@ function notesField(kind, id, record, title = '审核备注') {
 function renderScenarioAnnotation() {
   const id = state.scenarioId;
   const record = currentRecord('scenario', id);
+  const media = state.detail.media_assets || [];
+  const mediaChecks = media.map((asset) => {
+    const mediaRecord = currentRecord('media', asset.asset_id);
+    return `<details class="media-review"><summary>${esc(asset.trigger_label)} · ${esc(asset.status)}</summary>
+      ${annotationHeader('视频审核', 'media', asset.asset_id, mediaRecord)}
+      ${['expression_state_consistency','temporal_continuity','speech_naturalness','multimodal_utility'].map((key) => `<label class="check-line"><input type="checkbox" data-kind="media" data-id="${esc(asset.asset_id)}" data-path="checks/${key}" ${mediaRecord.checks?.[key] ? 'checked' : ''}> ${esc(label(key))}</label>`).join('')}
+      ${notesField('media', asset.asset_id, mediaRecord, '视频问题与证据')}
+    </details>`;
+  }).join('');
   $('#annotationPanel').innerHTML = `${annotationHeader('Scenario 审核', 'scenario', id, record)}
     <div class="form-section"><h4>核心质量 · 1–5</h4>${ratingRows('scenario', id, state.contract.scenario_rating_scale.dimensions, record)}</div>
     <div class="form-section"><h4>Gate 1 检查</h4>${triStateRows('scenario', id, state.contract.scenario_checks, record)}</div>
@@ -460,15 +518,28 @@ function renderScenarioAnnotation() {
       <label class="check-line"><input type="checkbox" data-kind="scenario" data-id="${esc(id)}" data-path="freeze/d0_reviewed" ${record.freeze?.d0_reviewed ? 'checked' : ''}> D0 动力合理</label>
       <label class="check-line"><input type="checkbox" data-kind="scenario" data-id="${esc(id)}" data-path="freeze/triggers_reviewed" ${record.freeze?.triggers_reviewed ? 'checked' : ''}> 视频阈值可达且不在初始状态误触发</label>
     </div>
-    ${notesField('scenario', id, record)}`;
+    ${notesField('scenario', id, record)}
+    <div class="form-section"><h4>Talking Head 逐视频审核</h4>${mediaChecks || '<div class="empty">没有视频资产</div>'}</div>`;
 }
 
 function renderRolloutAnnotation(trajectory) {
   const id = trajectory.trajectory_id;
   const record = currentRecord('rollout', id);
-  $('#annotationPanel').innerHTML = `${annotationHeader('Rollout 审核', 'rollout', id, record)}
-    <div class="form-section"><h4>六维质量 · 1–5</h4>${ratingRows('rollout', id, state.contract.rollout_quality_dimensions, record)}</div>
-    <div class="form-section"><h4>Hard reject</h4>
+  const auto = trajectory.screening || {};
+  const selected = record.selection?.selected ?? auto.provisional_selected;
+  $('#annotationPanel').innerHTML = `${annotationHeader('Rollout 协议审核', 'rollout', id, record)}
+    <button class="button ${selected ? 'primary' : ''} wide" data-select-winner="${esc(id)}">${selected ? '✓ 当前场景保留此条' : '将此条设为场景唯一赢家'}</button>
+    <p class="selection-warning">选择另一条会自动取消本场景此前的选择；导出后仍需实名、时间和哈希绑定。</p>
+    <div class="form-section"><h4>协议五问</h4>
+      <label class="form-row"><span>1. 自动 decision 正确吗</span><select data-kind="rollout" data-id="${esc(id)}" data-path="audit/automatic_decision_correct">
+        ${[['','待判断'],['yes','正确'],['no','错误'],['unsure','不确定']].map(([v,t]) => `<option value="${v}" ${record.audit?.automatic_decision_correct === v ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
+      <div class="dimension-checks"><span>2. 哪些 dimension 判断错了</span>${state.contract.rollout_quality_dimensions.map((key) => `<label class="check-line"><input type="checkbox" data-kind="rollout" data-id="${esc(id)}" data-path="audit/incorrect_dimensions/${esc(key)}" ${record.audit?.incorrect_dimensions?.[key] ? 'checked' : ''}>${esc(label(key))}</label>`).join('')}</div>
+      <label class="notes-field compact"><span>3. 错误原因</span><textarea data-kind="rollout" data-id="${esc(id)}" data-path="audit/error_reason">${esc(record.audit?.error_reason || '')}</textarea></label>
+      <label class="form-row"><span>4. 单例还是系统问题</span><select data-kind="rollout" data-id="${esc(id)}" data-path="audit/issue_scope">${[['','待判断'],['isolated','单例'],['systematic','系统性'],['none','无错误']].map(([v,t]) => `<option value="${v}" ${record.audit?.issue_scope === v ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
+      <label class="notes-field compact"><span>5. rule / prompt 应如何修改</span><textarea data-kind="rollout" data-id="${esc(id)}" data-path="audit/rule_or_prompt_revision">${esc(record.audit?.rule_or_prompt_revision || '')}</textarea></label>
+    </div>
+    <div class="form-section"><h4>人工六维复评分 · 1–5</h4>${ratingRows('rollout', id, state.contract.rollout_quality_dimensions, record)}</div>
+    <div class="form-section"><h4>Hard reject 复核</h4>
       ${state.contract.rollout_hard_reject_reasons.map((key) => `<label class="check-line danger"><input type="checkbox" data-kind="rollout" data-id="${esc(id)}" data-path="hard_rejects/${esc(key)}" ${record.hard_rejects?.[key] ? 'checked' : ''}> ${esc(label(key))}</label>`).join('')}
     </div>
     <div class="form-section"><h4>观察到的演化结果</h4>
@@ -512,6 +583,20 @@ function renderTaskAnnotation(task) {
     ${notesField('task', id, record)}`;
 }
 
+function renderManualReviewView() {
+  const review = state.data.manual_review || {};
+  $('#viewToolbar').innerHTML = '<div><span class="toolbar-title">完整人工工作面</span><span class="toolbar-note">可做、未生成、被前序 Gate 阻塞的项目全部列出</span></div>';
+  $('#viewContent').innerHTML = `<section class="manual-grid">${(review.categories || []).map((item) => `
+    <article class="panel manual-card"><div class="screening-title"><h3>${esc(item.title)}</h3><span class="decision review">${esc(item.status)}</span></div>
+      <p>${esc(item.description)}</p><div class="manual-count"><strong>${esc(item.available)}</strong><span>/ ${esc(item.required)} 可用</span></div><small>查看位置：${esc(item.location)}</small></article>`).join('')}</section>
+    <section class="panel content-panel"><div class="section-kicker">GATE 2 FILES</div><h3>Environment 人工证据</h3>
+      <div class="file-status-list">${Object.entries(review.environment_files || {}).map(([name, value]) => `<div><code>${esc(name)}</code><span>${value.human_attestation ? '已实名签署' : value.exists ? '文件存在但未人工通过' : '尚未生成'}</span></div>`).join('')}</div></section>
+    <details class="panel document-panel"><summary>SocialFlux Rollout Screening Protocol v1 全文</summary><pre>${esc(review.protocol_document || '')}</pre></details>`;
+  $('#annotationPanel').innerHTML = `<div class="annotation-head"><div><div class="section-kicker">NO HIDDEN TODO</div><h3>人工审核边界</h3></div></div>
+    <p class="annotation-copy">本页列出所有人工阶段。具体情节、轨迹、题目和视频在对应页面直接标注；尚未生成的 E1–E5、holdout 和 formal GT 仍显示为 pending，不会从界面消失。</p>
+    <div class="audit-callout"><b>推荐顺序</b><ol><li>Gate 1 冻结 scenario/S0/D0</li><li>完成 Gate 2 E1–E5</li><li>审核 rollout 协议队列并每场景确认 1 条</li><li>重建正式 tasks 后做 Gate 4</li><li>三人盲标、仲裁与 agreement</li></ol></div>`;
+}
+
 function renderMaterialsView() {
   $('#viewToolbar').innerHTML = '<div><span class="toolbar-title">生成材料</span><span class="toolbar-note">用于复核，不直接作为正式答案</span></div>';
   $('#viewContent').innerHTML = `
@@ -529,6 +614,7 @@ function renderCurrentView() {
   if (state.view === 'scenario') renderScenarioView();
   if (state.view === 'rollout') renderRolloutView();
   if (state.view === 'task') renderTaskView();
+  if (state.view === 'manual') renderManualReviewView();
   if (state.view === 'materials') renderMaterialsView();
 }
 
@@ -596,6 +682,15 @@ document.addEventListener('click', async (event) => {
     updateRecord(statusButton.dataset.kind, statusButton.dataset.id, 'status', statusButton.dataset.status);
     renderCurrentView();
     showToast('状态已保存到当前浏览器');
+    return;
+  }
+  const winnerButton = event.target.closest('[data-select-winner]');
+  if (winnerButton) {
+    (state.detail.rollouts || []).forEach((item) => {
+      updateRecord('rollout', item.trajectory_id, 'selection/selected', item.trajectory_id === winnerButton.dataset.selectWinner);
+    });
+    renderRolloutView();
+    showToast('本场景唯一赢家已更新到浏览器草稿');
     return;
   }
   const rolloutNav = event.target.closest('[data-nav-rollout]');

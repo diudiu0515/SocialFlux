@@ -20,7 +20,9 @@ def branch_counterfactuals(
         environment = environment_factory()
         policy = continuation_policy_factory()
         last_error = None
-        for branch_attempt in range(6):
+        # Each response already performs up to 4 distinct-text attempts.
+        # Two snapshot replays are enough before trying the next checkpoint.
+        for branch_attempt in range(2):
             environment.restore(
                 snapshot,
                 episode_id=f"local-branch-{branch_index}-attempt-{branch_attempt}",

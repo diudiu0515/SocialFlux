@@ -4,9 +4,9 @@
 
 > 勾选标准：必须有可复核的代码、产物或测试证据。标明需要真人审核、标注员、真实模型 API 或视频资产的条目，在没有对应记录前不勾选。
 
-> 最后自查：2026-09-07。
+> 最后自查：2026-09-08。
 
-> 本轮记录：20/20 scenario 的开发池已完成自然 rollout、筛选与 T1/T2/T3 实际提取；活跃池共 60 条轨迹（Qwen3.5-9B 42、Qwen3-32B 16、GLM-4-9B 2），最终双 Judge 与受控 history probe 为 60/60，按最终 ID 重建 180 个 instance（T1=120、T2=40、T3=20），结构门 180/180，20/20 均有 `dialogues.md` 和 `tasks.md`。EchoMimicV2 已生成 40/40 MP4 并通过媒体自动验收；视频语义观感、S0/D0 freeze、Gate 2 人工证据、正式 20×12 异构池与正式研究验收仍保持未完成。本轮全量结果为 core 138/138、web 5/5；scenario/rollout/task 标注网站已部署在 127.0.0.1:8000，草稿本地保存并可导出 JSON。
+> 本轮记录：Protocol v1 已审计 184 条可恢复 rollout（60 active、124 archive），自动判定 PASS=64、REVIEW=108、REJECT=12，并为 20/20 scenario 各产生 1 条 provisional winner；旧 Judge 缺逐维 turn-ID 证据且唯一赢家未人工确认，因此 184/184 全部进入网站人工队列，未冒充 formal selected。活跃开发池仍是 60 条（Qwen3.5-9B 42、Qwen3-32B 16、GLM-4-9B 2）；按最终 active ID 构建 180 个 instance（T1=120、T2=40、T3=20），20 个 T3 均有三条完整 5-turn 分支。EchoMimicV2 已生成 40/40 MP4 并通过机器媒体验收；视频语义观感、S0/D0 freeze、Gate 2 人工证据、正式 20×12→每场景 1 条异构池与正式研究验收仍未完成。本轮工程验证为 core 149/149、web 7/7、scenario docs 20/20、diff check 与 API/page smoke 通过；新版网站监听 127.0.0.1:8000，草稿本地保存并可导出 JSON。
 
 ## Revision v2 工程自查
 
@@ -18,15 +18,17 @@
 | R4 Scenario review gates | quality 人工批准后 normalization，S0/D0 单独 candidate→freeze | [x] |
 | R5 Rollout-derived tasks | T1 natural checkpoint、T2 natural histories+O*、T3 real checkpoint local branch | [x] |
 | R6 九项验收 scaffold | 报告固定九项且无证据不标 pass | [x] |
-| R7 Prompt/schema audit | 23 个固定 prompt、hash manifest、职责/边界/schema linkage | [x] |
-| R8 真实自然 trajectory pool | 多模型、多 temperature/seed API rollout | [ ] |
+| R7 Prompt/schema audit | 24 个固定 prompt、hash manifest、职责/边界/schema linkage；rollout Judge v2 强制逐维 turn-ID 证据 | [x] |
+| R8 真实自然 trajectory pool | 开发池已完成多模型、多 temperature/seed 的真实自由 rollout；正式 20×12 池单列于 G11 | [x] |
 | R9 正式研究验收 | 九项真人/模型实验与 adjudication 全部完成 | [ ] |
 | R10 影视结构原创化 | 影视来源只抽象高层社会机制；新增 10 个原创 scenario 且不复制角色、台词或情节序列 | [x] |
 | R11 Instance target/quality | T1/T2/T3 指向 environment character；结构审计与盲化语义质量协议可运行 | [x] |
-| R12 GPT–Qwen rollout 对照 | 同 environment/construction、匹配 scenario/seed 后比较任务质量；Qwen 已跑，GPT 凭据缺失 | [ ] |
+| R12 GPT–Qwen rollout 对照 | 同 environment/construction、匹配 scenario/seed 后比较任务质量；Qwen 已跑，GPT 匹配运行与盲审结果尚未落盘 | [ ] |
 | R13 Qwen rollout pilot | IA_PIPE_011 两个 seeds、6 turns、T1/T2/T3、质量报告与九项 gate 可复核 | [x] |
 | R14 20-scenario 抽查包 | 每个 scenario 3 seeds rollout、T1/T2/T3、dialogues.md、tasks.md 与逐场景 bundle audit | [x] |
-| R15 人工标注网站 | 可视化 20 个情节、60 条 rollout、180 个 T1/T2/T3 与视频；本地草稿、进度和 JSON 导出 | [x] |
+| R15 人工标注网站 | 可视化 20 个情节、完整人工 rollout 队列、180 个 T1/T2/T3、视频与所有人工 Gate 状态；本地草稿、进度和 JSON 导出 | [x] |
+| R16 Screening Protocol v1 | 精确三态阈值、10 项 hard reject、184 条审计库存、每场景 1 条 provisional winner 与协议五问均有代码/报告/网站证据 | [x] |
+| R17 文档与论文证据整理 | `docs/` 分类索引、Prompt catalog、paper evidence index、当前/归档实验分层、内部链接检查；无审计价值垃圾已清除 | [x] |
 
 ## gate.md 正式数据约束自查
 
@@ -35,15 +37,36 @@
 | G1 自由轨迹来源 | 同一 stateful environment、无预定义策略、T1/T2/T3 只从完整轨迹派生 | [x] |
 | G2 模型池合同 | 至少三本地模型族、至少一个 20–40B、每场景 12 runs、API ≤30% | [ ] |
 | G3 开发/正式隔离 | formal_raw 独立目录、旧 Qwen3.5 开发轨迹不能进入 final | [x] |
-| G4 六维与 hard reject | 六维独立评分、缺证据 pending、七类 gate.md hard reject 及更严格逻辑错误拒绝 | [x] |
-| G5 Post-hoc diversity | rollout 后 outcome 标注、近重复过滤、每场景保留 4–6 条 | [ ] |
+| G4 六维与 hard reject | 六维独立评分、缺证据 pending、Protocol v1 十类 hard reject 与确定性三态阈值 | [x] |
+| G5 Post-hoc selection | rollout 后 outcome 标注、近重复过滤、全局多样性报告、每场景人工确认 1 条 | [ ] |
 | G6 History dependence | 同 checkpoint 的 Full / Recent-k / Critical-event-removed 同时比较 evaluated action 与 environment interpretation，正式轨迹必须有证据 | [x] |
 | G7 双 Judge | 全量主审 + 跨模型族分层/边缘二审，缺二审不能合并完成 | [x] |
 | G8 Backbone sensitivity | 同 checkpoint/action 在两个 environment backbone 重放并设方向阈值 | [ ] |
 | G9 真人签名边界 | scenario/S0-D0 与精确 JSON hash 绑定；Gate 2 要求实名/时间戳；自动化不能签名 | [x] |
 | G10 Gate 4 + Formal human GT | T1/T2/T3 专属逐项人工清单；三人盲标、agreement、分歧真人 adjudication 的工具与强制校验 | [x] |
 | G11 正式异构 raw pool | 20 × 12 本地真实 rollout 产物通过配置/来源审计 | [ ] |
-| G12 正式发布证据 | 4–6 selected、双 Judge、history/backbone、human GT 全部通过 `verify_gate_md.py --strict` | [ ] |
+| G12 正式发布证据 | 每场景 1 条 human-confirmed selected、双 Judge、history/backbone、human GT 全部通过 `verify_gate_md.py --strict` | [ ] |
+
+## 当前剩余 TODO（按阻塞顺序）
+
+以下是长表的执行视图，不替代也不删除后面的历史条目。自动推荐不等于人工通过；浏览器草稿导出后仍需进入签名 registry/正式证据文件。
+
+- [x] 按 Screening Protocol v1 建立 184 条全库存、三态判定、六维分数、10 项 hard reject 和确定性抽审队列。
+- [x] 为 20 个 scenario 各物化 1 条 provisional canonical rollout；原始与淘汰轨迹保留在 audit archive，不进入 canonical pool。
+- [x] 网站展示全部 184 条待人工 rollout、180 个开发任务、40 个视频和八类人工 Gate；可逐场景改选唯一赢家并导出草稿。
+- [x] 新 rollout Judge prompt/schema 固定逐维 1–3 个有效 turn ID；caller 验证引用，旧证据统一显示 warning。
+- [x] 大模型升级方案已写入 formal runbook：Qwen3.5 environment-only，正式 pilot 比较 Qwen3-32B、可部署的 GLM-4-32B 与 DeepSeek 模型族。
+- [x] Markdown 已按架构、协议、操作、Prompt、设计输入和论文证据归档；中间实验留痕移入 archive，运行时 Prompt 与历史设计稿明确隔离。
+- [ ] **P0 人工：**审核 20 个 scenario 的来源、原创性、六维质量和 S0/D0，并生成真实 reviewer 签名与精确 hash 绑定的 freeze registry。
+- [ ] **P0 人工：**在网站核验 184 条 rollout；回答协议五问，比较每场景 active candidates，并确认 20 个唯一赢家。
+- [ ] **P0 人工：**逐条检查 40 个视频的 expression–state consistency、temporal continuity、speech naturalness 与 multimodal utility。
+- [ ] **P0 Gate 2：**完成 E1–E6 环境证据；其中 state update 与 full trajectory plausibility 必须三人标注，自动脚本不能代签。
+- [ ] **P1 模型 pilot：**部署并记录 GLM-4-32B 量化服务的显存、吞吐和失败证据；在相同 scenario/seed/budget 下与 Qwen3-32B、DeepSeek 做盲审比较。
+- [ ] **P1 正式 raw：**Gate 1/2 通过后生成 20×12=240 条 environment/policy 分离、三模型族自然 rollout，不复用旧开发轨迹。
+- [ ] **P1 正式筛选：**对 240 条使用 Judge v2、跨族二审、history intervention、backbone sensitivity 和 Protocol v1；人工确认后每场景仅留 1 条。
+- [ ] **P1 Gate 4：**从正式 selected pool 构建 T1/T2/T3；T2 的第二历史只能作为通过 Gate 3 与人工审核的 task-local auxiliary history。
+- [ ] **P1 正式 GT：**T1/T2/T3 三人盲标、agreement、分歧 adjudication，并通过 `verify_gate_md.py --strict`。
+- [ ] **P2 发布：**完成 filter-dev/holdout、重复与泄漏、template artifact、影视来源/模型污染人工审核和 benchmark freeze。
 
 | Phase | 模块 | 具体要做什么 | 产物 | 是否人工 | 优先级 | 自查 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -54,7 +77,7 @@
 | 0 | Episode | 定义 max turns、提前结束、关系破裂、goal achieved 等 termination | termination spec | 人工设计 | 🔴 | [ ] |
 | **1** | Scenario Schema | Persona / Background / Goal / Hidden Intention / state subset / triggers schema | `scenario.schema.json` | 否 | 🔴 | [x] |
 | 1 | Scenario 01 | 完整制作第一个 scenario（可继续用 authorship conflict） | `scenario_01.yaml` | 人工审核 | 🔴 | [ ] |
-| 1 | Initial State | 根据 scenario 生成 candidate \(S_0,D_0\) | candidate state | 是 |  | [ ] |
+| 1 | Initial State | 根据 scenario 生成 candidate \(S_0,D_0\) | candidate state | 是 |  | [x] |
 | 1 | Initial State | 人工 review → freeze \(S_0,D_0\) | frozen initial state | 是 | 🔴 | [ ] |
 | **2** | Provider | OpenAI-compatible / Anthropic / Gemini / vLLM 等统一接口 | `providers/` | 否 | 🔴 | [x] |
 | 2 | Policy | `policy.generate(observation)` | policy abstraction | 否 | 🔴 | [x] |

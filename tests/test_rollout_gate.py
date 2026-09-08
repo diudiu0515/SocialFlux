@@ -110,23 +110,23 @@ class RolloutGateTest(unittest.TestCase):
             for family in ("qwen", "glm", "deepseek"):
                 items.extend(trajectory(i, family, scenario=scenario) for i in range(4))
         selected = {
-            scenario: [item for item in items if item["scenario_id"] == scenario][:4]
+            scenario: [item for item in items if item["scenario_id"] == scenario][:1]
             for scenario in ("IA_PIPE_001", "IA_PIPE_002")
         }
         result = audit_pool_contract(items, selected)
         self.assertTrue(result["passed"])
         self.assertEqual(result["api_fraction"], 0.0)
 
-    def test_selected_pool_uses_four_to_six_instead_of_raw_twelve(self):
+    def test_selected_pool_keeps_exactly_one_instead_of_raw_twelve(self):
         items = [trajectory(i, ("qwen", "glm", "deepseek")[i % 3]) for i in range(6)]
         result = audit_pool_contract(
             items,
-            {"IA_PIPE_001": items},
+            {"IA_PIPE_001": items[:1]},
             require_raw_minimum=False,
         )
         self.assertTrue(result["passed"])
 
-    def test_diversity_selector_keeps_four_to_six(self):
+    def test_selector_keeps_one_quality_first_winner(self):
         items = [trajectory(i, ("qwen", "glm", "deepseek")[i % 3]) for i in range(8)]
         items[0]["turns"][-1]["policy_action"]["text"] = "如果仍无法核验，我会离开这次协商。"
         audits = []
@@ -140,10 +140,23 @@ class RolloutGateTest(unittest.TestCase):
             audits.append(record)
         result = select_diverse_trajectories(items, audits)
         self.assertTrue(result["passed"])
-        self.assertGreaterEqual(len(result["selected_ids"]), 4)
-        self.assertLessEqual(len(result["selected_ids"]), 6)
-        self.assertGreaterEqual(len(result["model_families"]), 3)
-        self.assertGreaterEqual(len(set(result["observed_outcomes"])), 2)
+        self.assertEqual(len(result["selected_ids"]), 1)
+        self.assertEqual(result["selected_ids"][0], items[0]["trajectory_id"])
+        self.assertFalse(result["model_quota"])
+
+    def test_diversity_selector_does_not_force_model_balance(self):
+        items = [trajectory(i, "qwen" if i < 6 else "glm") for i in range(8)]
+        items[0]["turns"][-1]["policy_action"]["text"] = "我决定离开并结束这次沟通。"
+        audits = []
+        for index, item in enumerate(items):
+            record = audit_rollout(
+                item, judgment(item), {"passed": True, "score": 0.8}
+            )
+            record["overall_score"] = 0.95 - 0.01 * index
+            audits.append(record)
+        result = select_diverse_trajectories(items, audits)
+        self.assertTrue(result["passed"])
+        self.assertEqual(result["model_families"], ["qwen"])
 
     def test_judge_packet_excludes_private_state(self):
         packet = public_judge_packet(trajectory(), {

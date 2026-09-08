@@ -1,7 +1,8 @@
 # SocialFlux Annotation Studio
 
-网站是当前 20 个 canonical scenario、60 条自然 rollout 与 180 个 T1/T2/T3
-实例的只读可视化和人工标注草稿工作台。它读取
+网站是 20 个 canonical scenario、完整 Rollout Screening 人工队列与 180 个 T1/T2/T3
+开发实例的只读可视化和人工标注草稿工作台。当前筛选库存 184 条，每场景最终只保留
+1 条建议赢家，但在真人比较确认前保持 provisional。它读取
 `configs/scenarios/scenario_NNN/`、`build/pipeline_v2/` 和 Talking Head
 资产，不复制或修改环境状态机。
 

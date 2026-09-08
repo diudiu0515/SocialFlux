@@ -149,7 +149,7 @@ class PipelineContractTest(unittest.TestCase):
         self.assertEqual(config["pilot_limits"], {
             "rollout_turns": 6, "t1": 6, "t2": 2, "t3": 1, "t3_horizon": 5,
         })
-        self.assertEqual(config["t2_pairing"], "within_source_model")
+        self.assertEqual(config["t2_pairing"], "all")
 
     def test_model_comparison_config_is_a_matched_pilot(self):
         config = load_rollout_config("configs/rollout_comparison.example.json")

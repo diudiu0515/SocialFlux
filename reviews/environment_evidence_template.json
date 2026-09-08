@@ -1,5 +1,5 @@
 {
-  "instructions": "Split these records into the six filenames required by quality_gate.md. Null/false placeholders must be replaced by real experiment and human-review evidence; do not set human_attestation unless the named humans performed the review.",
+  "instructions": "Split these records into the six filenames required by docs/protocols/quality_gate.md. Null/false placeholders must be replaced by real experiment and human-review evidence; do not set human_attestation unless the named humans performed the review.",
   "state_transition_agreement.json": {
     "record": {"human_attestation": false, "reviewers": [], "reviewed_at_utc": "", "annotator_count": 0, "transition_count": 0, "agreement": null}
   },

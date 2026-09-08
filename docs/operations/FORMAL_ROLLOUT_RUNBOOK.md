@@ -1,7 +1,7 @@
 # SocialFlux Formal Rollout Runbook
 
 This runbook is the only supported order for producing `formal_selected`
-trajectories and formal T1/T2/T3 ground truth under `gate.md`.
+trajectories and formal T1/T2/T3 ground truth under [`gate.md`](../protocols/gate.md).
 
 ## 0. Human freeze (blocking prerequisite)
 
@@ -92,6 +92,21 @@ CUDA_VISIBLE_DEVICES=3 python scripts/local_transformers_chat_server.py \
 The Qwen3.5-9B service is the stateful environment/construction backbone. The
 rollout policies are Qwen3-32B-AWQ, GLM-4-9B and DeepSeek-V2-Lite-Chat, four seeds
 each. No repair/neutral/escalation policy is supplied.
+
+This is the reproducible local baseline, not a claim that 9B is the best policy.
+Before the formal run, execute a matched pilot that replaces GLM-4-9B with a
+quantized GLM-4-32B deployment if it fits and passes service tests. Keep
+Qwen3-32B as the Qwen family, and keep four DeepSeek-family seeds; up to 30% of
+the total raw pool may use a larger DeepSeek API model only when credentials and
+provenance are available. Qwen3.5-9B remains environment-only in every formal
+variant. Compare models using the same scenario, seeds, sampling budget, Judge
+contract and human blind review; parameter count is not a selection score.
+
+Do not silently substitute a 235B/671B MoE model into this four-service layout.
+Activated parameters describe per-token computation, while serving still needs
+the full model weights distributed across devices. Record GPU memory, parallel
+layout, quantization, throughput and failures for any larger-model pilot before
+changing `configs/formal_rollout_pool.local.json`.
 
 ## 2. Generate isolated raw trajectories
 
@@ -194,9 +209,7 @@ python scripts/audit_formal_rollout_pool.py \
 ```
 
 Only trajectories passing six independent dimensions and all hard rejects are
-eligible. Outcome labels are inferred after rollout. Near-duplicate filtering
-keeps 4–6 trajectories per scenario while seeking model-family/outcome
-coverage. `selected` is not written unless the complete formal gate passes.
+eligible. Outcome labels are inferred after rollout. Near-duplicate filtering ranks candidates and keeps exactly one human-confirmed canonical trajectory per scenario. All candidates and rejection evidence remain in the audit archive; model family is reported but never quota-enforced. Afterward T1/T2/T3 rank eligible sources independently; one model may win none or all tasks. `selected` is not written unless the complete formal gate passes.
 
 ## 5. Build tasks and establish human-only GT
 

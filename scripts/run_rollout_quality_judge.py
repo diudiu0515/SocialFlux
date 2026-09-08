@@ -19,8 +19,8 @@ from scripts.audit_formal_rollout_pool import load_records
 from scripts.run_pipeline import load_scenarios
 
 
-def validate(value, trajectory_id):
-    semantic_fields = {"scores", "hard_reject_reasons", "rationale"}
+def validate(value, trajectory_id, valid_turn_ids=None):
+    semantic_fields = {"scores", "hard_reject_reasons", "evidence", "rationale"}
     if set(value) not in (semantic_fields, semantic_fields | {"trajectory_id"}):
         raise ValueError("quality judgment fields mismatch")
     # Record identity is caller-owned provenance. Never trust or require the
@@ -33,6 +33,17 @@ def validate(value, trajectory_id):
         raise ValueError("quality scores must be integer 1..5")
     if set(value["hard_reject_reasons"]) - set(HARD_REJECT_REASONS):
         raise ValueError("quality judgment contains unknown hard reject")
+    if set(value["evidence"]) != set(QUALITY_DIMENSIONS):
+        raise ValueError("quality judgment evidence dimensions mismatch")
+    allowed = set(valid_turn_ids or [])
+    for dimension, turn_ids in value["evidence"].items():
+        if (
+            not isinstance(turn_ids, list) or not 1 <= len(turn_ids) <= 3
+            or len(set(turn_ids)) != len(turn_ids)
+            or not all(isinstance(item, str) and item.startswith("t") and item[1:].isdigit() for item in turn_ids)
+            or (allowed and not set(turn_ids) <= allowed)
+        ):
+            raise ValueError(f"quality judgment has invalid turn evidence: {dimension}")
     if not str(value["rationale"]).strip():
         raise ValueError("quality judgment rationale is empty")
     return value
@@ -97,7 +108,7 @@ def main():
         if selected_ids is not None and trajectory_id not in selected_ids:
             continue
         prompt = render_prompt(
-            "rollout_quality_judge_v1",
+            "rollout_quality_judge_v2",
             public_judge_packet(trajectory, scenarios[trajectory["scenario_id"]]),
         )
         reset = getattr(provider, "reset", None)
@@ -107,7 +118,9 @@ def main():
             provider,
             [{"role": "user", "content": prompt}],
             deterministic_judge_sampling(sampling, trajectory_id),
-            lambda value, trajectory_id=trajectory_id: validate(value, trajectory_id),
+            lambda value, trajectory_id=trajectory_id, trajectory=trajectory: validate(
+                value, trajectory_id, {item["turn_id"] for item in trajectory["turns"]}
+            ),
             context=f"quality judgment {trajectory_id}",
             max_attempts=5,
         ))
@@ -119,7 +132,7 @@ def main():
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(
         json.dumps({
-            "format": "socialflux_rollout_quality_judgments_v1",
+            "format": "socialflux_rollout_quality_judgments_v2",
             "judge_role": args.judge_role,
             "model": provider_config["provider"].get("model"),
             "model_family": args.model_family,

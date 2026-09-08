@@ -11,7 +11,7 @@ checklist.
   families, at least 12 raw trajectories per scenario, no more than 30% API
   trajectories, and no policy/environment model identity.
 - formal_selected is only materialized after quality, history and diversity
-  gates pass. Each scenario retains 4–6 trajectories; selection does not keep
+  gates pass. Each scenario retains exactly one human-confirmed canonical trajectory; selection does not keep
   only one highest-scoring trajectory.
 
 ## Per-trajectory gate
@@ -43,15 +43,12 @@ four-gate report and replaces only IDs whose Gate 3 audit is explicitly
 `rejected`. Every candidate must pass structural checks and independent Qwen +
 GLM prefilters before publication. The active manifest is replaced before the
 old file is moved into `rollouts/rejected/`, and every failed candidate is
-preserved as an observable-dialogue JSONL audit record. A non-quality
-replacement needed to preserve within-source-model T2 pairing must use the
-separate `t2_pairing_rebalance` reason.
+preserved as an observable-dialogue JSONL audit record. A historical non-quality replacement recorded as `t2_pairing_rebalance` remains audit evidence only. Production task construction no longer replaces or retains trajectories to balance source models.
 
 ## Diversity
 
 Outcomes are assigned only after rollout. They are descriptive audit labels,
-not predefined policies. Greedy selection prioritizes quality while adding
-model-family and observed-outcome coverage and rejecting near duplicates.
+not predefined policies. Greedy selection prioritizes quality while adding observed-outcome coverage and rejecting near duplicates. Model family is raw-search provenance and an audit breakdown, never a final selection quota. T1, T2 and T3 then rank the eligible pool independently using task-specific dimensions.
 
 ## History dependence
 
@@ -102,6 +99,6 @@ development trajectories are not reused. The 32B policy satisfies the
 diversity within four 48GB GPUs. API share is zero when credentials are absent
 and can be raised, but never above 30%.
 
-The end-to-end command order is fixed in `FORMAL_ROLLOUT_RUNBOOK.md`.
+The end-to-end command order is fixed in [`FORMAL_ROLLOUT_RUNBOOK.md`](../operations/FORMAL_ROLLOUT_RUNBOOK.md).
 `scripts/verify_gate_md.py --strict` maps concrete artifacts back to all twelve
 sections of `gate.md` and refuses release while any section is incomplete.

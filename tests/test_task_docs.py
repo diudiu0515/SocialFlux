@@ -85,6 +85,29 @@ class TaskReviewDocumentTest(unittest.TestCase):
         self.assertIn("不得作为模型输入或正式 GT", text)
         self.assertNotIn("尚未提取", text)
 
+    def test_document_records_actual_task_sources_once(self):
+        selection = {
+            "t1_source_ids": ["tr-a"],
+            "t2_source_ids_ranked": ["tr-b", "tr-a"],
+            "t3_source_ids_ranked": ["tr-a", "tr-b"],
+            "selected": {
+                "t1": [{"source_trajectory_id": "tr-a", "checkpoint_turn_id": "t1"}],
+                "t2": [{"source_trajectory_ids": ["tr-a", "tr-b"]}],
+                "t3": [{"source_trajectory_id": "tr-a", "checkpoint_turn_id": "t1"}],
+            },
+        }
+        text = render_task_review(
+            self.scenario,
+            self.instances,
+            self.trajectories,
+            self.branches,
+            task_selection=selection,
+        )
+        self.assertIn("T1 实际选中：`tr-a@t1`", text)
+        self.assertIn("T2 实际选中：`tr-a/tr-b`", text)
+        self.assertIn("T3 实际选中：`tr-a@t1`", text)
+        self.assertEqual(text.count("**历史 B**"), 1)
+
     def test_writer_places_deterministic_markdown(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "tasks.md"

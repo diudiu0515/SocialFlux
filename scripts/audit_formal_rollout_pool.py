@@ -70,8 +70,8 @@ def validate_formal_judgment_bundle(path):
     if path is None or not path.exists():
         return False, "formal pool requires a completed primary/secondary judge merge"
     value = json.loads(path.read_text(encoding="utf-8"))
-    if value.get("format") != "socialflux_dual_judge_merge_v1":
-        return False, "formal judgments must be socialflux_dual_judge_merge_v1"
+    if value.get("format") != "socialflux_dual_judge_merge_v2":
+        return False, "formal judgments must be socialflux_dual_judge_merge_v2 with turn-ID evidence"
     if value.get("complete") is not True:
         return False, "formal dual-judge bundle is incomplete"
     primary = value.get("primary_judge", {})
@@ -154,8 +154,8 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--selected-root", type=Path)
     parser.add_argument("--stage", choices=("development", "formal"), default="development")
-    parser.add_argument("--minimum", type=int, default=4)
-    parser.add_argument("--maximum", type=int, default=6)
+    parser.add_argument("--minimum", type=int, default=1)
+    parser.add_argument("--maximum", type=int, default=1)
     args = parser.parse_args()
 
     scenario_records = load_scenario_records("configs/scenarios")

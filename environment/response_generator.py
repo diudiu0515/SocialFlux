@@ -36,8 +36,9 @@ class ModelResponseGenerator(ResponseGenerator):
             self.sampling,
             forbidden_echoes,
             context="environment response",
-            max_attempts=12,
-            similarity_threshold=0.72,
+            # Reject a bad checkpoint instead of brute-forcing near-duplicates.
+            max_attempts=4,
+            similarity_threshold=0.92,
             validator=lambda value: avoids_unsupported_offscreen_claim(
                 value,
                 environment=True,

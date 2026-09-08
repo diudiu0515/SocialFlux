@@ -14,6 +14,11 @@ from evaluation.instance_quality import build_instance_quality_report
 from evaluation.leakage import assert_no_leaks
 from evaluation.review_registry import load_review_registry
 from evaluation.quality_gates import audit_environment_gate, audit_scenario_gate
+from evaluation.task_source_selection import (
+    rank_t1_checkpoints,
+    rank_t3_checkpoints,
+    select_task_sources,
+)
 from offline.candidate_generation import ModelCandidateGenerator
 from offline.rollout_builders import (
     build_t1_checkpoints,
@@ -96,6 +101,14 @@ def load_rollout_config(path):
             raise ValueError("pilot_limits.t3_horizon must be between 5 and 10")
     if config.get("t2_pairing", "all") not in {"all", "within_source_model"}:
         raise ValueError("t2_pairing must be all or within_source_model")
+    selection = config.get("task_source_selection", {})
+    if selection:
+        if selection.get("strategy") != "quality_gate_then_task_specific_weighted_ranking":
+            raise ValueError("unsupported task_source_selection.strategy")
+        if selection.get("model_quota") is not False:
+            raise ValueError("task source selection must not impose a model quota")
+        if not isinstance(selection.get("t1_sources"), int) or selection["t1_sources"] < 1:
+            raise ValueError("task_source_selection.t1_sources must be a positive integer")
     pool_stage = config.get("pool_stage", "development")
     if pool_stage not in {"development", "formal_raw", "formal_selected"}:
         raise ValueError("pool_stage must be development, formal_raw or formal_selected")
@@ -158,6 +171,7 @@ def _public_config(config):
         ],
         "pilot_limits": deepcopy(config.get("pilot_limits")),
         "t2_pairing": config.get("t2_pairing", "all"),
+        "task_source_selection": deepcopy(config.get("task_source_selection", {})),
         "pool_stage": config.get("pool_stage", "development"),
     }
 
@@ -285,6 +299,14 @@ def _load_existing_rollouts(rollout_dir):
     return trajectories
 
 
+def _load_rollout_quality_audits(rollout_dir):
+    manifest_path = Path(rollout_dir) / "manifest.json"
+    if not manifest_path.exists():
+        return []
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    return manifest.get("config", {}).get("quality_audits") or []
+
+
 def _write_offline(path, records):
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as handle:
@@ -293,29 +315,12 @@ def _write_offline(path, records):
             handle.write(json.dumps(record, ensure_ascii=False) + "\n")
 
 
-def _round_robin(groups, limit):
-    selected = []
-    depth = 0
-    while len(selected) < limit and any(depth < len(group) for group in groups):
-        for group in groups:
-            if depth < len(group):
-                selected.append(group[depth])
-                if len(selected) >= limit:
-                    break
-        depth += 1
-    return selected
-
-
-def _round_robin_turns(trajectories):
-    depth = 0
-    while any(depth < len(trajectory.get("turns", [])) for trajectory in trajectories):
-        for trajectory in trajectories:
-            if depth < len(trajectory.get("turns", [])):
-                yield trajectory, trajectory["turns"][depth]
-        depth += 1
-
-
-def _load_reusable_t3(build_root, scenario_id, trajectories):
+def _load_reusable_t3(
+    build_root,
+    scenario_id,
+    trajectories,
+    expected_source_id=None,
+):
     if build_root is None:
         return None
     scenario_root = Path(build_root) / scenario_id
@@ -335,11 +340,17 @@ def _load_reusable_t3(build_root, scenario_id, trajectories):
     if len(candidates) != 1:
         return None
     candidate = candidates[0]
+    if not candidate.get("input", {}).get("history"):
+        return None
     metadata = candidate.get("metadata", {})
     source_id = metadata.get("source_trajectory_id")
     checkpoint_id = metadata.get("checkpoint_turn_id")
     active_ids = {item["trajectory_id"] for item in trajectories}
-    if source_id not in active_ids or not checkpoint_id:
+    if (
+        source_id not in active_ids
+        or not checkpoint_id
+        or (expected_source_id is not None and source_id != expected_source_id)
+    ):
         return None
     branches = json.loads(branch_path.read_text(encoding="utf-8"))
     branches = [
@@ -365,6 +376,7 @@ def run_scenario(
     allow_unreviewed=False,
     rollout_root=None,
     reuse_t3_from=None,
+    quality_audits=None,
 ):
     _require_reviewed(scenario, allow_unreviewed)
     scenario_id = scenario["scenario_id"]
@@ -435,15 +447,45 @@ def run_scenario(
         )
         return summary
 
+    quality_audits = (
+        quality_audits
+        if quality_audits is not None
+        else _load_rollout_quality_audits(rollout_dir)
+    )
+    task_selection = select_task_sources(
+        trajectories,
+        quality_audits,
+        t1_source_count=config.get("task_source_selection", {}).get("t1_sources", 3),
+    )
+    by_trajectory_id = {item["trajectory_id"]: item for item in trajectories}
+    eligible_trajectories = [
+        by_trajectory_id[identifier]
+        for identifier in task_selection["eligible_trajectory_ids"]
+    ]
+    if len(eligible_trajectories) < 2:
+        raise ValueError(f"{scenario_id} has fewer than two quality-eligible trajectories")
+
     t1_limit = pilot_limits.get(
         "t1",
         scenario.get("sampling_plan", {}).get("t1_max", 5),
     )
-    t1_groups = [
-        build_t1_checkpoints(trajectory, scenario.get("target_state_ids", []))
-        for trajectory in trajectories
+    t1_source_trajectories = [
+        by_trajectory_id[identifier]
+        for identifier in task_selection["t1_source_ids"]
     ]
-    t1_candidates = _round_robin(t1_groups, t1_limit)
+    t1_candidates = []
+    for checkpoint in rank_t1_checkpoints(
+        t1_source_trajectories,
+        task_selection["scores"]["t1"],
+    )[:t1_limit]:
+        candidate = build_t1_checkpoints(
+            checkpoint["trajectory"],
+            scenario.get("target_state_ids", []),
+        )[checkpoint["turn_index"]]
+        candidate["metadata"]["selection_method"] = (
+            "task_specific_quality_plus_history_depth_and_state_information"
+        )
+        t1_candidates.append(candidate)
 
     construction = ModelCandidateGenerator(
         build_provider(config["construction"]["provider"]),
@@ -454,11 +496,12 @@ def run_scenario(
         scenario.get("sampling_plan", {}).get("t2_max", 3),
     )
     t2 = build_t2_pairs(
-        trajectories,
+        eligible_trajectories,
         construction.shared_observation,
         t2_limit,
         scenario.get("target_state_ids", []),
         same_source_model=config.get("t2_pairing") == "within_source_model",
+        trajectory_quality=task_selection["scores"]["t2"],
     )
 
     t3_limit = pilot_limits.get(
@@ -469,28 +512,47 @@ def run_scenario(
         "t3_horizon",
         scenario.get("t3_delayed_horizon", 5),
     )
-    reused_t3 = _load_reusable_t3(reuse_t3_from, scenario_id, trajectories)
+    reused_t3 = _load_reusable_t3(
+        reuse_t3_from,
+        scenario_id,
+        eligible_trajectories,
+        expected_source_id=task_selection["t3_source_ids_ranked"][0],
+    )
+    t3_selection_attempts = []
     if reused_t3 is not None:
         reused_instance, branches = reused_t3
         t3 = [reused_instance]
+        t3_selection_attempts.append({
+            "source_trajectory_id": reused_instance["metadata"]["source_trajectory_id"],
+            "checkpoint_turn_id": reused_instance["metadata"]["checkpoint_turn_id"],
+            "status": "reused_after_full_audit",
+        })
     else:
         t3 = []
         branches = []
-        for trajectory, turn in _round_robin_turns(trajectories):
+        for checkpoint_rank in rank_t3_checkpoints(
+            eligible_trajectories,
+            task_selection["scores"]["t3"],
+        ):
             if len(t3) >= t3_limit:
                 break
+            trajectory = checkpoint_rank["trajectory"]
+            turn = checkpoint_rank["turn"]
             actions = construction.candidate_actions(turn["observation"], count=3)
             checkpoint = {
                 **turn,
                 "trajectory_id": trajectory["trajectory_id"],
                 "scenario_id": scenario_id,
             }
-            t3.append(build_t3_candidates(
+            candidate_instance = build_t3_candidates(
                 checkpoint,
                 actions,
                 t3_horizon,
                 scenario.get("target_state_ids", []),
-            ))
+            )
+            candidate_instance["metadata"]["source_quality_score"] = checkpoint_rank["source_score"]
+            candidate_instance["metadata"]["checkpoint_depth"] = checkpoint_rank["checkpoint_depth"]
+            candidate_instance["metadata"]["selection_score"] = checkpoint_rank["selection_score"]
             spec_run = policy_lookup.get(trajectory["policy_id"])
             if spec_run is None:
                 provenance = trajectory.get("policy_provenance", {})
@@ -507,17 +569,67 @@ def run_scenario(
                     f"no rollout-config policy matches trajectory {trajectory['trajectory_id']}"
                 )
             spec, run_index = spec_run
-            new_branches = branch_counterfactuals(
-                environment_factory,
-                turn,
-                actions,
-                lambda spec=spec, run_index=run_index: _policy_from_spec(spec, run_index),
-                t3_horizon,
-            )
+            try:
+                new_branches = branch_counterfactuals(
+                    environment_factory,
+                    turn,
+                    actions,
+                    lambda spec=spec, run_index=run_index: _policy_from_spec(spec, run_index),
+                    t3_horizon,
+                )
+            except RuntimeError as exc:
+                t3_selection_attempts.append({
+                    "source_trajectory_id": trajectory["trajectory_id"],
+                    "checkpoint_turn_id": turn["turn_id"],
+                    "selection_score": checkpoint_rank["selection_score"],
+                    "status": "rejected_branch_generation",
+                    "reason": str(exc),
+                })
+                continue
             for branch in new_branches:
                 branch["scenario_id"] = scenario_id
                 branch["source_trajectory_id"] = trajectory["trajectory_id"]
             branches.extend(new_branches)
+            t3.append(candidate_instance)
+            t3_selection_attempts.append({
+                "source_trajectory_id": trajectory["trajectory_id"],
+                "checkpoint_turn_id": turn["turn_id"],
+                "selection_score": checkpoint_rank["selection_score"],
+                "status": "selected",
+            })
+
+    if len(t3) < t3_limit:
+        raise RuntimeError(
+            f"{scenario_id} could not build {t3_limit} complete T3 instances; "
+            f"attempts={len(t3_selection_attempts)}"
+        )
+
+    task_selection["selected"] = {
+        "t1": [
+            {
+                "instance_id": item["instance_id"],
+                "source_trajectory_id": item["metadata"]["source_trajectory_id"],
+                "checkpoint_turn_id": item["input"]["history"][-1]["turn_id"],
+            }
+            for item in t1_candidates
+        ],
+        "t2": [
+            {
+                "instance_id": item["instance_id"],
+                "source_trajectory_ids": item["metadata"]["source_trajectory_ids"],
+                "history_turn_count": len(item["input"]["history_a"]),
+            }
+            for item in t2
+        ],
+        "t3": [
+            {
+                "instance_id": item["instance_id"],
+                "source_trajectory_id": item["metadata"]["source_trajectory_id"],
+                "checkpoint_turn_id": item["metadata"]["checkpoint_turn_id"],
+            }
+            for item in t3
+        ],
+    }
 
     _write_offline(
         scenario_output / "offline" / "instances.jsonl",
@@ -529,12 +641,17 @@ def run_scenario(
         json.dumps(branches, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
+    (validation_dir / "t3_selection_attempts.json").write_text(
+        json.dumps(t3_selection_attempts, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
     write_task_review(
         rollout_dir / "tasks.md",
         scenario,
         t1_candidates + t2 + t3,
         trajectories,
         branches,
+        task_selection=task_selection,
     )
     bundle_stage = config.get("pool_stage", "development")
     if build_only:
@@ -553,11 +670,14 @@ def run_scenario(
         "t2": len(t2),
         "t3": len(t3),
         "local_intervention_branches": len(branches),
+        "t3_selection_attempt_count": len(t3_selection_attempts),
+        "t3_selection_audit": str(validation_dir / "t3_selection_attempts.json"),
         "t3_reused_after_active_source_audit": reused_t3 is not None,
         "task_review": str(rollout_dir / "tasks.md"),
         "ground_truth_status": "pending_human_annotation",
         "run_scope": bundle_stage,
         "pilot_limits": deepcopy(pilot_limits) if pilot_limits else None,
+        "task_source_selection": task_selection,
     }
     scenario_output.mkdir(parents=True, exist_ok=True)
     (scenario_output / "pipeline_manifest.json").write_text(
@@ -600,6 +720,11 @@ def main():
         type=Path,
         help="Reuse an existing T3 only when its source remains active and its full branch audit passes.",
     )
+    parser.add_argument(
+        "--quality-report",
+        type=Path,
+        help="Trajectory quality report used for task-specific T1/T2/T3 source ranking.",
+    )
     args = parser.parse_args()
     config = load_rollout_config(args.rollout_config)
     if config.get("pool_stage") in {"formal_raw", "formal_selected"} and args.rollout_root is None:
@@ -629,6 +754,16 @@ def main():
         )
         if not environment_gate["passed"]:
             raise ValueError("formal_raw rollout requires passed Gate 2 environment evidence")
+    audit_by_scenario = {}
+    if args.quality_report is not None:
+        quality_payload = json.loads(args.quality_report.read_text(encoding="utf-8"))
+        quality_records = (
+            quality_payload if isinstance(quality_payload, list)
+            else quality_payload.get("trajectory_audits", quality_payload.get("records", []))
+        )
+        for audit in quality_records:
+            audit_by_scenario.setdefault(audit.get("scenario_id"), []).append(audit)
+
     summaries = []
     for scenario_path, scenario in records:
         summary = run_scenario(
@@ -640,6 +775,10 @@ def main():
             allow_unreviewed=args.allow_unreviewed,
             rollout_root=args.rollout_root,
             reuse_t3_from=args.reuse_t3_from,
+            quality_audits=(
+                audit_by_scenario.get(scenario["scenario_id"])
+                if args.quality_report is not None else None
+            ),
         )
         summaries.append(summary)
         print(json.dumps({

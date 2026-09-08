@@ -1,4 +1,4 @@
-# Optional local-model stack used by FORMAL_ROLLOUT_RUNBOOK.md.
+# Optional local-model stack used by docs/operations/FORMAL_ROLLOUT_RUNBOOK.md.
 # Core schema/unit tests do not require GPU packages.
 torch>=2.8.0,<2.11
 torchao==0.16.0  # Python API supports torch 2.8-2.10; 0.18 requires torch 2.11+

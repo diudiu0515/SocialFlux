@@ -101,6 +101,18 @@ def _target_line(instance):
     return f"目标角色：`{_text(target_id)}`；目标状态：{state_text}。"
 
 
+def _selected_summary(records):
+    values = []
+    for item in records:
+        sources = item.get("source_trajectory_ids") or [item.get("source_trajectory_id")]
+        source_text = "/".join(str(source) for source in sources if source)
+        checkpoint = item.get("checkpoint_turn_id")
+        if checkpoint:
+            source_text += f"@{checkpoint}"
+        values.append(f"`{source_text}`")
+    return ", ".join(values) if values else "—"
+
+
 def _render_t1(instance, trajectories):
     inputs = instance["input"]
     source_id = instance["metadata"]["source_trajectory_id"]
@@ -203,7 +215,13 @@ def _render_t3(instance, branches):
     return lines
 
 
-def render_task_review(scenario, instances, trajectory_records, branch_records):
+def render_task_review(
+    scenario,
+    instances,
+    trajectory_records,
+    branch_records,
+    task_selection=None,
+):
     """Return one deterministic Chinese Markdown review package."""
     trajectories = {item["trajectory_id"]: item for item in trajectory_records}
     branches = defaultdict(list)
@@ -231,9 +249,26 @@ def render_task_review(scenario, instances, trajectory_records, branch_records):
         "2. 再展开私有诊断，检查 simulator 的状态方向与幅度，而不是把它直接当答案。",
         "3. 发现人物失真、历史断裂、共享观察不兼容、候选近义重复或分支无差异时，记录 instance ID 并退回重生成。",
         "",
-        "## T1：当前状态跟踪",
-        "",
     ]
+    if task_selection:
+        lines.extend([
+            "## 本场景任务选源",
+            "",
+            "先过统一质量门，再分别按 T1/T2/T3 所需能力加权。模型身份不计分，也没有模型配额；同一模型可以不入选，也可以赢得全部任务。",
+            "",
+            f"- T1 优先来源：{', '.join(f'`{item}`' for item in task_selection.get('t1_source_ids', []))}",
+            f"- T2 候选来源排名：{', '.join(f'`{item}`' for item in task_selection.get('t2_source_ids_ranked', []))}",
+            f"- T3 候选来源排名：{', '.join(f'`{item}`' for item in task_selection.get('t3_source_ids_ranked', []))}",
+        ])
+        selected = task_selection.get("selected", {})
+        if selected:
+            lines.extend([
+                f"- T1 实际选中：{_selected_summary(selected.get('t1', []))}",
+                f"- T2 实际选中：{_selected_summary(selected.get('t2', []))}",
+                f"- T3 实际选中：{_selected_summary(selected.get('t3', []))}",
+            ])
+        lines.append("")
+    lines.extend(["## T1：当前状态跟踪", ""])
     if not grouped["T1_state_tracking"]:
         lines.extend(["**缺失：本 scenario 尚未提取 T1。**", ""])
     for instance in grouped["T1_state_tracking"]:
@@ -251,11 +286,24 @@ def render_task_review(scenario, instances, trajectory_records, branch_records):
     return "\n".join(lines).rstrip() + "\n"
 
 
-def write_task_review(path, scenario, instances, trajectories, branches):
+def write_task_review(
+    path,
+    scenario,
+    instances,
+    trajectories,
+    branches,
+    task_selection=None,
+):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
-        render_task_review(scenario, instances, trajectories, branches),
+        render_task_review(
+            scenario,
+            instances,
+            trajectories,
+            branches,
+            task_selection=task_selection,
+        ),
         encoding="utf-8",
     )
     return path

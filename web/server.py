@@ -1,6 +1,8 @@
 """Read-only annotation visualizer for scenarios, rollouts, and tasks."""
 
 import argparse
+import base64
+import hmac
 import json
 from pathlib import Path
 import shutil
@@ -21,6 +23,24 @@ PIPELINE_DIR = ROOT / "build" / "pipeline_v2"
 ACCEPTANCE_DIR = ROOT / "build" / "acceptance_v2"
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 MEDIA_MANIFEST = ROOT / "media" / "talking_head" / "manifest.json"
+SCREENING_REPORT = ROOT / "build" / "rollout_screening_v1" / "screening_report.json"
+SCENARIO_REVIEW_TEMPLATE = ROOT / "reviews" / "scenario_review_template.json"
+ENVIRONMENT_REVIEW_TEMPLATE = ROOT / "reviews" / "environment_evidence_template.json"
+FORMAL_ENVIRONMENT_DIR = ROOT / "data" / "formal" / "environment"
+
+
+def credentials_match(header, username, password):
+    """Validate an HTTP Basic Authorization header without timing leaks."""
+    if not header or not header.startswith("Basic "):
+        return False
+    try:
+        decoded = base64.b64decode(header[6:], validate=True).decode("utf-8")
+        supplied_username, supplied_password = decoded.split(":", 1)
+    except (ValueError, UnicodeDecodeError):
+        return False
+    return hmac.compare_digest(supplied_username, username) and hmac.compare_digest(
+        supplied_password, password
+    )
 
 
 def read_json(path, default=None):
@@ -58,6 +78,16 @@ def annotation_contract():
         },
         "rollout_quality_dimensions": list(QUALITY_DIMENSIONS),
         "rollout_hard_reject_reasons": list(HARD_REJECT_REASONS),
+        "rollout_screening": {
+            "protocol": "SocialFlux Rollout Screening Protocol v1",
+            "automatic_decisions": ["PASS", "REVIEW", "REJECT"],
+            "final_per_scenario": 1,
+            "human_audit_questions": [
+                "automatic_decision_correct", "incorrect_dimensions", "error_reason",
+                "issue_scope", "rule_or_prompt_revision",
+            ],
+            "winner_requires_human_confirmation": True,
+        },
         "task_review_ratings": {
             task_type: sorted(ratings)
             for task_type, ratings in TASK_REVIEW_RATINGS.items()
@@ -94,6 +124,69 @@ def load_media_assets():
     return manifest.get("assets", [])
 
 
+def load_screening_report():
+    return read_json(SCREENING_REPORT, {}) or {}
+
+
+def _review_file_status(path):
+    value = read_json(path, {}) or {}
+    record = value.get("record", value)
+    return {
+        "exists": path.exists(),
+        "human_attestation": record.get("human_attestation") is True,
+        "reviewers": record.get("reviewers", []),
+        "reviewed_at_utc": record.get("reviewed_at_utc", ""),
+    }
+
+
+def manual_review_catalog():
+    """Expose every human-facing stage, including not-yet-generated packets."""
+    screening = load_screening_report()
+    summary = screening.get("summary", {})
+    scenario_records = (read_json(SCENARIO_REVIEW_TEMPLATE, {}) or {}).get("records", [])
+    media_count = len(load_media_assets())
+    task_count = sum(len(load_instances(item["scenario_id"])) for item in load_scenarios())
+    environment_files = {
+        name: _review_file_status(FORMAL_ENVIRONMENT_DIR / name)
+        for name in (
+            "state_transition_agreement.json", "trajectory_plausibility.json",
+            "history_intervention.json", "paraphrase_robustness.json",
+            "local_counterfactual.json", "backbone_sensitivity.json",
+        )
+    }
+    categories = [
+        ["gate1_scenario", "Gate 1 · Scenario 与 S0/D0 冻结", len(scenario_records), 20,
+         "pending_human", "人物、冲突、state、D0、视频阈值、来源原创化及姓名/时间/哈希。", "Scenario 情节"],
+        ["gate2_environment", "Gate 2 · Environment Validity",
+         sum(value["exists"] for value in environment_files.values()), 6,
+         "pending_evidence", "E1–E5 真人实验；E6 是双 backbone 模型实验。", "本页证据状态"],
+        ["gate3_rollout", "Gate 3 · Rollout Screening",
+         summary.get("human_review_queue_count", 0), summary.get("human_review_queue_count", 0),
+         "pending_human", "PASS/REVIEW/REJECT 审计、turn-ID 证据与每场景三选一比较。", "Rollout 筛选"],
+        ["gate4_tasks", "Gate 4 · Task 1/2/3 逐题审核", task_count, task_count,
+         "development_packets_only", "公开题面、来源、专属检查、人工标签和证据句；当前仍是开发包。", "Task 标注"],
+        ["formal_gt", "Formal GT · 三人盲标与仲裁", 0, task_count * 3,
+         "blocked_by_formal_tasks", "每个正式 task 三人独立盲标，分歧再具名仲裁。", "正式 Task 包生成后"],
+        ["media", "Talking Head · 视频人工审核", media_count, media_count,
+         "pending_human", "表情—状态、人物连续性、语音自然度和多模态信息效用。", "Scenario 情节"],
+        ["filter_holdout", "筛选器校准与 Holdout", 0, 1,
+         "pending_split_and_labels", "检查误收/误拒、人机一致性；holdout 通过后才 freeze。", "本页协议"],
+        ["dataset_audit", "原创性、污染与公开信息泄漏", 20, 20,
+         "pending_human", "影视只保留高层机制，无角色/台词/情节复制；公开输入不泄漏私有状态。", "Scenario 与原始材料"],
+    ]
+    return {
+        "format": "socialflux_manual_review_catalog_v1",
+        "categories": [
+            dict(zip(("id", "title", "available", "required", "status", "description", "location"), item))
+            for item in categories
+        ],
+        "environment_files": environment_files,
+        "screening_summary": summary,
+        "protocol_document": (ROOT / "docs" / "protocols" / "SocialFlux_Rollout_Screening_Protocol_v1.md").read_text(encoding="utf-8"),
+        "warning": "未生成、未实名签署或仅有开发数据的项目明确保持 pending。",
+    }
+
+
 def _scenario_record(scenario_id):
     return next(
         (
@@ -124,6 +217,7 @@ def scenario_summary(scenario, source_path):
         "trajectory_count",
         rollout_manifest.get("trajectory_count", 0) if local_rollout_ready else 0,
     )
+    screening = load_screening_report().get("scenarios", {}).get(scenario["scenario_id"], {})
     return {
         "scenario_id": scenario["scenario_id"],
         "title": scenario["title"],
@@ -149,6 +243,12 @@ def scenario_summary(scenario, source_path):
                 or local_rollout_ready
             ),
         },
+        "screening": {
+            "candidate_count": screening.get("candidate_count", trajectory_count),
+            "final_trajectory_count": 1 if screening.get("provisional_selected_id") else 0,
+            "provisional_selected_id": screening.get("provisional_selected_id"),
+            "selection_status": screening.get("selection_status", "not_generated"),
+        },
     }
 
 
@@ -163,6 +263,26 @@ def acceptance_report():
 
 
 def load_rollouts(scenario_id):
+    screening_records = [
+        item for item in load_screening_report().get("records", [])
+        if item.get("scenario_id") == scenario_id and item.get("human_review_required")
+    ]
+    if screening_records:
+        rollouts = []
+        for item in sorted(screening_records, key=lambda value: (
+            not value.get("provisional_selected", False),
+            value.get("source_stage") != "active_candidate",
+            value.get("automatic_decision") != "REVIEW",
+            value.get("trajectory_id", ""),
+        )):
+            target = (ROOT / item["trajectory_path"]).resolve()
+            if ROOT not in target.parents or not target.is_file():
+                continue
+            trajectory = read_json(target)
+            if trajectory:
+                trajectory["screening"] = item
+                rollouts.append(trajectory)
+        return rollouts
     record = _scenario_record(scenario_id)
     if record is None:
         return []
@@ -185,6 +305,7 @@ def scenario_detail(scenario_id):
     source_path, scenario = record
     dialogue_path = source_path.parent / "rollouts" / "dialogues.md"
     task_review_path = source_path.parent / "rollouts" / "tasks.md"
+    screening = load_screening_report()
     return {
         "summary": scenario_summary(scenario, source_path),
         "scenario": scenario,
@@ -203,10 +324,17 @@ def scenario_detail(scenario_id):
         ),
         "rollouts": load_rollouts(scenario_id),
         "instances": load_instances(scenario_id),
+        "task_source_selection": _pipeline_summary(scenario_id).get(
+            "task_source_selection", {}
+        ),
+        "screening": screening.get("scenarios", {}).get(scenario_id, {}),
         "media_assets": [
             {
                 **asset,
-                "url": f"/media/{asset['asset_id']}",
+                "url": (
+                    f"/media/{asset['asset_id']}?v="
+                    f"{asset.get('video_sha256', 'pending')[:12]}"
+                ),
             }
             for asset in load_media_assets()
             if asset.get("scenario_id") == scenario_id
@@ -222,6 +350,8 @@ def api_payload(path):
         return {"ok": True, "scenario_count": len(records), "pipeline_version": "v2", "site_mode": "annotation_workbench"}
     if parts == ["api", "annotation-contract"]:
         return annotation_contract()
+    if parts == ["api", "manual-review"]:
+        return manual_review_catalog()
     if parts == ["api", "summary"]:
         return {
             "scenario_count": len(records),
@@ -229,6 +359,8 @@ def api_payload(path):
             "scenarios": [scenario_summary(scenario, path) for path, scenario in records],
             "pipeline_manifest": read_json(PIPELINE_DIR / "manifest.json", {}) or {},
             "acceptance": acceptance_report(),
+            "screening": load_screening_report().get("summary", {}),
+            "manual_review": manual_review_catalog(),
         }
     if parts == ["api", "scenarios"]:
         return {
@@ -243,6 +375,9 @@ def api_payload(path):
 
 
 class App(SimpleHTTPRequestHandler):
+    auth_username = None
+    auth_password = None
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(STATIC_DIR), **kwargs)
 
@@ -255,7 +390,25 @@ class App(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def authenticate(self):
+        if self.auth_username is None or self.auth_password is None:
+            return True
+        if credentials_match(
+            self.headers.get("Authorization"),
+            self.auth_username,
+            self.auth_password,
+        ):
+            return True
+        self.send_response(401)
+        self.send_header("WWW-Authenticate", 'Basic realm="SocialFlux", charset="UTF-8"')
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Content-Length", "0")
+        self.end_headers()
+        return False
+
     def do_GET(self):
+        if not self.authenticate():
+            return
         parsed = urlparse(self.path)
         if parsed.path.startswith("/media/"):
             asset_id = unquote(parsed.path.removeprefix("/media/"))
@@ -296,7 +449,17 @@ def main():
     parser = argparse.ArgumentParser(description="Serve the SocialFlux annotation workbench")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8000)
+    parser.add_argument("--username", default="socialflux")
+    parser.add_argument("--password-file", type=Path)
     args = parser.parse_args()
+    if args.password_file:
+        password = args.password_file.read_text(encoding="utf-8").strip()
+        if not password:
+            parser.error("--password-file must not be empty")
+        App.auth_username = args.username
+        App.auth_password = password
+    elif args.host not in {"127.0.0.1", "localhost", "::1"}:
+        parser.error("public binding requires --password-file")
     server = ThreadingHTTPServer((args.host, args.port), App)
     print(f"SocialFlux Annotation Studio: http://{args.host}:{args.port}/")
     try:

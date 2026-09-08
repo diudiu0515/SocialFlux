@@ -1,6 +1,6 @@
 {
   "format": "socialflux_rollout_pool_v1",
-  "t2_pairing": "within_source_model",
+  "t2_pairing": "all",
   "pilot_limits": {
     "rollout_turns": 6,
     "t1": 6,

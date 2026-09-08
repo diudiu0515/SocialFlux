@@ -1,7 +1,12 @@
 {
   "format": "socialflux_rollout_pool_v1",
   "pool_stage": "development",
-  "t2_pairing": "within_source_model",
+  "t2_pairing": "all",
+  "task_source_selection": {
+    "strategy": "quality_gate_then_task_specific_weighted_ranking",
+    "t1_sources": 3,
+    "model_quota": false
+  },
   "pilot_limits": {
     "rollout_turns": 6,
     "t1": 6,

@@ -67,7 +67,7 @@ python scripts/scenario_docs.py --check
 
 密钥只通过 `api_key_env` 指向环境变量。日志和公开 manifest 不记录密钥或环境变量名。
 
-GPT–Qwen 匹配 pilot 使用 `configs/rollout_comparison.example.json`：固定同一个 environment/construction model、scenario、turns、temperature 与 seeds，Qwen/GPT 轨迹交错排列；T2 设置 `within_source_model` 并按来源模型分层轮询，避免交叉模型 history pair。把 Qwen 绝对路径和 `YOUR_GPT_MODEL` 替换为本机值，并在 shell 设置 `OPENAI_API_KEY`。本地 Transformers server 必须确认 sampling 已开启；provider 会按 base seed + call index 推进请求 seed。
+GPT–Qwen 匹配 pilot 使用 `configs/rollout_comparison.example.json`：固定同一个 environment/construction model、scenario、turns、temperature 与 seeds，Qwen/GPT 轨迹交错排列；仅这个受控模型对照实验的 T2 设置 `within_source_model`，避免把跨模型差异混入模型比较。生产任务构建使用 `all`，不按模型分层或配额。把 Qwen 绝对路径和 `YOUR_GPT_MODEL` 替换为本机值，并在 shell 设置 `OPENAI_API_KEY`。本地 Transformers server 必须确认 sampling 已开启；provider 会按 base seed + call index 推进请求 seed。
 
 ## 3. 生成自然轨迹与离线任务
 

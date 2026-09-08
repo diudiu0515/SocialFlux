@@ -96,7 +96,7 @@ def _build_quality_judge(path, model_family):
     def judge(trajectory, scenario):
         trajectory_id = trajectory["trajectory_id"]
         prompt = render_prompt(
-            "rollout_quality_judge_v1",
+            "rollout_quality_judge_v2",
             public_judge_packet(trajectory, scenario),
         )
         reset = getattr(provider, "reset", None)
@@ -106,7 +106,9 @@ def _build_quality_judge(path, model_family):
             provider,
             [{"role": "user", "content": prompt}],
             deterministic_judge_sampling(sampling, trajectory_id),
-            lambda value: validate_quality_judgment(value, trajectory_id),
+            lambda value: validate_quality_judgment(
+                value, trajectory_id, {item["turn_id"] for item in trajectory["turns"]}
+            ),
             context=f"repair candidate quality judgment {trajectory_id}",
             max_attempts=5,
         )
@@ -117,6 +119,13 @@ def _build_quality_judge(path, model_family):
 def _merge_candidate_judgments(primary, secondary):
     if secondary is None:
         return primary
+    evidence = {
+        key: list(dict.fromkeys(
+            list(primary.get("evidence", {}).get(key, []))
+            + list(secondary.get("evidence", {}).get(key, []))
+        ))[:3]
+        for key in primary["scores"]
+    }
     return {
         "trajectory_id": primary["trajectory_id"],
         "scores": {
@@ -127,6 +136,7 @@ def _merge_candidate_judgments(primary, secondary):
             set(primary.get("hard_reject_reasons", []))
             | set(secondary.get("hard_reject_reasons", []))
         ),
+        **({"evidence": evidence} if all(evidence.values()) else {}),
         "rationale": (
             "Primary candidate prefilter: " + primary["rationale"]
             + " Secondary candidate prefilter: " + secondary["rationale"]

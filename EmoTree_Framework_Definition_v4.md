@@ -1,6 +1,6 @@
 # SocialFlux Framework Definition — Revision-Integrated Canonical Version
 
-> 文件名为历史兼容入口；本文内容已按 2026-09-02 的 `revision.md` 与 `prompt_check.md` 重写，是当前 pipeline 的权威定义。若旧文档冲突，以本文和 schema/code 为准。
+> 文件名为历史兼容入口；本文内容已按 2026-09-02 的 `docs/source-notes/revision.md` 与 `docs/source-notes/prompt_check.md` 重写，是当前 pipeline 的权威定义。若旧文档冲突，以本文和 schema/code 为准。
 
 ## 1. 研究目标
 
@@ -91,7 +91,7 @@ Appraisal 与 state update 是两个不同 prompt/call。Response 只能在更�
 
 ## 7. Natural Rollout Pool
 
-每个已批准 scenario 从相同 frozen S0/D0 启动多个 model/sampling 配置。每条 trajectory 必须记录 policy model、sampling、seed、prompt ID、environment model/config（去密钥）、完整 private transitions 与 observable projections。异常、过早终止和格式错误可过滤，但不得按“是否符合预设策略方向”筛选。
+每个已批准 scenario 从相同 frozen S0/D0 启动多个 model/sampling 配置。每条 trajectory 必须记录 policy model、sampling、seed、prompt ID、environment model/config（去密钥）、完整 private transitions 与 observable projections。异常、过早终止和格式错误可过滤，但不得按“是否符合预设策略方向”筛选。多模型用于扩大 raw candidate search，不形成最终配额；统一质量门后，T1、T2、T3 必须按各自所需能力独立选源，模型身份不进入任务分数。
 
 ## 8. T1
 
@@ -99,11 +99,11 @@ T1 从自然 trajectory checkpoint 提取完整可观察历史与当前 observat
 
 ## 9. T2
 
-T2 从自然轨迹池检索同 scenario、同深度且历史与 private state 已分化的 A/B，并显式携带 environment-character target 与 target state IDs。模型质量对比时 A/B 必须来自同一 source model，并按 source model 分层取样。随后显式传入 target/evaluated 双方身份，构造一个由 environment character 发出、对两段历史都自然的完全相同 O*。实例必须保留 O* 一致性证明、来源 trajectory IDs 和 compatibility pending 状态。若 O* 角色互换、自身泄漏历史差异、包含重复历史或对任一历史不自然，实例删除。
+T2 从自然轨迹池检索同 scenario、同深度且历史与 private state 已分化的 A/B，并显式携带 environment-character target 与 target state IDs。生产任务按历史依赖、轨迹质量和 private-state 分化联合检索 A/B，不要求 source model 相同，也不按模型分层。只有专门比较 GPT–Qwen 等模型差异的受控实验可以启用同 source model 配对，以隔离模型变量。随后显式传入 target/evaluated 双方身份，构造一个由 environment character 发出、对两段历史都自然的完全相同 O*。实例必须保留 O* 一致性证明、来源 trajectory IDs 和 compatibility pending 状态。若 O* 角色互换、自身泄漏历史差异、包含重复历史或对任一历史不自然，实例删除。
 
 ## 10. T3
 
-T3 从真实自然轨迹 checkpoint 提供 2–4 个自由文本候选行动。构建端 restore 同一 private snapshot，逐个执行一次局部 action intervention，再由与源轨迹一致的自由模型策略继续 5 轮，必要时至 10 轮。所有 option 共享起点与 continuation protocol。主任务输入不含 oracle state；oracle 只能用于单独 ablation。
+T3 从真实自然轨迹中有公开历史的 checkpoint 提供 2–4 个自由文本候选行动；按 interaction progression、state–response consistency、coherence、naturalness、character consistency 与历史深度择优。最高排名 checkpoint 若无法完整生成所有分支，必须留痕并自动回退，不能硬凑或中断整场。构建端 restore 同一 private snapshot，逐个执行一次局部 action intervention，再由与源轨迹一致的自由模型策略继续 5 轮，必要时至 10 轮。所有 option 共享起点与 continuation protocol。主任务输入不含 oracle state；oracle 只能用于单独 ablation。
 
 ## 11. T4
 

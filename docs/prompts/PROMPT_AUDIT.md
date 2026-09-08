@@ -1,6 +1,6 @@
 # SocialFlux Prompt Audit
 
-审计日期：2026-09-06。范围：`prompts/*.md`、`prompts/manifest.json`、对应 schema 与 Python caller。共保留 23 个版本化 prompt；未登记 Markdown 数为 0。
+审计日期：2026-09-07。范围：`prompts/*.md`、`prompts/manifest.json`、对应 schema 与 Python caller。共保留 24 个版本化 prompt；未登记 Markdown 数为 0。
 
 ## Prompt 逐项审计
 
@@ -21,7 +21,8 @@
 | `t2_shared_observation_v3` | benchmark construction；`ModelCandidateGenerator` | 读显式 target/evaluated 身份与两段 public natural histories | inline O* JSON | 实测修复 O* 角色互换；强制由 environment target 发话、双历史兼容且禁止 private provenance 泄漏 |
 | `local_intervention_validation_v1` | author-side validation protocol | 可读真实 checkpoint private experiment packet | `local_intervention_review.schema.json` | controlled 只保留为局部实验，不再驱动多轮策略 |
 | `instance_quality_judge_v2` | validation；`evaluate_instance_quality --judge-provider-config` 对 T1/T2/T3 做盲化质量诊断 | 只读去除 model/provider/trajectory/private state/metadata 后的 participant-visible packet | `instance_quality_judge.schema.json` | 评估 history dependency、证据、社会合理性、非平凡性和可回答性；明确不是 human GT，不能单独宣布模型胜负 |
-| `rollout_quality_judge_v1` | validation；`run_rollout_quality_judge` 的全量主审与分层二审 | 只读 state-free 场景参考（背景、角色、显式目标、persona）和 observable action/response/expression；不读 hidden intention、private state、provenance 或阈值 | `rollout_quality_judgment.schema.json` | 固定 gate.md 六维评分与 hard reject；补充 1–5 锚点（4=良好仅轻微瑕疵、3=存在明显实质限制）并要求 rationale 与分数一致；caller 按 trajectory ID 派生确定性 seed，跨模型族二审缺失时不能形成正式合并记录 |
+| `rollout_quality_judge_v1` | legacy validation；仅用于解释旧开发证据，不再用于新生成 | 只读 state-free 场景参考（背景、角色、显式目标、persona）和 observable action/response/expression；不读 hidden intention、private state、provenance 或阈值 | `rollout_quality_judgment.schema.json` | 固定 gate.md 六维评分与 hard reject；补充 1–5 锚点（4=良好仅轻微瑕疵、3=存在明显实质限制）并要求 rationale 与分数一致；caller 按 trajectory ID 派生确定性 seed，跨模型族二审缺失时不能形成正式合并记录 |
+| `rollout_quality_judge_v2` | production screening；`run_rollout_quality_judge` 与 repair prefilter | 只读 state-free 场景参考和 observable trajectory | `rollout_quality_judgment_v2.schema.json` | 固定 Protocol v1 六维、10 项 hard reject；每个维度强制 1–3 个真实 turn ID，caller 校验引用存在；PASS/REVIEW/REJECT 由确定性代码计算 |
 | `history_dependence_probe_v1` | evaluated-policy-side counterfactual；`run_history_dependence` | policy prompt 只读 full/recent-k/critical-event-removed 三种 public observation；同一脚本另外在 author-side restore 相同 S/D/action 做环境解释重放 | natural-language action only；脚本把 action 差异与 environment appraisal/state-delta 差异写入 `history_dependence_result.schema.json` | 三个 policy 条件改为同配置、同 seed 重新采样，原 rollout action 只留作审计；环境探针只运行 canonical appraisal/state update，不生成不会反向影响 delta 的回复；支持逐条断点与新 ID 定向复验 |
 | `task_t1_v1` | evaluated-agent-side；T1 baseline/evaluation | 只读 public longitudinal instance | `task_t1_output.schema.json` | 移除作者 effects/oracle；证据 ID 必须可见 |
 | `task_t2_v1` | evaluated-agent-side；T2 baseline/evaluation | 只读 A/B history 与相同 O* | `task_t2_output.schema.json` | 明确 O* byte-identical，禁止构建 metadata/private state |
@@ -32,7 +33,7 @@
 
 ## Conceptual problems 与修复
 
-删除了旧版 direct scenario generation、story world、合并 appraisal/update、旧 response、旧 memory、旧 T1/T2/T3/T4、policy action 和 human annotation prompt。同步删除 action interpreter、controlled policy、template response、world benchmark schema 与旧任务合同。`prompt_check.md` 第 16 节关于 escalation/neutral/repair 三种多轮 policy 的旧建议与更新后的 `revision.md` 冲突；按较新的 revision，三类固定策略不进入生成 pipeline，只保留真实 checkpoint 上的局部自由文本 intervention。
+删除了旧版 direct scenario generation、story world、合并 appraisal/update、旧 response、旧 memory、旧 T1/T2/T3/T4、policy action 和 human annotation prompt。同步删除 action interpreter、controlled policy、template response、world benchmark schema 与旧任务合同。[`prompt_check.md`](../source-notes/prompt_check.md) 第 16 节关于 escalation/neutral/repair 三种多轮 policy 的旧建议与更新后的 [`revision.md`](../source-notes/revision.md) 冲突；按较新的 revision，三类固定策略不进入生成 pipeline，只保留真实 checkpoint 上的局部自由文本 intervention。
 
 所有当前 prompt 已采用 task-first、quality/constraints 居中、output/schema-last。Appraisal → semantic state update → deterministic numeric mapping → response 的顺序已在代码和测试中固定。Source quality → normalization → initial state 的顺序也已在 CLI、schema 和文档中固定。
 

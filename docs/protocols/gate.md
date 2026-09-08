@@ -43,11 +43,10 @@ Open-source / locally deployed models
 目标不是让最强模型生成“最好看的对话”，而是获得：
 
 ```text
-Quality
-+
-Behavioral Diversity
-+
-Model-family Diversity
+Raw candidate search coverage（可来自多个 model family）
+→ Quality Gate
+→ Behavioral Diversity
+→ Task-specific utility
 ```
 
 ---
@@ -129,6 +128,8 @@ Non-duplicate
 Behaviorally Diverse
 ```
 
+模型家族只作为 raw search coverage 与审计字段，不是最终入选配额。不得为了“每个模型都入选”压过更适合当前 scenario 或当前任务的高质量 trajectory。
+
 ---
 
 ## 6. Quality + Diversity Selection
@@ -153,9 +154,12 @@ hidden-state leakage
 malformed output
 repetitive loop
 severe character contradiction
+broken dialogue logic
 meaningless premature ending
 nonsensical state oscillation
 implementation-induced state saturation
+future-information leakage
+unusable trajectory
 ```
 
 通过后，再做 diversity filtering。
@@ -164,7 +168,8 @@ implementation-induced state saturation
 
 ```text
 12 trajectories
-→ 只留下最高分 1 条
+→ 不经三态筛选、证据审计和人工比较
+→ 直接按单一总分留下 1 条
 ```
 
 而应该：
@@ -172,9 +177,11 @@ implementation-induced state saturation
 ```text
 12 trajectories
 → Quality Gate
-→ 去重
-→ 保留 4–6 条质量高但演化不同的 trajectories
+→ 去重与协议人工审核
+→ 每场景保留 1 条经人工确认的 canonical trajectory
 ```
+
+唯一 canonical 轨迹形成后，T1/T2/T3 必须分别验证源适配度；T2 可额外绑定一条同样通过 Gate 3 与人工审核的 task-local auxiliary history（不计入 canonical rollout 主池）。T1/T2/T3 必须分别选源，而不是共享一个总分 winner：T1 优先 state–response consistency 与 history dependence；T2 同时考虑 history dependence、轨迹质量和 state divergence；T3 优先 interaction progression、state–response consistency 与有充分历史的 checkpoint。模型名称不进入任务分数，只保留为 provenance 和并列时审计信息。
 
 ---
 
