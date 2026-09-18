@@ -1,0 +1,572 @@
+{
+  "format": "socialflux_scale20_design_matrix_v2",
+  "scenario_count": 20,
+  "parent": "configs/scale20_v1/design_matrix.json",
+  "design_contract": {
+    "turn_target": "10-20 natural; short retained; 20 cap",
+    "evidence_policy": "authored public nodes; no forced resolution",
+    "version_separation": "v1 rollouts are not v2 validation evidence"
+  },
+  "scenarios": [
+    {
+      "scenario_id": "IA_PIPE_001",
+      "title": "导师—学生署名冲突",
+      "relationship_category": "学业/导师关系",
+      "relationship_structure": "对话参与者 与 导师 的持续关系",
+      "conflict_structure": "贡献证据×制度依赖",
+      "source_type": "narrative-derived",
+      "source_work": "The Chair",
+      "source_plot_position": "department leadership under institutional pressure; no episode-specific sequence is claimed",
+      "source_verification": "High-level academic power and career-dependence structure inspired by The Chair. The project scenario replaces all characters, institution, authorship facts, deadlines, choices, and dialogue. Source verification: https://media.netflix.com/en/only-on-netflix/81206259",
+      "primary_states": [
+        "emotion.anger",
+        "emotion.anxiety",
+        "relationship.trust",
+        "relationship.hostility"
+      ],
+      "time_organization": "current_contribution_dispute → lab_group_meeting_record → journal_submission_node",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 2
+    },
+    {
+      "scenario_id": "IA_PIPE_002",
+      "title": "经理—员工绩效争议",
+      "relationship_category": "职场上下级",
+      "relationship_structure": "对话参与者 与 部门经理 的持续关系",
+      "conflict_structure": "绩效证据×管理权力",
+      "source_type": "narrative-derived",
+      "source_work": "年会不能停！",
+      "source_plot_position": "an employee is caught in an opaque personnel system while a manager protects their own position; no scene or dialogue is reproduced",
+      "source_verification": "High-level workplace hierarchy, opaque personnel process, and self-protective management structure inspired by 年会不能停！. The appraisal dispute, evidence, roles, deadlines, and all dialogue are original. Source verification: https://society.people.com.cn/n1/2024/0128/c1008-40167927.html",
+      "primary_states": [
+        "emotion.anger",
+        "emotion.anxiety",
+        "relationship.trust",
+        "relationship.hostility"
+      ],
+      "time_organization": "rating_evidence_meeting → performance_self_audit_result → appeal_deadline",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 2
+    },
+    {
+      "scenario_id": "IA_PIPE_003",
+      "title": "朋友间借款与信任",
+      "relationship_category": "友情",
+      "relationship_structure": "对话参与者 与 朋友 的持续关系",
+      "conflict_structure": "债务履约×友情边界",
+      "source_type": "synthetic-script",
+      "source_work": null,
+      "source_plot_position": null,
+      "source_verification": "由多种通用社会互动机制组合成原创剧本；没有使用可识别的具体作品角色、场景、事件序列或对白。",
+      "primary_states": [
+        "emotion.anger",
+        "emotion.anxiety",
+        "relationship.trust",
+        "relationship.hostility"
+      ],
+      "time_organization": "initial_repayment_negotiation → first_repayment_checkpoint",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 2
+    },
+    {
+      "scenario_id": "IA_PIPE_004",
+      "title": "伴侣照护责任冲突",
+      "relationship_category": "恋爱/伴侣",
+      "relationship_structure": "对话参与者 与 伴侣 的持续关系",
+      "conflict_structure": "照护容量×被忽视感",
+      "source_type": "narrative-derived",
+      "source_work": "小日子",
+      "source_plot_position": "a couple's own decisions become entangled with obligations to both families; no episode-specific sequence is claimed",
+      "source_verification": "High-level couple-versus-family-boundary and shared-responsibility structure inspired by 小日子. The care recipient, appointment, work constraints, roles, and all dialogue are original. Source verification: https://wetv.vip/zh-cn/play/ugfajmyp45a2zuk-Simple%20Days",
+      "primary_states": [
+        "emotion.anger",
+        "emotion.anxiety",
+        "relationship.trust",
+        "relationship.hostility"
+      ],
+      "time_organization": "care_load_conversation → two_week_care_review",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    },
+    {
+      "scenario_id": "IA_PIPE_005",
+      "title": "家庭养老资源分配",
+      "relationship_category": "亲情/手足",
+      "relationship_structure": "对话参与者 与 家庭成员 的持续关系",
+      "conflict_structure": "紧急照护×旧家庭不公",
+      "source_type": "narrative-derived",
+      "source_work": "都挺好",
+      "source_plot_position": "siblings with unequal histories negotiate a parent's living and care needs; the project does not reproduce an episode outcome",
+      "source_verification": "High-level sibling elder-care, money, and old-family-role structure inspired by 都挺好. The discharge timeline, capacities, care choices, and all dialogue are original. Source verification: https://www.gtv.com.tw/Program/P2020030301/index.html",
+      "primary_states": [
+        "emotion.anger",
+        "emotion.anxiety",
+        "relationship.trust",
+        "relationship.hostility"
+      ],
+      "time_organization": "discharge_capacity_meeting → discharge_plan_check → first_week_home_review",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    },
+    {
+      "scenario_id": "IA_PIPE_006",
+      "title": "编辑与记者信息核验",
+      "relationship_category": "职场合作",
+      "relationship_structure": "对话参与者 与 编辑 的持续关系",
+      "conflict_structure": "证据强度×公共风险",
+      "source_type": "synthetic-script",
+      "source_work": null,
+      "source_plot_position": null,
+      "source_verification": "由社会机制与关系约束先形成原创叙事脚本，再标准化为 scenario。",
+      "primary_states": [
+        "emotion.anger",
+        "emotion.anxiety",
+        "relationship.trust",
+        "relationship.hostility"
+      ],
+      "time_organization": "editorial_evidence_review → legal_wording_review",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    },
+    {
+      "scenario_id": "IA_PIPE_007",
+      "title": "平台申诉与商户责任",
+      "relationship_category": "陌生人/平台弱关系",
+      "relationship_structure": "对话参与者 与 平台客服 的持续关系",
+      "conflict_structure": "信息不对称×经营损失",
+      "source_type": "synthetic-script",
+      "source_work": null,
+      "source_plot_position": null,
+      "source_verification": "由多种通用社会互动机制组合成原创剧本；没有使用可识别的具体作品角色、场景、事件序列或对白。",
+      "primary_states": [
+        "emotion.anger",
+        "emotion.anxiety",
+        "relationship.trust",
+        "relationship.hostility"
+      ],
+      "time_organization": "evidence_mismatch_review → manual_review_intake",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    },
+    {
+      "scenario_id": "IA_PIPE_008",
+      "title": "医疗沟通与治疗选择",
+      "relationship_category": "医患弱关系",
+      "relationship_structure": "对话参与者 与 医生 的持续关系",
+      "conflict_structure": "临床不确定×患者价值",
+      "source_type": "synthetic-script",
+      "source_work": null,
+      "source_plot_position": null,
+      "source_verification": "由社会机制与关系约束先形成原创叙事脚本，再标准化为 scenario。",
+      "primary_states": [
+        "emotion.anger",
+        "emotion.anxiety",
+        "relationship.trust",
+        "relationship.hostility"
+      ],
+      "time_organization": "risk_clarification → shared_decision_meeting",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    },
+    {
+      "scenario_id": "IA_PIPE_009",
+      "title": "团队项目贡献冲突",
+      "relationship_category": "学业/同伴合作",
+      "relationship_structure": "对话参与者 与 项目负责人 的持续关系",
+      "conflict_structure": "贡献记录×交付责任",
+      "source_type": "synthetic-script",
+      "source_work": null,
+      "source_plot_position": null,
+      "source_verification": "由多种通用社会互动机制组合成原创剧本；没有使用可识别的具体作品角色、场景、事件序列或对白。",
+      "primary_states": [
+        "emotion.anger",
+        "emotion.anxiety",
+        "relationship.trust",
+        "relationship.hostility"
+      ],
+      "time_organization": "shared_record_review → integration_rehearsal",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    },
+    {
+      "scenario_id": "IA_PIPE_010",
+      "title": "AI 上线安全与效率",
+      "relationship_category": "职场跨职能",
+      "relationship_structure": "对话参与者 与 产品负责人 的持续关系",
+      "conflict_structure": "安全风险×商业时限",
+      "source_type": "synthetic-script",
+      "source_work": null,
+      "source_plot_position": null,
+      "source_verification": "由社会机制与关系约束先形成原创叙事脚本，再标准化为 scenario。",
+      "primary_states": [
+        "emotion.anger",
+        "emotion.anxiety",
+        "relationship.trust",
+        "relationship.hostility"
+      ],
+      "time_organization": "risk_scope_meeting → go_no_go_meeting → monitoring_review",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    },
+    {
+      "scenario_id": "IA_PIPE_011",
+      "title": "高端展会的临时撤展决定",
+      "relationship_category": "职场上下级",
+      "relationship_structure": "高标准总监与试用期策展助理",
+      "conflict_structure": "程序公平×赞助压力",
+      "source_type": "narrative-derived",
+      "source_work": "The Devil Wears Prada",
+      "source_plot_position": "abstracted workplace status gatekeeping and asymmetric career leverage",
+      "source_verification": "High-level social mechanism inspired by The Devil Wears Prada (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+      "primary_states": [
+        "emotion.irritation",
+        "motivation.openness",
+        "relationship.professional_respect",
+        "schedule_pressure"
+      ],
+      "time_organization": "withdrawal_request_review → morning_compliance_review",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    },
+    {
+      "scenario_id": "IA_PIPE_012",
+      "title": "异地搬迁前的共同照护安排",
+      "relationship_category": "恋爱/分居伴侣",
+      "relationship_structure": "分居伴侣与共同照护者",
+      "conflict_structure": "职业迁移×共同照护",
+      "source_type": "narrative-derived",
+      "source_work": "Marriage Story",
+      "source_plot_position": "abstracted separation negotiation under conflicting family and career goals",
+      "source_verification": "High-level social mechanism inspired by Marriage Story (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+      "primary_states": [
+        "emotion.grief",
+        "motivation.compromise_readiness",
+        "relationship.trust",
+        "child_stability_risk"
+      ],
+      "time_organization": "relocation_needs_meeting → work_decision_checkpoint → school_planning_meeting",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    },
+    {
+      "scenario_id": "IA_PIPE_013",
+      "title": "事故复盘委员会的少数意见",
+      "relationship_category": "专业委员会弱关系",
+      "relationship_structure": "委员会主席与持少数意见的外部评审",
+      "conflict_structure": "少数证据×群体定责",
+      "source_type": "narrative-derived",
+      "source_work": "12 Angry Men",
+      "source_plot_position": "abstracted minority dissent during a pressured group decision",
+      "source_verification": "High-level social mechanism inspired by 12 Angry Men (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+      "primary_states": [
+        "emotion.uncertainty",
+        "motivation.evidence_openness",
+        "relationship.credibility_trust",
+        "decision_error_risk"
+      ],
+      "time_organization": "committee_evidence_review → clock_sync_result",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    },
+    {
+      "scenario_id": "IA_PIPE_014",
+      "title": "家族公益基金的接班表决",
+      "relationship_category": "亲情/手足",
+      "relationship_structure": "有竞争历史的手足与共同董事",
+      "conflict_structure": "家庭认可×治理条件",
+      "source_type": "narrative-derived",
+      "source_work": "Succession",
+      "source_plot_position": "abstracted family-enterprise succession bargaining and unstable authority",
+      "source_verification": "High-level social mechanism inspired by Succession (television); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+      "primary_states": [
+        "emotion.resentment",
+        "motivation.coalition_openness",
+        "relationship.sibling_trust",
+        "governance_failure_risk"
+      ],
+      "time_organization": "conditional_support_meeting → succession_vote",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    },
+    {
+      "scenario_id": "IA_PIPE_015",
+      "title": "城市供水异常的公开通报",
+      "relationship_category": "职场跨专业",
+      "relationship_structure": "技术工程师与危机协调主任",
+      "conflict_structure": "科学不确定×公开预警",
+      "source_type": "narrative-derived",
+      "source_work": "Chernobyl",
+      "source_plot_position": "abstracted institutional truth-telling during a public-risk crisis",
+      "source_verification": "High-level social mechanism inspired by Chernobyl (television); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+      "primary_states": [
+        "emotion.moral_distress",
+        "motivation.truth_commitment",
+        "relationship.expert_trust",
+        "public_harm_risk"
+      ],
+      "time_organization": "anomaly_triage → confirmation_window",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    },
+    {
+      "scenario_id": "IA_PIPE_016",
+      "title": "社区餐馆改造前夜的运营冲突",
+      "relationship_category": "亲情兼职场合作",
+      "relationship_structure": "共同承担遗产压力的亲属与工作搭档",
+      "conflict_structure": "专业改造×家族遗产",
+      "source_type": "narrative-derived",
+      "source_work": "The Bear",
+      "source_plot_position": "abstracted high-pressure team coordination and contested operational authority",
+      "source_verification": "High-level social mechanism inspired by The Bear (television); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+      "primary_states": [
+        "emotion.grief",
+        "motivation.shared_ownership",
+        "relationship.professional_respect",
+        "team_breakdown_risk"
+      ],
+      "time_organization": "opening_scope_meeting → kitchen_rehearsal → first_week_review",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    },
+    {
+      "scenario_id": "IA_PIPE_017",
+      "title": "家庭是否披露长辈病情",
+      "relationship_category": "亲情",
+      "relationship_structure": "家族事务组织者与返乡晚辈",
+      "conflict_structure": "知情权×保护性隐瞒",
+      "source_type": "narrative-derived",
+      "source_work": "The Farewell",
+      "source_plot_position": "abstracted family secrecy conflict framed as collective protection",
+      "source_verification": "High-level social mechanism inspired by The Farewell (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+      "primary_states": [
+        "emotion.guilt",
+        "motivation.honesty_readiness",
+        "relationship.family_trust",
+        "elder_distress_risk"
+      ],
+      "time_organization": "disclosure_values_meeting → doctor_coordination → family_conversation",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    },
+    {
+      "scenario_id": "IA_PIPE_018",
+      "title": "未知信号事件中的解释权",
+      "relationship_category": "临时跨专业弱关系",
+      "relationship_structure": "临时征召的语言研究员与安全指挥官",
+      "conflict_structure": "歧义解释×危机升级",
+      "source_type": "narrative-derived",
+      "source_work": "Arrival",
+      "source_plot_position": "abstracted ambiguous-signal interpretation under escalation risk",
+      "source_verification": "High-level social mechanism inspired by Arrival (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+      "primary_states": [
+        "emotion.uncertainty",
+        "emotion.curiosity",
+        "relationship.expert_trust",
+        "crisis_escalation_risk"
+      ],
+      "time_organization": "interpretation_assumptions → cross_region_data_review → clarification_signal_decision",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    },
+    {
+      "scenario_id": "IA_PIPE_019",
+      "title": "创业公司股权稀释争议",
+      "relationship_category": "友情兼创业合作",
+      "relationship_structure": "由朋友转为权责不对等的创业合伙人",
+      "conflict_structure": "股权授权×友情背叛",
+      "source_type": "narrative-derived",
+      "source_work": "The Social Network",
+      "source_plot_position": "abstracted founder-credit dispute under friendship and ownership tension",
+      "source_verification": "High-level social mechanism inspired by The Social Network (film); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+      "primary_states": [
+        "emotion.resentment",
+        "motivation.recognition_readiness",
+        "relationship.friendship_trust",
+        "equity_dispute_risk"
+      ],
+      "time_organization": "authorization_harm_meeting → board_packet_review → governance_board_meeting",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    },
+    {
+      "scenario_id": "IA_PIPE_020",
+      "title": "公益法律中心的保密和解",
+      "relationship_category": "职场师徒",
+      "relationship_structure": "资深督导律师与初级承办律师",
+      "conflict_structure": "客户权利×机构生存",
+      "source_type": "narrative-derived",
+      "source_work": "Better Call Saul",
+      "source_plot_position": "abstracted ethical boundary negotiation under professional loyalty and pressure",
+      "source_verification": "High-level social mechanism inspired by Better Call Saul (television); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+      "primary_states": [
+        "emotion.guilt",
+        "motivation.moral_resolve",
+        "relationship.mentor_trust",
+        "client_harm_risk"
+      ],
+      "time_organization": "client_risk_stratification → ethics_review_checkpoint",
+      "task_potential": {
+        "T1": "check_after_generation",
+        "T2": "controlled_pair_design_only_not_two_independent_rollouts",
+        "T3": "checkpoint_branch_potential; requires 5-10 subsequent turns",
+        "T4": "online_natural_ending_candidate"
+      },
+      "configuration_status": "v2_built_schema_pending",
+      "generation_status": "not_generated_with_v2",
+      "semantic_review_status": "not_reviewed_with_v2",
+      "v2_evidence_pool_count": 1
+    }
+  ]
+}

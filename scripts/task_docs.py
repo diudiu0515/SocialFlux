@@ -31,7 +31,9 @@ def _state_at_checkpoint(trajectory, public_history_length):
     if public_history_length < len(turns):
         return turns[public_history_length].get("state_before", {})
     if turns:
-        return turns[-1].get("state_after", {})
+        return turns[-1].get(
+            "state_after_public_events", turns[-1].get("state_after", {})
+        )
     return trajectory.get("initial_state", {})
 
 
@@ -63,7 +65,12 @@ def _observable(observation):
     observation = observation or {}
     expression = observation.get("observable_expression", {}) or {}
     cues = observation.get("observable_cues", []) or expression.get("behavioral_cues", []) or []
+    longitudinal = observation.get("longitudinal_context", {})
+    segment = longitudinal.get("segment", {})
+    time = longitudinal.get("time", {})
     return [
+        f"- 当前片段：{_text(segment.get('segment_id'))}（片段内第 {segment.get('segment_turn_id', 0)} 轮；原因：{_text(segment.get('reason'))}）",
+        f"- 已经过时间：{time.get('elapsed', 0)} {time.get('unit', '—')}",
         f"- 当前回应：{_text(observation.get('current_response'))}",
         f"- 表情：{_text(expression.get('facial_expression'))}",
         f"- 视线：{_text(expression.get('gaze'))}",
@@ -83,10 +90,15 @@ def _public_history(history, heading="公开对话历史"):
                 f"- {turn_id}，被评估角色：{_text(turn.get('policy_action', {}).get('text'))}",
                 f"  - 环境角色：{_text(turn.get('environment_response'))}",
             ])
+            for event in turn.get("public_events_after", []):
+                lines.append(
+                    f"  - 公开时间/事件记录（{event.get('evidence_id', 'event')}）：{_text(event.get('text'))}"
+                )
         else:
             role = {
                 "evaluated_agent": "被评估角色",
                 "environment_agent": "环境角色",
+                "public_event": "公开时间/事件记录",
             }.get(turn.get("role"), _text(turn.get("role"), "角色"))
             lines.append(f"- {turn.get('turn_id', index)}，{role}：{_text(turn.get('text'))}")
     lines.append("")
@@ -134,7 +146,8 @@ def _render_t1(instance, trajectories):
     lines.extend([
         "**私有诊断层（仅供研究员核验生成合理性，不得作为模型输入或正式 GT）**",
         "",
-        f"- 本轮内部状态变化：{_transition(turn.get('state_before'), turn.get('state_after'))}",
+        f"- 本轮行动后内部状态变化：{_transition(turn.get('state_before'), turn.get('state_after'))}",
+        f"- 公开时间/事件后状态：{_state_snapshot(turn.get('state_after_public_events', turn.get('state_after', {})))}",
         f"- 本轮互动动力变化：{_transition(turn.get('dynamics_before'), turn.get('dynamics_after'))}",
         "- 人工抽查：对照最后一句 action，确认变化方向、幅度、persona 条件化和历史依赖是否合理。",
         "",
@@ -206,6 +219,9 @@ def _render_t3(instance, branches):
             f"- 延迟状态：{_transition(branch.get('state_before'), branch.get('state_after_delayed'))}",
             f"- 即时互动动力：{_transition(branch.get('dynamics_before'), branch.get('dynamics_after_immediate'))}",
             f"- 延迟互动动力：{_transition(branch.get('dynamics_before'), branch.get('dynamics_after_delayed'))}",
+            f"- 实际窗口：{branch.get('actual_turns_observed', '—')} 轮；经过 {branch.get('elapsed_time_delta', '—')} 时间单位（{branch.get('elapsed_time_start', '—')} → {branch.get('elapsed_time_end', '—')}）",
+            f"- 冻结外生计划：`{branch.get('external_event_plan_hash', '—')}`",
+            f"- 跨越事件：{_text('；'.join(event.get('text', '') for event in branch.get('crossed_event_nodes', [])) or None)}",
             "",
         ])
     lines.extend([

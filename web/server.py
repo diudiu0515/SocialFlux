@@ -3,7 +3,9 @@
 import argparse
 import base64
 import hmac
+import hashlib
 import json
+import math
 from pathlib import Path
 import shutil
 import sys
@@ -14,19 +16,89 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from environment.observation import (
+    PRIVATE_AUTHOR_FIELDS,
+    PUBLIC_OBSERVATION_FIELDS,
+    build_initial_policy_observation,
+)
 from evaluation.quality_gates import SCENARIO_CHECKS, TASK_REVIEW_RATINGS
-from evaluation.rollout_gate import HARD_REJECT_REASONS, QUALITY_DIMENSIONS
+from evaluation.rollout_gate import (
+    HARD_REJECT_REASONS, QUALITY_DIMENSIONS, infer_observed_outcome,
+)
+from prompts.loader import get_prompt, render_prompt
 from scripts.scenario_docs import discover_scenario_paths
 
 SCENARIO_DIR = ROOT / "configs" / "scenarios"
-PIPELINE_DIR = ROOT / "build" / "pipeline_v2"
+PIPELINE_DIR = ROOT / "build" / "pipeline_20turn_selected"
 ACCEPTANCE_DIR = ROOT / "build" / "acceptance_v2"
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 MEDIA_MANIFEST = ROOT / "media" / "talking_head" / "manifest.json"
-SCREENING_REPORT = ROOT / "build" / "rollout_screening_v1" / "screening_report.json"
+SCREENING_REPORT = ROOT / "build" / "rollout_current_20x3_v11" / "screening_report.json"
+LONG_ROLLOUT_ROOT = ROOT / "build" / "rollout_current_20x3_v11"
+ROLLOUT_REVIEW_ROOTS = (
+    LONG_ROLLOUT_ROOT,
+    ROOT / "build" / "rollout_newrequest_20x3_v3",
+    ROOT / "build" / "newrequest_agent_v20_ia001_probe",
+    ROOT / "build" / "newrequest_agent_v20_ia001_probe_v2",
+    ROOT / "build" / "newrequest_agent_v20_ia001_probe_v3",
+    ROOT / "build" / "newrequest_agent_v20_ia001_probe_v4",
+    ROOT / "build" / "newrequest_qwen32all_ia001_probe",
+    ROOT / "build" / "newrequest_v4_probe_ia001",
+    ROOT / "build" / "newrequest_v4_probe_ia003",
+    ROOT / "build" / "newrequest_v4_probe_ia019",
+    ROOT / "build" / "newrequest_v6_probe_ia003",
+    ROOT / "build" / "newrequest_v6_probe_ia019",
+    ROOT / "build" / "newrequest_v7_probe_ia001",
+    ROOT / "build" / "newrequest_v7_probe_ia009",
+    ROOT / "build" / "newrequest_v7_probe_ia019",
+    ROOT / "build" / "newrequest_v8_probe_ia003",
+    ROOT / "build" / "newrequest_v9_probe_ia009",
+    ROOT / "build" / "newrequest_v9_probe_ia016",
+    ROOT / "build" / "newrequest_scenarios_v1_probe_ia003",
+    ROOT / "build" / "newrequest_scenarios_v1_probe_ia009",
+    ROOT / "build" / "newrequest_scenarios_v1_probe_ia019",
+)
 SCENARIO_REVIEW_TEMPLATE = ROOT / "reviews" / "scenario_review_template.json"
 ENVIRONMENT_REVIEW_TEMPLATE = ROOT / "reviews" / "environment_evidence_template.json"
 FORMAL_ENVIRONMENT_DIR = ROOT / "data" / "formal" / "environment"
+HUMAN_REVIEW_PLAN = ROOT / "configs" / "human_review_plan.json"
+HUMAN_REVIEW_WORKSPACE = ROOT / "build" / "human_review_workspace.json"
+TASK_REVIEW_SAMPLE = ROOT / "reviews" / "task_review_sample_template.json"
+MACHINE_TASK_PROPOSALS = ROOT / "build" / "machine_task_proposals.json"
+TASK_EXAMPLES = ROOT / "build" / "task_examples_v1" / "examples.json"
+TASK_EXAMPLE_MEDIA_ROOT = ROOT / "media" / "task_examples"
+QUALITY_GATE_REPORT = ROOT / "build" / "quality_gates" / "report.json"
+R3_DIAGNOSTIC_REVIEW = (
+    ROOT / "data" / "formal" / "environment" / "r3_current_diagnostic_review.json"
+)
+SCALE20_PILOT_REVIEW = ROOT / "build" / "scale20_v1" / "pilot_review.json"
+SCALE20_FULL20_REVIEW = ROOT / "build" / "scale20_v1" / "full20_human_review.json"
+SCALE20_V2_REVIEW = ROOT / "build" / "scale20_v2" / "review.json"
+SCALE150_MATRIX = ROOT / "configs" / "scale300_v1" / "design_matrix.json"
+SCALE150_MODEL_REVIEW_FILES = (
+    ROOT / "build" / "scale150_v1" / "model_semantic_reviews.codex.json",
+    ROOT / "build" / "scale200_v1" / "model_semantic_sample_reviews.codex.json",
+    ROOT / "build" / "scale300_v1" / "model_semantic_reviews.json",
+)
+SCALE300_AUTOMATIC_GATE_AUDIT = ROOT / "build" / "scale300_v1" / "automatic_gate_audit.json"
+# Switch to build/scale300_tasks only after its summary covers all 300 ordinals.
+SCALE300_TASK_ROOT = ROOT / "build" / "scale300_tasks_v3"
+T2_EXPRESSION_DEV_ROOT = ROOT / "build" / "t2_expression_dev_v1"
+SCALE150_ROLLOUT_ROOTS = (
+    ("qwen32_all", ROOT / "build" / "scale150_v1" / "rollouts_v2"),
+    ("qwen32_policy_qwen35_environment_pre_request_fix", ROOT / "build" / "scale150_v1" / "rollouts_hybrid"),
+    ("qwen32_policy_qwen35_environment_pre_schema_fix", ROOT / "build" / "scale150_v1" / "rollouts_hybrid_v2"),
+    ("qwen32_policy_qwen35_environment", ROOT / "build" / "scale150_v1" / "rollouts_hybrid_v3"),
+    ("qwen32_policy_qwen35_environment_content_v2", ROOT / "build" / "scale150_v1" / "rollouts_content_v2"),
+    ("qwen32_policy_qwen35_environment_scale200_source_order_bug", ROOT / "build" / "scale200_v1" / "rollouts_content_v1_source_order_bug"),
+    ("qwen32_policy_qwen35_environment_scale200_corrected", ROOT / "build" / "scale200_v1" / "rollouts_content_v2"),
+    ("ia089_retry_connection_refused", ROOT / "build" / "scale200_v1" / "rollouts_content_v3_ia089"),
+    ("ia089_qwen35_role_failure", ROOT / "build" / "scale200_v1" / "rollouts_content_v4_ia089"),
+    ("ia089_qwen32_all_stages_partial", ROOT / "build" / "scale200_v1" / "rollouts_content_v5_ia089_qwen32all"),
+    ("scale300_thinking_enabled_failure", ROOT / "build" / "scale300_v1" / "rollouts_v1"),
+    ("scale300_new100", ROOT / "build" / "scale300_v1" / "rollouts_v2"),
+    ("scale300_hybrid_new100", ROOT / "build" / "scale300_v1" / "rollouts_v3_hybrid"),
+)
 
 
 def credentials_match(header, username, password):
@@ -59,6 +131,458 @@ def read_jsonl(path):
     ]
 
 
+def load_r3_diagnostic_review():
+    """Load current R3 evidence without treating it as formal acceptance."""
+    return read_json(R3_DIAGNOSTIC_REVIEW, {}) or {}
+
+
+def load_scale20_pilot_review():
+    """Load the bounded Scale20 pilot and attach each immutable trajectory artifact."""
+    review = read_json(SCALE20_PILOT_REVIEW, {}) or {}
+    enriched = []
+    for candidate in review.get("candidates", []):
+        item = dict(candidate)
+        relative = Path(item.get("artifact_path", ""))
+        target = (ROOT / relative).resolve()
+        if ROOT in target.parents and target.is_file():
+            trajectory = read_json(target, {}) or {}
+            trajectory["screening"] = {
+                "automatic_decision": "REJECT",
+                "candidate_classification": item.get("classification", "diagnostic"),
+                "source_root": "scale20_v1_bounded_pilot",
+                "human_review_reasons": [
+                    issue.get("issue", "") for issue in item.get("issues", [])
+                ],
+            }
+            trajectory["diagnostic_review"] = {
+                "review_type": "model_semantic_review",
+                "status": item.get("model_semantic_review", "pending"),
+                "human_review": item.get("human_review", "pending"),
+                "issues": item.get("issues", []),
+            }
+            item["trajectory"] = trajectory
+        else:
+            item["trajectory_error"] = "artifact_missing_or_outside_workspace"
+        enriched.append(item)
+    return {**review, "candidates": enriched}
+
+
+def load_scale20_full20_review():
+    """Load all 20 one-attempt trajectories for human review."""
+    review = read_json(SCALE20_FULL20_REVIEW, {}) or {}
+    enriched = []
+    for candidate in review.get("candidates", []):
+        item = dict(candidate)
+        relative = Path(item.get("artifact_path", ""))
+        target = (ROOT / relative).resolve()
+        if ROOT in target.parents and target.is_file():
+            trajectory = read_json(target, {}) or {}
+            semantic = item.get("model_semantic_review", {})
+            semantic_label = semantic.get("label", "pending") if isinstance(semantic, dict) else str(semantic)
+            semantic_note = semantic.get("note", "") if isinstance(semantic, dict) else ""
+            machine_decision = "PASS" if item.get("generation_status") == "accepted" else "REVIEW"
+            trajectory["screening"] = {
+                "automatic_decision": machine_decision,
+                "candidate_classification": item.get("generation_status", "diagnostic"),
+                "source_root": "scale20_v1_full20_one_attempt",
+                "human_review_reasons": [semantic_note] if semantic_note else [],
+            }
+            trajectory["diagnostic_review"] = {
+                "review_type": "model_semantic_review",
+                "status": semantic_label,
+                "human_review": item.get("human_review", "pending"),
+                "issues": [semantic_note] if semantic_note else [],
+            }
+            item["trajectory"] = trajectory
+        else:
+            item["trajectory_error"] = "artifact_missing_or_outside_workspace"
+        enriched.append(item)
+    return {**review, "candidates": enriched}
+
+
+def load_scale20_combined_review():
+    """Keep v1 full20 evidence and append clearly versioned v2 pilots."""
+    review = load_scale20_full20_review()
+    v2 = read_json(SCALE20_V2_REVIEW, {}) or {}
+    enriched = []
+    for candidate in v2.get("candidates", []):
+        item = dict(candidate)
+        target = (ROOT / Path(item.get("artifact_path", ""))).resolve()
+        if ROOT in target.parents and target.is_file():
+            trajectory = read_json(target, {}) or {}
+            semantic = item.get("model_semantic_review", {})
+            trajectory["screening"] = {
+                "automatic_decision": "REVIEW",
+                "candidate_classification": item.get("generation_status", "diagnostic"),
+                "source_root": "scale20_v2_representative_pilot",
+                "human_review_reasons": [semantic.get("note", "")],
+            }
+            trajectory["diagnostic_review"] = {
+                "review_type": "model_semantic_review",
+                "status": semantic.get("label", "pending"),
+                "human_review": item.get("human_review", "pending"),
+                "issues": item.get("issues", []),
+            }
+            item["trajectory"] = trajectory
+        else:
+            item["trajectory_error"] = "artifact_missing_or_outside_workspace"
+        enriched.append(item)
+    return {
+        **review,
+        "candidates": review.get("candidates", []),
+        "v2_candidates": enriched,
+        "v2_revision": {key: value for key, value in v2.items() if key != "candidates"},
+    }
+
+
+
+def load_scale150_review():
+    """Return a compact, live Scale200 index without embedding trajectory bodies."""
+    matrix = read_json(SCALE150_MATRIX, {}) or {}
+    automatic_gate_records = {
+        item.get("scenario_id"): item
+        for item in (read_json(SCALE300_AUTOMATIC_GATE_AUDIT, {}) or {}).get("records", [])
+        if item.get("scenario_id")
+    }
+    attempts = {}
+    semantic_reviews = {}
+    for review_path in SCALE150_MODEL_REVIEW_FILES:
+        semantic_reviews.update({
+            item.get("trajectory_id"): item
+            for item in (read_json(review_path, {}) or {}).get("records", [])
+            if item.get("trajectory_id")
+        })
+    shard_status = {}
+    for stack_name, rollout_root in SCALE150_ROLLOUT_ROOTS:
+        for shard in range(1, 5):
+            progress_path = rollout_root / f"shard{shard}" / "progress.json"
+            progress = read_json(progress_path, {}) or {}
+            shard_status[f"{stack_name}.shard{shard}"] = {
+                "status": progress.get("status", "not_started"),
+                "attempt_count": len(progress.get("attempts", [])),
+                "accepted_count": progress.get("completed_slot_count", 0),
+                "expected_count": progress.get("expected_slot_count", 0),
+                "quality_summary": progress.get("quality_summary", {}),
+            }
+            for attempt in progress.get("attempts", []):
+                attempts.setdefault(attempt.get("scenario_id"), []).append(
+                    (stack_name, rollout_root, shard, attempt)
+                )
+    candidates = []
+    status_counts = {}
+    generated_count = 0
+    for row in matrix.get("scenarios", []):
+        item = {
+            "scenario_id": row["scenario_id"],
+            "ordinal": row.get("ordinal"),
+            "title": row.get("title"),
+            "relationship_category": row.get("relationship_category"),
+            "conflict_structure": row.get("conflict_structure"),
+            "source_type": row.get("source_type"),
+            "source_work": row.get("source_work"),
+            "configuration_status": row.get("configuration_status"),
+            "generation_status": "pending_generation",
+            "human_review": "pending",
+            "automatic_gate_audit": automatic_gate_records.get(row["scenario_id"], {}),
+            "gate_status": {
+                "gate1": "pending_human_review",
+                "gate2": "pending_or_machine_evidence_only",
+                "gate3": "pending_rollout_semantic_review",
+                "gate4": "not_constructed",
+            },
+        }
+        scenario_path = (
+            SCALE150_MATRIX.parent / "scenarios"
+            / f"scenario_{int(row['ordinal']):03d}"
+            / f"scenario_{int(row['ordinal']):03d}.json"
+        )
+        current_scenario = read_json(scenario_path, {}) or {}
+        current_fingerprint = hashlib.sha256(json.dumps(
+            current_scenario, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")).hexdigest()
+        item["scenario_fingerprint"] = current_fingerprint
+        attempt_history = attempts.get(row["scenario_id"], [])
+        item["attempt_history_count"] = len(attempt_history)
+        item["stale_attempt_count"] = sum(
+            record[3].get("scenario_fingerprint") != current_fingerprint
+            for record in attempt_history
+        )
+        record = next(
+            (
+                value for value in reversed(attempt_history)
+                if value[3].get("scenario_fingerprint") == current_fingerprint
+            ),
+            None,
+        )
+        if record:
+            stack_name, rollout_root, shard, attempt = record
+            status = attempt.get("status", "unknown")
+            item["generation_status"] = status
+            item["scenario_version_matches_current"] = (
+                attempt.get("scenario_fingerprint") == current_fingerprint
+            )
+            if not item["scenario_version_matches_current"]:
+                item["gate_status"]["gate3"] = "stale_scenario_version_regeneration_required"
+            item["trajectory_id"] = (
+                attempt.get("trajectory_id") or attempt.get("partial_trajectory_id")
+            )
+            item["turn_count"] = (
+                attempt.get("completed_turns_before_error")
+                or (attempt.get("precheck", {}).get("structural", {}).get("turn_count"))
+                or 0
+            )
+            item["ending"] = attempt.get("precheck", {}).get("structural", {}).get("ending")
+            item["machine_precheck"] = attempt.get("precheck")
+            scenario_dir = (
+                rollout_root / f"shard{shard}"
+                / f"scenario_{int(row['ordinal']):03d}"
+            )
+            filename = (
+                attempt.get("partial_trajectory_file")
+                if status == "generation_error"
+                else attempt.get("trajectory_file")
+            )
+            if filename:
+                subdirectory = {
+                    "generation_error": "rejected",
+                    "short_natural_trajectory": "short_trajectories",
+                    "budget_truncated": "budget_truncated",
+                    "machine_rejected": "rejected",
+                }.get(status, "")
+                target = scenario_dir / subdirectory / filename
+                if target.is_file():
+                    item["artifact_path"] = str(target.relative_to(ROOT))
+            item["model_stack"] = stack_name
+            item["model_semantic_review"] = semantic_reviews.get(
+                item.get("trajectory_id"), {"decision": "pending"}
+            )
+            if item["model_semantic_review"].get("decision") == "reject":
+                item["gate_status"]["gate3"] = "model_semantic_reject_human_pending"
+            generated_count += 1
+        status_counts[item["generation_status"]] = (
+            status_counts.get(item["generation_status"], 0) + 1
+        )
+        candidates.append(item)
+    return {
+        "format": "socialflux_scale300_live_review_v1",
+        "configuration_version": "scale300_v1",
+        "scenario_count": matrix.get("scenario_count", 0),
+        "source_counts": matrix.get("source_counts", {}),
+        "design_contract": matrix.get("design_contract", {}),
+        "generated_scenario_count": generated_count,
+        "pending_scenario_count": max(0, matrix.get("scenario_count", 0) - generated_count),
+        "generation_status_counts": status_counts,
+        "shards": shard_status,
+        "candidates": candidates,
+        "human_review_warning": "模型与机器检查不是人工验收；短轨迹、截断和失败样本均保留。",
+    }
+
+
+def load_scale150_scenario(scenario_id):
+    """Load one exact Scale200 scenario for Gate 1 review."""
+    matrix = read_json(SCALE150_MATRIX, {}) or {}
+    row = next(
+        (
+            item for item in matrix.get("scenarios", [])
+            if item.get("scenario_id") == scenario_id
+        ),
+        None,
+    )
+    if row is None:
+        return None
+    ordinal = int(row.get("ordinal", 0))
+    target = (
+        SCALE150_MATRIX.parent / "scenarios" / f"scenario_{ordinal:03d}"
+        / f"scenario_{ordinal:03d}.json"
+    ).resolve()
+    if ROOT not in target.parents or not target.is_file():
+        return None
+    scenario = read_json(target, {}) or {}
+    if scenario.get("scenario_id") != scenario_id:
+        return None
+    return {
+        "matrix_record": row,
+        "scenario": scenario,
+        "artifact_path": str(target.relative_to(ROOT)),
+        "scenario_sha256": hashlib.sha256(target.read_bytes()).hexdigest(),
+        "human_review": "pending",
+    }
+
+
+def load_scale150_trajectory(trajectory_id):
+    review = load_scale150_review()
+    candidate = next(
+        (
+            item for item in review.get("candidates", [])
+            if item.get("trajectory_id") == trajectory_id
+        ),
+        None,
+    )
+    if not candidate or not candidate.get("artifact_path"):
+        return None
+    target = (ROOT / candidate["artifact_path"]).resolve()
+    if ROOT not in target.parents or not target.is_file():
+        return None
+    trajectory = read_json(target, {}) or {}
+    trajectory["screening"] = {
+        "automatic_decision": (
+            "PASS" if candidate.get("generation_status") == "accepted" else "REVIEW"
+        ),
+        "candidate_classification": candidate.get("generation_status"),
+        "source_root": candidate.get("model_stack", "scale150_v1"),
+        "human_review_reasons": [],
+    }
+    semantic_review = candidate.get("model_semantic_review", {"decision": "pending"})
+    trajectory["diagnostic_review"] = {
+        "review_type": "model_semantic_review_not_human",
+        "status": semantic_review.get("decision", "pending"),
+        "issues": semantic_review.get("issues", []),
+        "summary": semantic_review.get("summary", ""),
+        "human_review": "pending",
+    }
+    return {"candidate": candidate, "trajectory": trajectory}
+
+
+def load_scale300_task_review():
+    """Return live, compact T1-T4 construction status for all Scale300 scenarios."""
+    review = load_scale150_review()
+    progress_by_scenario = {}
+    answer_counts = {name: 0 for name in ("T1", "T2", "T3", "T4")}
+    for target in sorted(SCALE300_TASK_ROOT.glob("scenario_*.json")):
+        package = read_json(target, {}) or {}
+        scenario_id = package.get("scenario_id")
+        if not scenario_id:
+            continue
+        tasks = package.get("tasks", {})
+        for name in answer_counts:
+            answer_counts[name] += int(bool((tasks.get(name) or {}).get("llm_answer")))
+        progress_by_scenario[scenario_id] = {
+            "status": package.get("status", "pending"),
+            "turn_count": package.get("turn_count"),
+            "task_statuses": package.get("task_statuses", {}),
+            "source_quality": package.get("source_quality", {}),
+            "request_accounting": package.get("request_accounting", {}),
+        }
+    candidates = []
+    semantic_counts = {}
+    for candidate in review.get("candidates", []):
+        item = {
+            key: candidate.get(key)
+            for key in (
+                "scenario_id", "ordinal", "title", "relationship_category",
+                "conflict_structure", "generation_status", "turn_count",
+                "trajectory_id", "artifact_path", "model_semantic_review",
+            )
+        }
+        item["task_construction"] = progress_by_scenario.get(
+            candidate.get("scenario_id"), {"status": "pending"}
+        )
+        semantic_decision = (candidate.get("model_semantic_review") or {}).get(
+            "decision", "pending"
+        )
+        semantic_counts[semantic_decision] = (
+            semantic_counts.get(semantic_decision, 0) + 1
+        )
+        candidates.append(item)
+    task_summary = read_json(SCALE300_TASK_ROOT / "summary.json", {}) or {}
+    task_summary["answer_counts"] = answer_counts
+    automatic_gate_summary = (read_json(SCALE300_AUTOMATIC_GATE_AUDIT, {}) or {}).get("summary", {})
+    return {
+        "format": "socialflux_scale300_task_review_live_v1",
+        "background": read_json(SCALE300_TASK_ROOT / "background_status.json", {}) or {},
+        "summary": task_summary,
+        "processed": len(progress_by_scenario),
+        "total_scenarios": len(candidates),
+        "shards": [],
+        "candidates": candidates,
+        "big_progress": {
+            "configured": review.get("scenario_count", 0),
+            "rollouts_generated": review.get("generated_scenario_count", 0),
+            "rollout_status_counts": review.get("generation_status_counts", {}),
+            "model_semantic_review_counts": semantic_counts,
+            "automatic_gate_summary": automatic_gate_summary,
+            "strict_machine_and_model_gate3_pass_human_pending": sum(
+                candidate.get("generation_status") == "accepted"
+                and (candidate.get("model_semantic_review") or {}).get("decision") == "approve"
+                for candidate in review.get("candidates", [])
+            ),
+            "human_ground_truth_completed": task_summary.get(
+                "human_ground_truth_completed", 0
+            ),
+        },
+        "annotation_notice": (
+            "LLM answers are review aids, not ground truth. T2 controlled pairs and "
+            "T3 branches remain pending human/branch validation where marked."
+        ),
+    }
+
+
+def load_scale300_task_package(scenario_id):
+    """Load one generated task package without allowing arbitrary path access."""
+    review = load_scale150_review()
+    candidate = next(
+        (item for item in review.get("candidates", []) if item.get("scenario_id") == scenario_id),
+        None,
+    )
+    if not candidate:
+        return None
+    ordinal = int(candidate.get("ordinal", 0))
+    target = (SCALE300_TASK_ROOT / f"scenario_{ordinal:03d}.json").resolve()
+    if SCALE300_TASK_ROOT.resolve() not in target.parents or not target.is_file():
+        return {
+            "scenario_id": scenario_id,
+            "ordinal": ordinal,
+            "status": "pending",
+            "human_review": "pending",
+        }
+    payload = read_json(target, {}) or {}
+    payload["artifact_path"] = str(target.relative_to(ROOT))
+    return payload
+
+
+
+def _r3_diagnostic_trajectory(scenario_id):
+    review = load_r3_diagnostic_review()
+    candidate = review.get("human_review_candidate", {})
+    if candidate.get("scenario_id") != scenario_id:
+        return None
+    relative = Path(candidate.get("artifact_path", ""))
+    target = (ROOT / relative).resolve()
+    if ROOT not in target.parents or not target.is_file():
+        return None
+    trajectory = read_json(target, {}) or {}
+    if not trajectory.get("turns"):
+        return None
+    trajectory["diagnostic_review"] = candidate
+    trajectory["screening"] = {
+        "automatic_decision": "REJECT",
+        "scores": {},
+        "source_stage": "r3_diagnostic_rejected_evidence",
+        "observed_outcome": infer_observed_outcome(trajectory),
+        "judge_rationale": candidate.get("known_issue", ""),
+        "hard_failures": ["unusable_trajectory"],
+        "missing_evidence": list(QUALITY_DIMENSIONS),
+        "protocol_contract_warnings": [
+            "predates_current_quality_version",
+            "diagnostic_human_feedback_only",
+            "cannot_be_promoted_to_formal_pool",
+        ],
+        "provisional_selected": False,
+        "human_review_required": True,
+        "human_review_reasons": [
+            "请判断 t11–t17 是不可接受的车轱辘话，还是自然的必要确认。",
+            "请逐轮核对提案、承诺、付款、请求的说话人和 action_owner。",
+            "该轨迹在 t20 前因旧 closure validator 失败；既非自然结束，也非达到上限。",
+        ],
+        "precheck": {
+            "quality_version": candidate.get("quality_version"),
+            "classification": candidate.get("classification"),
+            "fixed_since_candidate": candidate.get("fixed_since_candidate", []),
+        },
+    }
+    return trajectory
+
+
 def annotation_contract():
     return {
         "format": "socialflux_annotation_ui_v1",
@@ -69,11 +593,11 @@ def annotation_contract():
             "maximum": 5,
             "dimensions": [
                 "social_plausibility",
+                "character_coherence",
                 "tradeoff_quality",
                 "history_necessity",
-                "strategy_space",
-                "motivation_coherence",
-                "surface_originality",
+                "interaction_richness",
+                "t1_t4_suitability",
             ],
         },
         "rollout_quality_dimensions": list(QUALITY_DIMENSIONS),
@@ -91,6 +615,14 @@ def annotation_contract():
         "task_review_ratings": {
             task_type: sorted(ratings)
             for task_type, ratings in TASK_REVIEW_RATINGS.items()
+        },
+        "human_review_plan": read_json(HUMAN_REVIEW_PLAN, {}) or {},
+        "gate4_review": {
+            "format": "socialflux_gate4_double_audit_v2",
+            "same_deterministic_sample": True,
+            "independent_reviewers": 2,
+            "third_reviewer_only_for_disagreement": True,
+            "machine_proposal_is_ground_truth": False,
         },
         "task_label_contracts": {
             "T1_state_tracking": {"value_scale": [0, 10], "requires_evidence": True},
@@ -115,6 +647,15 @@ def load_scenario_records():
     return [(path, read_json(path)) for path in discover_scenario_paths(SCENARIO_DIR)]
 
 
+def scenario_review_packet(scenario_id):
+    registry = read_json(SCENARIO_REVIEW_TEMPLATE, {}) or {}
+    return next(
+        (item for item in registry.get("records", [])
+         if item.get("scenario_id") == scenario_id),
+        None,
+    )
+
+
 def load_scenarios():
     return [scenario for _, scenario in load_scenario_records()]
 
@@ -124,8 +665,107 @@ def load_media_assets():
     return manifest.get("assets", [])
 
 
+def load_task_examples():
+    """Load T1–T3 review examples without promoting machine answers to GT."""
+    packet = read_json(TASK_EXAMPLES, {}) or {}
+    examples = []
+    for source in packet.get("examples", []):
+        item = dict(source)
+        media = dict(item.get("media", {}))
+        target = (ROOT / Path(media.get("path", ""))).resolve()
+        media_root = TASK_EXAMPLE_MEDIA_ROOT.resolve()
+        if media_root in target.parents and target.is_file():
+            checksum = hashlib.sha256(target.read_bytes()).hexdigest()
+            media.update({"status": "generated", "video_sha256": checksum,
+                          "url": f"/task-media/{target.name}?v={checksum[:12]}"})
+        elif ((ROOT / "media" / "talking_head" / "assets").resolve() in target.parents
+              and target.is_file()):
+            checksum = hashlib.sha256(target.read_bytes()).hexdigest()
+            manifest_record = next(
+                (record for record in load_media_assets()
+                 if record.get("asset_id") == media.get("asset_id")),
+                {},
+            )
+
+            media.update({"status": "generated", "video_sha256": checksum,
+                          "quality_status": manifest_record.get("quality_status"),
+                          "quality_checks": manifest_record.get("quality_checks", {})})
+        elif media.get("shown_to_model"):
+            media["status"] = "pending_generation"
+        item["media"] = media
+        examples.append(item)
+    return {**packet, "examples": examples}
+
+
+def load_t2_expression_dev():
+    """Load bounded T2 pairs with program, model, and Codex reviews separated."""
+    review_packet = read_json(
+        T2_EXPRESSION_DEV_ROOT / "codex_semantic_reviews.json", {}
+    ) or {}
+    reviews = {
+        item.get("scenario_id"): item
+        for item in review_packet.get("records", [])
+    }
+    pairs = []
+    for path in sorted(T2_EXPRESSION_DEV_ROOT.glob("pair_*.json")):
+        pair = read_json(path, {}) or {}
+        pair["codex_semantic_review"] = reviews.get(pair.get("scenario_id"), {})
+        pairs.append(pair)
+    codex_counts = {}
+    for pair in pairs:
+        decision = pair["codex_semantic_review"].get("decision", "pending")
+        codex_counts[decision] = codex_counts.get(decision, 0) + 1
+    return {
+        "format": "socialflux_t2_expression_human_review_v1",
+        "summary": read_json(T2_EXPRESSION_DEV_ROOT / "summary.json", {}) or {},
+        "pairs": pairs,
+        "codex_semantic_review_counts": codex_counts,
+        "human_review": "pending",
+        "media_status": "not_generated",
+    }
+
+
 def load_screening_report():
     return read_json(SCREENING_REPORT, {}) or {}
+
+
+def load_long_rollout_progress():
+    return read_json(LONG_ROLLOUT_ROOT / "progress.json", {}) or {}
+
+
+def long_rollout_summary(scenario_id=None):
+    progress = load_long_rollout_progress()
+    completed = list(progress.get("completed_slots", {}).values())
+    attempts = progress.get("attempts", [])
+    if scenario_id:
+        completed = [item for item in completed if item.get("scenario_id") == scenario_id]
+        attempts = [item for item in attempts if item.get("scenario_id") == scenario_id]
+        expected = (
+            progress.get("expected_slot_count", 0) // max(len(load_scenarios()), 1)
+            if progress else 0
+        )
+    else:
+        expected = progress.get("expected_slot_count", 0)
+    return {
+        "status": progress.get("status") or (
+            "in_progress" if progress else "not_started"
+        ),
+        "required_turns": progress.get("required_turns", 20),
+        "expected_slot_count": expected,
+        "completed_slot_count": len(completed),
+        "visible_attempt_count": sum(
+            bool(item.get("trajectory_file") or item.get("partial_trajectory_file"))
+            for item in attempts
+        ),
+        "machine_rejected_attempt_count": sum(
+            str(item.get("status", "")).endswith("rejected") for item in attempts
+        ),
+        "generation_error_count": sum(
+            item.get("status") == "generation_error" for item in attempts
+        ),
+        "updated_at_utc": progress.get("updated_at_utc", ""),
+        "evidence_status": "development_raw_pending_judge_history_and_human_review",
+    }
 
 
 def _review_file_status(path):
@@ -139,6 +779,19 @@ def _review_file_status(path):
     }
 
 
+def human_review_workspace():
+    value = read_json(HUMAN_REVIEW_WORKSPACE, {}) or {}
+    if value.get("format") != "socialflux_human_review_workspace_v1":
+        return {
+            "format": "socialflux_human_review_workspace_v1",
+            "staffing_plan": read_json(HUMAN_REVIEW_PLAN, {}) or {},
+            "gate2": {},
+            "gate4": read_json(TASK_REVIEW_SAMPLE, {}) or {},
+            "warning": "Run scripts/prepare_human_review_workspace.py to materialize review packets.",
+        }
+    return value
+
+
 def manual_review_catalog():
     """Expose every human-facing stage, including not-yet-generated packets."""
     screening = load_screening_report()
@@ -146,6 +799,10 @@ def manual_review_catalog():
     scenario_records = (read_json(SCENARIO_REVIEW_TEMPLATE, {}) or {}).get("records", [])
     media_count = len(load_media_assets())
     task_count = sum(len(load_instances(item["scenario_id"])) for item in load_scenarios())
+    workspace = human_review_workspace()
+    task_sample = workspace.get("gate4", {}).get("sampling", {}).get("sample_count", 0)
+    gate3_primary = workspace.get("gate3", {}).get("primary_count", summary.get("active_candidate_count", 0))
+    gate3_secondary = workspace.get("gate3", {}).get("secondary_audit_count", 0)
     environment_files = {
         name: _review_file_status(FORMAL_ENVIRONMENT_DIR / name)
         for name in (
@@ -154,19 +811,37 @@ def manual_review_catalog():
             "local_counterfactual.json", "backbone_sensitivity.json",
         )
     }
+    long_summary = long_rollout_summary()
+    quality_report = read_json(QUALITY_GATE_REPORT, {}) or {}
+    quality_status = {
+        key: value.get("status", "pending")
+        for key, value in quality_report.get("gates", {}).items()
+    }
+    gate3_required = max(
+        long_summary.get("expected_slot_count", 0), len(load_scenarios()) * 3
+    )
+    gate4_plan = workspace.get("staffing_plan", {}).get("gate4", {})
+    gate4_target = 3 * max(
+        gate4_plan.get("minimum_sample_per_task_type", 2),
+        math.ceil(len(scenario_records) * gate4_plan.get("sample_fraction_per_task_type", 0.1)),
+    )
     categories = [
+        ["long_rollout_generation", "最多20轮自然结束候选池",
+         long_summary["visible_attempt_count"], long_summary["expected_slot_count"],
+         long_summary["status"], "每个 scenario 生成 3 条；最多 20 轮并允许自然结束。短轨迹、预算截断和失败尝试全部留痕并可人工查看。", "Rollout筛选"],
+        ["scale20_pilot", "Scale20 单条全量人工审核",
+         20, 20, "pending_human_review",
+         "20 个场景各有一条本轮完整或 partial 轨迹，共 202 轮；模型复核仅用于排序，所有正文均交由人工判断。", "Scale20 人审"],
         ["gate1_scenario", "Gate 1 · Scenario 与 S0/D0 冻结", len(scenario_records), 20,
-         "pending_human", "人物、冲突、state、D0、视频阈值、来源原创化及姓名/时间/哈希。", "Scenario 情节"],
-        ["gate2_environment", "Gate 2 · Environment Validity",
+         quality_status.get("gate_1_scenario_quality", "pending"), "人物、冲突、state、D0、视频阈值、来源原创化及姓名/时间/哈希。", "Scenario 情节"],
+        ["gate2_environment", "Gate 2 · Environment Validity（1 人实验复核）",
          sum(value["exists"] for value in environment_files.values()), 6,
-         "pending_evidence", "E1–E5 真人实验；E6 是双 backbone 模型实验。", "本页证据状态"],
+         quality_status.get("gate_2_environment_validity", "pending"), "E1/E2 为确定性抽样；E3/E4/E5 自动跑实验后由 1 人复核；E6 自动。", "人审工作台 · Gate 2"],
         ["gate3_rollout", "Gate 3 · Rollout Screening",
-         summary.get("human_review_queue_count", 0), summary.get("human_review_queue_count", 0),
-         "pending_human", "PASS/REVIEW/REJECT 审计、turn-ID 证据与每场景三选一比较。", "Rollout 筛选"],
-        ["gate4_tasks", "Gate 4 · Task 1/2/3 逐题审核", task_count, task_count,
-         "development_packets_only", "公开题面、来源、专属检查、人工标签和证据句；当前仍是开发包。", "Task 标注"],
-        ["formal_gt", "Formal GT · 三人盲标与仲裁", 0, task_count * 3,
-         "blocked_by_formal_tasks", "每个正式 task 三人独立盲标，分歧再具名仲裁。", "正式 Task 包生成后"],
+         gate3_primary, gate3_required,
+         quality_status.get("gate_3_rollout_quality", "pending"), f"主审优先看 {gate3_primary} 条 active candidates；第二人确定性 audit {gate3_secondary} 条。Archive 同步可见，人工可复核，但不会被自动伪装成通过。", "Rollout 筛选 + 人审工作台 audit 清单"],
+        ["gate4_tasks", "Gate 4 · 两人同样本独立抽查", task_sample, gate4_target,
+         quality_status.get("gate_4_task_instance_quality", "pending"), f"当前 {task_count}/60 个机器建议答案；目标按 task type 确定性抽取 {gate4_target} 个。两人看同一批，分歧才交第三人。", "人审工作台 · Gate 4"],
         ["media", "Talking Head · 视频人工审核", media_count, media_count,
          "pending_human", "表情—状态、人物连续性、语音自然度和多模态信息效用。", "Scenario 情节"],
         ["filter_holdout", "筛选器校准与 Holdout", 0, 1,
@@ -182,6 +857,10 @@ def manual_review_catalog():
         ],
         "environment_files": environment_files,
         "screening_summary": summary,
+        "long_rollout_generation": long_summary,
+        "staffing_plan": workspace.get("staffing_plan", {}),
+        "model_stack": workspace.get("model_stack", {}),
+        "r3_current_diagnostic_review": load_r3_diagnostic_review(),
         "protocol_document": (ROOT / "docs" / "protocols" / "SocialFlux_Rollout_Screening_Protocol_v1.md").read_text(encoding="utf-8"),
         "warning": "未生成、未实名签署或仅有开发数据的项目明确保持 pending。",
     }
@@ -199,7 +878,30 @@ def _scenario_record(scenario_id):
 
 
 def load_instances(scenario_id):
-    return read_jsonl(PIPELINE_DIR / scenario_id / "offline" / "instances.jsonl")
+    proposals = {
+        item.get("instance_id"): item.get("proposal")
+        for item in (read_json(MACHINE_TASK_PROPOSALS, {}) or {}).get("records", [])
+    }
+    interventions = read_json(
+        PIPELINE_DIR / scenario_id / "validation" / "local_action_interventions.json",
+        [],
+    ) or []
+    by_checkpoint = {}
+    for branch in interventions:
+        key = (branch.get("source_trajectory_id"), branch.get("checkpoint_turn_id"))
+        by_checkpoint.setdefault(key, []).append(branch)
+    records = []
+    for item in read_jsonl(PIPELINE_DIR / scenario_id / "offline" / "instances.jsonl"):
+        metadata = item.get("metadata", {})
+        key = (metadata.get("source_trajectory_id"), metadata.get("checkpoint_turn_id"))
+        records.append({
+            **item,
+            "machine_proposal": proposals.get(item.get("instance_id"), {
+                "status": "not_generated"
+            }),
+            "counterfactual_diagnostics": by_checkpoint.get(key, []),
+        })
+    return records
 
 def _pipeline_summary(scenario_id):
     return read_json(PIPELINE_DIR / scenario_id / "pipeline_manifest.json", {}) or {}
@@ -208,15 +910,8 @@ def _pipeline_summary(scenario_id):
 def scenario_summary(scenario, source_path):
     pipeline = _pipeline_summary(scenario["scenario_id"])
     bundle = source_path.parent
-    rollout_manifest = read_json(bundle / "rollouts" / "manifest.json", {}) or {}
-    local_rollout_ready = (
-        rollout_manifest.get("config", {}).get("origin")
-        == "free_form_model_interaction"
-    )
-    trajectory_count = pipeline.get(
-        "trajectory_count",
-        rollout_manifest.get("trajectory_count", 0) if local_rollout_ready else 0,
-    )
+    active_rollouts = long_rollout_summary(scenario["scenario_id"])["completed_slot_count"]
+    trajectory_count = pipeline.get("trajectory_count", active_rollouts)
     screening = load_screening_report().get("scenarios", {}).get(scenario["scenario_id"], {})
     return {
         "scenario_id": scenario["scenario_id"],
@@ -238,10 +933,7 @@ def scenario_summary(scenario, source_path):
             "t1": pipeline.get("t1", 0),
             "t2": pipeline.get("t2", 0),
             "t3": pipeline.get("t3", 0),
-            "available": (
-                pipeline.get("trajectory_origin") == "free_form_model_interaction"
-                or local_rollout_ready
-            ),
+            "available": bool(pipeline),
         },
         "screening": {
             "candidate_count": screening.get("candidate_count", trajectory_count),
@@ -262,7 +954,7 @@ def acceptance_report():
     })
 
 
-def load_rollouts(scenario_id):
+def _legacy_rollouts(scenario_id):
     screening_records = [
         item for item in load_screening_report().get("records", [])
         if item.get("scenario_id") == scenario_id and item.get("human_review_required")
@@ -294,7 +986,120 @@ def load_rollouts(scenario_id):
     for trajectory_id in manifest.get("trajectory_ids", []):
         trajectory = read_json(rollout_dir / f"{trajectory_id}.json")
         if trajectory:
+            trajectory.setdefault("screening", {
+                "automatic_decision": "UNSCREENED",
+                "candidate_classification": "legacy_manifest_candidate",
+                "human_review_required": True,
+                "human_review_reasons": [
+                    "Legacy free-form rollout has no bound screening record."
+                ],
+            })
             rollouts.append(trajectory)
+    return rollouts
+
+
+def _scenario_fingerprint(scenario):
+    payload = json.dumps(
+        scenario, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def load_long_rollouts(scenario_id):
+    record = _scenario_record(scenario_id)
+    if record is None:
+        return []
+    current_scenario_fingerprint = _scenario_fingerprint(record[1])
+    rollouts = []
+    seen = set()
+    for rollout_root in ROLLOUT_REVIEW_ROOTS:
+        scenario_dir = rollout_root / record[0].parent.name
+        progress = read_json(rollout_root / "progress.json", {}) or {}
+        attempts = {}
+        for item in progress.get("attempts", []):
+            if item.get("scenario_id") != scenario_id:
+                continue
+            for key in ("trajectory_id", "partial_trajectory_id"):
+                trajectory_id = item.get(key)
+                if trajectory_id:
+                    attempts[trajectory_id] = item
+        paths = sorted(scenario_dir.glob("*.json"))
+        for archive in ("short_trajectories", "budget_truncated", "rejected"):
+            paths += sorted((scenario_dir / archive).glob("*.json"))
+        for path in paths:
+            if path.name == "manifest.json":
+                continue
+            trajectory = read_json(path)
+            trajectory_id = (trajectory or {}).get("trajectory_id")
+            if not trajectory or not trajectory.get("turns") or trajectory_id in seen:
+                continue
+            seen.add(trajectory_id)
+            trajectory["scenario_version_matches_current"] = (
+                trajectory.get("scenario_fingerprint")
+                == current_scenario_fingerprint
+            )
+            attempt = attempts.get(trajectory_id, {})
+            classification = attempt.get("status") or {
+                "short_trajectories": "short_natural_trajectory",
+                "budget_truncated": "budget_truncated",
+                "rejected": "machine_rejected",
+            }.get(path.parent.name, "unknown")
+            accepted = classification == "accepted" and path.parent == scenario_dir
+            source_stage = {
+                "accepted": "newrequest_main_candidate_10_to_20",
+                "short_natural_trajectory": "newrequest_short_natural_archive",
+                "budget_truncated": "newrequest_budget_truncated_archive",
+                "generation_error": "newrequest_partial_generation_error",
+            }.get(classification, "newrequest_machine_rejected_attempt")
+            rationale = {
+                "accepted": "10–20 turn natural-ending machine precheck passed; semantic and human review pending.",
+                "short_natural_trajectory": "Conversation ended naturally before turn 10; retained for review, not padded.",
+                "budget_truncated": "Generation reached the 20-turn budget without a natural ending.",
+                "generation_error": "A complete partial trajectory was retained before generation stopped.",
+            }.get(classification, "Generation attempt failed a hard machine check.")
+            precheck = attempt.get("precheck", {})
+            hard = precheck.get("hard_reject_reasons", [])
+            trajectory["screening"] = {
+                "automatic_decision": "PENDING" if accepted else "REVIEW",
+                "scores": {},
+                "mean_quality_score": None,
+                "source_stage": source_stage,
+                "source_root": str(rollout_root.relative_to(ROOT)),
+                "candidate_classification": classification,
+                "observed_outcome": infer_observed_outcome(trajectory),
+                "turn_evidence": {"judge_turn_evidence_complete": False},
+                "judge_rationale": rationale,
+                "hard_failures": hard,
+                "missing_evidence": list(QUALITY_DIMENSIONS),
+                "protocol_contract_warnings": [
+                    "pending_rollout_judge_v2", "pending_history_dependence",
+                    "pending_human_comparative_review",
+                ],
+                "provisional_selected": False,
+                "human_review_required": True,
+                "human_review_reasons": [
+                    "Raw candidate is visible for semantic and human review; machine status is not human acceptance."
+                ],
+                "generation_attempt": attempt.get("attempt"),
+                "precheck": precheck,
+            }
+            rollouts.append(trajectory)
+    return rollouts
+
+
+def load_rollouts(scenario_id):
+    if load_long_rollout_progress():
+        rollouts = load_long_rollouts(scenario_id)
+    else:
+        rollouts = _legacy_rollouts(scenario_id)
+    diagnostic = _r3_diagnostic_trajectory(scenario_id)
+    if diagnostic and not any(
+        item.get("trajectory_id") == diagnostic.get("trajectory_id") for item in rollouts
+    ):
+        if any(item.get("scenario_version_matches_current") for item in rollouts):
+            rollouts.append(diagnostic)
+        else:
+            rollouts.insert(0, diagnostic)
     return rollouts
 
 
@@ -303,12 +1108,31 @@ def scenario_detail(scenario_id):
     if record is None:
         return None
     source_path, scenario = record
-    dialogue_path = source_path.parent / "rollouts" / "dialogues.md"
-    task_review_path = source_path.parent / "rollouts" / "tasks.md"
+    active_bundle = LONG_ROLLOUT_ROOT / source_path.parent.name
+    dialogue_path = active_bundle / "dialogues.md"
+    task_review_path = PIPELINE_DIR / scenario_id / "tasks.md"
     screening = load_screening_report()
+    initial_observation = build_initial_policy_observation(scenario)
+    prompt_id = "task_t4_action_v21"
+    model_contract = {
+        "prompt_id": prompt_id,
+        "horizon_turns": 20,
+        "role_card": scenario["evaluated_agent_role"],
+        "public_observation_fields": list(PUBLIC_OBSERVATION_FIELDS),
+        "private_author_fields_excluded": list(PRIVATE_AUTHOR_FIELDS),
+        "initial_observation": initial_observation,
+        "prompt_template": get_prompt(prompt_id),
+        "rendered_initial_prompt": render_prompt(prompt_id, initial_observation),
+        "boundary_note": (
+            "网页向研究者展示 persona/hidden intention/S0/D0；这些作者侧私有信息"
+            "不会进入被测模型 observation。"
+        ),
+    }
     return {
         "summary": scenario_summary(scenario, source_path),
+        "evaluated_model_contract": model_contract,
         "scenario": scenario,
+        "gate1_review_packet": scenario_review_packet(scenario_id),
         "documentation": source_path.with_suffix(".md").read_text(encoding="utf-8"),
         "rollout_dialogues": (
             dialogue_path.read_text(encoding="utf-8")
@@ -328,6 +1152,7 @@ def scenario_detail(scenario_id):
             "task_source_selection", {}
         ),
         "screening": screening.get("scenarios", {}).get(scenario_id, {}),
+        "long_rollout_generation": long_rollout_summary(scenario_id),
         "media_assets": [
             {
                 **asset,
@@ -341,17 +1166,38 @@ def scenario_detail(scenario_id):
         ],
     }
 
-
 def api_payload(path):
     parts = [unquote(part) for part in path.strip("/").split("/") if part]
     records = load_scenario_records()
     catalog = read_json(SCENARIO_DIR / "manifest.json", {}) or {}
     if parts == ["api", "health"]:
-        return {"ok": True, "scenario_count": len(records), "pipeline_version": "v2", "site_mode": "annotation_workbench"}
+        return {"ok": True, "scenario_count": len(records), "pipeline_version": "20turn-selected-v1", "site_mode": "annotation_workbench"}
     if parts == ["api", "annotation-contract"]:
         return annotation_contract()
+    if parts == ["api", "task-examples"]:
+        return load_task_examples()
+    if parts == ["api", "t2-expression-dev"]:
+        return load_t2_expression_dev()
+    if parts == ["api", "gate1-review"]:
+        return read_json(SCENARIO_REVIEW_TEMPLATE, {}) or {}
     if parts == ["api", "manual-review"]:
         return manual_review_catalog()
+    if parts == ["api", "scale20-pilot"]:
+        return load_scale20_pilot_review()
+    if parts == ["api", "scale20-review"]:
+        return load_scale20_combined_review()
+    if parts == ["api", "scale150-review"]:
+        return load_scale150_review()
+    if parts == ["api", "scale300-tasks"]:
+        return load_scale300_task_review()
+    if len(parts) == 3 and parts[:2] == ["api", "scale300-task"]:
+        return load_scale300_task_package(parts[2])
+    if len(parts) == 3 and parts[:2] == ["api", "scale150-scenario"]:
+        return load_scale150_scenario(parts[2])
+    if len(parts) == 3 and parts[:2] == ["api", "scale150-trajectory"]:
+        return load_scale150_trajectory(parts[2])
+    if parts == ["api", "review-workspace"]:
+        return human_review_workspace()
     if parts == ["api", "summary"]:
         return {
             "scenario_count": len(records),
@@ -359,8 +1205,19 @@ def api_payload(path):
             "scenarios": [scenario_summary(scenario, path) for path, scenario in records],
             "pipeline_manifest": read_json(PIPELINE_DIR / "manifest.json", {}) or {},
             "acceptance": acceptance_report(),
+            "quality_gates": read_json(QUALITY_GATE_REPORT, {}) or {},
             "screening": load_screening_report().get("summary", {}),
+            "long_rollout_generation": long_rollout_summary(),
             "manual_review": manual_review_catalog(),
+            "review_workspace": human_review_workspace(),
+            "scale20_pilot": {
+                key: value for key, value in load_scale20_pilot_review().items()
+                if key in {"status", "quality_version", "configuration_summary", "generation_summary", "request_budget", "task_availability"}
+            },
+            "scale20_review": {
+                key: value for key, value in load_scale20_full20_review().items()
+                if key in {"status", "quality_version", "generated_scenario_count", "selected_trajectory_count", "total_turns", "generation_status_counts", "model_semantic_review_counts", "actual_request_counts"}
+            },
         }
     if parts == ["api", "scenarios"]:
         return {
@@ -380,6 +1237,12 @@ class App(SimpleHTTPRequestHandler):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(STATIC_DIR), **kwargs)
+
+    def end_headers(self):
+        static_path = urlparse(self.path).path
+        if static_path.endswith((".html", ".js", ".css")):
+            self.send_header("Cache-Control", "no-store")
+        super().end_headers()
 
     def send_json(self, payload, status=200):
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
@@ -410,6 +1273,25 @@ class App(SimpleHTTPRequestHandler):
         if not self.authenticate():
             return
         parsed = urlparse(self.path)
+        if parsed.path.startswith("/task-media/"):
+            filename = unquote(parsed.path.removeprefix("/task-media/"))
+            target = (TASK_EXAMPLE_MEDIA_ROOT / filename).resolve()
+            media_root = TASK_EXAMPLE_MEDIA_ROOT.resolve()
+            if (
+                target.parent != media_root
+                or target.suffix.lower() != ".mp4"
+                or not target.is_file()
+            ):
+                self.send_error(404, "task media not found")
+                return
+            self.send_response(200)
+            self.send_header("Content-Type", "video/mp4")
+            self.send_header("Content-Length", str(target.stat().st_size))
+            self.send_header("Cache-Control", "public, max-age=3600")
+            self.end_headers()
+            with target.open("rb") as stream:
+                shutil.copyfileobj(stream, self.wfile)
+            return
         if parsed.path.startswith("/media/"):
             asset_id = unquote(parsed.path.removeprefix("/media/"))
             asset = next(
@@ -438,7 +1320,7 @@ class App(SimpleHTTPRequestHandler):
                            200 if payload is not None else 404)
             return
         if parsed.path in ("/", ""):
-            self.path = "/index.html"
+            self.path = "/scale150.html"
         super().do_GET()
 
     def log_message(self, format, *args):

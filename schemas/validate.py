@@ -21,6 +21,10 @@ QUALITY_CHECKS = {
     "t4_adaptation_opportunity",
     "no_universal_script",
 }
+DELTA_LABELS = {
+    "strong_decrease", "moderate_decrease", "mild_decrease", "similar",
+    "mild_increase", "moderate_increase", "strong_increase",
+}
 
 
 def _bounded(value, path):
@@ -51,7 +55,15 @@ def _validate_multimodal(scenario):
         "<": lambda value, threshold: value < threshold,
         "==": lambda value, threshold: value == threshold,
     }
-    for trigger in scenario.get("video_triggers", []):
+    triggers = scenario.get("video_triggers", [])
+    if len(triggers) != 3:
+        raise ValueError("canonical scenario must define exactly three video triggers")
+    priorities = [trigger.get("priority") for trigger in triggers]
+    if any(not isinstance(priority, int) or priority < 1 for priority in priorities):
+        raise ValueError("every video trigger requires a positive integer priority")
+    if len(set(priorities)) != len(priorities):
+        raise ValueError("video trigger priorities must be unique within a scenario")
+    for trigger in triggers:
         for key in ("trigger_id", "trigger_mode", "conditions", "cue_template", "observable_expression"):
             if key not in trigger:
                 raise ValueError(f"video trigger missing {key}")
@@ -80,11 +92,120 @@ def _validate_multimodal(scenario):
                 raise ValueError(f"invalid change condition for video trigger variable {variable}")
             if not isinstance(condition.get("threshold"), (int, float)):
                 raise ValueError(f"video change threshold must be numeric for {variable}")
-        if trigger.get("cooldown_turns", 0) < 0:
-            raise ValueError("video trigger cooldown_turns must be non-negative")
+        if not 2 <= trigger.get("cooldown_turns", 0) <= 4:
+            raise ValueError("video trigger cooldown_turns must be in [2, 4]")
         if not isinstance(trigger["observable_expression"], dict) or not trigger["observable_expression"]:
             raise ValueError("video trigger observable_expression must be a non-empty object")
 
+
+
+def _flat_numeric_paths(values, prefix=""):
+    paths = set()
+    for key, value in values.items():
+        path = f"{prefix}.{key}" if prefix else key
+        if isinstance(value, dict):
+            paths.update(_flat_numeric_paths(value, path))
+        else:
+            paths.add(path)
+    return paths
+
+
+def _validate_sparse_effect(effect, allowed_paths, label):
+    if not isinstance(effect, dict):
+        raise ValueError(f"{label} must be an object")
+    unknown = set(effect) - set(allowed_paths)
+    if unknown:
+        raise ValueError(f"{label} references unknown variables: {sorted(unknown)}")
+    invalid = {path: value for path, value in effect.items() if value not in DELTA_LABELS}
+    if invalid:
+        raise ValueError(f"{label} has invalid semantic deltas: {invalid}")
+
+
+def _validate_longitudinal_design(scenario):
+    design = scenario.get("longitudinal_design")
+    if design is None:
+        return
+    if design.get("format") != "socialflux_longitudinal_v1":
+        raise ValueError("longitudinal_design requires socialflux_longitudinal_v1")
+    if not str(design.get("time_unit", "")).strip():
+        raise ValueError("longitudinal_design requires an explicit time_unit")
+    segments = design.get("segments")
+    if not isinstance(segments, list) or len(segments) < 2:
+        raise ValueError("longitudinal_design requires at least two segments")
+    identifiers = [item.get("segment_id") for item in segments]
+    if any(not str(item).strip() for item in identifiers) or len(set(identifiers)) != len(identifiers):
+        raise ValueError("longitudinal segment IDs must be non-empty and unique")
+    state_paths = _flat_numeric_paths(scenario["initial_state"])
+    dynamics_paths = _flat_numeric_paths(scenario["initial_dynamics"])
+    for index, segment in enumerate(segments):
+        minimum = segment.get("min_turns")
+        maximum = segment.get("max_turns")
+        if not isinstance(minimum, int) or not isinstance(maximum, int) or not 1 <= minimum <= maximum:
+            raise ValueError("each longitudinal segment requires 1 <= min_turns <= max_turns")
+        if not str(segment.get("reason", "")).strip():
+            raise ValueError("each longitudinal segment requires a reason")
+        if index:
+            for key in ("advance_by", "public_time_record", "opening_response"):
+                if not segment.get(key):
+                    raise ValueError(f"non-initial longitudinal segment missing {key}")
+        time_effect = segment.get("time_effect", {
+            "policy": "none", "state_delta": {}, "dynamics_delta": {},
+        })
+        if time_effect.get("policy") not in ("none", "scenario_authored"):
+            raise ValueError("time_effect policy must be none or scenario_authored")
+        if time_effect.get("policy") == "none" and (
+            time_effect.get("state_delta") or time_effect.get("dynamics_delta")
+        ):
+            raise ValueError("time-only policy none cannot change state or dynamics")
+        _validate_sparse_effect(
+            time_effect.get("state_delta", {}), state_paths,
+            f"segments[{index}].time_effect.state_delta",
+        )
+        _validate_sparse_effect(
+            time_effect.get("dynamics_delta", {}), dynamics_paths,
+            f"segments[{index}].time_effect.dynamics_delta",
+        )
+    minimum_capacity = sum(item["min_turns"] for item in segments)
+    maximum_capacity = sum(item["max_turns"] for item in segments)
+    if minimum_capacity > scenario["max_turns"]:
+        raise ValueError("longitudinal minimum turns exceed the scenario maximum")
+    if maximum_capacity < min(10, scenario["max_turns"]):
+        raise ValueError("longitudinal segments do not cover the minimum formal horizon")
+
+    pools = design.get("event_pools", [])
+    pool_ids = [pool.get("event_pool_id") for pool in pools]
+    if any(not str(item).strip() for item in pool_ids) or len(set(pool_ids)) != len(pool_ids):
+        raise ValueError("longitudinal event pool IDs must be non-empty and unique")
+    for segment in segments:
+        if segment.get("event_pool_id") and segment["event_pool_id"] not in pool_ids:
+            raise ValueError("longitudinal segment references an unknown event pool")
+    for pool_index, pool in enumerate(pools):
+        if pool.get("selection") != "deterministic_by_trajectory_id":
+            raise ValueError("event pools must use deterministic_by_trajectory_id")
+        outcomes = pool.get("outcomes")
+        if not isinstance(outcomes, list) or not outcomes:
+            raise ValueError("every event pool requires at least one authored outcome")
+        outcome_ids = [item.get("outcome_id") for item in outcomes]
+        if any(not str(item).strip() for item in outcome_ids) or len(set(outcome_ids)) != len(outcome_ids):
+            raise ValueError("event outcome IDs must be non-empty and unique within a pool")
+        for outcome_index, outcome in enumerate(outcomes):
+            if not str(outcome.get("public_record", "")).strip():
+                raise ValueError("every event outcome requires a public record")
+            if outcome.get("causal_scope") not in ("exogenous", "action_mediated"):
+                raise ValueError("event outcome requires a valid causal_scope")
+            if outcome.get("commitment_effect") not in (
+                "none", "fulfilled", "partially_fulfilled", "unfulfilled",
+            ):
+                raise ValueError("event outcome requires a valid commitment_effect")
+            prefix = f"event_pools[{pool_index}].outcomes[{outcome_index}]"
+            _validate_sparse_effect(
+                outcome.get("state_delta", {}), state_paths,
+                f"{prefix}.state_delta",
+            )
+            _validate_sparse_effect(
+                outcome.get("dynamics_delta", {}), dynamics_paths,
+                f"{prefix}.dynamics_delta",
+            )
 
 def validate_blueprint(blueprint):
     required = (
@@ -311,13 +432,18 @@ def validate_scenario(scenario):
     for key in ("persona", "explicit_goal", "hidden_intention"):
         if key not in agent:
             raise ValueError(f"environment_agent missing {key}")
+    evaluated = scenario["evaluated_agent_role"]
+    for key in ("character_id", "name", "role", "explicit_goal"):
+        if not str(evaluated.get(key, "")).strip():
+            raise ValueError(f"evaluated_agent_role missing {key}")
     _bounded(scenario["initial_state"], "initial_state")
     _bounded(scenario["initial_dynamics"], "initial_dynamics")
-    if not isinstance(scenario["max_turns"], int) or scenario["max_turns"] < 1:
-        raise ValueError("max_turns must be a positive integer")
+    if scenario["max_turns"] != 20:
+        raise ValueError("canonical scenario max_turns must be exactly 20")
     horizon = scenario.get("t3_delayed_horizon", 5)
     if not isinstance(horizon, int) or not 5 <= horizon <= 10:
         raise ValueError("t3_delayed_horizon must be between 5 and 10")
+    _validate_longitudinal_design(scenario)
     _validate_multimodal(scenario)
     return scenario
 
@@ -345,6 +471,33 @@ def validate_trajectory(trajectory):
             raise ValueError("every policy action must be non-empty free-form text")
         if "action_id" in action:
             raise ValueError("free-form trajectories must not contain action_id taxonomy")
+    if trajectory.get("longitudinal_design_version"):
+        if trajectory["longitudinal_design_version"] != "socialflux_longitudinal_v1":
+            raise ValueError("unsupported longitudinal trajectory version")
+        timeline = trajectory.get("public_timeline")
+        if not isinstance(timeline, list):
+            raise ValueError("longitudinal trajectory requires a public timeline")
+        timeline_ids = {item.get("event_id") for item in timeline}
+        previous_elapsed = 0
+        for turn in trajectory["turns"]:
+            if not str(turn.get("segment_id", "")).strip():
+                raise ValueError("longitudinal turn requires a segment_id")
+            before = turn.get("elapsed_time_before")
+            after = turn.get("elapsed_time_after")
+            if not isinstance(before, int) or not isinstance(after, int):
+                raise ValueError("longitudinal turn requires integer elapsed time")
+            if before < previous_elapsed or after < before:
+                raise ValueError("longitudinal elapsed time must be monotonic")
+            previous_elapsed = after
+            transition = turn.get("segment_transition_after") or {}
+            event_ids = {
+                event.get("event_id")
+                for event in transition.get("public_events", [])
+            }
+            if not event_ids.issubset(timeline_ids):
+                raise ValueError(
+                    "turn references a public event absent from trajectory timeline"
+                )
     return trajectory
 
 

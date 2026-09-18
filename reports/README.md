@@ -8,7 +8,8 @@
 - `2026-09-06_final_instance_quality.{json,md}`：开发 T1/T2/T3 质量汇总。
 - `2026-09-06_four_gate_final_development.{json,md}`：四 Gate 开发状态；总体不是正式通过。
 - `2026-09-06_gate_filtering_log.md`：修复与替换过程摘要。
-- `2026-09-07_rollout_screening_protocol_v1.md`：184 条 Protocol v1 筛选和 20 条 provisional winner。
+- `2026-09-07_rollout_screening_protocol_v1.md`：旧184条六轮库存按新20轮合同重筛，184条全部REJECT且无winner。
+- `2026-09-08_long_horizon_t4_smoke.md`：20轮T4与raw生成 smoke、失败分析、Prompt hash和排除决定。
 - `2026-09-07_task_selection_iteration.md`：任务专项选源迭代。
 - `2026-09-07_task_source_selection_audit.{json,md}`：T1/T2/T3 选源审计。
 

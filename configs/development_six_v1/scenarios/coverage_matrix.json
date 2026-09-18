@@ -1,0 +1,86 @@
+{
+  "format": "socialflux_scenario_coverage_v1",
+  "dimensions": [
+    "relationship_type",
+    "social_mechanism",
+    "power_asymmetry",
+    "goal_conflict",
+    "information_asymmetry",
+    "temporal_history_pattern",
+    "relevant_state_families",
+    "repair_possibility",
+    "failure_mode",
+    "scenario_source"
+  ],
+  "rows": [
+    {
+      "scenario_id": "IA_PIPE_003",
+      "relationship_type": "对话参与者 与 朋友 的持续关系",
+      "social_mechanism": "friendship trust",
+      "power_asymmetry": "关系权力总体对等，但借款事实造成临时责任不对称。",
+      "goal_conflict": "朋友迟迟未归还本金3000元，过去几次只给含糊延期；双方既想保留多年友谊，又必须把首期还款、实际履约、剩余风险和未来经济边界分开处理。",
+      "information_asymmetry": "保护自身声誉、资源或关系位置，同时避免直接承认失误",
+      "temporal_history_pattern": [
+        "双方都清楚未归还本金为3000元，原定数月前归还，之后出现过几次没有金额或日期的延期。",
+        "借款人近期收入不稳定，但没有向出借人公开完整财务情况；出借人只能要求可执行安排，不能假定未公开原因。",
+        "双方都珍惜多年友谊，但出借人已经停止新的经济帮助，借款人把这种边界体验成不信任。",
+        "任何口头承诺都必须与之后的公开转账记录分开；时间到达本身不能证明已还、部分还或未还。"
+      ],
+      "relevant_state_families": [
+        "emotion",
+        "motivation",
+        "relationship",
+        "risk"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "synthetic-script"
+    },
+    {
+      "scenario_id": "IA_PIPE_009",
+      "relationship_type": "对话参与者 与 项目负责人 的持续关系",
+      "social_mechanism": "peer collaboration",
+      "power_asymmetry": "同伴形式上平等，但任务依赖、成果控制和截止压力造成影响力差异。",
+      "goal_conflict": "团队项目十天后截止，成员对数据清理、原型、展示稿和最后集成分别做了什么缺少共同记录；项目负责人既想按时交付，也担心承认分工混乱会影响自己的成果位置。",
+      "information_asymmetry": "保护自身声誉、资源或关系位置，同时避免直接承认失误",
+      "temporal_history_pattern": [
+        "被评估成员完成了数据清理和方法说明初稿，项目负责人完成原型框架并主导展示方向，这些贡献双方都能从共享仓库看到。",
+        "一次任务重分配把最终集成交给被评估成员，却没有同步减少其原有分析任务。",
+        "距离提交还有十天，原型与分析结果尚未完成一次共同集成测试。",
+        "课程要求署名说明贡献，但不规定固定排序；团队内部仍需自行解释责任和成果归属。"
+      ],
+      "relevant_state_families": [
+        "emotion",
+        "motivation",
+        "relationship",
+        "risk"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "synthetic-script"
+    },
+    {
+      "scenario_id": "IA_PIPE_019",
+      "relationship_type": "由朋友转为权责不对等的创业合伙人",
+      "social_mechanism": "friendship contribution conflict under rapid scaling",
+      "power_asymmetry": "环境角色控制产品、投资人和董事席位；被评估角色掌握早期资金记录与共同创立证据",
+      "goal_conflict": "校园创业公司完成融资后，早期运营合伙人发现股权显著稀释，五天后董事会将确认新治理结构；创始人要保住融资和产品控制，合伙人要查明授权、争取权益并决定友情是否还能支撑合作。",
+      "information_asymmetry": "环境角色知道投资条款针对被评估角色设计；被评估角色保留了早期承诺和转账记录",
+      "temporal_history_pattern": [
+        "双方早期口头约定重大股权变化共同确认，但没有形成完整书面治理条款。",
+        "公司增长后，运营合伙人逐渐被排除在产品会议外；创始人认为一次运营款未及时到账破坏了信任。",
+        "融资已经完成，不能假定可以简单撤销；董事会仍能讨论未来角色、信息权和有限补偿。",
+        "五天后的董事会材料会公开现有授权文件和资本结构，但文件本身不能回答过去伤害或未来信任。"
+      ],
+      "relevant_state_families": [
+        "dynamics",
+        "emotion",
+        "motivation",
+        "relationship"
+      ],
+      "repair_possibility": "human_review_pending",
+      "failure_mode": "human_review_pending",
+      "scenario_source": "narrative-derived"
+    }
+  ]
+}

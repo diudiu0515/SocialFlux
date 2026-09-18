@@ -13,11 +13,13 @@ from environment.delta_mapper import flatten_state
 from environment.env import coerce_free_form_action
 from environment.factory import ModelEnvironmentFactory
 from environment.state_updater import apply_transition
+from evaluation.transition_metrics import compare_transition_outputs
 from prompts.loader import render_prompt
 from providers.factory import build_provider
 from providers.text import complete_distinct_text, text_similarity
+from rollout.configuration import load_rollout_config
 from scripts.audit_formal_rollout_pool import load_records
-from scripts.run_pipeline import load_rollout_config, load_scenarios
+from scripts.run_pipeline import load_scenarios
 
 
 def critical_turn(trajectory, checkpoint):

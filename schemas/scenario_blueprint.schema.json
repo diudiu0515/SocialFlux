@@ -116,6 +116,7 @@
       "required": [
         "character_id",
         "name",
+        "role",
         "explicit_goal"
       ],
       "properties": {
@@ -128,6 +129,10 @@
           "minLength": 1
         },
         "explicit_goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
           "type": "string",
           "minLength": 1
         }
@@ -150,9 +155,7 @@
       }
     },
     "suggested_horizon": {
-      "type": "integer",
-      "minimum": 5,
-      "maximum": 20
+      "const": 20
     }
   },
   "not": {

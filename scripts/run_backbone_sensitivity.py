@@ -54,6 +54,7 @@ def replay_transition(scenario, backbone, checkpoint):
     return {
         "appraisal": transition["appraisal"],
         "evidence_turn_ids": transition["evidence_turn_ids"],
+        "calibration": transition.get("calibration", {}),
         "numeric_state_delta": numeric_state_delta,
         "numeric_dynamics_delta": numeric_dynamics_delta,
     }
@@ -68,6 +69,8 @@ def main():
     args = parser.parse_args()
     config = json.loads(args.config.read_text(encoding="utf-8"))
     backbones = config.get("backbones", [])
+    for backbone in backbones:
+        backbone.setdefault("sampling", {})["temperature"] = 0
     if len(backbones) != 2:
         raise ValueError("backbone sensitivity requires exactly two backbones")
     models = [item.get("provider", {}).get("model") for item in backbones]
@@ -92,6 +95,8 @@ def main():
                     "model_family": backbone["model_family"],
                     "error_type": type(exc).__name__,
                     "error": str(exc),
+                    "validation_error": str(getattr(exc, "last_error", "")),
+                    "last_raw": str(getattr(exc, "last_raw", ""))[-2000:],
                 })
         comparison = (
             failed_comparison()
@@ -108,6 +113,10 @@ def main():
                 output["appraisal"] if output is not None else None
                 for output in outputs
             ],
+            "calibrations": [
+                output["calibration"] if output is not None else None
+                for output in outputs
+            ],
             "replay_errors": replay_errors,
             "replay_scope": "appraisal_and_state_transition",
         })
@@ -117,6 +126,10 @@ def main():
             "replay_error_count": len(replay_errors),
         }, ensure_ascii=False), file=sys.stderr, flush=True)
     summary = summarize_backbone_sensitivity(records)
+    summary["backbone_activity_by_model_family"] = {
+        backbones[0]["model_family"]: summary["backbone_activity"]["left"],
+        backbones[1]["model_family"]: summary["backbone_activity"]["right"],
+    }
     result = {
         "format": "socialflux_backbone_sensitivity_v1",
         "replay_scope": "appraisal_and_state_transition",

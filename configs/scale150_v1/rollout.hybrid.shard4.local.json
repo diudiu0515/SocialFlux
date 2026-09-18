@@ -1,0 +1,98 @@
+{
+  "format": "socialflux_rollout_pool_v1",
+  "pool_stage": "development",
+  "environment": {
+    "horizon_mode": "natural_max_20",
+    "appraisal_prompt_id": "environment_appraisal_v10",
+    "response_prompt_id": "environment_response_v23",
+    "provider": {
+      "provider": "local_vllm",
+      "endpoint": "http://127.0.0.1:8314/v1/chat/completions",
+      "model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+      "timeout": 300,
+      "max_tokens": 768
+    },
+    "sampling": {
+      "temperature": 0.35,
+      "top_p": 0.9,
+      "seed": 6100
+    },
+    "response_provider": {
+      "provider": "local_vllm",
+      "endpoint": "http://127.0.0.1:8314/v1/chat/completions",
+      "model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+      "timeout": 300,
+      "max_tokens": 384
+    },
+    "response_sampling": {
+      "temperature": 0.5,
+      "top_p": 0.9,
+      "seed": 6300
+    }
+  },
+  "construction": {
+    "provider": {
+      "provider": "local_vllm",
+      "endpoint": "http://127.0.0.1:8314/v1/chat/completions",
+      "model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope",
+      "timeout": 300,
+      "max_tokens": 768
+    },
+    "sampling": {
+      "temperature": 0.5,
+      "seed": 7100
+    }
+  },
+  "policies": [
+    {
+      "policy_id": "qwen3_32b_policy_qwen35_env_scale150_shard_4",
+      "prompt_id": "task_t4_action_v21",
+      "horizon_mode": "natural_max_20",
+      "source_type": "local",
+      "model_family": "qwen",
+      "model_parameters_billion": 32,
+      "provider": {
+        "provider": "local_vllm",
+        "endpoint": "http://127.0.0.1:8302/v1/chat/completions",
+        "model": "Qwen/Qwen3-32B-AWQ",
+        "timeout": 300,
+        "max_tokens": 220
+      },
+      "sampling": {
+        "temperature": 0.65,
+        "top_p": 0.92,
+        "seed": 15204
+      },
+      "runs": 1,
+      "environment_provider_override": {
+        "endpoint": "http://127.0.0.1:8314/v1/chat/completions"
+      },
+      "environment_response_provider_override": {
+        "endpoint": "http://127.0.0.1:8314/v1/chat/completions"
+      }
+    }
+  ],
+  "pilot_limits": {
+    "rollout_turns": 20,
+    "t1": 6,
+    "t2": 2,
+    "t3": 1,
+    "t3_horizon": 5
+  },
+  "t2_pairing": "all",
+  "task_source_selection": {
+    "strategy": "quality_gate_then_task_specific_weighted_ranking",
+    "t1_sources": 1,
+    "model_quota": false
+  },
+  "candidate_strategy": "single_first_pass",
+  "scale150_shard": {
+    "index": 4,
+    "count": 4,
+    "scenario_rule": "(ordinal - 1) % 4 == 3",
+    "candidate_budget_per_scenario": 1,
+    "retain_all_attempts": true,
+    "model_stack": "qwen3_32b_policy__qwen3_5_9b_appraisal_response",
+    "continuation_excludes_attempted_v2": true
+  }
+}

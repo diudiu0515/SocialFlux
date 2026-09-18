@@ -38,12 +38,12 @@ class FourQualityGatesTest(unittest.TestCase):
                 (root / name).write_text(json.dumps(bare), encoding="utf-8")
             self.assertFalse(audit_environment_gate([self.scenario], root)["passed"])
             values = {
-                "state_transition_agreement.json": {"record": {"human_attestation": True, "reviewers": ["h1", "h2", "h3"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "annotator_count": 3, "transition_count": 30, "agreement": 0.7}},
-                "trajectory_plausibility.json": {"record": {"human_attestation": True, "reviewers": ["h1", "h2", "h3"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "annotator_count": 3, "trajectory_count": 15, "scores": {"persona_consistency": 3.5, "history_sensitivity": 3.5, "state_continuity": 3.5, "response_state_consistency": 3.5, "overall": 4.0}}},
+                "state_transition_agreement.json": {"record": {"human_attestation": True, "reviewers": ["h1"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "annotator_count": 1, "transition_count": 30, "agreement": 0.7}},
+                "trajectory_plausibility.json": {"record": {"human_attestation": True, "reviewers": ["h1"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "annotator_count": 1, "trajectory_count": 15, "scores": {"persona_consistency": 3.5, "history_sensitivity": 3.5, "state_continuity": 3.5, "response_state_consistency": 3.5, "overall": 4.0}}},
                 "history_intervention.json": {"record": {"passed": True, "human_attestation": True, "reviewers": ["h1"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "matched_checkpoint_count": 10, "same_persona_state_action": True}},
                 "paraphrase_robustness.json": {"record": {"passed": True, "human_attestation": True, "reviewers": ["h1"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "pair_count": 10, "direction_consistency": 0.8}},
                 "local_counterfactual.json": {"record": {"passed": True, "human_attestation": True, "reviewers": ["h1"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "checkpoint_count": 10, "same_checkpoint_verified": True}},
-                "backbone_sensitivity.json": {"format": "socialflux_backbone_sensitivity_v1", "backbones": [{"model_family": "qwen"}, {"model_family": "glm"}], "record": {"passed": True, "matched_checkpoint_count": 10}},
+                "backbone_sensitivity.json": {"format": "socialflux_backbone_sensitivity_v1", "backbones": [{"model_family": "qwen"}, {"model_family": "glm"}], "record": {"passed": True, "backbone_activity_passed": True, "matched_checkpoint_count": 10}},
             }
             for name, value in values.items():
                 (root / name).write_text(json.dumps(value), encoding="utf-8")

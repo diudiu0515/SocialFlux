@@ -1,0 +1,33 @@
+{
+  "format": "socialflux_t4_evaluation_v2",
+  "max_turns": 20,
+  "model_routes": "model_routes.frontier_api.json",
+  "model_assignment": {
+    "strategy": "single_model_all_llm_roles",
+    "model": "claude-fable-5",
+    "independent_calls": true
+  },
+  "evaluated_model": {
+    "policy_id": "t4_claude_fable5",
+    "prompt_id": "task_t4_action_v21",
+    "horizon_mode": "natural_max_20",
+    "validation_profile": "hard_only",
+    "provider": {"model_route": "policy"},
+    "sampling": {"temperature": 0.6, "top_p": 0.9, "seed": 7201}
+  },
+  "environment": {
+    "appraisal_prompt_id": "environment_appraisal_v11",
+    "response_prompt_id": "environment_response_v25",
+    "response_validation_profile": "hard_only",
+    "horizon_mode": "natural_max_20",
+    "provider": {"model_route": "appraisal"},
+    "sampling": {"temperature": 0.2, "top_p": 0.9, "seed": 7301},
+    "response_provider": {"model_route": "response"},
+    "response_sampling": {"temperature": 0.35, "top_p": 0.9, "seed": 7302}
+  },
+  "judge": {
+    "prompt_id": "t4_judge_v2",
+    "provider": {"model_route": "t4_judge"},
+    "sampling": {"temperature": 0.1, "top_p": 0.9, "seed": 7401}
+  }
+}

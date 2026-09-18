@@ -29,7 +29,7 @@ class IncreasingUpdater:
 
 
 class MultimodalEnvironmentTest(unittest.TestCase):
-    def test_crossing_trigger_is_private_and_public_media_is_safe(self):
+    def test_priority_cooldown_and_public_media_boundary(self):
         scenario = json.loads(
             Path("configs/scenarios/scenario_001/scenario_001.json").read_text()
         )
@@ -43,7 +43,8 @@ class MultimodalEnvironmentTest(unittest.TestCase):
             max_turns=3,
         )
         first, second, third = trajectory["turns"]
-        self.assertEqual(first["media"], [])
+        self.assertEqual(len(first["media"]), 1)
+        self.assertEqual(first["trigger_events"][0]["trigger_id"], "evidence_lands")
         self.assertEqual(len(second["media"]), 1)
         self.assertEqual(second["trigger_events"][0]["trigger_id"], "escalation_confrontation")
         self.assertNotIn("trigger_events", second["observation"])
@@ -81,7 +82,11 @@ class MultimodalEnvironmentTest(unittest.TestCase):
             validate_scenario(scenario)
             self.assertNotIn("action_effects", scenario)
             self.assertNotIn("response_templates", scenario)
-            self.assertGreaterEqual(len(scenario["video_triggers"]), 1)
+            self.assertEqual(len(scenario["video_triggers"]), 3)
+            self.assertEqual(
+                len({trigger["priority"] for trigger in scenario["video_triggers"]}),
+                3,
+            )
 
 
 if __name__ == "__main__":

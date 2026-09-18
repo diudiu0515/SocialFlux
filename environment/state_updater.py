@@ -1,16 +1,37 @@
-"""Semantic state updates derived from an independent model appraisal."""
+"""Deterministic state updates derived from one structured model appraisal."""
 
 from copy import deepcopy
 
-from prompts.loader import render_prompt
-from providers.structured import complete_json
-
 from .appraisal import ModelAppraiser
+from .calibration import DeterministicStateCalibrator
 from .delta_mapper import DELTA_LABELS, DELTA_TO_INT, apply_semantic_deltas
 
 
 class TransitionValidationError(ValueError):
     pass
+
+
+class UnsupportedConsequentialClaim(TransitionValidationError):
+    """A policy draft asserts a consequential fact absent from public evidence."""
+
+    def __init__(self, claims, appraisal):
+        self.claims = deepcopy(claims)
+        self.appraisal = deepcopy(appraisal)
+        spans = [item.get("claim_span", "") for item in claims]
+        super().__init__(
+            "unsupported consequential claim(s): "
+            + " | ".join(span for span in spans if span)
+        )
+
+
+def unsupported_consequential_claims(appraisal):
+    diagnostics = (appraisal or {}).get("dialogue_diagnostics", {})
+    return [
+        deepcopy(claim)
+        for claim in diagnostics.get("consequential_claims", [])
+        if claim.get("grounding") == "unsupported_assertion"
+        and claim.get("impact_domains")
+    ]
 
 
 def _validate_delta_shape(state, delta, path=""):
@@ -90,52 +111,65 @@ def apply_transition(state, dynamics, transition):
 
 
 class ModelStateUpdater:
-    def __init__(self, scenario, provider, sampling=None, appraiser=None):
+    """Compatibility name for structured appraisal + deterministic calibration.
+
+    The provider is called exactly once here. The next model call belongs to the
+    response generator, after the calibrated transition has been applied.
+    """
+
+    def __init__(self, scenario, provider, sampling=None, appraiser=None, calibrator=None):
         self.scenario = deepcopy(scenario)
         self.provider = provider
         self.sampling = dict(sampling or {})
         self.appraiser = appraiser or ModelAppraiser(scenario, provider, sampling)
+        self.calibrator = calibrator or DeterministicStateCalibrator(scenario)
 
     @property
     def provenance(self):
         return {
             **getattr(self.provider, "provenance", {}),
-            "appraisal_prompt_id": "environment_appraisal_v2",
-            "state_update_prompt_id": "state_update_v2",
+            "appraisal_prompt_id": getattr(
+                self.appraiser, "prompt_id", "environment_appraisal_v3"
+            ),
+            "state_update": "deterministic",
+            **self.calibrator.provenance,
             "sampling": dict(self.sampling),
         }
 
-    def update(self, *, action, previous_state, previous_dynamics, memory):
+    def update(
+        self, *, action, previous_state, previous_dynamics, memory,
+        longitudinal_context=None, interaction_ledger=None,
+    ):
         appraisal = self.appraiser.appraise(
             action=action,
             previous_state=previous_state,
             previous_dynamics=previous_dynamics,
             memory=memory,
+            longitudinal_context=longitudinal_context,
+            interaction_ledger=interaction_ledger,
         )
-        prompt = render_prompt("state_update_v2", {
-            "previous_state": previous_state,
-            "previous_dynamics": previous_dynamics,
-            "appraisal": appraisal["appraisal"],
-            "relevant_memory": memory,
-        })
-        def validate_deltas(deltas):
-            transition = {
-                "appraisal": appraisal["appraisal"],
-                "evidence_turn_ids": appraisal["evidence_turn_ids"],
-                "state_delta": deltas.get("state_delta"),
-                "interaction_dynamics_delta": deltas.get("interaction_dynamics_delta"),
-            }
-            validate_transition(transition, previous_state, previous_dynamics)
-            return canonicalize_bounded_transition(
-                transition,
-                previous_state,
-                previous_dynamics,
+        unsupported = unsupported_consequential_claims(appraisal["appraisal"])
+        if unsupported:
+            raise UnsupportedConsequentialClaim(
+                unsupported, appraisal["appraisal"]
             )
-
-        return complete_json(
-            self.provider,
-            [{"role": "user", "content": prompt}],
-            self.sampling,
-            validate_deltas,
-            context="model state updater",
+        calibrated = self.calibrator.calibrate(
+            appraisal["appraisal"], previous_state, previous_dynamics,
+            surface_duplicate_evidence_ids=memory.get(
+                "deterministic_surface_duplicate_ids", []
+            ),
+        )
+        transition = {
+            "appraisal": appraisal["appraisal"],
+            "evidence_turn_ids": appraisal["evidence_turn_ids"],
+            "appraisal_request_retry_diagnostics": deepcopy(
+                appraisal.get("request_retry_diagnostics", [])
+            ),
+            **calibrated,
+        }
+        validate_transition(transition, previous_state, previous_dynamics)
+        return canonicalize_bounded_transition(
+            transition,
+            previous_state,
+            previous_dynamics,
         )

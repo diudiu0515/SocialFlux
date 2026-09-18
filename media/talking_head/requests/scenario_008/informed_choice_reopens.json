@@ -1,0 +1,10 @@
+{
+  "prompt": "写实纪录片质感中近景，固定机位，单人出镜，保持参考肖像身份、年龄、服装与背景一致。角色是医生，自然地说普通话，完整台词是：‘你的顾虑我明白了，我们重新比较两个方案。’面部：眉间张力下降，表情更专注；视线：保持耐心眼神接触；头部：轻微侧头倾听后缓慢点头；反应时机：确认顾虑后留出短暂停顿；说话方式：分段解释，让对方保有选择空间；韵律：语速放慢，风险词不再压迫；动作：对方顾虑被理解后重新打开共同决策空间。普通话音素与唇形逐字同步，静音处自然闭唇；眨眼、呼吸和微表情连续，牙齿与面部边缘稳定，不夸张，不切镜，无字幕、标签、水印或其他人物。",
+  "duration_seconds": 3.72,
+  "continuity_reference": "media/talking_head/assets/scenario_008/reference.png",
+  "safety_check": {
+    "contains_private_state": false,
+    "contains_threshold_logic": false,
+    "contains_benchmark_answer": false
+  }
+}

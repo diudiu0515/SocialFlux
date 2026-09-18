@@ -4,9 +4,14 @@
 
 > 勾选标准：必须有可复核的代码、产物或测试证据。标明需要真人审核、标注员、真实模型 API 或视频资产的条目，在没有对应记录前不勾选。
 
-> 最后自查：2026-09-08。
+> 最后自查：2026-09-18。
 
-> 本轮记录：Protocol v1 已审计 184 条可恢复 rollout（60 active、124 archive），自动判定 PASS=64、REVIEW=108、REJECT=12，并为 20/20 scenario 各产生 1 条 provisional winner；旧 Judge 缺逐维 turn-ID 证据且唯一赢家未人工确认，因此 184/184 全部进入网站人工队列，未冒充 formal selected。活跃开发池仍是 60 条（Qwen3.5-9B 42、Qwen3-32B 16、GLM-4-9B 2）；按最终 active ID 构建 180 个 instance（T1=120、T2=40、T3=20），20 个 T3 均有三条完整 5-turn 分支。EchoMimicV2 已生成 40/40 MP4 并通过机器媒体验收；视频语义观感、S0/D0 freeze、Gate 2 人工证据、正式 20×12→每场景 1 条异构池与正式研究验收仍未完成。本轮工程验证为 core 149/149、web 7/7、scenario docs 20/20、diff check 与 API/page smoke 通过；新版网站监听 127.0.0.1:8000，草稿本地保存并可导出 JSON。
+> 当前主链：Scale300、每场景 3 个 Fable seed，唯一入口为
+> `python -m pipeline`。代码/preflight 已就绪；Gate 1–4 的正式人工证据、
+> 900 条 raw pool、300 条 canonical selection 和正式 tasks 尚未完成。以下
+> 既有条目与历史记录按维护规则保留，不因主链升级而删除或伪造完成状态。
+
+> 本轮记录：20个scenario、全部rollout配置、Gate 3与T4已统一为连续`t1..t20`；被测模型使用明确身份、角色和explicit goal，网站同时展示研究者私有persona/hidden intention与被测模型实际公开输入。旧184条轨迹均只有6轮，当前Protocol重筛结果为REJECT=184、provisional winner=0；旧180个Task只作历史审计。新的20×3质量候选池已由可断点脚本启动，实时完成数见`build/rollout_20turn_3candidate/progress.json`；模型族只记录provenance，不设配额。Talking Head现为60/60机器通过；本轮工程验证为core 168/168、web 8/8、Prompt 30/30、scenario文档20/20。真人Gate、全量20轮池、重筛选、新Task和正式研究验收仍未完成。
 
 ## Revision v2 工程自查
 
@@ -18,54 +23,60 @@
 | R4 Scenario review gates | quality 人工批准后 normalization，S0/D0 单独 candidate→freeze | [x] |
 | R5 Rollout-derived tasks | T1 natural checkpoint、T2 natural histories+O*、T3 real checkpoint local branch | [x] |
 | R6 九项验收 scaffold | 报告固定九项且无证据不标 pass | [x] |
-| R7 Prompt/schema audit | 24 个固定 prompt、hash manifest、职责/边界/schema linkage；rollout Judge v2 强制逐维 turn-ID 证据 | [x] |
-| R8 真实自然 trajectory pool | 开发池已完成多模型、多 temperature/seed 的真实自由 rollout；正式 20×12 池单列于 G11 | [x] |
+| R7 Prompt/schema audit | 30个固定prompt、hash manifest、职责/边界/schema linkage；rollout Judge v2强制逐维turn-ID证据 | [x] |
+| R8 真实自然 trajectory pool | 旧六轮开发池已真实生成但已按20轮合同全部淘汰；新版20×3池单列于R18/G11 | [x] |
 | R9 正式研究验收 | 九项真人/模型实验与 adjudication 全部完成 | [ ] |
 | R10 影视结构原创化 | 影视来源只抽象高层社会机制；新增 10 个原创 scenario 且不复制角色、台词或情节序列 | [x] |
 | R11 Instance target/quality | T1/T2/T3 指向 environment character；结构审计与盲化语义质量协议可运行 | [x] |
 | R12 GPT–Qwen rollout 对照 | 同 environment/construction、匹配 scenario/seed 后比较任务质量；Qwen 已跑，GPT 匹配运行与盲审结果尚未落盘 | [ ] |
-| R13 Qwen rollout pilot | IA_PIPE_011 两个 seeds、6 turns、T1/T2/T3、质量报告与九项 gate 可复核 | [x] |
-| R14 20-scenario 抽查包 | 每个 scenario 3 seeds rollout、T1/T2/T3、dialogues.md、tasks.md 与逐场景 bundle audit | [x] |
-| R15 人工标注网站 | 可视化 20 个情节、完整人工 rollout 队列、180 个 T1/T2/T3、视频与所有人工 Gate 状态；本地草稿、进度和 JSON 导出 | [x] |
-| R16 Screening Protocol v1 | 精确三态阈值、10 项 hard reject、184 条审计库存、每场景 1 条 provisional winner 与协议五问均有代码/报告/网站证据 | [x] |
+| R13 历史Qwen六轮pilot | IA_PIPE_011两个seeds、6 turns及旧Task可复核，但只作迁移前审计，不再是有效长程数据 | [x] |
+| R14 20-scenario新版抽查包 | 每个scenario完成10–20轮候选筛选后重建T1/T2/T3、dialogues.md、tasks.md与逐场景bundle audit | [ ] |
+| R15 人工标注网站 | 可视化20个情节、完整persona/hidden intention、被测prompt与信息边界、184条旧失败rollout、180个历史Task、60视频和所有人工Gate；本地草稿、进度和JSON导出 | [x] |
+| R16 Screening Protocol v1 | 精确三态阈值、10项hard reject、严格20轮、全REJECT不强选winner、184条旧库存与协议五问均有代码/报告/网站证据 | [x] |
 | R17 文档与论文证据整理 | `docs/` 分类索引、Prompt catalog、paper evidence index、当前/归档实验分层、内部链接检查；无审计价值垃圾已清除 | [x] |
+| R18 统一 20 轮合同 | 20 个 scenario、全部 rollout 配置、Gate 3 和 T4 runner 均强制 20 轮；新轨迹实际落盘并重筛选 | [ ] |
+| R19 被测角色与 Prompt 可审计 | 每个角色有明确身份/目标；网站展示prompt实参和作者私有字段且验证不泄漏 | [x] |
+| R20 20轮断点生成 | 60个固定槽位、逐条原子落盘、失败/替代seed留痕、resume复验与多worker执行脚本 | [x] |
 
 ## gate.md 正式数据约束自查
 
 | 条目 | 完成标准 | 自查 |
 | --- | --- | --- |
 | G1 自由轨迹来源 | 同一 stateful environment、无预定义策略、T1/T2/T3 只从完整轨迹派生 | [x] |
-| G2 模型池合同 | 至少三本地模型族、至少一个 20–40B、每场景 12 runs、API ≤30% | [ ] |
+| G2 模型池合同 | 每场景至少3条20轮质量候选；模型族只记录provenance，不设配额；environment/policy分离 | [ ] |
 | G3 开发/正式隔离 | formal_raw 独立目录、旧 Qwen3.5 开发轨迹不能进入 final | [x] |
 | G4 六维与 hard reject | 六维独立评分、缺证据 pending、Protocol v1 十类 hard reject 与确定性三态阈值 | [x] |
 | G5 Post-hoc selection | rollout 后 outcome 标注、近重复过滤、全局多样性报告、每场景人工确认 1 条 | [ ] |
 | G6 History dependence | 同 checkpoint 的 Full / Recent-k / Critical-event-removed 同时比较 evaluated action 与 environment interpretation，正式轨迹必须有证据 | [x] |
-| G7 双 Judge | 全量主审 + 跨模型族分层/边缘二审，缺二审不能合并完成 | [x] |
+| G7 Judge + audit | 全量机器主审 + 跨模型族确定性分层/边缘二审，缺必需audit不能合并完成 | [x] |
 | G8 Backbone sensitivity | 同 checkpoint/action 在两个 environment backbone 重放并设方向阈值 | [ ] |
 | G9 真人签名边界 | scenario/S0-D0 与精确 JSON hash 绑定；Gate 2 要求实名/时间戳；自动化不能签名 | [x] |
-| G10 Gate 4 + Formal human GT | T1/T2/T3 专属逐项人工清单；三人盲标、agreement、分歧真人 adjudication 的工具与强制校验 | [x] |
-| G11 正式异构 raw pool | 20 × 12 本地真实 rollout 产物通过配置/来源审计 | [ ] |
-| G12 正式发布证据 | 每场景 1 条 human-confirmed selected、双 Judge、history/backbone、human GT 全部通过 `verify_gate_md.py --strict` | [ ] |
+| G10 Gate 4 + audited machine GT | T1/T2/T3机器答案绑定实例hash；两人审同一抽样，分歧由第三人adjudicate | [x] |
+| G11 正式质量候选池 | 20 × 3 本地真实rollout产物通过配置/来源审计 | [ ] |
+| G12 正式发布证据 | 每场景1条human-confirmed selected、Judge/audit、history/backbone、Gate 4抽查全部通过 `verify_gate_md.py --strict` | [ ] |
 
 ## 当前剩余 TODO（按阻塞顺序）
 
 以下是长表的执行视图，不替代也不删除后面的历史条目。自动推荐不等于人工通过；浏览器草稿导出后仍需进入签名 registry/正式证据文件。
 
-- [x] 按 Screening Protocol v1 建立 184 条全库存、三态判定、六维分数、10 项 hard reject 和确定性抽审队列。
-- [x] 为 20 个 scenario 各物化 1 条 provisional canonical rollout；原始与淘汰轨迹保留在 audit archive，不进入 canonical pool。
-- [x] 网站展示全部 184 条待人工 rollout、180 个开发任务、40 个视频和八类人工 Gate；可逐场景改选唯一赢家并导出草稿。
-- [x] 新 rollout Judge prompt/schema 固定逐维 1–3 个有效 turn ID；caller 验证引用，旧证据统一显示 warning。
-- [x] 大模型升级方案已写入 formal runbook：Qwen3.5 environment-only，正式 pilot 比较 Qwen3-32B、可部署的 GLM-4-32B 与 DeepSeek 模型族。
-- [x] Markdown 已按架构、协议、操作、Prompt、设计输入和论文证据归档；中间实验留痕移入 archive，运行时 Prompt 与历史设计稿明确隔离。
-- [ ] **P0 人工：**审核 20 个 scenario 的来源、原创性、六维质量和 S0/D0，并生成真实 reviewer 签名与精确 hash 绑定的 freeze registry。
-- [ ] **P0 人工：**在网站核验 184 条 rollout；回答协议五问，比较每场景 active candidates，并确认 20 个唯一赢家。
-- [ ] **P0 人工：**逐条检查 40 个视频的 expression–state consistency、temporal continuity、speech naturalness 与 multimodal utility。
-- [ ] **P0 Gate 2：**完成 E1–E6 环境证据；其中 state update 与 full trajectory plausibility 必须三人标注，自动脚本不能代签。
+- [x] 按 Screening Protocol v1 建立184条旧库存、三态判定、六维分数、10项hard reject和确定性人工队列；新20轮规则下结果为184条REJECT、0条winner。
+- [x] 禁止从全REJECT场景物化winner；旧原始与淘汰轨迹保留在audit archive，不进入新版canonical pool。
+- [x] 网站展示全部184条旧rollout、180个历史任务、60个视频、完整persona/hidden intention、被测prompt/排除字段和全部人工Gate。
+- [x] 新rollout Judge prompt/schema固定逐维1–3个有效turn ID；caller验证引用，旧证据统一显示warning。
+- [x] 被测模型使用配置指定的T4 prompt（当前示例为`task_t4_action_v17`），固定角色身份、explicit goal、反复述ledger和公开信息边界；T4在自然结束或预算结束后评分。
+- [x] 20×3质量候选配置与断点生成器已实现；Qwen3.5 environment-only，policy按pilot通过率优先使用Qwen3-32B。
+- [x] Markdown已按架构、协议、操作、Prompt、设计输入和论文证据归档；本轮T4失败与20轮smoke已留痕。
+- [ ] **P0 自动长任务：**完成`build/rollout_20turn_3candidate/progress.json`中的60/60槽位；重试耗尽项不得伪装完成。
+- [ ] **P0 自动+人工筛选：**对新20轮池运行双Judge/history/backbone/Protocol，并在网站逐场景比较后确认20个唯一winner。
+- [ ] **P0 Task重建：**仅从新20轮筛选来源重建每场景T1/T2/T3及自然语言抽查Markdown。
+- [ ] **P0 人工：**审核20个scenario的来源、原创性、六维质量和S0/D0，并生成真实reviewer签名与精确hash绑定的freeze registry。
+- [ ] **P0 人工：**逐条检查60个视频的expression–state consistency、temporal continuity、speech naturalness与multimodal utility。
+- [ ] **P0 Gate 2：**由1名审核员完成 E1–E6 环境证据抽查；自动脚本不能代签，E4/E6失败项必须修复后复验。
 - [ ] **P1 模型 pilot：**部署并记录 GLM-4-32B 量化服务的显存、吞吐和失败证据；在相同 scenario/seed/budget 下与 Qwen3-32B、DeepSeek 做盲审比较。
-- [ ] **P1 正式 raw：**Gate 1/2 通过后生成 20×12=240 条 environment/policy 分离、三模型族自然 rollout，不复用旧开发轨迹。
-- [ ] **P1 正式筛选：**对 240 条使用 Judge v2、跨族二审、history intervention、backbone sensitivity 和 Protocol v1；人工确认后每场景仅留 1 条。
+- [ ] **P1 正式 raw：**Gate 1/2 通过后生成或确认 20×3=60 条 environment/policy 分离的自然 rollout；模型只按质量选择并完整记录provenance。
+- [ ] **P1 正式筛选：**对60条使用Judge v2、确定性二审audit、history intervention、backbone sensitivity和Protocol v1；1人主审、第二人少量audit后每场景仅留1条。
 - [ ] **P1 Gate 4：**从正式 selected pool 构建 T1/T2/T3；T2 的第二历史只能作为通过 Gate 3 与人工审核的 task-local auxiliary history。
-- [ ] **P1 正式 GT：**T1/T2/T3 三人盲标、agreement、分歧 adjudication，并通过 `verify_gate_md.py --strict`。
+- [ ] **P1 正式 GT：**LLM生成T1/T2/T3机器建议答案；Gate 4两人独立抽查同一确定性样本，分歧由第三人adjudicate，并通过 `verify_gate_md.py --strict`。
 - [ ] **P2 发布：**完成 filter-dev/holdout、重复与泄漏、template artifact、影视来源/模型污染人工审核和 benchmark freeze。
 
 | Phase | 模块 | 具体要做什么 | 产物 | 是否人工 | 优先级 | 自查 |
@@ -100,9 +111,9 @@
 | 5B | Paraphrase Robustness | 比较 \(\Delta S_A\approx\Delta S_B\) | similarity metric | 自动 | 🔴 | [ ] |
 | **5C** | **Persona Sensitivity** | 固定 H/S/A，只改变 persona trait | paired transitions | 是 | 🔴 | [ ] |
 | 5C | Persona Sensitivity | 验证 persona → appraisal → transition 真有作用 | sensitivity result | 是+自动 | 🔴 | [ ] |
-| **5D** | **State Update Human Validation** | 抽 30–50 transitions | annotation set | 3 annotators | 🔴 | [ ] |
+| **5D** | **State Update Human Validation** | 抽 30–50 transitions | annotation set | 1 reviewer | 🔴 | [ ] |
 | 5D | State Update Human Validation | 人标 decrease / similar / increase + plausibility | agreement | 是 | 🔴 | [ ] |
-| **5E** | **Trajectory Plausibility** | 抽 15–20 条完整 trajectory | validation set | 3 annotators | 🔴 | [ ] |
+| **5E** | **Trajectory Plausibility** | 抽 15–20 条完整 trajectory | validation set | 1 reviewer | 🔴 | [ ] |
 | 5E | Trajectory Plausibility | State continuity / history sensitivity / persona consistency / response-state consistency / overall plausibility | human scores | 是 | 🔴 | [ ] |
 | **5F** | **Response-State Consistency** | 相同 context、不同 hidden state，检查 response 是否合理变化 | paired responses | 是 | 🔴 | [ ] |
 | **5G** | **History Sensitivity** | Full history vs remove relevant event | paired transitions | 人工+自动 | 🔴 | [ ] |
@@ -130,9 +141,9 @@
 | 12 | T3 Delayed | 相同 continuation protocol rollout 默认 5 turns | delayed effects | 自动 | 🔴 | [x] |
 | 12 | T3 Long Horizon | 部分需要时延长到 ≤10 turns | delayed effects | 自动 | 🟠 | [x] |
 | 12 | T3 Stability | 多 seed 检查 delayed direction 是否稳定 | confidence/filter | 自动 | 🔴 | [ ] |
-| **13** | **Formal Human GT** | 最终入 benchmark 的 T1 做 human annotation | T1 GT | 3 annotators | 🔴 | [ ] |
-| 13 | Formal Human GT | T2 pairwise state + evidence + causal action | T2 GT | 3 annotators | 🔴 | [ ] |
-| 13 | Formal Human GT | T3 immediate/delayed effect validation | T3 GT | 3 annotators | 🔴 | [ ] |
+| **13** | **Audited Machine GT** | LLM生成T1答案；Gate 4抽取同样本复核 | T1 audited-machine GT | 2 auditors；分歧时第3人 | 🔴 | [ ] |
+| 13 | Audited Machine GT | LLM生成T2 pairwise state + evidence + causal action；Gate 4抽查 | T2 audited-machine GT | 2 auditors；分歧时第3人 | 🔴 | [ ] |
+| 13 | Audited Machine GT | LLM生成T3 immediate/delayed effect；Gate 4抽查 | T3 audited-machine GT | 2 auditors；分歧时第3人 | 🔴 | [ ] |
 | 13 | Adjudication | disagreement / ambiguous cases 复审或删除 | final GT | expert/human | 🔴 | [ ] |
 | 13 | Agreement | Fleiss κ / Krippendorff α / weighted κ 等 | annotation statistics | 自动 | 🔴 | [ ] |
 | **14** | T1 Baselines | 主流模型跑 T1 | results | 否 | 🔴 | [ ] |

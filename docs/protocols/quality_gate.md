@@ -177,6 +177,12 @@ Environment 未通过本 Gate 前，只能产生 development rollout。
 
 正式 benchmark rollout 必须在 Environment freeze 后重新生成。
 
+当前 20-scenario pilot 由 1 名真人 reviewer 负责 Gate 2。E1 抽 40 个
+transition（每个 scenario 2 个），E2 抽 20 条完整 trajectory（每个
+scenario 1 条）；E3/E4/E5 由脚本先在 matched checkpoint 上自动生成，
+真人只复核实验控制、语义等价/社会合理性和少量具体结果。E6 是纯自动
+backbone 实验。自动结果不会写入 `human_attestation`。
+
 必须验证：
 
 ## E1 Human State-Transition Agreement
@@ -269,6 +275,15 @@ appraisal / relevant state transition
 
 这是验证 longitudinal dependency 的核心实验。
 
+自动化命令：
+
+```bash
+python scripts/run_environment_interventions.py --resume
+```
+
+输出保存在 `data/formal/environment/history_intervention.json`，并保留
+Full/Removed 两次 appraisal、state/dynamics direction 与 change score。
+
 ---
 
 ## E4 Paraphrase Robustness
@@ -311,6 +326,9 @@ A1 / A2 / A3
 Human 判断相对方向是否合理。
 
 这只是 validation intervention，不是 rollout strategy。
+
+E3/E4/E5 至少各覆盖 10 个 matched checkpoint；当前 pilot 默认各覆盖
+20 个 scenario。真人确认前，文件即使 machine screen 通过也保持 pending。
 
 ---
 
@@ -577,6 +595,13 @@ Critical Event Removed
 
 通过 Gate 3 的 trajectory 才能用于 T1/T2/T3 construction。
 
+Task label 先由冻结 simulator 的私有 state 与 counterfactual branch 生成
+可审计的 machine proposal。Gate 4 不要求真人重做每一道题，而是按 task
+type 做确定性 10% 分层抽样（每类至少 2 题）。两名真人 reviewer 独立检查
+完全相同的样本；两人一致通过则接受，一致拒绝则该题/同类题回炉，只有
+分歧才交给不同的第三人 adjudicate。Machine proposal 在抽查通过前不是
+formal GT。
+
 ## T1 Gate
 
 ```text
@@ -630,18 +655,18 @@ Current-only shortcut check
 
 ---
 
-# 8. Formal GT
+# 8. Label Release
 
-只有通过 Gate 4 的 instances 才进入正式 annotation。
+只有通过 Gate 4 双人同样本抽查的 machine proposals 才能进入 label release。
 
 ```text
-Candidate Instance
+Machine-proposed Label
 ↓
-Independent Human Annotation
+Two Independent Reviews on the Same Deterministic Sample
 ↓
 Agreement
 ↓
-Adjudication / Ambiguous Removal
+Disagreement-only Adjudication / Rejected-family Repair
 ↓
 Formal GT
 ```
@@ -649,9 +674,9 @@ Formal GT
 原则：
 
 ```text
-Simulator state = candidate signal
+Simulator state / branch = machine proposal
 
-Human annotation = formal benchmark GT
+Human audit = release control; it does not retroactively become a full manual label set
 ```
 
 ---
@@ -677,9 +702,7 @@ Clean + Diverse Trajectory Pool
 ↓
 T1 / T2 / T3 Construction
 ↓
-Gate 4
-↓
-Human GT
+Gate 4 same-sample double audit
 ↓
 Final Benchmark
 ```

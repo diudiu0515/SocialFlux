@@ -1,0 +1,21 @@
+{
+  "format": "socialflux_api_model_role_benchmark_v1",
+  "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+  "api_key_env": "AUTODL_API_KEY",
+  "stream": true,
+  "models": ["gpt-6-astra", "claude-fable-5", "DeepSeek-V4-Pro"],
+  "checkpoint_cases": [
+    {"case_id":"IA001_t1","scenario":"configs/scenarios/scenario_001/scenario_001.json","trajectory":"configs/scenarios/scenario_001/rollouts/1d33ccc8ca734174b362c2cc6e71fadf.json","turn_index":0},
+    {"case_id":"IA002_t3","scenario":"configs/scenarios/scenario_002/scenario_002.json","trajectory":"configs/scenarios/scenario_002/rollouts/09b6344cc85242e9af7393d4b47b2ebe.json","turn_index":2},
+    {"case_id":"IA003_frontier_t1","scenario":"configs/development_six_v1/scenarios/scenario_003/scenario_003.json","trajectory":"build/frontier_api_probe_v2_ia003_ia019/scenario_003/short_trajectories/a4be06dc25bf4b44a556961763720227.json","turn_index":0},
+    {"case_id":"IA009_t4","scenario":"configs/scenarios/scenario_009/scenario_009.json","trajectory":"configs/scenarios/scenario_009/rollouts/5f926a29878d47c89a1618b13ad531c2.json","turn_index":3},
+    {"case_id":"IA013_t3","scenario":"configs/scenarios/scenario_013/scenario_013.json","trajectory":"configs/scenarios/scenario_013/rollouts/89b0709c9d6f4a8daa1b028c085002bb.json","turn_index":2},
+    {"case_id":"IA019_frontier_t1","scenario":"configs/development_six_v1/scenarios/scenario_019/scenario_019.json","trajectory":"build/frontier_api_probe_v2_ia019/scenario_019/rejected/c9421d50fabc4ba59724106916716b48.json","turn_index":0}
+  ],
+  "task_construction_spec_indexes": [1, 2],
+  "task_answer_results": [
+    "build/t2_source_adapted_v2/refactor_model_check/results/spec_001_scenario_091.json",
+    "build/t2_source_adapted_v2/refactor_model_check/results/spec_002_scenario_293.json"
+  ],
+  "judge_case_ids": ["IA001_t1", "IA003_frontier_t1", "IA009_t4", "IA019_frontier_t1"]
+}

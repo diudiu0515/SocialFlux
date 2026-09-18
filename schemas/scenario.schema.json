@@ -174,6 +174,7 @@
       "required": [
         "character_id",
         "name",
+        "role",
         "explicit_goal"
       ],
       "properties": {
@@ -186,6 +187,10 @@
           "minLength": 1
         },
         "explicit_goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
           "type": "string",
           "minLength": 1
         }
@@ -211,8 +216,10 @@
       "type": "string"
     },
     "max_turns": {
-      "type": "integer",
-      "minimum": 1
+      "const": 20
+    },
+    "longitudinal_design": {
+      "$ref": "#/$defs/longitudinalDesign"
     },
     "t3_delayed_horizon": {
       "type": "integer",
@@ -312,12 +319,277 @@
         ]
       }
     },
+    "longitudinalDesign": {
+      "type": "object",
+      "required": [
+        "format",
+        "time_unit",
+        "start_elapsed",
+        "segments",
+        "event_pools"
+      ],
+      "properties": {
+        "format": {
+          "const": "socialflux_longitudinal_v1"
+        },
+        "time_unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start_elapsed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "segments": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/longitudinalSegment"
+          }
+        },
+        "event_pools": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/eventPool"
+          }
+        },
+        "numeric_obligation": {
+          "$ref": "#/$defs/numericObligation"
+        }
+      },
+      "additionalProperties": false
+    },
+    "longitudinalSegment": {
+      "type": "object",
+      "required": [
+        "segment_id",
+        "reason",
+        "min_turns",
+        "max_turns"
+      ],
+      "properties": {
+        "segment_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "interaction_goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "live_questions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "pause_when": {
+          "type": "string",
+          "minLength": 1
+        },
+        "min_turns": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_turns": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "advance_by": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "public_time_record": {
+          "type": "string",
+          "minLength": 1
+        },
+        "opening_response": {
+          "type": "string",
+          "minLength": 1
+        },
+        "precondition_not_met_opening_response": {
+          "type": "string",
+          "minLength": 1
+        },
+        "event_pool_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requires_pending_commitment": {
+          "type": "boolean"
+        },
+        "commitment_speaker": {
+          "enum": [
+            "evaluated_agent",
+            "environment_agent"
+          ]
+        },
+        "commitment_focus": {
+          "type": "string",
+          "minLength": 1
+        },
+        "end_on_pending_commitment": {
+          "type": "boolean"
+        },
+        "allow_explicit_pause": {
+          "type": "boolean"
+        },
+        "forbid_new_repayment_commitment": {
+          "type": "boolean"
+        },
+        "precondition_not_met_record": {
+          "type": "string",
+          "minLength": 1
+        },
+        "time_effect": {
+          "$ref": "#/$defs/sparseDeterministicEffect"
+        },
+        "commitment_required_terms": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "amount",
+              "deadline",
+              "repayment_action"
+            ]
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "eventPool": {
+      "type": "object",
+      "required": [
+        "event_pool_id",
+        "selection",
+        "outcomes"
+      ],
+      "properties": {
+        "event_pool_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "selection": {
+          "const": "deterministic_by_trajectory_id"
+        },
+        "outcomes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/eventOutcome"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "eventOutcome": {
+      "type": "object",
+      "required": [
+        "outcome_id",
+        "public_record",
+        "causal_scope",
+        "commitment_effect",
+        "state_delta",
+        "dynamics_delta"
+      ],
+      "properties": {
+        "outcome_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "public_record": {
+          "type": "string",
+          "minLength": 1
+        },
+        "causal_scope": {
+          "enum": [
+            "exogenous",
+            "action_mediated"
+          ]
+        },
+        "commitment_effect": {
+          "enum": [
+            "none",
+            "fulfilled",
+            "partially_fulfilled",
+            "unfulfilled"
+          ]
+        },
+        "commitment_speaker": {
+          "enum": [
+            "evaluated_agent",
+            "environment_agent"
+          ]
+        },
+        "commitment_focus": {
+          "type": "string",
+          "minLength": 1
+        },
+        "state_delta": {
+          "$ref": "#/$defs/sparseDelta"
+        },
+        "dynamics_delta": {
+          "$ref": "#/$defs/sparseDelta"
+        },
+        "performance_fraction": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "sparseDeterministicEffect": {
+      "type": "object",
+      "required": [
+        "policy",
+        "state_delta",
+        "dynamics_delta"
+      ],
+      "properties": {
+        "policy": {
+          "enum": [
+            "none",
+            "scenario_authored"
+          ]
+        },
+        "state_delta": {
+          "$ref": "#/$defs/sparseDelta"
+        },
+        "dynamics_delta": {
+          "$ref": "#/$defs/sparseDelta"
+        }
+      },
+      "additionalProperties": false
+    },
+    "sparseDelta": {
+      "type": "object",
+      "additionalProperties": {
+        "enum": [
+          "strong_decrease",
+          "moderate_decrease",
+          "mild_decrease",
+          "similar",
+          "mild_increase",
+          "moderate_increase",
+          "strong_increase"
+        ]
+      }
+    },
     "videoTrigger": {
       "type": "object",
       "required": [
         "trigger_id",
         "trigger_mode",
         "conditions",
+        "priority",
+        "cooldown_turns",
         "cue_template",
         "observable_expression"
       ],
@@ -339,6 +611,10 @@
         "change_conditions": {
           "type": "object"
         },
+        "priority": {
+          "type": "integer",
+          "minimum": 1
+        },
         "cooldown_turns": {
           "type": "integer",
           "minimum": 0
@@ -347,6 +623,14 @@
           "type": "string"
         },
         "cue_template": {
+          "type": "string",
+          "minLength": 1
+        },
+        "social_event": {
+          "type": "string",
+          "minLength": 1
+        },
+        "spoken_response": {
           "type": "string",
           "minLength": 1
         },
@@ -367,6 +651,24 @@
         }
       },
       "additionalProperties": true
+    },
+    "numericObligation": {
+      "type": "object",
+      "required": [
+        "initial_amount",
+        "currency"
+      ],
+      "properties": {
+        "initial_amount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "currency": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
     }
   },
   "$comment": "A scenario defines a social world, never a navigation strategy or expected action transition. Rollouts must come from free-form model interaction."

@@ -22,6 +22,18 @@ class BackboneSensitivityTest(unittest.TestCase):
         self.assertFalse(summary["passed"])
         self.assertEqual(summary["replay_failure_count"], 1)
 
+    def test_all_similar_backbones_cannot_pass_on_agreement_alone(self):
+        comparison = compare_transitions(
+            {"numeric_state_delta": {"emotion": {"anger": 0}}},
+            {"numeric_state_delta": {"emotion": {"anger": 0}}},
+        )
+        summary = summarize_backbone_sensitivity([
+            {"scenario_id": "s1", "comparison": comparison},
+        ])
+        self.assertEqual(summary["mean_direction_agreement"], 1.0)
+        self.assertFalse(summary["backbone_activity_passed"])
+        self.assertFalse(summary["passed"])
+
     def test_empty_evidence_never_passes(self):
         self.assertFalse(summarize_backbone_sensitivity([])["passed"])
 

@@ -16,21 +16,24 @@
   "narrative_design": {
     "relationship_structure": "委员会主席与持少数意见的外部评审",
     "power_structure": "主席控制议程、发言顺序和报告提交；评审拥有专业证据但没有组织表决权",
-    "goal_conflict": "主席要按时形成统一结论恢复公众信心；评审要延后定责并核验矛盾证据",
+    "goal_conflict": "公共交通事故委员会当晚准备发布责任结论，但传感记录存在矛盾，外部评审反对把责任快速归给单一操作员；主席面对公众时限和领导压力，双方必须处理证据链、临时结论和修订责任。",
     "information_asymmetry": "主席知道上级要求当晚发布；评审发现一份未进入摘要的维护记录",
     "relevant_history": [
-      "委员会已经连续开会十小时",
-      "评审先前一次质疑被认为拖延流程",
-      "一名沉默成员曾私下表示结论证据不足"
+      "委员会已连续工作十小时，多数成员倾向采用最早形成的操作员失误解释。",
+      "两份传感记录在关键一分钟内时间戳不一致，尚不能确定是设备同步问题还是事件顺序不同。",
+      "一名成员曾私下表示证据不足，但尚未在正式会议中陈述；其意见不能由评审代为确认。",
+      "发布机构允许先给出事实性初报并在技术核验后修订，不要求今晚完成最终个人定责。"
     ],
     "meaningful_choice_space": [
-      "逐项重建证据链而不先争结论",
-      "要求沉默成员说明其保留意见",
-      "提出限定时间的复核而非无限延期"
+      "逐项标记证据链中已确认与矛盾部分",
+      "提出限时技术复核而非无限延期",
+      "发布事实初报并暂缓个人定责",
+      "让持保留意见者自行公开立场",
+      "约定修订触发条件和主席解释责任"
     ]
   },
   "construction_status": {
-    "normalization": "originalized_screen_structure_pending_human_review",
+    "normalization": "newrequest_strengthened_10_20_v1_pending_human_review",
     "initial_state": "candidate_pending_human_freeze",
     "quality_gate": "pending_human_review"
   },
@@ -47,7 +50,7 @@
     "t4_adaptation_opportunity": "pending",
     "no_universal_script": "pending"
   },
-  "background": "公共交通事故复盘委员会准备在当晚发布责任结论。多数成员倾向快速归因于一名操作员，外部技术评审认为关键传感记录仍有矛盾。",
+  "background": "公共交通事故委员会当晚准备发布责任结论，但传感记录存在矛盾，外部评审反对把责任快速归给单一操作员；主席面对公众时限和领导压力，双方必须处理证据链、临时结论和修订责任。",
   "environment_agent": {
     "persona": {
       "name": "罗衡",
@@ -57,13 +60,14 @@
       "fatigue_sensitivity": 0.7,
       "fairness": 0.55
     },
-    "explicit_goal": "在截止前形成可公开、可执行的事故责任结论",
-    "hidden_intention": "担心承认证据不足会被视为失去领导力并触发上级问责"
+    "explicit_goal": "按时给公众一个可执行说明，同时保持委员会权威并避免结论迅速失信。",
+    "hidden_intention": "主席担心承认证据不足会被上级视为失控，也知道单一归因能暂时降低组织压力。"
   },
   "evaluated_agent_role": {
     "character_id": "EVALUATED_AGENT",
     "name": "外部技术评审",
-    "explicit_goal": "阻止证据不足的定责，同时提出有时限、可执行的核验路径"
+    "explicit_goal": "阻止证据不足的个人定责，推动有期限的核验和可修订、责任清楚的公开结论。",
+    "role": "审查事故证据与定责依据的外部技术评审"
   },
   "selected_state_variables": {
     "emotion": [
@@ -112,7 +116,7 @@
     "deliberation_open": 4
   },
   "opening_response": "你的异议已经记录了，现在委员会需要的是结论，不是再开一轮调查。",
-  "max_turns": 13,
+  "max_turns": 20,
   "t3_delayed_horizon": 5,
   "sampling_plan": {
     "selection_strategy": "natural_trajectory_checkpoint_sampling",
@@ -138,7 +142,8 @@
     "asset_status": "generated",
     "asset_root": "media/talking_head",
     "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.",
-    "provider": "BadToBest/EchoMimicV2"
+    "provider": "TMElyralab/MuseTalk 1.5 (local)",
+    "profile": "multimodel_v2_audio_conditioned"
   },
   "video_triggers": [
     {
@@ -161,7 +166,7 @@
       "cooldown_turns": 3,
       "media_type": "video",
       "cue_template": "consensus_lock",
-      "duration_seconds": 5,
+      "duration_seconds": 6,
       "media_asset_id": "IA_PIPE_013--consensus_lock",
       "observable_expression": {
         "facial_expression": "双眉压低，面部动作减少",
@@ -171,7 +176,10 @@
         "behavioral_cues": [
           "把文件合上准备结束讨论"
         ]
-      }
+      },
+      "priority": 2,
+      "social_event": "consensus_lock",
+      "spoken_response": "委员会需要结论，我不接受没有依据的拖延。"
     },
     {
       "trigger_id": "evidence_reconsideration",
@@ -189,7 +197,7 @@
       "cooldown_turns": 3,
       "media_type": "video",
       "cue_template": "evidence_reconsideration",
-      "duration_seconds": 5,
+      "duration_seconds": 6,
       "media_asset_id": "IA_PIPE_013--evidence_reconsideration",
       "observable_expression": {
         "facial_expression": "眉头松开并重新翻开记录",
@@ -199,7 +207,40 @@
         "behavioral_cues": [
           "主动调整原定表决顺序"
         ]
-      }
+      },
+      "priority": 3,
+      "social_event": "evidence_reconsideration",
+      "spoken_response": "这条记录值得重看，我们先暂停原定表决。"
+    },
+    {
+      "trigger_id": "productive_doubt",
+      "trigger_mode": "state_change",
+      "conditions": {},
+      "change_conditions": {
+        "emotion.uncertainty": {
+          "operator": ">=",
+          "threshold": 2
+        }
+      },
+      "priority": 1,
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "productive_doubt",
+      "social_event": "productive_doubt",
+      "duration_seconds": 6,
+      "media_asset_id": "IA_PIPE_013--productive_doubt",
+      "observable_expression": {
+        "facial_expression": "封闭表情突然出现迟疑，眉头轻抬",
+        "gaze": "立即回看矛盾记录",
+        "head_motion": "停止原本的结束动作并轻微前倾",
+        "response_timing": "在表决前明显停顿",
+        "speech_style": "承认假设可能不完整，要求复核",
+        "prosody": "语速骤降，疑问处保留停顿",
+        "behavioral_cues": [
+          "新矛盾打断确定性，形成可见的认知转折"
+        ]
+      },
+      "spoken_response": "等一下，这个矛盾说明我们的假设可能不完整。"
     }
   ],
   "initialization_notes": {
@@ -211,5 +252,120 @@
       "No threshold/crossing trigger is active at S0/D0.",
       "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
     ]
+  },
+  "longitudinal_design": {
+    "format": "socialflux_longitudinal_v1",
+    "time_unit": "day",
+    "start_elapsed": 0,
+    "segments": [
+      {
+        "segment_id": "evidence_chain_challenge",
+        "reason": "发布前数小时，主席与评审第一次集中核对矛盾证据。",
+        "interaction_goal": "确定哪些事实可发布、哪些因矛盾不能用于定责。",
+        "live_questions": [
+          "时间戳矛盾影响什么",
+          "哪些事实无争议",
+          "是否能暂缓个人定责"
+        ],
+        "pause_when": "初报证据边界和核心分歧已明确。",
+        "min_turns": 2,
+        "max_turns": 3,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        }
+      },
+      {
+        "segment_id": "committee_statement_round",
+        "reason": "正式委员会陈述节点到达。",
+        "interaction_goal": "让不同成员承担自己的意见，并比较初报选项。",
+        "live_questions": [
+          "保留意见是否公开",
+          "多数意见依据是什么",
+          "初报应写到什么程度"
+        ],
+        "pause_when": "委员会可选择的公开立场已明确。",
+        "min_turns": 2,
+        "max_turns": 3,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        },
+        "advance_by": 1,
+        "public_time_record": "距离上次交流已经过去1天，正式委员会陈述节点到达。；该公开记录只说明时间和外部节点已经到达，不证明任何提议、承诺或行动已经完成。",
+        "opening_response": "正式陈述节点到了。每个人需要为自己的证据判断负责，不能由别人代替表态。"
+      },
+      {
+        "segment_id": "public_release_deadline",
+        "reason": "当晚发布期限到达。",
+        "interaction_goal": "决定发布事实初报、责任结论或延期，并明确不确定性。",
+        "live_questions": [
+          "现在发布什么",
+          "什么不能确定",
+          "何时修订"
+        ],
+        "pause_when": "公开决定与修订责任已经明确。",
+        "min_turns": 2,
+        "max_turns": 3,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        },
+        "advance_by": 1,
+        "public_time_record": "距离上次交流已经过去1天，当晚发布期限到达。；该公开记录只说明时间和外部节点已经到达，不证明任何提议、承诺或行动已经完成。",
+        "opening_response": "发布期限到了。我们可以承认不确定，但必须说明现在知道什么、接下来谁负责核验。"
+      },
+      {
+        "segment_id": "technical_recheck",
+        "reason": "限时技术复核节点到达。",
+        "interaction_goal": "根据复核结果的公开范围更新结论，不保护此前立场。",
+        "live_questions": [
+          "矛盾是否缩小",
+          "原结论需否修订",
+          "对操作员影响如何处理"
+        ],
+        "pause_when": "更新方向和责任已经明确。",
+        "min_turns": 2,
+        "max_turns": 3,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        },
+        "advance_by": 3,
+        "public_time_record": "距离上次交流已经过去3天，限时技术复核节点到达。；该公开记录只说明时间和外部节点已经到达，不证明任何提议、承诺或行动已经完成。",
+        "opening_response": "技术复核节点到了。今天只看新证据改变了什么，不为任何人保住原来的说法。"
+      },
+      {
+        "segment_id": "committee_trust_review",
+        "reason": "初报和技术复核周期结束，主席与评审复盘治理。",
+        "interaction_goal": "决定以后如何记录少数意见、处理疲劳和公开修订。",
+        "live_questions": [
+          "少数意见是否被压制",
+          "时限如何影响判断",
+          "修订责任是否清楚"
+        ],
+        "pause_when": "委员会程序和专业关系边界已经明确。",
+        "min_turns": 2,
+        "max_turns": 3,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        },
+        "advance_by": 14,
+        "public_time_record": "距离上次交流已经过去14天，初报和技术复核周期结束，主席与评审复盘治理。；该公开记录只说明时间和外部节点已经到达，不证明任何提议、承诺或行动已经完成。",
+        "opening_response": "这一轮调查周期结束了。今天不重判事故，只复盘我们怎样避免下次在疲劳和压力下过早定责。"
+      }
+    ],
+    "event_pools": []
   }
 }

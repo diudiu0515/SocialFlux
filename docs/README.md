@@ -1,11 +1,11 @@
 # SocialFlux Documentation Index
 
-该目录是项目文档的统一入口。根目录仅保留仓库入口、当前权威框架、项目进度与持续自查；论文方法、筛选协议、Prompt 说明、操作手册和历史设计输入按职责分开保存。
+该目录是项目文档的统一入口。根目录的 DESIGN_CONTRACT.md 是唯一设计约束入口；本目录保存操作手册、协议、Prompt 说明、论文证据和历史输入。
 
 ## 权威入口
 
 - [项目 README](../README.md)：安装、快速检查、网站和目录概览。
-- [Framework Definition](../EmoTree_Framework_Definition_v4.md)：当前研究对象、任务和信息边界的最高层定义。
+- [设计约束与核心机制](../DESIGN_CONTRACT.md)：当前研究对象、运行合同、任务来源、验收和发布条件的唯一权威定义。
 - [Project Progress](../PROJECT_PROGRESS.md)：当前工程证据与尚未完成的研究工作。
 - [Self Check / TODO](../self_check.md)：不可删除的持续任务清单。
 
@@ -24,7 +24,7 @@
 
 ## 操作手册
 
-- [Formal Rollout Runbook](operations/FORMAL_ROLLOUT_RUNBOOK.md)：Gate 1/2、20×12 raw rollout、双 Judge、history、selection、Gate 4 与正式 GT 的唯一支持顺序。
+- [Formal Rollout Runbook](operations/FORMAL_ROLLOUT_RUNBOOK.md)：Gate 1/2、20×3 quality-candidate rollout、Judge/history、selection、Gate 4 与正式 GT 的唯一支持顺序。
 
 ## Prompt
 
@@ -39,7 +39,7 @@
 
 ## 历史设计输入
 
-[`source-notes/`](source-notes/) 保存用户给出的 revision、Prompt 检查、Talking Head 与 multimodal 设计稿。它们用于追溯设计决策，不直接覆盖 framework、schema 或代码。若设计稿与当前权威合同冲突，以 Framework、协议、schema/code 和最新实验报告为准；冲突必须显式记录后再实现。
+[source-notes/](source-notes/) 保存用户给出的 revision、Prompt 检查、Talking Head 与 multimodal 设计稿。它们用于追溯设计决策，不直接覆盖 DESIGN_CONTRACT.md、schema 或代码。若历史设计稿冲突，以 DESIGN_CONTRACT.md、schema/code 和最新实验报告为准；冲突必须显式记录后再实现。
 
 ## 整理规则
 

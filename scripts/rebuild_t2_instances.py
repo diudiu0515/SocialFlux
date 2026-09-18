@@ -11,8 +11,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from offline.candidate_generation import ModelCandidateGenerator
 from offline.rollout_builders import build_t2_pairs
 from providers.factory import build_provider
+from rollout.configuration import load_rollout_config
 from scripts.run_pipeline import (
-    _load_existing_rollouts, _write_offline, load_rollout_config, load_scenario_records,
+    _load_existing_rollouts, _write_offline, load_scenario_records,
 )
 from scripts.task_docs import write_task_review
 

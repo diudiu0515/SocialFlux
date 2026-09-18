@@ -1,0 +1,21 @@
+{
+  "format": "socialflux_task_model_benchmark_v1",
+  "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+  "api_key_env": "AUTODL_API_KEY",
+  "api_key_file": "/root/.config/socialflux/autodl_api_key",
+  "stream": true,
+  "models": ["gpt-6-astra", "claude-fable-5", "DeepSeek-V4-Pro"],
+  "roles": ["t1_answer", "t2_answer", "t3_action_authoring", "t3_answer", "t4_judge"],
+  "scenario_count": 50,
+  "retry_limit": 2,
+  "request_budget": 1500,
+  "selection": {
+    "generation_statuses": ["accepted", "short_natural_trajectory"],
+    "model_semantic_decision": "approve",
+    "minimum_turns": 6,
+    "require_tasks": ["T1", "T2", "T3", "T4"],
+    "require_current_source_artifact": true,
+    "stratify_first_by": "conflict_structure",
+    "balance_fields": ["source_type", "turn_bin"]
+  }
+}

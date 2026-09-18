@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+from fractions import Fraction
 import shutil
 import subprocess
 import sys
@@ -17,6 +18,7 @@ ENV_PYTHON = ROOT / ".local_models" / "echomimic-env" / "bin" / "python"
 MEDIA = ROOT / "media" / "talking_head"
 MANIFEST = MEDIA / "manifest.json"
 BUILD = ROOT / "build" / "talking_head"
+RUNS = BUILD / "runs_multimodel_v2"
 POSES = TOOL / "assets" / "halfbody_demo" / "pose"
 
 
@@ -45,10 +47,10 @@ def safe_name(asset_id):
 
 
 def pose_for(record):
-    line = record["utterance"]
-    if "不能再拖" in line:
+    profile = record.get("motion_profile")
+    if profile == "reactive":
         return POSES / "02"
-    if "一点时间" in line:
+    if profile == "withdrawn":
         return POSES / "03"
     return POSES / "01"
 
@@ -115,7 +117,7 @@ def run_shard(shard_id):
     missing = [str(path) for path in required_paths() if not path.exists()]
     if missing:
         raise FileNotFoundError("missing EchoMimicV2 dependencies: " + ", ".join(missing))
-    run_dir = BUILD / "runs" / f"shard_{shard_id}"
+    run_dir = RUNS / f"shard_{shard_id}"
     run_dir.mkdir(parents=True, exist_ok=True)
     env = dict(os.environ)
     env["CUDA_VISIBLE_DEVICES"] = str(shard_id)
@@ -124,8 +126,9 @@ def run_shard(shard_id):
         str(ENV_PYTHON),
         str(TOOL / "infer_acc.py"),
         "--config", str(BUILD / f"shard_{shard_id}.json"),
-        "-W", "768", "-H", "768", "-L", "120",
+        "-W", "768", "-H", "768", "-L", "144",
         "--steps", "6", "--fps", "24",
+        "--motion_sync", "1",
         "--seed", str(420 + shard_id),
     ]
     subprocess.run(command, cwd=run_dir, env=env, check=True)
@@ -134,7 +137,10 @@ def run_shard(shard_id):
 def probe(path):
     raw = subprocess.check_output([
         "ffprobe", "-v", "error", "-show_entries",
-        "format=duration:stream=codec_type,width,height",
+        (
+            "format=duration:stream=codec_type,codec_name,width,height,"
+            "r_frame_rate,pix_fmt,sample_rate,channels"
+        ),
         "-of", "json", str(path),
     ], text=True)
     data = json.loads(raw)
@@ -143,10 +149,21 @@ def probe(path):
         {},
     )
     kinds = {item["codec_type"] for item in data["streams"]}
+    audio = next(
+        (item for item in data["streams"] if item["codec_type"] == "audio"),
+        {},
+    )
+    frame_rate = video.get("r_frame_rate", "0/1")
     return {
         "duration_seconds_actual": round(float(data["format"]["duration"]), 3),
         "width": video.get("width"),
         "height": video.get("height"),
+        "fps": round(float(Fraction(frame_rate)), 3),
+        "video_codec": video.get("codec_name"),
+        "pixel_format": video.get("pix_fmt"),
+        "audio_codec": audio.get("codec_name"),
+        "audio_sample_rate": int(audio.get("sample_rate", 0)),
+        "audio_channels": audio.get("channels"),
         "has_video": "video" in kinds,
         "has_audio": "audio" in kinds,
     }
@@ -154,7 +171,7 @@ def probe(path):
 
 def find_generated(record):
     name = safe_name(record["asset_id"])
-    matches = sorted((BUILD / "runs").glob(f"shard_*/output/**/{name}-a-{name}-i0_sig.mp4"))
+    matches = sorted(RUNS.glob(f"shard_*/output/**/{name}-a-{name}-i0_sig.mp4"))
     if len(matches) != 1:
         raise FileNotFoundError(
             f"expected one generated output for {record['asset_id']}, found {len(matches)}"
@@ -208,17 +225,34 @@ def collect():
             or not result["has_audio"]
             or not 3 <= result["duration_seconds_actual"] <= 8
             or not duration_matches
+            or result["width"] != 768
+            or result["height"] != 768
+            or result["fps"] != 24
+            or result["video_codec"] != "h264"
+            or result["pixel_format"] != "yuv420p"
         ):
             errors.append({"asset_id": record["asset_id"], **result})
             record["status"] = "failed_validation"
             continue
         record.update(result)
         record["video_sha256"] = file_sha256(target)
+        record["quality_status"] = "structural_pass_human_lipsync_pending"
+        record["quality_checks"] = {
+            "audio_conditioned_generation": True,
+            "resolution_768_square": True,
+            "fps_24": True,
+            "duration_3_to_8_seconds": True,
+            "audio_video_streams_present": True,
+            "human_lipsync_and_realism_review": "pending",
+        }
         record["status"] = "generated"
     manifest["generated_count"] = sum(
         item["status"] == "generated" for item in manifest["assets"]
     )
     manifest["validation_errors"] = errors
+    manifest["structural_validation"] = (
+        "passed" if not errors else "failed"
+    )
     dump(MANIFEST, manifest)
     update_scenarios(manifest["assets"])
     subprocess.run(

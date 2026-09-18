@@ -14,7 +14,7 @@ canonical blueprint (no S0/D0)
 candidate S0/D0 + trigger specification → real reviewer freeze
         ↓
 one canonical StatefulEnvironment
-        ├── natural multi-model / multi-seed rollout
+        ├── natural single-baseline-model / multi-seed rollout
         ├── T1 natural checkpoints
         ├── T2 naturally divergent histories + exact shared O*
         ├── T3 local branches from one real checkpoint
@@ -31,12 +31,23 @@ nine-criterion acceptance + human annotation
 2. 接收任意自由文本 action。
 3. 从可观察历史检索 memory；完整原始历史始终是权威记录。
 4. `ModelAppraiser` 私下结合 persona、目标、hidden intention、S_t/D_t 与历史解释 action。
-5. `ModelStateUpdater` 仅根据 appraisal 输出七级 semantic delta；确定性 mapper 将其映射到 0–10，并把边界裁剪后的标签归一到真实数值变化。
+5. 配置指定的 appraisal prompt 输出 event features 与稀疏、带证据的 variable impacts；DeterministicStateCalibrator 统一完成 inertia、persona sensitivity、magnitude、稀疏性和 0–10 边界更新，期间不调用 LLM；随后配置指定的 response prompt 作为独立 LLM call 读取更新后状态与 ledger 生成回应。
 6. `ModelResponseGenerator` 在更新后的状态上生成自然回应。
 7. trigger engine 检测 threshold/crossing/state-change，并只公开安全 expression/media。
 8. logger 保存 private master trajectory；公开 task builder 必须通过 leakage audit。
 
 环境没有 action interpreter、action effects 表、response template 或固定策略 runner。
+
+### 运行时模块边界
+
+- environment/env.py 只编排单轮生命周期：准备输入 → Structured Appraisal → 确定性更新 → Response Generation → 提交状态 → 终止判断 → 写日志。step() 不承载 prompt 或语义规则。
+- environment/dialogue_support.py 保存 policy 与 environment 共用、且与说话人无关的生成配置、horizon 提示和 prompt 压缩逻辑。
+- environment/ledger_events.py 只校验带原文证据的语义事件；environment/interaction_ledger.py 负责把已校验事件归约为可持续记忆。两者均不调用模型。
+- environment/response_generator.py 负责 response prompt 和 provider 调用；environment/response_validation.py 独立保存输出 schema、事实边界和动作归属检查。
+- policies/model_policy.py 负责 agent prompt 和 provider 调用；policies/action_validation.py 独立保存 agent action 的验证契约。
+- tasks/T2/runtime.py 是 T2 文件 I/O、环境创建、公开历史投影和状态比较的唯一 owner；`scripts/t2_common.py` 仅保留历史导入兼容，新代码不得从其增加逻辑。
+- scenario_design/revision.py 只负责旧 scenario 的证据保留式叙事修订；`scripts/revise_scale300_scenarios.py` 只负责批处理、断点续跑和原子落盘。
+- providers/anthropic.py 是 active baseline 的唯一网关 owner，负责 Anthropic Messages、有界 transport retry 与实际 HTTP 请求计数；领域层只负责 schema/语义 retry。
 
 ## 信息边界
 
@@ -50,13 +61,13 @@ nine-criterion acceptance + human annotation
 
 ## 轨迹和局部干预
 
-自然轨迹的多样性来自模型、temperature、seed 和自然历史，不来自策略类别。每条 run 保存 base seed；OpenAI-compatible provider 按 base seed + call index 推进随机流，既可复现又避免每回合重置同一采样。模型族只用于扩大 raw candidate search 和来源审计，不是最终配额。质量门之后，T1 按状态—回应一致性与历史依赖择优，T2 按历史依赖、来源质量和 private-state 分化联合择优，T3 按互动推进、状态—回应一致性及有历史的 checkpoint 择优；一个模型可以零入选，也可以赢得全部任务。T2 从同场景同深度的自然轨迹检索不同历史，再生成一个对双方都合理且字节级共享的 O*，不再强制同来源模型配对。T3 从真实 checkpoint restore 同一 private snapshot，为 2–4 个自由文本行动各执行一次局部 intervention，随后继续使用与源轨迹匹配的同一模型配置。受控 intervention 是实验工具，不是多轮 rollout policy。
+自然轨迹的多样性来自模型、temperature、seed 和自然历史，不来自策略类别。每条 run 保存 base seed；Anthropic Messages provider 按 base seed + call index 推进随机流，既可复现又避免每回合重置同一采样。模型族只用于扩大 raw candidate search 和来源审计，不是最终配额。质量门之后，T1 按状态—回应一致性与历史依赖择优，T2 按历史依赖、来源质量和 private-state 分化联合择优，T3 按互动推进、状态—回应一致性及有历史的 checkpoint 择优；一个模型可以零入选，也可以赢得全部任务。T2 先选一条人物与历史连贯的真实轨迹 A，在有意义的 checkpoint 后改写并重新计算 B；A/B 共享分叉前历史，并使用在两边都自然可信、字节级相同的受控 ending O*。固定 ending 只属于 T2 构造，不扩展为在线对话脚本。T3 从真实 checkpoint restore 同一 private snapshot，为 2–4 个自由文本行动各执行一次局部 intervention，随后继续使用与源轨迹匹配的同一模型配置。snapshot 同时冻结 scenario-authored 外生 event plan 与片段边界；每个分支记录实际经过时间和跨越事件，由 action 自身导致的后果可以不同，外部条件不得随机分叉。受控 intervention 是实验工具，不是多轮 rollout policy。
 
 ## Scenario bundle
 
-每个 `scenario_NNN/` 的 JSON 是机器事实源，同名 Markdown 是确定性生成的人类说明，含故事初始化、S0/D0、视频阈值、质量状态与 rollout 位置。每次 rollout 后，同目录 `rollouts/dialogues.md` 逐轮描述完整自然对话，`rollouts/tasks.md` 逐 instance 描述 T1/T2/T3 公开题面和隔离的私有诊断，供人工抽查。JSON 改动后必须运行 `scripts/scenario_docs.py`；`--check` 校验 Markdown 内 SHA-256 与 catalog/coverage matrix。
+每个 `scenario_NNN/` 的 JSON 是机器事实源，同名 Markdown 是确定性生成的人类说明，含故事初始化、S0/D0、作者化多片段时间线/事件池、视频阈值、质量状态与 rollout 位置。每次 rollout 后，同目录 `rollouts/dialogues.md` 逐轮描述完整自然对话，`rollouts/tasks.md` 逐 instance 描述 T1/T2/T3 公开题面和隔离的私有诊断，供人工抽查。JSON 改动后必须运行 `scripts/scenario_docs.py`；`--check` 校验 Markdown 内 SHA-256 与 catalog/coverage matrix。
 
-S0/D0 的候选值与真人冻结协议见 [`S0_D0_REVIEW.md`](../protocols/S0_D0_REVIEW.md)。Talking Head 使用 `media/talking_head/manifest.json` 作为媒体事实源：每个 scenario 两条状态触发视频，请求只含公开表演指令，不泄漏 hidden state、阈值或任务答案；生成后由收集器验证视频流、音轨、时长、分辨率和帧率，再将 media ID 回填 scenario。网站通过受限 `/media/<asset_id>` 路由读取清单中的 MP4，不接受任意文件路径。
+S0/D0 的候选值与真人冻结协议见 [`S0_D0_REVIEW.md`](../protocols/S0_D0_REVIEW.md)。Talking Head 使用 `media/talking_head/manifest.json` 作为媒体事实源：每个 scenario 三条状态触发视频，请求只含公开表演指令，不泄漏 hidden state、阈值或任务答案；生成后由收集器验证视频流、音轨、时长、分辨率和帧率，再将 media ID 回填 scenario。网站通过受限 `/media/<asset_id>` 路由读取清单中的 MP4，不接受任意文件路径。
 
 影视来源只允许贡献高层社会机制。`extract-structure` 的结构合同强制记录必须丢弃的表层元素以及原创化要求；后续 source 必须使用新人物、新场域、新事件、新 stakes 和原创语言，不复制台词、角色或标志性情节序列。
 
@@ -69,16 +80,16 @@ S0/D0 的候选值与真人冻结协议见 [`S0_D0_REVIEW.md`](../protocols/S0_D
 T1/T2/T3 均绑定持有 latent state 的环境角色，而不是输出 action 的 evaluated model。结构审计检查无泄漏、目标 state、历史形状、精确重复、T2 双方角色与 private-state 分化、T3 checkpoint/branch 完整性，并按 source model 与 scenario 双重汇总；轨迹审计另按 scenario 报 action/response 唯一率、简洁性和 latent 边界占比。语义质量采用移除 model/provider/trajectory provenance 的盲化 packet。九项验收自动读取该质量报告；轨迹质量未过时不得标 Full-Trajectory provisionally ready。自动或 LLM 分数均不能替代 human answerability 与标签有效性评审。
 
 开发池修复采用事务式 replacement：只有四 Gate 报告中明确 `rejected` 的
-trajectory ID 才进入自动重采样；新候选先过结构门，再由 Qwen 与 GLM
-跨模型族双预筛。候选通过后先写新文件与新 manifest，再把旧文件移动到
+trajectory ID 才进入自动重采样；新候选先过结构门，再由两个独立 seeded
+Claude review 请求预筛。它们提供请求级复核，不构成跨模型族独立证据。候选通过后先写新文件与新 manifest，再把旧文件移动到
 bundle 内的 `rollouts/rejected/` 并记录 old/new ID、原因、尝试次数和 judge
 证据。失败候选逐条写 JSONL，包含人工可见的完整对话，不会静默丢弃。
 历史上的 `t2_pairing_rebalance` 只作为旧开发实验留痕；当前生产构建不再为模型均衡替换轨迹，也不得把来源不均衡伪装成 Gate reject。
 
 正式 rollout judge 的采样 seed 由基础 seed 与 trajectory ID 的 SHA-256
 确定，因此同一轨迹在单条、批量或不同排序下得到相同判定。开发筛选的最终
-证据采用 100% Qwen3-32B 主审和 100% GLM 二审；正常正式流程仍可按
-`gate.md` 使用全量主审加确定性分层/争议二审。合并器对 hard reject 取并集、
+证据采用 Claude 主审和独立 seed 的 Claude 二审；正常正式流程仍按
+`gate.md` 使用全量主审加确定性分层/争议二审，且保留真人抽查。合并器对 hard reject 取并集、
 对维度分数取均值，并要求证据 ID 与当前活跃 manifest 完全一致。
 
 History dependence 的 Full / Recent-k / Critical-event-removed 三个 policy
@@ -90,18 +101,23 @@ History dependence 的 Full / Recent-k / Critical-event-removed 三个 policy
 
 ## 人工标注工作台
 
-`web/` 直接读取 canonical scenario、184 条 rollout 审计库存、`pipeline_v2` task instance 与 Talking Head 资产，并按 Gate 1、Screening Protocol 三态判定/六维/十项 hard reject/协议五问/每场景唯一赢家、Gate 4 T1/T2/T3 专属合同生成可视化表单。人工总清单还显示 Gate 2、Formal GT、holdout、视频和污染审核；没有数据的环节保留 pending，不从界面隐藏。草稿只写入浏览器 `localStorage`，支持 JSON 导出；它不自动修改 scenario、签署 S0/D0 freeze 或生成正式 human GT。部署默认仅绑定 `127.0.0.1:8000`，远程访问通过 SSH 隧道完成，避免向公网暴露完整研究材料。
+`web/` 直接读取 canonical scenario、184条旧六轮审计库存、正在生成的20×3新候选池、pipeline_v2历史task instance与Talking Head资产。
+
+当前生产 baseline 的所有 LLM role 统一为 `claude-fable-5`。新的 Fable 场景/轨迹批次以 run manifest 为入口；网站中写死的 Qwen/GLM 路径仅是历史审计数据源，不能被选为当前 canonical 产物。
 
 ## 验收
 
 当前 gate 固定为九项：State-Update Human Agreement、Persona Sensitivity、Paraphrase Robustness、History Intervention、Local Action Intervention、Neutral-State Stability、Response-State Consistency、Full-Trajectory Plausibility、Seed Robustness。自动结构证据只能标为 pending/evidence_ready/provisionally_ready；需要真人的项目没有评审记录不得标 pass。
 
-`gate.md` 在九项环境验收之外约束正式数据来源：每场景至少 12 条、至少三种本地模型族、至少一个 20–40B 本地模型、API 不超过 30%、environment/policy 模型分离、六维质量评分、十类 hard reject、post-hoc outcome 去重和人工比较后每场景保留 1 条 canonical trajectory；全部候选与审计证据留在 archive 和网站中。主 Judge 覆盖全池，跨模型族第二 Judge 覆盖分层样本和争议/边缘项；`formal_selected` 的 manifest、轨迹文件与逐条质量 audit 必须 ID 完全一致，并绑定真人 scenario/S0-D0 签名、历史干预证据与双 Judge 合并记录。T2 因定义上需要两段自然历史，可携带一条独立通过 Gate 3 与人工审核的 task-local auxiliary history，但它不计入 scenario 的唯一 canonical rollout，且必须在题目和网站中展示完整 provenance。历史干预在同一 checkpoint 下同时比较 evaluated action 和 environment appraisal/state-delta interpretation。骨干敏感性通过同 checkpoint/action 在两个 environment backbone 下重放并比较 state-delta 方向。Gate 4 使用 T1/T2/T3 各自的实名、时间戳、实例哈希绑定人工清单；正式 GT 始终是三人标注→agreement→真人 adjudication。
+`gate.md` 在九项环境验收之外约束正式数据来源：每场景至少 3 条高质量、自然结束在10–20轮的候选、模型族只作为 provenance 而不设配额、environment/policy 模型分离、六维质量评分、十类 hard reject、post-hoc outcome 去重和人工比较后每场景保留 1 条 canonical trajectory；
 
 ## 架构不变量
 
 - 正常生成不得出现固定 action taxonomy 或 scripted trajectory。
 - 同一 canonical environment 必须用于离线和 T4。
+- canonical scenario 的 max_turns=20 是上限；offline 主候选须自然结束在10–20轮，T4最多20轮并允许自然结束。轨迹可由多个可变长度互动片段组成，只有 ending 与实际对话一致才可进入后续评分。
+- 片段间必须公开经过时间和再次互动原因；期限到达不是履约，fulfilled/partial/unfulfilled 必须来自 scenario-authored event record。
+- evaluated-agent prompt 必须显式提供其公开身份与 explicit goal，但禁止提供对方 hidden intention、persona 数值或任何 S/D/transition 私有量。
 - T1/T2/T3 必须由自然轨迹派生。
 - T3 干预必须 restore 同一真实 checkpoint。
 - LLM judge 不是 human ground truth。

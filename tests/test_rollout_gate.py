@@ -13,8 +13,26 @@ from evaluation.rollout_gate import (
 
 def trajectory(index=0, family="qwen", source="local", scenario="IA_PIPE_001"):
     turns = []
+    action_texts = [
+        "先核对原始贡献记录。", "请说明决定形成的时间线。", "我愿意听取资源限制。",
+        "能否区分事实与推测？", "这项安排会影响我的毕业。", "我提出共享材料清单。",
+        "如果署名不变，请解释标准。", "我们可以邀请中立同事旁听。", "我承认沟通时间太晚。",
+        "先处理最紧迫的截止日期。", "这部分工作由我独立完成。", "请确认哪些证据仍然缺失。",
+        "我可以接受阶段性复核。", "但口头承诺不足以执行。", "我们把分歧写成两个选项。",
+        "我需要保留正式申诉空间。", "也愿意补做必要验证。", "请对刚才的让步明确回应。",
+        "若仍无共识，我建议暂停决定。", "现在请确认最终可执行安排。",
+    ]
+    response_texts = [
+        "记录可以查看，但背景比表格复杂。", "时间线里还有一次临时调整。", "资源确实有限，我不想回避。",
+        "有些判断来自经验而非文件。", "我理解毕业安排不能一直悬着。", "材料清单可以先由双方确认。",
+        "标准包含投入和整体责任。", "旁听人选需要双方都信任。", "时间压力让沟通变得仓促。",
+        "截止日期可以先单独处理。", "独立完成的范围还需核验。", "缺的是版本记录和交接说明。",
+        "阶段复核比一次定死更可行。", "书面记录会增加我的顾虑。", "两个选项可以帮助委员会判断。",
+        "正式申诉会改变后续合作方式。", "补充验证能降低目前的不确定性。", "我愿意回应，但需要更窄的问题。",
+        "暂停会影响项目，不过并非不能谈。", "最终安排必须同时覆盖责任与期限。",
+    ]
     state = {"emotion": {"anger": 2}, "relationship": {"trust": 7}}
-    for turn in range(6):
+    for turn in range(20):
         before = copy.deepcopy(state)
         state = {
             "emotion": {"anger": min(10, 2 + turn // 2)},
@@ -22,8 +40,8 @@ def trajectory(index=0, family="qwen", source="local", scenario="IA_PIPE_001"):
         }
         turns.append({
             "turn_id": f"t{turn + 1}",
-            "policy_action": {"text": f"我想具体讨论第{turn + 1}个问题，方案编号{index}。"},
-            "environment_response": f"我听到了第{turn + 1}点，但还需要更多依据，批次{index}。",
+            "policy_action": {"text": action_texts[turn] + f" 编号{index}。"},
+            "environment_response": response_texts[turn] + f" 批次{index}。",
             "state_before": before,
             "state_after": copy.deepcopy(state),
             "dynamics_before": {"escalation_risk": turn},
@@ -34,6 +52,7 @@ def trajectory(index=0, family="qwen", source="local", scenario="IA_PIPE_001"):
         "trajectory_id": f"traj-{scenario}-{family}-{index}",
         "scenario_id": scenario,
         "turns": turns,
+        "ending": {"reason": "max_turns", "turn_id": 20},
         "policy_provenance": {
             "model": f"{family}-model",
             "model_family": family,
@@ -104,11 +123,30 @@ class RolloutGateTest(unittest.TestCase):
         self.assertIn("hidden_state_leakage", result["hard_reject_reasons"])
         self.assertFalse(result["passed"])
 
+    def test_natural_ending_before_twenty_is_not_automatically_rejected(self):
+        item = trajectory()
+        item["turns"] = item["turns"][:17]
+        item["ending"] = {"reason": "natural_completion", "turn_id": 17}
+        result = audit_rollout(
+            item, judgment(item), {"passed": True, "score": 0.8}
+        )
+        self.assertNotIn(
+            "meaningless_premature_ending", result["hard_reject_reasons"]
+        )
+
+        item["ending"] = {"reason": "max_turns", "turn_id": 17}
+        invalid = audit_rollout(
+            item, judgment(item), {"passed": True, "score": 0.8}
+        )
+        self.assertIn(
+            "meaningless_premature_ending", invalid["hard_reject_reasons"]
+        )
+
+
     def test_pool_contract_enforces_gate_md_ratios_and_separation(self):
         items = []
         for scenario in ("IA_PIPE_001", "IA_PIPE_002"):
-            for family in ("qwen", "glm", "deepseek"):
-                items.extend(trajectory(i, family, scenario=scenario) for i in range(4))
+            items.extend(trajectory(i, "qwen", scenario=scenario) for i in range(3))
         selected = {
             scenario: [item for item in items if item["scenario_id"] == scenario][:1]
             for scenario in ("IA_PIPE_001", "IA_PIPE_002")
@@ -116,8 +154,13 @@ class RolloutGateTest(unittest.TestCase):
         result = audit_pool_contract(items, selected)
         self.assertTrue(result["passed"])
         self.assertEqual(result["api_fraction"], 0.0)
+        self.assertTrue(result["checks"]["every_trajectory_has_1_to_20_turns"])
+        self.assertTrue(
+            result["checks"]["every_trajectory_has_consistent_natural_or_max_ending"]
+        )
+        self.assertTrue(result["checks"]["model_family_is_provenance_not_quota"])
 
-    def test_selected_pool_keeps_exactly_one_instead_of_raw_twelve(self):
+    def test_selected_pool_keeps_exactly_one_instead_of_raw_three(self):
         items = [trajectory(i, ("qwen", "glm", "deepseek")[i % 3]) for i in range(6)]
         result = audit_pool_contract(
             items,

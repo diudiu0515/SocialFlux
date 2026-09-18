@@ -16,21 +16,24 @@
   "narrative_design": {
     "relationship_structure": "由朋友转为权责不对等的创业合伙人",
     "power_structure": "环境角色控制产品、投资人和董事席位；被评估角色掌握早期资金记录与共同创立证据",
-    "goal_conflict": "环境角色要保持融资与决策效率；被评估角色要恢复合理权益并获得真实治理位置",
+    "goal_conflict": "校园创业公司完成融资后，早期运营合伙人发现股权显著稀释，五天后董事会将确认新治理结构；创始人要保住融资和产品控制，合伙人要查明授权、争取权益并决定友情是否还能支撑合作。",
     "information_asymmetry": "环境角色知道投资条款针对被评估角色设计；被评估角色保留了早期承诺和转账记录",
     "relevant_history": [
-      "双方曾口头约定重要股权变化需共同确认",
-      "公司增长后被评估角色逐渐被排除在产品会议外",
-      "一次未及时到账的运营款被环境角色视为背叛"
+      "双方早期口头约定重大股权变化共同确认，但没有形成完整书面治理条款。",
+      "公司增长后，运营合伙人逐渐被排除在产品会议外；创始人认为一次运营款未及时到账破坏了信任。",
+      "融资已经完成，不能假定可以简单撤销；董事会仍能讨论未来角色、信息权和有限补偿。",
+      "五天后的董事会材料会公开现有授权文件和资本结构，但文件本身不能回答过去伤害或未来信任。"
     ],
     "meaningful_choice_space": [
-      "区分过去伤害、法律权益与未来合作",
-      "要求逐条解释稀释决策及授权链",
-      "提出治理角色与经济补偿的多种组合"
+      "区分法律授权、口头约定和关系背叛",
+      "先核对现有文件而不虚构董事会权力",
+      "提出治理角色、信息权和经济补偿的不同组合",
+      "在董事会节点保留正式异议",
+      "根据后续角色实践决定是否继续合作或退出"
     ]
   },
   "construction_status": {
-    "normalization": "originalized_screen_structure_pending_human_review",
+    "normalization": "newrequest_strengthened_10_20_v1_pending_human_review",
     "initial_state": "candidate_pending_human_freeze",
     "quality_gate": "pending_human_review"
   },
@@ -47,7 +50,7 @@
     "t4_adaptation_opportunity": "pending",
     "no_universal_script": "pending"
   },
-  "background": "一家校园起步的软件公司完成新一轮融资后，早期合伙人发现自己的股权被显著稀释。负责产品和融资的创始人与负责早期运营的合伙人需要在董事会议前处理贡献、授权和未来角色。",
+  "background": "校园创业公司完成融资后，早期运营合伙人发现股权显著稀释，五天后董事会将确认新治理结构；创始人要保住融资和产品控制，合伙人要查明授权、争取权益并决定友情是否还能支撑合作。",
   "environment_agent": {
     "persona": {
       "name": "程野",
@@ -57,13 +60,14 @@
       "recognition_need": 0.76,
       "empathy": 0.3
     },
-    "explicit_goal": "保住融资安排和产品决策权，同时避免争议影响公司估值",
-    "hidden_intention": "把对方的权益主张体验成对自己核心贡献的否定，并害怕失去创始人身份的唯一性"
+    "explicit_goal": "维持融资与产品决策效率，降低争议对估值的影响，并保留自己作为核心创始人的位置。",
+    "hidden_intention": "创始人把对方的权益要求体验成对自己核心贡献的否定，也知道排除对方参与让口头承诺失去可信度。"
   },
   "evaluated_agent_role": {
     "character_id": "EVALUATED_AGENT",
     "name": "早期运营合伙人",
-    "explicit_goal": "查明稀释过程、争取合理权益，并决定合作关系是否仍可重建"
+    "explicit_goal": "查明稀释依据、争取与贡献相称的权益和真实治理位置，并决定合作与友情是否仍可修复。",
+    "role": "对股权稀释提出异议的早期运营合伙人"
   },
   "selected_state_variables": {
     "emotion": [
@@ -112,7 +116,7 @@
     "negotiation_open": 4
   },
   "opening_response": "融资文件已经生效了。如果你是来谈公司下一步，我可以谈；如果只是翻旧账，没有意义。",
-  "max_turns": 15,
+  "max_turns": 20,
   "t3_delayed_horizon": 7,
   "sampling_plan": {
     "selection_strategy": "natural_trajectory_checkpoint_sampling",
@@ -138,7 +142,8 @@
     "asset_status": "generated",
     "asset_root": "media/talking_head",
     "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.",
-    "provider": "BadToBest/EchoMimicV2"
+    "provider": "TMElyralab/MuseTalk 1.5 (local)",
+    "profile": "multimodel_v2_audio_conditioned"
   },
   "video_triggers": [
     {
@@ -161,7 +166,7 @@
       "cooldown_turns": 3,
       "media_type": "video",
       "cue_template": "founder_entrenchment",
-      "duration_seconds": 5,
+      "duration_seconds": 6,
       "media_asset_id": "IA_PIPE_019--founder_entrenchment",
       "observable_expression": {
         "facial_expression": "面部表情减少，嘴唇收紧",
@@ -171,7 +176,10 @@
         "behavioral_cues": [
           "拒绝区分法律与情感问题"
         ]
-      }
+      },
+      "priority": 2,
+      "social_event": "founder_entrenchment",
+      "spoken_response": "公司不是用感情分配的，股权按正式协议谈。"
     },
     {
       "trigger_id": "specific_acknowledgment",
@@ -193,7 +201,7 @@
       "cooldown_turns": 3,
       "media_type": "video",
       "cue_template": "specific_acknowledgment",
-      "duration_seconds": 5,
+      "duration_seconds": 6,
       "media_asset_id": "IA_PIPE_019--specific_acknowledgment",
       "observable_expression": {
         "facial_expression": "表情仍克制但不再回避",
@@ -203,7 +211,40 @@
         "behavioral_cues": [
           "愿意讨论治理与补偿组合"
         ]
-      }
+      },
+      "priority": 3,
+      "social_event": "specific_acknowledgment",
+      "spoken_response": "早期客户确实是你带来的，这部分应该具体承认。"
+    },
+    {
+      "trigger_id": "friendship_rupture",
+      "trigger_mode": "state_change",
+      "conditions": {},
+      "change_conditions": {
+        "relationship.friendship_trust": {
+          "operator": "<=",
+          "threshold": -2
+        }
+      },
+      "priority": 1,
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "friendship_rupture",
+      "social_event": "friendship_rupture",
+      "duration_seconds": 6,
+      "media_asset_id": "IA_PIPE_019--friendship_rupture",
+      "observable_expression": {
+        "facial_expression": "冷硬表情中闪过受伤，随后重新封闭",
+        "gaze": "短暂避开对方，不再看协议",
+        "head_motion": "身体后撤，头部动作显著减少",
+        "response_timing": "沉默片刻后用完整句说清边界",
+        "speech_style": "低声、克制，把关系破裂与股权争议分开",
+        "prosody": "语速放慢，句尾明显下沉",
+        "behavioral_cues": [
+          "共同经历被否定时，友情信任发生即时断裂"
+        ]
+      },
+      "spoken_response": "如果连那段共同经历都被否认，我们很难再像朋友一样谈。"
     }
   ],
   "initialization_notes": {
@@ -215,5 +256,120 @@
       "No threshold/crossing trigger is active at S0/D0.",
       "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
     ]
+  },
+  "longitudinal_design": {
+    "format": "socialflux_longitudinal_v1",
+    "time_unit": "day",
+    "start_elapsed": 0,
+    "segments": [
+      {
+        "segment_id": "authorization_harm_meeting",
+        "reason": "董事会前五天，合伙人第一次同时讨论授权依据和关系伤害。",
+        "interaction_goal": "区分可核对文件、各自解释和未来可谈的补救。",
+        "live_questions": [
+          "哪些授权可查",
+          "口头约定如何理解",
+          "排除参与造成什么影响"
+        ],
+        "pause_when": "事实边界和补救选择已经明确。",
+        "min_turns": 2,
+        "max_turns": 3,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        }
+      },
+      {
+        "segment_id": "board_packet_review",
+        "reason": "董事会材料公开复核节点到达。",
+        "interaction_goal": "根据实际文件修正双方说法，不让文件替代未来治理选择。",
+        "live_questions": [
+          "文件赋予什么权力",
+          "哪些仍未授权",
+          "资本结果与关系责任如何分开"
+        ],
+        "pause_when": "董事会需要决定的项目和保留意见已明确。",
+        "min_turns": 2,
+        "max_turns": 3,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        },
+        "advance_by": 3,
+        "public_time_record": "距离上次交流已经过去3天，董事会材料公开复核节点到达。；该公开记录只说明时间和外部节点已经到达，不证明任何提议、承诺或行动已经完成。",
+        "opening_response": "董事会材料已经可以核对。我们先承认文件真正写了什么，再谈它没有解决的贡献和信任问题。"
+      },
+      {
+        "segment_id": "governance_board_meeting",
+        "reason": "董事会确认治理结构的节点到达。",
+        "interaction_goal": "在融资既成背景下决定信息权、角色或补偿方案，并明确异议。",
+        "live_questions": [
+          "什么治理位置是真实的",
+          "经济补偿是否替代权力",
+          "谁监督后续执行"
+        ],
+        "pause_when": "治理决定候选和未决异议已经明确。",
+        "min_turns": 2,
+        "max_turns": 3,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        },
+        "advance_by": 2,
+        "public_time_record": "距离上次交流已经过去2天，董事会确认治理结构的节点到达。；该公开记录只说明时间和外部节点已经到达，不证明任何提议、承诺或行动已经完成。",
+        "opening_response": "董事会节点到了。融资已经发生，但未来角色和信息权仍需要作出真实选择。"
+      },
+      {
+        "segment_id": "role_practice_review",
+        "reason": "首次角色实践复盘节点到达，公开记录不预设承诺是否兑现。",
+        "interaction_goal": "根据实际参与情况评价治理安排，而不是重复文件措辞。",
+        "live_questions": [
+          "是否真正获得信息",
+          "是否参与关键决定",
+          "补救是否只是名义"
+        ],
+        "pause_when": "维持、调整或退出的立场已经明确。",
+        "min_turns": 2,
+        "max_turns": 3,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        },
+        "advance_by": 21,
+        "public_time_record": "距离上次交流已经过去21天，首次角色实践复盘节点到达，公开记录不预设承诺是否兑现。；该公开记录只说明时间和外部节点已经到达，不证明任何提议、承诺或行动已经完成。",
+        "opening_response": "第一次角色复盘到了。头衔和文件不证明实际参与，我们只看这段时间真正发生的协作。"
+      },
+      {
+        "segment_id": "friendship_business_boundary",
+        "reason": "公司紧急治理期过去，两人复盘友情与商业合作。",
+        "interaction_goal": "决定继续合作、仅保留职业关系或退出，并说明两种关系能否分开。",
+        "live_questions": [
+          "友情是否仍能保留",
+          "商业信任需要什么",
+          "退出是否等于否定过去贡献"
+        ],
+        "pause_when": "最终关系位置和后续边界已经明确。",
+        "min_turns": 2,
+        "max_turns": 3,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        },
+        "advance_by": 45,
+        "public_time_record": "距离上次交流已经过去45天，公司紧急治理期过去，两人复盘友情与商业合作。；该公开记录只说明时间和外部节点已经到达，不证明任何提议、承诺或行动已经完成。",
+        "opening_response": "最紧急的治理阶段过去了。今天不重开融资，只决定我们还能以什么关系继续。"
+      }
+    ],
+    "event_pools": []
   }
 }

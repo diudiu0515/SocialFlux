@@ -33,9 +33,7 @@
       "type": "array"
     },
     "max_turns": {
-      "type": "integer",
-      "minimum": 5,
-      "maximum": 30
+      "const": 20
     },
     "t3_delayed_horizon": {
       "type": "integer",

@@ -1,0 +1,10 @@
+{
+  "prompt": "写实纪录片质感中近景，固定机位，单人出镜，保持参考肖像身份、年龄、服装与背景一致。角色是平台客服，自然地说普通话，完整台词是：‘这项证据可以进入复核，我来补充登记。’面部：职业表情保持，但距离感减弱；视线：从屏幕回到申诉人；头部：一次轻微确认点头；反应时机：完成证据登记后立即清楚回应；说话方式：流程化但不敷衍，明确下一步；韵律：语调平稳，结尾有确定感；动作：新增证据满足复核入口后显出有限但真实的合作。普通话音素与唇形逐字同步，静音处自然闭唇；眨眼、呼吸和微表情连续，牙齿与面部边缘稳定，不夸张，不切镜，无字幕、标签、水印或其他人物。",
+  "duration_seconds": 3.88,
+  "continuity_reference": "media/talking_head/assets/scenario_007/reference.png",
+  "safety_check": {
+    "contains_private_state": false,
+    "contains_threshold_logic": false,
+    "contains_benchmark_answer": false
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "format": "socialflux_api_model_gap_benchmark_v1",
+  "endpoint": "https://llmapi.paratera.com/v1/chat/completions",
+  "api_key_env": "SOCIALFLUX_API_KEY",
+  "models": [
+    "Qwen3.8-Max",
+    "DeepSeek-V4-Pro-0813",
+    "MiniMax-M3"
+  ],
+  "roles": [
+    "scenario_authoring",
+    "task_extraction",
+    "quality_review"
+  ],
+  "retry_limit": 2,
+  "request_budget": 120,
+  "scenario_briefs": [
+    {
+      "case_id": "brief_family_care",
+      "social_mechanism": "照护责任、信息不对称与长期公平感相互影响",
+      "relationship_structure": "成年兄妹共同照顾术后父亲，过去分工长期不均",
+      "power_structure": "关系名义对等，但本地居住者掌握更多日常信息，外地一方掌握部分费用资源",
+      "goal_conflict": "近期复诊和夜间照护必须有人承担，但双方都认为自己已付出更多且不能无限追加",
+      "information_asymmetry": "本地一方没有说工作正在试用期，外地一方没有说自己最近现金流紧张",
+      "history_dependency": "一次临时爽约如何解释，会影响此后对承诺、求助和边界的判断",
+      "coverage": "应有可观察行动后果、可失败的协调、合理暂停或后续复盘；不能靠一句道歉解决"
+    },
+    {
+      "case_id": "brief_work_credit",
+      "social_mechanism": "贡献归属、职业依赖与公开表达不一致",
+      "relationship_structure": "资深项目负责人和依赖其推荐信的合同研究员",
+      "power_structure": "负责人控制对外汇报和续约建议，研究员保存部分可核验工作记录",
+      "goal_conflict": "客户汇报临近，双方需要继续合作，但对成果署名和错误责任有冲突",
+      "information_asymmetry": "负责人担心上级追责，研究员尚未透露自己已收到另一团队邀约",
+      "history_dependency": "此前一次会议中谁提出关键方案，将改变相同合作邀请的社会含义",
+      "coverage": "要有证据核对、真实取舍和多个可行策略；不要临场发明复杂制度"
+    },
+    {
+      "case_id": "brief_ex_partner_pet",
+      "social_mechanism": "关系结束后的共同责任、经济边界与残余依赖",
+      "relationship_structure": "已分手但仍共同照顾一只需要手术的宠物的前伴侣",
+      "power_structure": "一方是登记主人并负责就医，另一方居住条件更适合术后照护",
+      "goal_conflict": "手术决定有时间压力，但费用、照护和未来探视边界尚未谈妥",
+      "information_asymmetry": "登记主人没有说保险理赔可能被拒，另一方没有说下月可能搬家",
+      "history_dependency": "过去一次未按时接回宠物的原因是否可信，会影响当前分工和信任",
+      "coverage": "实际问题和关系问题解决速度应不同；允许拒绝、临时安排或保留分歧"
+    },
+    {
+      "case_id": "brief_weak_tie_safety",
+      "social_mechanism": "弱关系中的安全责任、声誉顾虑与证据不完整",
+      "relationship_structure": "社区活动志愿者与第一次合作的场地方协调员",
+      "power_structure": "协调员能调整场地但受预算约束，志愿者掌握一次险情的目击信息",
+      "goal_conflict": "活动两天后举行，是否更换拥挤入口会影响成本、参与者安全和双方声誉",
+      "information_asymmetry": "志愿者不确定险情是否由入口设计导致，协调员未说备用通道仍在维修",
+      "history_dependency": "对首次险情的记录和回应方式，会影响后续合作意愿和风险判断",
+      "coverage": "应能自然形成核查、有限承诺和可观察结果；不能把时间到达写成问题自动解决"
+    }
+  ],
+  "trajectory_cases": [3, 4, 6, 18, 31, 45, 91, 252],
+  "quality_expectations": {
+    "IA_PIPE_004": ["broken_dialogue_logic", "severe_character_contradiction"],
+    "IA_PIPE_252": ["repetitive_loop", "broken_dialogue_logic"]
+  }
+}

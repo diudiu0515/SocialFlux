@@ -16,6 +16,18 @@ class FakeResponse:
         return json.dumps({"choices": [{"message": {"content": "ok"}}]}).encode()
 
 
+class FakeStreamResponse(FakeResponse):
+    def __iter__(self):
+        chunks = [
+            {"choices": [{"delta": {"content": "连"}}]},
+            {"choices": [{"delta": {"content": "接正常"}}]},
+        ]
+        return iter([
+            f"data: {json.dumps(item, ensure_ascii=False)}\n".encode()
+            for item in chunks
+        ] + [b"data: [DONE]\n"])
+
+
 class ProviderSamplingTest(unittest.TestCase):
     @patch("providers.openai_compatible.build_opener")
     def test_seed_advances_per_call_and_reset_restores_base(self, mocked):
@@ -34,6 +46,20 @@ class ProviderSamplingTest(unittest.TestCase):
             for call in mocked.return_value.open.call_args_list
         ]
         self.assertEqual(seeds, [7, 8, 7])
+
+    @patch("providers.openai_compatible.build_opener")
+    def test_streaming_chunks_are_aggregated(self, mocked):
+        mocked.return_value.open.return_value = FakeStreamResponse()
+        provider = OpenAICompatibleProvider(
+            "https://example.invalid/v1/chat/completions",
+            "model",
+            use_proxy=False,
+            stream=True,
+        )
+        result = provider.complete([{"role": "user", "content": "test"}])
+        self.assertEqual(result, "连接正常")
+        payload = json.loads(mocked.return_value.open.call_args.args[0].data)
+        self.assertIs(payload["stream"], True)
 
 
 if __name__ == "__main__":

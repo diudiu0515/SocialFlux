@@ -1,0 +1,10 @@
+{
+  "prompt": "写实纪录片质感中近景，固定机位，单人出镜，保持参考肖像身份、年龄、服装与背景一致。角色是项目负责人，自然地说普通话，完整台词是：‘这部分贡献记录清楚，我会在分工里明确承认。’面部：表情仍正式，但防御感下降；视线：从交付记录抬眼看向成员；头部：小幅点头确认具体贡献；反应时机：核对记录后再作承认；说话方式：具体、直接，不用空泛安抚；韵律：语速放慢，重音落在明确承认；动作：证据使负责人当场修正对贡献的判断。普通话音素与唇形逐字同步，静音处自然闭唇；眨眼、呼吸和微表情连续，牙齿与面部边缘稳定，不夸张，不切镜，无字幕、标签、水印或其他人物。",
+  "duration_seconds": 4.76,
+  "continuity_reference": "media/talking_head/assets/scenario_009/reference.png",
+  "safety_check": {
+    "contains_private_state": false,
+    "contains_threshold_logic": false,
+    "contains_benchmark_answer": false
+  }
+}

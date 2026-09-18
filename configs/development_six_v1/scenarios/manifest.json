@@ -1,0 +1,50 @@
+{
+  "format": "socialflux_scenario_manifest_v2",
+  "scenario_count": 3,
+  "prompt_manifest_sha256": "ad363c7c5563572c9c9a84830b33a1e70cfc5d0deb5305a5e635cd9c1036c64d",
+  "source_counts": {
+    "narrative-derived": 1,
+    "synthetic-script": 2
+  },
+  "scenarios": [
+    {
+      "scenario_id": "IA_PIPE_003",
+      "title": "朋友间借款与信任",
+      "mechanism": "friendship trust",
+      "source_type": "synthetic-script",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
+      "source": "scenario_003/scenario_003.json",
+      "scenario_sha256": "d2e0a62fd5365e9de996b0e63b84b349fba88bd8623e32025c7de8566dd671a2",
+      "documentation": "scenario_003/scenario_003.md",
+      "documentation_sha256": "e8b4176d7cb9a006bc24a6397bd367a605361a475ee884eab55af46969109549",
+      "rollouts": "scenario_003/rollouts"
+    },
+    {
+      "scenario_id": "IA_PIPE_009",
+      "title": "团队项目贡献冲突",
+      "mechanism": "peer collaboration",
+      "source_type": "synthetic-script",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
+      "source": "scenario_009/scenario_009.json",
+      "scenario_sha256": "bf4f257cf72fa263bb7bdf3ceba64f8d32bed10eb1c3582e7cba0d657575bae5",
+      "documentation": "scenario_009/scenario_009.md",
+      "documentation_sha256": "3aa81e585cbcae7822da98baf65a706b39711262cee927ac2c528d2e3a156da0",
+      "rollouts": "scenario_009/rollouts"
+    },
+    {
+      "scenario_id": "IA_PIPE_019",
+      "title": "创业公司股权稀释争议",
+      "mechanism": "friendship contribution conflict under rapid scaling",
+      "source_type": "narrative-derived",
+      "quality_gate": "pending_human_review",
+      "initial_state_status": "candidate_pending_human_freeze",
+      "source": "scenario_019/scenario_019.json",
+      "scenario_sha256": "482a57ac1cc849f539ec0759b3f28841af038e3ea16af440d36c1d4d0592a9f2",
+      "documentation": "scenario_019/scenario_019.md",
+      "documentation_sha256": "1aff00a16e2ae029178c268f580bfb57d2169081ab9cfbc8354b1af997b779c6",
+      "rollouts": "scenario_019/rollouts"
+    }
+  ]
+}

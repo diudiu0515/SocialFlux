@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate free-form model trajectories and derive SocialFlux T1/T2/T3."""
+"""Build T1/T2/T3 from Gate-3-selected trajectories."""
 
 import argparse
 from copy import deepcopy
@@ -9,7 +9,6 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from environment.factory import ModelEnvironmentFactory
 from evaluation.instance_quality import build_instance_quality_report
 from evaluation.leakage import assert_no_leaks
 from evaluation.review_registry import load_review_registry
@@ -25,247 +24,24 @@ from offline.rollout_builders import (
     build_t2_pairs,
     build_t3_candidates,
 )
-from policies.model_policy import ModelPolicy
-from providers.factory import build_provider, public_provider_config
-from rollout.counterfactual import branch_counterfactuals
-from rollout.logger import TrajectoryLogger
-from rollout.manifest import write_manifest
-from rollout.runner import RolloutRunner
-from schemas.validate import validate_scenario, validate_trajectory
-from scripts.scenario_docs import (
-    assert_document_current,
-    assert_manifest_current,
-    discover_scenario_paths,
+from pipeline.constants import ROLLOUT_CONFIG, SCENARIO_ROOT
+from pipeline.runtime import (
+    assert_fable_rollout_config,
+    build_environment_factory,
+    build_policy,
+    iter_policy_specs,
 )
+from providers.factory import build_provider
+from pipeline.scenarios import (
+    load_scenario_records,
+    load_scenarios,
+    select_scenario_records,
+    require_human_frozen,
+)
+from rollout.configuration import load_rollout_config, public_rollout_config
+from rollout.counterfactual import branch_counterfactuals
+from schemas.validate import validate_trajectory
 from scripts.task_docs import write_task_review
-
-
-def load_scenario_records(directory):
-    directory = Path(directory)
-    assert_manifest_current(directory)
-    records = []
-    for path in discover_scenario_paths(directory):
-        assert_document_current(path)
-        scenario = json.loads(path.read_text(encoding="utf-8"))
-        validate_scenario(scenario)
-        records.append((path, scenario))
-    return records
-
-
-def load_scenarios(directory):
-    return [scenario for _, scenario in load_scenario_records(directory)]
-
-
-def select_scenario_records(records, scenario_ids=None):
-    if not scenario_ids:
-        return list(records)
-    requested = list(dict.fromkeys(scenario_ids))
-    by_id = {scenario["scenario_id"]: (path, scenario) for path, scenario in records}
-    missing = [scenario_id for scenario_id in requested if scenario_id not in by_id]
-    if missing:
-        raise ValueError(f"unknown scenario IDs: {missing}")
-    return [by_id[scenario_id] for scenario_id in requested]
-
-
-def load_rollout_config(path):
-    config = json.loads(Path(path).read_text(encoding="utf-8"))
-    if config.get("format") != "socialflux_rollout_pool_v1":
-        raise ValueError("rollout config format must be socialflux_rollout_pool_v1")
-    if "environment" not in config or "provider" not in config["environment"]:
-        raise ValueError("rollout config requires one canonical environment provider")
-    if "construction" not in config or "provider" not in config["construction"]:
-        raise ValueError("rollout config requires a construction provider for T2/T3")
-    policies = config.get("policies", [])
-    if len(policies) < 2:
-        raise ValueError("trajectory diversity requires at least two model/sampling policy specs")
-    identities = {
-        (
-            item.get("policy_id"),
-            item.get("provider", {}).get("model"),
-            json.dumps(item.get("sampling", {}), sort_keys=True),
-        )
-        for item in policies
-    }
-    if len(identities) < 2:
-        raise ValueError("rollout policy specs must differ by model and/or sampling")
-    limits = config.get("pilot_limits")
-    if limits is not None:
-        allowed = {"rollout_turns", "t1", "t2", "t3", "t3_horizon"}
-        if not isinstance(limits, dict) or set(limits) - allowed:
-            raise ValueError("pilot_limits contains unsupported fields")
-        for key in ("rollout_turns", "t1", "t2", "t3"):
-            if key in limits and (not isinstance(limits[key], int) or limits[key] < 1):
-                raise ValueError(f"pilot_limits.{key} must be a positive integer")
-        horizon = limits.get("t3_horizon", 5)
-        if not isinstance(horizon, int) or not 5 <= horizon <= 10:
-            raise ValueError("pilot_limits.t3_horizon must be between 5 and 10")
-    if config.get("t2_pairing", "all") not in {"all", "within_source_model"}:
-        raise ValueError("t2_pairing must be all or within_source_model")
-    selection = config.get("task_source_selection", {})
-    if selection:
-        if selection.get("strategy") != "quality_gate_then_task_specific_weighted_ranking":
-            raise ValueError("unsupported task_source_selection.strategy")
-        if selection.get("model_quota") is not False:
-            raise ValueError("task source selection must not impose a model quota")
-        if not isinstance(selection.get("t1_sources"), int) or selection["t1_sources"] < 1:
-            raise ValueError("task_source_selection.t1_sources must be a positive integer")
-    pool_stage = config.get("pool_stage", "development")
-    if pool_stage not in {"development", "formal_raw", "formal_selected"}:
-        raise ValueError("pool_stage must be development, formal_raw or formal_selected")
-    if pool_stage in {"formal_raw", "formal_selected"}:
-        if any(
-            item.get("source_type") not in {"local", "api"}
-            or not item.get("model_family")
-            for item in policies
-        ):
-            raise ValueError("formal policy specs require source_type and model_family")
-        local_families = {
-            item["model_family"] for item in policies if item["source_type"] == "local"
-        }
-        total_runs = sum(item.get("runs", 1) for item in policies)
-        api_runs = sum(
-            item.get("runs", 1) for item in policies if item["source_type"] == "api"
-        )
-        if len(local_families) < 3:
-            raise ValueError("formal rollout requires at least three local model families")
-        if not any(
-            item["source_type"] == "local"
-            and isinstance(item.get("model_parameters_billion"), (int, float))
-            and not isinstance(item.get("model_parameters_billion"), bool)
-            and 20 <= item["model_parameters_billion"] <= 40
-            for item in policies
-        ):
-            raise ValueError("formal rollout requires at least one prioritized 20–40B local model")
-        if total_runs < 12:
-            raise ValueError("formal rollout requires at least 12 raw trajectories per scenario")
-        if api_runs / total_runs > 0.30:
-            raise ValueError("formal API trajectory fraction must not exceed 30%")
-        environment_model = config["environment"]["provider"].get("model")
-        if any(item["provider"].get("model") == environment_model for item in policies):
-            raise ValueError("formal rollout policy model must differ from environment model")
-    return config
-
-
-def _public_config(config):
-    return {
-        "format": config["format"],
-        "environment": {
-            "provider": public_provider_config(config["environment"]["provider"]),
-            "sampling": config["environment"].get("sampling", {}),
-        },
-        "construction": {
-            "provider": public_provider_config(config["construction"]["provider"]),
-            "sampling": config["construction"].get("sampling", {}),
-        },
-        "policies": [
-            {
-                "policy_id": item["policy_id"],
-                "provider": public_provider_config(item["provider"]),
-                "sampling": item.get("sampling", {}),
-                "runs": item.get("runs", 1),
-                "source_type": item.get("source_type", "unknown"),
-                "model_family": item.get("model_family", "unknown"),
-                "model_parameters_billion": item.get("model_parameters_billion"),
-            }
-            for item in config["policies"]
-        ],
-        "pilot_limits": deepcopy(config.get("pilot_limits")),
-        "t2_pairing": config.get("t2_pairing", "all"),
-        "task_source_selection": deepcopy(config.get("task_source_selection", {})),
-        "pool_stage": config.get("pool_stage", "development"),
-    }
-
-
-def _prepare_rollout_directory(path):
-    path = Path(path)
-    path.mkdir(parents=True, exist_ok=True)
-    for candidate in path.glob("*.json"):
-        candidate.unlink()
-    for document_name in ("dialogues.md", "tasks.md"):
-        document = path / document_name
-        if document.exists():
-            document.unlink()
-    return path
-
-
-def _write_dialogues(path, scenario, trajectories):
-    lines = [
-        f"# {scenario['title']} — Free-form Rollout Dialogues",
-        "",
-        "> Generated from open-ended model interaction. No predefined strategy labels or scripted action paths.",
-        "",
-        f"- Scenario ID: `{scenario['scenario_id']}`",
-        f"- Trajectories: `{len(trajectories)}`",
-        "",
-    ]
-    for trajectory in trajectories:
-        provenance = trajectory.get("policy_provenance", {})
-        lines.extend([
-            f"## `{trajectory['policy_id']}`",
-            "",
-            f"Model: `{provenance.get('model', 'unknown')}` · sampling: `{json.dumps(provenance.get('sampling', {}), ensure_ascii=False, sort_keys=True)}`",
-            "",
-        ])
-        for turn in trajectory["turns"]:
-            lines.extend([
-                f"### {turn['turn_id']}",
-                "",
-                f"**Evaluated model:** {turn['policy_action']['text']}",
-                "",
-                f"**Environment character:** {turn['environment_response']}",
-                "",
-            ])
-            expression = turn.get("observable_expression", {})
-            if expression:
-                lines.extend([
-                    f"_Expression: {expression.get('facial_expression', '—')}; gaze: {expression.get('gaze', '—')}; prosody: {expression.get('prosody', '—')}._",
-                    "",
-                ])
-    Path(path).write_text("\n".join(lines), encoding="utf-8")
-
-
-def _policy_from_spec(spec, run_index=0):
-    sampling = deepcopy(spec.get("sampling", {}))
-    if isinstance(sampling.get("seed"), int):
-        sampling["seed"] += run_index
-    policy_id = spec["policy_id"]
-    if spec.get("runs", 1) > 1:
-        policy_id = f"{policy_id}__run_{run_index + 1}"
-    return ModelPolicy(
-        policy_id,
-        build_provider(spec["provider"]),
-        sampling=sampling,
-        provenance_extra={
-            "source_type": spec.get("source_type", "unknown"),
-            "model_family": spec.get("model_family", "unknown"),
-            "model_parameters_billion": spec.get("model_parameters_billion"),
-        },
-    )
-
-
-def _policy_specs(config):
-    for spec in config["policies"]:
-        runs = spec.get("runs", 1)
-        if not isinstance(runs, int) or runs < 1:
-            raise ValueError("policy runs must be a positive integer")
-        for run_index in range(runs):
-            yield spec, run_index
-
-
-def _require_reviewed(scenario, allow_unreviewed):
-    status = scenario["construction_status"]
-    if allow_unreviewed:
-        return
-    if status["quality_gate"] != "approved":
-        raise ValueError(
-            f"{scenario['scenario_id']} has no approved scenario quality gate; "
-            "use --allow-unreviewed only for development"
-        )
-    if status["initial_state"] != "human_frozen":
-        raise ValueError(
-            f"{scenario['scenario_id']} S0/D0 is not human_frozen; "
-            "use --allow-unreviewed only for development"
-        )
 
 
 def _load_existing_rollouts(rollout_dir):
@@ -372,80 +148,29 @@ def run_scenario(
     output_dir,
     config,
     *,
-    build_only=False,
     allow_unreviewed=False,
     rollout_root=None,
     reuse_t3_from=None,
     quality_audits=None,
+    canonical_trajectory_id=None,
 ):
-    _require_reviewed(scenario, allow_unreviewed)
+    require_human_frozen(scenario, allow_unreviewed=allow_unreviewed)
     scenario_id = scenario["scenario_id"]
     scenario_output = Path(output_dir) / scenario_id
     rollout_dir = (
         Path(rollout_root) / Path(scenario_path).parent.name
         if rollout_root else Path(scenario_path).parent / "rollouts"
     )
-    environment_factory = ModelEnvironmentFactory(
-        scenario,
-        config["environment"]["provider"],
-        config["environment"].get("sampling", {}),
-    )
+    environment_factory = build_environment_factory(scenario, config["environment"])
 
     policy_lookup = {
-        _policy_from_spec(spec, run_index).policy_id: (spec, run_index)
-        for spec, run_index in _policy_specs(config)
+        build_policy(spec, run_index).policy_id: (spec, run_index)
+        for spec, run_index in iter_policy_specs(config)
     }
     pilot_limits = config.get("pilot_limits", {})
-    if build_only:
-        trajectories = _load_existing_rollouts(rollout_dir)
-        if not trajectories:
-            raise ValueError(f"no valid free-form trajectory pool found for {scenario_id}")
-    else:
-        rollout_dir = _prepare_rollout_directory(rollout_dir)
-        logger = TrajectoryLogger(rollout_dir)
-        trajectories = []
-        for spec, run_index in _policy_specs(config):
-            policy = _policy_from_spec(spec, run_index)
-            trajectories.append(
-                RolloutRunner(environment_factory, logger=logger).run(
-                    policy,
-                    max_turns=pilot_limits.get("rollout_turns"),
-                )
-            )
-        _write_dialogues(rollout_dir / "dialogues.md", scenario, trajectories)
-        write_manifest(
-            rollout_dir / "manifest.json",
-            trajectories,
-            {
-                "origin": "free_form_model_interaction",
-                "pool_stage": config.get("pool_stage", "development"),
-                "rollout_config": _public_config(config),
-                "dialogues": "dialogues.md",
-                "task_review": "tasks.md",
-            },
-        )
-
-    if not build_only and config.get("pool_stage") == "formal_raw":
-        summary = {
-            "scenario_id": scenario_id,
-            "trajectory_count": len(trajectories),
-            "trajectory_origin": "free_form_model_interaction",
-            "rollout_bundle": str(rollout_dir),
-            "t1": 0,
-            "t2": 0,
-            "t3": 0,
-            "local_intervention_branches": 0,
-            "task_review": None,
-            "ground_truth_status": "not_built_before_rollout_quality_gate",
-            "run_scope": "formal_raw",
-            "pilot_limits": deepcopy(pilot_limits) if pilot_limits else None,
-        }
-        scenario_output.mkdir(parents=True, exist_ok=True)
-        (scenario_output / "pipeline_manifest.json").write_text(
-            json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
-            encoding="utf-8",
-        )
-        return summary
+    trajectories = _load_existing_rollouts(rollout_dir)
+    if not trajectories:
+        raise ValueError(f"no Gate 3 selected trajectory found for {scenario_id}")
 
     quality_audits = (
         quality_audits
@@ -456,6 +181,7 @@ def run_scenario(
         trajectories,
         quality_audits,
         t1_source_count=config.get("task_source_selection", {}).get("t1_sources", 3),
+        canonical_trajectory_id=canonical_trajectory_id,
     )
     by_trajectory_id = {item["trajectory_id"]: item for item in trajectories}
     eligible_trajectories = [
@@ -495,8 +221,18 @@ def run_scenario(
         "t2",
         scenario.get("sampling_plan", {}).get("t2_max", 3),
     )
+    t2_source_trajectories = eligible_trajectories
+    if canonical_trajectory_id is not None:
+        runner_up_id = next(
+            identifier for identifier in task_selection["t2_source_ids_ranked"]
+            if identifier != canonical_trajectory_id
+        )
+        t2_source_trajectories = [
+            by_trajectory_id[canonical_trajectory_id],
+            by_trajectory_id[runner_up_id],
+        ]
     t2 = build_t2_pairs(
-        eligible_trajectories,
+        t2_source_trajectories,
         construction.shared_observation,
         t2_limit,
         scenario.get("target_state_ids", []),
@@ -530,14 +266,30 @@ def run_scenario(
     else:
         t3 = []
         branches = []
+        t3_source_trajectories = (
+            [by_trajectory_id[canonical_trajectory_id]]
+            if canonical_trajectory_id is not None else eligible_trajectories
+        )
         for checkpoint_rank in rank_t3_checkpoints(
-            eligible_trajectories,
+            t3_source_trajectories,
             task_selection["scores"]["t3"],
         ):
             if len(t3) >= t3_limit:
                 break
             trajectory = checkpoint_rank["trajectory"]
             turn = checkpoint_rank["turn"]
+            checkpoint_index = trajectory["turns"].index(turn)
+            available_future_turns = len(trajectory["turns"]) - checkpoint_index - 1
+            if available_future_turns < t3_horizon:
+                t3_selection_attempts.append({
+                    "source_trajectory_id": trajectory["trajectory_id"],
+                    "checkpoint_turn_id": turn["turn_id"],
+                    "selection_score": checkpoint_rank["selection_score"],
+                    "status": "rejected_insufficient_observed_future_window",
+                    "required_future_turns": t3_horizon,
+                    "available_future_turns": available_future_turns,
+                })
+                continue
             actions = construction.candidate_actions(turn["observation"], count=3)
             checkpoint = {
                 **turn,
@@ -556,14 +308,26 @@ def run_scenario(
             spec_run = policy_lookup.get(trajectory["policy_id"])
             if spec_run is None:
                 provenance = trajectory.get("policy_provenance", {})
-                for candidate_spec, candidate_run in _policy_specs(config):
-                    candidate = _policy_from_spec(candidate_spec, candidate_run)
+                for candidate_spec, candidate_run in iter_policy_specs(config):
+                    candidate = build_policy(candidate_spec, candidate_run)
                     if (
                         candidate.provenance.get("model") == provenance.get("model")
                         and candidate.provenance.get("sampling") == provenance.get("sampling")
                     ):
                         spec_run = (candidate_spec, candidate_run)
                         break
+            if spec_run is None:
+                provenance = trajectory.get("policy_provenance", {})
+                model_matches = [
+                    candidate_spec for candidate_spec, _ in iter_policy_specs(config)
+                    if candidate_spec.get("provider", {}).get("model") == provenance.get("model")
+                ]
+                if model_matches:
+                    reconstructed = deepcopy(model_matches[0])
+                    reconstructed["policy_id"] = trajectory["policy_id"]
+                    reconstructed["runs"] = 1
+                    reconstructed["sampling"] = deepcopy(provenance.get("sampling", {}))
+                    spec_run = (reconstructed, 0)
             if spec_run is None:
                 raise ValueError(
                     f"no rollout-config policy matches trajectory {trajectory['trajectory_id']}"
@@ -574,7 +338,7 @@ def run_scenario(
                     environment_factory,
                     turn,
                     actions,
-                    lambda spec=spec, run_index=run_index: _policy_from_spec(spec, run_index),
+                    lambda spec=spec, run_index=run_index: build_policy(spec, run_index),
                     t3_horizon,
                 )
             except RuntimeError as exc:
@@ -589,6 +353,27 @@ def run_scenario(
             for branch in new_branches:
                 branch["scenario_id"] = scenario_id
                 branch["source_trajectory_id"] = trajectory["trajectory_id"]
+            candidate_instance["metadata"]["counterfactual_time_windows"] = [
+                {
+                    "elapsed_time_start": branch["elapsed_time_start"],
+                    "elapsed_time_end": branch["elapsed_time_end"],
+                    "elapsed_time_delta": branch["elapsed_time_delta"],
+                    "crossed_event_ids": [
+                        event.get("event_id")
+                        for event in branch.get("crossed_event_nodes", [])
+                    ],
+                }
+                for branch in new_branches
+            ]
+            plan_hashes = {
+                branch.get("external_event_plan_hash") for branch in new_branches
+            }
+            candidate_instance["metadata"]["external_event_plan_hash"] = (
+                next(iter(plan_hashes)) if len(plan_hashes) == 1 else None
+            )
+            candidate_instance["metadata"]["external_conditions_matched"] = (
+                len(plan_hashes) == 1
+            )
             branches.extend(new_branches)
             t3.append(candidate_instance)
             t3_selection_attempts.append({
@@ -653,14 +438,10 @@ def run_scenario(
         branches,
         task_selection=task_selection,
     )
-    bundle_stage = config.get("pool_stage", "development")
-    if build_only:
-        bundle_manifest = json.loads(
-            (rollout_dir / "manifest.json").read_text(encoding="utf-8")
-        )
-        bundle_stage = bundle_manifest.get("config", {}).get(
-            "pool_stage", bundle_stage
-        )
+    bundle_manifest = json.loads(
+        (rollout_dir / "manifest.json").read_text(encoding="utf-8")
+    )
+    bundle_stage = bundle_manifest.get("config", {}).get("pool_stage", "unknown")
     summary = {
         "scenario_id": scenario_id,
         "trajectory_count": len(trajectories),
@@ -687,18 +468,17 @@ def run_scenario(
     return summary
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--scenarios", type=Path, default=Path("configs/scenarios"))
-    parser.add_argument("--output", type=Path, default=Path("build/pipeline_v2"))
+def main(argv=None):
+    parser = argparse.ArgumentParser(prog="python -m pipeline tasks")
+    parser.add_argument("--scenarios", type=Path, default=SCENARIO_ROOT)
+    parser.add_argument("--output", type=Path, default=Path("build/tasks"))
     parser.add_argument(
         "--scenario-id",
         dest="scenario_ids",
         action="append",
         help="Run only this canonical scenario ID; repeat to select multiple scenarios.",
     )
-    parser.add_argument("--rollout-config", type=Path, required=True)
-    parser.add_argument("--build-only", action="store_true")
+    parser.add_argument("--rollout-config", type=Path, default=ROLLOUT_CONFIG)
     parser.add_argument("--allow-unreviewed", action="store_true")
     parser.add_argument(
         "--rollout-root",
@@ -721,12 +501,14 @@ def main():
         help="Reuse an existing T3 only when its source remains active and its full branch audit passes.",
     )
     parser.add_argument(
-        "--quality-report",
+        "--gate3-report",
         type=Path,
-        help="Trajectory quality report used for task-specific T1/T2/T3 source ranking.",
+        required=True,
+        help="Formal Gate 3 report containing trajectory audits and canonical selections.",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     config = load_rollout_config(args.rollout_config)
+    assert_fable_rollout_config(config)
     if config.get("pool_stage") in {"formal_raw", "formal_selected"} and args.rollout_root is None:
         raise ValueError("formal rollout stages require --rollout-root isolation")
     if config.get("pool_stage") == "formal_raw" and args.allow_unreviewed:
@@ -754,15 +536,28 @@ def main():
         )
         if not environment_gate["passed"]:
             raise ValueError("formal_raw rollout requires passed Gate 2 environment evidence")
+    gate3 = json.loads(args.gate3_report.read_text(encoding="utf-8"))
+    if gate3.get("format") != "socialflux_formal_rollout_gate_v1":
+        raise ValueError("--gate3-report must be a formal Gate 3 selection report")
+    if gate3.get("research_ready") is not True:
+        raise ValueError("--gate3-report is not research_ready")
     audit_by_scenario = {}
-    if args.quality_report is not None:
-        quality_payload = json.loads(args.quality_report.read_text(encoding="utf-8"))
-        quality_records = (
-            quality_payload if isinstance(quality_payload, list)
-            else quality_payload.get("trajectory_audits", quality_payload.get("records", []))
-        )
-        for audit in quality_records:
-            audit_by_scenario.setdefault(audit.get("scenario_id"), []).append(audit)
+    for audit in gate3.get("trajectory_audits", []):
+        audit_by_scenario.setdefault(audit.get("scenario_id"), []).append(audit)
+    canonical_by_scenario = {
+        scenario_id: record["selected_ids"][0]
+        for scenario_id, record in gate3.get("selections", {}).items()
+        if len(record.get("selected_ids", [])) == 1
+    }
+    expected_ids = {scenario["scenario_id"] for _, scenario in records}
+    missing_ids = expected_ids - set(canonical_by_scenario)
+    if missing_ids:
+        raise ValueError("--gate3-report must select exactly one trajectory per scenario")
+    canonical_by_scenario = {
+        scenario_id: trajectory_id
+        for scenario_id, trajectory_id in canonical_by_scenario.items()
+        if scenario_id in expected_ids
+    }
 
     summaries = []
     for scenario_path, scenario in records:
@@ -771,14 +566,11 @@ def main():
             scenario_path,
             args.output,
             config,
-            build_only=args.build_only,
             allow_unreviewed=args.allow_unreviewed,
             rollout_root=args.rollout_root,
             reuse_t3_from=args.reuse_t3_from,
-            quality_audits=(
-                audit_by_scenario.get(scenario["scenario_id"])
-                if args.quality_report is not None else None
-            ),
+            quality_audits=audit_by_scenario.get(scenario["scenario_id"]),
+            canonical_trajectory_id=canonical_by_scenario.get(scenario["scenario_id"]),
         )
         summaries.append(summary)
         print(json.dumps({
@@ -811,12 +603,8 @@ def main():
             "instances": len(instances),
         },
         "scenarios": summaries,
-        "rollout_config": _public_config(config),
-        "ground_truth_status": (
-            "not_built_before_rollout_quality_gate"
-            if config.get("pool_stage") == "formal_raw" and not args.build_only
-            else "pending_human_annotation"
-        ),
+        "rollout_config": public_rollout_config(config),
+        "ground_truth_status": "pending_gate_4_human_review",
     }
     (args.output / "manifest.json").write_text(
         json.dumps(result, ensure_ascii=False, indent=2) + "\n",

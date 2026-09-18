@@ -13,7 +13,10 @@ Extract:
 - relevant state-variable families and target state IDs;
 - socially meaningful multimodal event concepts;
 - a nontrivial choice space without prescribing a best path;
-- source-specific temporal structure, practical constraints, ambiguity, and adaptation boundaries that prevent scenarios from feeling interchangeable.
+- source-specific temporal structure, practical constraints, ambiguity, and adaptation boundaries that prevent scenarios from feeling interchangeable;
+- set suggested_horizon to 20 as a maximum budget, not a required dialogue length;
+  design enough genuine interaction capacity for a natural 10–20-turn rollout,
+  while allowing a coherent interaction to end earlier without filler.
 
 Preserve causal uniqueness and do not normalize every source into the same state set, trigger pair, opening, or confrontation pattern. Do not produce S0/D0, numeric trigger thresholds, action effects, response templates, strategy labels, expected deltas, sampling checkpoints, or scripted trajectories. Those belong to later reviewed stages.
 

@@ -1,0 +1,10 @@
+{
+  "prompt": "写实纪录片质感中近景，固定机位，单人出镜，保持参考肖像身份、年龄、服装与背景一致。角色是产品负责人，自然地说普通话，完整台词是：‘这个新证据改变了风险判断，先做小范围验证。’面部：专注表情骤然收紧，随即恢复控制；视线：迅速移向风险信息再回到团队；头部：先定住，再做一次短促确认；反应时机：看到新证据后明显停顿；说话方式：立即收窄范围，提出可逆验证；韵律：起句加重，随后转为稳定决策语气；动作：新风险信息让上线判断发生即时调整。普通话音素与唇形逐字同步，静音处自然闭唇；眨眼、呼吸和微表情连续，牙齿与面部边缘稳定，不夸张，不切镜，无字幕、标签、水印或其他人物。",
+  "duration_seconds": 4.6,
+  "continuity_reference": "media/talking_head/assets/scenario_010/reference.png",
+  "safety_check": {
+    "contains_private_state": false,
+    "contains_threshold_logic": false,
+    "contains_benchmark_answer": false
+  }
+}

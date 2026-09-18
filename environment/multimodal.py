@@ -68,7 +68,14 @@ class ObservableExpressionLayer:
             for key in current_values
         }
         private_events = []
-        public_expression = deepcopy(self.default_expression)
+        # No salient composite/rapid-change event means no special observable cue.
+        public_expression = {
+            "facial_expression": "",
+            "gaze": "",
+            "speech_style": "",
+            "prosody": "",
+            "behavioral_cues": [],
+        }
         triggers = sorted(
             self.scenario.get("video_triggers", []),
             key=lambda item: item.get("priority", 999),

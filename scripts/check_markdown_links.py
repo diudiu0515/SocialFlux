@@ -18,7 +18,7 @@ def markdown_files() -> list[Path]:
         ["git", "ls-files", "--cached", "--others", "--exclude-standard", "--", "*.md"],
         cwd=ROOT, check=True, capture_output=True, text=True,
     )
-    return [ROOT / line for line in result.stdout.splitlines() if line]
+    return [ROOT / line for line in result.stdout.splitlines() if line and (ROOT / line).exists()]
 
 
 def local_target(raw: str) -> str | None:

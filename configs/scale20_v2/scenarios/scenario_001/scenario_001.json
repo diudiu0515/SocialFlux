@@ -1,0 +1,362 @@
+{
+  "scenario_id": "IA_PIPE_001",
+  "title": "导师—学生署名冲突",
+  "mechanism": "institutional resource control",
+  "source": {
+    "type": "narrative-derived",
+    "provenance_id": "screen-structure-001-the-chair",
+    "surface_text_policy": "original_surface_text",
+    "redistribution_status": "transformed_structural_abstraction",
+    "provenance_note": "High-level academic power and career-dependence structure inspired by The Chair. The project scenario replaces all characters, institution, authorship facts, deadlines, choices, and dialogue. Source verification: https://media.netflix.com/en/only-on-netflix/81206259",
+    "work_title": "The Chair",
+    "year": 2021,
+    "medium": "television series",
+    "related_characters_or_plot_position": "department leadership under institutional pressure; no episode-specific sequence is claimed"
+  },
+  "narrative_design": {
+    "relationship_structure": "对话参与者 与 导师 的持续关系",
+    "power_structure": "导师拥有署名、资源和毕业支持上的制度性权力，学生拥有贡献证据与申诉选择。",
+    "goal_conflict": "期刊作者贡献说明14天后截止；博士生的核心实验和方法初稿尚未对应到明确署名。两天后已排定课题组贡献核对会，届时实验日志、版本记录和共同作者确认会形成公开会议记录；六周后的毕业送审确认是另一项决定。",
+    "information_asymmetry": "保护自身声誉、资源或关系位置，同时避免直接承认失误",
+    "relevant_history": [
+      "学生完成了核心实验的数据整理、主要结果复现和方法部分初稿；导师负责研究方向、资源和最后一轮框架修改，双方对这些贡献的权重没有书面共识。",
+      "导师曾口头提出过两个不同的署名顺序，但都说要等全文完成后再定；学生因此担心毕业节点会削弱自己的议价空间。",
+      "期刊编辑已公开要求团队在14天内提交逐项作者贡献说明，说明提交后仍可修改，但所有作者都要确认。",
+      "学院将在六周后安排毕业送审资格审查，导师的学术确认是必要材料之一；署名与毕业程序相关但并非同一决定。",
+      "课题组已确定两天后召开贡献核对会并查阅共享实验日志、文稿版本和共同作者确认；会议只能核对贡献事实与分歧，不能自动裁决署名。"
+    ],
+    "meaningful_choice_space": [
+      "先核对核心实验、写作和指导贡献各自的证据与解释",
+      "提出暂定署名并保留在贡献说明截止前修改的条件",
+      "把毕业确认与署名谈判明确分开",
+      "在双方无法确认时邀请不掌握毕业资源的第三方主持",
+      "在期刊节点后复盘导师是否按讨论结果行动",
+      "决定哪些争议带到两天后的组会核对，而不是在证据到齐前重复表态",
+      "依据组会记录区分贡献事实、贡献权重与署名顺序"
+    ]
+  },
+  "construction_status": {
+    "normalization": "scale20_v2_authored_evidence_nodes",
+    "initial_state": "candidate_pending_human_freeze",
+    "quality_gate": "pending_v2_generation_and_semantic_review"
+  },
+  "quality_gate": {
+    "social_plausibility": "pending",
+    "real_tradeoff": "pending",
+    "longitudinal_necessity": "pending",
+    "nontrivial_strategy_space": "pending",
+    "character_motivation_coherence": "pending",
+    "information_asymmetry": "pending",
+    "t1_suitability": "pending",
+    "t2_suitability": "pending",
+    "t3_suitability": "pending",
+    "t4_adaptation_opportunity": "pending",
+    "no_universal_script": "pending"
+  },
+  "background": "期刊作者贡献说明14天后截止；博士生的核心实验和方法初稿尚未对应到明确署名。两天后已排定课题组贡献核对会，届时实验日志、版本记录和共同作者确认会形成公开会议记录；六周后的毕业送审确认是另一项决定。",
+  "environment_agent": {
+    "persona": {
+      "name": "导师",
+      "role": "导师",
+      "patience": 0.45,
+      "empathy": 0.35
+    },
+    "explicit_goal": "按期提交论文和贡献说明，保留导师对整体研究贡献的解释空间，同时避免署名争议影响课题组与毕业安排。",
+    "hidden_intention": "导师担心承认学生的核心贡献会削弱自己的学术控制，也知道过去两次改变口径已经损害了可信度。"
+  },
+  "evaluated_agent_role": {
+    "character_id": "EVALUATED_AGENT",
+    "name": "对话参与者",
+    "explicit_goal": "用公开贡献证据争取合理署名，同时确保毕业程序不被当作交换条件，并决定这段指导关系能否继续。",
+    "role": "争取合理署名与毕业安排的研究生"
+  },
+  "selected_state_variables": {
+    "emotion": [
+      "anger",
+      "anxiety",
+      "hope"
+    ],
+    "motivation": [
+      "resolve",
+      "repair_intent"
+    ],
+    "relationship": [
+      "trust",
+      "hostility"
+    ],
+    "risk": [
+      "goal_failure_risk"
+    ]
+  },
+  "target_state_ids": [
+    "emotion.anger",
+    "emotion.anxiety",
+    "relationship.trust",
+    "relationship.hostility"
+  ],
+  "initial_state": {
+    "emotion": {
+      "anger": 3,
+      "anxiety": 4,
+      "hope": 5
+    },
+    "motivation": {
+      "resolve": 6,
+      "repair_intent": 5
+    },
+    "relationship": {
+      "trust": 7,
+      "hostility": 2
+    }
+  },
+  "initial_dynamics": {
+    "goal_failure_risk": 3,
+    "escalation_risk": 2,
+    "negotiation_open": 5
+  },
+  "max_turns": 20,
+  "t3_delayed_horizon": 5,
+  "sampling_plan": {
+    "selection_strategy": "natural_trajectory_checkpoint_sampling",
+    "seed": 17,
+    "t1_max": 5,
+    "t2_max": 3,
+    "t3_max": 4
+  },
+  "observable_expression": {
+    "default": {
+      "facial_expression": "保持克制并注意对方反应",
+      "gaze": "保持自然注视",
+      "speech_style": "正常语速，信息清楚",
+      "prosody": "语气克制",
+      "behavioral_cues": [
+        "根据当前互动调整停顿和回应长度"
+      ]
+    }
+  },
+  "media_generation": {
+    "stage": "structured_expression",
+    "default_media_type": "video",
+    "asset_status": "generated",
+    "asset_root": "media/talking_head",
+    "note": "视频资产生成前只输出 observable expression 与 media spec，不伪造 asset。",
+    "provider": "TMElyralab/MuseTalk 1.5 (local)",
+    "profile": "multimodel_v2_audio_conditioned"
+  },
+  "video_triggers": [
+    {
+      "trigger_id": "escalation_confrontation",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.anger": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "relationship.hostility": {
+          "operator": ">=",
+          "threshold": 7
+        },
+        "escalation_risk": {
+          "operator": ">=",
+          "threshold": 8
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "procedural_confrontation",
+      "duration_seconds": 6,
+      "media_asset_id": "IA_PIPE_001--escalation_confrontation",
+      "observable_expression": {
+        "facial_expression": "眉头收紧，身体后靠，保持掌控感",
+        "gaze": "保持直接但克制的注视",
+        "speech_style": "短促而有边界感",
+        "prosody": "语气压低后在句尾加重",
+        "behavioral_cues": [
+          "状态达到显著冲突区间后出现一次明显外显变化"
+        ]
+      },
+      "priority": 2,
+      "social_event": "procedural_confrontation",
+      "spoken_response": "署名不能含糊，请你现在把贡献和依据逐项说清楚。"
+    },
+    {
+      "trigger_id": "anxious_withdrawal",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.anxiety": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "motivation.repair_intent": {
+          "operator": "<=",
+          "threshold": 2
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "anxious_withdrawal",
+      "duration_seconds": 6,
+      "media_asset_id": "IA_PIPE_001--anxious_withdrawal",
+      "observable_expression": {
+        "facial_expression": "表情收缩，显出疲惫或不安",
+        "gaze": "短暂低头后重新看向对方",
+        "speech_style": "回应犹豫，句子变短",
+        "prosody": "音量降低，停顿变长",
+        "behavioral_cues": [
+          "避免夸张哭泣或脸谱化表演"
+        ]
+      },
+      "priority": 3,
+      "social_event": "anxious_withdrawal",
+      "spoken_response": "我不想把关系弄得更僵，先让我缓一缓。"
+    },
+    {
+      "trigger_id": "evidence_lands",
+      "trigger_mode": "state_change",
+      "conditions": {},
+      "change_conditions": {
+        "motivation.repair_intent": {
+          "operator": ">=",
+          "threshold": 2
+        }
+      },
+      "priority": 1,
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "evidence_lands",
+      "social_event": "evidence_lands",
+      "duration_seconds": 6,
+      "media_asset_id": "IA_PIPE_001--evidence_lands",
+      "observable_expression": {
+        "facial_expression": "紧绷感短暂松开，先抿唇再轻微点头",
+        "gaze": "从记录移回学生，恢复稳定注视",
+        "head_motion": "先静止半拍，再做一次很小的确认点头",
+        "response_timing": "看完记录后停顿片刻再开口",
+        "speech_style": "克制、审慎，愿意重新核对",
+        "prosody": "起句较轻，后半句恢复清晰",
+        "behavioral_cues": [
+          "身份感仍强，但证据进入后出现可见的重新评估"
+        ]
+      },
+      "spoken_response": "这份记录我看到了，我们按实际贡献重新谈。"
+    }
+  ],
+  "initialization_notes": {
+    "rationale": {
+      "migration": "These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.",
+      "state_selection": "Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed."
+    },
+    "trigger_reachability": [
+      "No configured trigger is active at S0/D0.",
+      "Threshold reachability within the episode remains pending human review."
+    ]
+  },
+  "longitudinal_design": {
+    "format": "socialflux_longitudinal_v1",
+    "time_unit": "day",
+    "start_elapsed": 0,
+    "segments": [
+      {
+        "segment_id": "current_contribution_dispute",
+        "reason": "组会前两天先确定争议边界和待核验材料。",
+        "interaction_goal": "回应当前署名关切，明确已有事实和组会待核验项。",
+        "live_questions": [
+          "学生主张的贡献",
+          "导师争议事实还是权重",
+          "组会核验材料"
+        ],
+        "pause_when": "当前事实和组会待核验项已经明确，可以暂停等待记录。",
+        "min_turns": 1,
+        "max_turns": 6,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        }
+      },
+      {
+        "segment_id": "lab_group_meeting_record",
+        "reason": "两天后课题组贡献核对会召开。",
+        "interaction_goal": "依据组会记录处理事实与署名权重分歧，不把记录说成自动裁决。",
+        "live_questions": [
+          "记录确认的贡献",
+          "仍有分歧的权重",
+          "贡献说明如何修改"
+        ],
+        "pause_when": "共同点和未决分歧已经明确。",
+        "min_turns": 1,
+        "max_turns": 7,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        },
+        "advance_by": 2,
+        "public_time_record": "过去2天，预先排定的课题组贡献核对会已经召开；时间本身不证明署名提案被接受。",
+        "opening_response": "组会记录出来了：你的核心复现、数据整理和方法初稿都有版本证据，我负责的方向、资源和框架修改也有记录。事实清楚了，但怎样对应署名顺序仍有分歧。",
+        "event_pool_id": "lab_group_evidence"
+      },
+      {
+        "segment_id": "journal_submission_node",
+        "reason": "又过十天，贡献说明到达提交节点。",
+        "interaction_goal": "决定如何如实提交，并记录仍未解决的署名意见。",
+        "live_questions": [
+          "草案写入哪些事实",
+          "如何保留异议",
+          "毕业确认是否分开"
+        ],
+        "pause_when": "提交方式、未决意见和责任已经明确。",
+        "min_turns": 1,
+        "max_turns": 7,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        },
+        "advance_by": 10,
+        "public_time_record": "距离组会过去10天，贡献说明到达提交节点；节点到达不等于署名顺序已经一致。",
+        "opening_response": "贡献草案已把有记录的工作逐项写入，但署名顺序仍未一致。今天要决定如实提交并保留异议，还是提出有依据的修改。",
+        "event_pool_id": "journal_contribution_draft"
+      }
+    ],
+    "event_pools": [
+      {
+        "event_pool_id": "lab_group_evidence",
+        "selection": "deterministic_by_trajectory_id",
+        "outcomes": [
+          {
+            "outcome_id": "student_core_contribution_confirmed",
+            "public_record": "课题组核对记录显示：实验日志和版本记录确认博士生独立完成核心结果复现、主要数据整理和方法第一版；共同作者确认导师负责研究方向、资源协调和最终框架修改。导师仍认为整体设计权重应影响署名顺序，学生不同意把这一解释当成结论。",
+            "causal_scope": "exogenous",
+            "commitment_effect": "none",
+            "state_delta": {},
+            "dynamics_delta": {}
+          }
+        ]
+      },
+      {
+        "event_pool_id": "journal_contribution_draft",
+        "selection": "deterministic_by_trajectory_id",
+        "outcomes": [
+          {
+            "outcome_id": "facts_recorded_order_unresolved",
+            "public_record": "提交前草案已逐项写入博士生的核心实验、数据整理和方法初稿，也写入导师的研究方向、资源和框架修改；所有作者尚未对署名顺序一致确认，期刊允许保留未决意见。",
+            "causal_scope": "exogenous",
+            "commitment_effect": "none",
+            "state_delta": {},
+            "dynamics_delta": {}
+          }
+        ]
+      }
+    ]
+  },
+  "scenario_design_revision": {
+    "version": "scale20_v2",
+    "reason": "author consequential future evidence instead of requiring LLM invention",
+    "dialogue_policy": "observations, not a turn script or forced reconciliation",
+    "parent_configuration": "scale20_v1"
+  }
+}

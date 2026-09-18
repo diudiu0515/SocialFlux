@@ -51,9 +51,113 @@ class InstanceQualityTest(unittest.TestCase):
             ],
         }
         audit = audit_trajectory(trajectory)
-        self.assertFalse(audit["passed"])
+        self.assertTrue(audit["passed"])
         self.assertFalse(audit["checks"]["responses_no_exact_repetition"])
+        self.assertIn(
+            "responses_no_exact_repetition", audit["check_groups"]["diagnostic"]
+        )
         self.assertEqual(audit["diagnostics"]["action_unique_ratio"], 1.0)
+
+    def test_audit_rejects_nested_question_churn_and_nonterminal_turn_20(self):
+        actions = [
+            f"我需要你说明第{index}个治理问题是否明确。"
+            for index in range(1, 21)
+        ]
+        trajectory = {
+            "trajectory_id": "question-churn",
+            "policy_provenance": {"model": "test-model"},
+            "public_scenario_context": {"environment_role": {"name": "程野"}},
+            "turns": [
+                {
+                    "policy_action": {"text": action},
+                    "environment_response": f"当前只回答第{index}个问题。",
+                    "appraisal": {"speaker_intent": "被评估参与者继续追问"},
+                    "state_after": {"emotion": {"anger": 5}},
+                }
+                for index, action in enumerate(actions, start=1)
+            ],
+        }
+        audit = audit_trajectory(trajectory)
+        self.assertFalse(audit["checks"]["actions_no_template_loop"])
+        self.assertFalse(audit["checks"]["fixed_horizon_closes_naturally"])
+
+    def test_existing_debt_erasure_is_a_hard_structural_failure(self):
+        trajectory = {
+            "trajectory_id": "debt-erasure",
+            "policy_provenance": {"model": "test-model"},
+            "turns": [
+                {
+                    "policy_action": {"text": (
+                        "关于旧欠款，就让它自然留在过去吧。"
+                        if index == 4 else f"我说明第{index + 1}点。"
+                    )},
+                    "environment_response": f"我回应第{index + 1}点。",
+                    "state_after": {"emotion": {"anger": 5}},
+                }
+                for index in range(5)
+            ],
+        }
+        audit = audit_trajectory(trajectory)
+        self.assertFalse(audit["passed"])
+        self.assertFalse(audit["checks"]["turns_preserve_existing_obligations"])
+        self.assertIn(
+            "turns_preserve_existing_obligations", audit["check_groups"]["hard"]
+        )
+
+    def test_incomplete_amount_arrangement_cannot_be_upgraded_in_trajectory(self):
+        trajectory = {
+            "trajectory_id": "proposal-upgrade",
+            "policy_provenance": {"model": "test-model"},
+            "turns": [{
+                "observation": {"current_response": (
+                    "14天内我确实能安排800元，这个节点可行。"
+                    if index == 0 else "我们继续讨论。"
+                )},
+                "policy_action": {"text": (
+                    "我认可这个首期安排。"
+                    if index == 0 else f"我说明第{index + 1}点。"
+                )},
+                "environment_response": f"我回应第{index + 1}点。",
+                "state_after": {"emotion": {"anger": 5}},
+            } for index in range(5)],
+        }
+        audit = audit_trajectory(trajectory)
+        self.assertFalse(audit["passed"])
+        self.assertFalse(audit["checks"]["turns_preserve_proposal_strength"])
+        self.assertIn(
+            "turns_preserve_proposal_strength", audit["check_groups"]["hard"]
+        )
+
+    def test_public_transition_event_grounds_later_performance_amount(self):
+        trajectory = {
+            "trajectory_id": "public-event-grounding",
+            "policy_provenance": {"model": "test-model"},
+            "public_scenario_context": {
+                "background": "朋友仍有欠款。",
+                "public_situation": {},
+            },
+            "turns": [
+                {
+                    "policy_action": {"text": "那就先按约定执行。"},
+                    "environment_response": "好，到节点再核对公开记录。",
+                    "segment_transition_after": {
+                        "public_events": [
+                            {
+                                "public": True,
+                                "event_type": "commitment_performance",
+                                "text": "公开转账记录显示：本节点约定600元，实际到账300元。",
+                            }
+                        ]
+                    },
+                },
+                {
+                    "policy_action": {"text": "这次实际还了300元，但执行仍不稳定。"},
+                    "environment_response": "我理解你对执行稳定性的担忧。",
+                },
+            ],
+        }
+        audit = audit_trajectory(trajectory)
+        self.assertTrue(audit["checks"]["performance_amounts_are_grounded"])
 
     def test_complete_rollout_derived_instances_pass_structural_audit(self):
         runner = RolloutRunner(environment_factory(SCENARIO))

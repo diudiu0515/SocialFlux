@@ -15,7 +15,8 @@ from evaluation.quality_gates import (
     audit_all_gates,
     load_rollouts,
 )
-from scripts.run_pipeline import load_scenarios
+from pipeline.constants import SCENARIO_ROOT
+from pipeline.scenarios import load_scenarios
 from scripts.scenario_docs import discover_scenario_paths
 
 
@@ -43,17 +44,17 @@ def markdown(report):
     return "\n".join(lines)
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--scenario-root", type=Path, default=Path("configs/scenarios"))
-    parser.add_argument("--raw-root", type=Path)
+def main(argv=None):
+    parser = argparse.ArgumentParser(prog="python -m pipeline audit")
+    parser.add_argument("--scenario-root", type=Path, default=SCENARIO_ROOT)
+    parser.add_argument("--raw-root", type=Path, default=Path("build/rollout_20turn_3candidate"))
     parser.add_argument(
         "--rollout-stage",
         choices=("raw", "selected"),
         default="raw",
-        help="selected skips raw >=12 and requires exactly one trajectory per scenario",
+        help="selected skips raw >=3 and requires exactly one trajectory per scenario",
     )
-    parser.add_argument("--pipeline-output", type=Path, default=Path("build/pipeline_v2"))
+    parser.add_argument("--pipeline-output", type=Path, default=Path("build/pipeline_20turn_selected"))
     parser.add_argument("--environment-evidence", type=Path)
     parser.add_argument("--judgments", type=Path)
     parser.add_argument("--history-evidence", type=Path)
@@ -61,7 +62,7 @@ def main():
     parser.add_argument("--review-registry", type=Path, help="human-signed Gate 1 registry")
     parser.add_argument("--output", type=Path, default=Path("build/quality_gates/report.json"))
     parser.add_argument("--strict", action="store_true", help="exit 1 unless all four gates pass")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     scenarios = load_scenarios(args.scenario_root)
     scenario_paths = {
@@ -70,7 +71,7 @@ def main():
     }
     review_registry = load_review_registry(args.review_registry) if args.review_registry else None
     trajectories = load_rollouts(
-        args.raw_root or args.scenario_root,
+        args.raw_root,
         require_selected_manifest=args.rollout_stage == "selected",
     )
     instances = _read_jsonl(args.pipeline_output / "instances.jsonl")

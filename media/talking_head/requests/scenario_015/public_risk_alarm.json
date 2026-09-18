@@ -1,0 +1,10 @@
+{
+  "prompt": "写实纪录片质感中近景，固定机位，单人出镜，保持参考肖像身份、年龄、服装与背景一致。角色是城市危机协调主任，自然地说普通话，完整台词是：‘这个变化可能影响公众安全，通报不能再等。’面部：压力骤然上升，眉头明显收紧；视线：快速核对原始数据后直视同事；头部：身体轻微前倾，动作转为集中；反应时机：确认异常后立刻开口；说话方式：简短明确，把公众安全置于程序拖延之前；韵律：风险词加重，节奏紧但不慌乱；动作：新增异常使潜在危害从抽象风险变成行动信号。普通话音素与唇形逐字同步，静音处自然闭唇；眨眼、呼吸和微表情连续，牙齿与面部边缘稳定，不夸张，不切镜，无字幕、标签、水印或其他人物。",
+  "duration_seconds": 4.48,
+  "continuity_reference": "media/talking_head/assets/scenario_015/reference.png",
+  "safety_check": {
+    "contains_private_state": false,
+    "contains_threshold_logic": false,
+    "contains_benchmark_answer": false
+  }
+}

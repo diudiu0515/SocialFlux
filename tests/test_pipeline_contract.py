@@ -5,8 +5,8 @@ from pathlib import Path
 
 from evaluation.leakage import assert_no_leaks
 from providers.factory import build_provider
-from scripts.run_pipeline import (
-    load_rollout_config,
+from rollout.configuration import load_rollout_config
+from pipeline.scenarios import (
     load_scenario_records,
     load_scenarios,
     select_scenario_records,
@@ -20,29 +20,35 @@ from scripts.scenario_docs import (
 
 class PipelineContractTest(unittest.TestCase):
     def test_formal_pool_config_meets_gate_md_sampling_contract(self):
-        from scripts.run_pipeline import load_rollout_config
-
-        config = load_rollout_config("configs/formal_rollout_pool.local.json")
+        config = load_rollout_config("configs/formal_rollout_pool.json")
         self.assertEqual(config["pool_stage"], "formal_raw")
-        self.assertEqual(sum(item["runs"] for item in config["policies"]), 12)
+        self.assertEqual(sum(item["runs"] for item in config["policies"]), 3)
+        self.assertEqual({item["model_family"] for item in config["policies"]}, {"claude"})
         self.assertEqual(
-            {item["model_family"] for item in config["policies"]},
-            {"glm", "qwen", "deepseek"},
+            config["model_assignment"],
+            {
+                "strategy": "single_model_all_llm_roles",
+                "model": "claude-fable-5",
+                "independent_calls": True,
+            },
         )
-        self.assertTrue(any(
-            20 <= item.get("model_parameters_billion", 0) <= 40
-            for item in config["policies"]
-        ))
-        environment_model = config["environment"]["provider"]["model"]
-        self.assertTrue(all(
-            item["provider"]["model"] != environment_model
-            for item in config["policies"]
-        ))
+        self.assertEqual(
+            {
+                config["environment"]["provider"]["model"],
+                config["environment"]["response_provider"]["model"],
+                config["construction"]["provider"]["model"],
+                *(item["provider"]["model"] for item in config["policies"]),
+            },
+            {"claude-fable-5"},
+        )
 
-    def test_formal_raw_generation_cannot_build_tasks_before_quality_gate(self):
+    def test_task_builder_only_consumes_gate_three_output(self):
         source = Path("scripts/run_pipeline.py").read_text(encoding="utf-8")
-        self.assertIn('"not_built_before_rollout_quality_gate"', source)
-        self.assertIn('config.get("pool_stage") == "formal_raw"', source)
+        self.assertNotIn("RolloutRunner", source)
+        self.assertIn('"pending_gate_4_human_review"', source)
+        self.assertIn('"--gate3-report"', source)
+        self.assertNotIn('"--quality-report"', source)
+        self.assertNotIn('"--screening-report"', source)
         self.assertIn('formal_raw rollout requires --environment-evidence', source)
 
     def test_scenario_catalog_has_both_sources_and_coverage(self):
@@ -65,6 +71,8 @@ class PipelineContractTest(unittest.TestCase):
             scenario = json.loads(path.read_text(encoding="utf-8"))
             self.assertEqual(path.parent.name, path.stem)
             self.assertNotIn("action_effects", scenario)
+            self.assertEqual(scenario["max_turns"], 20)
+            self.assertTrue(scenario["evaluated_agent_role"]["role"])
             text = paired.read_text(encoding="utf-8")
             self.assertIn("## 1. 叙事结构与初始化", text)
             self.assertIn("## 2. 自由交互与状态更新契约", text)
@@ -143,30 +151,46 @@ class PipelineContractTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 load_rollout_config(path)
 
-    def test_qwen_full_config_extracts_all_three_tasks(self):
-        config = load_rollout_config("configs/rollout_qwen35_full.example.json")
-        self.assertEqual(len(config["policies"]), 3)
-        self.assertEqual(config["pilot_limits"], {
-            "rollout_turns": 6, "t1": 6, "t2": 2, "t3": 1, "t3_horizon": 5,
-        })
-        self.assertEqual(config["t2_pairing"], "all")
+    def test_scale150_development_allows_explicit_single_first_pass(self):
+        config = {
+            "format": "socialflux_rollout_pool_v1",
+            "pool_stage": "development",
+            "candidate_strategy": "single_first_pass",
+            "environment": {"provider": {}},
+            "construction": {"provider": {}},
+            "policies": [{"policy_id": "one-pass", "provider": {"model": "x"}}],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "scale150.json"
+            path.write_text(json.dumps(config), encoding="utf-8")
+            loaded = load_rollout_config(path)
+            self.assertEqual(loaded["candidate_strategy"], "single_first_pass")
+            config["pool_stage"] = "formal_raw"
+            path.write_text(json.dumps(config), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                load_rollout_config(path)
 
-    def test_model_comparison_config_is_a_matched_pilot(self):
-        config = load_rollout_config("configs/rollout_comparison.example.json")
-        self.assertEqual(config["pilot_limits"]["rollout_turns"], 6)
-        self.assertEqual(config["pilot_limits"]["t1"], 8)
-        self.assertEqual(config["pilot_limits"]["t3"], 4)
-        self.assertEqual(config["t2_pairing"], "within_source_model")
+    def test_formal_config_resolves_semantic_model_routes(self):
+        config = load_rollout_config("configs/formal_rollout_pool.json")
+        self.assertEqual(config["environment"]["provider"]["model"], "claude-fable-5")
         self.assertEqual(
-            [item["policy_id"] for item in config["policies"]],
-            ["qwen35_seed_101", "gpt_seed_101", "qwen35_seed_202", "gpt_seed_202"],
+            config["environment"]["response_provider"]["model"],
+            "claude-fable-5",
         )
-        models = [item["provider"]["model"] for item in config["policies"]]
-        self.assertEqual(sum("Qwen3.5-9B" in model for model in models), 2)
-        self.assertEqual(sum(model == "YOUR_GPT_MODEL" for model in models), 2)
         self.assertEqual(
-            {item["sampling"]["temperature"] for item in config["policies"]},
-            {0.6},
+            config["construction"]["provider"]["model"],
+            "claude-fable-5",
+        )
+        self.assertEqual(
+            {item["provider"]["model"] for item in config["policies"]},
+            {"claude-fable-5"},
+        )
+        provenance = config["model_routes_provenance"]
+        self.assertRegex(provenance["sha256"], r"^[0-9a-f]{64}$")
+        self.assertEqual(provenance["bindings"]["environment.appraisal"], "appraisal")
+        self.assertEqual(
+            provenance["bindings"]["environment.response"],
+            "response",
         )
 
     def test_provider_factory_contracts(self):

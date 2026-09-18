@@ -47,6 +47,10 @@ class PromptCatalogTest(unittest.TestCase):
         action = policy.generate({"turn_id": 3})
         self.assertEqual(action, {"text": "任意自然语言行动"})
         self.assertEqual(provider.calls[0][1], {"temperature": 0.8, "seed": 7})
+        rendered = next(item["content"] for item in provider.calls[0][0] if item["role"] == "user")
+        self.assertIn("role.explicit_goal", rendered)
+        self.assertIn("evaluated participant", rendered)
+        self.assertIn('"turn_id": 3', rendered)
 
     def test_two_stage_scenario_prompts_replace_direct_json_generation(self):
         script_prompt = get_prompt("scenario_script_generation_v1")
@@ -84,14 +88,15 @@ class PromptCatalogTest(unittest.TestCase):
             action={"text": "我想核对事实。"},
         )
         self.assertIn("我想核对事实", rendered)
-        self.assertIn("never classify into repair", rendered)
-        self.assertIn("never use keywords as a transition lookup", rendered)
-        self.assertIn("0–4 unique IDs copied exactly", rendered)
-        self.assertIn("no Markdown fence", rendered)
+        self.assertIn("first and only model call before deterministic state calibration", rendered)
+        self.assertIn("fixed event feature", rendered)
+        self.assertIn("sparse candidate lists, not final", rendered)
+        self.assertIn("Usually identify 0–2 state impacts", rendered)
+        self.assertIn("Do not generate", rendered)
 
-        state_update = get_prompt("state_update_v2")
-        self.assertIn("every leaf in both delta objects", state_update)
-        self.assertIn("values such as `-2`, `0`, or `1` are invalid", state_update)
+        response = get_prompt("environment_response_v6")
+        self.assertIn("separate LLM call", response)
+        self.assertIn("new consequential constraint", response)
 
         rollout_judge = get_prompt("rollout_quality_judge_v2")
         self.assertIn("four top-level fields", rollout_judge)

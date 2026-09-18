@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SocialFlux Scale300 人工审核</title>
+<link rel="stylesheet" href="/styles.css?v=scale300-sidebar-v1">
+<style>
+:root{color-scheme:dark;background:#101419;color:#e7edf3;font-family:Inter,"Noto Sans SC",sans-serif}
+*{box-sizing:border-box}body{margin:0}.top{position:sticky;top:0;z-index:3;background:#151b22;border-bottom:1px solid #2c3743;padding:14px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+a{color:#72b7ff}.top h1{font-size:18px;margin:0}.top select,.top input,.top button,textarea{background:#0f141a;color:#e7edf3;border:1px solid #3a4654;border-radius:6px;padding:8px}
+.top select{min-width:520px;max-width:70vw}.summary{padding:12px 20px;background:#19212a;border-bottom:1px solid #2c3743}
+main{max-width:1500px;margin:auto;padding:18px;display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px}.panel,.turn{background:#171e26;border:1px solid #2c3743;border-radius:9px;padding:14px;margin-bottom:13px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}.meta div{background:#11171d;padding:9px;border-radius:6px}.meta span{display:block;color:#91a0af;font-size:12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}.bubble{padding:12px;border-radius:8px;white-space:pre-wrap}.action{background:#183047}.response{background:#263426}
+.turn header{display:flex;justify-content:space-between;margin-bottom:10px}details{margin-top:9px}pre{white-space:pre-wrap;word-break:break-word;background:#0e1318;padding:10px;max-height:520px;overflow:auto}
+aside{position:sticky;top:88px;height:fit-content}label{display:block;margin:10px 0}textarea{width:100%;min-height:100px}.checks label{display:flex;gap:8px;align-items:flex-start}.checks input{margin-top:3px}
+button{cursor:pointer}.pending{color:#f4c56b}.good{color:#72d69c}.bad{color:#ff8f8f}@media(max-width:900px){main{grid-template-columns:1fr}.pair{grid-template-columns:1fr}.top select{min-width:260px;max-width:95vw}aside{position:static}}
+.turn-human-note{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;color:#b8c3cf;font-size:12px}.turn-human-note span{padding:6px 9px;border:1px solid #303b48;border-radius:999px;background:#10161d}.ending-summary{color:#cbd5df;line-height:1.65}
+.main{display:block}.scale-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:13px}.scale-toolbar button{padding:8px 11px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2)}.scale-toolbar a{margin-left:auto}.scale-summary{margin-bottom:13px;padding:12px 14px}.scale-workspace{display:grid;grid-template-columns:minmax(0,1fr) 380px;align-items:start;gap:14px}.scale-workspace #content{min-width:0}.scale-workspace #review{position:sticky;top:18px;max-height:calc(100vh - 36px);overflow:auto}.sidebar-actions .button{display:block;width:100%;margin-top:7px;text-align:center;text-decoration:none}.sidebar-actions .button:first-child{margin-top:0}#picker{display:none}.sidebar-status{color:var(--muted);font:9px ui-monospace,monospace}@media(max-width:900px){.scale-workspace{display:flex;flex-direction:column}.scale-workspace #review{position:static;max-height:none;order:-1}.main{padding-top:20px}}
+</style>
+</head>
+<body><div class="app-shell">
+<aside class="sidebar">
+  <div class="brand"><span class="brand-mark">SF</span><div><strong>SocialFlux</strong><small>Scale300 Review</small></div></div>
+  <div class="local-notice">草稿保存在当前浏览器。机器结果不是人工 GT，请定期导出 JSON。</div>
+  <label class="search-box"><span>⌕</span><input id="scenarioSearch" type="search" placeholder="搜索情节、关系或 ID"></label>
+  <div class="side-label">SCENARIO QUEUE <span id="scenarioCount">—</span></div>
+  <div id="scenarioList" class="scenario-list"></div>
+  <div class="sidebar-actions">
+    <button id="export" class="button primary">导出标注草稿 JSON</button><button id="importBtn" class="button">导入标注草稿 JSON</button><input id="importFile" type="file" accept="application/json,.json" hidden>
+    <a class="button" href="/scale300_tasks.html">T1–T3 答案核验</a><a class="button" href="/task_examples.html">示例与视频</a>
+    <div id="localProgress" class="local-progress">0 / 300 个场景已处理</div>
+  </div>
+</aside>
+<main class="main">
+  <header class="topbar"><div><div class="eyebrow">SCENARIO · ROLLOUT · FOUR GATES</div><h1>Scale300 人工审核工作台</h1></div><div class="top-actions"><label class="reviewer-field">标注员 <input id="reviewer" placeholder="姓名或 ID"></label><span class="gate-badge">300 scenarios</span></div></header>
+  <div class="scale-toolbar"><button id="prev">← 上一个</button><button id="next">下一个 →</button><button id="refresh">刷新进度</button><span id="currentLabel" class="sidebar-status">加载中…</span><a href="/review.html">查看数据总览</a><select id="picker"></select></div>
+  <div id="summary" class="panel scale-summary">加载中…</div>
+  <div class="scale-workspace"><section id="content"></section><aside id="review" class="panel"></aside></div>
+</main></div>
+<script>
+(function(){
+"use strict";
+var STORAGE_KEY="socialflux.annotation.drafts.v1";
+var data=null,currentIndex=0,currentPayload=null,currentScenario=null;
+function esc(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+function drafts(){try{var x=JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}");return {reviewer:x.reviewer||"",records:x.records||{}};}catch(e){return {reviewer:"",records:{}};}}
+function save(x){localStorage.setItem(STORAGE_KEY,JSON.stringify(x));}
+async function get(url){var r=await fetch(url);if(!r.ok)throw new Error(await r.text());return r.json();}
+function candidate(){return data.candidates[currentIndex];}
+function recordKey(id){return "scale150_rollout:"+id;}
+function drawSummary(){
+ var c=data.generation_status_counts||{};
+ document.getElementById("summary").innerHTML="<b>场景配置 "+esc(data.scenario_count)+"</b> · 生成记录 "+esc(data.generated_scenario_count)+" · 无记录 "+esc(data.pending_scenario_count)+" · "+esc(JSON.stringify(c))+"<br>"+esc(data.human_review_warning);
+}
+function drawPicker(){
+ var p=document.getElementById("picker");p.innerHTML=data.candidates.map(function(x,i){
+  return '<option value="'+i+'" '+(i===currentIndex?"selected":"")+">"+(i+1)+"/"+data.candidates.length+" · "+esc(x.scenario_id)+" · "+esc(x.turn_count||0)+"轮 · "+esc(x.generation_status)+" · "+esc(x.title)+"</option>";
+ }).join("");
+ drawSidebar();
+}
+function drawSidebar(){
+ if(!data)return;
+ var q=document.getElementById("scenarioSearch").value.trim().toLowerCase(),d=drafts(),done={};
+ Object.keys(d.records).forEach(function(k){var r=d.records[k];if(r&&r.scenario_id&&r.status&&r.status!=="pending")done[r.scenario_id]=true;});
+ var visible=data.candidates.map(function(x,i){return{x:x,i:i};}).filter(function(v){var x=v.x,hay=[x.scenario_id,x.title,x.relationship_category,x.source_work,x.source_type].join(" ").toLowerCase();return !q||hay.indexOf(q)>=0;});
+ var list=document.getElementById("scenarioList"),scrollTop=list.scrollTop;
+ document.getElementById("scenarioCount").textContent=visible.length+"/"+data.candidates.length;document.getElementById("localProgress").textContent=Object.keys(done).length+" / "+data.candidates.length+" 个场景已处理";
+ list.innerHTML=visible.map(function(v){var x=v.x,i=v.i;return '<button class="scenario-item '+(i===currentIndex?'active':'')+'" data-index="'+i+'"><span class="scenario-index">'+String(i+1).padStart(3,"0")+'</span><span><strong>'+esc(x.scenario_id)+' · '+esc(x.title)+'</strong><small>'+esc(x.relationship_category)+' · '+esc(x.turn_count||0)+'轮 · '+esc(x.generation_status)+'</small></span><i class="review-dot '+(done[x.scenario_id]?'done':'')+'"></i></button>';}).join("");list.scrollTop=scrollTop;
+ list.querySelectorAll("[data-index]").forEach(function(button){button.onclick=function(){currentIndex=Number(this.dataset.index);loadCurrent().catch(function(e){alert(e.message);});};});
+ var c=candidate();document.getElementById("currentLabel").textContent=(currentIndex+1)+" / "+data.candidates.length+" · "+c.scenario_id+" · "+c.title;
+}
+function drawReview(){
+ var c=candidate(),trajectoryId=c.trajectory_id||c.scenario_id,d=drafts();
+ var gate1Key="scale300_gate1:"+c.scenario_id,gate1=d.records[gate1Key]||d.records["scale150_gate1:"+c.scenario_id]||{};
+ var gate2Key="scale300_gate2:"+c.scenario_id,gate2=d.records[gate2Key]||{};
+ var gate3Key="scale300_gate3:"+trajectoryId,gate3=d.records[gate3Key]||d.records["scale150_rollout:"+trajectoryId]||{};
+ var gate4Key="scale300_gate4:"+c.scenario_id,gate4=d.records[gate4Key]||{};
+ var attest=["variables_relevant","values_justified","no_policy_effect_baked_in","initial_triggers_inactive","multiple_future_paths_possible","shared_across_models_and_seeds"];
+ var scores=["social_plausibility","character_coherence","tradeoff_quality","history_necessity","interaction_richness","t1_t4_suitability"];
+ var attestLabels=["状态变量与场景相关","初始数值有充分依据","没有预先写入某种策略的效果","初始触发条件尚未发生","场景允许多种合理走向","可供不同模型和 seed 共同使用"];
+ var scoreLabels={social_plausibility:"社会情境可信度",character_coherence:"人物一致性",tradeoff_quality:"真实取舍质量",history_necessity:"历史信息必要性",interaction_richness:"互动丰富度",t1_t4_suitability:"任务适用性"};
+ var gate2Labels=["状态变化有对话或事件依据","整段互动符合人物与情境","人物和动作归属正确","状态变化与人物回应一致","对方回应自然可信"];
+ var gate2Checks=["state_transition_reasonable","trajectory_plausible","role_binding_correct","state_response_consistent","environment_valid"];
+ var gate3Checks=["identity_motivation_ownership","contextual_coherence","no_empty_loop","proposal_commitment_result_distinction","state_evidence_reasonable","t1_usable","t2_potential","t3_potential","t4_usable"];
+ var gate4Labels=["T1 问题可由公开信息回答","T2 的 A/B 比较受到控制","T3 候选行动与时间窗口有效","T4 在线互动可以评价","没有泄露隐藏状态","LLM 候选答案基本合理"];
+ var gate3Labels=["身份、动机和动作归属连贯","承接前文且结束/继续自然","没有持续无信息循环","提案、承诺、报告和核验结果区分正确","状态变化有具体依据","T1 可构造","T2 有受控配对潜力","T3 有足够后续窗口潜力","T4 在线互动可用"];
+ var gate4Checks=["t1_answerable","t2_controlled_pair_valid","t3_actions_and_horizon_valid","t4_online_evaluable","no_hidden_state_leakage","machine_answer_reasonable"];
+ function boxes(keys,labels,record,prefix){return keys.map(function(k,i){return '<label><input type="checkbox" data-'+prefix+'="'+k+'" '+(record.checks&&record.checks[k]?"checked":"")+'> '+esc(labels?labels[i]:k)+'</label>';}).join("");}
+ function decisions(id,record,extra){return '<label>结论 <select id="'+id+'"><option value="">未判断</option><option value="approved">通过</option><option value="needs_revision">需要修改</option><option value="borderline">边界样本</option><option value="rejected">拒绝</option>'+(extra||"")+'</select></label>';}
+ var scoreRows=scores.map(function(k){var value=(gate1.scores||{})[k]||"";return '<label>'+esc(scoreLabels[k])+' <select data-g1-score="'+k+'"><option value="">未评分</option>'+[1,2,3,4,5].map(function(v){return '<option value="'+v+'" '+(String(value)===String(v)?"selected":"")+'>'+v+'</option>';}).join("")+'</select></label>';}).join("");
+ document.getElementById("review").innerHTML=
+  '<h3>Gate 1 · 场景</h3><p>判断场景和初始设定是否适合研究。</p>'+decisions("g1Decision",gate1)+
+  '<div class="checks">'+attest.map(function(k,i){return '<label><input type="checkbox" data-g1-attest="'+k+'" '+(gate1.attestations&&gate1.attestations[k]?"checked":"")+'> '+esc(attestLabels[i])+'</label>';}).join("")+'</div>'+scoreRows+
+  '<label>Gate 1 备注<textarea id="g1Notes">'+esc(gate1.notes||"")+'</textarea></label><button id="saveGate1">保存 Gate 1</button><hr>'+
+  '<h3>Gate 2 · 环境与状态</h3><p>只根据可见对话和事件判断是否合理。</p>'+decisions("g2Decision",gate2)+
+  '<div class="checks">'+boxes(gate2Checks,gate2Labels,gate2,"g2-check")+'</div><label>Gate 2 证据与备注<textarea id="g2Notes">'+esc(gate2.notes||"")+'</textarea></label><button id="saveGate2">保存 Gate 2</button><hr>'+
+  '<h3>Gate 3 · 对话质量</h3><p>拒绝时请注明具体轮次。</p>'+decisions("g3Decision",gate3)+
+  '<div class="checks">'+boxes(gate3Checks,gate3Labels,gate3,"g3-check")+'</div><label>具体轮次与问题<textarea id="g3Notes">'+esc(gate3.notes||"")+'</textarea></label><button id="saveGate3">保存 Gate 3</button><hr>'+
+  '<h3>Gate 4 · 任务可用性</h3><p>判断现有对话能否支持对应任务。</p>'+decisions("g4Decision",gate4,'<option value="blocked">暂时无法判断</option>')+
+  '<div class="checks">'+boxes(gate4Checks,gate4Labels,gate4,"g4-check")+'</div><label>Gate 4 任务缺口/答案抽查<textarea id="g4Notes">'+esc(gate4.notes||"")+'</textarea></label><button id="saveGate4">保存 Gate 4</button>';
+ ["g1Decision","g2Decision","g3Decision","g4Decision"].forEach(function(id,i){document.getElementById(id).value=[gate1,gate2,gate3,gate4][i].status||"";});
+ document.getElementById("saveGate1").onclick=function(){var now=drafts(),a={},sc={};document.querySelectorAll("[data-g1-attest]").forEach(function(x){a[x.dataset.g1Attest]=x.checked;});document.querySelectorAll("[data-g1-score]").forEach(function(x){sc[x.dataset.g1Score]=x.value?Number(x.value):null;});now.reviewer=document.getElementById("reviewer").value.trim();now.records[gate1Key]={record_type:"scale300_gate1",record_id:c.scenario_id,scenario_id:c.scenario_id,scenario_sha256:currentScenario&&currentScenario.scenario_sha256,status:document.getElementById("g1Decision").value||"pending",attestations:a,scores:sc,notes:document.getElementById("g1Notes").value,updated_at_utc:new Date().toISOString()};save(now);drawSidebar();alert("Gate 1 已保存");};
+ document.getElementById("saveGate2").onclick=function(){saveChecks(gate2Key,"scale300_gate2",c.scenario_id,"g2","g2Decision","g2Notes");};
+ document.getElementById("saveGate3").onclick=function(){saveChecks(gate3Key,"scale300_gate3",trajectoryId,"g3","g3Decision","g3Notes");};
+ document.getElementById("saveGate4").onclick=function(){saveChecks(gate4Key,"scale300_gate4",c.scenario_id,"g4","g4Decision","g4Notes");};
+ function saveChecks(key,type,id,prefix,decisionId,notesId){var now=drafts(),v={};document.querySelectorAll("[data-"+prefix+"-check]").forEach(function(x){v[x.getAttribute("data-"+prefix+"-check")]=x.checked;});now.reviewer=document.getElementById("reviewer").value.trim();now.records[key]={record_type:type,record_id:id,scenario_id:c.scenario_id,trajectory_id:trajectoryId,status:document.getElementById(decisionId).value||"pending",checks:v,notes:document.getElementById(notesId).value,updated_at_utc:new Date().toISOString()};save(now);drawSidebar();alert(type+" 已保存");}
+}
+function roleName(v,fallback){if(!v)return fallback;if(typeof v==="string")return v;return v.name||v.role||v.title||v.character_id||fallback;}
+function collectText(v,out){out=out||[];if(typeof v==="string"&&v.trim()&&out.indexOf(v.trim())<0)out.push(v.trim());else if(Array.isArray(v))v.forEach(function(x){collectText(x,out);});else if(v&&typeof v==="object")Object.keys(v).forEach(function(k){collectText(v[k],out);});return out;}
+function flattenDelta(v,prefix,out){out=out||[];if(typeof v==="number"&&v!==0)out.push([prefix,v]);else if(v&&typeof v==="object")Object.keys(v).forEach(function(k){flattenDelta(v[k],prefix?prefix+"."+k:k,out);});return out;}
+function changeSummary(x){var labels={anger:"愤怒",anxiety:"焦虑",hope:"希望",trust:"信任",hostility:"敌意",resolve:"坚持程度",repair_intent:"修复意愿",risk:"风险"},items=flattenDelta(x.numeric_state_delta,"",[]).concat(flattenDelta(x.numeric_dynamics_delta,"",[]));if(!items.length)return"本轮状态无明显变化";return items.map(function(p){var key=p[0].split(".").pop(),n=Number(p[1]);return(labels[key]||key)+" "+(n>0?"↑":"↓")+Math.abs(n).toFixed(2);}).join(" · ");}
+function drawTrajectory(){
+ var c=candidate(),t=currentPayload&&currentPayload.trajectory;
+ var scenario=currentScenario&&currentScenario.scenario,agentName=roleName(scenario&&scenario.evaluated_agent_role,"对话参与者"),environmentName=roleName(scenario&&scenario.environment_agent,"对方");
+ var meta='<section class="panel"><div class="meta"><div><span>场景</span>'+esc(c.scenario_id)+'</div><div><span>标题</span>'+esc(c.title)+'</div><div><span>关系</span>'+esc(c.relationship_category)+'</div><div><span>来源</span>'+esc(c.source_work||c.source_type)+'</div><div><span>轮数</span>'+esc(c.turn_count||0)+'</div><div><span>生成情况</span>'+esc(c.generation_status)+'</div><div><span>模型复核</span>'+esc((c.model_semantic_review||{}).decision||"pending")+'</div></div></section>';
+ var scenarioPanel=scenario?'<section class="panel"><h3>场景背景</h3><p class="ending-summary">'+esc(scenario.background)+'</p><div class="meta"><div><span>角色 A</span>'+esc(agentName)+'</div><div><span>角色 B</span>'+esc(environmentName)+'</div></div></section>':'';
+ if(!t){document.getElementById("content").innerHTML=meta+scenarioPanel+'<div class="panel pending">该场景没有可阅读的完整轨迹。</div>';drawReview();return;}
+ var ending=collectText(t.ending,[]).slice(0,4).join("；")||"未提供自然语言结束说明";
+ var turns=(t.turns||[]).map(function(x,i){
+  var eventText=collectText(x.segment_transition_after,[]).slice(0,3).join("；"),changeText=changeSummary(x),timeText=x.elapsed_time_before===x.elapsed_time_after?"":("时间 "+x.elapsed_time_before+" → "+x.elapsed_time_after);
+  return '<article class="turn"><header><b>第 '+(i+1)+' 轮</b><span>'+esc(timeText)+'</span></header><div class="pair"><div class="bubble action"><b>'+esc(agentName)+'</b><br>'+esc(x.policy_action&&x.policy_action.text)+'</div><div class="bubble response"><b>'+esc(environmentName)+'</b><br>'+esc(x.environment_response)+'</div></div><div class="turn-human-note"><span>状态：'+esc(changeText)+'</span>'+(eventText?'<span>公开事件：'+esc(eventText)+'</span>':'')+'</div></article>';
+ }).join("");
+ document.getElementById("content").innerHTML=meta+scenarioPanel+'<section class="panel"><b>对话结束情况</b><p class="ending-summary">'+esc(ending)+'</p></section>'+turns;
+ drawReview();
+}
+async function loadCurrent(){
+ var c=candidate();currentPayload=null;currentScenario=null;drawPicker();drawTrajectory();
+ var values=await Promise.all([
+  get("/api/scale150-scenario/"+encodeURIComponent(c.scenario_id)),
+  c.trajectory_id?get("/api/scale150-trajectory/"+encodeURIComponent(c.trajectory_id)):Promise.resolve(null)
+ ]);
+ currentScenario=values[0];currentPayload=values[1];drawTrajectory();
+}
+async function refresh(){
+ data=await get("/api/scale150-review");if(currentIndex>=data.candidates.length)currentIndex=0;drawSummary();drawPicker();await loadCurrent();
+}
+document.getElementById("picker").onchange=function(){currentIndex=Number(this.value);loadCurrent().catch(function(e){alert(e.message);});};
+document.getElementById("prev").onclick=function(){if(currentIndex>0){currentIndex--;loadCurrent();}};
+document.getElementById("next").onclick=function(){if(currentIndex+1<data.candidates.length){currentIndex++;loadCurrent();}};
+document.getElementById("refresh").onclick=function(){refresh().catch(function(e){alert(e.message);});};
+document.getElementById("scenarioSearch").oninput=function(){drawSidebar();};
+document.getElementById("reviewer").value=drafts().reviewer;
+document.getElementById("reviewer").oninput=function(){var d=drafts();d.reviewer=this.value.trim();save(d);};
+document.getElementById("export").onclick=function(){var d=drafts(),payload={format:"socialflux_browser_annotation_export_v1",exported_at_utc:new Date().toISOString(),reviewer:d.reviewer,record_count:Object.keys(d.records).length,records:Object.values(d.records)};var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}));a.download="socialflux-scale300-annotations.json";a.click();URL.revokeObjectURL(a.href);};
+document.getElementById("importBtn").onclick=function(){document.getElementById("importFile").click();};
+document.getElementById("importFile").onchange=async function(){try{var imported=JSON.parse(await this.files[0].text());if(!Array.isArray(imported.records))throw new Error("不是有效的 SocialFlux 标注导出文件");var d=drafts();imported.records.forEach(function(r){if(r&&r.record_type&&r.record_id)d.records[r.record_type+":"+r.record_id]=r;});if(imported.reviewer)d.reviewer=imported.reviewer;save(d);document.getElementById("reviewer").value=d.reviewer;drawReview();drawSidebar();alert("已导入 "+imported.records.length+" 条草稿");}catch(e){alert("导入失败："+e.message);}finally{this.value="";}};
+refresh().catch(function(e){document.getElementById("content").innerHTML='<div class="panel bad">无法加载：'+esc(e.message)+'</div>';});
+})();
+</script>
+</body>
+</html>

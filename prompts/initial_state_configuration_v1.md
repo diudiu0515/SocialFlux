@@ -13,7 +13,7 @@ Constraints:
 - values must follow from persona + background + goals + hidden intention + initial situation;
 - avoid unjustified extremes and leave room for multiple natural trajectories;
 - no video trigger may already be active at S0/D0;
-- plausible free interaction within the horizon must be able to reach salient trigger regions;
+- set max_turns to exactly 20; plausible free interaction across this long horizon must be able to reach salient trigger regions without repetitive padding;
 - create thresholds and observable-expression specifications, never action effects or a prescribed strategy;
 - media is sparse: ordinary turns are text, selected threshold/crossing/state-change events emit safe observable media specifications;
 - status must be candidate_pending_human_freeze. A model cannot freeze its own proposal.

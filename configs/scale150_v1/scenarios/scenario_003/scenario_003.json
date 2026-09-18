@@ -1,0 +1,451 @@
+{
+  "scenario_id": "IA_PIPE_003",
+  "title": "朋友间借款与信任",
+  "mechanism": "friendship trust",
+  "source": {
+    "type": "synthetic-script",
+    "provenance_id": "SF-SRC-003",
+    "surface_text_policy": "original_surface_text",
+    "redistribution_status": "original_synthetic",
+    "provenance_note": "由多种通用社会互动机制组合成原创剧本；没有使用可识别的具体作品角色、场景、事件序列或对白。"
+  },
+  "narrative_design": {
+    "relationship_structure": "对话参与者 与 朋友 的持续关系",
+    "power_structure": "关系权力总体对等，但借款事实造成临时责任不对称。",
+    "goal_conflict": "朋友迟迟未归还本金3000元，过去几次只给含糊延期；双方既想保留多年友谊，又必须把首期还款、实际履约、剩余风险和未来经济边界分开处理。",
+    "information_asymmetry": "保护自身声誉、资源或关系位置，同时避免直接承认失误",
+    "relevant_history": [
+      "双方都清楚未归还本金为3000元，原定数月前归还，之后出现过几次没有金额或日期的延期。",
+      "借款人近期收入不稳定，但没有向出借人公开完整财务情况；出借人只能要求可执行安排，不能假定未公开原因。",
+      "双方都珍惜多年友谊，但出借人已经停止新的经济帮助，借款人把这种边界体验成不信任。",
+      "任何口头承诺都必须与之后的公开转账记录分开；时间到达本身不能证明已还、部分还或未还。"
+    ],
+    "meaningful_choice_space": [
+      "形成金额和期限明确的首期安排",
+      "允许借款人说明困难但不把说明当履约",
+      "根据公开转账记录区分履约、部分履约和未履约",
+      "把剩余债务风险与友情修复分别讨论",
+      "明确未来不再借款是否仍保留普通联系"
+    ]
+  },
+  "construction_status": {
+    "normalization": "scale20_v2_authored_evidence_nodes",
+    "initial_state": "candidate_pending_human_freeze",
+    "quality_gate": "pending_v2_generation_and_semantic_review"
+  },
+  "quality_gate": {
+    "social_plausibility": "pending",
+    "real_tradeoff": "pending",
+    "longitudinal_necessity": "pending",
+    "nontrivial_strategy_space": "pending",
+    "character_motivation_coherence": "pending",
+    "information_asymmetry": "pending",
+    "t1_suitability": "pending",
+    "t2_suitability": "pending",
+    "t3_suitability": "pending",
+    "t4_adaptation_opportunity": "pending",
+    "no_universal_script": "pending"
+  },
+  "background": "朋友迟迟未归还本金3000元，过去几次只给含糊延期；双方既想保留多年友谊，又必须把首期还款、实际履约、剩余风险和未来经济边界分开处理。",
+  "environment_agent": {
+    "persona": {
+      "name": "朋友",
+      "role": "朋友",
+      "patience": 0.65,
+      "empathy": 0.55
+    },
+    "explicit_goal": "在不暴露全部财务压力的情况下形成自己能承担的还款安排，并尽可能保留友情。",
+    "hidden_intention": "借款人既羞于承认现金流失控，也担心明确承诺后再次失败会彻底失去朋友。"
+  },
+  "evaluated_agent_role": {
+    "character_id": "EVALUATED_AGENT",
+    "name": "对话参与者",
+    "explicit_goal": "形成可核验的还款安排，根据实际履约调整风险判断，并建立不把友情等同于经济信任的长期边界。",
+    "role": "要求落实还款安排的出借朋友"
+  },
+  "selected_state_variables": {
+    "emotion": [
+      "anger",
+      "anxiety",
+      "hope"
+    ],
+    "motivation": [
+      "resolve",
+      "repair_intent"
+    ],
+    "relationship": [
+      "trust",
+      "hostility"
+    ],
+    "risk": [
+      "goal_failure_risk"
+    ]
+  },
+  "target_state_ids": [
+    "emotion.anger",
+    "emotion.anxiety",
+    "relationship.trust",
+    "relationship.hostility"
+  ],
+  "initial_state": {
+    "emotion": {
+      "anger": 5,
+      "anxiety": 6,
+      "hope": 5
+    },
+    "motivation": {
+      "resolve": 6,
+      "repair_intent": 5
+    },
+    "relationship": {
+      "trust": 5,
+      "hostility": 2
+    }
+  },
+  "initial_dynamics": {
+    "goal_failure_risk": 5,
+    "escalation_risk": 4,
+    "negotiation_open": 5
+  },
+  "opening_response": "本金3000元我至今还没有归还，第一笔金额和沟通方式现在也都没有确定。我们这次先谈我在14天内实际能还多少、这个节点是否可行，以及如果有变化我该怎么及时说明；余款留到核对节点再谈。",
+  "max_turns": 20,
+  "longitudinal_design": {
+    "format": "socialflux_longitudinal_v1",
+    "time_unit": "day",
+    "start_elapsed": 0,
+    "segments": [
+      {
+        "segment_id": "initial_repayment_negotiation",
+        "reason": "双方首次集中讨论逾期欠款，并只形成首个可核验节点。",
+        "interaction_goal": "确定14天内第一笔还款的金额，以及计划变化时的沟通责任。",
+        "live_questions": [
+          "首期能承担多少",
+          "14天是否可行",
+          "变化时如何说明"
+        ],
+        "pause_when": "首期可核验安排或明确分歧已经形成。",
+        "min_turns": 1,
+        "max_turns": 7,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        },
+        "end_on_pending_commitment": true,
+        "commitment_speaker": "environment_agent",
+        "commitment_focus": "practical_execution",
+        "commitment_required_terms": [
+          "amount",
+          "deadline",
+          "repayment_action"
+        ]
+      },
+      {
+        "segment_id": "first_repayment_checkpoint",
+        "reason": "14天核对节点到达，需要用公开转账记录区分承诺和履约。",
+        "interaction_goal": "先回应首期实际结果，再决定下一笔是否能形成明确安排。",
+        "live_questions": [
+          "首期实际结果是什么",
+          "结果如何改变风险",
+          "下一笔能否明确"
+        ],
+        "pause_when": "首期结果已回应，下一步安排或分歧已明确。",
+        "min_turns": 1,
+        "max_turns": 7,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        },
+        "advance_by": 14,
+        "public_time_record": "距离上次交流已经过去14天，14天核对节点到达，需要用公开转账记录区分承诺和履约。；该公开记录只说明时间和外部节点已经到达，不证明任何提议、承诺或行动已经完成。",
+        "opening_response": "14天核对节点到了。公开转账记录只证明实际到账情况，我们先把它与上次承诺分开。",
+        "event_pool_id": "first_repayment_record",
+        "requires_pending_commitment": true,
+        "commitment_speaker": "environment_agent",
+        "commitment_focus": "practical_execution",
+        "commitment_required_terms": [
+          "amount",
+          "deadline",
+          "repayment_action"
+        ],
+        "end_on_pending_commitment": true,
+        "precondition_not_met_record": "此前没有形成金额、期限和还款动作都明确的首期承诺；14天后双方因欠款仍未解决而再次联系。",
+        "precondition_not_met_opening_response": "14天到了，但上次没有形成可核验的首期承诺，因此不能判断履约。我们先面对这个缺口。"
+      }
+    ],
+    "event_pools": [
+      {
+        "event_pool_id": "first_repayment_record",
+        "selection": "deterministic_by_trajectory_id",
+        "outcomes": [
+          {
+            "outcome_id": "fulfilled",
+            "public_record": "公开转账记录显示：上次交流中约定在本节点完成的第一笔还款已经足额到账。",
+            "causal_scope": "action_mediated",
+            "commitment_effect": "fulfilled",
+            "commitment_speaker": "environment_agent",
+            "commitment_focus": "practical_execution",
+            "state_delta": {
+              "emotion.anxiety": "moderate_decrease",
+              "emotion.hope": "mild_increase",
+              "motivation.resolve": "mild_decrease"
+            },
+            "dynamics_delta": {
+              "goal_failure_risk": "moderate_decrease",
+              "escalation_risk": "mild_decrease"
+            },
+            "performance_fraction": 1.0
+          },
+          {
+            "outcome_id": "partially_fulfilled",
+            "public_record": "公开转账记录显示：上次交流中约定在本节点完成的第一笔还款只有部分到账，尚未足额履行；本记录未公开具体到账金额，因此不能据此计算精确余额。",
+            "causal_scope": "action_mediated",
+            "commitment_effect": "partially_fulfilled",
+            "commitment_speaker": "environment_agent",
+            "commitment_focus": "practical_execution",
+            "state_delta": {
+              "emotion.anxiety": "mild_decrease",
+              "emotion.hope": "mild_increase",
+              "motivation.repair_intent": "mild_increase"
+            },
+            "dynamics_delta": {
+              "goal_failure_risk": "mild_decrease"
+            },
+            "performance_fraction": 0.5
+          },
+          {
+            "outcome_id": "unfulfilled",
+            "public_record": "公开转账记录显示：截至上次交流约定的本节点，第一笔还款没有到账。",
+            "causal_scope": "action_mediated",
+            "commitment_effect": "unfulfilled",
+            "commitment_speaker": "environment_agent",
+            "commitment_focus": "practical_execution",
+            "state_delta": {
+              "emotion.anxiety": "mild_increase",
+              "emotion.hope": "mild_decrease",
+              "motivation.repair_intent": "mild_decrease",
+              "relationship.hostility": "mild_increase"
+            },
+            "dynamics_delta": {
+              "goal_failure_risk": "mild_increase",
+              "escalation_risk": "mild_increase",
+              "negotiation_open": "mild_decrease"
+            },
+            "performance_fraction": 0.0
+          }
+        ]
+      },
+      {
+        "event_pool_id": "second_repayment_record",
+        "selection": "deterministic_by_trajectory_id",
+        "outcomes": [
+          {
+            "outcome_id": "fulfilled",
+            "public_record": "公开转账记录显示：首次核对时约定在本节点完成的下一笔还款已经足额到账。",
+            "causal_scope": "action_mediated",
+            "commitment_effect": "fulfilled",
+            "commitment_speaker": "environment_agent",
+            "commitment_focus": "practical_execution",
+            "state_delta": {
+              "emotion.anger": "mild_decrease",
+              "emotion.anxiety": "mild_decrease",
+              "emotion.hope": "mild_increase",
+              "relationship.trust": "mild_increase"
+            },
+            "dynamics_delta": {
+              "goal_failure_risk": "moderate_decrease",
+              "escalation_risk": "mild_decrease"
+            },
+            "performance_fraction": 1.0
+          },
+          {
+            "outcome_id": "partially_fulfilled",
+            "public_record": "公开转账记录显示：首次核对时约定在本节点完成的下一笔还款只有部分到账，剩余部分仍未履行；本记录未公开具体到账金额，因此不能据此计算精确余额。",
+            "causal_scope": "action_mediated",
+            "commitment_effect": "partially_fulfilled",
+            "commitment_speaker": "environment_agent",
+            "commitment_focus": "practical_execution",
+            "state_delta": {
+              "emotion.anxiety": "mild_increase",
+              "motivation.resolve": "mild_increase"
+            },
+            "dynamics_delta": {
+              "goal_failure_risk": "mild_increase"
+            },
+            "performance_fraction": 0.5
+          },
+          {
+            "outcome_id": "unfulfilled",
+            "public_record": "公开转账记录显示：截至首次核对时约定的本节点，下一笔还款没有到账。",
+            "causal_scope": "action_mediated",
+            "commitment_effect": "unfulfilled",
+            "commitment_speaker": "environment_agent",
+            "commitment_focus": "practical_execution",
+            "state_delta": {
+              "emotion.anger": "moderate_increase",
+              "emotion.hope": "mild_decrease",
+              "relationship.trust": "mild_decrease",
+              "relationship.hostility": "mild_increase"
+            },
+            "dynamics_delta": {
+              "goal_failure_risk": "moderate_increase",
+              "escalation_risk": "mild_increase",
+              "negotiation_open": "mild_decrease"
+            },
+            "performance_fraction": 0.0
+          }
+        ]
+      }
+    ],
+    "numeric_obligation": {
+      "initial_amount": 3000,
+      "currency": "CNY"
+    }
+  },
+  "t3_delayed_horizon": 5,
+  "sampling_plan": {
+    "selection_strategy": "natural_trajectory_checkpoint_sampling",
+    "seed": 17,
+    "t1_max": 5,
+    "t2_max": 3,
+    "t3_max": 4
+  },
+  "observable_expression": {
+    "default": {
+      "facial_expression": "保持克制并注意对方反应",
+      "gaze": "保持自然注视",
+      "speech_style": "正常语速，信息清楚",
+      "prosody": "语气克制",
+      "behavioral_cues": [
+        "根据当前互动调整停顿和回应长度"
+      ]
+    }
+  },
+  "media_generation": {
+    "stage": "structured_expression",
+    "default_media_type": "video",
+    "asset_status": "generated",
+    "asset_root": "media/talking_head",
+    "note": "视频资产生成前只输出 observable expression 与 media spec，不伪造 asset。",
+    "provider": "TMElyralab/MuseTalk 1.5 (local)",
+    "profile": "multimodel_v2_audio_conditioned"
+  },
+  "video_triggers": [
+    {
+      "trigger_id": "escalation_confrontation",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.anger": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "relationship.hostility": {
+          "operator": ">=",
+          "threshold": 7
+        },
+        "escalation_risk": {
+          "operator": ">=",
+          "threshold": 8
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "disappointed_distance",
+      "duration_seconds": 6,
+      "media_asset_id": "IA_PIPE_003--escalation_confrontation",
+      "observable_expression": {
+        "facial_expression": "嘴角收紧，视线短暂移开",
+        "gaze": "减少直接眼神接触",
+        "speech_style": "回答变短，留出明显停顿",
+        "prosody": "音量降低，失望感上升",
+        "behavioral_cues": [
+          "状态达到显著冲突区间后出现一次明显外显变化"
+        ]
+      },
+      "priority": 2,
+      "social_event": "disappointed_distance",
+      "spoken_response": "一再改时间让我很难再信你，请给我明确还款安排。"
+    },
+    {
+      "trigger_id": "anxious_withdrawal",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.anxiety": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "motivation.repair_intent": {
+          "operator": "<=",
+          "threshold": 2
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "anxious_withdrawal",
+      "duration_seconds": 6,
+      "media_asset_id": "IA_PIPE_003--anxious_withdrawal",
+      "observable_expression": {
+        "facial_expression": "表情收缩，显出疲惫或不安",
+        "gaze": "短暂低头后重新看向对方",
+        "speech_style": "回应犹豫，句子变短",
+        "prosody": "音量降低，停顿变长",
+        "behavioral_cues": [
+          "避免夸张哭泣或脸谱化表演"
+        ]
+      },
+      "priority": 3,
+      "social_event": "anxious_withdrawal",
+      "spoken_response": "我现在不知道还能不能继续相信这个承诺。"
+    },
+    {
+      "trigger_id": "repayment_relief",
+      "trigger_mode": "state_change",
+      "conditions": {},
+      "change_conditions": {
+        "emotion.anxiety": {
+          "operator": "<=",
+          "threshold": -2
+        }
+      },
+      "priority": 1,
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "repayment_relief",
+      "social_event": "repayment_relief",
+      "duration_seconds": 6,
+      "media_asset_id": "IA_PIPE_003--repayment_relief",
+      "observable_expression": {
+        "facial_expression": "嘴角不再收紧，轻轻呼出一口气",
+        "gaze": "恢复眼神接触，不再频繁移开",
+        "head_motion": "肩颈放松并轻微点头",
+        "response_timing": "听完具体日期后停顿一下",
+        "speech_style": "谨慎接受，同时确认可执行细节",
+        "prosody": "音量恢复，句尾不再下沉",
+        "behavioral_cues": [
+          "可执行安排出现后，防备中显出短暂释然"
+        ]
+      },
+      "spoken_response": "这样分期我能接受，我们把日期写清楚。"
+    }
+  ],
+  "initialization_notes": {
+    "rationale": {
+      "migration": "These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.",
+      "state_selection": "Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed."
+    },
+    "trigger_reachability": [
+      "No configured trigger is active at S0/D0.",
+      "Threshold reachability within the episode remains pending human review."
+    ]
+  },
+  "scenario_design_revision": {
+    "version": "scale20_v2",
+    "reason": "author consequential future evidence instead of requiring LLM invention",
+    "dialogue_policy": "observations, not a turn script or forced reconciliation",
+    "parent_configuration": "scale20_v2",
+    "catalog_version": "scale150_v1"
+  }
+}

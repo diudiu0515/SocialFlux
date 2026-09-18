@@ -2,34 +2,22 @@
 
 SocialFlux 是一个用于长期社会互动推理的 stateful benchmark pipeline。它用同一套私有状态环境生成自然模型轨迹、构建 T1/T2/T3 离线任务，并提供 T4 在线交互；正常生成过程不含预定义 repair/neutral/escalation 策略，也不查 action transition table。
 
-当前代码架构、20 个 scenario bundle（原 10 个保留，新增 10 个影视高层结构启发的原创场景）、版本化固定 prompt、可视化网站和九项验收框架已经迁移到 v2。20 个 scenario 均已完成 Qwen3.5-9B 三 seed 开发 rollout 与 T1/T2/T3 实际提取，共 60 条机器清洗通过的轨迹、180 个结构合格 instance；每个 bundle 都有完整对话和人工抽查 Markdown。每个 scenario 另有两条 EchoMimicV2 Talking Head MP4，共 40 条，经音轨、时长、分辨率与帧率自动验收并可在网站播放。现有 scenario 的质量门、S0/D0 和视频语义观感仍待真人复核，仓库不会把开发产物伪装成正式研究验收结论。
+当前唯一生产目录是 `configs/scale300_v1/scenarios`，共 300 个 scenario。每场景生成 3 个 Fable seed 候选；offline rollout 最多 20 轮，10–20 轮自然结束才进入主候选。旧 20 场景、六轮轨迹和历史 task 只保留为诊断或审计材料。
 
 ## 核心约束
 
-- action 是任意自然语言文本，不含 action ID 或固定策略类别。
-- 离线生成与 T4 共用 `environment.StatefulEnvironment`。
-- 状态变化由 persona、相关可观察历史、S_t/D_t 与当前 action 经 appraisal 和 state update 两个独立阶段产生。
-- T1/T2/T3 来自自然轨迹 checkpoint；受控操作仅用于局部诊断。
-- 多模型只扩大 raw candidate search，不形成最终配额；质量门后 T1/T2/T3 按各自能力权重独立选源，T3 只接受带历史且完整跑通局部分支的 checkpoint。
-- narrative-derived 只抽象影视作品的高层社会机制并强制原创化表层内容；它与 synthetic-script 归一化到同一个 scenario schema。
-- 模型看不到 hidden intention、latent state、delta、trigger threshold 或未来分支。
-- 普通轮次为文本；达到私有阈值时才产生稀疏 Talking Head media specification。
+全部核心约束、轮数、状态更新、信息边界、任务来源、验收和发布条件以 [DESIGN_CONTRACT.md](DESIGN_CONTRACT.md) 为准；本 README 只提供运行入口。
+
+**每次运行前必读：**运行 rollout、T1–T4 构造、质量筛选、媒体生成或评测之前，先阅读 [代码结构与修改纪律](DESIGN_CONTRACT.md#21-每次运行前必读代码结构与修改纪律)。不得用场景特判、词面规则、重复 wrapper 或平行入口继续堆补丁；本批代码、prompt、schema 和配置确认后再冻结运行。
 
 ## 快速检查
 
 ```bash
+python -m pipeline preflight
 python scripts/scenario_docs.py --check
 python scripts/check_markdown_links.py
 python -m unittest discover -s tests -v
 python -m unittest discover -s web/tests -v
-python scripts/run_acceptance.py
-python scripts/evaluate_instance_quality.py --pipeline-output build/pipeline_v2
-python scripts/run_quality_gates.py \
-  --scenario-root configs/scenarios \
-  --pipeline-output build/pipeline_v2 \
-  --raw-root data/formal/raw \
-  --output build/quality_gates/report.json \
-  --strict
 python scripts/verify_gate_md.py
 ```
 
@@ -39,31 +27,88 @@ python scripts/verify_gate_md.py
 python -m web.server --host 127.0.0.1 --port 8000
 ```
 
-服务器本机访问 `http://127.0.0.1:8000/`。远程浏览先执行 `ssh -L 8000:127.0.0.1:8000 <host>`，再打开同一地址。网站可视化全部 scenario 情节、S0/D0、视频阈值、自然 rollout 和 180 个 T1/T2/T3 待标注实例，并在 task 卡片显示质量门来源与专项分数；标注草稿仅保存在浏览器并可导出 JSON。
+服务器本机访问 `http://127.0.0.1:8000/`。远程浏览先执行 `ssh -L 8000:127.0.0.1:8000 <host>`，再打开同一地址。网站同时展示研究者可见的完整 persona、hidden intention、S0/D0、三条视频阈值，以及被测模型实际收到的角色身份、explicit goal、公开历史和固定 prompt 实参；私有字段排除清单也直接可见。旧 184 条六轮 rollout 与 180 个历史开发 Task 继续作为人工审计材料展示，但均不代表新版 10–20 轮主候选通过。标注草稿仅保存在浏览器并可导出 JSON。
 
 ## 运行真实 rollout
 
-复制并填写 `configs/rollout_pool.example.json`，把密钥写入配置指定的环境变量，不要把密钥写入 JSON 或提交 Git。scenario 完成人工质量审核与 S0/D0 freeze 后运行：
+当前 frontier API 角色统一定义在
+[`configs/model_routes.frontier_api.json`](configs/model_routes.frontier_api.json)：
+Scenario、policy、Structured Appraisal、Response、T1–T4 构造/答案与质量复核
+全部使用 `claude-fable-5`，但每个语义 role 仍建立独立请求和 provenance。
+历史多模型对照保留为实验记录；模型语义复核不等于人工验收。
+业务代码不得再次写死模型名。
+
+AutoDL 的非敏感 Chat Completions endpoint 已绑定在路由文件中，并配置为绕过服务器
+HTTP 代理直连。运行前只在进程
+环境中设置密钥；不要将密钥写入 JSON、shell 脚本、日志或 Git：
 
 ```bash
-python -m scripts.run_pipeline \
-  --rollout-config configs/rollout_pool.local.json \
-  --output build/pipeline_v2
-python scripts/run_acceptance.py \
-  --pipeline-output build/pipeline_v2 \
-  --output build/acceptance_v2
+export AUTODL_API_KEY='YOUR_API_KEY'
 ```
 
-`--allow-unreviewed` 仅允许开发 smoke test，不能产生正式 benchmark 数据。
+服务器后台任务若没有继承交互 shell 环境，会自动回退到权限为 600 的
+`/root/.config/socialflux/autodl_api_key`；该文件位于仓库外。
 
-场景创建、审核顺序、产物位置见 [Pipeline](docs/architecture/PIPELINE.md)，架构不变量见 [Architecture](docs/architecture/ARCHITECTURE.md)，完整定义见 [Framework Definition](EmoTree_Framework_Definition_v4.md)，prompt 审计见 [Prompt Audit](docs/prompts/PROMPT_AUDIT.md)。完整导航与论文证据入口见 [文档索引](docs/README.md)。
+板块级选择证据见 [api.md](api.md) 和
+[`2026-09-17_autodl_board_model_selection.md`](reports/experiments/2026-09-17_autodl_board_model_selection.md)。
 
-正式多模型生成、双 Judge、历史干预、骨干敏感性、每场景 1 条 canonical trajectory 选择与三人 GT 顺序见 [Formal Rollout Runbook](docs/operations/FORMAL_ROLLOUT_RUNBOOK.md)，约束原文见 [gate.md](docs/protocols/gate.md)。
-正式发布必须以 `scripts/verify_gate_md.py --strict` 返回成功为准；当前真人 Gate 1/2/4 与正式 GT 尚未提供，因此开发数据不能标为 final benchmark。
+唯一公开入口是 `python -m pipeline`。正式运行顺序与代码阶段一致：
+
+```bash
+# 300 scenarios、3 seeds、Fable-only 路由预检
+python -m pipeline preflight
+
+# Gate 1 人工冻结后生成 300×3 raw candidates
+python -m pipeline rollout \
+  --review-registry reviews/scale300_scenario_review.json \
+  --output data/formal/raw --workers 4 --retry-limit 3 --resume
+
+# Gate 2 环境证据通过后完成 Gate 3 审计、筛选并物化 canonical pool
+python -m pipeline gate3 \
+  --raw-root data/formal/raw \
+  --stage formal \
+  --review-registry reviews/scale300_scenario_review.json \
+  --environment-evidence data/formal/environment_evidence \
+  --judgments data/formal/judgments.json \
+  --history-evidence data/formal/history.json \
+  --output data/formal/gate3_report.json \
+  --selected-root data/formal/selected
+
+# Gate 3 完成 canonical selection 后构建 T1/T2/T3
+python -m pipeline tasks \
+  --rollout-root data/formal/selected \
+  --review-registry reviews/scale300_scenario_review.json \
+  --environment-evidence data/formal/environment_evidence \
+  --gate3-report data/formal/gate3_report.json \
+  --output data/formal/tasks
+
+# T4 使用同一 environment runtime
+python -m pipeline t4 --output data/formal/t4
+
+# Gate 4 与最终发布审计
+python -m pipeline audit \
+  --rollout-stage selected \
+  --raw-root data/formal/selected \
+  --pipeline-output data/formal/tasks \
+  --review-registry reviews/scale300_scenario_review.json \
+  --environment-evidence data/formal/environment_evidence \
+  --judgments data/formal/judgments.json \
+  --history-evidence data/formal/history.json \
+  --human-task-review data/formal/gate4_review.json \
+  --output data/formal/four_gate_report.json --strict
+```
+
+所有语义请求都由 `pipeline/runtime.py` 通过版本化 route table 交给 `claude-fable-5`；Python 只负责编排、确定性状态更新、校验和产物写入。`--allow-unreviewed` 只用于显式诊断，不能产生正式数据。
+
+场景创建、审核顺序、产物位置见 [Pipeline](docs/architecture/PIPELINE.md)，架构不变量见 [Architecture](docs/architecture/ARCHITECTURE.md)，完整约束见 [DESIGN_CONTRACT](DESIGN_CONTRACT.md)，prompt 审计见 [Prompt Audit](docs/prompts/PROMPT_AUDIT.md)。完整导航与论文证据入口见 [文档索引](docs/README.md)。
+
+正式三 seed 生成、Judge、history evidence、每场景 1 条 canonical trajectory 与 Gate 4 两人同样本抽查顺序见 [Formal Rollout Runbook](docs/operations/FORMAL_ROLLOUT_RUNBOOK.md)，约束原文见 [gate.md](docs/protocols/gate.md)。
+正式发布必须以 `scripts/verify_gate_md.py --strict` 返回成功为准；当前真人 Gate 1–4 与正式 GT 尚未齐备，因此开发数据不能标为 final benchmark。
 
 ## 目录
 
-- `configs/scenarios/scenario_NNN/`：canonical JSON、同名自然语言说明，以及 `rollouts/` 内的本地轨迹、完整对话和 T1/T2/T3 人工抽查包。
+- `pipeline/`：Gate 1–4 阶段顺序、Scale300 preflight、Fable-only runtime 与唯一公开 CLI。
+- `configs/scale300_v1/scenarios/scenario_NNN/`：当前 300 个 canonical candidate JSON 及同名可读文档。
 - `environment/`：唯一状态环境、appraisal、state update、response、memory、termination 与 multimodal trigger。
 - `rollout/`、`offline/`：自然轨迹与 T1/T2/T3 构建。
 - `evaluation/`、`annotation/`：九项验收、泄漏审计与人工标注 overlay。

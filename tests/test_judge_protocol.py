@@ -10,6 +10,7 @@ def record(item, score=4, rejects=None):
         "trajectory_id": item["trajectory_id"],
         "scores": {key: score for key in QUALITY_DIMENSIONS},
         "hard_reject_reasons": list(rejects or []),
+        "evidence": {key: ["t1"] for key in QUALITY_DIMENSIONS},
         "rationale": "independent observable review",
     }
 
@@ -38,14 +39,52 @@ class JudgeProtocolTest(unittest.TestCase):
         self.assertFalse(result["complete"])
         self.assertTrue(result["missing_secondary_ids"])
 
-    def test_same_family_judges_are_rejected(self):
+    def test_same_model_independent_profiles_are_allowed(self):
         bundle = {
-            "judge_role": "primary", "model": "judge-a", "model_family": "same",
+            "format": "socialflux_rollout_quality_judgments_v3",
+            "judge_role": "primary", "model": "claude-fable-5", "model_family": "claude",
+            "review_profile": {
+                "profile": "rollout_primary",
+                "sampling": {"seed": 7401},
+            },
             "records": [record(item) for item in self.items],
         }
-        second = {**bundle, "judge_role": "secondary", "model": "judge-b"}
-        with self.assertRaisesRegex(ValueError, "different model families"):
-            merge_judgments(self.items, bundle, second)
+        reasons = required_secondary_ids(self.items, bundle["records"])
+        second = {
+            **bundle,
+            "judge_role": "secondary",
+            "review_profile": {
+                "profile": "rollout_secondary",
+                "sampling": {"seed": 7402},
+            },
+            "records": [
+                record(item) for item in self.items
+                if item["trajectory_id"] in reasons
+            ],
+        }
+        result = merge_judgments(self.items, bundle, second)
+        self.assertEqual(result["format"], "socialflux_dual_judge_merge_v3")
+        self.assertTrue(result["complete"])
+
+    def test_same_model_same_seed_is_rejected(self):
+        primary = {
+            "judge_role": "primary", "model": "claude-fable-5",
+            "model_family": "claude",
+            "review_profile": {
+                "profile": "rollout_primary", "sampling": {"seed": 7401},
+            },
+            "records": [record(item) for item in self.items],
+        }
+        secondary = {
+            **primary,
+            "judge_role": "secondary",
+            "review_profile": {
+                "profile": "rollout_secondary", "sampling": {"seed": 7401},
+            },
+            "records": [],
+        }
+        with self.assertRaisesRegex(ValueError, "different seeds"):
+            merge_judgments(self.items, primary, secondary)
 
 
 if __name__ == "__main__":

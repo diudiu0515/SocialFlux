@@ -151,6 +151,35 @@ def _mode_text(mode):
     }.get(mode, mode)
 
 
+def _longitudinal_design(design):
+    if not design:
+        return ["- 当前场景尚未配置多片段时间线，按单段连续互动运行。"]
+    lines = [
+        f"- 格式：`{design.get('format')}`；时间单位：`{design.get('time_unit')}`；时间本身默认不改变状态。",
+        "",
+        "| 片段 | 可变轮数 | 时间推进 | 再次互动原因 |",
+        "|---|---:|---:|---|",
+    ]
+    for index, segment in enumerate(design.get("segments", [])):
+        advance = (
+            "起点" if index == 0
+            else f"+{segment.get('advance_by')} {design.get('time_unit')}"
+        )
+        lines.append(
+            f"| `{segment.get('segment_id')}` | {segment.get('min_turns')}–{segment.get('max_turns')} | {advance} | {segment.get('reason')} |"
+        )
+    for pool in design.get("event_pools", []):
+        lines.extend([
+            "",
+            f"事件池 `{pool.get('event_pool_id')}`（轨迹重置时确定性冻结；T3 分支共享）：",
+        ])
+        for outcome in pool.get("outcomes", []):
+            lines.append(
+                f"- `{outcome.get('outcome_id')}` / `{outcome.get('commitment_effect')}`：{outcome.get('public_record')}"
+            )
+    return lines
+
+
 PROMPT_MANIFEST = Path(__file__).resolve().parents[1] / "prompts" / "manifest.json"
 
 
@@ -209,6 +238,8 @@ def render_scenario_document(scenario, source_name, source_hash):
         "",
         f"被评估角色：{role.get('name', role.get('character_id', '未配置'))}（`{role.get('character_id', 'unknown')}`）。",
         "",
+        f"被评估角色身份：{role.get('role', '未配置')}",
+        "",
         f"被评估角色公开目标：{role.get('explicit_goal', '未配置')}",
         "",
         f"环境角色：{persona.get('name', '未配置')} / {persona.get('role', '未配置')}。",
@@ -217,7 +248,11 @@ def render_scenario_document(scenario, source_name, source_hash):
         "",
         f"隐藏意图（作者侧私有）：{agent['hidden_intention']}",
         "",
-        f"最长互动：`{scenario['max_turns']}` 轮。",
+        f"统一长程互动：offline rollout 最多 `{scenario['max_turns']}` 轮，允许在当前交流合理暂停、达成安排或保留分歧时自然结束；T4 在线任务仍按其独立合同运行满 20 轮后评分。",
+        "",
+        "### 多片段时间线与履约事件",
+        "",
+        *_longitudinal_design(scenario.get("longitudinal_design")),
         "",
         "### 初始 State（0–10）",
         "",

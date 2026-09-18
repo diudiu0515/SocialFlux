@@ -46,6 +46,18 @@
     "initial_dynamics": {
       "type": "object"
     },
+    "longitudinal_design_version": {
+      "type": ["string", "null"]
+    },
+    "event_plan": {
+      "type": "object"
+    },
+    "segments": {
+      "type": "array"
+    },
+    "public_timeline": {
+      "type": "array"
+    },
     "turns": {
       "type": "array",
       "minItems": 1,
@@ -90,6 +102,30 @@
             "type": "array"
           },
           "environment_snapshot_before": {
+            "type": "object"
+          },
+          "segment_id": {
+            "type": "string"
+          },
+          "segment_turn_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "elapsed_time_before": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "elapsed_time_after": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "segment_transition_after": {
+            "type": ["object", "null"]
+          },
+          "state_after_public_events": {
+            "type": "object"
+          },
+          "dynamics_after_public_events": {
             "type": "object"
           },
           "observation": {

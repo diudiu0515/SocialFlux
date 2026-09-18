@@ -1,0 +1,57 @@
+[
+  {
+    "id": "conditional_commitment",
+    "text": "收到转账后，我会当天确认到账。",
+    "events": [{"event_type":"commitment","owner":"evaluated_agent","action_owner":"evaluated_agent","evidence_span":"收到转账后，我会当天确认到账。","status":"conditional"}],
+    "valid": true
+  },
+  {
+    "id": "tentative_proposal",
+    "text": "14天内最多能还800元，你看可行吗？",
+    "events": [{"event_type":"proposal","owner":"environment_agent","action_owner":"environment_agent","evidence_span":"14天内最多能还800元，你看可行吗？","status":"tentative"}],
+    "valid": true
+  },
+  {
+    "id": "firm_commitment",
+    "text": "我会在14天内还800元。",
+    "events": [{"event_type":"commitment","owner":"environment_agent","action_owner":"environment_agent","evidence_span":"我会在14天内还800元。","status":"firm"}],
+    "valid": true
+  },
+  {
+    "id": "ambiguous_arrangement_not_commitment",
+    "text": "14天内我能安排800元。",
+    "events": [{"event_type":"proposal","owner":"environment_agent","action_owner":"environment_agent","evidence_span":"14天内我能安排800元。","status":"tentative"}],
+    "valid": true
+  },
+  {
+    "id": "payment_report_only",
+    "text": "我刚刚转了800元。",
+    "events": [{"event_type":"payment","owner":"environment_agent","action_owner":"environment_agent","evidence_span":"我刚刚转了800元。","status":"reported_complete"}],
+    "valid": true
+  },
+  {
+    "id": "request",
+    "text": "你能在14天内还多少？",
+    "events": [{"event_type":"request","owner":"evaluated_agent","action_owner":"environment_agent","evidence_span":"你能在14天内还多少？","status":"open"}],
+    "valid": true
+  },
+  {
+    "id": "pause_without_debt_erasure",
+    "text": "今天先谈到这里，旧账责任不变。",
+    "events": [{"event_type":"pause","owner":"environment_agent","action_owner":"environment_agent","evidence_span":"今天先谈到这里","status":"explicit"}],
+    "valid": true
+  },
+  {
+    "id": "wrong_owner",
+    "text": "我会在14天内还800元。",
+    "events": [{"event_type":"commitment","owner":"evaluated_agent","action_owner":"evaluated_agent","evidence_span":"我会在14天内还800元。","status":"firm"}],
+    "expected_owner": "environment_agent",
+    "valid": false
+  },
+  {
+    "id": "non_verbatim_evidence",
+    "text": "我会在14天内还800元。",
+    "events": [{"event_type":"commitment","owner":"environment_agent","action_owner":"environment_agent","evidence_span":"两周内归还八百元","status":"firm"}],
+    "valid": false
+  }
+]

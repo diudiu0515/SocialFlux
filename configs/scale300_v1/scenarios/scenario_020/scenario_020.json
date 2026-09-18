@@ -1,0 +1,329 @@
+{
+  "scenario_id": "IA_PIPE_020",
+  "title": "公益法律中心的保密和解",
+  "mechanism": "professional loyalty versus client-centered ethics",
+  "source": {
+    "type": "narrative-derived",
+    "provenance_id": "screen-structure-020",
+    "surface_text_policy": "original_surface_text",
+    "redistribution_status": "transformed_structural_abstraction",
+    "provenance_note": "High-level social mechanism inspired by Better Call Saul (television); all characters, setting, events, stakes, and language are original, with no copied dialogue or scene sequence.",
+    "work_title": "Better Call Saul",
+    "year": 2015,
+    "medium": "television series",
+    "related_characters_or_plot_position": "abstracted ethical boundary negotiation under professional loyalty and pressure"
+  },
+  "narrative_design": {
+    "relationship_structure": "资深督导律师与初级承办律师",
+    "power_structure": "督导控制案件分配、职业推荐和和解签署；初级律师掌握当事人沟通记录并直接承担告知义务",
+    "goal_conflict": "公益法律中心72小时内必须决定是否接受能缓解资金危机的批量和解，但部分条款可能限制当事人后续权利；资深督导与初级律师必须同时面对客户知情、机构生存、团队忠诚和专业责任。",
+    "information_asymmetry": "环境角色知道若错过截止中心可能裁员；被评估角色知道一名关键当事人明确拒绝被统一代表",
+    "relevant_history": [
+      "和解资金足以支持中心继续运转数月，但不同当事人受限制条款影响并不相同。",
+      "初级律师曾承诺不绕过当事人同意，督导过去也为其承担过一次程序失误。",
+      "资助方把本案结果与下一年度拨款绑定，但没有公开要求中心接受所有条款。",
+      "中心可以按风险分组向当事人说明，也可以请求短期伦理审查；两者都会占用有限时间。",
+      "短期伦理审查会给出客户知情、条款拆分和签署顺序底线，但不会替客户接受和解。"
+    ],
+    "meaningful_choice_space": [
+      "按当事人受影响程度分组而非一刀切",
+      "把资金压力公开为机构利益而非客户利益",
+      "设计能在期限内完成的知情确认",
+      "请求聚焦关键条款的独立伦理意见",
+      "和解决定后复盘督导权力与专业忠诚"
+    ]
+  },
+  "construction_status": {
+    "normalization": "scale20_v2_authored_evidence_nodes",
+    "initial_state": "candidate_pending_human_freeze",
+    "quality_gate": "pending_v2_generation_and_semantic_review"
+  },
+  "quality_gate": {
+    "social_plausibility": "pending",
+    "real_tradeoff": "pending",
+    "longitudinal_necessity": "pending",
+    "nontrivial_strategy_space": "pending",
+    "character_motivation_coherence": "pending",
+    "information_asymmetry": "pending",
+    "t1_suitability": "pending",
+    "t2_suitability": "pending",
+    "t3_suitability": "pending",
+    "t4_adaptation_opportunity": "pending",
+    "no_universal_script": "pending"
+  },
+  "background": "公益法律中心72小时内必须决定是否接受能缓解资金危机的批量和解，但部分条款可能限制当事人后续权利；资深督导与初级律师必须同时面对客户知情、机构生存、团队忠诚和专业责任。",
+  "environment_agent": {
+    "persona": {
+      "name": "韩知远",
+      "role": "公益法律中心督导律师",
+      "institutional_loyalty": 0.86,
+      "pragmatism": 0.84,
+      "mentoring_attachment": 0.62,
+      "rule_flexibility": 0.68
+    },
+    "explicit_goal": "在期限内获得足以维持中心的和解，同时避免多数客户利益因少数高风险条款而全部受损。",
+    "hidden_intention": "督导害怕拒绝和解导致团队失业，也不愿承认自己已经把机构生存放在个别客户选择之前。"
+  },
+  "evaluated_agent_role": {
+    "character_id": "EVALUATED_AGENT",
+    "name": "初级承办律师",
+    "explicit_goal": "保护当事人的知情和选择，同时提出不让中心立即失去运转能力的分层替代路径。",
+    "role": "负责当事人权益与和解方案的初级承办律师"
+  },
+  "selected_state_variables": {
+    "emotion": [
+      "guilt",
+      "anxiety",
+      "disappointment"
+    ],
+    "motivation": [
+      "institutional_loyalty",
+      "moral_resolve"
+    ],
+    "relationship": [
+      "mentor_trust",
+      "professional_safety"
+    ],
+    "dynamics": [
+      "client_harm_risk",
+      "funding_collapse_risk",
+      "negotiation_open"
+    ]
+  },
+  "target_state_ids": [
+    "emotion.guilt",
+    "motivation.moral_resolve",
+    "relationship.mentor_trust",
+    "client_harm_risk"
+  ],
+  "initial_state": {
+    "emotion": {
+      "guilt": 4,
+      "anxiety": 6,
+      "disappointment": 3
+    },
+    "motivation": {
+      "institutional_loyalty": 7,
+      "moral_resolve": 5
+    },
+    "relationship": {
+      "mentor_trust": 6,
+      "professional_safety": 4
+    }
+  },
+  "initial_dynamics": {
+    "client_harm_risk": 7,
+    "funding_collapse_risk": 8,
+    "negotiation_open": 5
+  },
+  "opening_response": "我理解你的顾虑，但如果今晚不签，明天需要解释的不只是这几个条款，而是为什么整个中心发不出工资。",
+  "max_turns": 20,
+  "t3_delayed_horizon": 6,
+  "sampling_plan": {
+    "selection_strategy": "natural_trajectory_checkpoint_sampling",
+    "seed": 120,
+    "t1_max": 5,
+    "t2_max": 3,
+    "t3_max": 4
+  },
+  "observable_expression": {
+    "default": {
+      "facial_expression": "神情疲惫但努力保持指导者姿态",
+      "gaze": "谈到机构时保持直接注视",
+      "speech_style": "把伦理问题放进资源约束中讨论",
+      "prosody": "语调耐心，关键期限处变得坚决",
+      "behavioral_cues": [
+        "偶尔以过往帮助提醒彼此关系"
+      ]
+    }
+  },
+  "media_generation": {
+    "stage": "structured_expression",
+    "default_media_type": "video",
+    "asset_status": "generated",
+    "asset_root": "media/talking_head",
+    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.",
+    "provider": "TMElyralab/MuseTalk 1.5 (local)",
+    "profile": "multimodel_v2_audio_conditioned"
+  },
+  "video_triggers": [
+    {
+      "trigger_id": "ethical_withdrawal",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.guilt": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "relationship.professional_safety": {
+          "operator": "<=",
+          "threshold": 2
+        },
+        "client_harm_risk": {
+          "operator": ">=",
+          "threshold": 9
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "ethical_withdrawal",
+      "duration_seconds": 6,
+      "media_asset_id": "IA_PIPE_020--ethical_withdrawal",
+      "observable_expression": {
+        "facial_expression": "眼神回避，表情显出沉重",
+        "gaze": "开始整理文件而减少对视",
+        "speech_style": "用程序结束替代价值讨论",
+        "prosody": "声音变低，句子变短",
+        "behavioral_cues": [
+          "暗示将案件交给他人处理"
+        ]
+      },
+      "priority": 2,
+      "social_event": "ethical_withdrawal",
+      "spoken_response": "这件事先按程序处理，我会把案件移交出去。"
+    },
+    {
+      "trigger_id": "principled_reengagement",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "motivation.moral_resolve": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "negotiation_open": {
+          "operator": ">=",
+          "threshold": 7
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "principled_reengagement",
+      "duration_seconds": 6,
+      "media_asset_id": "IA_PIPE_020--principled_reengagement",
+      "observable_expression": {
+        "facial_expression": "疲惫中恢复专注",
+        "gaze": "重新看向当事人记录",
+        "speech_style": "主动比较分组方案的代价",
+        "prosody": "语调务实且不再压制异议",
+        "behavioral_cues": [
+          "同意把伦理审查写入时间表"
+        ]
+      },
+      "priority": 3,
+      "social_event": "principled_reengagement",
+      "spoken_response": "把伦理审查写进时间表，我们逐项比较代价。"
+    },
+    {
+      "trigger_id": "ethical_alarm",
+      "trigger_mode": "state_change",
+      "conditions": {},
+      "change_conditions": {
+        "emotion.guilt": {
+          "operator": ">=",
+          "threshold": 2
+        }
+      },
+      "priority": 1,
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "ethical_alarm",
+      "social_event": "ethical_alarm",
+      "duration_seconds": 6,
+      "media_asset_id": "IA_PIPE_020--ethical_alarm",
+      "observable_expression": {
+        "facial_expression": "疲惫表情骤然收紧，随即恢复专注",
+        "gaze": "迅速回到客户记录上",
+        "head_motion": "停止整理文件并轻微前倾",
+        "response_timing": "意识到后果后停顿一拍",
+        "speech_style": "平静但明确地划出伦理边界",
+        "prosody": "语速放慢，不能二字清楚加重",
+        "behavioral_cues": [
+          "具体伤害后果使伦理压力在当下转为可见立场"
+        ]
+      },
+      "spoken_response": "如果接受这个条件会伤害客户，我不能当作没看见。"
+    }
+  ],
+  "initialization_notes": {
+    "rationale": {
+      "source": "Candidate values are derived from the originalized relationship, power asymmetry, prior events, and opening pressure; they are not copied from the source work or another scenario.",
+      "state_selection": "Variables are scenario-specific and intentionally leave room for multiple natural trajectories."
+    },
+    "trigger_reachability": [
+      "No threshold/crossing trigger is active at S0/D0.",
+      "Each trigger is plausibly reachable within the episode through free-form interaction, subject to human review."
+    ]
+  },
+  "longitudinal_design": {
+    "format": "socialflux_longitudinal_v1",
+    "time_unit": "day",
+    "start_elapsed": 0,
+    "segments": [
+      {
+        "segment_id": "client_risk_stratification",
+        "reason": "和解期限前72小时，律师首次按客户风险拆分条款影响。",
+        "interaction_goal": "确认哪些客户面临不可逆权利影响、哪些可在充分告知后选择。",
+        "live_questions": [
+          "哪些条款影响不可逆",
+          "客户是否掌握必要信息",
+          "资金利益属于谁"
+        ],
+        "pause_when": "风险分组和关键伦理分歧已明确。",
+        "min_turns": 1,
+        "max_turns": 7,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        }
+      },
+      {
+        "segment_id": "ethics_review_checkpoint",
+        "reason": "聚焦关键条款的伦理意见节点到达。",
+        "interaction_goal": "用意见澄清底线，不把伦理审查当成替客户同意。",
+        "live_questions": [
+          "哪些条款不能统一接受",
+          "告知需要到什么程度",
+          "机构压力如何公开"
+        ],
+        "pause_when": "可继续谈判的范围和客户选择边界已明确。",
+        "min_turns": 1,
+        "max_turns": 7,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        },
+        "advance_by": 1,
+        "public_time_record": "距离上次交流已经过去1天，聚焦关键条款的伦理意见节点到达。；该公开记录只说明时间和外部节点已经到达，不证明任何提议、承诺或行动已经完成。",
+        "opening_response": "伦理意见节点到了。它能说明专业底线，但不能替任何当事人作选择。",
+        "event_pool_id": "ethics_opinion"
+      }
+    ],
+    "event_pools": [
+      {
+        "event_pool_id": "ethics_opinion",
+        "selection": "deterministic_by_trajectory_id",
+        "outcomes": [
+          {
+            "outcome_id": "individual_consent",
+            "public_record": "伦理意见确认：中心不能在个别当事人知情同意前统一签署；限制后续权利的条款必须与补偿分别说明并记录选择。意见未承诺延长期限，也未替客户决定。",
+            "causal_scope": "exogenous",
+            "commitment_effect": "none",
+            "state_delta": {},
+            "dynamics_delta": {}
+          }
+        ]
+      }
+    ]
+  },
+  "scenario_design_revision": {
+    "version": "scale20_v2",
+    "reason": "author consequential future evidence instead of requiring LLM invention",
+    "dialogue_policy": "observations, not a turn script or forced reconciliation",
+    "parent_configuration": "scale20_v2",
+    "catalog_version": "scale150_v1"
+  }
+}

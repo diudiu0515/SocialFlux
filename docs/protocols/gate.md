@@ -106,15 +106,10 @@ DeepSeek flagship API
 每个 scenario 首先生成多个自由 rollout：
 
 ```text
-Local Model A × multiple seeds
-Local Model B × multiple seeds
-Local Model C × multiple seeds
-
-+
-optional API Model × 1–2 runs
+Any suitable policy model × three independent seeds/candidates
 ```
 
-不要每个 scenario 只生成一条 trajectory。
+每个 scenario 生成 3 条高质量候选，不按模型 family 分配名额。
 
 也不要简单保留最高分 trajectory。
 
@@ -306,25 +301,29 @@ Second Judge on stratified subset / disagreement cases
 
 ## 12. Formal Ground Truth
 
-Automatic judge 只用于：
+Automatic/model output 用于：
 
 ```text
 filtering
 quality control
 compatibility checking
+machine label proposal
 ```
 
-Formal T1/T2/T3 GT 仍然采用：
+Formal T1/T2/T3 label release 采用：
 
 ```text
-Human Annotation
+Machine Proposal
 ↓
-Agreement
+Two Humans Review the Same Deterministic 10% Sample
 ↓
-Adjudication
+Agreement / Disagreement-only Adjudication
 ↓
 Formal GT
 ```
+
+两名 reviewer 必须独立且检查完全相同的样本；一致 reject 触发修复，只有
+分歧时使用不同的第三名 reviewer。Machine proposal 不得伪装成人工标签。
 
 ---
 

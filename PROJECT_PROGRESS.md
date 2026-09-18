@@ -1,60 +1,74 @@
 # SocialFlux Project Progress
 
-更新时间：2026-09-08
+更新时间：2026-09-18
 
-| 模块 | 状态 | 证据/限制 |
+## 当前 Scale300 / Fable 状态
+
+- 唯一生产入口是 `python -m pipeline`，阶段顺序为
+  Gate 1 → rollout → Gate 2 → Gate 3 → T1/T2/T3 与 T4 → Gate 4。
+- canonical catalog 为 `configs/scale300_v1/scenarios` 的 300 个 scenario；
+  preflight 验证 300 × 3 = 900 个 rollout slot。
+- Policy、Appraisal、Response、construction、review 与 T4 全部通过同一
+  route table 解析到 `claude-fable-5`，Appraisal/Response 保持独立请求。
+- Gate 1：300 个 scenario 机器检查通过，正式 hash-bound 人工 freeze 未完成。
+- Gate 2：机器框架证据存在，Scale300 E1–E5 人工验证未完成。
+- Gate 3：正式 900 条 raw pool、双 Judge/history evidence 与 300 条
+  human-confirmed canonical trajectories 尚未生成。
+- Gate 4：必须等待 Gate 3 selected pool 和新 T1/T2/T3 instances；当前未通过。
+- `data/formal/raw`、`data/formal/selected`、`data/formal/tasks` 当前没有
+  可发布正式产物，因此不能宣称 benchmark release ready。
+
+以下内容是 2026-09-11 的 R3/20-scenario 历史快照，只用于审计，不代表当前
+active baseline。
+
+## 历史快照：2026-09-11
+
+| 模块 | 当前状态 | 可复核证据与边界 |
 |---|---|---|
-| v2 架构迁移 | 已完成 | 自由 action、单一环境、自然 rollout、局部 intervention |
-| Hybrid scenario source | 结构已完成 | 10 narrative-derived + 10 synthetic-script；影视十场景已有作品/年份/媒介/抽象位置 provenance，来源与原创性最终判断仍待真人复核 |
-| 两阶段 scenario 创建 | 已完成 | source quality approval → normalization → candidate S0/D0 |
-| 20 个 scenario bundle | 候选完成 | 保留原 10 个并新增 10 个影视结构启发场景；全部带 JSON、同名 Markdown、coverage，S0/D0 尚未 human_frozen |
-| Prompt catalog | 已完成 | 24 个版本化 prompt、SHA-256 manifest、职责与边界审计；新 rollout Judge 使用 Protocol v1 六维、10 项 hard reject 与逐维 turn-ID 证据合同 |
-| Provider/model pool | 已完成 | OpenAI-compatible、Anthropic、Gemini、vLLM；真实密钥/endpoint 由本地配置提供 |
-| 自然 rollout | 20 场景开发运行及严格筛选已完成 | 每 scenario 3 条 × 6 turns，共 60 条活跃自然轨迹；经定向重采样后来源为 Qwen3.5-9B 42、Qwen3-32B 16、GLM-4-9B 2。逐轨迹双 Judge + history 为 60/60；scenario 未 human-freeze，且不是正式 20×12 池 |
-| T1/T2/T3 builders | 已完成 | 统一质量门后按任务专项择优：T1=来源质量+历史深度+状态信息量，T2=来源质量+private-state 分化，T3=来源质量+中后段 checkpoint utility；模型身份不计分、不设配额 |
-| Instance 质量审计 | 自动部分已完成 | 按最终 60 个活跃 trajectory ID 专项选源并重建 T1=120、T2=40、T3=20；选源审计 20/20、结构 180/180、bundle 20/20，人工 plausibility/标签仍待评审 |
-| GPT–Qwen rollout 对照 | GPT 侧受凭据阻塞 | 官方 Qwen3.5-9B 已下载并完成 pilot；匹配配置、同模型 T2 分层和盲审已就绪；当前环境未设置 `OPENAI_API_KEY`，不能宣称胜负 |
-| T4 | 核心交互已完成 | 与离线共用环境；正式 judge/human 校准待完成 |
-| Talking Head | 机器生成与验收已完成 | EchoMimicV2 四卡生成 40/40 MP4；音轨、时长、分辨率与帧率自动校验通过，表达—状态与时序自然度待真人检查 |
-| 九项验收 | 框架已完成 | 当前正式结果为 pending；需要自然轨迹、模型实验与真人评审 |
-| gate.md 正式池约束 | 工程完成、正式证据待生成 | 20×12 三模型族（含 32B）配置、六维/hard reject、post-hoc 每场景唯一 canonical 选择、history、跨族双 Judge、backbone sensitivity、三人 GT 与 12 条总闸门均已实现；真人 freeze 尚未签名，因此 formal raw 不得启动 |
-| 正式本地模型准备 | 模型服务可用、正式运行受 Gate 阻塞 | Qwen3-32B-AWQ、GLM-4-9B、DeepSeek-V2-Lite-Chat 与 Qwen3.5-9B 环境服务已完成本地部署实验。模型目录不提交 Git；Gate 1 真人 freeze 与 Gate 2 通过前不得启动 formal raw |
-| 网站 | 已部署 | 标注工作台覆盖 20 个 scenario、184 条完整人工筛选队列、协议三态/六维/10 项 hard reject/五问/唯一赢家、180 个开发 Task、40 个视频，以及 Gate 1–4、Formal GT、holdout、污染审核总清单；草稿本地保存并导出 JSON |
-| 文档与清理 | 已完成 | 根目录保留 4 个权威入口；架构/协议/操作/Prompt/设计输入/论文证据归入 `docs/`，中间实验轮次归档但不删除；移除无引用的 12-byte `API.md` 垃圾占位 |
-| 测试 | 已完成本轮工程验证 | core 149/149、web 7/7、20/20 scenario 文档一致性检查、`git diff --check` 与新版 API/page smoke 均通过；研究人工验收不由工程测试替代 |
+| Scenario | 20 个候选 bundle 已迁移 | 10 synthetic-script + 10 narrative-derived；每个都有 JSON、配对自然语言 Markdown、明确 evaluated role/goal、完整 persona/hidden intention、S0/D0、3 个视频触发器和 `max_turns=20`。来源质量与 S0/D0 仍待真人冻结 |
+| Agent / Environment 模型 | 当前 R3 诊断栈已明确 | 当前 v29 诊断的 evaluated-agent policy、structured appraisal 和 visible response 都使用 `Qwen/Qwen3-32B-AWQ`，但 appraisal 与 response 是两个独立 LLM call，中间 state/dynamics/ledger 与 0–10 数值更新完全由 deterministic Python 执行。正式 baseline 仍是 Qwen3.5-9B environment；若正式替换须重跑受影响的 E4/E6 |
+| Gate 2 | E3–E6 机器实验完成，E1/E2 与 E3–E5 真人复核待完成 | E3：32 checkpoints/18 machine-pass；E4：20/20 strict pairs 通过等价预检，overall/state/dynamics direction=0.9400/0.9429/0.9333，sign reversal=0；E5：20/20 checkpoints machine-pass；E6：Qwen/GLM 20 scenarios，exact direction=0.7078、change/no-change=0.7128、sign reversal=0.005、0 replay failure，且两侧 active checkpoints=19/17，非退化 gate 通过。机器不得代签真人字段 |
+| 最多 20 轮合同 | 工程已完成，真实新池生成中 | offline rollout 以 20 为上限，10–20 轮自然结束才进入主候选；少于10轮归档，20轮预算截断如实记录。T4 同样最多20轮并允许自然结束；generate_long_rollout_pool.py 支持逐槽原子落盘、失败留痕和 resume |
+| 旧 rollout 库存 | 全部失效但保留审计 | 184 条旧轨迹均只有 6 轮；新版 Protocol 报告为 REJECT=184、provisional winner=0，不再进入 Task 1–4 |
+| 新最多20轮开发池 | v29 联合短测阻塞，未运行新 IA003 | 13 个 appraisal/ledger 短样例 13/13 通过（14 requests）；真实两阶段短测因 `social_act=acceptance` 不在固定 schema vocabulary 而在 appraisal 阶段失败（appraisal 4、response 1 requests）。按预先声明的停止条件未跑 v29 IA003、第二 seed 或异类场景；v25 IA003 19轮 rejected 轨迹已上网站供人工诊断 |
+| 20 轮 smoke | 仅历史结构 smoke，不再算质量通过 | 旧 Qwen3-32B × IA_PIPE_001 只证明曾走到 20 轮；固定长度不再是 offline rollout 的质量条件，且该样本在当前语义循环、未发生完成和说话人动作所有权规则下不构成合格候选 |
+| T1/T2/T3 | builder 可用，新正式实例未生成 | 旧 180 个六轮来源 instance 仅作历史审计。必须等新的最多20轮候选完成、Judge/history/人工筛选并每场景确认 1 条后重新提取三个任务；T3 只从后续 5–10 轮窗口足够且外生条件受控的 checkpoint 构造 |
+| T4 | runner 与 prompt 已完成 | 被测模型使用 config 显式指定的 T4 prompt（当前示例为 task_t4_action_v17），收到自己的角色身份、explicit goal、历史自身发言 ledger 和最新可观察回应，但不接收目标人物 hidden intention、persona 数值、S/D、appraisal、delta、阈值或未来 |
+| Prompt catalog | 68 个版本化 prompt | `prompts/manifest.json` 固定 SHA-256；当前 R3 显式使用 `task_t4_action_v17`、`environment_appraisal_v9` 与 `environment_response_v21`，中间 state/dynamics/ledger calibration 与数值更新为确定性代码；兼容默认值未冒充当前实验配置 |
+| Talking Head | 60/60 机器生成通过 | 每个 scenario 3 个视频事件；音轨、时长、分辨率、帧率和结构检查通过，表达—状态一致性、时序、语音自然度与效用仍待真人 |
+| 网站 | 已部署本机并加入当前 R3 诊断 | `127.0.0.1:8000` 的人工总清单展示 v29 短测与确切 schema 卡点；IA003 → Rollout 轨迹首条展示 v25 的19轮 rejected 样本，每轮可展开 appraisal/response event、owner/action_owner、obligation、proposal、commitment、公开事件及结束分类。人工结论只存浏览器草稿，不会晋升 rejected 样本 |
+| 正式研究验收 | 未完成 | E4/E6 机器回归已通过；Gate 1、Gate 2 真人签名、R3完整轨迹自然度复核、60条新池完成、Judge/history、逐场景从3条中选1条、Gate 4 两人同样本抽查及必要仲裁均不得被工程测试替代 |
 
-## 20-scenario development pool
+## 为什么旧数据不能继续用
 
-- 主轨迹：20 个 scenario × 3 条 × 6 轮上限，共 60 条。初始来源为 Qwen3.5-9B 三 seeds；质量修复后活跃来源为 Qwen3.5-9B 42、Qwen3-32B-AWQ 16、GLM-4-9B 2。
-- 离线实例：每 scenario T1=6、T2=2、T3=1；全量 T1=120、T2=40、T3=20。每个 T3 有 3 个候选行动、3 个即时分支和每分支 5 轮延迟 continuation。T3 公开历史最少 4、均值 8.4 条；全量生成中 18 个不可行 checkpoint 被拒并留痕。
-- 人工抽查材料：20/20 scenario 均在自身 `rollouts/` 下包含完整自然语言 `dialogues.md` 与逐 instance 的 `tasks.md`；bundle audit 为 20/20 ready。
-- Instance：最终 60 条 ID 确定后已按任务专项重建 T1=120、T2=40、T3=20，共 180 个实例；20 个 T3 各含 3 条局部分支。T1 历史均值 4.72 轮，T2 为 3.70 轮；结构审计 180/180、选源审计 20/20 通过，且所有 source trajectory 均属于当前 Gate 3 单轨迹通过集合。结构通过不替代人工语义评审。
-- 完整轨迹：Qwen3-32B 主审和 GLM 二审均覆盖 60/60；同 seed 的 Full/Recent-k/Critical-event-removed history probe 经三条失败轨迹替换后为 60/60。累计 80 个候选尝试均有 JSONL 留痕；旧文件移出活跃 manifest 并保留在 `rollouts/rejected/` 审计目录。详细过程见 `reports/experiments/2026-09-06_gate_filtering_log.md`。
-- 选源结果：模型只作为 provenance。按“每个任务使用到的唯一来源 trajectory”统计，T1 为 Qwen3.5=38、Qwen3-32B=9、GLM=2；T2 为 32/12/1；T3 为 15/4/1；DeepSeek=0。该不均衡分布是质量排序结果，不是配额目标，详见 `reports/experiments/2026-09-07_task_source_selection_audit.json/.md`。
-- Gate 3 边界：当前 active development pool 每场景只有 3 条，不是“四个配置各 3 条”的 12-run raw pool。60 个逐轨迹 audit 均通过，但仍不满足正式 raw pool 的每场景 12 条、三本地模型族和 environment/policy separation，因此总 Gate 3 状态保持 rejected，而不是 formal clean pool。正式规则现为 12 条 raw 过门、协议审核后每场景保留 1 条，不强制模型均衡；所有候选与淘汰依据继续留档并进入人工网站。
-- Protocol v1 全库存筛选：184 条可恢复轨迹全部入册（60 active、123 rejected archive、1 orphan archive），自动判定 PASS=64、REVIEW=108、REJECT=12。每场景已经计算 1 条 provisional winner，共 20 条；分布为 Qwen3.5-9B 15、Qwen3-32B-AWQ 3、GLM-4-9B 2。该分布只反映旧开发证据下的自动排序，不证明 9B 优于 32B。旧 Judge 没有逐维 turn-ID 证据，且唯一赢家仍需逐场景比较确认，所以 184/184 全部保留在网站人工队列；确认前不得写成 human-confirmed 或 formal selected。详细留痕见 `reports/experiments/2026-09-07_rollout_screening_protocol_v1.md`。
-- 最终自动报告：`reports/experiments/2026-09-06_four_gate_final_development.json`；Gate 1=pending、Gate 2=rejected、Gate 3=rejected、Gate 4=pending，`research_ready=false`。其中 Gate 3 单轨迹为 60/60，Gate 4 结构为 180/180；总状态未用局部通过冒充正式通过。
-- 九项 gate：Local Action Intervention 与 Seed Robustness 为 `evidence_ready`；其余（含 Full-Trajectory Plausibility）保持 `pending`；research acceptance 为 false。
+旧开发池和其 180 个 Task 是在 6 轮上限下生成的。它们可以证明早期代码路径曾运行，但不能检验长期目标保持、跨阶段适应、恢复能力或长期历史下的任务结果。新版 offline 协议允许 1–20 轮自然结束；`meaningless_premature_ending` 只拒绝轮数越界、结束元数据矛盾或 20 轮前错误使用 `max_turns`，不再因长度不足 20 本身拒绝。筛选器在所有候选 REJECT 时不再强行挑 winner。
 
-本地可再生产物位于 `build/pipeline_v2/`，轨迹、`dialogues.md` 与 `tasks.md` 位于各 `configs/scenarios/scenario_NNN/rollouts/`；private/generated 数据按 `.gitignore` 不提交，筛选摘要与实验方法保存在 `reports/experiments/`。
+## 新的最多20轮生成方案
 
-## 不能提前宣称完成的研究工作
+- 每场景只生成 3 条高质量候选，每条最多20轮并允许自然结束；模型族不设配额，最终每场景只按质量选最合适的1条。当前 Qwen3-32B 三 seed 与 Qwen3.5-9B 对照尚未得到 IA001 人工可接受候选，不能按机器通过率强行选取。
+- Qwen3.5-9B 只承担统一 environment，不作为本轮 policy，避免同模型自演自评。
+- 每条生成后立即检查 1–20 轮、10–20 主候选窗口、连续 turn ID、ending 与实际终止一致、对话结构、未来承诺与已完成区分、隐藏信息泄漏和跨说话人动作所有权；近重复、话题时长与焦点切换先作为诊断信号并接受语义复核。失败样本进入 rejected，替代采样 seed 与原因写入 progress.json。
+- 生成完成后依次运行 Rollout Judge v2、确定性二审audit、history dependence、Protocol v1 和人工比较；筛选前不构建新 Task。
+- 32B Qwen 是当前四张48GB GPU布局下可稳定常驻的较大本地模型。更大的235B/671B MoE需容纳完整权重并占用多卡，会挤掉独立 environment/Judge；GLM-4-32B量化版仍应做同配置部署实验，不能只凭参数名替换。
 
-- 20 个 scenario 的来源、质量门与 S0/D0 人工审核；
-- Gate 2 E1/E2 的三名实名评审及 E3–E5 的实名人工有效性确认；
-- 正式 20×12、三本地模型族且 environment/policy 分离的真实自然 rollout pool；
-- 30–50 transition 的三人 state-update 标注；
-- 15–20 完整轨迹的三人 plausibility 评审；
-- Persona、Paraphrase、History、Neutral、Response-State 和 Seed 实验结果；
-- T1/T2/T3 正式 human ground truth 与 T4 judge 校准；
-- Talking Head temporal/semantic 人工检查（实际 40 条资产和机器媒体验收已完成）。
+## T4 被测模型合同
 
-工程完成与研究验收分开记录；没有证据时状态保持 pending。
+每轮给被测模型：
 
-## Rollout 模型升级决策
+- `role.name`：公开角色名；
+- `role.role`：模型必须扮演的社会身份；
+- `role.explicit_goal`：贯穿20轮的任务目标；
+- 公开背景、目标人物公开身份、已经观察到的对话、最新回应、表情和媒体。
 
-当前 60 条 active trajectory 是开发/修复池，不是最终模型能力实验。它大量使用已经常驻的 Qwen3.5-9B，是为了快速迭代环境、prompt 和筛选器；同时让 Qwen3.5 同时承担 environment 与多数 policy 会削弱正式的模型隔离，因此不能直接作为最终 clean pool。
+明确不给：environment hidden intention、persona 数值、S/D、appraisal、delta、trigger conditions 和 future branches。自然结束或预算结束前不调用终局 judge；自动 judge 五维结果仍需真人校准。
 
-正式 raw pool 仍按 20×12 生成，并优先做质量匹配 pilot：Qwen3-32B-AWQ 4 seeds；GLM-4-32B 量化版 4 seeds（下载和显存实测通过后替换现有 GLM-4-9B）；DeepSeek 模型族 4 seeds，其中若配置到合规 API 凭据，可用不超过总池 30% 的旗舰 API 轨迹，否则保留本地 DeepSeek-V2-Lite。Qwen3.5-9B 只作为 environment，不再作为正式 policy。每条仍经过相同 Judge、history 与人工比较，不因为参数量大而自动入选。
+## 当前剩余顺序
 
-本机四张 48GB GPU 当前分别运行 environment、Qwen3-32B、GLM-4-9B 和 DeepSeek-V2-Lite。235B/671B 级 MoE 虽每 token 只激活部分参数，部署时仍需容纳总权重并跨多卡并行，不适合在保持独立 environment/Judge 服务的当前资源上直接常驻。GLM-4-32B 是当前更现实的本地升级目标；更大 API 模型只在凭据存在后做同配置盲测，避免用模型名代替实测质量。
+1. 完成并复验20×3质量优先候选池；失败槽位替代采样，不把旧六轮数据补丁式升级。
+2. Gate 1由1人冻结20个 scenario；Gate 2由1人审 E1/E2 与 E3–E5 样本；E4/E6 机器回归已完成，不降低阈值。
+3. 对新池执行双 Judge、history dependence、backbone sensitivity 与 Protocol v1；Gate 3由1人主审，第二人确定性 audit 20% 与争议项。
+4. 网站展示新池全部需人工比较的候选；每场景确认唯一 canonical trajectory，再重新提取 T1/T2/T3。
+5. Gate 4 两人独立审完全相同的10%分层样本，只有分歧才由第三人仲裁；Video由1人审核60个资产。
+6. 抽查通过后才可把全量机器建议答案发布为明确标注来源的 audited-machine GT；只有 `verify_gate_md.py --strict` 和所有真人证据通过后才能 freeze/release。
+
+工程状态与研究结论分开记录；没有落盘证据的项目保持 pending。

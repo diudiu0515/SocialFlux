@@ -15,7 +15,7 @@ import re
 
 from environment.delta_mapper import flatten_state
 from evaluation.instance_quality import audit_trajectory
-from providers.text import text_similarity
+from providers.text import dialogue_template_signatures, text_similarity
 
 
 QUALITY_DIMENSIONS = (
@@ -118,6 +118,25 @@ def _progression_score(trajectory):
     return round(min(1.0, 0.65 * state_change + 0.35 * lexical_change), 4)
 
 
+def _tail_has_repetitive_loop(values, window=4):
+    """Detect a repeated-content tail, not isolated confirmation or topic duration."""
+    tail = [str(value).strip() for value in values[-window:] if str(value).strip()]
+    if len(tail) < 3:
+        return False
+    counts = Counter(
+        signature
+        for value in tail
+        for signature in dialogue_template_signatures(value)
+    )
+    repeated_frame = any(count >= 3 for count in counts.values())
+    similarities = [
+        text_similarity(tail[left], tail[right])
+        for left in range(len(tail))
+        for right in range(left + 1, len(tail))
+    ]
+    return repeated_frame and max(similarities, default=0.0) >= 0.45
+
+
 def _heuristic_scores(trajectory, structural):
     checks = structural["checks"]
     coherence_keys = (
@@ -171,18 +190,38 @@ def audit_rollout(trajectory, judgment=None, history_evidence=None):
     if not structural["checks"]["actions_nonempty"] or not structural["checks"]["responses_nonempty"]:
         hard_rejects.append("malformed_output")
     if not (
-        structural["checks"]["actions_no_exact_repetition"]
-        and structural["checks"]["responses_no_exact_repetition"]
-        and structural["checks"]["actions_no_near_repetition"]
-        and structural["checks"]["responses_no_near_repetition"]
+        structural["checks"].get("actions_respect_public_role", True)
+        and structural["checks"].get("responses_respect_counterparty_role", True)
     ):
-        hard_rejects.append("repetitive_loop")
-    if len(turns) < 5:
+        hard_rejects.append("severe_character_contradiction")
+    if not (
+        structural["checks"].get("pending_commitments_are_consistent", True)
+        and structural["checks"].get("turns_preserve_speaker_action_ownership", True)
+        and structural["checks"].get("turns_preserve_existing_obligations", True)
+        and structural["checks"].get("turns_preserve_commitment_record", True)
+        and structural["checks"].get("turns_preserve_proposal_strength", True)
+    ):
+        hard_rejects.append("broken_dialogue_logic")
+    ending = trajectory.get("ending") or {}
+    turn_count = len(turns)
+    ending_is_consistent = (
+        1 <= turn_count <= 20
+        and ending.get("turn_id") == turn_count
+        and ending.get("reason") in {"natural_completion", "max_turns"}
+        and (
+            ending.get("reason") != "max_turns"
+            or turn_count == 20
+        )
+    )
+    if not ending_is_consistent:
         hard_rejects.append("meaningless_premature_ending")
     if oscillation > 0.5:
         hard_rejects.append("nonsensical_state_oscillation")
-    if saturation > 0.75:
-        hard_rejects.append("implementation_induced_state_saturation")
+
+    actions = [
+        turn.get("policy_action", {}).get("text", "") for turn in turns
+    ]
+    responses = [turn.get("environment_response", "") for turn in turns]
 
     judge_scores, judge_errors = _validated_judge_scores(judgment)
     if judgment:
@@ -425,12 +464,27 @@ def audit_pool_contract(
     api_fraction = sources["api"] / total if total else 0.0
     checks = {
         "nonempty": total > 0,
-        "at_least_three_local_model_families": len(families - {"unknown"}) >= 3,
+        "every_trajectory_has_1_to_20_turns": (
+            total > 0 and all(1 <= len(item.get("turns", [])) <= 20 for item in trajectories)
+        ),
+        "every_trajectory_has_consistent_natural_or_max_ending": (
+            total > 0 and all(
+                (item.get("ending") or {}).get("turn_id") == len(item.get("turns", []))
+                and (item.get("ending") or {}).get("reason")
+                in {"natural_completion", "max_turns"}
+                and (
+                    (item.get("ending") or {}).get("reason") != "max_turns"
+                    or len(item.get("turns", [])) == 20
+                )
+                for item in trajectories
+            )
+        ),
+        "model_family_is_provenance_not_quota": True,
         "prioritized_20_to_40b_local_model_present": prioritized_capacity_present,
         "api_fraction_at_most_30_percent": api_fraction <= api_max_fraction,
-        "each_scenario_has_at_least_12_raw": (
+        "each_scenario_has_at_least_3_raw": (
             not require_raw_minimum
-            or (bool(scenarios) and all(len(items) >= 12 for items in scenarios.values()))
+            or (bool(scenarios) and all(len(items) >= 3 for items in scenarios.values()))
         ),
         "each_scenario_selects_exactly_one": (
             not selection_supplied

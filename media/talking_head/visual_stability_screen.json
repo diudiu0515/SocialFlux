@@ -1,0 +1,493 @@
+{
+  "format": "socialflux_talking_head_visual_stability_screen_v1",
+  "asset_count": 60,
+  "pass_count": 60,
+  "review_count": 0,
+  "thresholds": {
+    "max_non_face_pixel_mad": 5.0,
+    "max_upper_face_pixel_mad": 8.0,
+    "face_required_in_all_sampled_frames": true
+  },
+  "results": [
+    {
+      "asset_id": "IA_PIPE_001--escalation_confrontation",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.8032,
+      "max_upper_face_pixel_mad": 2.2056
+    },
+    {
+      "asset_id": "IA_PIPE_001--anxious_withdrawal",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.8062,
+      "max_upper_face_pixel_mad": 2.2091
+    },
+    {
+      "asset_id": "IA_PIPE_001--evidence_lands",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.803,
+      "max_upper_face_pixel_mad": 2.2098
+    },
+    {
+      "asset_id": "IA_PIPE_002--escalation_confrontation",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.4766,
+      "max_upper_face_pixel_mad": 1.9784
+    },
+    {
+      "asset_id": "IA_PIPE_002--anxious_withdrawal",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.4772,
+      "max_upper_face_pixel_mad": 1.9724
+    },
+    {
+      "asset_id": "IA_PIPE_002--fairness_recalibration",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.4781,
+      "max_upper_face_pixel_mad": 1.9753
+    },
+    {
+      "asset_id": "IA_PIPE_003--escalation_confrontation",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.7685,
+      "max_upper_face_pixel_mad": 2.1085
+    },
+    {
+      "asset_id": "IA_PIPE_003--anxious_withdrawal",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.7672,
+      "max_upper_face_pixel_mad": 2.0907
+    },
+    {
+      "asset_id": "IA_PIPE_003--repayment_relief",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.7685,
+      "max_upper_face_pixel_mad": 2.0919
+    },
+    {
+      "asset_id": "IA_PIPE_004--escalation_confrontation",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.7186,
+      "max_upper_face_pixel_mad": 2.0544
+    },
+    {
+      "asset_id": "IA_PIPE_004--anxious_withdrawal",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.7201,
+      "max_upper_face_pixel_mad": 2.0606
+    },
+    {
+      "asset_id": "IA_PIPE_004--care_plan_relief",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.7195,
+      "max_upper_face_pixel_mad": 2.0547
+    },
+    {
+      "asset_id": "IA_PIPE_005--escalation_confrontation",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.7393,
+      "max_upper_face_pixel_mad": 2.0406
+    },
+    {
+      "asset_id": "IA_PIPE_005--anxious_withdrawal",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.7392,
+      "max_upper_face_pixel_mad": 2.0484
+    },
+    {
+      "asset_id": "IA_PIPE_005--burden_recognized",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.7403,
+      "max_upper_face_pixel_mad": 2.0514
+    },
+    {
+      "asset_id": "IA_PIPE_006--escalation_confrontation",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.6996,
+      "max_upper_face_pixel_mad": 2.6726
+    },
+    {
+      "asset_id": "IA_PIPE_006--anxious_withdrawal",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.6987,
+      "max_upper_face_pixel_mad": 2.6635
+    },
+    {
+      "asset_id": "IA_PIPE_006--verification_path_opens",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.6991,
+      "max_upper_face_pixel_mad": 2.6631
+    },
+    {
+      "asset_id": "IA_PIPE_007--escalation_confrontation",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5474,
+      "max_upper_face_pixel_mad": 2.0482
+    },
+    {
+      "asset_id": "IA_PIPE_007--anxious_withdrawal",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5469,
+      "max_upper_face_pixel_mad": 2.0441
+    },
+    {
+      "asset_id": "IA_PIPE_007--appeal_path_opens",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5482,
+      "max_upper_face_pixel_mad": 2.0505
+    },
+    {
+      "asset_id": "IA_PIPE_008--escalation_confrontation",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.4328,
+      "max_upper_face_pixel_mad": 2.3401
+    },
+    {
+      "asset_id": "IA_PIPE_008--anxious_withdrawal",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.4304,
+      "max_upper_face_pixel_mad": 2.343
+    },
+    {
+      "asset_id": "IA_PIPE_008--informed_choice_reopens",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.4295,
+      "max_upper_face_pixel_mad": 2.339
+    },
+    {
+      "asset_id": "IA_PIPE_009--escalation_confrontation",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.4451,
+      "max_upper_face_pixel_mad": 2.0964
+    },
+    {
+      "asset_id": "IA_PIPE_009--anxious_withdrawal",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.4438,
+      "max_upper_face_pixel_mad": 2.092
+    },
+    {
+      "asset_id": "IA_PIPE_009--contribution_recognized",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.443,
+      "max_upper_face_pixel_mad": 2.0976
+    },
+    {
+      "asset_id": "IA_PIPE_010--escalation_confrontation",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5978,
+      "max_upper_face_pixel_mad": 2.5975
+    },
+    {
+      "asset_id": "IA_PIPE_010--anxious_withdrawal",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5999,
+      "max_upper_face_pixel_mad": 2.5974
+    },
+    {
+      "asset_id": "IA_PIPE_010--risk_reassessment",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5981,
+      "max_upper_face_pixel_mad": 2.5954
+    },
+    {
+      "asset_id": "IA_PIPE_011--visible_microcontrol",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5656,
+      "max_upper_face_pixel_mad": 2.1556
+    },
+    {
+      "asset_id": "IA_PIPE_011--guarded_reconsideration",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5643,
+      "max_upper_face_pixel_mad": 2.1322
+    },
+    {
+      "asset_id": "IA_PIPE_011--schedule_shock",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5643,
+      "max_upper_face_pixel_mad": 2.1437
+    },
+    {
+      "asset_id": "IA_PIPE_012--defensive_parenting",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.7453,
+      "max_upper_face_pixel_mad": 2.1309
+    },
+    {
+      "asset_id": "IA_PIPE_012--shared_grief_surface",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.7455,
+      "max_upper_face_pixel_mad": 2.1179
+    },
+    {
+      "asset_id": "IA_PIPE_012--trust_break_moment",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.7434,
+      "max_upper_face_pixel_mad": 2.1208
+    },
+    {
+      "asset_id": "IA_PIPE_013--consensus_lock",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5197,
+      "max_upper_face_pixel_mad": 2.6018
+    },
+    {
+      "asset_id": "IA_PIPE_013--evidence_reconsideration",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5174,
+      "max_upper_face_pixel_mad": 2.6055
+    },
+    {
+      "asset_id": "IA_PIPE_013--productive_doubt",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5182,
+      "max_upper_face_pixel_mad": 2.6029
+    },
+    {
+      "asset_id": "IA_PIPE_014--status_guard",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.6012,
+      "max_upper_face_pixel_mad": 2.1182
+    },
+    {
+      "asset_id": "IA_PIPE_014--tentative_coalition",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5999,
+      "max_upper_face_pixel_mad": 2.1267
+    },
+    {
+      "asset_id": "IA_PIPE_014--recognition_wound",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.6015,
+      "max_upper_face_pixel_mad": 2.1158
+    },
+    {
+      "asset_id": "IA_PIPE_015--institutional_defensiveness",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5084,
+      "max_upper_face_pixel_mad": 2.2966
+    },
+    {
+      "asset_id": "IA_PIPE_015--truth_shift",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5064,
+      "max_upper_face_pixel_mad": 2.2964
+    },
+    {
+      "asset_id": "IA_PIPE_015--public_risk_alarm",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5083,
+      "max_upper_face_pixel_mad": 2.2976
+    },
+    {
+      "asset_id": "IA_PIPE_016--kitchen_overload",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.6167,
+      "max_upper_face_pixel_mad": 2.3898
+    },
+    {
+      "asset_id": "IA_PIPE_016--shared_grief_acknowledged",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.6173,
+      "max_upper_face_pixel_mad": 2.3723
+    },
+    {
+      "asset_id": "IA_PIPE_016--cashflow_shock",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.6166,
+      "max_upper_face_pixel_mad": 2.4001
+    },
+    {
+      "asset_id": "IA_PIPE_017--family_defensiveness",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5318,
+      "max_upper_face_pixel_mad": 2.1066
+    },
+    {
+      "asset_id": "IA_PIPE_017--hesitant_disclosure",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5318,
+      "max_upper_face_pixel_mad": 2.1033
+    },
+    {
+      "asset_id": "IA_PIPE_017--guilt_surfaces",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5316,
+      "max_upper_face_pixel_mad": 2.1121
+    },
+    {
+      "asset_id": "IA_PIPE_018--security_shutdown",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.4066,
+      "max_upper_face_pixel_mad": 2.2872
+    },
+    {
+      "asset_id": "IA_PIPE_018--cautious_curiosity",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.4076,
+      "max_upper_face_pixel_mad": 2.2877
+    },
+    {
+      "asset_id": "IA_PIPE_018--threat_reassessment",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.407,
+      "max_upper_face_pixel_mad": 2.2834
+    },
+    {
+      "asset_id": "IA_PIPE_019--founder_entrenchment",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.4729,
+      "max_upper_face_pixel_mad": 2.0938
+    },
+    {
+      "asset_id": "IA_PIPE_019--specific_acknowledgment",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.4706,
+      "max_upper_face_pixel_mad": 2.0947
+    },
+    {
+      "asset_id": "IA_PIPE_019--friendship_rupture",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.4703,
+      "max_upper_face_pixel_mad": 2.0932
+    },
+    {
+      "asset_id": "IA_PIPE_020--ethical_withdrawal",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5864,
+      "max_upper_face_pixel_mad": 2.3519
+    },
+    {
+      "asset_id": "IA_PIPE_020--principled_reengagement",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.5856,
+      "max_upper_face_pixel_mad": 2.3319
+    },
+    {
+      "asset_id": "IA_PIPE_020--ethical_alarm",
+      "status": "pass",
+      "sampled_frame_count": 5,
+      "face_detected_frame_count": 5,
+      "max_non_face_pixel_mad": 1.586,
+      "max_upper_face_pixel_mad": 2.3265
+    }
+  ]
+}

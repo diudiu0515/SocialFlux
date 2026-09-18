@@ -114,7 +114,7 @@ def build_acceptance_report(
     criteria = [
         _pending(
             CRITERIA[0],
-            "30–50 sampled transitions, three human annotators, direction/plausibility agreement",
+            "30–50 sampled transitions reviewed by one named human for direction/plausibility",
         ),
         _pending(
             CRITERIA[1],
@@ -150,7 +150,7 @@ def build_acceptance_report(
             "structural_checks": structures,
             "quality_checks": trajectory_quality,
             "formal_human_judgment": "pending",
-            "requirement": "15–20 complete natural trajectories reviewed by three annotators",
+            "requirement": "15–20 complete natural trajectories reviewed by one named primary reviewer",
         },
         {
             "criterion": CRITERIA[8],

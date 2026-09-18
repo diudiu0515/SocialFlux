@@ -1,0 +1,10 @@
+{
+  "prompt": "写实纪录片质感中近景，固定机位，单人出镜，保持参考肖像身份、年龄、服装与背景一致。角色是公益法律中心督导律师，自然地说普通话，完整台词是：‘如果接受这个条件会伤害客户，我不能当作没看见。’面部：疲惫表情骤然收紧，随即恢复专注；视线：迅速回到客户记录上；头部：停止整理文件并轻微前倾；反应时机：意识到后果后停顿一拍；说话方式：平静但明确地划出伦理边界；韵律：语速放慢，不能二字清楚加重；动作：具体伤害后果使伦理压力在当下转为可见立场。普通话音素与唇形逐字同步，静音处自然闭唇；眨眼、呼吸和微表情连续，牙齿与面部边缘稳定，不夸张，不切镜，无字幕、标签、水印或其他人物。",
+  "duration_seconds": 4.68,
+  "continuity_reference": "media/talking_head/assets/scenario_020/reference.png",
+  "safety_check": {
+    "contains_private_state": false,
+    "contains_threshold_logic": false,
+    "contains_benchmark_answer": false
+  }
+}

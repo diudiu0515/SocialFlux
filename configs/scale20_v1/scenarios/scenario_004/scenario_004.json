@@ -1,0 +1,300 @@
+{
+  "scenario_id": "IA_PIPE_004",
+  "title": "伴侣照护责任冲突",
+  "mechanism": "intimate obligation",
+  "source": {
+    "type": "narrative-derived",
+    "provenance_id": "screen-structure-004-simple-days",
+    "surface_text_policy": "original_surface_text",
+    "redistribution_status": "transformed_structural_abstraction",
+    "provenance_note": "High-level couple-versus-family-boundary and shared-responsibility structure inspired by 小日子. The care recipient, appointment, work constraints, roles, and all dialogue are original. Source verification: https://wetv.vip/zh-cn/play/ugfajmyp45a2zuk-Simple%20Days",
+    "work_title": "小日子",
+    "year": 2024,
+    "medium": "television series",
+    "related_characters_or_plot_position": "a couple's own decisions become entangled with obligations to both families; no episode-specific sequence is claimed"
+  },
+  "narrative_design": {
+    "relationship_structure": "对话参与者 与 伴侣 的持续关系",
+    "power_structure": "亲密关系名义对等，时间、照护能力和情感依赖造成情境性不对称。",
+    "goal_conflict": "伴侣连续数周承担了更多家庭照护，下一次重要复诊在五天后；另一方工作排班不稳定。双方需要处理具体分工、临时变更、被忽视的负担和亲密关系，而不是只做一张任务表。",
+    "information_asymmetry": "保护自身声誉、资源或关系位置，同时避免直接承认失误",
+    "relevant_history": [
+      "过去四周中，一方承担了大部分接送、用药提醒和复诊沟通，另一次临时加班直到当天才告知。",
+      "另一方并非完全缺席，已经固定负责周末采购和一次夜间照护，但认为自己的经济压力没有被看见。",
+      "五天后的复诊需要一人陪同并准备既往记录，双方都不能保证工作临时不变。",
+      "此前一次争执中双方都说过“以后我多做”，但没有明确哪些责任可以替换、哪些必须提前告知。"
+    ],
+    "meaningful_choice_space": [
+      "区分固定责任、可替换任务和紧急备援",
+      "表达负担而不把对方全部贡献抹掉",
+      "为复诊形成主责和备用方案",
+      "约定临时变更的最低提前沟通",
+      "在实际执行后讨论照护公平与亲密关系"
+    ]
+  },
+  "construction_status": {
+    "normalization": "scale20_v1_natural_interaction_design",
+    "initial_state": "candidate_pending_human_freeze",
+    "quality_gate": "pending_generation_and_semantic_review"
+  },
+  "quality_gate": {
+    "social_plausibility": "pending",
+    "real_tradeoff": "pending",
+    "longitudinal_necessity": "pending",
+    "nontrivial_strategy_space": "pending",
+    "character_motivation_coherence": "pending",
+    "information_asymmetry": "pending",
+    "t1_suitability": "pending",
+    "t2_suitability": "pending",
+    "t3_suitability": "pending",
+    "t4_adaptation_opportunity": "pending",
+    "no_universal_script": "pending"
+  },
+  "background": "伴侣连续数周承担了更多家庭照护，下一次重要复诊在五天后；另一方工作排班不稳定。双方需要处理具体分工、临时变更、被忽视的负担和亲密关系，而不是只做一张任务表。",
+  "environment_agent": {
+    "persona": {
+      "name": "伴侣",
+      "role": "伴侣",
+      "patience": 0.75,
+      "empathy": 0.35
+    },
+    "explicit_goal": "确保复诊和日常照护不断档，同时保留自己的工作容量和在关系中的公平感。",
+    "hidden_intention": "伴侣害怕被定义成不可靠，也积累了经济压力未被认可的委屈，因此容易先为自己辩护。"
+  },
+  "evaluated_agent_role": {
+    "character_id": "EVALUATED_AGENT",
+    "name": "对话参与者",
+    "explicit_goal": "建立双方真正能履行的照护安排，并让临时变化、情绪负担和关系修复都有可观察的后续。",
+    "role": "协商共同照护责任的伴侣"
+  },
+  "selected_state_variables": {
+    "emotion": [
+      "anger",
+      "anxiety",
+      "hope"
+    ],
+    "motivation": [
+      "resolve",
+      "repair_intent"
+    ],
+    "relationship": [
+      "trust",
+      "hostility"
+    ],
+    "risk": [
+      "goal_failure_risk"
+    ]
+  },
+  "target_state_ids": [
+    "emotion.anger",
+    "emotion.anxiety",
+    "relationship.trust",
+    "relationship.hostility"
+  ],
+  "initial_state": {
+    "emotion": {
+      "anger": 3,
+      "anxiety": 7,
+      "hope": 5
+    },
+    "motivation": {
+      "resolve": 6,
+      "repair_intent": 5
+    },
+    "relationship": {
+      "trust": 7,
+      "hostility": 3
+    }
+  },
+  "initial_dynamics": {
+    "goal_failure_risk": 6,
+    "escalation_risk": 2,
+    "negotiation_open": 5
+  },
+  "max_turns": 20,
+  "t3_delayed_horizon": 5,
+  "sampling_plan": {
+    "selection_strategy": "natural_trajectory_checkpoint_sampling",
+    "seed": 17,
+    "t1_max": 5,
+    "t2_max": 3,
+    "t3_max": 4
+  },
+  "observable_expression": {
+    "default": {
+      "facial_expression": "保持克制并注意对方反应",
+      "gaze": "保持自然注视",
+      "speech_style": "正常语速，信息清楚",
+      "prosody": "语气克制",
+      "behavioral_cues": [
+        "根据当前互动调整停顿和回应长度"
+      ]
+    }
+  },
+  "media_generation": {
+    "stage": "structured_expression",
+    "default_media_type": "video",
+    "asset_status": "generated",
+    "asset_root": "media/talking_head",
+    "note": "视频资产生成前只输出 observable expression 与 media spec，不伪造 asset。",
+    "provider": "TMElyralab/MuseTalk 1.5 (local)",
+    "profile": "multimodel_v2_audio_conditioned"
+  },
+  "video_triggers": [
+    {
+      "trigger_id": "escalation_confrontation",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.anger": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "relationship.hostility": {
+          "operator": ">=",
+          "threshold": 7
+        },
+        "escalation_risk": {
+          "operator": ">=",
+          "threshold": 8
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "hurt_withdrawal",
+      "duration_seconds": 6,
+      "media_asset_id": "IA_PIPE_004--escalation_confrontation",
+      "observable_expression": {
+        "facial_expression": "眼神回避，肩膀略微下沉",
+        "gaze": "减少直接眼神接触",
+        "speech_style": "迟疑、克制，减少解释",
+        "prosody": "声音变轻，停顿变长",
+        "behavioral_cues": [
+          "状态达到显著冲突区间后出现一次明显外显变化"
+        ]
+      },
+      "priority": 2,
+      "social_event": "hurt_withdrawal",
+      "spoken_response": "照护不能只靠一句会帮忙，请把责任分清楚。"
+    },
+    {
+      "trigger_id": "anxious_withdrawal",
+      "trigger_mode": "crossing",
+      "conditions": {
+        "emotion.anxiety": {
+          "operator": ">=",
+          "threshold": 8
+        },
+        "motivation.repair_intent": {
+          "operator": "<=",
+          "threshold": 2
+        }
+      },
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "anxious_withdrawal",
+      "duration_seconds": 6,
+      "media_asset_id": "IA_PIPE_004--anxious_withdrawal",
+      "observable_expression": {
+        "facial_expression": "表情收缩，显出疲惫或不安",
+        "gaze": "短暂低头后重新看向对方",
+        "speech_style": "回应犹豫，句子变短",
+        "prosody": "音量降低，停顿变长",
+        "behavioral_cues": [
+          "避免夸张哭泣或脸谱化表演"
+        ]
+      },
+      "priority": 3,
+      "social_event": "anxious_withdrawal",
+      "spoken_response": "我真的很累，暂时不想再争下去了。"
+    },
+    {
+      "trigger_id": "care_plan_relief",
+      "trigger_mode": "state_change",
+      "conditions": {},
+      "change_conditions": {
+        "emotion.anxiety": {
+          "operator": "<=",
+          "threshold": -2
+        }
+      },
+      "priority": 1,
+      "cooldown_turns": 3,
+      "media_type": "video",
+      "cue_template": "care_plan_relief",
+      "social_event": "care_plan_relief",
+      "duration_seconds": 6,
+      "media_asset_id": "IA_PIPE_004--care_plan_relief",
+      "observable_expression": {
+        "facial_expression": "疲惫仍在，但眼周紧张明显减轻",
+        "gaze": "从轮班表抬眼看向伴侣",
+        "head_motion": "缓慢点头，动作幅度很小",
+        "response_timing": "确认安排后先长呼气再回应",
+        "speech_style": "低声、具体，开始讨论落实",
+        "prosody": "节奏放慢，停顿更自然",
+        "behavioral_cues": [
+          "责任被具体分担后出现不夸张的如释重负"
+        ]
+      },
+      "spoken_response": "如果按这个轮班表来，我能稍微放心一些。"
+    }
+  ],
+  "initialization_notes": {
+    "rationale": {
+      "migration": "These S0/D0 values were migrated from the retained original scenario and remain candidates pending human review.",
+      "state_selection": "Values follow the scenario background, persona, goals, and opening pressure; no authored action effect is assumed."
+    },
+    "trigger_reachability": [
+      "No configured trigger is active at S0/D0.",
+      "Threshold reachability within the episode remains pending human review."
+    ]
+  },
+  "longitudinal_design": {
+    "format": "socialflux_longitudinal_v1",
+    "time_unit": "day",
+    "start_elapsed": 0,
+    "segments": [
+      {
+        "segment_id": "care_load_conversation",
+        "reason": "复诊前五天，双方第一次把近期照护负担和可用容量放在一起讨论。",
+        "interaction_goal": "先承认实际投入和限制，再确定复诊的主责与备援。",
+        "live_questions": [
+          "近期负担如何分布",
+          "复诊谁主责",
+          "临时变化如何通知"
+        ],
+        "pause_when": "复诊安排和一个未解决的公平问题已经明确。",
+        "min_turns": 1,
+        "max_turns": 7,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        }
+      },
+      {
+        "segment_id": "two_week_care_review",
+        "reason": "复诊后两周的共同照护复盘节点到达。",
+        "interaction_goal": "让双方报告实际执行和未被看见的负担，明确报告不是外部证明。",
+        "live_questions": [
+          "哪些安排实际可持续",
+          "哪类临时变化仍伤害信任",
+          "是否需要交换责任"
+        ],
+        "pause_when": "一个可持续调整和一个关系影响已经明确。",
+        "min_turns": 1,
+        "max_turns": 7,
+        "allow_explicit_pause": true,
+        "time_effect": {
+          "policy": "none",
+          "state_delta": {},
+          "dynamics_delta": {}
+        },
+        "advance_by": 14,
+        "public_time_record": "距离上次交流已经过去14天，复诊后两周的共同照护复盘节点到达。；该公开记录只说明时间和外部节点已经到达，不证明任何提议、承诺或行动已经完成。",
+        "opening_response": "两周过去了。今天基于双方可观察到的安排复盘，不把任何人的自我报告自动当成完整事实。"
+      }
+    ],
+    "event_pools": []
+  }
+}
