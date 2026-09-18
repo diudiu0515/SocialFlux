@@ -284,13 +284,13 @@ S0/D0 是候选初始化，不是自动 ground truth。只有真人 reviewer 对
 
 ### 9.1 Raw pool
 
-- 每个已批准 scenario 生成 3 条质量候选；模型族只记录 provenance，不设最终配额。
+- 每个已批准 scenario 只生成 1 条自然轨迹；技术重试只修复同一逻辑调用，轨迹失败不得用新 seed 补抽。模型只记录 provenance，不设配额。
 - 当前 active baseline 的 policy、Structured Appraisal、Response、T1–T4 构造/答案和自动质量复核统一使用 `claude-fable-5`，模型映射只能来自 `configs/model_routes.frontier_api.json`。这是明确的 single-model baseline，不得误称为跨模型独立性证据。
 - “统一模型”不改变逻辑和物理调用边界：Structured Appraisal 与 Response 必须是两次独立请求，中间仍只允许 Python 确定性更新；policy、任务答案和 judge 也分别请求并记录各自 prompt、sampling、seed、重试和实际请求数。
 - backbone sensitivity 与不同模型族 judge 作为后续单独实验保留，不得把历史多模型配置混入当前 baseline，也不得用旧 benchmark 输出冒充本轮 Claude 产物。
 - 只从同一 frozen S0/D0 启动自然 rollout。
 - 每条 trajectory 记录完整 private transitions、observable projections、prompt IDs、sampling、seed、environment config 和 ending。
-- 所有候选、拒绝原因、替代 seed、Judge evidence 和 manifest 变化必须留痕。
+- 唯一轨迹、失败原因、技术重试、Judge evidence 和 manifest 变化必须留痕。
 
 ### 9.2 Rollout Quality Gate
 
@@ -338,7 +338,7 @@ A/B 分别从分叉 checkpoint 经过正式 Structured Appraisal → 确定性�
 
 1. Gate 1：scenario source、质量、原创性和真人 freeze。
 2. Gate 2：environment validity，包括 state-update human agreement、persona sensitivity、paraphrase robustness、history intervention、local action intervention、neutral-state stability、response-state consistency、full-trajectory plausibility、seed robustness，以及必要的 backbone sensitivity。
-3. Gate 3：raw trajectory 的六维质量、hard reject、history evidence、Judge/audit、去重和 canonical selection。
+3. Gate 3：唯一 raw trajectory 的六维质量、hard reject、history evidence 与 Judge/audit；只做准入/淘汰，不做 best-of-N selection。
 4. Gate 4：T1/T2/T3 instance 的泄漏、可回答性、证据和 machine proposal 人工抽查。
 
 发布前必须同时满足：
@@ -374,4 +374,4 @@ A/B 分别从分叉 checkpoint 经过正式 Structured Appraisal → 确定性�
 
 当前代码已经实现自由文本 action、单一 environment、private/public boundary、两阶段 appraisal/response、确定性 state update、ledger、自然结束分类、T1/T2/T3 builder、T4 judge packet 和 Gate 结构。
 
-当前仍不能宣称正式发布完成：旧 rollout 仅作审计，Scale300 的 900 条正式候选、真人 scenario/S0/D0 freeze、Gate 2/3/4、正式 Judge/history/backbone evidence 和 audited machine GT 仍需以实际产物证明。任何状态更新都必须反映真实文件和报告，不得只改本节文字。
+当前仍不能宣称正式发布完成：旧 rollout 仅作审计，Scale300 的 300 条唯一正式轨迹、真人 scenario/S0/D0 freeze、Gate 2/3/4、正式 Judge/history/backbone evidence 和 audited machine GT 仍需以实际产物证明。任何状态更新都必须反映真实文件和报告，不得只改本节文字。

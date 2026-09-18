@@ -7,12 +7,11 @@ checklist.
 
 - development may use --allow-unreviewed; it never becomes final benchmark.
 - formal_raw requires all scenario quality gates approved and S0/D0
-  human_frozen, uses an isolated rollout root, exactly three quality-seeking raw
-  candidates per scenario, no more than 30% API trajectories, and no
-  policy/environment model identity. Model family is provenance, never a quota.
-- formal_selected is only materialized after quality, history and diversity
-  gates pass. Each scenario retains exactly one human-confirmed canonical trajectory; selection does not keep
-  only one highest-scoring trajectory.
+  human_frozen, uses an isolated rollout root, and contains exactly one logical
+  natural trajectory per scenario. Transport/schema retries may repair the same
+  logical call; failed trajectories are never replaced by another seed.
+- formal_selected is only materialized after quality and history gates pass.
+  Gate 3 admits or rejects the sole trajectory and never performs best-of-N selection.
 
 ## Per-trajectory gate
 
@@ -45,10 +44,12 @@ GLM prefilters before publication. The active manifest is replaced before the
 old file is moved into `rollouts/rejected/`, and every failed candidate is
 preserved as an observable-dialogue JSONL audit record. A historical non-quality replacement recorded as `t2_pairing_rebalance` remains audit evidence only. Production task construction no longer replaces or retains trajectories to balance source models.
 
-## Diversity
+## Corpus diversity
 
 Outcomes are assigned only after rollout. They are descriptive audit labels,
-not predefined policies. Greedy selection prioritizes quality while adding observed-outcome coverage and rejecting near duplicates. Model family is raw-search provenance and an audit breakdown, never a final selection quota. T1, T2 and T3 then rank the eligible pool independently using task-specific dimensions.
+not predefined policies. Diversity is audited across scenarios and must come
+from the scenario design matrix and natural histories, not from best-of-N
+trajectory search. Model family remains provenance, never a selection quota.
 
 ## History dependence
 
@@ -92,9 +93,9 @@ raw trajectories, judgments and selected trajectories live under data/formal
 and are excluded from Git.
 
 The active baseline routes Policy, Appraisal, Response, construction and judge
-roles through independent `claude-fable-5` requests. Each scenario has three
-seed slots; Gate 3 ranks observed trajectory quality without using model
-identity. Historical local and multi-model runs remain diagnostic evidence only.
+roles through independent `claude-fable-5` requests. Each scenario has one
+rollout slot; Gate 3 is pass/fail and does not use model identity. Historical
+local, multi-model and multi-seed runs remain diagnostic evidence only.
 
 The end-to-end command order is fixed in [`FORMAL_ROLLOUT_RUNBOOK.md`](../operations/FORMAL_ROLLOUT_RUNBOOK.md).
 `scripts/verify_gate_md.py --strict` maps concrete artifacts back to all twelve

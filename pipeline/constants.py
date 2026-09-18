@@ -5,7 +5,7 @@ from pathlib import Path
 
 ACTIVE_MODEL = "claude-fable-5"
 SCENARIO_COUNT = 300
-SEEDS_PER_SCENARIO = 3
+ROLLOUTS_PER_SCENARIO = 1
 MAX_TURNS = 20
 MIN_MAIN_TURNS = 10
 

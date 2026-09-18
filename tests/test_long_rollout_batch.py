@@ -14,13 +14,13 @@ from pipeline.scenarios import load_scenario_records
 
 
 class LongRolloutBatchTest(unittest.TestCase):
-    def test_formal_plan_has_60_natural_horizon_claude_slots(self):
+    def test_formal_plan_has_one_natural_horizon_claude_slot_per_scenario(self):
         config = load_rollout_config("configs/formal_rollout_pool.json")
         records = load_scenario_records("configs/scenarios")
         slots = planned_slots(records, config)
         self.assertEqual(config["pilot_limits"]["rollout_turns"], TARGET_TURNS)
-        self.assertEqual(len(slots), 60)
-        self.assertEqual(len({item["slot_id"] for item in slots}), 60)
+        self.assertEqual(len(slots), 20)
+        self.assertEqual(len({item["slot_id"] for item in slots}), 20)
         self.assertEqual({item["spec"]["model_family"] for item in slots}, {"claude"})
         environment_model = config["environment"]["provider"]["model"]
         self.assertTrue(all(

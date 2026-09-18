@@ -142,7 +142,12 @@ class RolloutRunner:
                         item["claim_span"] for item in rejected[-1]["claims"]
                     ],
                 }
-            action = policy.generate(observation)
+            try:
+                action = policy.generate(observation)
+            except Exception as exc:
+                if rejected:
+                    exc.action_attempt_diagnostics = deepcopy(rejected)
+                raise
             try:
                 result = environment.step(action)
             except UnsupportedConsequentialClaim as exc:

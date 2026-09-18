@@ -13,7 +13,13 @@ class FakeResponse:
         return False
 
     def read(self):
-        return json.dumps({"choices": [{"message": {"content": "ok"}}]}).encode()
+        return json.dumps({
+            "choices": [{
+                "message": {"content": "ok"},
+                "finish_reason": "stop",
+            }],
+            "usage": {"prompt_tokens": 12, "completion_tokens": 3},
+        }).encode()
 
 
 class FakeStreamResponse(FakeResponse):
@@ -60,6 +66,40 @@ class ProviderSamplingTest(unittest.TestCase):
         self.assertEqual(result, "连接正常")
         payload = json.loads(mocked.return_value.open.call_args.args[0].data)
         self.assertIs(payload["stream"], True)
+
+    @patch("providers.openai_compatible.build_opener")
+    def test_metrics_record_requests_usage_and_finish_reason(self, mocked):
+        mocked.return_value.open.return_value = FakeResponse()
+        provider = OpenAICompatibleProvider(
+            "https://example.invalid/v1/chat/completions",
+            "model",
+            use_proxy=False,
+        )
+        provider.complete([{"role": "user", "content": "test"}])
+        self.assertEqual(provider.metrics["request_count"], 1)
+        self.assertEqual(provider.metrics["failed_request_count"], 0)
+        self.assertEqual(provider.metrics["usage"], {
+            "prompt_tokens": 12,
+            "completion_tokens": 3,
+        })
+        self.assertEqual(provider.metrics["finish_reasons"], {"stop": 1})
+        self.assertGreaterEqual(provider.metrics["request_duration_seconds"], 0)
+
+    @patch("providers.openai_compatible.build_opener")
+    def test_metrics_record_failed_request_and_reset(self, mocked):
+        mocked.return_value.open.side_effect = TimeoutError("timed out")
+        provider = OpenAICompatibleProvider(
+            "https://example.invalid/v1/chat/completions",
+            "model",
+            use_proxy=False,
+        )
+        with self.assertRaises(TimeoutError):
+            provider.complete([{"role": "user", "content": "test"}])
+        self.assertEqual(provider.metrics["request_count"], 1)
+        self.assertEqual(provider.metrics["failed_request_count"], 1)
+        provider.reset()
+        self.assertEqual(provider.metrics["request_count"], 0)
+        self.assertEqual(provider.metrics["failed_request_count"], 0)
 
 
 if __name__ == "__main__":

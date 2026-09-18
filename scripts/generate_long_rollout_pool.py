@@ -27,7 +27,9 @@ from evaluation.rollout_gate import audit_rollout
 from pipeline.artifacts import write_dialogues
 from pipeline.constants import ROLLOUT_CONFIG, SCENARIO_ROOT
 from pipeline.runtime import (
+    assert_development_role_partitioned_rollout_config,
     assert_fable_rollout_config,
+    assert_single_model_rollout_config,
     build_environment_factory,
     build_policy,
     iter_policy_specs,
@@ -49,7 +51,7 @@ MIN_MAIN_TURNS = 10
 MAX_REQUESTS_PER_TURN = 18
 # Compatibility alias; the contract is a maximum, not an exact target.
 TARGET_TURNS = MAX_TURNS
-QUALITY_VERSION = "claude_fable5_semantic_events_v1"
+QUALITY_VERSION = "socialflux_semantic_events_v1"
 _QUALITY_INPUTS = (
     "configs/model_routes.frontier_api.json",
     "environment/appraisal.py",
@@ -362,6 +364,11 @@ def _verify_completed_slot(output, slot, record):
 
 
 def run_slot(slot, scenario, output, retry_limit, attempt_offset=0):
+    if (
+        slot["config"].get("candidate_strategy") == "single_first_pass"
+        and attempt_offset > 0
+    ):
+        return None, []
     scenario_dir = Path(output) / slot["scenario_directory"]
     scenario_dir.mkdir(parents=True, exist_ok=True)
     environment_factory = build_environment_factory(scenario, slot["config"]["environment"])
@@ -502,6 +509,21 @@ def main(argv=None):
     )
     parser.add_argument("--allow-unreviewed", action="store_true")
     parser.add_argument(
+        "--experimental-model",
+        help=(
+            "explicit one-trajectory development model; requires "
+            "candidate_strategy=single_first_pass and --retry-limit 1"
+        ),
+    )
+    parser.add_argument(
+        "--development-role-partition",
+        action="store_true",
+        help=(
+            "development-only GPT policy/tasks with Claude appraisal/response; "
+            "requires one first-pass rollout and --retry-limit 1"
+        ),
+    )
+    parser.add_argument(
         "--review-registry",
         type=Path,
         help="Human-signed Gate 1 registry; required for production rollout.",
@@ -513,7 +535,44 @@ def main(argv=None):
     if not 1 <= args.workers <= 8:
         raise ValueError("--workers must be between 1 and 8")
     config = load_rollout_config(args.rollout_config)
-    assert_fable_rollout_config(config)
+    if (
+        config.get("candidate_strategy") == "single_first_pass"
+        and args.retry_limit != 1
+    ):
+        raise ValueError(
+            "single_first_pass forbids replacement sampling; use --retry-limit 1"
+        )
+    if args.experimental_model and args.development_role_partition:
+        raise ValueError(
+            "choose either --experimental-model or --development-role-partition"
+        )
+    if args.experimental_model:
+        if config.get("pool_stage") != "development":
+            raise ValueError("experimental single rollout must use development stage")
+        if config.get("candidate_strategy") != "single_first_pass":
+            raise ValueError(
+                "experimental single rollout requires single_first_pass strategy"
+            )
+        assert_single_model_rollout_config(
+            config,
+            expected_model=args.experimental_model,
+            expected_seed_slots=1,
+            context="experimental single-trajectory",
+        )
+    elif args.development_role_partition:
+        if config.get("pool_stage") != "development":
+            raise ValueError("role-partitioned audit must use development stage")
+        if config.get("candidate_strategy") != "single_first_pass":
+            raise ValueError(
+                "role-partitioned audit requires single_first_pass strategy"
+            )
+        if args.retry_limit != 1:
+            raise ValueError(
+                "role-partitioned audit forbids replacement sampling"
+            )
+        assert_development_role_partitioned_rollout_config(config)
+    else:
+        assert_fable_rollout_config(config)
     if config.get("pilot_limits", {}).get("rollout_turns") != MAX_TURNS:
         raise ValueError("long rollout batch requires a maximum of 20 turns")
     if config.get("environment", {}).get("horizon_mode") != "natural_max_20":
@@ -602,6 +661,16 @@ def main(argv=None):
                     f"{slot['slot_id']}",
                     flush=True,
                 )
+        if (
+            config.get("candidate_strategy") == "single_first_pass"
+            and _attempt_offset(progress, slot["slot_id"]) > 0
+        ):
+            print(
+                f"[{index}/{len(slots)}] retain exhausted first pass "
+                f"{slot['slot_id']}",
+                flush=True,
+            )
+            continue
         pending.append((index, slot))
 
     retry_ceiling = (

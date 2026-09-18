@@ -94,11 +94,12 @@ are diagnostic evidence only and cannot be mixed into this run.
 python -m pipeline rollout \
   --review-registry reviews/scenario_review.signed.json \
   --output data/formal/raw \
-  --workers 4 --retry-limit 3 --resume
+  --workers 4 --retry-limit 1 --resume
 ```
 
-This creates 300 × 3 free-form quality candidates and deliberately creates zero task
-instances: task extraction is blocked until formal selection. Existing
+This creates exactly one free-form trajectory per approved scenario and deliberately creates zero task
+instances: task extraction is blocked until Gate 3 admission. A rejected or failed
+trajectory remains denominator evidence and is not replaced. Existing
 development rollouts under `configs/scenarios/` are not read or copied.
 
 ## 3. Quality judge, history intervention and second judge
@@ -187,8 +188,7 @@ python -m pipeline gate3 \
   --selected-root data/formal/selected
 ```
 
-Only trajectories passing six independent dimensions and all hard rejects are
-eligible. Outcome labels are inferred after rollout. Near-duplicate filtering ranks candidates and keeps exactly one human-confirmed canonical trajectory per scenario. All candidates and rejection evidence remain in the audit archive; model family is reported but never quota-enforced. Afterward T1/T2/T3 rank eligible sources independently; one model may win none or all tasks. `selected` is not written unless the complete formal gate passes.
+The sole trajectory must pass all six independent dimensions and every hard-reject check. Gate 3 performs no ranking, diversity selection, seed comparison, or replacement sampling: it admits or rejects that trajectory. Outcome labels remain post-hoc diagnostics. Rejection evidence stays in the audit archive. `selected` is not written unless the complete formal gate passes.
 
 ## 5. Build tasks and audit machine-proposed labels
 

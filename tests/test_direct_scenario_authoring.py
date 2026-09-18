@@ -3,11 +3,84 @@ import unittest
 from schemas.validate import QUALITY_CHECKS
 from scripts.generate_scale300_candidates import (
     _assemble_candidate,
+    _blueprint_core_validator,
+    _blueprint_validator,
     _validate_brief,
+    _quality_validator,
 )
 
 
 class DirectScenarioAuthoringTest(unittest.TestCase):
+    def test_blueprint_core_rejects_prose_in_list_fields(self):
+        brief = {
+            "scenario_id": "IA_PIPE_001",
+            "source_type": "synthetic-script",
+            "provenance_id": "direct-001",
+        }
+        core = {
+            "scenario_id": "IA_PIPE_001",
+            "title": "candidate",
+            "mechanism": "conflict",
+            "source": {
+                "type": "synthetic-script",
+                "provenance_id": "direct-001",
+                "surface_text_policy": "original_surface_text",
+                "redistribution_status": "original_synthetic_script",
+            },
+            "narrative_design": {
+                "relationship_structure": "collaborators",
+                "power_structure": "asymmetric authority",
+                "goal_conflict": "accuracy versus deadline",
+                "information_asymmetry": "different records",
+                "relevant_history": "one prose history",
+                "meaningful_choice_space": "three choices in prose",
+            },
+            "background": "A deadline creates a bounded conflict.",
+        }
+        with self.assertRaisesRegex(ValueError, "relevant_history"):
+            _blueprint_core_validator(core, brief)
+
+    def test_blueprint_rejects_string_persona(self):
+        brief = {
+            "scenario_id": "IA_PIPE_001",
+            "source_type": "synthetic-script",
+            "provenance_id": "direct-001",
+        }
+        blueprint = {
+            "scenario_id": "IA_PIPE_001",
+            "title": "candidate",
+            "mechanism": "conflict",
+            "source": {
+                "type": "synthetic-script",
+                "provenance_id": "direct-001",
+            },
+            "narrative_design": {},
+            "background": "background",
+            "environment_agent": {
+                "persona": "name: role",
+                "explicit_goal": "goal",
+                "hidden_intention": "intention",
+            },
+            "evaluated_agent_role": {"character_id": "EVALUATED_AGENT"},
+            "selected_state_variables": {},
+            "target_state_ids": [],
+            "multimodal_event_concepts": [],
+            "suggested_horizon": 20,
+        }
+        with self.assertRaisesRegex(ValueError, "persona must be an object"):
+            _blueprint_validator(blueprint, brief)
+
+    def test_quality_validator_preserves_pending_human_boundary(self):
+        report = {
+            "format": "socialflux_source_quality_v1",
+            "source_type": "synthetic-script",
+            "checks": {key: "pass" for key in QUALITY_CHECKS},
+            "recommendation": "pass",
+            "summary": "bounded candidate",
+            "review_status": "pending_human_review",
+        }
+        self.assertIs(_quality_validator(report, "synthetic-script"), report)
+
     def test_brief_has_no_parent_catalog_input(self):
         brief = {
             "scenario_id": "IA_PIPE_001",

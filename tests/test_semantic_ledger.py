@@ -17,6 +17,10 @@ CASES = json.loads(
 
 
 class SemanticLedgerShortCaseTest(unittest.TestCase):
+    def test_scalar_discussion_space_is_one_item_not_characters(self):
+        ledger = initial_ledger(discussion_dimensions="核对事实后共同披露")
+        self.assertEqual(ledger["discussion_space"], ["核对事实后共同披露"])
+
     def test_whitespace_only_span_variant_is_aligned_to_exact_source(self):
         text = "你在14天内能还多少？"
         events = [{

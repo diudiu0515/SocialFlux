@@ -2,7 +2,7 @@
 
 SocialFlux 是一个用于长期社会互动推理的 stateful benchmark pipeline。它用同一套私有状态环境生成自然模型轨迹、构建 T1/T2/T3 离线任务，并提供 T4 在线交互；正常生成过程不含预定义 repair/neutral/escalation 策略，也不查 action transition table。
 
-当前唯一生产目录是 `configs/scale300_v1/scenarios`，共 300 个 scenario。Scale300 由 Claude 直接创建，不继承 Scale20/150/200；现有 300 个候选在新批次替换前继续保留。每场景生成 3 个 Fable seed 候选；offline rollout 最多 20 轮，10–20 轮自然结束才进入主候选。
+当前唯一生产目录是 `configs/scale300_v1/scenarios`，共 300 个 scenario。Scale300 由 Claude 直接创建，不继承 Scale20/150/200；现有 300 个候选在新批次替换前继续保留。每个通过 Gate 1 的场景只生成 1 条 Fable 自然 rollout；offline rollout 最多 20 轮，10–20 轮自然结束才进入后续任务构建。失败轨迹计入失败率，不另采样替换。
 
 ## 核心约束
 
@@ -73,13 +73,13 @@ export AUTODL_API_KEY='YOUR_API_KEY'
 唯一公开入口是 `python -m pipeline`。正式运行顺序与代码阶段一致：
 
 ```bash
-# 300 scenarios、3 seeds、Fable-only 路由预检
+# 300 scenarios、单 rollout、Fable-only 路由预检
 python -m pipeline preflight
 
-# Gate 1 人工冻结后生成 300×3 raw candidates
+# Gate 1 人工冻结后生成 300 条唯一 raw trajectories
 python -m pipeline rollout \
   --review-registry reviews/scale300_scenario_review.json \
-  --output data/formal/raw --workers 4 --retry-limit 3 --resume
+  --output data/formal/raw --workers 4 --retry-limit 1 --resume
 
 # Gate 2 环境证据通过后完成 Gate 3 审计、筛选并物化 canonical pool
 python -m pipeline gate3 \
@@ -92,7 +92,7 @@ python -m pipeline gate3 \
   --output data/formal/gate3_report.json \
   --selected-root data/formal/selected
 
-# Gate 3 完成 canonical selection 后构建 T1/T2/T3
+# Gate 3 对唯一轨迹完成准入/淘汰后构建 T1/T2/T3
 python -m pipeline tasks \
   --rollout-root data/formal/selected \
   --review-registry reviews/scale300_scenario_review.json \
@@ -120,7 +120,7 @@ python -m pipeline audit \
 
 场景创建、审核顺序、产物位置见 [Pipeline](docs/architecture/PIPELINE.md)，架构不变量见 [Architecture](docs/architecture/ARCHITECTURE.md)，完整约束见 [DESIGN_CONTRACT](DESIGN_CONTRACT.md)，prompt 审计见 [Prompt Audit](docs/prompts/PROMPT_AUDIT.md)。完整导航与论文证据入口见 [文档索引](docs/README.md)。
 
-正式三 seed 生成、Judge、history evidence、每场景 1 条 canonical trajectory 与 Gate 4 两人同样本抽查顺序见 [Formal Rollout Runbook](docs/operations/FORMAL_ROLLOUT_RUNBOOK.md)，约束原文见 [gate.md](docs/protocols/gate.md)。
+正式单轨迹生成、Judge、history evidence、Gate 3 准入与 Gate 4 两人同样本抽查顺序见 [Formal Rollout Runbook](docs/operations/FORMAL_ROLLOUT_RUNBOOK.md)，约束原文见 [gate.md](docs/protocols/gate.md)。
 正式发布必须以 `scripts/verify_gate_md.py --strict` 返回成功为准；当前真人 Gate 1–4 与正式 GT 尚未齐备，因此开发数据不能标为 final benchmark。
 
 ## 目录

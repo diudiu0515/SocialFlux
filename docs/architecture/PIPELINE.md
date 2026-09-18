@@ -5,14 +5,14 @@
 ```text
 300 Scenario
   → Gate 1：Scenario / S0-D0 冻结
-  → 每场景 3 个 seed 的自然 rollout
+  → 每场景 1 条自然 rollout
       Policy 自由文本 action
       → Appraisal LLM
       → Python 确定性状态更新
       → Response LLM
       → Ledger / 下一轮 observation
   → Gate 2：Environment validity
-  → Gate 3：Trajectory 筛选与 canonical selection
+  → Gate 3：唯一 Trajectory 合格/淘汰
   → T1 / T2 / T3 构建；T4 在线评测
   → Gate 4：任务实例与答案抽查
 ```
@@ -24,7 +24,7 @@ schema 和确定性投影校验，不负责生成或批准场景。
 ## 运行时边界
 
 - 唯一场景目录：`configs/scale300_v1/scenarios`，必须恰好包含 300 个 scenario 及同名 Markdown。
-- 每个 scenario 恰好有 3 个独立 seed，各生成一条自然候选轨迹。
+- 每个 Gate-1-approved scenario 恰好生成 1 条自然轨迹；失败计入产率，不生成替代候选。
 - Policy 只输出自由文本 action，不读取 action transition table。
 - Appraisal 和 Response 是独立语义调用；二者之间只有 Python 负责确定性状态更新。
 - Ledger 保存已发生的公开事件、模型 action/response 和下一轮 observation，不暴露 hidden intention、persona、S/D、appraisal 或 delta。
@@ -37,7 +37,7 @@ schema 和确定性投影校验，不负责生成或批准场景。
 |---|---|---|
 | Gate 1 | scenario 未 approved，或 S0/D0 未 human_frozen | 可生成的 frozen scenario |
 | Gate 2 | environment 的 E1–E6 证据不足或失败 | environment-valid trajectories |
-| Gate 3 | 结构、自然结束、语义质量或 history/Judge 证据不足 | 每场景 1 条 canonical trajectory |
+| Gate 3 | 唯一轨迹的结构、自然结束、语义质量或 history/Judge 证据不足 | 合格场景的 canonical trajectory |
 | Gate 4 | T1/T2/T3 实例或答案人工抽查未通过 | 可发布任务与答案 |
 
 `pending` 不能被程序改写成 `passed`。`--allow-unreviewed` 只用于诊断，不能产出正式数据。
@@ -50,15 +50,15 @@ python scripts/build_scale300_v1.py --check
 python scripts/build_scale300_v1.py
 python scripts/build_scale300_review_template.py
 
-# 300 scenarios × 3 seeds 与 Fable-only 路由检查
+# 300 scenarios × 1 rollout 与 Fable-only 路由检查
 python -m pipeline preflight
 
-# Gate 1 已冻结后，生成 900 个 raw candidate slots
+# Gate 1 已冻结后，生成 300 个唯一 raw slots
 python -m pipeline rollout \
   --review-registry reviews/scale300_scenario_review.json \
-  --output data/formal/raw --workers 4 --retry-limit 3 --resume
+  --output data/formal/raw --workers 4 --retry-limit 1 --resume
 
-# Gate 2 通过后执行 Gate 3 审计、筛选与 canonical materialization
+# Gate 2 通过后执行 Gate 3 审计、准入与 canonical materialization
 python -m pipeline gate3 \
   --raw-root data/formal/raw \
   --stage formal \

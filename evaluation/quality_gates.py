@@ -420,8 +420,10 @@ def audit_rollout_gate(
         require_raw_minimum=pool_stage == "raw",
     )
     hard_contract = {
-        "api_fraction_at_most_30_percent": contract["checks"]["api_fraction_at_most_30_percent"],
-        "environment_policy_separated": contract["checks"]["environment_policy_separated"],
+        key: value
+        for key, value in contract["checks"].items()
+        if key.startswith("every_trajectory_")
+        or key == "each_scenario_has_expected_raw_count"
     }
     status = "passed" if contract["passed"] and all(item["passed"] for item in audits) else (
         "rejected" if any(item["status"] == "rejected" for item in audits) or not all(hard_contract.values()) else "pending"
@@ -434,8 +436,8 @@ def audit_rollout_gate(
         row[status_key] += 1
     scenario_rows = dict(by_scenario)
     for row in scenario_rows.values():
-        row["raw_shortfall_to_3"] = (
-            max(0, 3 - row["raw"]) if pool_stage == "raw" else 0
+        row["raw_count_error"] = (
+            abs(1 - row["raw"]) if pool_stage == "raw" else 0
         )
         row["quality_evidence_shortfall"] = row["pending"]
     return {
@@ -448,7 +450,7 @@ def audit_rollout_gate(
         "pool_contract": contract,
         "pool_stage": pool_stage,
         "supplement_needed": {
-            "raw_trajectories_to_3": sum(row["raw_shortfall_to_3"] for row in scenario_rows.values()),
+            "raw_count_errors": sum(row["raw_count_error"] for row in scenario_rows.values()),
             "model_family_quota": False,
             "independent_quality_or_history_reviews": sum(row["quality_evidence_shortfall"] for row in scenario_rows.values()),
         },

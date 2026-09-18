@@ -12,7 +12,7 @@ schema/catalog validation (no model approval)
 Gate 1 source/quality review + S0/D0 real reviewer freeze
         ↓
 one canonical StatefulEnvironment
-        ├── natural single-baseline-model / multi-seed rollout
+        ├── one natural baseline-model rollout per scenario
         ├── T1 natural checkpoints
         ├── T2 naturally divergent histories + exact shared O*
         ├── T3 local branches from one real checkpoint
@@ -59,7 +59,7 @@ nine-criterion acceptance + human annotation
 
 ## 轨迹和局部干预
 
-自然轨迹的多样性来自模型、temperature、seed 和自然历史，不来自策略类别。每条 run 保存 base seed；Anthropic Messages provider 按 base seed + call index 推进随机流，既可复现又避免每回合重置同一采样。模型族只用于扩大 raw candidate search 和来源审计，不是最终配额。质量门之后，T1 按状态—回应一致性与历史依赖择优，T2 按历史依赖、来源质量和 private-state 分化联合择优，T3 按互动推进、状态—回应一致性及有历史的 checkpoint 择优；一个模型可以零入选，也可以赢得全部任务。T2 先选一条人物与历史连贯的真实轨迹 A，在有意义的 checkpoint 后改写并重新计算 B；A/B 共享分叉前历史，并使用在两边都自然可信、字节级相同的受控 ending O*。固定 ending 只属于 T2 构造，不扩展为在线对话脚本。T3 从真实 checkpoint restore 同一 private snapshot，为 2–4 个自由文本行动各执行一次局部 intervention，随后继续使用与源轨迹匹配的同一模型配置。snapshot 同时冻结 scenario-authored 外生 event plan 与片段边界；每个分支记录实际经过时间和跨越事件，由 action 自身导致的后果可以不同，外部条件不得随机分叉。受控 intervention 是实验工具，不是多轮 rollout policy。
+每个场景只生成一条自然轨迹。每条 run 保存 base seed；Anthropic Messages provider 按 base seed + call index 推进随机流，既可复现又避免每回合重置同一采样。Gate 3 只判断这条轨迹是否合格，不做 best-of-N、跨 seed 排名或失败后补抽。轨迹间的总体多样性来自场景设计和自然历史；模型与 seed 仅作 provenance。T2 先选一条人物与历史连贯的真实轨迹 A，在有意义的 checkpoint 后改写并重新计算 B；A/B 共享分叉前历史，并使用在两边都自然可信、字节级相同的受控 ending O*。固定 ending 只属于 T2 构造，不扩展为在线对话脚本。T3 从真实 checkpoint restore 同一 private snapshot，为 2–4 个自由文本行动各执行一次局部 intervention，随后继续使用与源轨迹匹配的同一模型配置。snapshot 同时冻结 scenario-authored 外生 event plan 与片段边界；每个分支记录实际经过时间和跨越事件，由 action 自身导致的后果可以不同，外部条件不得随机分叉。受控 intervention 是实验工具，不是多轮 rollout policy。
 
 ## Scenario bundle
 
@@ -108,7 +108,7 @@ Gate 1 页面读取当前 design matrix 和 exact scenario JSON；浏览器草�
 
 当前 gate 固定为九项：State-Update Human Agreement、Persona Sensitivity、Paraphrase Robustness、History Intervention、Local Action Intervention、Neutral-State Stability、Response-State Consistency、Full-Trajectory Plausibility、Seed Robustness。自动结构证据只能标为 pending/evidence_ready/provisionally_ready；需要真人的项目没有评审记录不得标 pass。
 
-`gate.md` 在九项环境验收之外约束正式数据来源：每场景至少 3 条高质量、自然结束在10–20轮的候选、模型族只作为 provenance 而不设配额、environment/policy 模型分离、六维质量评分、十类 hard reject、post-hoc outcome 去重和人工比较后每场景保留 1 条 canonical trajectory；
+`gate.md` 在九项环境验收之外约束正式数据来源：每场景恰好 1 条自然结束在 10–20 轮的轨迹、模型只作为 provenance、各语义 role 保持独立请求、六维质量评分、十类 hard reject，以及 Gate 3 对唯一轨迹的合格/淘汰；
 
 ## 架构不变量
 
@@ -125,5 +125,5 @@ Gate 1 页面读取当前 design matrix 和 exact scenario JSON；浏览器草�
 - 正式 rollout 必须写入隔离的 `data/formal/`，不得复用开发轨迹。
 - 单 Judge、同模型族双 Judge 或缺失历史/骨干证据不能生成 formal_selected。
 - selected manifest、文件或 quality-audit ID 不一致时不得构建任务。
-- 开发池逐轨迹筛选通过不等于正式池合同通过；3 条/场景或少于三模型族时不得标为 formal clean pool。
+- 开发池逐轨迹筛选通过不等于正式池合同通过；正式池必须证明每个 Gate-1-approved 场景恰有一个 rollout slot，且没有失败后补抽。
 - secrets 只来自环境变量，公开 manifest 删除 secret 及环境变量名。

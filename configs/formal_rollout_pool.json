@@ -1,6 +1,7 @@
 {
   "format": "socialflux_rollout_pool_v1",
   "pool_stage": "formal_raw",
+  "candidate_strategy": "single_first_pass",
   "model_routes": "model_routes.frontier_api.json",
   "model_assignment": {
     "strategy": "single_model_all_llm_roles",
@@ -30,26 +31,6 @@
       "model_family": "claude",
       "provider": {"model_route": "policy"},
       "sampling": {"temperature": 0.65, "top_p": 0.92, "seed": 8201},
-      "runs": 1
-    },
-    {
-      "policy_id": "claude_fable5_seed_8202",
-      "prompt_id": "task_t4_action_v21",
-      "horizon_mode": "natural_max_20",
-      "source_type": "api",
-      "model_family": "claude",
-      "provider": {"model_route": "policy"},
-      "sampling": {"temperature": 0.65, "top_p": 0.92, "seed": 8202},
-      "runs": 1
-    },
-    {
-      "policy_id": "claude_fable5_seed_8203",
-      "prompt_id": "task_t4_action_v21",
-      "horizon_mode": "natural_max_20",
-      "source_type": "api",
-      "model_family": "claude",
-      "provider": {"model_route": "policy"},
-      "sampling": {"temperature": 0.65, "top_p": 0.92, "seed": 8203},
       "runs": 1
     }
   ],

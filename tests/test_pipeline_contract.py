@@ -22,7 +22,8 @@ class PipelineContractTest(unittest.TestCase):
     def test_formal_pool_config_meets_gate_md_sampling_contract(self):
         config = load_rollout_config("configs/formal_rollout_pool.json")
         self.assertEqual(config["pool_stage"], "formal_raw")
-        self.assertEqual(sum(item["runs"] for item in config["policies"]), 3)
+        self.assertEqual(config["candidate_strategy"], "single_first_pass")
+        self.assertEqual(sum(item["runs"] for item in config["policies"]), 1)
         self.assertEqual({item["model_family"] for item in config["policies"]}, {"claude"})
         self.assertEqual(
             config["model_assignment"],

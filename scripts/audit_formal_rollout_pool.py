@@ -10,12 +10,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from evaluation.rollout_gate import (
-    audit_pool_contract,
-    audit_rollout,
-    content_sha256,
-    select_diverse_trajectories,
-)
+from evaluation.rollout_gate import audit_pool_contract, audit_rollout, content_sha256
 from evaluation.review_registry import load_review_registry
 from evaluation.quality_gates import audit_environment_gate, audit_scenario_gate
 from evaluation.judge_protocol import validate_judge_independence
@@ -110,6 +105,33 @@ def assert_formal_scenarios(scenario_records, review_registry):
         )
 
 
+def admit_single_trajectory(trajectories, audits):
+    """Admit the sole quality-passing trajectory; never rank or resample."""
+    if len(trajectories) != 1:
+        return {
+            "passed": False,
+            "selected": [],
+            "selected_ids": [],
+            "eligible_count": sum(bool(item.get("passed")) for item in audits),
+            "raw_count": len(trajectories),
+            "strategy": "single_trajectory_pass_fail",
+            "reason": "expected_exactly_one_raw_trajectory",
+        }
+    trajectory = trajectories[0]
+    audit = next(
+        (item for item in audits if item["trajectory_id"] == trajectory["trajectory_id"]),
+        None,
+    )
+    passed = bool(audit and audit.get("passed"))
+    return {
+        "passed": passed,
+        "selected": [trajectory] if passed else [],
+        "selected_ids": [trajectory["trajectory_id"]] if passed else [],
+        "eligible_count": int(passed),
+        "raw_count": 1,
+        "strategy": "single_trajectory_pass_fail",
+        "reason": "quality_passed" if passed else "quality_failed_or_pending",
+    }
 def materialize_selected(root, selected, audits, report):
     root = Path(root)
     root.mkdir(parents=True, exist_ok=True)
@@ -198,11 +220,9 @@ def main(argv=None):
     for trajectory in trajectories:
         grouped[trajectory["scenario_id"]].append(trajectory)
     selections = {
-        scenario_id: select_diverse_trajectories(
+        scenario_id: admit_single_trajectory(
             items,
             [audit for audit in audits if audit["scenario_id"] == scenario_id],
-            1,
-            1,
         )
         for scenario_id, items in sorted(grouped.items())
     }
@@ -214,6 +234,7 @@ def main(argv=None):
     report = {
         "format": "socialflux_formal_rollout_gate_v1",
         "stage": args.stage,
+        "admission_strategy": "single_trajectory_pass_fail",
         "raw_trajectory_count": len(trajectories),
         "passed_quality_count": sum(item["passed"] for item in audits),
         "selected_trajectory_count": sum(len(items) for items in selected.values()),

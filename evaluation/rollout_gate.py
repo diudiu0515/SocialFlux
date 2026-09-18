@@ -437,8 +437,9 @@ def audit_pool_contract(
     selected_by_scenario=None,
     api_max_fraction=0.30,
     require_raw_minimum=True,
+    expected_raw_per_scenario=1,
 ):
-    """Audit the model/source composition and per-scenario sampling contract."""
+    """Audit the one-logical-rollout-per-scenario production contract."""
     selection_supplied = selected_by_scenario is not None
     selected_by_scenario = selected_by_scenario or {}
     total = len(trajectories)
@@ -479,23 +480,22 @@ def audit_pool_contract(
                 for item in trajectories
             )
         ),
-        "model_family_is_provenance_not_quota": True,
-        "prioritized_20_to_40b_local_model_present": prioritized_capacity_present,
-        "api_fraction_at_most_30_percent": api_fraction <= api_max_fraction,
-        "each_scenario_has_at_least_3_raw": (
+        "model_and_source_are_provenance_not_quotas": True,
+        "each_scenario_has_expected_raw_count": (
             not require_raw_minimum
-            or (bool(scenarios) and all(len(items) >= 3 for items in scenarios.values()))
+            or (
+                bool(scenarios)
+                and all(
+                    len(items) == expected_raw_per_scenario
+                    for items in scenarios.values()
+                )
+            )
         ),
         "each_scenario_selects_exactly_one": (
             not selection_supplied
             or (bool(selected_by_scenario) and all(
                 len(items) == 1 for items in selected_by_scenario.values()
             ))
-        ),
-        "environment_policy_separated": all(
-            item.get("policy_provenance", {}).get("model")
-            != item.get("environment_provenance", {}).get("environment", {}).get("model")
-            for item in trajectories
         ),
     }
     return {
@@ -506,6 +506,15 @@ def audit_pool_contract(
         "source_counts": dict(sources),
         "api_fraction": round(api_fraction, 4),
         "local_model_families": sorted(families),
+        "provenance_diagnostics": {
+            "api_fraction_at_most_30_percent": api_fraction <= api_max_fraction,
+            "prioritized_20_to_40b_local_model_present": prioritized_capacity_present,
+            "environment_and_policy_use_different_models": all(
+                item.get("policy_provenance", {}).get("model")
+                != item.get("environment_provenance", {}).get("environment", {}).get("model")
+                for item in trajectories
+            ),
+        },
     }
 
 

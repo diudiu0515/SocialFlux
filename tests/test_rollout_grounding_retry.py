@@ -32,6 +32,38 @@ class RejectFirstUnsupportedClaim(ContextualTestUpdater):
 
 
 class RolloutGroundingRetryTest(unittest.TestCase):
+    def test_rejected_action_is_preserved_when_repair_call_fails(self):
+        scenario = deepcopy(SCENARIO)
+        scenario["max_turns"] = 1
+
+        def factory():
+            return StatefulEnvironment(
+                scenario,
+                state_updater=RejectFirstUnsupportedClaim(scenario),
+                response_generator=ContextualTestResponse(),
+            )
+
+        class FailingRepairPolicy(TextPolicy):
+            def generate(self, observation):
+                if self.index:
+                    raise TimeoutError("repair request timed out")
+                return super().generate(observation)
+
+        policy = FailingRepairPolicy(
+            "grounding-repair-timeout",
+            ["这是未经证实的关键事实。"],
+        )
+        with self.assertRaises(TimeoutError) as caught:
+            RolloutRunner(factory).run(policy, max_turns=1)
+        diagnostics = caught.exception.partial_trajectory[
+            "generation_error"
+        ]["rejected_policy_action_attempts"]
+        self.assertEqual(len(diagnostics), 1)
+        self.assertEqual(
+            diagnostics[0]["policy_action"]["text"],
+            "这是未经证实的关键事实。",
+        )
+
     def test_rejected_action_is_replaced_before_state_commit(self):
         scenario = deepcopy(SCENARIO)
         scenario["max_turns"] = 1

@@ -10,9 +10,9 @@ from .flow import PipelinePreflight
 
 
 COMMANDS = {
-    "preflight": "validate Scale300, three seeds, and Fable-only routing",
-    "rollout": "generate the three natural rollout candidates per scenario",
-    "gate3": "validate Gates 1-2, select one canonical trajectory per scenario",
+    "preflight": "validate Scale300, one rollout, and Fable-only routing",
+    "rollout": "generate one natural rollout per approved scenario",
+    "gate3": "validate Gates 1-2 and admit or reject each sole trajectory",
     "tasks": "build T1/T2/T3 from Gate-3-selected trajectories",
     "t4": "run online T4 evaluation with the shared environment",
     "audit": "evaluate the final Gate 1-4 release status",

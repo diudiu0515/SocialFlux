@@ -143,10 +143,10 @@ class RolloutGateTest(unittest.TestCase):
         )
 
 
-    def test_pool_contract_enforces_gate_md_ratios_and_separation(self):
+    def test_pool_contract_enforces_one_raw_trajectory_per_scenario(self):
         items = []
         for scenario in ("IA_PIPE_001", "IA_PIPE_002"):
-            items.extend(trajectory(i, "qwen", scenario=scenario) for i in range(3))
+            items.append(trajectory(len(items), "qwen", scenario=scenario))
         selected = {
             scenario: [item for item in items if item["scenario_id"] == scenario][:1]
             for scenario in ("IA_PIPE_001", "IA_PIPE_002")
@@ -158,7 +158,7 @@ class RolloutGateTest(unittest.TestCase):
         self.assertTrue(
             result["checks"]["every_trajectory_has_consistent_natural_or_max_ending"]
         )
-        self.assertTrue(result["checks"]["model_family_is_provenance_not_quota"])
+        self.assertTrue(result["checks"]["model_and_source_are_provenance_not_quotas"])
 
     def test_selected_pool_keeps_exactly_one_instead_of_raw_three(self):
         items = [trajectory(i, ("qwen", "glm", "deepseek")[i % 3]) for i in range(6)]

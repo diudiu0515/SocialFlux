@@ -240,6 +240,10 @@ def initial_ledger(background="", explicit_goal="", discussion_dimensions=None):
         }
         for index, (source, text) in enumerate(unique_threads, start=1)
     ]
+    if isinstance(discussion_dimensions, str):
+        discussion_dimensions = [discussion_dimensions]
+    elif not isinstance(discussion_dimensions, (list, tuple)):
+        discussion_dimensions = []
     return {
         "established_facts": facts,
         "goal_threads": goal_threads,

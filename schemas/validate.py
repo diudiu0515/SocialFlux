@@ -411,16 +411,30 @@ def validate_scenario(scenario):
     if scenario["source"].get("type") not in ("narrative-derived", "synthetic-script"):
         raise ValueError("scenario source.type must use a supported hybrid source")
     design = scenario["narrative_design"]
+    if not isinstance(design, dict):
+        raise ValueError("narrative_design must be an object")
     for key in (
         "relationship_structure",
         "power_structure",
         "goal_conflict",
         "information_asymmetry",
-        "relevant_history",
-        "meaningful_choice_space",
     ):
-        if not design.get(key):
-            raise ValueError(f"narrative_design missing {key}")
+        if not isinstance(design.get(key), str) or not design[key].strip():
+            raise ValueError(f"narrative_design.{key} must be non-empty text")
+    for key, minimum, maximum in (
+        ("relevant_history", 1, 5),
+        ("meaningful_choice_space", 3, 8),
+    ):
+        items = design.get(key)
+        if (
+            not isinstance(items, list)
+            or not minimum <= len(items) <= maximum
+            or any(not isinstance(item, str) or not item.strip() for item in items)
+        ):
+            raise ValueError(
+                f"narrative_design.{key} must contain {minimum}-{maximum} "
+                "non-empty text items"
+            )
     status = scenario["construction_status"]
     if status.get("initial_state") not in ("candidate_pending_human_freeze", "human_frozen"):
         raise ValueError("invalid initial state review status")
@@ -432,6 +446,12 @@ def validate_scenario(scenario):
     for key in ("persona", "explicit_goal", "hidden_intention"):
         if key not in agent:
             raise ValueError(f"environment_agent missing {key}")
+    persona = agent["persona"]
+    if not isinstance(persona, dict):
+        raise ValueError("environment_agent.persona must be an object")
+    for key in ("name", "role"):
+        if not isinstance(persona.get(key), str) or not persona[key].strip():
+            raise ValueError(f"environment_agent.persona missing text {key}")
     evaluated = scenario["evaluated_agent_role"]
     for key in ("character_id", "name", "role", "explicit_goal"):
         if not str(evaluated.get(key, "")).strip():

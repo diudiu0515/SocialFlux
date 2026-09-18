@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from environment.appraisal import _validate_appraisal
+from environment.appraisal import ModelAppraiser, _validate_appraisal
 from environment.calibration import DeterministicStateCalibrator
 from environment.env import StatefulEnvironment
 from environment.factory import ModelEnvironmentFactory
@@ -89,6 +89,25 @@ class SequencedProvider:
 
 
 class ModelEnvironmentBoundaryTest(unittest.TestCase):
+    def test_appraiser_honors_provider_route_output_budget(self):
+        provider = SequencedProvider()
+        provider.generation_defaults = {"max_tokens": 900}
+        appraiser = ModelAppraiser(
+            SCENARIO,
+            provider,
+            {"temperature": 0.2},
+            "environment_appraisal_v11",
+        )
+        self.assertEqual(appraiser.sampling["max_tokens"], 900)
+
+    def test_appraiser_uses_legacy_default_without_route_budget(self):
+        appraiser = ModelAppraiser(
+            SCENARIO,
+            SequencedProvider(),
+            {"temperature": 0.2},
+        )
+        self.assertEqual(appraiser.sampling["max_tokens"], 2800)
+
     def test_structured_response_preserves_semantic_request_without_question_marker(self):
         generator = ModelResponseGenerator(
             SequencedProvider(),

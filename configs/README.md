@@ -4,7 +4,7 @@ The active single-model baseline has five canonical configuration files:
 
 - `model_routes.frontier_api.json`: the only model-to-role mapping; every role
   resolves to `claude-fable-5`.
-- `formal_rollout_pool.json`: three raw rollout candidates per approved scenario.
+- `formal_rollout_pool.json`: one non-replacement rollout per approved scenario.
 - `review_models.json`: rollout and instance model-review profiles.
 - `t4_evaluation.json`: online T4 policy, two-stage environment, and terminal judge.
 - `t2_source_adaptation_v2.json`: source A selection, authored B, formal A/B

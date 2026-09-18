@@ -11,7 +11,7 @@ from .constants import (
     APPRAISAL_PROMPT,
     POLICY_PROMPT,
     RESPONSE_PROMPT,
-    SEEDS_PER_SCENARIO,
+    ROLLOUTS_PER_SCENARIO,
 )
 
 
@@ -28,35 +28,43 @@ def assert_fable_providers(provider_configs, *, context):
         )
 
 
-def assert_fable_rollout_config(config):
-    """Reject model overrides and malformed three-seed production configs."""
+def assert_single_model_rollout_config(
+    config, *, expected_model, expected_seed_slots, context,
+):
+    """Reject model overrides and malformed fixed-slot single-model configs."""
     assignment = config.get("model_assignment") or {}
-    if assignment.get("model") != ACTIVE_MODEL:
-        raise ValueError(f"active rollout model must be {ACTIVE_MODEL}")
+    if assignment.get("model") != expected_model:
+        raise ValueError(f"{context} rollout model must be {expected_model}")
     if assignment.get("independent_calls") is not True:
-        raise ValueError("Fable roles must remain independent provider calls")
+        raise ValueError(f"{context} roles must remain independent provider calls")
     policies = config.get("policies", [])
-    if len(policies) != SEEDS_PER_SCENARIO or any(
+    if len(policies) != expected_seed_slots or any(
         item.get("runs", 1) != 1 for item in policies
     ):
         raise ValueError(
-            f"active rollout requires exactly {SEEDS_PER_SCENARIO} one-run seed slots"
+            f"{context} rollout requires exactly {expected_seed_slots} "
+            "one-run seed slots"
         )
     seeds = [item.get("sampling", {}).get("seed") for item in policies]
-    if len(set(seeds)) != SEEDS_PER_SCENARIO or any(
+    if len(set(seeds)) != expected_seed_slots or any(
         not isinstance(seed, int) for seed in seeds
     ):
-        raise ValueError("active rollout requires three distinct integer seeds")
+        raise ValueError(
+            f"{context} rollout requires {expected_seed_slots} distinct integer seeds"
+        )
     environment = config["environment"]
-    assert_fable_providers(
-        [
-            environment["provider"],
-            environment["response_provider"],
-            config["construction"]["provider"],
-            *(item["provider"] for item in policies),
-        ],
-        context="active rollout",
-    )
+    providers = [
+        environment["provider"],
+        environment["response_provider"],
+        config["construction"]["provider"],
+        *(item["provider"] for item in policies),
+    ]
+    models = {provider.get("model") for provider in providers}
+    if models != {expected_model}:
+        raise ValueError(
+            f"{context} resolved models must be {{{expected_model!r}}}, "
+            f"got {sorted(str(item) for item in models)}"
+        )
     forbidden = [
         item["policy_id"]
         for item in policies
@@ -65,8 +73,55 @@ def assert_fable_rollout_config(config):
     ]
     if forbidden:
         raise ValueError(
-            f"active rollout forbids per-policy model overrides: {forbidden}"
+            f"{context} rollout forbids per-policy model overrides: {forbidden}"
         )
+
+
+def assert_fable_rollout_config(config):
+    """Reject model overrides and malformed single-rollout production configs."""
+    assert_single_model_rollout_config(
+        config,
+        expected_model=ACTIVE_MODEL,
+        expected_seed_slots=ROLLOUTS_PER_SCENARIO,
+        context="active Fable",
+    )
+
+
+def assert_development_role_partitioned_rollout_config(config):
+    """Validate the explicit GPT-policy/Claude-environment audit boundary."""
+    expected = {
+        "strategy": "gpt_policy_tasks_with_claude_reference_environment",
+        "policy_model": "gpt-6-astra",
+        "environment_model": ACTIVE_MODEL,
+        "construction_model": "gpt-6-astra",
+        "independent_calls": True,
+    }
+    assignment = config.get("development_role_assignment")
+    if assignment != expected:
+        raise ValueError(
+            "development role partition must explicitly declare GPT policy/tasks "
+            "and the Claude reference environment"
+        )
+    policies = config.get("policies", [])
+    if len(policies) != 1 or policies[0].get("runs", 1) != 1:
+        raise ValueError("development role partition requires one policy run")
+    seed = policies[0].get("sampling", {}).get("seed")
+    if not isinstance(seed, int) or isinstance(seed, bool):
+        raise ValueError("development role partition requires one integer seed")
+    environment = config["environment"]
+    resolved = {
+        "policy_model": policies[0]["provider"].get("model"),
+        "environment_model": environment["provider"].get("model"),
+        "response_model": environment["response_provider"].get("model"),
+        "construction_model": config["construction"]["provider"].get("model"),
+    }
+    if resolved != {
+        "policy_model": expected["policy_model"],
+        "environment_model": expected["environment_model"],
+        "response_model": expected["environment_model"],
+        "construction_model": expected["construction_model"],
+    }:
+        raise ValueError(f"development role partition mismatch: {resolved}")
 
 
 def assert_fable_t4_config(config):

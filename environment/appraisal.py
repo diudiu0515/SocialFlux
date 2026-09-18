@@ -460,9 +460,28 @@ class ModelAppraiser:
         self.provider = provider
         self.sampling = dict(sampling or {})
         self.prompt_id = prompt_id
-        configured_max = self.sampling.get("max_tokens", 0)
-        if not isinstance(configured_max, int) or configured_max < 2800:
-            self.sampling["max_tokens"] = 2800
+        configured_max = self.sampling.get("max_tokens")
+        if configured_max is None:
+            provider_defaults = getattr(provider, "generation_defaults", {})
+            provider_max = getattr(provider, "max_tokens", None)
+            if not isinstance(provider_max, int) or isinstance(provider_max, bool):
+                provider_max = (
+                    provider_defaults.get("max_tokens")
+                    if isinstance(provider_defaults, dict) else None
+                )
+            self.sampling["max_tokens"] = (
+                provider_max
+                if isinstance(provider_max, int)
+                and not isinstance(provider_max, bool)
+                and provider_max > 0
+                else 2800
+            )
+        elif (
+            not isinstance(configured_max, int)
+            or isinstance(configured_max, bool)
+            or configured_max < 1
+        ):
+            raise ValueError("appraisal max_tokens must be a positive integer")
 
     @property
     def provenance(self):

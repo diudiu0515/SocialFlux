@@ -113,10 +113,9 @@ def _validate_task_selection(config):
 def _validate_policy_pool(config):
     policies = config.get("policies", [])
     total_runs = sum(item.get("runs", 1) for item in policies)
-    single_first_pass = (
-        config.get("pool_stage", "development") == "development"
-        and config.get("candidate_strategy") == "single_first_pass"
-    )
+    single_first_pass = config.get("candidate_strategy") == "single_first_pass"
+    if single_first_pass and total_runs != 1:
+        raise ValueError("single_first_pass requires exactly one logical rollout")
     if total_runs < 2 and not single_first_pass:
         raise ValueError("trajectory search requires at least two policy samples")
     identities = {
@@ -139,7 +138,7 @@ def _validate_policy_pool(config):
         raise ValueError("pool_stage must be development, formal_raw or formal_selected")
     if pool_stage not in {"formal_raw", "formal_selected"}:
         return
-    if total_runs < 3:
+    if total_runs < 3 and not single_first_pass:
         raise ValueError("formal rollout requires at least 3 raw trajectories per scenario")
     if any(
         item.get("source_type") not in {"local", "api"}
@@ -171,6 +170,9 @@ def public_rollout_config(config):
         "format": config["format"],
         "model_routes": deepcopy(config.get("model_routes_provenance")),
         "model_assignment": deepcopy(config.get("model_assignment")),
+        "development_role_assignment": deepcopy(
+            config.get("development_role_assignment")
+        ),
         "environment": {
             "appraisal_provider": public_provider_config(environment["provider"]),
             "response_provider": public_provider_config(
