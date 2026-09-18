@@ -260,6 +260,10 @@ config 中显式声明并存在于 `prompts/manifest.json`。诊断实验可使�
 
 每个 scenario 固定：稳定 persona、社会背景、关系/权力结构、environment explicit goal、author-only hidden intention、evaluated-agent role/goal、候选 S0/D0、终止条件、可观察表达和稀疏 media trigger。
 
+当前 Scale300 由 Claude 直接创建 300 个完整 canonical JSON，不继承、复制或扩展
+Scale20/100/150/200 catalog。`scripts/build_scale300_v1.py` 只验证完整性和 schema
+并生成确定性投影，不调用模型、不改写语义，也不能设置人工通过状态。
+
 来源至少包括 synthetic-script 和 narrative-derived 两类。
 
 ### 8.1 Synthetic-script
@@ -354,7 +358,8 @@ A/B 分别从分叉 checkpoint 经过正式 Structured Appraisal → 确定性�
 
 - `DESIGN_CONTRACT.md`：本文件，唯一设计入口。
 - `README.md`：快速开始和常用命令，只引用本文件，不重复定义另一套轮数合同。
-- `configs/scale300_v1/scenarios/scenario_NNN/scenario_NNN.json`：当前 Scale300 scenario 机器事实源；`configs/scenarios/` 仅保留 20 场景开发集。
+- `configs/scale300_v1/CLAUDE_AUTHORING.md`：Claude 直建 Scale300 的输入、输出和人工边界。
+- `configs/scale300_v1/scenarios/scenario_NNN/scenario_NNN.json`：当前 Scale300 scenario 机器事实源；`configs/scenarios/` 仅保留 Web/历史诊断使用的 20 场景开发集，不是父 catalog。
 - 同目录 `.md`：由 `scripts/scenario_docs.py` 生成的确定性可读投影；必须通过 `--check`。
 - `environment/`：唯一状态环境及其 appraisal、update、response、memory、termination、ledger、multimodal。
 - `prompts/`：固定运行时 prompt；`prompts/manifest.json` 记录 hash。

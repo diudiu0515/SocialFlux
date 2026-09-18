@@ -3,15 +3,13 @@
 ## 总体数据流
 
 ```text
-film/TV analysis request / synthetic brief
+Claude direct Scale300 authoring request
         ↓
-originalized structure extraction / original script
+300 complete canonical scenario JSON candidates
         ↓
-source quality report → real reviewer approval
+schema/catalog validation (no model approval)
         ↓
-canonical blueprint (no S0/D0)
-        ↓
-candidate S0/D0 + trigger specification → real reviewer freeze
+Gate 1 source/quality review + S0/D0 real reviewer freeze
         ↓
 one canonical StatefulEnvironment
         ├── natural single-baseline-model / multi-seed rollout
@@ -46,7 +44,7 @@ nine-criterion acceptance + human annotation
 - environment/response_generator.py 负责 response prompt 和 provider 调用；environment/response_validation.py 独立保存输出 schema、事实边界和动作归属检查。
 - policies/model_policy.py 负责 agent prompt 和 provider 调用；policies/action_validation.py 独立保存 agent action 的验证契约。
 - tasks/T2/runtime.py 是 T2 文件 I/O、环境创建、公开历史投影和状态比较的唯一 owner；`scripts/t2_common.py` 仅保留历史导入兼容，新代码不得从其增加逻辑。
-- scenario_design/revision.py 只负责旧 scenario 的证据保留式叙事修订；`scripts/revise_scale300_scenarios.py` 只负责批处理、断点续跑和原子落盘。
+- scripts/build_scale300_v1.py 只校验 Claude 直接创建的 300 个 canonical JSON，并刷新 Markdown、manifest、coverage 与 design matrix；它不调用模型、不继承旧 Scale，也不修改场景语义。
 - providers/anthropic.py 是 active baseline 的唯一网关 owner，负责 Anthropic Messages、有界 transport retry 与实际 HTTP 请求计数；领域层只负责 schema/语义 retry。
 
 ## 信息边界
@@ -101,7 +99,8 @@ History dependence 的 Full / Recent-k / Critical-event-removed 三个 policy
 
 ## 人工标注工作台
 
-`web/` 直接读取 canonical scenario、184条旧六轮审计库存、正在生成的20×3新候选池、pipeline_v2历史task instance与Talking Head资产。
+`web/` 保留为 Scenario、rollout、task 与 Talking Head 的人工审核工作台。Scale300
+Gate 1 页面读取当前 design matrix 和 exact scenario JSON；浏览器草稿不构成签名。
 
 当前生产 baseline 的所有 LLM role 统一为 `claude-fable-5`。新的 Fable 场景/轨迹批次以 run manifest 为入口；网站中写死的 Qwen/GLM 路径仅是历史审计数据源，不能被选为当前 canonical 产物。
 

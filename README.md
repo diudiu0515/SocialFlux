@@ -2,7 +2,7 @@
 
 SocialFlux 是一个用于长期社会互动推理的 stateful benchmark pipeline。它用同一套私有状态环境生成自然模型轨迹、构建 T1/T2/T3 离线任务，并提供 T4 在线交互；正常生成过程不含预定义 repair/neutral/escalation 策略，也不查 action transition table。
 
-当前唯一生产目录是 `configs/scale300_v1/scenarios`，共 300 个 scenario。每场景生成 3 个 Fable seed 候选；offline rollout 最多 20 轮，10–20 轮自然结束才进入主候选。旧 20 场景、六轮轨迹和历史 task 只保留为诊断或审计材料。
+当前唯一生产目录是 `configs/scale300_v1/scenarios`，共 300 个 scenario。Scale300 由 Claude 直接创建，不继承 Scale20/150/200；现有 300 个候选在新批次替换前继续保留。每场景生成 3 个 Fable seed 候选；offline rollout 最多 20 轮，10–20 轮自然结束才进入主候选。
 
 ## 核心约束
 
@@ -18,6 +18,7 @@ SocialFlux 是一个用于长期社会互动推理的 stateful benchmark pipelin
 ## 快速检查
 
 ```bash
+python scripts/build_scale300_v1.py --check
 python -m pipeline preflight
 python scripts/scenario_docs.py --check
 python scripts/check_markdown_links.py
@@ -35,6 +36,18 @@ python -m web.server --host 127.0.0.1 --port 8000
 服务器本机访问 `http://127.0.0.1:8000/`。远程浏览先执行 `ssh -L 8000:127.0.0.1:8000 <host>`，再打开同一地址。网站同时展示研究者可见的完整 persona、hidden intention、S0/D0、三条视频阈值，以及被测模型实际收到的角色身份、explicit goal、公开历史和固定 prompt 实参；私有字段排除清单也直接可见。旧 184 条六轮 rollout 与 180 个历史开发 Task 继续作为人工审计材料展示，但均不代表新版 10–20 轮主候选通过。标注草稿仅保存在浏览器并可导出 JSON。
 
 ## 运行真实 rollout
+
+Claude 直建新一批场景时，先遵循
+[`configs/scale300_v1/CLAUDE_AUTHORING.md`](configs/scale300_v1/CLAUDE_AUTHORING.md)，
+再运行以下命令刷新确定性投影并生成人工 Gate 1 表：
+
+```bash
+python scripts/build_scale300_v1.py
+python scripts/build_scale300_review_template.py
+```
+
+这两个脚本不调用模型，也不会批准 Gate 1。人工审核必须绑定最终 scenario
+文件的 SHA-256；任何后续修改都会使已有签名失效。
 
 当前 frontier API 角色统一定义在
 [`configs/model_routes.frontier_api.json`](configs/model_routes.frontier_api.json)：
@@ -113,7 +126,8 @@ python -m pipeline audit \
 ## 目录
 
 - `pipeline/`：Gate 1–4 阶段顺序、Scale300 preflight、Fable-only runtime 与唯一公开 CLI。
-- `configs/scale300_v1/scenarios/scenario_NNN/`：当前 300 个 canonical candidate JSON 及同名可读文档。
+- `configs/scale300_v1/CLAUDE_AUTHORING.md`：独立 Scale300 直建合同；不允许读取旧 Scale catalog 续写。
+- `configs/scale300_v1/scenarios/scenario_NNN/`：当前 300 个 candidate JSON 及同名可读文档。
 - `environment/`：唯一状态环境、appraisal、state update、response、memory、termination 与 multimodal trigger。
 - `rollout/`、`offline/`：自然轨迹与 T1/T2/T3 构建。
 - `evaluation/`、`annotation/`：九项验收、泄漏审计与人工标注 overlay。

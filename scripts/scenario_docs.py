@@ -473,7 +473,7 @@ def main():
     parser.add_argument("paths", nargs="*", type=Path)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
-    catalog = Path("configs/scenarios")
+    catalog = Path("configs/scale300_v1/scenarios")
     paths = args.paths or discover_scenario_paths(catalog)
     if not paths:
         parser.error("no bundled scenario JSON files found")

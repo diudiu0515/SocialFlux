@@ -17,6 +17,10 @@
   → Gate 4：任务实例与答案抽查
 ```
 
+300 个 Scenario 由 Claude 直接写入 canonical schema，不经过 Scale20、Scale100、
+Scale150 或 Scale200 的复制/扩展链。`scripts/build_scale300_v1.py` 只做完整性、
+schema 和确定性投影校验，不负责生成或批准场景。
+
 ## 运行时边界
 
 - 唯一场景目录：`configs/scale300_v1/scenarios`，必须恰好包含 300 个 scenario 及同名 Markdown。
@@ -41,6 +45,11 @@
 ## 唯一运行顺序
 
 ```bash
+# Claude 直建完成后：校验、刷新投影、生成 unsigned Gate 1 表
+python scripts/build_scale300_v1.py --check
+python scripts/build_scale300_v1.py
+python scripts/build_scale300_review_template.py
+
 # 300 scenarios × 3 seeds 与 Fable-only 路由检查
 python -m pipeline preflight
 
@@ -86,8 +95,8 @@ python -m pipeline audit \
 
 `scripts/generate_long_rollout_pool.py`、`scripts/run_quality_gates.py`、
 `scripts/run_pipeline.py` 和 `scripts/run_t4_evaluation.py` 是各阶段的内部 worker，
-不再是并列的用户入口。历史配置、旧 20 场景和旧 rollout 仅用于诊断与复现实验，
-不参与 active pipeline。
+不再是并列的用户入口。旧 Scale catalog 和继承生成器已删除；保留的旧 rollout
+与报告仅用于尚未被替代的方法审计，不参与 active pipeline。
 
 正式运行和人工证据格式见
 [Formal Rollout Runbook](../operations/FORMAL_ROLLOUT_RUNBOOK.md)；
