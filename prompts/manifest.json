@@ -231,6 +231,16 @@
       "sha256": "218572f6c6f049b2f7613c4550ad7dde5956b8b0c74fa4602f72f53f7ac7bd89",
       "version": "v2"
     },
+    "scenario_candidate_initialization_v1": {
+      "path": "scenario_candidate_initialization_v1.md",
+      "sha256": "d0f21522e90dcd993281fe5852bee9a507c14324525abbfaaff584dd1834bae4",
+      "version": "v1"
+    },
+    "scenario_candidate_normalization_v1": {
+      "path": "scenario_candidate_normalization_v1.md",
+      "sha256": "8e4aefd8b18e39e7e00faa8680b5bec5a18fa875fc7bdf9857520416f7bd0b83",
+      "version": "v1"
+    },
     "scenario_normalization_v1": {
       "path": "scenario_normalization_v1.md",
       "sha256": "ea36cee4cbabc2d6006fcd87154b0fcd03ed704426624ab898b6b5ca8db4ee3c",

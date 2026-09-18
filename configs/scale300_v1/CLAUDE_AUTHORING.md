@@ -25,8 +25,22 @@ JSON 必须符合 `schemas/scenario.schema.json`，并满足：
 - 生成器不得填写真人姓名、审核时间、`human_attestation=true` 或 Gate 1 pass。
 
 Claude 可以参考 `DESIGN_CONTRACT.md`、`schemas/scenario.schema.json`、
-`prompts/scenario_script_generation_v1.md`、`prompts/scenario_normalization_v1.md`
-和 `prompts/initial_state_configuration_v1.md`，但不得读取旧 Scale catalog 来续写。
+`prompts/scenario_script_generation_v1.md`、
+`prompts/scenario_candidate_normalization_v1.md` 和
+`prompts/scenario_candidate_initialization_v1.md`，但不得读取旧 Scale catalog
+来续写。
+
+可执行直建入口为：
+
+```bash
+python scripts/generate_scale300_candidates.py \
+  --brief configs/scale300_v1/authoring_brief.example.json \
+  --output data/scenario_authoring/run_001
+```
+
+该入口依次进行原创 narrative、独立机器质量检查、blueprint normalization
+和 S0/D0 proposal；任何机器检查都不会批准 Gate 1。每次运行写入新的 versioned
+目录，保留模型 provenance、token usage、质量报告和中间产物。
 
 ## 完整性检查
 
