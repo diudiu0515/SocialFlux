@@ -62,6 +62,45 @@ SocialFlux 是一个用于长期社会互动推理的 stateful benchmark。它�
 
 若确需违反本节，必须在本次 run manifest 中写明理由、影响范围和移除计划；没有记录的临时兼容层不得进入下一次正式运行。
 
+### 2.2 Git 提交与推送纪律
+
+代码、配置、schema、prompt 和文档的修改必须及时形成可审计的 Git
+历史，不能长期堆积在未提交工作区。
+
+#### 提交时机与粒度
+
+- 一个职责完整、相关测试通过的工作单元完成后立即提交；开始长时间
+  rollout、切换任务、交接工作或结束会话前，必须先处理当前可提交变更。
+- 一个 commit 只表达一个连贯目的。功能、无关格式化、实验数据和历史清理
+  不应混在同一提交；不得用一个超大提交长期吞并多个无关阶段。
+- 不提交已知破坏 active pipeline、缺少必要文件或未通过相关测试的状态。
+  需要保存失败实验时，提交的是可复核的报告/fixture，而不是把生产分支留在
+  不可运行状态。
+- 提交前必须检查 `git status`、`git diff --check`、相关测试和文档链接；
+  同时确认没有 secret、private trajectory、`build/`、`data/formal/`、
+  模型权重、日志或其他被 `.gitignore` 排除的本地产物。
+
+#### Commit message
+
+- 使用 `<type>: <imperative summary>`，必要时使用
+  `<type>(<scope>): <imperative summary>`。
+- 常用 type 为 `feat`、`fix`、`refactor`、`docs`、`test` 和
+  `chore`；summary 应准确描述结果，避免 `update`、`changes`、
+  `misc` 等无信息内容。
+- 提交说明和交接记录必须如实写明测试结果、尚未完成的 Gate 与人工边界，
+  不得把机器通过写成研究通过。
+
+#### Push 与远端一致性
+
+- 除非任务明确要求只保留本地，commit 成功并通过检查后应及时 push 当前
+  工作分支，不把唯一副本长期留在本机。
+- push 前先获取远端状态并确认不存在意外分叉；push 后核对本地 HEAD 与
+  对应 remote-tracking branch 的 commit hash，并确认工作区干净。
+- 禁止向远端推送密钥、签名真人证据、private trajectory 或未授权的大型
+  artifact。远端、分支或提交范围不明确时，先取得明确确认。
+- 已共享的历史不得擅自 force-push、rebase 或 amend。需要修正时追加新
+  commit；只有得到明确授权后才能改写远端历史。
+
 ## 3. 不可违反的研究原则
 
 ### 3.1 自由互动

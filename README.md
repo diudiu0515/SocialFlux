@@ -10,6 +10,11 @@ SocialFlux 是一个用于长期社会互动推理的 stateful benchmark pipelin
 
 **每次运行前必读：**运行 rollout、T1–T4 构造、质量筛选、媒体生成或评测之前，先阅读 [代码结构与修改纪律](DESIGN_CONTRACT.md#21-每次运行前必读代码结构与修改纪律)。不得用场景特判、词面规则、重复 wrapper 或平行入口继续堆补丁；本批代码、prompt、schema 和配置确认后再冻结运行。
 
+**Git 交付：**每个通过相关检查的完整工作单元都要及时 commit 并 push
+当前工作分支；提交粒度、message、secret/artifact 排除、远端同步和禁止
+改写共享历史的规则见
+[Git 提交与推送纪律](DESIGN_CONTRACT.md#22-git-提交与推送纪律)。
+
 ## 快速检查
 
 ```bash
