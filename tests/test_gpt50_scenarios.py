@@ -1,9 +1,14 @@
+import json
+from pathlib import Path
+from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 
 from scripts.generate_gpt50_scenarios import (
     CURATED_CONTEXTS,
     NARRATIVE_COUNT,
     SOURCE_WORKS,
+    _scenario_complete,
     curated_brief,
     TOTAL_COUNT,
     requested_identity,
@@ -45,6 +50,39 @@ def brief_for(identity):
 
 
 class Gpt50ScenarioTest(unittest.TestCase):
+    def test_rebuild_resume_skips_only_completed_v2_scenarios(self):
+        with TemporaryDirectory() as directory:
+            output = Path(directory)
+            target = output / "scenarios" / "scenario_001" / "scenario_001.json"
+            run = output / "authoring" / "scenario_001" / "run_manifest.json"
+            target.parent.mkdir(parents=True)
+            run.parent.mkdir(parents=True)
+            run.write_text(json.dumps({
+                "status": "candidate_generated_pending_human_gate1",
+                "model_routes_sha256": "routes-hash",
+            }), encoding="utf-8")
+            with patch(
+                "scripts.generate_gpt50_scenarios.validate_scenario"
+            ):
+                target.write_text(json.dumps({
+                    "state_contract_version": "socialflux_state_v1",
+                }), encoding="utf-8")
+                self.assertFalse(_scenario_complete(
+                    output,
+                    1,
+                    "routes-hash",
+                    required_contract_version="socialflux_state_v2",
+                ))
+                target.write_text(json.dumps({
+                    "state_contract_version": "socialflux_state_v2",
+                }), encoding="utf-8")
+                self.assertTrue(_scenario_complete(
+                    output,
+                    1,
+                    "routes-hash",
+                    required_contract_version="socialflux_state_v2",
+                ))
+
     def test_source_ratio_is_exact_three_to_seven(self):
         sources = [
             source_type_for_ordinal(ordinal)

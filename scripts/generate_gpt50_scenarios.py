@@ -306,7 +306,9 @@ def generate_briefs(args, routes):
     }, ensure_ascii=False), flush=True)
     return generated
 
-def _scenario_complete(output, ordinal, routes_sha256):
+def _scenario_complete(
+    output, ordinal, routes_sha256, *, required_contract_version=None,
+):
     target = scenario_path(output, ordinal)
     run = Path(output) / "authoring" / f"scenario_{ordinal:03d}" / "run_manifest.json"
     if not target.exists() or not run.exists():
@@ -317,17 +319,27 @@ def _scenario_complete(output, ordinal, routes_sha256):
         or manifest.get("model_routes_sha256") != routes_sha256
     ):
         return False
-    validate_scenario(load_json(target))
+    scenario = load_json(target)
+    validate_scenario(scenario)
+    if (
+        required_contract_version is not None
+        and scenario.get("state_contract_version") != required_contract_version
+    ):
+        return False
     return True
 
 
 def author_one(args, routes, ordinal):
     output = args.output.resolve()
     target = scenario_path(output, ordinal)
-    if (
-        args.resume
-        and not args.rebuild_private_layer
-        and _scenario_complete(output, ordinal, routes.sha256)
+    required_contract_version = (
+        "socialflux_state_v2" if args.rebuild_private_layer else None
+    )
+    if args.resume and _scenario_complete(
+        output,
+        ordinal,
+        routes.sha256,
+        required_contract_version=required_contract_version,
     ):
         return {
             "ordinal": ordinal,
