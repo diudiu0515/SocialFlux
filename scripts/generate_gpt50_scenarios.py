@@ -552,8 +552,6 @@ def main(argv=None):
         for ordinal in range(1, args.count + 1):
             result = author_one(args, routes, ordinal)
             record(result)
-            if result["status"] == "failed":
-                break
     else:
         with ThreadPoolExecutor(max_workers=args.workers) as executor:
             futures = {
