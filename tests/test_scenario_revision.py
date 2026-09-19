@@ -8,7 +8,7 @@ from scripts.revise_scale300_scenarios import provider_request_count
 
 
 SCENARIO = json.loads(Path(
-    "configs/scale300_v1/scenarios/scenario_201/scenario_201.json"
+    "configs/scenarios/scenario_001/scenario_001.json"
 ).read_text(encoding="utf-8"))
 
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SocialFlux Scale300 人工审核</title>
+<title>SocialFlux 历史批次审核</title>
 <link rel="stylesheet" href="/styles.css?v=scale300-sidebar-v1">
 <style>
 :root{color-scheme:dark;background:#101419;color:#e7edf3;font-family:Inter,"Noto Sans SC",sans-serif}
@@ -22,7 +22,7 @@ button{cursor:pointer}.pending{color:#f4c56b}.good{color:#72d69c}.bad{color:#ff8
 </head>
 <body><div class="app-shell">
 <aside class="sidebar">
-  <div class="brand"><span class="brand-mark">SF</span><div><strong>SocialFlux</strong><small>Scale300 Review</small></div></div>
+  <div class="brand"><span class="brand-mark">SF</span><div><strong>SocialFlux</strong><small>Archived Batch Review</small></div></div>
   <div class="local-notice">草稿保存在当前浏览器。机器结果不是人工 GT，请定期导出 JSON。</div>
   <label class="search-box"><span>⌕</span><input id="scenarioSearch" type="search" placeholder="搜索情节、关系或 ID"></label>
   <div class="side-label">SCENARIO QUEUE <span id="scenarioCount">—</span></div>
@@ -30,11 +30,11 @@ button{cursor:pointer}.pending{color:#f4c56b}.good{color:#72d69c}.bad{color:#ff8
   <div class="sidebar-actions">
     <button id="export" class="button primary">导出标注草稿 JSON</button><button id="importBtn" class="button">导入标注草稿 JSON</button><input id="importFile" type="file" accept="application/json,.json" hidden>
     <a class="button" href="/scale300_tasks.html">T1–T3 答案核验</a><a class="button" href="/task_examples.html">示例与视频</a>
-    <div id="localProgress" class="local-progress">0 / 300 个场景已处理</div>
+    <div id="localProgress" class="local-progress">历史数据已归档</div>
   </div>
 </aside>
 <main class="main">
-  <header class="topbar"><div><div class="eyebrow">SCENARIO · ROLLOUT · FOUR GATES</div><h1>Scale300 人工审核工作台</h1></div><div class="top-actions"><label class="reviewer-field">标注员 <input id="reviewer" placeholder="姓名或 ID"></label><span class="gate-badge">300 scenarios</span></div></header>
+  <header class="topbar"><div><div class="eyebrow">SCENARIO · ROLLOUT · FOUR GATES</div><h1>历史批次人工审核工作台</h1></div><div class="top-actions"><label class="reviewer-field">标注员 <input id="reviewer" placeholder="姓名或 ID"></label><span class="gate-badge">archived</span></div></header>
   <div class="scale-toolbar"><button id="prev">← 上一个</button><button id="next">下一个 →</button><button id="refresh">刷新进度</button><span id="currentLabel" class="sidebar-status">加载中…</span><a href="/review.html">查看数据总览</a><select id="picker"></select></div>
   <div id="summary" class="panel scale-summary">加载中…</div>
   <div class="scale-workspace"><section id="content"></section><aside id="review" class="panel"></aside></div>
@@ -134,7 +134,14 @@ async function loadCurrent(){
  currentScenario=values[0];currentPayload=values[1];drawTrajectory();
 }
 async function refresh(){
- data=await get("/api/scale150-review");if(currentIndex>=data.candidates.length)currentIndex=0;drawSummary();drawPicker();await loadCurrent();
+ data=await get("/api/scale150-review");if(currentIndex>=data.candidates.length)currentIndex=0;drawSummary();
+ if(data.candidates.length){drawPicker();await loadCurrent();return;}
+ document.getElementById("scenarioCount").textContent="0/0";
+ document.getElementById("scenarioList").innerHTML="";
+ document.getElementById("localProgress").textContent="历史数据已归档";
+ document.getElementById("currentLabel").textContent="旧 Qwen / Scale300 数据已归档";
+ document.getElementById("content").innerHTML='<div class="panel pending">旧批次数据已移出活跃目录。请前往 <a href="/gpt50">GPT Gate 1</a> 审核当前设计实验。</div>';
+ document.getElementById("review").innerHTML='<h3>无活跃历史候选</h3><p>框架仍保留；新批次接入 manifest 后可继续使用。</p>';
 }
 document.getElementById("picker").onchange=function(){currentIndex=Number(this.value);loadCurrent().catch(function(e){alert(e.message);});};
 document.getElementById("prev").onclick=function(){if(currentIndex>0){currentIndex--;loadCurrent();}};
@@ -143,7 +150,7 @@ document.getElementById("refresh").onclick=function(){refresh().catch(function(e
 document.getElementById("scenarioSearch").oninput=function(){drawSidebar();};
 document.getElementById("reviewer").value=drafts().reviewer;
 document.getElementById("reviewer").oninput=function(){var d=drafts();d.reviewer=this.value.trim();save(d);};
-document.getElementById("export").onclick=function(){var d=drafts(),payload={format:"socialflux_browser_annotation_export_v1",exported_at_utc:new Date().toISOString(),reviewer:d.reviewer,record_count:Object.keys(d.records).length,records:Object.values(d.records)};var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}));a.download="socialflux-scale300-annotations.json";a.click();URL.revokeObjectURL(a.href);};
+document.getElementById("export").onclick=function(){var d=drafts(),payload={format:"socialflux_browser_annotation_export_v1",exported_at_utc:new Date().toISOString(),reviewer:d.reviewer,record_count:Object.keys(d.records).length,records:Object.values(d.records)};var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}));a.download="socialflux-archived-batch-annotations.json";a.click();URL.revokeObjectURL(a.href);};
 document.getElementById("importBtn").onclick=function(){document.getElementById("importFile").click();};
 document.getElementById("importFile").onchange=async function(){try{var imported=JSON.parse(await this.files[0].text());if(!Array.isArray(imported.records))throw new Error("不是有效的 SocialFlux 标注导出文件");var d=drafts();imported.records.forEach(function(r){if(r&&r.record_type&&r.record_id)d.records[r.record_type+":"+r.record_id]=r;});if(imported.reviewer)d.reviewer=imported.reviewer;save(d);document.getElementById("reviewer").value=d.reviewer;drawReview();drawSidebar();alert("已导入 "+imported.records.length+" 条草稿");}catch(e){alert("导入失败："+e.message);}finally{this.value="";}};
 refresh().catch(function(e){document.getElementById("content").innerHTML='<div class="panel bad">无法加载：'+esc(e.message)+'</div>';});

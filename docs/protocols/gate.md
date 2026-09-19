@@ -146,18 +146,9 @@ Critical Event Removed
 
 ## 9. Development vs Final Rollout
 
-当前已有 Qwen development rollouts 可以继续用于：
+旧 development rollouts 已移出活跃目录并单独归档。它们只能用于可追溯的历史方法审计，不得被 pipeline 自动发现，也不得进入当前或 final benchmark。
 
-```text
-pipeline debugging
-builder testing
-schema testing
-quality-gate development
-```
-
-但最终 benchmark 应重新生成 heterogeneous trajectory pool。
-
-Development rollout 不自动进入 final benchmark。
+新的 development batch 必须使用独立 manifest/output root；development rollout 不自动进入 final benchmark。
 
 ---
 
@@ -269,7 +260,7 @@ task yield, leakage and judge disagreement
 ```
 
 人工复核漏洞报告并冻结设计后，再启动最多 200 个 Claude 主场景；每场景仍只
-生成一条 rollout。现有 Scale300 在明确替换前仅作为 compatibility baseline。
+生成一条 rollout。旧 Scale300 已归档，不作为 compatibility baseline。
 
 正式阶段：
 

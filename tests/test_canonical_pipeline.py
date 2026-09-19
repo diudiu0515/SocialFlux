@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from pipeline.constants import ACTIVE_MODEL
+from pipeline.constants import ACTIVE_MODEL, ROLLOUTS_PER_SCENARIO
 from pipeline.flow import PIPELINE_STAGES, PipelinePreflight
 from pipeline.runtime import (
     assert_development_role_partitioned_rollout_config,
@@ -12,7 +12,6 @@ from pipeline.runtime import (
 )
 from rollout.configuration import load_rollout_config, public_rollout_config
 from scripts.generate_long_rollout_pool import run_slot
-from scripts.build_scale300_v1 import build_design_matrix, load_catalog
 
 
 class CanonicalPipelineTest(unittest.TestCase):
@@ -58,25 +57,18 @@ class CanonicalPipelineTest(unittest.TestCase):
             context="test",
         )
 
-    def test_scale300_catalog_is_direct_and_has_no_parent_catalog(self):
-        records = load_catalog("configs/scale300_v1/scenarios")
-        matrix = build_design_matrix(records)
+    def test_archived_scale300_catalog_is_not_active(self):
+        self.assertFalse(Path("configs/scale300_v1/scenarios").exists())
+        self.assertTrue(Path("configs/scale300_v1/CLAUDE_AUTHORING.md").is_file())
+        self.assertEqual(ROLLOUTS_PER_SCENARIO, 1)
 
-        self.assertEqual(len(records), 300)
-        self.assertEqual(matrix["scenario_count"], 300)
+    def test_preflight_blocks_when_no_active_catalog_is_promoted(self):
+        with self.assertRaisesRegex(ValueError, "no scenarios found"):
+            PipelinePreflight().run()
         self.assertEqual(
-            matrix["construction"],
-            "direct_claude_authoring_no_parent_catalog",
+            [stage.value for stage in PIPELINE_STAGES],
+            ["gate1", "rollout", "gate2", "gate3", "tasks", "t4", "gate4"],
         )
-        self.assertNotIn("parent", matrix)
-
-    def test_scale300_preflight_has_exact_stage_order_and_single_slot(self):
-        result = PipelinePreflight().run()
-        self.assertEqual(result["scenario_count"], 300)
-        self.assertEqual(result["rollout_slots"], 300)
-        self.assertEqual(result["stages"], [stage.value for stage in PIPELINE_STAGES])
-        self.assertEqual(result["model"], ACTIVE_MODEL)
-        self.assertEqual(result["t4_model"], ACTIVE_MODEL)
 
     def test_active_runtime_rejects_non_fable_or_environment_override(self):
         config = load_rollout_config("configs/formal_rollout_pool.json")

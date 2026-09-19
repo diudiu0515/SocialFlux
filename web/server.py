@@ -34,31 +34,11 @@ PIPELINE_DIR = ROOT / "build" / "pipeline_20turn_selected"
 ACCEPTANCE_DIR = ROOT / "build" / "acceptance_v2"
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 MEDIA_MANIFEST = ROOT / "media" / "talking_head" / "manifest.json"
-SCREENING_REPORT = ROOT / "build" / "rollout_current_20x3_v11" / "screening_report.json"
-LONG_ROLLOUT_ROOT = ROOT / "build" / "rollout_current_20x3_v11"
-ROLLOUT_REVIEW_ROOTS = (
-    LONG_ROLLOUT_ROOT,
-    ROOT / "build" / "rollout_newrequest_20x3_v3",
-    ROOT / "build" / "newrequest_agent_v20_ia001_probe",
-    ROOT / "build" / "newrequest_agent_v20_ia001_probe_v2",
-    ROOT / "build" / "newrequest_agent_v20_ia001_probe_v3",
-    ROOT / "build" / "newrequest_agent_v20_ia001_probe_v4",
-    ROOT / "build" / "newrequest_qwen32all_ia001_probe",
-    ROOT / "build" / "newrequest_v4_probe_ia001",
-    ROOT / "build" / "newrequest_v4_probe_ia003",
-    ROOT / "build" / "newrequest_v4_probe_ia019",
-    ROOT / "build" / "newrequest_v6_probe_ia003",
-    ROOT / "build" / "newrequest_v6_probe_ia019",
-    ROOT / "build" / "newrequest_v7_probe_ia001",
-    ROOT / "build" / "newrequest_v7_probe_ia009",
-    ROOT / "build" / "newrequest_v7_probe_ia019",
-    ROOT / "build" / "newrequest_v8_probe_ia003",
-    ROOT / "build" / "newrequest_v9_probe_ia009",
-    ROOT / "build" / "newrequest_v9_probe_ia016",
-    ROOT / "build" / "newrequest_scenarios_v1_probe_ia003",
-    ROOT / "build" / "newrequest_scenarios_v1_probe_ia009",
-    ROOT / "build" / "newrequest_scenarios_v1_probe_ia019",
-)
+SCREENING_REPORT = ROOT / "build" / "screening_report.json"
+LONG_ROLLOUT_ROOT = ROOT / "build" / "rollouts"
+# Historical model outputs are archived outside the active data path. New batches
+# should be added explicitly through their own manifest instead of implicit globbing.
+ROLLOUT_REVIEW_ROOTS = ()
 SCENARIO_REVIEW_TEMPLATE = ROOT / "reviews" / "scenario_review_template.json"
 ENVIRONMENT_REVIEW_TEMPLATE = ROOT / "reviews" / "environment_evidence_template.json"
 FORMAL_ENVIRONMENT_DIR = ROOT / "data" / "formal" / "environment"
@@ -83,31 +63,12 @@ GPT50_SCENARIO_ROOTS = (
     ROOT / "data" / "gpt50" / "smoke" / "scenario_v2" / "scenarios",
     ROOT / "data" / "gpt50" / "smoke" / "scenario" / "scenarios",
 )
-SCALE150_MODEL_REVIEW_FILES = (
-    ROOT / "build" / "scale150_v1" / "model_semantic_reviews.codex.json",
-    ROOT / "build" / "scale200_v1" / "model_semantic_sample_reviews.codex.json",
-    ROOT / "build" / "scale300_v1" / "model_semantic_reviews.json",
-)
+SCALE150_MODEL_REVIEW_FILES = ()
 SCALE300_AUTOMATIC_GATE_AUDIT = ROOT / "build" / "scale300_v1" / "automatic_gate_audit.json"
 # Switch to build/scale300_tasks only after its summary covers all 300 ordinals.
 SCALE300_TASK_ROOT = ROOT / "build" / "scale300_tasks_v3"
 T2_EXPRESSION_DEV_ROOT = ROOT / "build" / "t2_expression_dev_v1"
-SCALE150_ROLLOUT_ROOTS = (
-    ("qwen32_all", ROOT / "build" / "scale150_v1" / "rollouts_v2"),
-    ("qwen32_policy_qwen35_environment_pre_request_fix", ROOT / "build" / "scale150_v1" / "rollouts_hybrid"),
-    ("qwen32_policy_qwen35_environment_pre_schema_fix", ROOT / "build" / "scale150_v1" / "rollouts_hybrid_v2"),
-    ("qwen32_policy_qwen35_environment", ROOT / "build" / "scale150_v1" / "rollouts_hybrid_v3"),
-    ("qwen32_policy_qwen35_environment_content_v2", ROOT / "build" / "scale150_v1" / "rollouts_content_v2"),
-    ("qwen32_policy_qwen35_environment_scale200_source_order_bug", ROOT / "build" / "scale200_v1" / "rollouts_content_v1_source_order_bug"),
-    ("qwen32_policy_qwen35_environment_scale200_corrected", ROOT / "build" / "scale200_v1" / "rollouts_content_v2"),
-    ("ia089_retry_connection_refused", ROOT / "build" / "scale200_v1" / "rollouts_content_v3_ia089"),
-    ("ia089_qwen35_role_failure", ROOT / "build" / "scale200_v1" / "rollouts_content_v4_ia089"),
-    ("ia089_qwen32_all_stages_partial", ROOT / "build" / "scale200_v1" / "rollouts_content_v5_ia089_qwen32all"),
-    ("scale300_thinking_enabled_failure", ROOT / "build" / "scale300_v1" / "rollouts_v1"),
-    ("scale300_new100", ROOT / "build" / "scale300_v1" / "rollouts_v2"),
-    ("scale300_hybrid_new100", ROOT / "build" / "scale300_v1" / "rollouts_v3_hybrid"),
-)
-
+SCALE150_ROLLOUT_ROOTS = ()
 
 def credentials_match(header, username, password):
     """Validate an HTTP Basic Authorization header without timing leaks."""
@@ -936,9 +897,7 @@ def manual_review_catalog():
         key: value.get("status", "pending")
         for key, value in quality_report.get("gates", {}).items()
     }
-    gate3_required = max(
-        long_summary.get("expected_slot_count", 0), len(load_scenarios()) * 3
-    )
+    gate3_required = long_summary.get("expected_slot_count", 0)
     gate4_plan = workspace.get("staffing_plan", {}).get("gate4", {})
     gate4_target = 3 * max(
         gate4_plan.get("minimum_sample_per_task_type", 2),
@@ -947,11 +906,11 @@ def manual_review_catalog():
     categories = [
         ["long_rollout_generation", "最多20轮自然结束候选池",
          long_summary["visible_attempt_count"], long_summary["expected_slot_count"],
-         long_summary["status"], "每个 scenario 生成 3 条；最多 20 轮并允许自然结束。短轨迹、预算截断和失败尝试全部留痕并可人工查看。", "Rollout筛选"],
-        ["scale20_pilot", "Scale20 单条全量人工审核",
-         20, 20, "pending_human_review",
-         "20 个场景各有一条本轮完整或 partial 轨迹，共 202 轮；模型复核仅用于排序，所有正文均交由人工判断。", "Scale20 人审"],
-        ["gate1_scenario", "Gate 1 · Scenario 与 S0/D0 冻结", len(scenario_records), 20,
+         long_summary["status"], "每个 approved scenario 只生成 1 条自然 rollout；失败计入产率，不补抽。", "Rollout筛选"],
+        ["scale20_pilot", "历史 Scale20 审核框架",
+         0, 0, "archived",
+         "旧模型 rollout 已归档；页面和标注合同保留，等待新批次 manifest。", "历史人审"],
+        ["gate1_scenario", "Gate 1 · Scenario 与 S0/D0 冻结", len(scenario_records), len(scenario_records),
          quality_status.get("gate_1_scenario_quality", "pending"), "人物、冲突、state、D0、视频阈值、来源原创化及姓名/时间/哈希。", "Scenario 情节"],
         ["gate2_environment", "Gate 2 · Environment Validity（1 人实验复核）",
          sum(value["exists"] for value in environment_files.values()), 6,
@@ -960,7 +919,7 @@ def manual_review_catalog():
          gate3_primary, gate3_required,
          quality_status.get("gate_3_rollout_quality", "pending"), f"主审优先看 {gate3_primary} 条 active candidates；第二人确定性 audit {gate3_secondary} 条。Archive 同步可见，人工可复核，但不会被自动伪装成通过。", "Rollout 筛选 + 人审工作台 audit 清单"],
         ["gate4_tasks", "Gate 4 · 两人同样本独立抽查", task_sample, gate4_target,
-         quality_status.get("gate_4_task_instance_quality", "pending"), f"当前 {task_count}/60 个机器建议答案；目标按 task type 确定性抽取 {gate4_target} 个。两人看同一批，分歧才交第三人。", "人审工作台 · Gate 4"],
+         quality_status.get("gate_4_task_instance_quality", "pending"), f"当前 {task_count} 个机器建议答案；目标按 task type 确定性抽取 {gate4_target} 个。两人看同一批，分歧才交第三人。", "人审工作台 · Gate 4"],
         ["media", "Talking Head · 视频人工审核", media_count, media_count,
          "pending_human", "表情—状态、人物连续性、语音自然度和多模态信息效用。", "Scenario 情节"],
         ["filter_holdout", "筛选器校准与 Holdout", 0, 1,
@@ -1443,7 +1402,7 @@ class App(SimpleHTTPRequestHandler):
                            200 if payload is not None else 404)
             return
         if parsed.path in ("/", ""):
-            self.path = "/scale150.html"
+            self.path = "/gpt50_gate1.html"
         elif parsed.path in ("/gpt50", "/gpt50/"):
             self.path = "/gpt50_gate1.html"
         super().do_GET()

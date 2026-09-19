@@ -135,111 +135,32 @@ class ScenarioWebTest(unittest.TestCase):
             "socialflux_annotation_ui_v1",
         )
 
-    def test_manual_review_catalog_exposes_every_stage(self):
-        review = api_payload("/api/manual-review")
-        identifiers = {item["id"] for item in review["categories"]}
-        self.assertEqual(
-            identifiers,
-            {"gate1_scenario", "gate2_environment", "gate3_rollout", "gate4_tasks",
-             "media", "filter_holdout", "dataset_audit",
-             "long_rollout_generation", "scale20_pilot"},
-        )
-        self.assertEqual(review["screening_summary"].get("provisional_selected_count", 0), 0)
-        self.assertEqual(review["long_rollout_generation"]["required_turns"], 20)
-        by_id = {item["id"]: item for item in review["categories"]}
-        self.assertEqual(by_id["gate3_rollout"]["required"], 60)
-        self.assertEqual(by_id["gate4_tasks"]["required"], 6)
-        self.assertIn("SocialFlux Rollout Screening Protocol v1", review["protocol_document"])
-        diagnostic = review["r3_current_diagnostic_review"]
-        self.assertEqual(diagnostic["quality_version"], "r3_semantic_ledger_v29")
-        self.assertFalse(diagnostic["formal_acceptance"])
-        self.assertEqual(diagnostic["short_appraisal_probe"]["passed_case_count"], 13)
+    def test_archived_outputs_are_not_exposed_as_current_data(self):
+        manual = api_payload("/api/manual-review")
+        self.assertEqual(manual["format"], "socialflux_manual_review_catalog_v1")
+        self.assertEqual(len(manual["categories"]), 9)
 
-    def test_scale20_pilot_exposes_all_statuses_and_complete_turns(self):
-        pilot = api_payload("/api/scale20-pilot")
-        self.assertEqual(len(pilot["scenario_results"]), 20)
-        self.assertEqual(len(pilot["candidates"]), 8)
-        self.assertEqual(
-            {item["scenario_id"] for item in pilot["candidates"]},
-            {"IA_PIPE_005", "IA_PIPE_012", "IA_PIPE_013", "IA_PIPE_018"},
-        )
-        for candidate in pilot["candidates"]:
-            trajectory = candidate["trajectory"]
-            self.assertEqual(len(trajectory["turns"]), candidate["turn_count"])
-            self.assertTrue(all(
-                turn.get("policy_action", {}).get("text")
-                and turn.get("environment_response")
-                for turn in trajectory["turns"]
-            ))
-            self.assertEqual(
-                trajectory["diagnostic_review"]["review_type"],
-                "model_semantic_review",
-            )
-            self.assertEqual(candidate["human_review"], "pending")
-
-    def test_scale20_full_review_exposes_one_trajectory_per_scenario(self):
-        review = api_payload("/api/scale20-review")
-        self.assertEqual(review["generated_scenario_count"], 20)
-        self.assertEqual(len(review["candidates"]), 20)
-        self.assertEqual(len({item["scenario_id"] for item in review["candidates"]}), 20)
-        self.assertEqual(
-            sum(len(item["trajectory"]["turns"]) for item in review["candidates"]),
-            review["total_turns"],
-        )
-        self.assertTrue(all(
-            all(
-                turn.get("appraisal")
-                and "state_after" in turn
-                and turn.get("environment_response")
-                and "interaction_ledger_after" in turn
-                for turn in item["trajectory"]["turns"]
-            )
-            for item in review["candidates"]
-        ))
-        self.assertTrue(all(item["human_review"] == "pending" for item in review["candidates"]))
-
-    def test_review_workspace_exposes_staffing_models_and_same_gate4_sample(self):
         workspace = api_payload("/api/review-workspace")
         self.assertEqual(workspace["format"], "socialflux_human_review_workspace_v1")
         self.assertEqual(workspace["staffing_plan"]["gate1"]["reviewers_required"], 1)
-        self.assertEqual(workspace["staffing_plan"]["gate2"]["reviewers_required"], 1)
         self.assertEqual(workspace["staffing_plan"]["gate4"]["independent_reviewers"], 2)
-        self.assertTrue(workspace["gate4"]["sampling"]["same_sample_for_both_reviewers"])
-        self.assertLessEqual(workspace["gate4"]["sampling"]["sample_count"], 6)
-        self.assertEqual(
-            len(workspace["gate4"]["records"]),
-            workspace["gate4"]["sampling"]["sample_count"],
-        )
-        self.assertLessEqual(workspace["counts"]["task_population"], 60)
-        self.assertIn("Qwen3.5-9B", workspace["model_stack"]["environment"]["model"])
 
-    def test_ia003_exposes_rejected_r3_diagnostic_with_ledger(self):
+        self.assertEqual(api_payload("/api/scale20-pilot")["candidates"], [])
+        self.assertEqual(api_payload("/api/scale20-review")["candidates"], [])
+        self.assertTrue(all(
+            load_rollouts(f"IA_PIPE_{number:03d}") == []
+            for number in range(1, 21)
+        ))
+
+        task_review = api_payload("/api/scale300-tasks")
+        self.assertEqual(task_review["total_scenarios"], 0)
+        self.assertEqual(task_review["processed"], 0)
+        self.assertEqual(task_review["candidates"], [])
+        self.assertEqual(load_task_examples()["examples"], [])
+
         detail = scenario_detail("IA_PIPE_003")
-        diagnostic = next(
-            item for item in detail["rollouts"]
-            if item.get("diagnostic_review")
-        )
-        self.assertEqual(len(diagnostic["turns"]), 19)
-        self.assertEqual(diagnostic["screening"]["automatic_decision"], "REJECT")
-        self.assertTrue(diagnostic["turns"][0].get("interaction_ledger_after"))
-
-    def test_every_scenario_has_round_by_round_rollout_content(self):
-        total_rollouts = 0
-        total_turns = 0
-        for number in range(1, 21):
-            scenario_id = f"IA_PIPE_{number:03d}"
-            rollouts = load_rollouts(scenario_id)
-            self.assertTrue(rollouts, scenario_id)
-            self.assertTrue(all(item.get("turns") for item in rollouts), scenario_id)
-            self.assertTrue(all(
-                turn.get("policy_action", {}).get("text")
-                and turn.get("environment_response")
-                for item in rollouts for turn in item["turns"]
-            ), scenario_id)
-            total_rollouts += len(rollouts)
-            total_turns += sum(len(item["turns"]) for item in rollouts)
-        self.assertGreaterEqual(total_rollouts, 60)
-        self.assertGreaterEqual(total_turns, 300)
+        self.assertEqual(detail["summary"]["scenario_id"], "IA_PIPE_003")
+        self.assertEqual(detail["rollouts"], [])
 
     def test_rollout_frontend_renders_all_three_stages_per_turn(self):
         script = Path("web/static/app.js").read_text(encoding="utf-8")
@@ -278,39 +199,6 @@ class ScenarioWebTest(unittest.TestCase):
         health = api_payload("/api/health")
         self.assertEqual(health["pipeline_version"], "20turn-selected-v1")
         self.assertEqual(health["site_mode"], "annotation_workbench")
-
-    def test_scale300_task_review_uses_v3_and_exposes_four_machine_answers(self):
-        review = api_payload("/api/scale300-tasks")
-        self.assertEqual(review["total_scenarios"], 300)
-        self.assertEqual(review["processed"], 300)
-        self.assertEqual(review["summary"]["answer_counts"], {
-            "T1": 50, "T2": 50, "T3": 50, "T4": 50,
-        })
-        package = api_payload("/api/scale300-task/IA_PIPE_003")
-        self.assertEqual(package["format"], "socialflux_scale300_task_package_v3")
-        self.assertEqual(set(package["tasks"]), {"T1", "T2", "T3", "T4"})
-        self.assertTrue(all(
-            task["answer_status"] == "machine_proposal_pending_human_review"
-            for task in package["tasks"].values()
-        ))
-        self.assertTrue(all(
-            not task["formal_pool_eligible"]
-            for task in package["tasks"].values()
-        ))
-
-    def test_task_examples_expose_three_machine_proposals_without_gt(self):
-        packet = api_payload("/api/task-examples")
-        self.assertEqual({item["task"] for item in packet["examples"]}, {"T1", "T2", "T3"})
-        self.assertEqual(packet["human_ground_truth_count"], 0)
-        for item in packet["examples"]:
-            self.assertIsNone(item["text_instance"]["ground_truth"])
-            self.assertIsNotNone(item["llm_answer"])
-            self.assertIn("not_ground_truth", item["answer_provenance"]["answer_type"])
-        t3 = next(item for item in packet["examples"] if item["task"] == "T3")
-        self.assertFalse(t3["media"]["shown_to_model"])
-        self.assertEqual(load_task_examples()["status"], packet["status"])
-
-
 
     def test_unknown_scenario_is_not_found(self):
         self.assertIsNone(api_payload("/api/scenarios/does-not-exist"))

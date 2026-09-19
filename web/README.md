@@ -1,45 +1,35 @@
 # SocialFlux Annotation Studio
 
-网站是 20 个 canonical scenario、完整 Rollout Screening 人工队列与历史 180 个 T1/T2/T3
-开发实例的只读可视化和人工标注草稿工作台。当前旧筛选库存 184 条均因只有 6 轮而被
-新版 20 轮 Gate 判为 REJECT，不存在 provisional winner；它们仍完整呈现，供人工审计旧失败与筛选规则。网站读取
-`configs/scenarios/scenario_NNN/`、`build/pipeline_v2/` 和 Talking Head
-资产，不复制或修改环境状态机。
+当前默认页面是 GPT 小规模实验的人工 Gate 1：
 
-界面包含：
-
-- Scenario 情节、被测角色身份与 explicit goal、环境角色目标、完整 persona/hidden intention、关键历史、选择空间、S0/D0 与视频阈值审核；
-- 被测模型使用配置指定的 T4 prompt（当前示例为 `task_t4_action_v17`），并展示首轮真实渲染输入、公开字段和明确排除的私有字段；
-- Rollout 逐轮对话、状态变化、六维质量和 hard-reject 标注；
-- T1/T2/T3 逐实例题面、专属 Gate 4 检查和人工标签草稿；
-- `/task_examples.html` 集中展示三项高质量示例、完整公开历史、机器答案与 text/text+video 配对；
-- 该页审核结果保存在浏览器 localStorage，并可单独导出 JSON；机器答案始终保持 `ground_truth=null`；
-- 自然语言 scenario、完整 rollout 与 task 抽查文档；
-- 浏览器自动保存、审核进度和 JSON 导出。
-
-浏览器记录只是本机草稿，不会写入仓库，也不构成真人签名、Gate 通过或正式
-human GT。导出的 JSON 仍需走项目中的 hash 绑定、两人同样本独立抽查和
-分歧仲裁流程；只有抽查通过后才能发布全量机器建议标签。
-
-启动：
-
-```bash
-python -m web.server --host 0.0.0.0 --port 8000
+```text
+http://127.0.0.1:8000/gpt50
 ```
 
-本机访问 `http://127.0.0.1:8000/`。远程服务器推荐端口转发：
+它展示完整 scenario、角色、关键历史、S0/D0、trigger 与 schema 状态，并导出绑定 scenario SHA-256 的人工审核草稿。通过 Gate 1 后每个场景只生成一条 rollout。
+
+旧 Qwen rollout 和旧 Scale300 场景已移出活跃目录，保存在本地忽略归档中。历史四 Gate 页面、任务审核页、示例页和 Talking Head 路由仍保留；没有活跃历史数据时会显示归档状态，不会将旧结果当作当前候选。
+
+浏览器记录仅保存在 localStorage，不写仓库，也不构成真人签名、Gate 通过或 human GT。正式 Gate 4 仍要求两人独立审核同一确定性样本，只有分歧项进入仲裁。
+
+## 启动
 
 ```bash
-ssh -L 8000:127.0.0.1:8000 <host>
+python -m web.server --host 127.0.0.1 --port 8000
 ```
 
-然后访问 `http://127.0.0.1:8000/`。
+远程访问：
 
-验证：
+```bash
+ssh -p 22 -L 8000:127.0.0.1:8000 root@SERVER_IP
+```
+
+保持隧道终端开启，然后在本机浏览器打开 `http://127.0.0.1:8000/gpt50`。
+
+## 验证
 
 ```bash
 python -m unittest discover -s web/tests -v
 curl http://127.0.0.1:8000/api/health
-curl http://127.0.0.1:8000/api/annotation-contract
-curl http://127.0.0.1:8000/api/task-examples
+curl http://127.0.0.1:8000/api/gpt50-review
 ```

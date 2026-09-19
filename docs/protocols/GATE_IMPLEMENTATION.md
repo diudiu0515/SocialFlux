@@ -39,8 +39,8 @@ change its score merely by shifting the random stream.
 
 For development-pool cleanup, `scripts/repair_failed_rollouts.py` accepts a
 four-gate report and replaces only IDs whose Gate 3 audit is explicitly
-`rejected`. Every candidate must pass structural checks and independent Qwen +
-GLM prefilters before publication. The active manifest is replaced before the
+`rejected`. Every candidate must pass structural checks and the configured independent
+semantic prefilters before publication. The active manifest is replaced before the
 old file is moved into `rollouts/rejected/`, and every failed candidate is
 preserved as an observable-dialogue JSONL audit record. A historical non-quality replacement recorded as `t2_pairing_rebalance` remains audit evidence only. Production task construction no longer replaces or retains trajectories to balance source models.
 

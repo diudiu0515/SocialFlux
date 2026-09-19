@@ -220,7 +220,7 @@ human adjudicates only disagreements. Then Gate 4 must pass:
 
 ```bash
 python -m pipeline audit --strict \
-  --scenario-root configs/scale300_v1/scenarios \
+  --scenario-root path/to/frozen-scenarios \
   --raw-root data/formal/selected \
   --rollout-stage selected \
   --pipeline-output data/formal/tasks \

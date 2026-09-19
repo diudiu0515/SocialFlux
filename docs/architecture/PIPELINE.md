@@ -1,10 +1,10 @@
 # SocialFlux Pipeline
 
-当前生产主链只有一条，公开入口只有 `python -m pipeline`：
+当前生产结构与 batch size、模型供应商解耦：
 
 ```text
-300 Scenario
-  → Gate 1：Scenario / S0-D0 冻结
+N 个 Scenario 候选
+  → Gate 1：Scenario / S0-D0 人工冻结
   → 每场景 1 条自然 rollout
       Policy 自由文本 action
       → Appraisal LLM
@@ -12,92 +12,43 @@
       → Response LLM
       → Ledger / 下一轮 observation
   → Gate 2：Environment validity
-  → Gate 3：唯一 Trajectory 合格/淘汰
+  → Gate 3：唯一 Trajectory 准入或淘汰
   → T1 / T2 / T3 构建；T4 在线评测
   → Gate 4：任务实例与答案抽查
 ```
 
-300 个 Scenario 由 Claude 直接写入 canonical schema，不经过 Scale20、Scale100、
-Scale150 或 Scale200 的复制/扩展链。`scripts/build_scale300_v1.py` 只做完整性、
-schema 和确定性投影校验，不负责生成或批准场景。
+当前先运行 GPT 小规模端到端实验，用来发现 scenario、environment、task 和 score 设计漏洞；审核通过后再扩大 Claude 主批次。旧 Qwen/Scale300 数据已归档，不是 compatibility baseline，也不进入 active pipeline。
 
 ## 运行时边界
 
-- 唯一场景目录：`configs/scale300_v1/scenarios`，必须恰好包含 300 个 scenario 及同名 Markdown。
-- 每个 Gate-1-approved scenario 恰好生成 1 条自然轨迹；失败计入产率，不生成替代候选。
+- 每个批次有独立的 scenario root、manifest、Gate 记录和输出 root。
+- 每个 Gate-1-approved scenario 恰好生成 1 条自然轨迹；失败计入产率，不补抽。
 - Policy 只输出自由文本 action，不读取 action transition table。
-- Appraisal 和 Response 是独立语义调用；二者之间只有 Python 负责确定性状态更新。
-- Ledger 保存已发生的公开事件、模型 action/response 和下一轮 observation，不暴露 hidden intention、persona、S/D、appraisal 或 delta。
-- 所有 active 语义角色统一路由到 `claude-fable-5`。业务模块不写死 provider，也不允许 policy 级 environment override。
-- `pipeline/runtime.py` 是 Fable provider、policy 和 environment factory 的唯一组装位置。
+- Appraisal 与 Response 是独立语义调用；Python 在两者之间执行确定性状态更新。
+- Ledger 只保存已发生的公开事件、action/response 与下一轮 observation，不暴露 hidden intention、persona、S/D、appraisal 或 delta。
+- 模型由版本化 route table 注入，业务模块不得写死 provider/model。
+- 浏览器草稿、LLM judge 和机器建议都不能替代真人 Gate 或正式 GT。
 
 ## 四个 Gate
 
 | Gate | 阻断条件 | 通过后的产物 |
 |---|---|---|
-| Gate 1 | scenario 未 approved，或 S0/D0 未 human_frozen | 可生成的 frozen scenario |
-| Gate 2 | environment 的 E1–E6 证据不足或失败 | environment-valid trajectories |
-| Gate 3 | 唯一轨迹的结构、自然结束、语义质量或 history/Judge 证据不足 | 合格场景的 canonical trajectory |
-| Gate 4 | T1/T2/T3 实例或答案人工抽查未通过 | 可发布任务与答案 |
+| Gate 1 | scenario 未 approved，或 S0/D0 未 human_frozen | hash-bound frozen scenario |
+| Gate 2 | environment 的 E1–E6 证据不足或失败 | environment-valid trajectory |
+| Gate 3 | 唯一轨迹结构、自然结束、语义质量或 history evidence 不合格 | canonical trajectory |
+| Gate 4 | T1/T2/T3/T4 实例或答案抽查未通过 | 可发布任务与答案 |
 
-`pending` 不能被程序改写成 `passed`。`--allow-unreviewed` 只用于诊断，不能产出正式数据。
+`pending` 不能被程序改成 `passed`。`--allow-unreviewed` 仅用于隔离诊断，不能产出正式数据。
 
-## 唯一运行顺序
+## 批次执行
 
-```bash
-# Claude 直建完成后：校验、刷新投影、生成 unsigned Gate 1 表
-python scripts/build_scale300_v1.py --check
-python scripts/build_scale300_v1.py
-python scripts/build_scale300_review_template.py
+1. 模型创建完整 canonical scenario JSON。
+2. schema/catalog 校验并生成只读文档；校验脚本不得修改语义。
+3. 人工 Gate 1 绑定最终 JSON 的 SHA-256，冻结 S0/D0。
+4. 对已批准场景各运行一个 rollout slot。
+5. Gate 2 完成环境证据，Gate 3 对唯一轨迹作准入/淘汰。
+6. 仅从 selected root 构建 T1/T2/T3；T4 使用同一 environment runtime。
+7. Gate 4 对机器建议进行同样本双人抽查和分歧仲裁。
+8. strict audit 通过后才能称为正式发布。
 
-# 300 scenarios × 1 rollout 与 Fable-only 路由检查
-python -m pipeline preflight
-
-# Gate 1 已冻结后，生成 300 个唯一 raw slots
-python -m pipeline rollout \
-  --review-registry reviews/scale300_scenario_review.json \
-  --output data/formal/raw --workers 4 --retry-limit 1 --resume
-
-# Gate 2 通过后执行 Gate 3 审计、准入与 canonical materialization
-python -m pipeline gate3 \
-  --raw-root data/formal/raw \
-  --stage formal \
-  --review-registry reviews/scale300_scenario_review.json \
-  --environment-evidence data/formal/environment_evidence \
-  --judgments data/formal/judgments.json \
-  --history-evidence data/formal/history.json \
-  --output data/formal/gate3_report.json \
-  --selected-root data/formal/selected
-
-# 只消费 Gate 3 选出的 canonical trajectories
-python -m pipeline tasks \
-  --rollout-root data/formal/selected \
-  --review-registry reviews/scale300_scenario_review.json \
-  --environment-evidence data/formal/environment_evidence \
-  --gate3-report data/formal/gate3_report.json \
-  --output data/formal/tasks
-
-# T4 复用同一个 stateful environment
-python -m pipeline t4 --output data/formal/t4
-
-# Gate 4 与最终严格审计
-python -m pipeline audit \
-  --rollout-stage selected \
-  --raw-root data/formal/selected \
-  --pipeline-output data/formal/tasks \
-  --review-registry reviews/scale300_scenario_review.json \
-  --environment-evidence data/formal/environment_evidence \
-  --judgments data/formal/judgments.json \
-  --history-evidence data/formal/history.json \
-  --human-task-review data/formal/gate4_review.json \
-  --output data/formal/four_gate_report.json --strict
-```
-
-`scripts/generate_long_rollout_pool.py`、`scripts/run_quality_gates.py`、
-`scripts/run_pipeline.py` 和 `scripts/run_t4_evaluation.py` 是各阶段的内部 worker，
-不再是并列的用户入口。旧 Scale catalog 和继承生成器已删除；保留的旧 rollout
-与报告仅用于尚未被替代的方法审计，不参与 active pipeline。
-
-正式运行和人工证据格式见
-[Formal Rollout Runbook](../operations/FORMAL_ROLLOUT_RUNBOOK.md)；
-全部不可变约束见 [DESIGN_CONTRACT](../../DESIGN_CONTRACT.md)。
+命令参数示例见仓库根 [README](../../README.md)，正式证据格式见 [Formal Rollout Runbook](../operations/FORMAL_ROLLOUT_RUNBOOK.md)，完整约束见 [DESIGN_CONTRACT](../../DESIGN_CONTRACT.md)。

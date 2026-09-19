@@ -21,6 +21,7 @@ data/formal/
 data/smoke/
 data/scenario_authoring/
 data/gpt50/
+archives/
 reviews/*signed*.json
 configs/scenarios/scenario_*/rollouts/
 media/talking_head/assets/

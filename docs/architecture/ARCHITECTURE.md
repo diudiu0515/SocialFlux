@@ -3,9 +3,9 @@
 ## 总体数据流
 
 ```text
-Claude direct Scale300 authoring request
+Versioned scenario authoring batch (GPT design audit or Claude primary)
         ↓
-300 complete canonical scenario JSON candidates
+N complete canonical scenario JSON candidates
         ↓
 schema/catalog validation (no model approval)
         ↓
@@ -44,7 +44,7 @@ nine-criterion acceptance + human annotation
 - environment/response_generator.py 负责 response prompt 和 provider 调用；environment/response_validation.py 独立保存输出 schema、事实边界和动作归属检查。
 - policies/model_policy.py 负责 agent prompt 和 provider 调用；policies/action_validation.py 独立保存 agent action 的验证契约。
 - tasks/T2/runtime.py 是 T2 文件 I/O、环境创建、公开历史投影和状态比较的唯一 owner；`scripts/t2_common.py` 仅保留历史导入兼容，新代码不得从其增加逻辑。
-- scripts/build_scale300_v1.py 只校验 Claude 直接创建的 300 个 canonical JSON，并刷新 Markdown、manifest、coverage 与 design matrix；它不调用模型、不继承旧 Scale，也不修改场景语义。
+- batch validator 只校验模型直接创建的 canonical JSON，并刷新 Markdown、manifest 与 coverage；它不调用模型、不批准 Gate 1，也不修改场景语义。
 - providers/anthropic.py 是 active baseline 的唯一网关 owner，负责 Anthropic Messages、有界 transport retry 与实际 HTTP 请求计数；领域层只负责 schema/语义 retry。
 
 ## 信息边界
@@ -63,7 +63,7 @@ nine-criterion acceptance + human annotation
 
 ## Scenario bundle
 
-每个 `scenario_NNN/` 的 JSON 是机器事实源，同名 Markdown 是确定性生成的人类说明，含故事初始化、S0/D0、作者化多片段时间线/事件池、视频阈值、质量状态与 rollout 位置。每次 rollout 后，同目录 `rollouts/dialogues.md` 逐轮描述完整自然对话，`rollouts/tasks.md` 逐 instance 描述 T1/T2/T3 公开题面和隔离的私有诊断，供人工抽查。JSON 改动后必须运行 `scripts/scenario_docs.py`；`--check` 校验 Markdown 内 SHA-256 与 catalog/coverage matrix。
+每个 `scenario_NNN/` 的 JSON 是机器事实源，同名 Markdown 是确定性生成的人类说明，含故事初始化、S0/D0、作者化多片段时间线/事件池、视频阈值与质量状态。批次目录和运行产物分离：场景目录不内嵌历史模型 rollout。JSON 改动后必须刷新确定性文档并重新进行 hash-bound Gate 1；旧签名自动失效。
 
 S0/D0 的候选值与真人冻结协议见 [`S0_D0_REVIEW.md`](../protocols/S0_D0_REVIEW.md)。Talking Head 使用 `media/talking_head/manifest.json` 作为媒体事实源：每个 scenario 三条状态触发视频，请求只含公开表演指令，不泄漏 hidden state、阈值或任务答案；生成后由收集器验证视频流、音轨、时长、分辨率和帧率，再将 media ID 回填 scenario。网站通过受限 `/media/<asset_id>` 路由读取清单中的 MP4，不接受任意文件路径。
 
@@ -99,10 +99,9 @@ History dependence 的 Full / Recent-k / Critical-event-removed 三个 policy
 
 ## 人工标注工作台
 
-`web/` 保留为 Scenario、rollout、task 与 Talking Head 的人工审核工作台。Scale300
-Gate 1 页面读取当前 design matrix 和 exact scenario JSON；浏览器草稿不构成签名。
+`web/` 保留为 Scenario、rollout、task 与 Talking Head 的人工审核工作台。当前默认入口读取 GPT 小规模设计实验的 exact scenario JSON；浏览器草稿不构成签名。历史四 Gate 页面保留框架，但旧 Qwen/Scale300 数据已从活跃路径归档。
 
-当前生产 baseline 的所有 LLM role 统一为 `claude-fable-5`。新的 Fable 场景/轨迹批次以 run manifest 为入口；网站中写死的 Qwen/GLM 路径仅是历史审计数据源，不能被选为当前 canonical 产物。
+模型通过版本化 route table 按语义角色注入。GPT 小规模批次用于设计审计，Claude 用于后续主批次；任何模型名都不得写死在业务模块，批次必须以 manifest 和 provenance 为入口。
 
 ## 验收
 
