@@ -1,15 +1,14 @@
-"""Frozen constants for the active Scale300/Fable production path."""
+"""Frozen defaults for the active, versioned Fable production path."""
 
 from pathlib import Path
 
 
 ACTIVE_MODEL = "claude-fable-5"
-SCENARIO_COUNT = 300
 ROLLOUTS_PER_SCENARIO = 1
 MAX_TURNS = 20
 MIN_MAIN_TURNS = 10
 
-SCENARIO_ROOT = Path("configs/scale300_v1/scenarios")
+SCENARIO_ROOT = Path("data/active/scenarios")
 ROLLOUT_CONFIG = Path("configs/formal_rollout_pool.json")
 MODEL_ROUTES = Path("configs/model_routes.frontier_api.json")
 REVIEW_CONFIG = Path("configs/review_models.json")

@@ -2,7 +2,10 @@
 
 Write one original, compact social-scenario dossier from the construction brief.
 This dossier will be normalized into a benchmark candidate and later reviewed by
-a human; it is not a trajectory or an answer.
+a human; it is not a trajectory or an answer. All people, organizations, and
+events are fictional, and the task contains no real personal data. Write a
+neutral workplace case: do not infer sensitive traits, diagnose anyone, or
+provide technical operating or safety instructions.
 
 Use 700–1,000 words. Include only:
 
@@ -19,6 +22,8 @@ brief's mechanism, power structure, information asymmetry, and temporal design.
 Do not mention schemas, latent variables, S0/D0, triggers, benchmark tasks,
 scores, labels, prompts, or model behavior. Do not write a screenplay or long
 dialogue. Do not prescribe a best strategy or ending.
+The dossier may establish that a later verification procedure is scheduled,
+but must not reveal its result as if the characters already know the future.
 
 Return Markdown only, with concise section headings.
 

@@ -14,7 +14,6 @@ from .constants import (
     MODEL_ROUTES,
     REVIEW_CONFIG,
     ROLLOUT_CONFIG,
-    SCENARIO_COUNT,
     SCENARIO_ROOT,
     T2_CONFIG,
     T4_CONFIG,
@@ -51,10 +50,6 @@ class PipelinePreflight:
 
     def run(self):
         records = load_scenario_records(self.scenario_root)
-        if len(records) != SCENARIO_COUNT:
-            raise ValueError(
-                f"active catalog requires {SCENARIO_COUNT} scenarios, found {len(records)}"
-            )
         config = load_rollout_config(self.rollout_config)
         assert_fable_rollout_config(config)
         t4 = load_t4_config(self.t4_config)

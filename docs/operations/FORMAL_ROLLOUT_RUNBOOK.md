@@ -11,7 +11,8 @@ Generate or refresh the unsigned worksheet:
 python scripts/prepare_scenario_review.py
 ```
 
-A real reviewer inspects all 20 JSON/Markdown scenario pairs, updates each
+A real reviewer inspects every JSON/Markdown scenario pair listed in the active
+run manifest, updates each
 scenario's quality checklist and `construction_status`, regenerates docs, then
 records their identity, UTC time, exact scenario SHA-256 and all six truthful
 attestations in a separate signed registry. A model or script cannot perform
@@ -27,9 +28,9 @@ the other dimensions must each be at least 3 and the overall mean at least 4.0.
 Use the development trajectories—not future formal trajectories—to assemble
 the six independent evidence files under `data/formal/environment/`:
 
-- `state_transition_agreement.json`: 30–50 sampled transitions, one named human;
+- `state_transition_agreement.json`: the manifest-declared stratified transition sample, one named human;
   collapsed direction agreement must be at least 0.70.
-- `trajectory_plausibility.json`: 15–20 complete trajectories, one named human;
+- `trajectory_plausibility.json`: the manifest-declared complete-trajectory sample, one named human;
   overall at least 4.0 and each named dimension at least 3.5.
 - `history_intervention.json`: same persona/state/action with the causally
   relevant event removed.
@@ -51,7 +52,9 @@ python scripts/run_backbone_sensitivity.py \
   --output data/formal/environment/backbone_sensitivity.json
 ```
 
-The first command does not approve Gate 2 by itself. E1/E2 and the human parts
+The manifest records the sample counts and deterministic selection seed; the
+protocol does not hard-code a catalog size. The first command does not approve
+Gate 2 by itself. E1/E2 and the human parts
 of E3–E5 remain real-reviewer work. Formal rollout refuses to start unless all
 Gate 1 records pass. Gate 2 is checked before canonical selection by
 `python -m pipeline gate3`; it never mutates pending evidence into a pass.

@@ -108,7 +108,7 @@ SocialFlux 是一个用于长期社会互动推理的 stateful benchmark。它�
 - evaluated policy 每轮输出任意非空自然语言文本。
 - 不接受 `action_id`、repair/neutral/escalation 类固定策略标签或 action transition table。
 - 正常 rollout 不使用 scripted action trajectory，不重复同一策略来制造预期方向。
-- diversity 来自模型、采样、seed 和自然形成的历史；结果标签只能在 rollout 后描述，不能在生成前作为策略。
+- diversity 来自不同 scenario、自由文本 action 和自然形成的历史；结果标签只能在 rollout 后描述，不能在生成前作为策略。
 - 场景不得包含 `action_effects`、`response_templates` 或按 action 直接指定 observable cue 的字段。
 
 内部 appraisal 可以把 action 解释成 question、proposal、commitment 等语义事件，但这些是环境的解释结果，不是 evaluated policy 的可选 action taxonomy，也不能直接决定状态变化。
@@ -136,7 +136,7 @@ public observation O_t
 环境角色可以访问 persona、explicit goal、author-only hidden intention、私有 S/D、可观察历史和当前 action。被测 evaluated model 只能看到：
 
 - 自己的公开身份、角色和 explicit goal；
-- 公开背景与当前 public situation；
+- 公开背景、双方关系/权力结构、当前冲突，以及已经发生的公开关系历史；
 - 对方公开身份；
 - 已观察的 action、response、公开时间和事件记录；
 - 可观察的 expression、media 和公开 conversation ledger；
@@ -149,7 +149,13 @@ public observation O_t
 - initial/current S 或 D；
 - appraisal、semantic delta、numeric delta；
 - trigger ID、threshold、未来分支或作者预设结果；
+- information asymmetry、meaningful choice space 或作者设计的讨论维度；
 - 只存在于 simulator private log 的证据。
+
+公开历史可以说明所有人都知道的未来安排或核验程序，但不能提前泄露其结果、
+内容或作者预测。环境和答案生成侧可见完整 persona；被测模型只能看到对方公开的
+name/role，不能看到其性格字段。background 属于公开输入，因此其中明确写出的
+“曾共事四年”等关系事实对被测模型可见。
 
 网站可以向研究者展示完整私有诊断，但不能把研究者视图当作模型输入，也不能由浏览器草稿直接签署正式证据。
 
@@ -161,22 +167,27 @@ public observation O_t
 
 Persona、role、explicit goal 和 hidden intention 是稳定上下文，不是 mutable state。
 
-可用状态族包括：
+S_t 必须且只能包含以下四个 family，每个 family 至少选择一个变量，全场景合计
+选择 4–8 个变量：
 
-- emotion：anger、anxiety、hope、sadness、fear、guilt、shame、disappointment、relief 等短期主观体验；
-- motivation：resolve、avoidance_urge、repair_intent、resistance_intent 等当前行动准备度；
-- coping：assertiveness、strategic_patience、evidence_seeking、endurance 等情境化应对取向；
-- relationship：trust、hostility、respect、perceived_safety、affiliation 等关系信念或立场。
+- emotion：即时主观体验，例如 anger、anxiety、hope、sadness、fear、guilt、shame、disappointment、frustration、relief；
+- behavioral_disposition：即时行动倾向，例如 resolve、avoidance_urge、repair_intent、resistance_intent、disclosure_willingness、cooperation_readiness、evidence_seeking、boundary_assertion；
+- relationship：关系信念或立场，例如 trust、hostility、respect、perceived_safety、affiliation、perceived_fairness；
+- consequence_risk：当前互动造成后果的风险，例如 goal_failure_risk、relationship_rupture_risk、reputational_harm_risk、material_loss_risk、safety_harm_risk、institutional_harm_risk、commitment_breach_risk、exclusion_risk。
 
-每个 scenario 只选择与其社会机制相关的变量。相反方向的变量不强制互补，也不要求每轮同时变化。
+每轮必须对四个 family 中所有选中变量逐项评估并在完整 delta 中各输出一次。
+“更新”是完成评估与状态转移，不等于每项必须发生数值变化；没有新的相关证据时
+必须输出 `similar`。只有证据支持的少数变量可以非零变化，不能为了覆盖四维而
+伪造联动。相反方向变量不强制互补。
 
 ### 4.2 Interaction dynamics
 
-D_t 与人物主观状态分开。常见 dynamics 包括：
-
-- `goal_failure_risk`：互动正在偏离 evaluated role 的合法目标的风险；
-- `escalation_risk`：互动继续下去的成本或困难正在增加；
-- `negotiation_open`：有意义的交换和适应是否仍然可能。
+D_t 是人物之外的外部互动条件，与 S_t 分开。每个 scenario 从以下规范变量中选择
+2–5 个：`deadline_pressure`、`resource_scarcity`、
+`information_asymmetry`、`public_exposure`、
+`negotiation_openness`、`coordination_stability`、
+`institutional_constraint`。D 与 S 一样每轮逐项评估并输出完整 delta；
+无证据变化时为 `similar`。
 
 客观风险不能伪装成 emotion。新增变量必须有 operational definition、邻近概念区分、可观察/可推断依据和 schema 记录。
 
@@ -196,7 +207,9 @@ D_t 与人物主观状态分开。常见 dynamics 包括：
 
 代码负责 persona sensitivity、inertia、稀疏性、边界裁剪和 numeric log；模型不能直接写数值结果。所有结果裁剪到 0–10。
 
-同一事件可以降低 risk、缓解 emotion，却不恢复 trust 或 motivation。重复确认不自动等于零变化，也不自动持续加分；是否变化必须由当前语义、历史和证据决定。
+同一事件可以降低 consequence risk、缓解 emotion，却不恢复 trust 或
+behavioral disposition。重复确认不自动等于零变化，也不自动持续加分；
+是否变化必须由当前语义、历史和证据决定。
 
 ## 5. 每轮调用合同
 
@@ -260,9 +273,10 @@ config 中显式声明并存在于 `prompts/manifest.json`。诊断实验可使�
 
 每个 scenario 固定：稳定 persona、社会背景、关系/权力结构、environment explicit goal、author-only hidden intention、evaluated-agent role/goal、候选 S0/D0、终止条件、可观察表达和稀疏 media trigger。
 
-当前 Scale300 由 Claude 直接创建 300 个完整 canonical JSON，不继承、复制或扩展
-Scale20/100/150/200 catalog。`scripts/build_scale300_v1.py` 只验证完整性和 schema
-并生成确定性投影，不调用模型、不改写语义，也不能设置人工通过状态。
+active catalog 使用版本化、批次大小无关的 candidate 路径，不继承旧
+Scale20/100/150/200/300 数据。Claude 是主生成模型；GPT 小批次仅用于端到端
+设计审计，二者必须使用独立 run ID 和 manifest，不能混成同一正式批次。生成器
+只能写 candidate，不能设置人工通过状态。
 
 来源至少包括 synthetic-script 和 narrative-derived 两类。
 
@@ -276,7 +290,7 @@ Scale20/100/150/200 catalog。`scripts/build_scale300_v1.py` 只验证完整性�
 
 ### 8.3 Gate 1 与 S0/D0
 
-在进入正式环境前，scenario 必须经过真人审核：social plausibility、real trade-off、longitudinal necessity、nontrivial strategy space、motivation coherence、information asymmetry、T1/T2/T3 suitability、T4 adaptation opportunity、no universal script 等。
+在进入正式环境前，scenario 必须经过真人审核：social plausibility、real trade-off、longitudinal necessity、nontrivial strategy space、character/goal coherence、information asymmetry、T1/T2/T3 suitability、T4 adaptation opportunity、no universal script 等。Schema 中保留的 `character_motivation_coherence` 只是 Gate 检查 ID，不是 state family。
 
 S0/D0 是候选初始化，不是自动 ground truth。只有真人 reviewer 对精确 JSON hash、来源质量和初始化结果签名后才算 human-frozen。LLM report、机器 gate 和网站草稿不能替代真人签名。
 
@@ -302,7 +316,9 @@ hard reject 包括：hidden-state leakage、malformed output、repetitive loop�
 
 ### 9.3 Canonical selection
 
-先过质量门，再做 near-duplicate 过滤、post-hoc outcome 描述、多样性检查和人工比较。每个 scenario 最终只保留一条 human-confirmed canonical trajectory；不能按单一总分机械选，也不能为了模型族均衡强留低质量样本。
+每个 scenario 只有一条自然 raw trajectory。Gate 3 对它做准入或淘汰，不排名、
+不进行 best-of-N、不因失败补 seed；通过后该条就是 canonical trajectory。
+全局 near-duplicate 和多样性检查只能拒绝问题数据，不能从额外 rollout 中择优。
 
 T1、T2、T3 在合格池上独立选源，一个模型可以零入选，也可以赢得全部任务。任务分数不包含 model identity。
 
@@ -337,15 +353,15 @@ A/B 分别从分叉 checkpoint 经过正式 Structured Appraisal → 确定性�
 四层不能互相代替：
 
 1. Gate 1：scenario source、质量、原创性和真人 freeze。
-2. Gate 2：environment validity，包括 state-update human agreement、persona sensitivity、paraphrase robustness、history intervention、local action intervention、neutral-state stability、response-state consistency、full-trajectory plausibility、seed robustness，以及必要的 backbone sensitivity。
+2. Gate 2：environment validity，包括 state-update human agreement、persona sensitivity、paraphrase robustness、history intervention、local action intervention、neutral-state stability、response-state consistency、full-trajectory plausibility，以及必要的 backbone sensitivity。
 3. Gate 3：唯一 raw trajectory 的六维质量、hard reject、history evidence 与 Judge/audit；只做准入/淘汰，不做 best-of-N selection。
 4. Gate 4：T1/T2/T3 instance 的泄漏、可回答性、证据和 machine proposal 人工抽查。
 
 发布前必须同时满足：
 
-- 300 个 Scale300 scenario 的 source/quality/S0/D0 evidence 完整；
+- 当前 manifest 中全部 scenario 的 source/quality/S0/D0 evidence 完整；
 - environment validity 的真人字段已签名，机器结果不能代签；
-- 每个 scenario 有合格 raw candidates、Judge/history/backbone evidence 和一条 human-confirmed canonical trajectory；
+- 每个 scenario 的唯一 raw trajectory 有完整 Judge/history/backbone evidence，并且通过 Gate 3；
 - T1/T2/T3 仅从合格来源构建，manifest、trajectory、audit 和 instance hash 完全一致；
 - Gate 4 对每种 task type 使用同一确定性 10% 样本给两名独立 reviewer；只有分歧才由第三人 adjudicate；
 - machine proposal 只有在 Gate 4 通过后才能以明确的 audited-machine 来源发布；
@@ -358,8 +374,8 @@ A/B 分别从分叉 checkpoint 经过正式 Structured Appraisal → 确定性�
 
 - `DESIGN_CONTRACT.md`：本文件，唯一设计入口。
 - `README.md`：快速开始和常用命令，只引用本文件，不重复定义另一套轮数合同。
-- `configs/scale300_v1/CLAUDE_AUTHORING.md`：Claude 直建 Scale300 的输入、输出和人工边界。
-- `configs/scale300_v1/scenarios/scenario_NNN/scenario_NNN.json`：当前 Scale300 scenario 机器事实源；`configs/scenarios/` 仅保留 Web/历史诊断使用的 20 场景开发集，不是父 catalog。
+- active run manifest：记录 scenario root、批次大小、模型路由、prompt/schema/config hash 与 run ID。
+- active scenario root：当前批次的机器事实源；旧 catalog 只可作本地历史诊断，不能由默认入口读取。
 - 同目录 `.md`：由 `scripts/scenario_docs.py` 生成的确定性可读投影；必须通过 `--check`。
 - `environment/`：唯一状态环境及其 appraisal、update、response、memory、termination、ledger、multimodal。
 - `prompts/`：固定运行时 prompt；`prompts/manifest.json` 记录 hash。
@@ -374,4 +390,6 @@ A/B 分别从分叉 checkpoint 经过正式 Structured Appraisal → 确定性�
 
 当前代码已经实现自由文本 action、单一 environment、private/public boundary、两阶段 appraisal/response、确定性 state update、ledger、自然结束分类、T1/T2/T3 builder、T4 judge packet 和 Gate 结构。
 
-当前仍不能宣称正式发布完成：旧 rollout 仅作审计，Scale300 的 300 条唯一正式轨迹、真人 scenario/S0/D0 freeze、Gate 2/3/4、正式 Judge/history/backbone evidence 和 audited machine GT 仍需以实际产物证明。任何状态更新都必须反映真实文件和报告，不得只改本节文字。
+当前仍不能宣称正式发布完成：新批次仍需真人 scenario/S0/D0 freeze、
+唯一正式轨迹、Gate 2/3/4、正式 Judge/history/backbone evidence 和 audited
+machine GT。任何状态更新都必须反映真实文件和报告，不得只改本节文字。

@@ -11,7 +11,7 @@ State / Environment Configuration
         ↓
 Gate 2 — Environment Validity Gate
         ↓
-Free-form Multi-model Rollouts
+One Free-form Natural Rollout per Approved Scenario
         ↓
 Gate 3 — Rollout Quality Gate
         ↓
@@ -60,55 +60,17 @@ Free-form Model Interaction
 Complete Trajectory
 ```
 
-## Rollout Models
+## Rollout Model and Count
 
-为控制成本，采用：
+Claude/Fable 是主批次模型；GPT 小批次只做端到端设计审计。不同 provider、
+run ID 和 manifest 的数据不得混为同一批次。
 
-```text
-Main:
-locally deployed strong open-weight models
+每个通过 Gate 1 的 scenario 从冻结的 S0/D0 只生成 1 条自然 trajectory，
+使用 1 个记录在 provenance 中的 seed。不做三倍 rollout、best-of-N 或失败后的
+replacement seed。格式重试只修复同一次逻辑调用，不能变成重新抽一条轨迹。
 
-Supplement:
-small amount of strong API models
-```
-
-目标不是获得“最完美”的对话，而是：
-
-```text
-Plausibility
-+
-History Dependence
-+
-Behavioral Diversity
-+
-Model-family Diversity
-```
-
-每个 scenario 使用多个 rollout models 和多个 seeds。
-
-例如：
-
-```text
-Local Model A × 3
-Local Model B × 3
-Local Model C × 3
-
-Optional strong API model × 1–2
-```
-
-不要每个 scenario 只保留最高分的一条 trajectory。
-
-最终选择：
-
-```text
-Quality Gate
-+
-Deduplication
-+
-Diversity Selection
-```
-
-保留若干高质量但演化路径不同的 trajectories。
+Gate 3 对这条唯一轨迹做准入或淘汰；全局去重和多样性检查可以拒绝问题数据，
+不能借此选择额外候选。
 
 ---
 
@@ -177,11 +139,11 @@ Environment 未通过本 Gate 前，只能产生 development rollout。
 
 正式 benchmark rollout 必须在 Environment freeze 后重新生成。
 
-当前 20-scenario pilot 由 1 名真人 reviewer 负责 Gate 2。E1 抽 40 个
-transition（每个 scenario 2 个），E2 抽 20 条完整 trajectory（每个
-scenario 1 条）；E3/E4/E5 由脚本先在 matched checkpoint 上自动生成，
-真人只复核实验控制、语义等价/社会合理性和少量具体结果。E6 是纯自动
-backbone 实验。自动结果不会写入 `human_attestation`。
+Gate 2 的抽样量由 active run manifest 按批次规模声明，不能在协议中写死
+20/100/200/300。E1 抽真实 transition，E2 抽完整 trajectory；
+E3/E4/E5 由脚本先在 matched checkpoint 上自动生成，真人复核实验控制、
+语义等价/社会合理性和抽样结果。E6 是自动 backbone 实验。自动结果不会写入
+`human_attestation`。
 
 必须验证：
 
@@ -327,8 +289,8 @@ Human 判断相对方向是否合理。
 
 这只是 validation intervention，不是 rollout strategy。
 
-E3/E4/E5 至少各覆盖 10 个 matched checkpoint；当前 pilot 默认各覆盖
-20 个 scenario。真人确认前，文件即使 machine screen 通过也保持 pending。
+E3/E4/E5 的覆盖量必须写入当前 run manifest；真人确认前，文件即使 machine
+screen 通过也保持 pending。
 
 ---
 
@@ -503,7 +465,7 @@ Video 应当是 sparse event，不要求每条 trajectory 固定数量。
 
 # 5. Gate 3 — Rollout Quality Gate
 
-多个 models × seeds 产生 raw trajectories 后，每条 trajectory 必须过筛。
+每个 approved scenario 的唯一 raw trajectory 都必须过筛。
 
 ## Hard Reject
 
@@ -541,27 +503,8 @@ Character Consistency >= 4
 Naturalness >= 4
 ```
 
-通过后再做：
-
-```text
-Deduplication
-+
-Diversity Selection
-```
-
-最终不要只留最高分 trajectory。
-
-优先保留：
-
-```text
-高质量
-+
-非重复
-+
-演化路径有差异
-```
-
-的 trajectories。
+Gate 3 只做 pass/reject，不排名、不补抽、不在同一 scenario 内择优。通过后该条
+trajectory 成为 canonical；全局 duplicate 检查仍可将其拒绝。
 
 ---
 
@@ -625,7 +568,7 @@ Current-only shortcut check
 ## T2 Gate
 
 ```text
-[ ] History A/B 均来自自然 rollout
+[ ] History A 来自自然 rollout，History B 是受控改写并独立重放
 [ ] 两段 history 有 meaningful divergence
 [ ] O*_A == O*_B
 [ ] text+video variant 中 video_A == video_B
@@ -694,11 +637,11 @@ Gate 2
 ↓
 Environment Freeze
 ↓
-Multi-model Free Rollout
+One Free-form Natural Rollout per Scenario
 ↓
 Gate 3
 ↓
-Clean + Diverse Trajectory Pool
+Admitted Canonical Trajectories
 ↓
 T1 / T2 / T3 Construction
 ↓

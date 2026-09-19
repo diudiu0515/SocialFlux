@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from schemas.validate import validate_scenario
+from schemas.validate import STATE_CONTRACT_VERSION, validate_scenario
 from scripts.scenario_docs import discover_scenario_paths
 
 
@@ -50,6 +50,11 @@ def require_human_frozen(scenario, *, allow_unreviewed=False):
     """Enforce Gate 1 before production rollout."""
     if allow_unreviewed:
         return
+    if scenario.get("state_contract_version") != STATE_CONTRACT_VERSION:
+        raise ValueError(
+            f"{scenario['scenario_id']} does not use {STATE_CONTRACT_VERSION}; "
+            "legacy contracts are diagnostic-only"
+        )
     status = scenario["construction_status"]
     if status["quality_gate"] != "approved":
         raise ValueError(

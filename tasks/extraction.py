@@ -51,7 +51,7 @@ def extraction_prompt(scenario, trajectory):
         }],
         "t3": {
             "checkpoint_turn_id": "t3",
-            "target_state_ids": ["motivation.resolve"],
+            "target_state_ids": ["behavioral_disposition.resolve"],
             "future_turns_available": 5,
             "rationale": "why distinct actions could produce comparable consequences",
         },

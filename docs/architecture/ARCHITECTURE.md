@@ -14,7 +14,7 @@ Gate 1 source/quality review + S0/D0 real reviewer freeze
 one canonical StatefulEnvironment
         ├── one natural baseline-model rollout per scenario
         ├── T1 natural checkpoints
-        ├── T2 naturally divergent histories + exact shared O*
+        ├── T2 natural A + controlled/replayed B + exact shared O*
         ├── T3 local branches from one real checkpoint
         └── T4 online free interaction
         ↓
@@ -29,7 +29,7 @@ nine-criterion acceptance + human annotation
 2. 接收任意自由文本 action。
 3. 从可观察历史检索 memory；完整原始历史始终是权威记录。
 4. `ModelAppraiser` 私下结合 persona、目标、hidden intention、S_t/D_t 与历史解释 action。
-5. 配置指定的 appraisal prompt 输出 event features 与稀疏、带证据的 variable impacts；DeterministicStateCalibrator 统一完成 inertia、persona sensitivity、magnitude、稀疏性和 0–10 边界更新，期间不调用 LLM；随后配置指定的 response prompt 作为独立 LLM call 读取更新后状态与 ledger 生成回应。
+5. 配置指定的 appraisal prompt 输出 event features 与稀疏、带证据的 variable impacts；DeterministicStateCalibrator 为四个 S family 和全部 D 变量生成完整 semantic delta，未变化项为 `similar`，并统一完成 inertia、persona sensitivity、magnitude、稀疏性和 0–10 边界更新，期间不调用 LLM；随后配置指定的 response prompt 作为独立 LLM call 读取更新后状态与 ledger 生成回应。
 6. `ModelResponseGenerator` 在更新后的状态上生成自然回应。
 7. trigger engine 检测 threshold/crossing/state-change，并只公开安全 expression/media。
 8. logger 保存 private master trajectory；公开 task builder 必须通过 leakage audit。
@@ -51,7 +51,7 @@ nine-criterion acceptance + human annotation
 
 | 层 | 可见 | 禁止进入 |
 |---|---|---|
-| Evaluated policy / T4 | 角色、背景、显式目标、可观察历史、回应、expression、media | hidden intention、S/D、appraisal、delta、阈值、未来 |
+| Evaluated policy / T4 | 角色、背景、公开关系/权力/冲突、公开既有历史、显式目标、可观察历史、回应、expression、media | persona 性格、information asymmetry、meaningful choice space、hidden intention、S/D、appraisal、delta、阈值、未来结果 |
 | T1/T2/T3 输入 | 任务所需可观察历史/checkpoint/候选自由文本 | private trajectory fields、作者假设、模型生成答案 |
 | Author-side environment | persona、hidden intention、S/D、相关 observable memory、action | 未来轨迹或预设 action 结果 |
 | Human annotation | 冻结的公开实例、rubric、独立证据要求 | simulator delta 作为 ground truth |
@@ -105,7 +105,13 @@ History dependence 的 Full / Recent-k / Critical-event-removed 三个 policy
 
 ## 验收
 
-当前 gate 固定为九项：State-Update Human Agreement、Persona Sensitivity、Paraphrase Robustness、History Intervention、Local Action Intervention、Neutral-State Stability、Response-State Consistency、Full-Trajectory Plausibility、Seed Robustness。自动结构证据只能标为 pending/evidence_ready/provisionally_ready；需要真人的项目没有评审记录不得标 pass。
+当前 Gate 2 固定检查 State-Update Human Agreement、Persona Sensitivity、
+Paraphrase Robustness、History Intervention、Local Action Intervention、
+Neutral-State Stability、Response-State Consistency、Full-Trajectory
+Plausibility，并按 manifest 记录必要的 Backbone Sensitivity。单一自然 rollout
+不要求 multi-seed stability。自动结构证据只能标为
+pending/evidence_ready/provisionally_ready；需要真人的项目没有评审记录不得标
+pass。
 
 `gate.md` 在九项环境验收之外约束正式数据来源：每场景恰好 1 条自然结束在 10–20 轮的轨迹、模型只作为 provenance、各语义 role 保持独立请求、六维质量评分、十类 hard reject，以及 Gate 3 对唯一轨迹的合格/淘汰；
 
@@ -115,7 +121,10 @@ History dependence 的 Full / Recent-k / Critical-event-removed 三个 policy
 - 同一 canonical environment 必须用于离线和 T4。
 - canonical scenario 的 max_turns=20 是上限；offline 主候选须自然结束在10–20轮，T4最多20轮并允许自然结束。轨迹可由多个可变长度互动片段组成，只有 ending 与实际对话一致才可进入后续评分。
 - 片段间必须公开经过时间和再次互动原因；期限到达不是履约，fulfilled/partial/unfulfilled 必须来自 scenario-authored event record。
-- evaluated-agent prompt 必须显式提供其公开身份与 explicit goal，但禁止提供对方 hidden intention、persona 数值或任何 S/D/transition 私有量。
+- evaluated-agent prompt 必须显式提供其公开身份与 explicit goal、公开 background 和关系历史，但禁止提供对方 persona 性格、hidden intention、information asymmetry、meaningful choice space 或任何 S/D/transition 私有量。
+- S 必须且只能使用 emotion、behavioral_disposition、relationship、
+  consequence_risk 四个 family；每轮完整评估所有选中 S/D 变量，证据不足时输出
+  `similar`，不能强迫四个 family 同时发生数值变化。
 - T1/T2/T3 必须由自然轨迹派生。
 - T3 干预必须 restore 同一真实 checkpoint。
 - LLM judge 不是 human ground truth。

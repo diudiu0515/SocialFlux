@@ -13,14 +13,10 @@ _PUBLIC_NARRATIVE_FIELDS = (
 
 def build_public_situation(scenario):
     design = scenario.get("narrative_design", {})
-    result = {
+    return {
         key: deepcopy(design.get(key, [] if key == "relevant_history" else ""))
         for key in _PUBLIC_NARRATIVE_FIELDS
     }
-    result["discussion_dimensions"] = deepcopy(
-        design.get("meaningful_choice_space", [])
-    )
-    return result
 
 
 def render_public_background(scenario):

@@ -10,7 +10,7 @@ from .flow import PipelinePreflight
 
 
 COMMANDS = {
-    "preflight": "validate Scale300, one rollout, and Fable-only routing",
+    "preflight": "validate the active batch, one rollout, and Fable-only routing",
     "rollout": "generate one natural rollout per approved scenario",
     "gate3": "validate Gates 1-2 and admit or reject each sole trajectory",
     "tasks": "build T1/T2/T3 from Gate-3-selected trajectories",
@@ -27,7 +27,7 @@ def _root_parser():
     parser = argparse.ArgumentParser(
         prog="python -m pipeline",
         description=(
-            "Canonical Scale300 pipeline: gate1 -> rollout -> gate2 -> "
+            "Canonical versioned pipeline: gate1 -> rollout -> gate2 -> "
             "gate3 -> tasks/t4 -> gate4."
         ),
     )

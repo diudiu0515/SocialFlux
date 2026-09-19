@@ -1,4 +1,4 @@
-"""Current Scale300 source-package and rollout-quality catalog."""
+"""Batch-size-independent source-package and rollout-quality catalog."""
 
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ CRITICAL_SOURCE_CHECKS = {
 }
 
 
-def load_source_packages(source_root, *, expected_count=300):
+def load_source_packages(source_root, *, expected_count=None):
     records = {}
     for path in sorted(Path(source_root).glob("shard*/scenario_*.json")):
         package = load(path)
@@ -27,6 +27,9 @@ def load_source_packages(source_root, *, expected_count=300):
         if ordinal in records:
             raise ValueError(f"duplicate source package ordinal: {ordinal}")
         records[ordinal] = (path, package)
+    if not records:
+        raise ValueError(f"no source task packages found under {source_root}")
+    expected_count = expected_count or max(records)
     expected = set(range(1, expected_count + 1))
     if set(records) != expected:
         raise ValueError(

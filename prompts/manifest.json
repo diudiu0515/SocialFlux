@@ -238,12 +238,12 @@
     },
     "scenario_candidate_core_v1": {
       "path": "scenario_candidate_core_v1.md",
-      "sha256": "381f70c57d1a2d40c24e2191666c8746550778ef25be7019175501e6c7b2093f",
+      "sha256": "121fac8300600342c6dd62943fc4e5c810f7dfdaeb8d916a545a4d416a81167a",
       "version": "v1"
     },
     "scenario_candidate_expression_triggers_v1": {
       "path": "scenario_candidate_expression_triggers_v1.md",
-      "sha256": "7e919a5351a2bb629fc871bb803fccf00b993a67d13977a8681e56e8efd6f4e9",
+      "sha256": "40ae2095dd8673ad6f1cbbb99fb678939b182d66207cf802caac1f7d04ea43bc",
       "version": "v1"
     },
     "scenario_candidate_initialization_v1": {
@@ -268,7 +268,7 @@
     },
     "scenario_candidate_script_v1": {
       "path": "scenario_candidate_script_v1.md",
-      "sha256": "66701c883892c006297d0aee0d582a856ffd6db1a0a3de61614884690620f571",
+      "sha256": "5172482b39fda280d2851d4409f5885236bf40a2d151d3e29e4e538ab232d032",
       "version": "v1"
     },
     "scenario_candidate_state_values_v1": {

@@ -37,14 +37,13 @@ class T4ContractTest(unittest.TestCase):
             observation["public_situation"]["relevant_history"],
             self.scenario["narrative_design"]["relevant_history"],
         )
-        self.assertEqual(
-            observation["public_situation"]["discussion_dimensions"],
-            self.scenario["narrative_design"]["meaningful_choice_space"],
-        )
+        self.assertNotIn("discussion_dimensions", observation["public_situation"])
         rendered = json.dumps(observation, ensure_ascii=False)
         self.assertNotIn(self.scenario["environment_agent"]["hidden_intention"], rendered)
         self.assertNotIn("initial_state", rendered)
         self.assertNotIn("meaningful_choice_space", rendered)
+        for choice in self.scenario["narrative_design"]["meaningful_choice_space"]:
+            self.assertNotIn(choice, rendered)
         self.assertNotIn("information_asymmetry", rendered)
         self.assertIn("hidden_intention", " ".join(PRIVATE_AUTHOR_FIELDS))
 

@@ -9,7 +9,7 @@ class TaskExtractionTest(unittest.TestCase):
             "target_state_ids": [
                 "emotion.anxiety",
                 "relationship.trust",
-                "motivation.resolve",
+                "behavioral_disposition.resolve",
             ]
         }
         self.trajectory = {
@@ -36,7 +36,7 @@ class TaskExtractionTest(unittest.TestCase):
             }],
             "t3": {
                 "checkpoint_turn_id": "t3",
-                "target_state_ids": ["motivation.resolve"],
+                "target_state_ids": ["behavioral_disposition.resolve"],
                 "future_turns_available": 5,
                 "rationale": "此时仍存在多种可行行动。",
             },

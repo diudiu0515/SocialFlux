@@ -25,7 +25,12 @@ N 个 Scenario 候选
 - 每个 Gate-1-approved scenario 恰好生成 1 条自然轨迹；失败计入产率，不补抽。
 - Policy 只输出自由文本 action，不读取 action transition table。
 - Appraisal 与 Response 是独立语义调用；Python 在两者之间执行确定性状态更新。
+- S 固定为 emotion、behavioral_disposition、relationship、
+  consequence_risk 四个 family；每轮必须完整评估全部选中 S/D 变量，未变化项写
+  `similar`，不能为了覆盖四维而强制数值变化。
 - Ledger 只保存已发生的公开事件、action/response 与下一轮 observation，不暴露 hidden intention、persona、S/D、appraisal 或 delta。
+- Policy 可见公开 background、关系/权力/冲突和既有历史；不可见 persona 性格、
+  information asymmetry、meaningful choice space 或未来核验结果。
 - 模型由版本化 route table 注入，业务模块不得写死 provider/model。
 - 浏览器草稿、LLM judge 和机器建议都不能替代真人 Gate 或正式 GT。
 

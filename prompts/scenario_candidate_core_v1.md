@@ -21,6 +21,10 @@ Contracts:
 - the first four narrative fields are non-empty strings; `relevant_history`
   is a JSON array of 1–5 non-empty strings and `meaningful_choice_space` is a
   JSON array of 3–6 non-empty strings—never serialize either array as prose;
+- `relevant_history` contains only public facts that have already happened or
+  currently hold. It may name a publicly known scheduled procedure, but never
+  disclose that procedure's future result, hidden content, predicted branch,
+  or author-only interpretation;
 - provide at least three genuinely different meaningful choices, without a
   best action, predicted outcome, task answer, or action taxonomy;
 - preserve the narrative's causal and temporal depth for 10–20 natural turns;
