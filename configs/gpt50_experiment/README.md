@@ -12,9 +12,11 @@ The GPT route never reads the Claude credential. It resolves only
 `/root/.config/socialflux/autodl_gpt_api_key`; the active Claude route keeps
 using `AUTODL_API_KEY` or `/root/.config/socialflux/autodl_api_key`.
 
-The Astra route uses non-streaming Chat Completions. The same endpoint can emit
-an empty visible final on long SSE requests; non-streaming keeps the complete
-assistant payload available to the schema validator.
+The Astra route uses AutoDL's OpenAI-compatible streaming Chat Completions at
+`https://www.autodl.art/api/v1/chat/completions`. The provider aggregates SSE
+chunks into one assistant payload before schema validation. A live minimal
+probe returned complete content and usage, and full scenario stages avoided the
+non-streaming read timeouts observed during this audit.
 
 The route explicitly uses low reasoning effort. A minimal JSON probe confirmed
 that this endpoint accepts the parameter; without it, the first normalization
@@ -64,6 +66,21 @@ the next primary batch: up to 200 Claude-authored scenarios, with the same
 one-rollout rule. The existing 300-scenario catalog remains the compatibility
 baseline until that explicit replacement decision; it is not used as a parent
 template for either new batch.
+
+Formal 50-scenario authoring (deterministic coverage matrix, two scenario workers by default):
+
+```bash
+python scripts/generate_gpt50_scenarios.py
+```
+
+The construction briefs come from the versioned 50-domain coverage matrix in
+`configs/gpt50_experiment/scenario_matrix.json`, not a
+long batch-model request or any prior scenario catalog. GPT authors every full
+dossier, normalization, and S0/D0 proposal from those briefs.
+
+The formal run writes each completed candidate immediately under
+`data/gpt50/experiment/scenario/scenarios/`, so `/gpt50` exposes progress
+without ever mixing in smoke data. Resume a stopped run with `--resume`.
 
 Smoke authoring:
 

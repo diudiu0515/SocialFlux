@@ -10,6 +10,7 @@ from pipeline.runtime import (
     assert_fable_rollout_config,
     assert_single_model_rollout_config,
 )
+from providers.model_routes import ModelRoutes
 from rollout.configuration import load_rollout_config, public_rollout_config
 from scripts.generate_long_rollout_pool import run_slot
 
@@ -45,6 +46,18 @@ class CanonicalPipelineTest(unittest.TestCase):
             public_rollout_config(config)["development_role_assignment"],
             config["development_role_assignment"],
         )
+
+    def test_gpt_authoring_uses_autodl_streaming_chat_completions(self):
+        routes = ModelRoutes.load(
+            "configs/gpt50_experiment/model_routes.astra.json"
+        )
+        route = routes.provider_config("scenario_authoring")
+        self.assertEqual(
+            route["endpoint"],
+            "https://www.autodl.art/api/v1/chat/completions",
+        )
+        self.assertTrue(route["stream"])
+        self.assertEqual(route["model"], "gpt-6-astra")
 
     def test_experimental_single_model_accepts_exactly_one_seed(self):
         config = load_rollout_config(

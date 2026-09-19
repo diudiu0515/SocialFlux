@@ -1,0 +1,509 @@
+{
+  "format": "socialflux_gpt50_design_matrix_v1",
+  "source_works": [
+    {
+      "title": "12 Angry Men",
+      "medium": "film"
+    },
+    {
+      "title": "The Farewell",
+      "medium": "film"
+    },
+    {
+      "title": "Moneyball",
+      "medium": "film"
+    },
+    {
+      "title": "Erin Brockovich",
+      "medium": "film"
+    },
+    {
+      "title": "The Bear",
+      "medium": "television"
+    },
+    {
+      "title": "Arrival",
+      "medium": "film"
+    },
+    {
+      "title": "The Martian",
+      "medium": "film"
+    },
+    {
+      "title": "Hidden Figures",
+      "medium": "film"
+    },
+    {
+      "title": "Chernobyl",
+      "medium": "television"
+    },
+    {
+      "title": "Spotlight",
+      "medium": "film"
+    },
+    {
+      "title": "The Good Place",
+      "medium": "television"
+    },
+    {
+      "title": "Station Eleven",
+      "medium": "television"
+    },
+    {
+      "title": "Severance",
+      "medium": "television"
+    },
+    {
+      "title": "The Wire",
+      "medium": "television"
+    },
+    {
+      "title": "Succession",
+      "medium": "television"
+    }
+  ],
+  "power_patterns": [
+    {
+      "mechanism": "accountability under uncertain evidence",
+      "power_structure": "one holds formal approval while the other controls field evidence"
+    },
+    {
+      "mechanism": "loyalty tested by disclosure",
+      "power_structure": "one can protect the relationship while the other can trigger formal review"
+    },
+    {
+      "mechanism": "scarcity allocation with delayed consequences",
+      "power_structure": "each controls a different indispensable resource and can veto the plan"
+    },
+    {
+      "mechanism": "care that risks becoming coercion",
+      "power_structure": "one has procedural authority while the other has relational legitimacy"
+    },
+    {
+      "mechanism": "credit, recognition, and invisible labor",
+      "power_structure": "one controls public attribution while the other holds implementation knowledge"
+    },
+    {
+      "mechanism": "deadline pressure versus reversible process",
+      "power_structure": "one owns the deadline while the other owns the safety or quality check"
+    },
+    {
+      "mechanism": "private vulnerability under public scrutiny",
+      "power_structure": "one controls external messaging while the other bears disproportionate exposure"
+    },
+    {
+      "mechanism": "competing duties to individuals and institutions",
+      "power_structure": "formal rank and moral responsibility point in opposite directions"
+    },
+    {
+      "mechanism": "trust repair after an ambiguous breach",
+      "power_structure": "both can withdraw cooperation, but only one controls the disputed record"
+    },
+    {
+      "mechanism": "collective benefit versus uneven personal cost",
+      "power_structure": "one aggregates outcomes while the other represents those carrying the cost"
+    }
+  ],
+  "contexts": [
+    {
+      "domain": "rural emergency medicine",
+      "relationship_structure": "a charge nurse and a regional ambulance dispatcher",
+      "goal_conflict": "whether to spend the final transfer slot on a deteriorating patient or preserve it for an incoming mass-casualty alert",
+      "information_asymmetry": "the nurse knows a bedside change not yet charted; the dispatcher knows the alert is less certain than the official wording suggests",
+      "history_anchor": "a prior transfer request was delayed after each blamed the other's incomplete documentation",
+      "verification_node": "the receiving hospital later releases its actual bed and triage log"
+    },
+    {
+      "domain": "public-school disability support",
+      "relationship_structure": "a school counselor and a parent advocate who have negotiated before",
+      "goal_conflict": "whether to implement an immediate informal accommodation or wait for the committee process before examinations",
+      "information_asymmetry": "the counselor knows staffing is temporarily available; the advocate knows the student has begun hiding a new symptom",
+      "history_anchor": "an earlier verbal accommodation disappeared after a timetable change",
+      "verification_node": "attendance and assessment records reveal whether the interim plan helped or stigmatized the student"
+    },
+    {
+      "domain": "local investigative journalism",
+      "relationship_structure": "a section editor and a reporter protecting a fragile source",
+      "goal_conflict": "whether to publish a time-sensitive corruption allegation with one disputed detail or hold the story and risk suppression",
+      "information_asymmetry": "the reporter knows why the source cannot provide one document; the editor knows legal counsel found an undisclosed conflict",
+      "history_anchor": "the editor previously defended the reporter after a correction damaged trust",
+      "verification_node": "a scheduled records release later confirms some claims while complicating another"
+    },
+    {
+      "domain": "startup cybersecurity",
+      "relationship_structure": "a chief technology officer and the security engineer who found a flaw",
+      "goal_conflict": "whether to notify customers before a funding demonstration or quietly patch first",
+      "information_asymmetry": "the engineer has evidence of limited exploitation; the CTO knows disclosure could end payroll financing",
+      "history_anchor": "a previous severity downgrade was never revisited after the deadline passed",
+      "verification_node": "independent access logs later establish the true scope and timing"
+    },
+    {
+      "domain": "family food business",
+      "relationship_structure": "siblings who jointly inherited a neighborhood bakery",
+      "goal_conflict": "whether to accept a supermarket contract that prevents closure but changes recipes and staffing",
+      "information_asymmetry": "one sibling knows the lender's final covenant; the other knows the oldest employees are planning a cooperative bid",
+      "history_anchor": "each believes they carried the business during the other's absence",
+      "verification_node": "the first contract month later reveals returns, overtime, and employee retention"
+    },
+    {
+      "domain": "climate adaptation nonprofit",
+      "relationship_structure": "a national fundraising director and a flood-prone neighborhood organizer",
+      "goal_conflict": "whether to launch a dramatic donor campaign using residents' stories before local consent is complete",
+      "information_asymmetry": "the director knows a matching grant expires tonight; the organizer knows two featured families have privately withdrawn",
+      "history_anchor": "a prior campaign raised money but left promised local control unresolved",
+      "verification_node": "the funder's audit later compares consent records, funds raised, and neighborhood allocation"
+    },
+    {
+      "domain": "university biomedical research",
+      "relationship_structure": "a principal investigator and a postdoctoral researcher nearing contract renewal",
+      "goal_conflict": "whether to submit a high-impact paper while an instrument anomaly remains unexplained",
+      "information_asymmetry": "the postdoc knows the anomaly clusters in the strongest result; the investigator knows the lab may close without the submission",
+      "history_anchor": "the investigator once credited the postdoc publicly but excluded them from a methods decision",
+      "verification_node": "a blinded rerun later separates instrument drift from the biological effect"
+    },
+    {
+      "domain": "housing cooperative governance",
+      "relationship_structure": "a cooperative chair and the tenant treasurer",
+      "goal_conflict": "whether to impose an emergency repair assessment or postpone work through another winter",
+      "information_asymmetry": "the chair has an engineer's private warning; the treasurer knows several residents are one payment from eviction",
+      "history_anchor": "a cheaper repair approved last year failed earlier than promised",
+      "verification_node": "a follow-up inspection and hardship uptake later reveal both safety and displacement effects"
+    },
+    {
+      "domain": "disaster relief logistics",
+      "relationship_structure": "a warehouse lead and a volunteer captain embedded in an isolated town",
+      "goal_conflict": "whether to reroute promised supplies toward a larger shelter after roads reopen",
+      "information_asymmetry": "the lead knows the larger shelter's inventory report is inflated; the captain knows the isolated town has an unreported medical shortage",
+      "history_anchor": "a prior reroute was interpreted locally as abandonment",
+      "verification_node": "delivery scans and clinic intake later show who actually received critical supplies"
+    },
+    {
+      "domain": "regional orchestra",
+      "relationship_structure": "a conductor and a principal musician who mentors the ensemble",
+      "goal_conflict": "whether to replace an ill soloist immediately or redesign the program around uncertain recovery",
+      "information_asymmetry": "the conductor knows the sponsor tied funding to the advertised work; the musician knows the understudy is considering leaving after repeated exclusion",
+      "history_anchor": "the ensemble previously accepted a last-minute substitution that caused resentment over credit",
+      "verification_node": "rehearsal recordings and audience commitments later reveal artistic and retention costs"
+    },
+    {
+      "domain": "Indigenous archive stewardship",
+      "relationship_structure": "a tribal archive curator and an external researcher with a long-standing partnership",
+      "goal_conflict": "whether to digitize restricted oral histories for a grant deadline or pause for renewed community authorization",
+      "information_asymmetry": "the curator knows one elder has reversed consent; the researcher knows the grant can be narrowed without total cancellation",
+      "history_anchor": "an earlier project returned copies but not control over metadata",
+      "verification_node": "the community council's recorded decision later defines access tiers and attribution"
+    },
+    {
+      "domain": "wildlife relocation planning",
+      "relationship_structure": "a conservation biologist and a rancher liaison",
+      "goal_conflict": "whether to begin an urgent predator relocation before compensation rules are finalized",
+      "information_asymmetry": "the biologist knows delay raises animal mortality; the liaison knows one reported loss was misclassified but community anger is real",
+      "history_anchor": "a previous pilot shared risks unevenly across ranches",
+      "verification_node": "tag data and verified loss claims later show ecological and livelihood effects"
+    },
+    {
+      "domain": "public defense",
+      "relationship_structure": "a supervising attorney and a family liaison trusted by the defendant",
+      "goal_conflict": "whether to recommend a plea deadline before a reluctant witness can be re-interviewed",
+      "information_asymmetry": "the attorney knows the prosecution has a weak but admissible record; the liaison knows the defendant is concealing pressure from a relative",
+      "history_anchor": "the family blamed the office after an earlier continuance increased detention time",
+      "verification_node": "the witness interview and disclosure log later clarify what advice was justified"
+    },
+    {
+      "domain": "urban transit operations",
+      "relationship_structure": "an operations manager and a union safety steward",
+      "goal_conflict": "whether to restore partial service with a temporary procedure after a signaling outage",
+      "information_asymmetry": "the manager knows political pressure may eliminate future funding; the steward knows a near-miss was not entered in the shared log",
+      "history_anchor": "both cooperated during a past shutdown but dispute who broke the return-to-work agreement",
+      "verification_node": "telemetry and operator reports later show whether the temporary procedure was safe"
+    },
+    {
+      "domain": "elder-care coordination",
+      "relationship_structure": "adult siblings sharing care for a parent with fluctuating capacity",
+      "goal_conflict": "whether to move the parent to assisted living before a preferred place expires",
+      "information_asymmetry": "one sibling knows a recent fall was more serious than reported; the other knows the parent's home-care benefit may be reinstated",
+      "history_anchor": "years of unequal caregiving have made offers of help feel like criticism",
+      "verification_node": "a capacity review and home-care decision later change the feasible options"
+    },
+    {
+      "domain": "video-game production",
+      "relationship_structure": "a producer and a senior designer representing a tired team",
+      "goal_conflict": "whether to cut a promised feature or require a short crunch before a public launch",
+      "information_asymmetry": "the producer knows the publisher may accept a delay; the designer knows key staff may quit even without formal complaints",
+      "history_anchor": "the last milestone was saved by unpaid effort that was later described as good planning",
+      "verification_node": "retention notices and launch defect data later expose the true trade-off"
+    },
+    {
+      "domain": "mutual-aid finance",
+      "relationship_structure": "a fund coordinator and a neighborhood donor who also refers applicants",
+      "goal_conflict": "whether to make an exception for an urgent undocumented need when reserves are low",
+      "information_asymmetry": "the coordinator sees confidential patterns across applications; the donor knows why this applicant cannot provide normal proof",
+      "history_anchor": "an earlier exception was criticized after its rationale stayed private",
+      "verification_node": "a later replenishment decision and anonymized audit test consistency without exposing the applicant"
+    },
+    {
+      "domain": "restaurant food safety",
+      "relationship_structure": "a restaurant manager and an allergy-trained head chef",
+      "goal_conflict": "whether to serve a large event after a supplier substitution cannot be fully verified",
+      "information_asymmetry": "the chef knows cross-contact is plausible; the manager knows cancellation may default on wages",
+      "history_anchor": "the manager previously backed the chef's stop-service call but later minimized it to investors",
+      "verification_node": "supplier records and post-event testing later establish the actual contamination risk"
+    },
+    {
+      "domain": "museum collection governance",
+      "relationship_structure": "a museum curator and a community representative seeking return of an object",
+      "goal_conflict": "whether to announce a long-term loan before provenance review is complete",
+      "information_asymmetry": "the curator knows one acquisition document is likely unreliable; the representative knows community leadership is divided over the proposed custodian",
+      "history_anchor": "an earlier consultation produced publicity but no transfer of authority",
+      "verification_node": "the provenance panel and community vote later create a reviewable record"
+    },
+    {
+      "domain": "labor organizing",
+      "relationship_structure": "a regional organizer and a shop steward at a precarious workplace",
+      "goal_conflict": "whether to call a public action after management offers a narrow private concession",
+      "information_asymmetry": "the organizer knows other sites are ready to join; the steward knows several outspoken workers cannot absorb lost shifts",
+      "history_anchor": "a prior action won recognition but left disciplined workers feeling used",
+      "verification_node": "scheduling records and the written concession later reveal who bore costs and what changed"
+    },
+    {
+      "domain": "kinship foster placement",
+      "relationship_structure": "a child-welfare caseworker and a relative seeking temporary placement",
+      "goal_conflict": "whether to approve an expedited placement before a home-study issue is resolved",
+      "information_asymmetry": "the caseworker knows the current placement is deteriorating; the relative knows an adult in the home has recently returned",
+      "history_anchor": "the relative previously withdrew during a crisis and believes the agency never heard the reason",
+      "verification_node": "the home study and child's adjustment notes later test both safety and continuity"
+    },
+    {
+      "domain": "clinical trial governance",
+      "relationship_structure": "a trial investigator and a patient advocate on the monitoring board",
+      "goal_conflict": "whether to unblind a worrying subgroup signal before enrollment closes",
+      "information_asymmetry": "the investigator knows the signal may be a data artifact; the advocate knows participants were told a narrower risk story",
+      "history_anchor": "an earlier warning was deferred and later proved harmless, hardening both sides",
+      "verification_node": "cleaned data and participant follow-up later determine whether early disclosure was warranted"
+    },
+    {
+      "domain": "agricultural water cooperative",
+      "relationship_structure": "a water scheduler and a smallholder representative",
+      "goal_conflict": "whether to change the rotation mid-season to protect the highest-value crops",
+      "information_asymmetry": "the scheduler knows reservoir loss is worse than public estimates; the representative knows some smallholders are quietly sharing allotments",
+      "history_anchor": "last year's emergency rule became permanent without the promised vote",
+      "verification_node": "meter readings and harvest outcomes later expose distributional effects"
+    },
+    {
+      "domain": "investigative podcasting",
+      "relationship_structure": "a host and a fact-checker who helped build the show",
+      "goal_conflict": "whether to release an episode after the subject offers a late off-record explanation",
+      "information_asymmetry": "the host knows a distributor may cancel if release slips; the fact-checker knows one key witness has merged two dates",
+      "history_anchor": "a prior episode boosted the host's profile while correction work remained invisible",
+      "verification_node": "phone records and a second interview later resolve the disputed timeline"
+    },
+    {
+      "domain": "enterprise incident response",
+      "relationship_structure": "a security response lead and a client account director",
+      "goal_conflict": "whether to isolate a major client's system before proof of compromise is conclusive",
+      "information_asymmetry": "the lead sees anomalous credentials; the director knows isolation will interrupt a medically critical workflow",
+      "history_anchor": "a previous false alarm damaged the client's willingness to cooperate",
+      "verification_node": "forensic imaging and service-impact logs later reveal both breach scope and interruption cost"
+    },
+    {
+      "domain": "funeral planning",
+      "relationship_structure": "a funeral director and an estranged relative chosen as family spokesperson",
+      "goal_conflict": "whether to follow a prepaid plan that conflicts with newly expressed family wishes",
+      "information_asymmetry": "the director has a signed but ambiguous amendment; the spokesperson knows the deceased reconciled privately with one excluded person",
+      "history_anchor": "the family previously accused the spokesperson of controlling access during illness",
+      "verification_node": "a scheduled reading of the planner's notes later clarifies intent without resolving every value conflict"
+    },
+    {
+      "domain": "immigration legal services",
+      "relationship_structure": "a clinic supervisor and a volunteer interpreter trusted by a family",
+      "goal_conflict": "whether to file before a deadline using an account whose translation is uncertain",
+      "information_asymmetry": "the supervisor knows late filing is likely fatal; the interpreter knows the speaker softened details out of fear of community exposure",
+      "history_anchor": "the clinic once corrected this interpreter publicly, damaging candor",
+      "verification_node": "a confidential second interpretation later tests accuracy and consent"
+    },
+    {
+      "domain": "youth athletics",
+      "relationship_structure": "a head coach and a team physician",
+      "goal_conflict": "whether to clear a star player for a championship after conflicting symptom reports",
+      "information_asymmetry": "the physician knows the test baseline may be unreliable; the coach knows the player fears losing a scholarship if absence is recorded",
+      "history_anchor": "the physician previously stopped another player and was blamed for the season's end",
+      "verification_node": "independent assessment and later symptom tracking establish the medical trajectory"
+    },
+    {
+      "domain": "open-source infrastructure",
+      "relationship_structure": "a volunteer maintainer and an engineer from a company dependent on the project",
+      "goal_conflict": "whether to merge an urgent vendor patch that bypasses the normal review queue",
+      "information_asymmetry": "the maintainer sees an unresolved design risk; the engineer knows a public outage is already spreading",
+      "history_anchor": "the company previously promised maintenance funding but redirected it",
+      "verification_node": "post-incident traces and a scheduled architecture review reveal whether urgency justified the shortcut"
+    },
+    {
+      "domain": "community theatre",
+      "relationship_structure": "an artistic director and an accessibility coordinator",
+      "goal_conflict": "whether to keep a celebrated lead whose rehearsal behavior excludes a disabled cast member",
+      "information_asymmetry": "the director knows replacement threatens ticket sales; the coordinator knows the cast member wants a specific repair rather than removal",
+      "history_anchor": "a previous complaint was generalized into a policy without acknowledging the harmed person",
+      "verification_node": "documented rehearsal changes and cast feedback later show whether repair was substantive"
+    },
+    {
+      "domain": "animal shelter medicine",
+      "relationship_structure": "a shelter director and a behavior specialist",
+      "goal_conflict": "whether to transfer a difficult dog to a rescue that has capacity but incomplete records",
+      "information_asymmetry": "the specialist knows the risk assessment is improving; the director knows an intake surge will force euthanasia decisions",
+      "history_anchor": "a past transfer failed after warnings were communicated only verbally",
+      "verification_node": "follow-up behavior reports and intake records later establish consequences for both populations"
+    },
+    {
+      "domain": "community credit union",
+      "relationship_structure": "a loan officer and a financial counselor serving the same neighborhood",
+      "goal_conflict": "whether to restructure a delinquent business loan outside standard criteria",
+      "information_asymmetry": "the officer knows regulators are reviewing exceptions; the counselor knows the owner's cash gap comes from caring for an employee",
+      "history_anchor": "an earlier flexible loan succeeded but was later cited as favoritism",
+      "verification_node": "verified cash flow and the examination report later test fairness and viability"
+    },
+    {
+      "domain": "archaeological fieldwork",
+      "relationship_structure": "a dig director and a local heritage officer",
+      "goal_conflict": "whether to remove newly found material before an approaching storm",
+      "information_asymmetry": "the director knows exposure may destroy evidence; the officer knows removal would violate a community consultation commitment",
+      "history_anchor": "a prior emergency removal was never fully documented or returned",
+      "verification_node": "weather damage records and council authorization later clarify what was preventable"
+    },
+    {
+      "domain": "language revitalization",
+      "relationship_structure": "a program coordinator and an elder who teaches the language",
+      "goal_conflict": "whether to release an unfinished learning app before school funding expires",
+      "information_asymmetry": "the coordinator knows teachers need materials now; the elder knows several recordings contain context that makes broad use inappropriate",
+      "history_anchor": "earlier materials credited the institution more prominently than speakers",
+      "verification_node": "classroom use and a speaker review later reveal educational value and cultural harm"
+    },
+    {
+      "domain": "aviation maintenance",
+      "relationship_structure": "a maintenance supervisor and a pilots' safety representative",
+      "goal_conflict": "whether to return an aircraft to service after a recurring fault cannot be reproduced",
+      "information_asymmetry": "the supervisor knows the fleet schedule is collapsing; the representative knows two crews described the same subtle symptom",
+      "history_anchor": "a previous precautionary grounding was mocked after no defect was found",
+      "verification_node": "flight-data analysis and component teardown later establish the failure mechanism"
+    },
+    {
+      "domain": "biotechnology intellectual property",
+      "relationship_structure": "a startup founder and the scientist who developed a key assay",
+      "goal_conflict": "whether to file a broad patent before a university ownership question is resolved",
+      "information_asymmetry": "the founder knows investors require filing; the scientist knows a former technician made an uncredited contribution",
+      "history_anchor": "the scientist accepted delayed recognition during an earlier emergency submission",
+      "verification_node": "lab notebooks and the university review later establish inventorship"
+    },
+    {
+      "domain": "faith-based refugee support",
+      "relationship_structure": "a congregation board chair and a volunteer sponsor close to a newly arrived family",
+      "goal_conflict": "whether to accept a restricted donor gift that requires public storytelling",
+      "information_asymmetry": "the chair knows the housing fund is nearly empty; the sponsor knows the family agreed only because they misunderstood the audience",
+      "history_anchor": "a prior fundraiser blurred the line between gratitude and consent",
+      "verification_node": "a translated consent review and donor decision later reveal whether alternatives existed"
+    },
+    {
+      "domain": "documentary production",
+      "relationship_structure": "a producer and a participant advocate",
+      "goal_conflict": "whether to retain a revealing scene after the participant requests withdrawal near picture lock",
+      "information_asymmetry": "the producer knows the scene is central to funder expectations; the advocate knows the participant faces a newly emerged retaliation risk",
+      "history_anchor": "the production previously promised shared review without defining veto power",
+      "verification_node": "distribution negotiations and a safety assessment later make the costs concrete"
+    },
+    {
+      "domain": "multigenerational wedding planning",
+      "relationship_structure": "a wedding planner and a family elder financing much of the event",
+      "goal_conflict": "whether to cancel a culturally important vendor after a private complaint",
+      "information_asymmetry": "the planner knows the complaint is credible but incomplete; the elder knows cancellation will revive a painful family dispute",
+      "history_anchor": "the couple earlier delegated decisions to avoid conflict, then objected to being excluded",
+      "verification_node": "the vendor response and couple's direct decision later clarify authority and risk"
+    },
+    {
+      "domain": "coastal fisheries management",
+      "relationship_structure": "a fisheries scientist and a small-fleet representative",
+      "goal_conflict": "whether to recommend an immediate closure based on an uncertain stock estimate",
+      "information_asymmetry": "the scientist knows the model is sensitive to one missing survey; the representative knows some boats are underreporting bycatch",
+      "history_anchor": "a past closure preserved stock but concentrated losses on compliant crews",
+      "verification_node": "the next survey and landing audits later test both conservation and equity claims"
+    },
+    {
+      "domain": "child-welfare supervision",
+      "relationship_structure": "a unit supervisor and an experienced caseworker",
+      "goal_conflict": "whether to override a family's safety plan after a concerning but ambiguous home visit",
+      "information_asymmetry": "the supervisor sees a pattern across cases; the caseworker knows this family's apparent noncompliance has a specific language barrier",
+      "history_anchor": "a previous override prevented harm but ruptured a different family's cooperation",
+      "verification_node": "a translated visit and collateral report later clarify the immediate risk"
+    },
+    {
+      "domain": "public library governance",
+      "relationship_structure": "a library director and a youth librarian",
+      "goal_conflict": "whether to pause a contested program after threats while publicly defending access",
+      "information_asymmetry": "the director knows insurers may withdraw event coverage; the librarian knows targeted teenagers interpret silence as abandonment",
+      "history_anchor": "an earlier security response protected staff but exposed attendee identities",
+      "verification_node": "attendance, incident, and insurer records later reveal which protections worked"
+    },
+    {
+      "domain": "student robotics competition",
+      "relationship_structure": "an adult mentor and a student team captain",
+      "goal_conflict": "whether to disclose that a winning component received prohibited outside help",
+      "information_asymmetry": "the mentor knows disclosure may disqualify scholarships; the captain knows teammates believed the help was allowed",
+      "history_anchor": "the mentor previously encouraged aggressive use of expert contacts",
+      "verification_node": "the competition review and scholarship committee later separate intent, responsibility, and remedy"
+    },
+    {
+      "domain": "local election administration",
+      "relationship_structure": "a county election clerk and a nonpartisan community observer",
+      "goal_conflict": "whether to extend voting at one site after an equipment failure without a court order",
+      "information_asymmetry": "the clerk knows other sites had shorter disruptions; the observer knows transportation barriers uniquely magnified this outage",
+      "history_anchor": "a prior emergency decision was attacked as partisan despite symmetric intent",
+      "verification_node": "machine logs and judicial review later establish duration and legal authority"
+    },
+    {
+      "domain": "rare-disease peer support",
+      "relationship_structure": "a support-group moderator and a pharmaceutical patient liaison",
+      "goal_conflict": "whether to share preliminary expanded-access news before eligibility rules are final",
+      "information_asymmetry": "the liaison knows early attention may accelerate approval; the moderator knows members have begun making irreversible financial plans",
+      "history_anchor": "a past hopeful announcement produced both access and severe disappointment",
+      "verification_node": "the published protocol later reveals who qualifies and what risks were omitted"
+    },
+    {
+      "domain": "university admissions",
+      "relationship_structure": "an admissions dean and a scholarship director",
+      "goal_conflict": "whether to admit a borderline applicant before a donor-funded scholarship condition is clarified",
+      "information_asymmetry": "the dean knows the applicant's context supports admission; the director knows the donor may impose an unlawful preference",
+      "history_anchor": "the offices previously traded exceptions without recording their rationales",
+      "verification_node": "legal review and the applicant's verified file later test both equity and process"
+    },
+    {
+      "domain": "food-bank distribution",
+      "relationship_structure": "an operations manager and a disability advocate",
+      "goal_conflict": "whether to tighten identification checks after inventory losses",
+      "information_asymmetry": "the manager knows another shortage will cancel deliveries; the advocate knows the proposed queue excludes homebound clients",
+      "history_anchor": "an earlier anti-fraud change shifted unpaid verification work onto volunteers",
+      "verification_node": "delivery completion and loss audits later reveal both access and control effects"
+    },
+    {
+      "domain": "historic-building retrofit",
+      "relationship_structure": "a preservation architect and a tenant-association representative",
+      "goal_conflict": "whether to begin a grant-funded retrofit that temporarily displaces residents",
+      "information_asymmetry": "the architect knows delay may forfeit funds; the representative knows promised temporary housing is not accessible for two tenants",
+      "history_anchor": "a previous consultation approved design goals but not relocation terms",
+      "verification_node": "housing inspections and grant milestones later establish whether a safer sequence was feasible"
+    },
+    {
+      "domain": "remote-work promotion",
+      "relationship_structure": "a department manager and a long-serving team lead",
+      "goal_conflict": "whether to promote a highly visible remote employee over a quieter colleague carrying coordination work",
+      "information_asymmetry": "the manager sees output metrics favoring one candidate; the lead knows whose invisible interventions prevented repeated failures",
+      "history_anchor": "the lead was previously asked to mentor without receiving decision authority",
+      "verification_node": "a project retrospective and peer evidence later make contributions more observable"
+    },
+    {
+      "domain": "public-health data reporting",
+      "relationship_structure": "a health-data director and a clinic-network representative",
+      "goal_conflict": "whether to publish a neighborhood dashboard before small-cell privacy risks are resolved",
+      "information_asymmetry": "the director knows delay weakens an outbreak response; the representative knows one category could identify stigmatized patients locally",
+      "history_anchor": "a prior aggregate release was technically legal but damaged clinic trust",
+      "verification_node": "privacy testing and intervention uptake later reveal both informational value and harm"
+    }
+  ]
+}

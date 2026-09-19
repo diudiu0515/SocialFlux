@@ -8,14 +8,14 @@
     "api_key_env": "AUTODL_GPT_API_KEY",
     "api_key_file": "/root/.config/socialflux/autodl_gpt_api_key",
     "model": "gpt-6-astra",
-    "stream": false,
+    "stream": true,
     "reasoning_effort": "low",
     "timeout": 600
   },
   "routes": {
     "scenario_authoring": {"max_tokens": 2200},
-    "scenario_normalization": {"max_tokens": 4000, "timeout": 360},
-    "scenario_initialization": {"max_tokens": 4000, "timeout": 360},
+    "scenario_normalization": {"max_tokens": 4000, "timeout": 600},
+    "scenario_initialization": {"max_tokens": 4000, "timeout": 600},
     "policy": {"max_tokens": 250, "timeout": 120},
     "appraisal": {"max_tokens": 900, "timeout": 180},
     "response": {"max_tokens": 300, "timeout": 120},
