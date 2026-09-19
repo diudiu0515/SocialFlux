@@ -105,8 +105,8 @@ def _validate_brief(value):
             "authoring brief fields mismatch: expected "
             f"{sorted(REQUIRED_BRIEF_FIELDS)}"
         )
-    if value["source_type"] != "synthetic-script":
-        raise ValueError("direct smoke authoring currently requires synthetic-script")
+    if value["source_type"] not in {"narrative-derived", "synthetic-script"}:
+        raise ValueError("direct authoring requires a supported source type")
     for field in REQUIRED_BRIEF_FIELDS - {"history_dependency", "coverage_requirements"}:
         if not isinstance(value[field], str) or not value[field].strip():
             raise ValueError(f"brief {field} must be non-empty text")
@@ -340,6 +340,15 @@ def main(argv=None):
     parser.add_argument("--max-attempts", type=int, default=3)
     parser.add_argument("--expected-model", default="claude-fable-5")
     parser.add_argument(
+        "--continue-after-machine-quality",
+        action="store_true",
+        help=(
+            "Continue normalizing a schema-valid candidate when the machine "
+            "quality screen recommends rejection. The screen remains recorded "
+            "and human Gate 1 remains pending."
+        ),
+    )
+    parser.add_argument(
         "--resume",
         action="store_true",
         help="reuse each validated stage artifact and continue from the first missing stage",
@@ -425,7 +434,7 @@ def main(argv=None):
         and set(quality["checks"]) == QUALITY_CHECKS
         and set(quality["checks"].values()) == {"pass"}
     )
-    if not machine_pass:
+    if not machine_pass and not args.continue_after_machine_quality:
         _atomic_json(args.output / "run_manifest.json", {
             "format": "socialflux_direct_scenario_authoring_run_v1",
             "status": "stopped_at_machine_quality",
@@ -618,6 +627,12 @@ def main(argv=None):
         },
         "provider_metrics": _metrics(providers),
         "machine_quality": quality,
+        "machine_quality_passed": machine_pass,
+        "admission_mode": (
+            "human_postfilter"
+            if args.continue_after_machine_quality
+            else "machine_quality_precheck"
+        ),
         "scenario_file": str(scenario_path),
         "human_gate1": "pending",
         "resumed": args.resume,
