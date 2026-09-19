@@ -2,7 +2,7 @@
 
 SocialFlux 是一个长期社会互动推理 benchmark pipeline。当前实现用同一套私有状态环境生成自然模型轨迹、构建 T1/T2/T3 离线任务，并以同一 runtime 执行 T4 在线评测。
 
-当前不保留旧 300 场景为活跃 catalog。旧 Scale300、Qwen 生成产物和旧 Talking Head 素材已移到本地忽略目录 `archives/legacy_qwen_scale300_20260919/`，不参与运行或提交。现在先用 GPT 做小规模端到端设计审计；闭环通过后，再扩展 Claude 主批次。无论模型和批次大小，每个通过 Gate 1 的场景只生成 1 条自然 rollout，不做 3 seed 或 best-of-N。
+当前不保留旧 300 场景为活跃 catalog。旧 Scale300 与 Qwen 生成产物保存在本地忽略归档；旧 Talking Head 产物、本地模型和本地生成工具已永久删除。媒体协议、触发规则、审核页面与接入框架继续保留，等待新的外部 API。现在先用 GPT 做小规模端到端设计审计；闭环通过后，再扩展 Claude 主批次。无论模型和批次大小，每个通过 Gate 1 的场景只生成 1 条自然 rollout，不做 3 seed 或 best-of-N。
 
 ## Pipeline
 
@@ -78,7 +78,7 @@ python scripts/verify_gate_md.py
 - `prompts/`、`schemas/`：版本化 prompt 与数据合同。
 - `configs/scale300_v1/CLAUDE_AUTHORING.md`：保留的 Claude 场景创作合同；不代表存在活跃 300 场景。
 - `web/`：Gate、任务、示例和可选媒体审核页面。
-- `scripts/*talking_head*.py`：保留的 Talking Head 生成与审核框架；当前没有活跃素材。
+- `scripts/*talking_head*.py`、媒体 prompt/schema 与网页路由：保留的 Talking Head 接入及审核框架；当前没有素材或本地生成引擎，等待外部 API。
 - `archives/`：本地可恢复历史归档，默认不进入 Git。
 
 ## Git 提交纪律

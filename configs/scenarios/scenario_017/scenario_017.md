@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_017`
 - 配对 JSON：`scenario_017.json`
-- JSON SHA-256：`1fff4425c785079a4697c54acf21f257d397f483b4502c2b9d06808adeb20e1d`
+- JSON SHA-256：`bf9d2516f8263f7460167fe83ea73739e70a1757eee0386647b36e4fc9c2b107`
 - 社会机制：collective care versus individual truth rights
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-017`
@@ -127,9 +127,9 @@ Scenario 只定义社会世界，不定义行动策略，也不预写任何 acti
 
 - 阶段：`structured_expression`
 - 默认媒体类型：`video`
-- 资产状态：`generated`
+- 资产状态：`not_generated`
 - 资产根目录：`media/talking_head`
-- 说明：Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.
+- 说明：当前没有媒体资产；仅保留 observable expression 与 media spec，等待外部 API 接入并重新通过媒体质量审核。
 
 ### 视频触发规则
 

@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_016`
 - 配对 JSON：`scenario_016.json`
-- JSON SHA-256：`2457bcfc3984b6a86d4cdee2f941d7a59d407ded49c45e2f7ff47ac9f4addf34`
+- JSON SHA-256：`f31c16833bd6ef3a33a34a006c4118669d162ff527ceeeab5f2d150d59f80ac8`
 - 社会机制：grief, expertise, and informal authority in a failing workplace
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-016`
@@ -127,9 +127,9 @@ Scenario 只定义社会世界，不定义行动策略，也不预写任何 acti
 
 - 阶段：`structured_expression`
 - 默认媒体类型：`video`
-- 资产状态：`generated`
+- 资产状态：`not_generated`
 - 资产根目录：`media/talking_head`
-- 说明：Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.
+- 说明：当前没有媒体资产；仅保留 observable expression 与 media spec，等待外部 API 接入并重新通过媒体质量审核。
 
 ### 视频触发规则
 

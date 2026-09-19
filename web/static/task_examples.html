@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <title>SocialFlux · T1–T3 高质量示例</title>
+  <title>SocialFlux · T1–T3 示例审核框架</title>
   <link rel="stylesheet" href="/styles.css?v=task-examples-v1">
   <style>
     body{margin:0;background:#090d13;color:#e8edf4;font-family:Inter,"Noto Sans SC",system-ui,sans-serif}.wrap{max-width:1280px;margin:auto;padding:26px}.hero,.card{background:#111822;border:1px solid #263443;border-radius:16px}.hero{padding:24px;margin-bottom:18px}.hero h1{margin:8px 0}.muted{color:#96a6b7}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.button,.pill{border:1px solid #34475c;border-radius:999px;padding:8px 12px;color:#dbe8f5;background:#182330;text-decoration:none}.button{cursor:pointer}.task-grid{display:grid;gap:18px}.card{padding:22px}.card h2{margin:0 0 8px}.meta{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 18px}.pill.good{border-color:#34785d;color:#9ce3bf}.pill.warn{border-color:#765e32;color:#f0cc83}.split{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);gap:18px}.panel{background:#0c121a;border:1px solid #253342;border-radius:12px;padding:14px;margin:12px 0}.history{display:grid;gap:10px}.turn{border-left:3px solid #365a77;background:#0e1620;padding:12px;border-radius:0 10px 10px 0}.speaker{color:#82b7df;font-size:12px;letter-spacing:.04em;margin-top:6px}.event{color:#e9bd73;border-left-color:#956d2c}.answer-table{width:100%;border-collapse:collapse;font-size:13px}.answer-table th,.answer-table td{border-bottom:1px solid #263443;text-align:left;padding:8px;vertical-align:top}.answer-table th{color:#91abc0}.video{width:100%;max-height:390px;background:#000;border-radius:12px}.warning{background:#2a2215;border:1px solid #6d5529;color:#efd096;padding:11px;border-radius:10px}.review textarea{box-sizing:border-box;width:100%;min-height:88px;background:#0a1017;color:#eef;border:1px solid #34475c;border-radius:8px;padding:10px}.review label{margin-right:14px}.saved{color:#7dd4a5;font-size:12px}.histories{display:grid;grid-template-columns:1fr 1fr;gap:12px}details{margin-top:12px}summary{cursor:pointer;color:#99c8ea}pre{white-space:pre-wrap;word-break:break-word;font-size:11px;max-height:460px;overflow:auto}.option{border-left:3px solid #8069b0;padding:9px 12px;margin:8px 0;background:#141326}.top-answer{font-weight:700;color:#a8d8fa}@media(max-width:900px){.split,.histories{grid-template-columns:1fr}.wrap{padding:12px}}
@@ -14,8 +14,8 @@
   <main class="wrap">
     <section class="hero">
       <div class="toolbar"><a class="button" href="/">← 返回主工作台</a><span id="status" class="pill">加载中</span><button id="export" class="button">导出本页审核 JSON</button></div>
-      <h1>T1–T3 高质量示例与视频核验</h1>
-      <p class="muted">完整公开证据、模型答案和视频配对均可见。模型答案是待人工核验的 proposal，ground_truth 保持 null；Codex 复核不冒充人工标注。</p>
+      <h1>T1–T3 示例与媒体审核框架</h1>
+      <p class="muted">页面与审核合同保留；当前没有示例数据或视频。接入新批次后，这里展示公开证据、模型 proposal 与外部 API 媒体，ground_truth 仍保持 null。</p>
     </section>
     <section id="summary" class="panel"></section>
     <section id="tasks" class="task-grid"></section>

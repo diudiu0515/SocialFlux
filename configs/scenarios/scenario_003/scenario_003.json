@@ -404,11 +404,11 @@
   "media_generation": {
     "stage": "structured_expression",
     "default_media_type": "video",
-    "asset_status": "generated",
+    "asset_status": "not_generated",
     "asset_root": "media/talking_head",
-    "note": "视频资产生成前只输出 observable expression 与 media spec，不伪造 asset。",
-    "provider": "TMElyralab/MuseTalk 1.5 (local)",
-    "profile": "multimodel_v2_audio_conditioned"
+    "note": "当前没有媒体资产；仅保留 observable expression 与 media spec，等待外部 API 接入并重新通过媒体质量审核。",
+    "provider": "external_api_pending",
+    "profile": "provider_neutral_v1"
   },
   "video_triggers": [
     {
@@ -432,7 +432,7 @@
       "media_type": "video",
       "cue_template": "disappointed_distance",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_003--escalation_confrontation",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "嘴角收紧，视线短暂移开",
         "gaze": "减少直接眼神接触",
@@ -463,7 +463,7 @@
       "media_type": "video",
       "cue_template": "anxious_withdrawal",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_003--anxious_withdrawal",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "表情收缩，显出疲惫或不安",
         "gaze": "短暂低头后重新看向对方",
@@ -493,7 +493,7 @@
       "cue_template": "repayment_relief",
       "social_event": "repayment_relief",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_003--repayment_relief",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "嘴角不再收紧，轻轻呼出一口气",
         "gaze": "恢复眼神接触，不再频繁移开",

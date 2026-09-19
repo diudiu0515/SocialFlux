@@ -4,14 +4,11 @@
 
 > 勾选标准：必须有可复核的代码、产物或测试证据。标明需要真人审核、标注员、真实模型 API 或视频资产的条目，在没有对应记录前不勾选。
 
-> 最后自查：2026-09-18。
+> 最后自查：2026-09-19。
 
-> 当前主链：Scale300、每场景 3 个 Fable seed，唯一入口为
-> `python -m pipeline`。代码/preflight 已就绪；Gate 1–4 的正式人工证据、
-> 900 条 raw pool、300 条 canonical selection 和正式 tasks 尚未完成。以下
-> 既有条目与历史记录按维护规则保留，不因主链升级而删除或伪造完成状态。
+> 当前主链：先完成 GPT 小规模端到端设计审计，再扩大 Claude 主批次；每个通过 Gate 1 的场景只生成 1 条自然 rollout，不做 3 seed 或 best-of-N。唯一入口为 `python -m pipeline`。Gate 1–4 的正式人工证据和正式 tasks 尚未完成。以下既有条目与历史记录按维护规则保留，不因主链升级而删除或伪造完成状态。
 
-> 本轮记录：20个scenario、全部rollout配置、Gate 3与T4已统一为连续`t1..t20`；被测模型使用明确身份、角色和explicit goal，网站同时展示研究者私有persona/hidden intention与被测模型实际公开输入。旧184条轨迹均只有6轮，当前Protocol重筛结果为REJECT=184、provisional winner=0；旧180个Task只作历史审计。新的20×3质量候选池已由可断点脚本启动，实时完成数见`build/rollout_20turn_3candidate/progress.json`；模型族只记录provenance，不设配额。Talking Head现为60/60机器通过；本轮工程验证为core 168/168、web 8/8、Prompt 30/30、scenario文档20/20。真人Gate、全量20轮池、重筛选、新Task和正式研究验收仍未完成。
+> 历史快照（2026-09-18，不代表当前 pipeline）：20个scenario、全部rollout配置、Gate 3与T4已统一为连续`t1..t20`；被测模型使用明确身份、角色和explicit goal，网站同时展示研究者私有persona/hidden intention与被测模型实际公开输入。旧184条轨迹均只有6轮，当前Protocol重筛结果为REJECT=184、provisional winner=0；旧180个Task只作历史审计。新的20×3质量候选池已由可断点脚本启动，实时完成数见`build/rollout_20turn_3candidate/progress.json`；模型族只记录provenance，不设配额。旧 Talking Head 的60条低质量资产及本地引擎已永久删除，仅保留等待外部 API 的框架；本轮工程验证为core 168/168、web 8/8、Prompt 30/30、scenario文档20/20。真人Gate、全量20轮池、重筛选、新Task和正式研究验收仍未完成。
 
 ## Revision v2 工程自查
 

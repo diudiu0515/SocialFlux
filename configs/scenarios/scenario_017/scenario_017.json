@@ -139,11 +139,11 @@
   "media_generation": {
     "stage": "structured_expression",
     "default_media_type": "video",
-    "asset_status": "generated",
+    "asset_status": "not_generated",
     "asset_root": "media/talking_head",
-    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.",
-    "provider": "TMElyralab/MuseTalk 1.5 (local)",
-    "profile": "multimodel_v2_audio_conditioned"
+    "note": "当前没有媒体资产；仅保留 observable expression 与 media spec，等待外部 API 接入并重新通过媒体质量审核。",
+    "provider": "external_api_pending",
+    "profile": "provider_neutral_v1"
   },
   "video_triggers": [
     {
@@ -167,7 +167,7 @@
       "media_type": "video",
       "cue_template": "family_defensiveness",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_017--family_defensiveness",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "笑容勉强，眼周紧绷",
         "gaze": "频繁查看其他家人反应",
@@ -198,7 +198,7 @@
       "media_type": "video",
       "cue_template": "hesitant_disclosure",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_017--hesitant_disclosure",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "表情复杂，紧张中出现松动",
         "gaze": "愿意与晚辈保持眼神接触",
@@ -228,7 +228,7 @@
       "cue_template": "guilt_surfaces",
       "social_event": "guilt_surfaces",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_017--guilt_surfaces",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "勉强笑意消失，表情显出自我怀疑",
         "gaze": "先避开家人，随后重新看向对方",

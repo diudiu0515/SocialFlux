@@ -922,7 +922,7 @@ def manual_review_catalog():
          quality_status.get("gate_4_task_instance_quality", "pending"), f"当前 {task_count} 个机器建议答案；目标按 task type 确定性抽取 {gate4_target} 个。两人看同一批，分歧才交第三人。", "人审工作台 · Gate 4"],
         ["media", "Talking Head · 可选媒体审核", media_count, media_count,
          "no_active_assets" if media_count == 0 else "pending_human",
-         "旧素材已归档；新批次生成后再审核人物连续性、语音自然度和多模态信息效用。", "Scenario 情节"],
+         "旧素材与本地引擎已永久删除；接入外部 API 并生成新批次后，再审核人物连续性、语音自然度和多模态信息效用。", "Scenario 情节"],
         ["filter_holdout", "筛选器校准与 Holdout", 0, 1,
          "pending_split_and_labels", "检查误收/误拒、人机一致性；holdout 通过后才 freeze。", "本页协议"],
         ["dataset_audit", "原创性、污染与公开信息泄漏", 20, 20,

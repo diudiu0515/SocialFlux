@@ -139,11 +139,11 @@
   "media_generation": {
     "stage": "structured_expression",
     "default_media_type": "video",
-    "asset_status": "generated",
+    "asset_status": "not_generated",
     "asset_root": "media/talking_head",
-    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.",
-    "provider": "TMElyralab/MuseTalk 1.5 (local)",
-    "profile": "multimodel_v2_audio_conditioned"
+    "note": "当前没有媒体资产；仅保留 observable expression 与 media spec，等待外部 API 接入并重新通过媒体质量审核。",
+    "provider": "external_api_pending",
+    "profile": "provider_neutral_v1"
   },
   "video_triggers": [
     {
@@ -167,7 +167,7 @@
       "media_type": "video",
       "cue_template": "founder_entrenchment",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_019--founder_entrenchment",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "面部表情减少，嘴唇收紧",
         "gaze": "停止看文件，直接盯住对方",
@@ -202,7 +202,7 @@
       "media_type": "video",
       "cue_template": "specific_acknowledgment",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_019--specific_acknowledgment",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "表情仍克制但不再回避",
         "gaze": "开始与对方共同查看早期记录",
@@ -232,7 +232,7 @@
       "cue_template": "friendship_rupture",
       "social_event": "friendship_rupture",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_019--friendship_rupture",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "冷硬表情中闪过受伤，随后重新封闭",
         "gaze": "短暂避开对方，不再看协议",

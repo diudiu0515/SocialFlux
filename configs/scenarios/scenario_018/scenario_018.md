@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_018`
 - 配对 JSON：`scenario_018.json`
-- JSON SHA-256：`593cd394c339863789517a26efe61b8e85b2a361d0321f84fd245d57be9ff235`
+- JSON SHA-256：`36210b5a2d4c1bc065befa03ebff11eb2ced53b2ef1b6f1db9deb33741dcdf02`
 - 社会机制：cross-domain trust under radical uncertainty
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-018`
@@ -127,9 +127,9 @@ Scenario 只定义社会世界，不定义行动策略，也不预写任何 acti
 
 - 阶段：`structured_expression`
 - 默认媒体类型：`video`
-- 资产状态：`generated`
+- 资产状态：`not_generated`
 - 资产根目录：`media/talking_head`
-- 说明：Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.
+- 说明：当前没有媒体资产；仅保留 observable expression 与 media spec，等待外部 API 接入并重新通过媒体质量审核。
 
 ### 视频触发规则
 

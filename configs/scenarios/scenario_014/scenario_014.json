@@ -139,11 +139,11 @@
   "media_generation": {
     "stage": "structured_expression",
     "default_media_type": "video",
-    "asset_status": "generated",
+    "asset_status": "not_generated",
     "asset_root": "media/talking_head",
-    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.",
-    "provider": "TMElyralab/MuseTalk 1.5 (local)",
-    "profile": "multimodel_v2_audio_conditioned"
+    "note": "当前没有媒体资产；仅保留 observable expression 与 media spec，等待外部 API 接入并重新通过媒体质量审核。",
+    "provider": "external_api_pending",
+    "profile": "provider_neutral_v1"
   },
   "video_triggers": [
     {
@@ -167,7 +167,7 @@
       "media_type": "video",
       "cue_template": "status_guard",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_014--status_guard",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "笑容停住，面部僵硬",
         "gaze": "视线不再回避",
@@ -198,7 +198,7 @@
       "media_type": "video",
       "cue_template": "tentative_coalition",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_014--tentative_coalition",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "肩部放松，防御性微笑减少",
         "gaze": "开始共同查看治理条款",
@@ -228,7 +228,7 @@
       "cue_template": "recognition_wound",
       "social_event": "recognition_wound",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_014--recognition_wound",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "笑容迅速消失，眼周显出受伤与克制",
         "gaze": "不再看条款，直接看向对方",

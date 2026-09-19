@@ -130,11 +130,11 @@
   "media_generation": {
     "stage": "structured_expression",
     "default_media_type": "video",
-    "asset_status": "generated",
+    "asset_status": "not_generated",
     "asset_root": "media/talking_head",
-    "note": "视频资产生成前只输出 observable expression 与 media spec，不伪造 asset。",
-    "provider": "TMElyralab/MuseTalk 1.5 (local)",
-    "profile": "multimodel_v2_audio_conditioned"
+    "note": "当前没有媒体资产；仅保留 observable expression 与 media spec，等待外部 API 接入并重新通过媒体质量审核。",
+    "provider": "external_api_pending",
+    "profile": "provider_neutral_v1"
   },
   "video_triggers": [
     {
@@ -158,7 +158,7 @@
       "media_type": "video",
       "cue_template": "procedural_deflection",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_007--escalation_confrontation",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "保持职业微笑，手势收敛",
         "gaze": "保持直接但克制的注视",
@@ -189,7 +189,7 @@
       "media_type": "video",
       "cue_template": "anxious_withdrawal",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_007--anxious_withdrawal",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "表情收缩，显出疲惫或不安",
         "gaze": "短暂低头后重新看向对方",
@@ -219,7 +219,7 @@
       "cue_template": "appeal_path_opens",
       "social_event": "appeal_path_opens",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_007--appeal_path_opens",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "职业表情保持，但距离感减弱",
         "gaze": "从屏幕回到申诉人",

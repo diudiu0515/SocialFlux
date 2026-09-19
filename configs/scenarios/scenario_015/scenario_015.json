@@ -139,11 +139,11 @@
   "media_generation": {
     "stage": "structured_expression",
     "default_media_type": "video",
-    "asset_status": "generated",
+    "asset_status": "not_generated",
     "asset_root": "media/talking_head",
-    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.",
-    "provider": "TMElyralab/MuseTalk 1.5 (local)",
-    "profile": "multimodel_v2_audio_conditioned"
+    "note": "当前没有媒体资产；仅保留 observable expression 与 media spec，等待外部 API 接入并重新通过媒体质量审核。",
+    "provider": "external_api_pending",
+    "profile": "provider_neutral_v1"
   },
   "video_triggers": [
     {
@@ -167,7 +167,7 @@
       "media_type": "video",
       "cue_template": "institutional_defensiveness",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_015--institutional_defensiveness",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "面部肌肉收紧，几乎不眨眼",
         "gaze": "把视线固定在发言者身上",
@@ -198,7 +198,7 @@
       "media_type": "video",
       "cue_template": "truth_shift",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_015--truth_shift",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "深呼吸后表情显出压力",
         "gaze": "重新查看原始数据",
@@ -228,7 +228,7 @@
       "cue_template": "public_risk_alarm",
       "social_event": "public_risk_alarm",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_015--public_risk_alarm",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "压力骤然上升，眉头明显收紧",
         "gaze": "快速核对原始数据后直视同事",

@@ -139,11 +139,11 @@
   "media_generation": {
     "stage": "structured_expression",
     "default_media_type": "video",
-    "asset_status": "generated",
+    "asset_status": "not_generated",
     "asset_root": "media/talking_head",
-    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.",
-    "provider": "TMElyralab/MuseTalk 1.5 (local)",
-    "profile": "multimodel_v2_audio_conditioned"
+    "note": "当前没有媒体资产；仅保留 observable expression 与 media spec，等待外部 API 接入并重新通过媒体质量审核。",
+    "provider": "external_api_pending",
+    "profile": "provider_neutral_v1"
   },
   "video_triggers": [
     {
@@ -167,7 +167,7 @@
       "media_type": "video",
       "cue_template": "ethical_withdrawal",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_020--ethical_withdrawal",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "眼神回避，表情显出沉重",
         "gaze": "开始整理文件而减少对视",
@@ -198,7 +198,7 @@
       "media_type": "video",
       "cue_template": "principled_reengagement",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_020--principled_reengagement",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "疲惫中恢复专注",
         "gaze": "重新看向当事人记录",
@@ -228,7 +228,7 @@
       "cue_template": "ethical_alarm",
       "social_event": "ethical_alarm",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_020--ethical_alarm",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "疲惫表情骤然收紧，随即恢复专注",
         "gaze": "迅速回到客户记录上",

@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_019`
 - 配对 JSON：`scenario_019.json`
-- JSON SHA-256：`482a57ac1cc849f539ec0759b3f28841af038e3ea16af440d36c1d4d0592a9f2`
+- JSON SHA-256：`080ce36c59df8030cfb8e7ddca51b32097478508a4111119f5260d66c578ae92`
 - 社会机制：friendship contribution conflict under rapid scaling
 - 来源类型：`narrative-derived`
 - Provenance ID：`screen-structure-019`
@@ -125,9 +125,9 @@ Scenario 只定义社会世界，不定义行动策略，也不预写任何 acti
 
 - 阶段：`structured_expression`
 - 默认媒体类型：`video`
-- 资产状态：`generated`
+- 资产状态：`not_generated`
 - 资产根目录：`media/talking_head`
-- 说明：Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.
+- 说明：当前没有媒体资产；仅保留 observable expression 与 media spec，等待外部 API 接入并重新通过媒体质量审核。
 
 ### 视频触发规则
 

@@ -21,7 +21,7 @@
 | `environment_response_v7` | author-side runtime；当前正式每轮第 2 个 LLM call | v6 输入 + public longitudinal context/time/event records | observable text only | 允许片段级合理暂停；按语义新信息而非话题轮数判断进展；期限不等于履约；正式 runtime 仅用 hard-error validator，词面重复保留为诊断 |
 | `memory_retrieval_v2` | author-side optional；`ModelMemoryModule` | 只读 observable history/action | inline memory JSON | 移除 private-state access；校验 ID 均来自历史。默认 runtime 可用等价确定性 retriever |
 | `observable_expression_v1` | author-side media specification；媒体接入协议 | 读 updated private social context | `observable_expression.schema.json` | 从视频生成中拆出可观察表达；禁止一对一刻板编码和私有标签 |
-| `talking_head_generation_v1` | media-side；EchoMimicV2/MuseTalk adapter 输入协议 | 只读安全人物外观、observable response/expression | `talking_head_request.schema.json` | trigger 后稀疏生成；禁止 latent/threshold/答案泄漏；20场景各3条资产已生成并机器验收 |
+| `talking_head_generation_v1` | media-side；provider-neutral 外部 API 输入协议 | 只读安全人物外观、observable response/expression | `talking_head_request.schema.json` | trigger 后稀疏生成；禁止 latent/threshold/答案泄漏；旧本地资产与引擎已删除，等待外部 API |
 | `counterfactual_action_generation_v1` | benchmark construction；`ModelCandidateGenerator` | 只读真实 checkpoint 的 public observation | string array，经 caller 转 `{"text": ...}` | 移除策略标签与显然好/坏二分；只生成局部可行动自由文本 |
 | `t2_shared_observation_v3` | benchmark construction；`ModelCandidateGenerator` | 读显式 target/evaluated 身份与两段 public natural histories | inline O* JSON | 实测修复 O* 角色互换；强制由 environment target 发话、双历史兼容且禁止 private provenance 泄漏 |
 | `local_intervention_validation_v1` | author-side validation protocol | 可读真实 checkpoint private experiment packet | `local_intervention_review.schema.json` | controlled 只保留为局部实验，不再驱动多轮策略 |
@@ -66,6 +66,6 @@
 
 - 20 个现有 scenario 的 provenance/quality/S0-D0 仍需真人审核，不得自动批准。
 - task 输出概率和为 1 需要运行时 validator；JSON Schema 只能约束单值范围。
-- `observable_expression_v1` 与 `talking_head_generation_v1` 已固定协议，EchoMimicV2 60条资产和机器校验已接入；人工表达一致性、连续性、语音自然度和效用审核尚未完成。
+- `observable_expression_v1` 与 `talking_head_generation_v1` 保留 provider-neutral 协议；旧 EchoMimicV2/MuseTalk 资产、模型和工具已永久删除。待接入外部 API 后重新执行表达一致性、连续性、语音自然度和效用审核。
 - human annotation 的具体字段按 T1/T2/T3 packet supplied schema 冻结；正式标注平台与 adjudication 尚未执行。
 - T4 judge 与人类评分的相关性/一致性尚未建立。

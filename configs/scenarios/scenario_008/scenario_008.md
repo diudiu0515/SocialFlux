@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_008`
 - 配对 JSON：`scenario_008.json`
-- JSON SHA-256：`7703091b5e3f940799d5a7c32b4c6dc549f0bf2ee8ff82eeaa7152514d7fcadb`
+- JSON SHA-256：`953351e062b6ee595d70899b7cb0f8c309aceda3df93b93b25a9c4920210d828`
 - 社会机制：medical information asymmetry
 - 来源类型：`synthetic-script`
 - Provenance ID：`SF-SRC-008`
@@ -127,9 +127,9 @@ Scenario 只定义社会世界，不定义行动策略，也不预写任何 acti
 
 - 阶段：`structured_expression`
 - 默认媒体类型：`video`
-- 资产状态：`generated`
+- 资产状态：`not_generated`
 - 资产根目录：`media/talking_head`
-- 说明：视频资产生成前只输出 observable expression 与 media spec，不伪造 asset。
+- 说明：当前没有媒体资产；仅保留 observable expression 与 media spec，等待外部 API 接入并重新通过媒体质量审核。
 
 ### 视频触发规则
 

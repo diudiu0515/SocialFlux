@@ -6,7 +6,7 @@
 
 - Scenario ID：`IA_PIPE_006`
 - 配对 JSON：`scenario_006.json`
-- JSON SHA-256：`7ed8a499b21bf26db101fbd7c18d4498ed0f92caed998d57d3a29c44120062db`
+- JSON SHA-256：`4ffe826f7b7bccbfd316f95278fa570744e91dbfbf3e2b0bb6b7a0bdf2e1bd84`
 - 社会机制：professional ethics
 - 来源类型：`synthetic-script`
 - Provenance ID：`SF-SRC-006`
@@ -127,9 +127,9 @@ Scenario 只定义社会世界，不定义行动策略，也不预写任何 acti
 
 - 阶段：`structured_expression`
 - 默认媒体类型：`video`
-- 资产状态：`generated`
+- 资产状态：`not_generated`
 - 资产根目录：`media/talking_head`
-- 说明：视频资产生成前只输出 observable expression 与 media spec，不伪造 asset。
+- 说明：当前没有媒体资产；仅保留 observable expression 与 media spec，等待外部 API 接入并重新通过媒体质量审核。
 
 ### 视频触发规则
 

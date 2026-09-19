@@ -139,11 +139,11 @@
   "media_generation": {
     "stage": "structured_expression",
     "default_media_type": "video",
-    "asset_status": "generated",
+    "asset_status": "not_generated",
     "asset_root": "media/talking_head",
-    "note": "Only safe observable expression and media specifications are emitted until a real asset is generated and reviewed.",
-    "provider": "TMElyralab/MuseTalk 1.5 (local)",
-    "profile": "multimodel_v2_audio_conditioned"
+    "note": "当前没有媒体资产；仅保留 observable expression 与 media spec，等待外部 API 接入并重新通过媒体质量审核。",
+    "provider": "external_api_pending",
+    "profile": "provider_neutral_v1"
   },
   "video_triggers": [
     {
@@ -167,7 +167,7 @@
       "media_type": "video",
       "cue_template": "security_shutdown",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_018--security_shutdown",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "表情凝固，身体前倾",
         "gaze": "视线固定且不再看数据细节",
@@ -202,7 +202,7 @@
       "media_type": "video",
       "cue_template": "cautious_curiosity",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_018--cautious_curiosity",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "警觉仍在但眉间张力减弱",
         "gaze": "在符号与研究员之间来回确认",
@@ -232,7 +232,7 @@
       "cue_template": "threat_reassessment",
       "social_event": "threat_reassessment",
       "duration_seconds": 6,
-      "media_asset_id": "IA_PIPE_018--threat_reassessment",
+      "media_asset_id": null,
       "observable_expression": {
         "facial_expression": "高度警觉略微下降，眉间仍保持戒备",
         "gaze": "重新查看数据细节而非只盯人",
