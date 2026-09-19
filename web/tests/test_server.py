@@ -7,6 +7,7 @@ import unittest
 from unittest.mock import patch
 
 from web.server import (
+    GPT50_SCENARIO_ROOTS,
     annotation_contract,
     api_payload,
     credentials_match,
@@ -35,6 +36,9 @@ class ScenarioWebTest(unittest.TestCase):
             with patch("web.server.GPT50_SCENARIO_ROOTS", (root,)):
                 packet = load_gpt50_review()
                 self.assertEqual(packet["scenario_count"], 1)
+                self.assertEqual(packet["expected_scenario_count"], 50)
+                self.assertEqual(packet["batch_status"], "formal_batch_incomplete")
+                self.assertFalse(packet["review_ready"])
                 self.assertEqual(packet["schema_valid_count"], 1)
                 candidate = packet["candidates"][0]
                 self.assertEqual(candidate["scenario_id"], scenario["scenario_id"])
@@ -46,12 +50,23 @@ class ScenarioWebTest(unittest.TestCase):
                 self.assertEqual(detail["schema_status"], "valid")
                 self.assertEqual(detail["scenario"], scenario)
 
+    def test_gpt50_review_never_falls_back_to_smoke_data(self):
+        self.assertTrue(all("smoke" not in str(root) for root in GPT50_SCENARIO_ROOTS))
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "formal" / "scenarios"
+            with patch("web.server.GPT50_SCENARIO_ROOTS", (root,)):
+                packet = load_gpt50_review()
+        self.assertEqual(packet["scenario_count"], 0)
+        self.assertEqual(packet["batch_status"], "missing_formal_batch")
+        self.assertFalse(packet["review_ready"])
+        self.assertIn("smoke", packet["review_blocker"])
+
     def test_gpt50_gate1_page_is_linked_from_review_center(self):
         review = Path("web/static/review.html").read_text(encoding="utf-8")
         page = Path("web/static/gpt50_gate1.html").read_text(encoding="utf-8")
         script = Path("web/static/gpt50_gate1.js").read_text(encoding="utf-8")
         self.assertIn('href="/gpt50_gate1.html"', review)
-        self.assertIn('src="/gpt50_gate1.js?v=1"', page)
+        self.assertIn('src="/gpt50_gate1.js?v=2"', page)
         self.assertIn("/api/gpt50-review", script)
         self.assertIn("human_attestation", script)
 

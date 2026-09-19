@@ -60,9 +60,8 @@ GPT50_SCENARIO_ROOTS = (
     ROOT / "data" / "gpt50" / "experiment" / "scenario" / "scenarios",
     ROOT / "data" / "gpt50" / "scenario" / "scenarios",
     ROOT / "data" / "gpt50" / "scenarios",
-    ROOT / "data" / "gpt50" / "smoke" / "scenario_v2" / "scenarios",
-    ROOT / "data" / "gpt50" / "smoke" / "scenario" / "scenarios",
 )
+GPT50_EXPECTED_SCENARIO_COUNT = 50
 SCALE150_MODEL_REVIEW_FILES = ()
 SCALE300_AUTOMATIC_GATE_AUDIT = ROOT / "build" / "scale300_v1" / "automatic_gate_audit.json"
 # Switch to build/scale300_tasks only after its summary covers all 300 ordinals.
@@ -170,16 +169,45 @@ def load_gpt50_review():
             "scenario_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
             "artifact_path": _display_path(path),
         })
+    scenario_count = len(candidates)
+    schema_valid_count = sum(
+        item["schema_status"] == "valid" for item in candidates
+    )
+    if scenario_count == 0:
+        batch_status = "missing_formal_batch"
+        review_blocker = (
+            "正式 GPT50 批次尚未生成；smoke scenario 不会进入人工审核队列。"
+        )
+    elif scenario_count < GPT50_EXPECTED_SCENARIO_COUNT:
+        batch_status = "formal_batch_incomplete"
+        review_blocker = (
+            f"正式 GPT50 批次生成中：{scenario_count} / "
+            f"{GPT50_EXPECTED_SCENARIO_COUNT}。"
+        )
+    elif scenario_count > GPT50_EXPECTED_SCENARIO_COUNT:
+        batch_status = "formal_batch_overfilled"
+        review_blocker = (
+            f"正式批次包含 {scenario_count} 条，超过预期 "
+            f"{GPT50_EXPECTED_SCENARIO_COUNT} 条；请先核对批次边界。"
+        )
+    elif schema_valid_count != scenario_count or errors:
+        batch_status = "formal_batch_invalid"
+        review_blocker = "正式批次存在 schema 或加载错误，请修复后再冻结 Gate 1。"
+    else:
+        batch_status = "ready_for_human_gate1"
+        review_blocker = ""
     return {
         "format": "socialflux_gpt50_gate1_review_v1",
         "batch": "gpt50_pipeline_design_audit",
-        "authoring_model": run_manifest.get("authoring_model", "unknown"),
-        "authoring_status": run_manifest.get("status", "unknown"),
+        "batch_status": batch_status,
+        "expected_scenario_count": GPT50_EXPECTED_SCENARIO_COUNT,
+        "review_ready": batch_status == "ready_for_human_gate1",
+        "review_blocker": review_blocker,
+        "authoring_model": run_manifest.get("authoring_model", run_manifest.get("model", "unknown")),
+        "authoring_status": run_manifest.get("status", "not_started"),
         "active_scenario_root": _display_path(root),
-        "scenario_count": len(candidates),
-        "schema_valid_count": sum(
-            item["schema_status"] == "valid" for item in candidates
-        ),
+        "scenario_count": scenario_count,
+        "schema_valid_count": schema_valid_count,
         "candidates": candidates,
         "load_errors": errors,
         "human_review_warning": (

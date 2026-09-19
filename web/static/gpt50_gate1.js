@@ -102,11 +102,12 @@ async function loadCurrent(){
 }
 async function refresh(){
  data=await get("/api/gpt50-review");
- document.getElementById("count").textContent=data.schema_valid_count+" / "+data.scenario_count+" schema valid";
- document.getElementById("root").textContent="作者模型："+data.authoring_model+" · 当前批次："+data.active_scenario_root;
- document.getElementById("status").innerHTML='<b>当前可审核 '+data.scenario_count+' 个场景</b> · schema valid '+data.schema_valid_count+(data.load_errors.length?' · <span class="error">加载错误 '+data.load_errors.length+'</span>':'')+'<p class="help">'+esc(data.human_review_warning)+'</p>';
+ var expected=data.expected_scenario_count||50,complete=data.review_ready===true;
+ document.getElementById("count").textContent=data.scenario_count+" / "+expected+" 已生成 · "+data.schema_valid_count+" schema valid";
+ document.getElementById("root").textContent="作者模型："+data.authoring_model+" · 正式批次："+data.active_scenario_root;
+ document.getElementById("status").innerHTML='<b>正式 GPT50：'+data.scenario_count+' / '+expected+'</b> · '+(complete?'<span class="good">可开始完整 Gate 1</span>':'<span class="error">'+esc(data.review_blocker||'批次未完成')+'</span>')+(data.load_errors.length?' · <span class="error">加载错误 '+data.load_errors.length+'</span>':'')+'<p class="help">'+esc(data.human_review_warning)+'</p>';
  if(index>=data.candidates.length)index=0;drawQueue();
- if(data.candidates.length)await loadCurrent();else document.getElementById("content").innerHTML='<section class="panel warning">当前批次没有可审核场景。</section>';
+ if(data.candidates.length)await loadCurrent();else document.getElementById("content").innerHTML='<section class="panel warning">'+esc(data.review_blocker||'正式批次没有可审核场景。')+'</section>';
 }
 document.getElementById("reviewer").value=store().reviewer||"";
 document.getElementById("reviewer").oninput=function(){var s=store();s.reviewer=this.value.trim();persist(s);};
