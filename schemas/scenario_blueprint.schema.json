@@ -140,7 +140,17 @@
       "additionalProperties": false
     },
     "selected_state_variables": {
-      "type": "object"
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 1,
+        "uniqueItems": true,
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
     },
     "target_state_ids": {
       "type": "array",

@@ -1,6 +1,6 @@
 import unittest
 
-from schemas.validate import QUALITY_CHECKS
+from schemas.validate import QUALITY_CHECKS, validate_blueprint
 from scripts.generate_scale300_candidates import (
     _assemble_candidate,
     _blueprint_core_validator,
@@ -62,8 +62,8 @@ class DirectScenarioAuthoringTest(unittest.TestCase):
                 "hidden_intention": "intention",
             },
             "evaluated_agent_role": {"character_id": "EVALUATED_AGENT"},
-            "selected_state_variables": {},
-            "target_state_ids": [],
+            "selected_state_variables": {"trust": ["working_trust", "repair_intent"], "risk": ["failure_risk", "delay_risk"]},
+            "target_state_ids": ["trust.working_trust"],
             "multimodal_event_concepts": [],
             "suggested_horizon": 20,
         }
@@ -96,6 +96,25 @@ class DirectScenarioAuthoringTest(unittest.TestCase):
         }
         self.assertIs(_validate_brief(brief), brief)
         self.assertFalse(any("parent" in key for key in brief))
+
+    def test_blueprint_rejects_scalar_or_description_map_state_variables(self):
+        base = {
+            "scenario_id": "IA_PIPE_001",
+            "title": "candidate",
+            "mechanism": "conflict",
+            "source": {"type": "synthetic-script"},
+            "narrative_design": {},
+            "background": "background",
+            "environment_agent": {},
+            "evaluated_agent_role": {},
+            "target_state_ids": ["trust.working_trust"],
+        }
+        for invalid in (
+            {"trust": "working_trust", "risk": ["failure_risk", "delay_risk"], "goal": ["clarity"]},
+            {"trust": {"working_trust": "description"}, "risk": ["failure_risk"], "goal": ["clarity", "openness"]},
+        ):
+            with self.assertRaisesRegex(ValueError, "non-empty array"):
+                validate_blueprint({**base, "selected_state_variables": invalid})
 
     def test_machine_output_remains_pending_human_gate1(self):
         blueprint = {

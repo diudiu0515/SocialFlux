@@ -234,6 +234,37 @@ def validate_blueprint(blueprint):
         raise ValueError(f"blueprint contains premature state/action fields: {sorted(forbidden)}")
     if blueprint["source"].get("type") not in ("narrative-derived", "synthetic-script"):
         raise ValueError("blueprint requires a supported source type")
+    selected = blueprint["selected_state_variables"]
+    if not isinstance(selected, dict) or not selected:
+        raise ValueError("selected_state_variables must be a non-empty object")
+    state_paths = set()
+    for family, variables in selected.items():
+        if not isinstance(family, str) or not family.strip():
+            raise ValueError("state family IDs must be non-empty text")
+        if (
+            not isinstance(variables, list)
+            or not variables
+            or any(not isinstance(item, str) or not item.strip() for item in variables)
+            or len(variables) != len(set(variables))
+        ):
+            raise ValueError(
+                "each selected_state_variables family must be a non-empty "
+                "array of unique variable IDs"
+            )
+        state_paths.update(f"{family}.{item}" for item in variables)
+    if not 4 <= len(state_paths) <= 8:
+        raise ValueError("selected_state_variables must contain 4-8 variables")
+    targets = blueprint["target_state_ids"]
+    if (
+        not isinstance(targets, list)
+        or not targets
+        or any(not isinstance(item, str) or not item.strip() for item in targets)
+        or len(targets) != len(set(targets))
+        or not set(targets).issubset(state_paths)
+    ):
+        raise ValueError(
+            "target_state_ids must be a non-empty unique subset of selected variables"
+        )
     return blueprint
 
 
