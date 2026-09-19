@@ -26,6 +26,7 @@ from evaluation.rollout_gate import (
     HARD_REJECT_REASONS, QUALITY_DIMENSIONS, infer_observed_outcome,
 )
 from prompts.loader import get_prompt, render_prompt
+from schemas.validate import validate_scenario
 from scripts.scenario_docs import discover_scenario_paths
 
 SCENARIO_DIR = ROOT / "configs" / "scenarios"
@@ -75,6 +76,13 @@ SCALE20_PILOT_REVIEW = ROOT / "build" / "scale20_v1" / "pilot_review.json"
 SCALE20_FULL20_REVIEW = ROOT / "build" / "scale20_v1" / "full20_human_review.json"
 SCALE20_V2_REVIEW = ROOT / "build" / "scale20_v2" / "review.json"
 SCALE150_MATRIX = ROOT / "configs" / "scale300_v1" / "design_matrix.json"
+GPT50_SCENARIO_ROOTS = (
+    ROOT / "data" / "gpt50" / "experiment" / "scenario" / "scenarios",
+    ROOT / "data" / "gpt50" / "scenario" / "scenarios",
+    ROOT / "data" / "gpt50" / "scenarios",
+    ROOT / "data" / "gpt50" / "smoke" / "scenario_v2" / "scenarios",
+    ROOT / "data" / "gpt50" / "smoke" / "scenario" / "scenarios",
+)
 SCALE150_MODEL_REVIEW_FILES = (
     ROOT / "build" / "scale150_v1" / "model_semantic_reviews.codex.json",
     ROOT / "build" / "scale200_v1" / "model_semantic_sample_reviews.codex.json",
@@ -134,6 +142,117 @@ def read_jsonl(path):
 def load_r3_diagnostic_review():
     """Load current R3 evidence without treating it as formal acceptance."""
     return read_json(R3_DIAGNOSTIC_REVIEW, {}) or {}
+
+
+def _active_gpt50_scenario_root():
+    """Select one GPT experiment batch without mixing checkpoints or versions."""
+    for root in GPT50_SCENARIO_ROOTS:
+        if discover_scenario_paths(root):
+            return root
+    return GPT50_SCENARIO_ROOTS[0]
+
+
+def _display_path(path):
+    try:
+        return str(Path(path).relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
+def _gpt50_scenario_records():
+    root = _active_gpt50_scenario_root()
+    records = []
+    errors = []
+    seen = set()
+    for path in discover_scenario_paths(root):
+        try:
+            scenario = read_json(path, {}) or {}
+            scenario_id = scenario.get("scenario_id")
+            if not scenario_id:
+                raise ValueError("scenario_id is missing")
+            if scenario_id in seen:
+                raise ValueError(f"duplicate scenario_id: {scenario_id}")
+            seen.add(scenario_id)
+            try:
+                validate_scenario(scenario)
+                schema_status = "valid"
+                schema_error = ""
+            except (TypeError, ValueError) as exc:
+                schema_status = "invalid"
+                schema_error = str(exc)
+            records.append((path, scenario, schema_status, schema_error))
+        except (OSError, TypeError, ValueError, json.JSONDecodeError) as exc:
+            errors.append({
+                "artifact_path": _display_path(path),
+                "error": str(exc),
+            })
+    return root, records, errors
+
+
+def load_gpt50_review():
+    """Expose the active GPT authoring batch for real, hash-bound Gate 1 review."""
+    root, records, errors = _gpt50_scenario_records()
+    run_manifest = read_json(root.parent / "run_manifest.json", {}) or {}
+    candidates = []
+    for ordinal, (path, scenario, schema_status, schema_error) in enumerate(records, 1):
+        design = scenario.get("narrative_design", {})
+        candidates.append({
+            "ordinal": ordinal,
+            "scenario_id": scenario.get("scenario_id"),
+            "title": scenario.get("title", ""),
+            "mechanism": scenario.get("mechanism", ""),
+            "relationship_structure": design.get("relationship_structure", ""),
+            "source_type": scenario.get("source", {}).get("type", ""),
+            "construction_status": scenario.get("construction_status", {}),
+            "schema_status": schema_status,
+            "schema_error": schema_error,
+            "scenario_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            "artifact_path": _display_path(path),
+        })
+    return {
+        "format": "socialflux_gpt50_gate1_review_v1",
+        "batch": "gpt50_pipeline_design_audit",
+        "authoring_model": run_manifest.get("authoring_model", "unknown"),
+        "authoring_status": run_manifest.get("status", "unknown"),
+        "active_scenario_root": _display_path(root),
+        "scenario_count": len(candidates),
+        "schema_valid_count": sum(
+            item["schema_status"] == "valid" for item in candidates
+        ),
+        "candidates": candidates,
+        "load_errors": errors,
+        "human_review_warning": (
+            "机器 schema/quality 检查不构成 Gate 1。只有实名人工审核、完整评分、"
+            "S0/D0 确认和导出的 hash-bound 记录才能冻结场景。"
+        ),
+    }
+
+
+def load_gpt50_scenario(scenario_id):
+    root, records, _ = _gpt50_scenario_records()
+    record = next(
+        (item for item in records if item[1].get("scenario_id") == scenario_id),
+        None,
+    )
+    if record is None:
+        return None
+    path, scenario, schema_status, schema_error = record
+    quality_path = root.parent / "source_quality.json"
+    document_path = path.with_suffix(".md")
+    return {
+        "scenario": scenario,
+        "scenario_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+        "artifact_path": _display_path(path),
+        "schema_status": schema_status,
+        "schema_error": schema_error,
+        "source_quality": read_json(quality_path, {}) or {},
+        "authoring_run": read_json(root.parent / "run_manifest.json", {}) or {},
+        "documentation": (
+            document_path.read_text(encoding="utf-8")
+            if document_path.is_file() else ""
+        ),
+        "human_review": "pending",
+    }
 
 
 def load_scale20_pilot_review():
@@ -1186,6 +1305,10 @@ def api_payload(path):
         return load_scale20_pilot_review()
     if parts == ["api", "scale20-review"]:
         return load_scale20_combined_review()
+    if parts == ["api", "gpt50-review"]:
+        return load_gpt50_review()
+    if len(parts) == 3 and parts[:2] == ["api", "gpt50-scenario"]:
+        return load_gpt50_scenario(parts[2])
     if parts == ["api", "scale150-review"]:
         return load_scale150_review()
     if parts == ["api", "scale300-tasks"]:
@@ -1321,6 +1444,8 @@ class App(SimpleHTTPRequestHandler):
             return
         if parsed.path in ("/", ""):
             self.path = "/scale150.html"
+        elif parsed.path in ("/gpt50", "/gpt50/"):
+            self.path = "/gpt50_gate1.html"
         super().do_GET()
 
     def log_message(self, format, *args):

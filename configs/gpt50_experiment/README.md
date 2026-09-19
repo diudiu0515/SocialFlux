@@ -79,11 +79,35 @@ Every stage is checkpointed. Resume from the first missing or invalid artifact
 with `--resume`; the smoke uses `--max-attempts 1` so a schema failure is
 reported rather than silently replaced by several expensive generations.
 
+Human Gate 1 is available at `/gpt50_gate1.html` (or the short
+`/gpt50` route) on the annotation server. The page automatically selects one
+active GPT batch, shows the exact scenario, roles, history, S0/D0 and triggers,
+and stores hash-bound drafts in the current browser. It never mixes invalid
+authoring checkpoints into the queue.
+
+After reviewing, export `gpt50-gate1-review.json` from the page. Validate the
+export before changing any scenario:
+
+```bash
+python scripts/apply_gpt50_gate1.py \
+  --draft /path/to/gpt50-gate1-review.json \
+  --scenarios data/gpt50/smoke/scenario_v2/scenarios \
+  --output data/gpt50/smoke/review.signed.json \
+  --dry-run
+```
+
+When the dry run reports the expected approved IDs, rerun without
+`--dry-run`. That deterministic application step changes only approved
+scenarios to `quality_gate=approved` and `initial_state=human_frozen`,
+refreshes their Markdown projections, and writes the final post-freeze
+SHA-bound registry. Stale hashes, incomplete attestations, missing real
+reviewer identity, or sub-threshold scores stop the operation before mutation.
+
 After human Gate 1, smoke rollout:
 
 ```bash
 python -m pipeline rollout \
-  --scenarios data/gpt50/smoke/scenario/scenarios \
+  --scenarios data/gpt50/smoke/scenario_v2/scenarios \
   --rollout-config configs/gpt50_experiment/rollout.hybrid.single.json \
   --development-role-partition \
   --review-registry data/gpt50/smoke/review.signed.json \

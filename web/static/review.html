@@ -14,6 +14,7 @@
   <div class="status"><span class="dot"></span><span id="service">正在读取数据…</span></div>
   <section class="metrics"><div class="metric"><b id="configured">—</b><span>场景配置</span></div><div class="metric"><b id="rollouts">—</b><span>Rollout 生成记录</span></div><div class="metric"><b id="gate3">—</b><span>Gate 3 严格预检</span></div><div class="metric"><b id="fullTasks">—</b><span>四任务均已构造</span></div><div class="metric"><b id="t4">—</b><span>T4 已呈现</span></div><div class="metric"><b id="human">—</b><span>人工 GT 完成</span></div></section>
   <section class="cards">
+    <article class="card"><h2>⓪ GPT 小规模 Gate 1</h2><p>先人工审核新 GPT 场景并冻结 S0/D0，完成后才启动唯一一条 rollout。</p><ul><li>当前批次自动发现</li><li>完整场景、角色与历史</li><li>S0/D0 与 trigger 核验</li><li>带 SHA 的人工审核导出</li></ul><a href="/gpt50_gate1.html">立即审核 GPT 场景</a></article>
     <article class="card"><h2>① 四 Gate 与场景/Rollout</h2><p>先看场景与已有逐轮正文，再判断角色、事实、状态、空转和结束方式。</p><ul><li>300 个场景完整目录</li><li>完整、短轨迹、截断和失败分别显示</li><li>Gate 1–4 人工审核表</li><li>草稿保存及 JSON 导入导出</li></ul><a href="/scale150.html">查看 300 个场景</a></article>
     <article class="card"><h2>② T1–T4 任务审核</h2><p>核对任务输入、候选、LLM 答案、证据以及明确记录的构造缺口。</p><ul><li>300 个任务包全部呈现</li><li>T1/T2/T3/T4 分栏</li><li>176 完整、其余分类保留</li><li>排除项不混入正式实验池</li></ul><a href="/scale300_tasks.html">审核任务与答案</a></article>
     <article class="card"><h2>③ 优秀示例与视频</h2><p>查看已抽取的任务示例，以及 text/text+video 配对与 Talking Head 素材。</p><ul><li>高质量 task example</li><li>答案和证据对照</li><li>音频与视频播放</li><li>用于确定后续扩量标准</li></ul><a href="/task_examples.html">查看示例与视频</a></article>

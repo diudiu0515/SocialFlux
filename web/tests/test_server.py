@@ -1,13 +1,18 @@
 import base64
 import hashlib
+import json
 from pathlib import Path
+import tempfile
 import unittest
+from unittest.mock import patch
 
 from web.server import (
     annotation_contract,
     api_payload,
     credentials_match,
     load_instances,
+    load_gpt50_review,
+    load_gpt50_scenario,
     load_rollouts,
     load_task_examples,
     load_scenarios,
@@ -16,6 +21,40 @@ from web.server import (
 
 
 class ScenarioWebTest(unittest.TestCase):
+    def test_gpt50_gate1_review_uses_one_explicit_hash_bound_batch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "scenarios"
+            target = root / "scenario_001" / "scenario_001.json"
+            target.parent.mkdir(parents=True)
+            source = Path("configs/scenarios/scenario_001/scenario_001.json")
+            scenario = json.loads(source.read_text(encoding="utf-8"))
+            target.write_text(
+                json.dumps(scenario, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+            with patch("web.server.GPT50_SCENARIO_ROOTS", (root,)):
+                packet = load_gpt50_review()
+                self.assertEqual(packet["scenario_count"], 1)
+                self.assertEqual(packet["schema_valid_count"], 1)
+                candidate = packet["candidates"][0]
+                self.assertEqual(candidate["scenario_id"], scenario["scenario_id"])
+                self.assertEqual(
+                    candidate["scenario_sha256"],
+                    hashlib.sha256(target.read_bytes()).hexdigest(),
+                )
+                detail = load_gpt50_scenario(scenario["scenario_id"])
+                self.assertEqual(detail["schema_status"], "valid")
+                self.assertEqual(detail["scenario"], scenario)
+
+    def test_gpt50_gate1_page_is_linked_from_review_center(self):
+        review = Path("web/static/review.html").read_text(encoding="utf-8")
+        page = Path("web/static/gpt50_gate1.html").read_text(encoding="utf-8")
+        script = Path("web/static/gpt50_gate1.js").read_text(encoding="utf-8")
+        self.assertIn('href="/gpt50_gate1.html"', review)
+        self.assertIn('src="/gpt50_gate1.js?v=1"', page)
+        self.assertIn("/api/gpt50-review", script)
+        self.assertIn("human_attestation", script)
+
     def test_basic_auth_credentials(self):
         encoded = base64.b64encode(b"socialflux:correct-horse").decode("ascii")
         self.assertTrue(
