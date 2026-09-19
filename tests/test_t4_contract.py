@@ -1,5 +1,6 @@
 import json
 import unittest
+from copy import deepcopy
 from pathlib import Path
 
 from environment.observation import (
@@ -7,6 +8,8 @@ from environment.observation import (
     PUBLIC_OBSERVATION_FIELDS,
     build_initial_policy_observation,
 )
+from environment.prompts import build_appraisal_prompt
+from environment.response_generator import ModelResponseGenerator
 from evaluation.t4_evaluation import (
     T4_TARGET_TURNS,
     assert_t4_trajectory,
@@ -44,6 +47,40 @@ class T4ContractTest(unittest.TestCase):
         self.assertNotIn("meaningful_choice_space", rendered)
         self.assertNotIn("information_asymmetry", rendered)
         self.assertIn("hidden_intention", " ".join(PRIVATE_AUTHOR_FIELDS))
+
+
+    def test_private_persona_reaches_environment_but_not_policy(self):
+        scenario = deepcopy(self.scenario)
+        marker = "PRIVATE_PERSONALITY_MARKER_7A91"
+        scenario["environment_agent"]["persona"]["private_test_trait"] = marker
+        observation = build_initial_policy_observation(scenario)
+        self.assertNotIn(marker, json.dumps(observation, ensure_ascii=False))
+        appraisal = build_appraisal_prompt(
+            persona=scenario["environment_agent"]["persona"],
+            background=scenario["background"],
+            explicit_goal=scenario["environment_agent"]["explicit_goal"],
+            hidden_intention=scenario["environment_agent"]["hidden_intention"],
+            previous_state=scenario["initial_state"],
+            previous_dynamics=scenario["initial_dynamics"],
+            memory={},
+            action={"text": "请说明你的决定。"},
+        )
+        self.assertIn(marker, appraisal)
+        generator = ModelResponseGenerator(
+            object(), prompt_id="environment_response_v25",
+            validation_profile="hard_only",
+        )
+        _, messages = generator._build_request({
+            "scenario": {
+                "background": scenario["background"],
+                "environment_agent": scenario["environment_agent"],
+                "evaluated_agent_role": scenario["evaluated_agent_role"],
+            },
+            "history": [],
+            "action": {"text": "请说明你的决定。"},
+            "turn_id": 1,
+        })
+        self.assertIn(marker, json.dumps(messages, ensure_ascii=False))
 
     def test_t4_accepts_natural_ending_before_maximum_horizon(self):
         actions = [f"这是第{index}轮的新行动。" for index in range(1, 21)]

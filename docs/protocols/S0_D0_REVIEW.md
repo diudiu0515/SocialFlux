@@ -2,8 +2,8 @@
 
 ## S0 与 D0 是什么
 
-- **S0（initial state）**：environment character 在第 0 轮的潜在人物状态。它按 scenario 选择少量 emotion、motivation 和 relationship 变量，并使用统一的 0–10 数值范围。
-- **D0（initial dynamics）**：第 0 轮的互动局势，不属于人物人格本身，例如 escalation risk、goal failure risk、schedule pressure、negotiation open。
+- **S0（initial state）**：environment character 在第 0 轮的潜在人物状态。它固定包含 emotion、behavioral_disposition、relationship、consequence_risk 四维，并从批准词表中选择 4–8 个变量，使用统一的 0–10 数值范围。
+- **D0（initial dynamics）**：第 0 轮的互动局势，不属于人物人格本身，例如 deadline pressure、resource scarcity、information asymmetry、public exposure、negotiation openness。角色对后果的风险判断属于 S0 的 consequence_risk，不属于 D0。
 
 S0/D0 共同决定 rollout 的起点，但不规定后续 action 的效果，也不是任务答案。
 

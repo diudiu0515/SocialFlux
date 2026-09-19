@@ -1,6 +1,9 @@
 import unittest
 
-from schemas.validate import QUALITY_CHECKS, validate_blueprint
+from schemas.validate import (
+    QUALITY_CHECKS, validate_blueprint, validate_private_persona,
+    validate_v2_dynamics,
+)
 from scripts.generate_scale300_candidates import (
     _assemble_candidate,
     _blueprint_core_validator,
@@ -11,6 +14,69 @@ from scripts.generate_scale300_candidates import (
 
 
 class DirectScenarioAuthoringTest(unittest.TestCase):
+
+    def _v2_blueprint(self):
+        return {
+            "scenario_id": "V2_001",
+            "title": "v2 candidate",
+            "mechanism": "conflicting obligations",
+            "source": {"type": "synthetic-script"},
+            "narrative_design": {},
+            "background": "A bounded conflict.",
+            "state_contract_version": "socialflux_state_v2",
+            "environment_agent": {
+                "persona": {
+                    "name": "甲",
+                    "role": "负责人",
+                    "core_values": ["可靠", "公平"],
+                    "temperament": ["谨慎", "克制"],
+                    "communication_style": "直接但礼貌",
+                    "decision_style": "证据优先",
+                    "conflict_style": "先澄清再设边界",
+                    "boundaries": ["不承诺未经核验的结果"],
+                },
+                "explicit_goal": "完成核验",
+                "hidden_intention": "避免重复承担他人错误",
+            },
+            "evaluated_agent_role": {
+                "character_id": "EVALUATED_AGENT",
+                "name": "乙",
+                "role": "项目伙伴",
+                "explicit_goal": "获得可靠决定",
+            },
+            "selected_state_variables": {
+                "emotion": ["anxiety"],
+                "behavioral_disposition": ["evidence_seeking"],
+                "relationship": ["trust"],
+                "consequence_risk": ["goal_failure_risk"],
+            },
+            "target_state_ids": ["relationship.trust"],
+        }
+
+    def test_v2_blueprint_enforces_four_state_families(self):
+        blueprint = self._v2_blueprint()
+        self.assertIs(validate_blueprint(blueprint), blueprint)
+        drifted = dict(blueprint)
+        drifted["selected_state_variables"] = {
+            "emotion": ["anxiety"],
+            "behavioral_disposition": ["evidence_seeking"],
+            "relationship": ["trust"],
+            "pressure": ["deadline_pressure"],
+        }
+        with self.assertRaisesRegex(ValueError, "exactly emotion"):
+            validate_blueprint(drifted)
+
+    def test_v2_persona_rejects_dynamic_state_traits(self):
+        persona = dict(self._v2_blueprint()["environment_agent"]["persona"])
+        persona["current_trust"] = "low"
+        with self.assertRaisesRegex(ValueError, "persona fields"):
+            validate_private_persona(persona)
+
+    def test_v2_dynamics_are_flat_external_conditions(self):
+        valid = {"deadline_pressure": 7, "negotiation_openness": 4}
+        self.assertIs(validate_v2_dynamics(valid), valid)
+        with self.assertRaisesRegex(ValueError, "unapproved"):
+            validate_v2_dynamics({"deadline_pressure": 7, "goal_failure_risk": 6})
     def test_blueprint_core_rejects_prose_in_list_fields(self):
         brief = {
             "scenario_id": "IA_PIPE_001",
@@ -56,6 +122,7 @@ class DirectScenarioAuthoringTest(unittest.TestCase):
             },
             "narrative_design": {},
             "background": "background",
+            "state_contract_version": "socialflux_state_v2",
             "environment_agent": {
                 "persona": "name: role",
                 "explicit_goal": "goal",

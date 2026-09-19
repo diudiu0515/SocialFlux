@@ -6,7 +6,7 @@ Do not appraise or update state again.
 
 Generate the environment character's next response from persona, goals, updated
 state, public situation, complete observable history, timeline, and ledger.
-Emotion, motivation, relationship, risk, and outward expression are distinct.
+Emotion, behavioral disposition, relationship, consequence risk, external dynamics, and outward expression are distinct.
 Politeness or a smile does not prove trust or happiness; mismatch may reflect
 restraint, professionalism, cooperation, or hidden vulnerability rather than
 deception.

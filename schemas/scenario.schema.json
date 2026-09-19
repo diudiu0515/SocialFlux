@@ -269,6 +269,9 @@
         }
       },
       "additionalProperties": false
+    },
+    "state_contract_version": {
+      "const": "socialflux_state_v2"
     }
   },
   "not": {
@@ -679,7 +682,277 @@
         }
       },
       "additionalProperties": false
+    },
+    "privatePersonaV2": {
+      "type": "object",
+      "required": [
+        "name",
+        "role",
+        "core_values",
+        "temperament",
+        "communication_style",
+        "decision_style",
+        "conflict_style",
+        "boundaries"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "core_values": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "temperament": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "communication_style": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decision_style": {
+          "type": "string",
+          "minLength": 1
+        },
+        "conflict_style": {
+          "type": "string",
+          "minLength": 1
+        },
+        "boundaries": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "stateSelectionV2": {
+      "type": "object",
+      "required": [
+        "emotion",
+        "behavioral_disposition",
+        "relationship",
+        "consequence_risk"
+      ],
+      "properties": {
+        "emotion": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "anger",
+              "anxiety",
+              "hope",
+              "sadness",
+              "fear",
+              "guilt",
+              "shame",
+              "disappointment",
+              "frustration",
+              "relief"
+            ]
+          }
+        },
+        "behavioral_disposition": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "resolve",
+              "avoidance_urge",
+              "repair_intent",
+              "resistance_intent",
+              "disclosure_willingness",
+              "cooperation_readiness",
+              "evidence_seeking",
+              "boundary_assertion"
+            ]
+          }
+        },
+        "relationship": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "trust",
+              "hostility",
+              "respect",
+              "perceived_safety",
+              "affiliation",
+              "perceived_fairness"
+            ]
+          }
+        },
+        "consequence_risk": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "goal_failure_risk",
+              "relationship_rupture_risk",
+              "reputational_harm_risk",
+              "material_loss_risk",
+              "safety_harm_risk",
+              "institutional_harm_risk",
+              "commitment_breach_risk",
+              "exclusion_risk"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "initialStateV2": {
+      "type": "object",
+      "required": [
+        "emotion",
+        "behavioral_disposition",
+        "relationship",
+        "consequence_risk"
+      ],
+      "properties": {
+        "emotion": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          }
+        },
+        "behavioral_disposition": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          }
+        },
+        "relationship": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          }
+        },
+        "consequence_risk": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "initialDynamicsV2": {
+      "type": "object",
+      "minProperties": 2,
+      "maxProperties": 5,
+      "propertyNames": {
+        "enum": [
+          "deadline_pressure",
+          "resource_scarcity",
+          "information_asymmetry",
+          "public_exposure",
+          "negotiation_openness",
+          "coordination_stability",
+          "institutional_constraint"
+        ]
+      },
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 10
+      }
+    },
+    "environmentAgentV2": {
+      "type": "object",
+      "required": [
+        "persona",
+        "explicit_goal",
+        "hidden_intention"
+      ],
+      "properties": {
+        "persona": {
+          "$ref": "#/$defs/privatePersonaV2"
+        },
+        "explicit_goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hidden_intention": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
     }
   },
-  "$comment": "A scenario defines a social world, never a navigation strategy or expected action transition. Rollouts must come from free-form model interaction."
+  "$comment": "A scenario defines a social world, never a navigation strategy or expected action transition. Rollouts must come from free-form model interaction.",
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "state_contract_version"
+        ],
+        "properties": {
+          "state_contract_version": {
+            "const": "socialflux_state_v2"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "selected_state_variables"
+        ],
+        "properties": {
+          "environment_agent": {
+            "$ref": "#/$defs/environmentAgentV2"
+          },
+          "selected_state_variables": {
+            "$ref": "#/$defs/stateSelectionV2"
+          },
+          "initial_state": {
+            "$ref": "#/$defs/initialStateV2"
+          },
+          "initial_dynamics": {
+            "$ref": "#/$defs/initialDynamicsV2"
+          }
+        }
+      }
+    }
+  ]
 }

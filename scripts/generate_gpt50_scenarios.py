@@ -324,7 +324,11 @@ def _scenario_complete(output, ordinal, routes_sha256):
 def author_one(args, routes, ordinal):
     output = args.output.resolve()
     target = scenario_path(output, ordinal)
-    if args.resume and _scenario_complete(output, ordinal, routes.sha256):
+    if (
+        args.resume
+        and not args.rebuild_private_layer
+        and _scenario_complete(output, ordinal, routes.sha256)
+    ):
         return {
             "ordinal": ordinal,
             "scenario_id": requested_identity(ordinal)["scenario_id"],
@@ -345,6 +349,8 @@ def author_one(args, routes, ordinal):
     ]
     if args.resume and run_dir.exists():
         command.append("--resume")
+    if args.rebuild_private_layer:
+        command.append("--rebuild-private-layer")
     completed = subprocess.run(
         command,
         cwd=ROOT,
@@ -445,6 +451,7 @@ def main(argv=None):
     parser.add_argument("--briefs-only", action="store_true")
     parser.add_argument("--scenarios-only", action="store_true")
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--rebuild-private-layer", action="store_true")
     parser.add_argument("--allow-route-migration", action="store_true")
     args = parser.parse_args(argv)
     if not 1 <= args.count <= TOTAL_COUNT:
@@ -453,6 +460,8 @@ def main(argv=None):
         parser.error("workers must be in 1..8")
     if args.briefs_only and args.scenarios_only:
         parser.error("briefs-only and scenarios-only are mutually exclusive")
+    if args.rebuild_private_layer and not args.resume:
+        parser.error("rebuild-private-layer requires --resume")
     args.output = args.output.resolve()
     if args.output.exists() and any(args.output.iterdir()) and not args.resume:
         raise ValueError("output is not empty; use --resume or a new versioned path")

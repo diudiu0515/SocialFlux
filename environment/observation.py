@@ -27,7 +27,7 @@ PUBLIC_OBSERVATION_FIELDS = (
 
 PRIVATE_AUTHOR_FIELDS = (
     "environment_agent.hidden_intention",
-    "environment_agent.persona numeric traits",
+    "environment_agent.persona stable personality",
     "initial_state/current state",
     "initial_dynamics/current dynamics",
     "appraisal and state deltas",
@@ -40,7 +40,11 @@ def build_policy_observation(scenario, session):
     """Return a defensive copy of policy-visible information only."""
     agent = scenario["environment_agent"]
     persona = agent.get("persona", {})
-    role = deepcopy(scenario.get("evaluated_agent_role", {}))
+    evaluated = scenario.get("evaluated_agent_role", {})
+    role = {
+        key: deepcopy(evaluated.get(key, ""))
+        for key in ("character_id", "name", "role", "explicit_goal")
+    }
     return {
         "scenario_id": scenario["scenario_id"],
         "role": role,

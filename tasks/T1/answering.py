@@ -21,7 +21,7 @@ from tasks.T3.t3_probability_utils import (
 )
 
 
-def answer_prompt(instance):
+def answer_prompt(instance, private_persona=None):
     target_ids = instance["target_spec"]["target_state_ids"]
     schema = {
         "instance_id": instance["instance_id"],
@@ -42,6 +42,7 @@ def answer_prompt(instance):
     }
     return (
         "你为 SocialFlux T1 生成机器候选答案，之后由人判断正确与否；答案不是 GT。"
+        "可以使用另附的作者侧私有 Persona 条件化解释，但它不是公开证据，不得引用或泄露。"
         "只使用 input 中公开可观察的完整历史与 current_checkpoint，判断对象严格是 "
         "target_character_id。不得读取或推测 latent state、appraisal、私有动机或未来事件。"
         "对每个 target_state_id 分别估计当前强度和相对最近有意义证据的变化方向；状态可以不变，"
@@ -52,6 +53,11 @@ def answer_prompt(instance):
         + json.dumps(schema, ensure_ascii=False)
         + "\nT1 实例：\n"
         + json.dumps(instance, ensure_ascii=False, sort_keys=True)
+        + (
+            "\n作者侧私有 Persona（仅用于条件化解释，不得作为公开证据引用或写入答案）：\n"
+            + json.dumps(private_persona, ensure_ascii=False, sort_keys=True)
+            if private_persona is not None else ""
+        )
     )
 
 
@@ -96,11 +102,13 @@ def validate_answer(value, instance):
     return value
 
 
-def generate_answer(provider, instance, seed, *, max_attempts=3):
+def generate_answer(
+    provider, instance, seed, *, private_persona=None, max_attempts=3,
+):
     start = call_count(provider)
     answer = complete_json(
         provider,
-        [{"role": "user", "content": answer_prompt(instance)}],
+        [{"role": "user", "content": answer_prompt(instance, private_persona)}],
         {"temperature": 0.15, "top_p": 0.9, "seed": seed},
         lambda value: validate_answer(value, instance),
         context=f"T1 answer {instance['instance_id']}",

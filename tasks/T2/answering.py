@@ -8,7 +8,7 @@ from providers.structured import complete_json
 from scripts.t2_common import DIRECTIONS, call_count
 
 
-def answer_prompt(instance):
+def answer_prompt(instance, private_persona=None):
     visible_ids = [turn["turn_id"] for turn in instance["input"]["history_a"]]
     example_turn = visible_ids[0]
     schema = {
@@ -48,7 +48,8 @@ def answer_prompt(instance):
         },
     }
     return (
-        "你为 SocialFlux T2 生成候选答案，答案之后由人判断正确与否，不是自动 GT。只能使用"
+        "你为 SocialFlux T2 生成候选答案，答案之后由人判断正确与否，不是自动 GT。"
+        "可以使用另附的作者侧私有 Persona 条件化解释，但它不是公开证据，不得引用或泄露。只能使用"
         "公开 History A/B、相同 shared ending 和 target_spec，不得读取后台状态。判断对象是"
         "input.target_character，也就是 environment_character；evaluated_agent 的言行只能作为"
         "影响目标角色的事件，不能冒充目标角色状态证据。从候选变量中优先选 1–3 个有双侧证据的"
@@ -60,6 +61,11 @@ def answer_prompt(instance):
         + json.dumps(schema, ensure_ascii=False)
         + "\nT2 实例：\n"
         + json.dumps(instance, ensure_ascii=False, sort_keys=True)
+        + (
+            "\n作者侧私有 Persona（仅用于条件化解释，不得作为公开证据引用或写入答案）：\n"
+            + json.dumps(private_persona, ensure_ascii=False, sort_keys=True)
+            if private_persona is not None else ""
+        )
     )
 
 
@@ -154,10 +160,12 @@ def validate_answer(value, instance):
     return value
 
 
-def generate_answer(provider, instance, seed, *, max_attempts=3):
+def generate_answer(
+    provider, instance, seed, *, private_persona=None, max_attempts=3,
+):
     answer = complete_json(
         provider,
-        [{"role": "user", "content": answer_prompt(instance)}],
+        [{"role": "user", "content": answer_prompt(instance, private_persona)}],
         {"temperature": 0.2, "top_p": 0.9, "seed": seed},
         lambda value: validate_answer(value, instance),
         context=f"T2 answer {instance['instance_id']}",

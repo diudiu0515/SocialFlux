@@ -25,13 +25,117 @@ DELTA_LABELS = {
     "strong_decrease", "moderate_decrease", "mild_decrease", "similar",
     "mild_increase", "moderate_increase", "strong_increase",
 }
+STATE_CONTRACT_VERSION = "socialflux_state_v2"
+PERSONA_FIELDS = {
+    "name", "role", "core_values", "temperament", "communication_style",
+    "decision_style", "conflict_style", "boundaries",
+}
+STATE_VARIABLE_ONTOLOGY = {
+    "emotion": {
+        "anger", "anxiety", "hope", "sadness", "fear", "guilt", "shame",
+        "disappointment", "frustration", "relief",
+    },
+    "behavioral_disposition": {
+        "resolve", "avoidance_urge", "repair_intent", "resistance_intent",
+        "disclosure_willingness", "cooperation_readiness", "evidence_seeking",
+        "boundary_assertion",
+    },
+    "relationship": {
+        "trust", "hostility", "respect", "perceived_safety", "affiliation",
+        "perceived_fairness",
+    },
+    "consequence_risk": {
+        "goal_failure_risk", "relationship_rupture_risk",
+        "reputational_harm_risk", "material_loss_risk", "safety_harm_risk",
+        "institutional_harm_risk", "commitment_breach_risk", "exclusion_risk",
+    },
+}
+DYNAMICS_VARIABLES = {
+    "deadline_pressure", "resource_scarcity", "information_asymmetry",
+    "public_exposure", "negotiation_openness", "coordination_stability",
+    "institutional_constraint",
+}
+
+
+def _nonempty_text_list(value, *, minimum, maximum, label):
+    if (
+        not isinstance(value, list)
+        or not minimum <= len(value) <= maximum
+        or any(not isinstance(item, str) or not item.strip() for item in value)
+        or len(set(value)) != len(value)
+    ):
+        raise ValueError(
+            f"{label} must contain {minimum}-{maximum} unique non-empty strings"
+        )
+
+
+def validate_private_persona(persona):
+    if not isinstance(persona, dict):
+        raise ValueError("environment_agent.persona must be an object")
+    if set(persona) != PERSONA_FIELDS:
+        raise ValueError(
+            "v2 persona fields must be exactly " + str(sorted(PERSONA_FIELDS))
+        )
+    for key in (
+        "name", "role", "communication_style", "decision_style",
+        "conflict_style",
+    ):
+        if not isinstance(persona[key], str) or not persona[key].strip():
+            raise ValueError(f"environment_agent.persona.{key} must be non-empty text")
+    _nonempty_text_list(
+        persona["core_values"], minimum=2, maximum=5,
+        label="environment_agent.persona.core_values",
+    )
+    _nonempty_text_list(
+        persona["temperament"], minimum=2, maximum=5,
+        label="environment_agent.persona.temperament",
+    )
+    _nonempty_text_list(
+        persona["boundaries"], minimum=1, maximum=5,
+        label="environment_agent.persona.boundaries",
+    )
+    return persona
+
+
+def validate_v2_state_selection(selected):
+    if set(selected) != set(STATE_VARIABLE_ONTOLOGY):
+        raise ValueError(
+            "v2 selected_state_variables must use exactly emotion, "
+            "behavioral_disposition, relationship, and consequence_risk"
+        )
+    for family, variables in selected.items():
+        unknown = set(variables) - STATE_VARIABLE_ONTOLOGY[family]
+        if unknown:
+            raise ValueError(
+                f"v2 state family {family} contains unapproved variables: "
+                f"{sorted(unknown)}"
+            )
+    return selected
+
+
+def validate_v2_dynamics(dynamics):
+    if not isinstance(dynamics, dict) or not 2 <= len(dynamics) <= 5:
+        raise ValueError("v2 initial_dynamics must select 2-5 variables")
+    if any(isinstance(value, dict) for value in dynamics.values()):
+        raise ValueError("v2 initial_dynamics must be a flat numeric object")
+    unknown = set(dynamics) - DYNAMICS_VARIABLES
+    if unknown:
+        raise ValueError(
+            f"v2 initial_dynamics contains unapproved variables: {sorted(unknown)}"
+        )
+    _bounded(dynamics, "initial_dynamics")
+    return dynamics
 
 
 def _bounded(value, path):
     if isinstance(value, dict):
         for key, item in value.items():
             _bounded(item, f"{path}.{key}")
-    elif not isinstance(value, (int, float)) or not 0 <= value <= 10:
+    elif (
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not 0 <= value <= 10
+    ):
         raise ValueError(f"{path} must be numeric in [0, 10]")
 
 
@@ -223,6 +327,9 @@ def validate_blueprint(blueprint):
     missing = [key for key in required if key not in blueprint]
     if missing:
         raise ValueError(f"scenario blueprint missing required fields: {missing}")
+    contract_version = blueprint.get("state_contract_version")
+    if contract_version not in (None, STATE_CONTRACT_VERSION):
+        raise ValueError(f"unsupported state_contract_version: {contract_version}")
     forbidden = {
         "initial_state",
         "initial_dynamics",
@@ -254,6 +361,9 @@ def validate_blueprint(blueprint):
         state_paths.update(f"{family}.{item}" for item in variables)
     if not 4 <= len(state_paths) <= 8:
         raise ValueError("selected_state_variables must contain 4-8 variables")
+    if contract_version == STATE_CONTRACT_VERSION:
+        validate_private_persona(blueprint["environment_agent"].get("persona"))
+        validate_v2_state_selection(selected)
     targets = blueprint["target_state_ids"]
     if (
         not isinstance(targets, list)
@@ -436,6 +546,9 @@ def validate_scenario(scenario):
     missing = [key for key in required if key not in scenario]
     if missing:
         raise ValueError(f"scenario missing required fields: {missing}")
+    contract_version = scenario.get("state_contract_version")
+    if contract_version not in (None, STATE_CONTRACT_VERSION):
+        raise ValueError(f"unsupported state_contract_version: {contract_version}")
     forbidden = FORBIDDEN_SCENARIO_FIELDS & set(scenario)
     if forbidden:
         raise ValueError(f"scenario must not define action taxonomy/effects: {sorted(forbidden)}")
@@ -483,6 +596,27 @@ def validate_scenario(scenario):
     for key in ("name", "role"):
         if not isinstance(persona.get(key), str) or not persona[key].strip():
             raise ValueError(f"environment_agent.persona missing text {key}")
+    if contract_version == STATE_CONTRACT_VERSION:
+        if set(agent) != {"persona", "explicit_goal", "hidden_intention"}:
+            raise ValueError("v2 environment_agent fields mismatch")
+        validate_private_persona(persona)
+        selected = scenario.get("selected_state_variables")
+        if not isinstance(selected, dict):
+            raise ValueError("v2 scenario requires selected_state_variables")
+        validate_v2_state_selection(selected)
+        expected_state = {
+            family: set(variables) for family, variables in selected.items()
+        }
+        if set(scenario["initial_state"]) != set(expected_state):
+            raise ValueError("v2 initial_state families do not match selected variables")
+        for family, variables in expected_state.items():
+            if not isinstance(scenario["initial_state"].get(family), dict) or set(
+                scenario["initial_state"][family]
+            ) != variables:
+                raise ValueError(
+                    f"v2 initial_state variables do not match selected family {family}"
+                )
+        validate_v2_dynamics(scenario["initial_dynamics"])
     evaluated = scenario["evaluated_agent_role"]
     for key in ("character_id", "name", "role", "explicit_goal"):
         if not str(evaluated.get(key, "")).strip():

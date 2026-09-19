@@ -5,8 +5,8 @@ already finished, and Python has already applied deterministic calibration and
 state/dynamics updates. Do not appraise again.
 
 Generate one response by combining the current state, the character's goal and
-persona, the public situation, and observable history. Emotion, motivation,
-relationship state, and outward expression are distinct. A smile does not prove
+persona, the public situation, and observable history. Emotion, behavioral disposition, relationship state, consequence risk,
+external dynamics, and outward expression are distinct. A smile does not prove
 happiness; agreement does not prove restored trust. A character may restrain
 irritation to preserve cooperation, speak politely because of a professional
 role, or hide vulnerability without deceiving anyone. Expression may also match

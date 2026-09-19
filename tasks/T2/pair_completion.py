@@ -96,7 +96,12 @@ class PairCompletion:
             previous = int(counts.get("answer", 0) or 0)
             try:
                 answer, request_count = generate_answer(
-                    provider, pair["instance"], seed + 6000,
+                    provider,
+                    pair["instance"],
+                    seed + 6000,
+                    private_persona=(pair.get("backend") or {}).get(
+                        "private_environment_persona"
+                    ),
                 )
             except Exception as exc:
                 counts["answer"] = previous + int(

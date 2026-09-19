@@ -99,7 +99,7 @@ class TaskPackageBuilder:
             "request_count": int(getattr(provider, "_call_index", 0) or 0),
         }
 
-    def _t1(self, trajectory, extraction, ordinal):
+    def _t1(self, scenario, trajectory, extraction, ordinal):
         selected = extraction["t1"][0]
         turn_ids = [turn["turn_id"] for turn in trajectory["turns"]]
         checkpoint_index = turn_ids.index(selected["checkpoint_turn_id"])
@@ -115,7 +115,9 @@ class TaskPackageBuilder:
         config, provider = self._provider("t1_answer")
         try:
             answer, requests = generate_t1_answer(
-                provider, instance, 410000 + ordinal, max_attempts=3,
+                provider, instance, 410000 + ordinal,
+                private_persona=scenario["environment_agent"]["persona"],
+                max_attempts=3,
             )
         except Exception as exc:
             raise _attach_request_count(exc, provider)
@@ -236,6 +238,7 @@ class TaskPackageBuilder:
                 answer_provider,
                 instance,
                 430000 + ordinal,
+                private_persona=scenario["environment_agent"]["persona"],
                 max_attempts=3,
             )
         except Exception as exc:
@@ -319,7 +322,7 @@ class TaskPackageBuilder:
 
         builders = {}
         if extraction is not None:
-            builders = {"T1": lambda: self._t1(trajectory, extraction, ordinal)}
+            builders = {"T1": lambda: self._t1(scenario, trajectory, extraction, ordinal)}
             if extraction["t3"] is None:
                 gaps["T3"] = {
                     "reason": "insufficient_five_turn_future_window",

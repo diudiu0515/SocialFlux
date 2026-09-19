@@ -9,8 +9,10 @@ Extract:
 - relationship and power structure;
 - conflicting goals and information asymmetry;
 - consequential prior events and desired longitudinal dependency;
-- environment persona, explicit goal, private hidden intention, and evaluated-agent role;
-- relevant state-variable families and target state IDs;
+- a stable private environment persona with canonical personality fields, plus explicit goal and private hidden intention;
+- an evaluated-agent role with public identity, role, and goal only;
+- `state_contract_version=socialflux_state_v2` and exactly the four state families emotion, behavioral_disposition, relationship, and consequence_risk;
+- 4–8 approved state variables total and target state IDs drawn from them;
 - socially meaningful multimodal event concepts;
 - a nontrivial choice space without prescribing a best path;
 - source-specific temporal structure, practical constraints, ambiguity, and adaptation boundaries that prevent scenarios from feeling interchangeable;

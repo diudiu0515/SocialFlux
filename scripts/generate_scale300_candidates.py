@@ -23,10 +23,12 @@ from providers.model_routes import ModelRoutes
 from providers.structured import StructuredOutputError, complete_json
 from schemas.validate import (
     QUALITY_CHECKS,
+    STATE_CONTRACT_VERSION,
     validate_blueprint,
     validate_initial_state_proposal,
     validate_quality_report,
     validate_scenario,
+    validate_v2_dynamics,
 )
 from scripts.scenario_docs import write_document
 
@@ -51,6 +53,7 @@ BLUEPRINT_FIELDS = {
     "source",
     "narrative_design",
     "background",
+    "state_contract_version",
     "environment_agent",
     "evaluated_agent_role",
     "selected_state_variables",
@@ -138,6 +141,10 @@ def _blueprint_validator(value, brief):
         raise ValueError(f"blueprint contains unsupported fields: {sorted(extra)}")
     if value["scenario_id"] != brief["scenario_id"]:
         raise ValueError("blueprint changed scenario_id")
+    if value.get("state_contract_version") != STATE_CONTRACT_VERSION:
+        raise ValueError(
+            f"blueprint state_contract_version must be {STATE_CONTRACT_VERSION}"
+        )
     source = value["source"]
     if source.get("type") != brief["source_type"]:
         raise ValueError("blueprint changed source_type")
@@ -250,6 +257,7 @@ def _initial_state_core_validator(value, blueprint):
         raise ValueError("initial-state core t3 horizon must be in [5, 10]")
     _assert_bounded_values(value["initial_state"], "initial_state")
     _assert_bounded_values(value["initial_dynamics"], "initial_dynamics")
+    validate_v2_dynamics(value["initial_dynamics"])
     selected = blueprint["selected_state_variables"]
     if set(value["initial_state"]) != set(selected):
         raise ValueError("initial-state families do not match selected variables")
@@ -353,10 +361,20 @@ def main(argv=None):
         action="store_true",
         help="reuse each validated stage artifact and continue from the first missing stage",
     )
+    parser.add_argument(
+        "--rebuild-private-layer",
+        action="store_true",
+        help=(
+            "reuse source, quality, and blueprint core, but regenerate stable Persona, "
+            "state vocabulary, S0/D0, and presentation under the current contract"
+        ),
+    )
     args = parser.parse_args(argv)
 
     if args.max_attempts < 1:
         raise ValueError("--max-attempts must be positive")
+    if args.rebuild_private_layer and not args.resume:
+        raise ValueError("--rebuild-private-layer requires --resume")
     if args.output.exists() and any(args.output.iterdir()) and not args.resume:
         raise ValueError("output directory is not empty; use a new versioned path")
 
@@ -453,7 +471,7 @@ def main(argv=None):
         raise SystemExit(2)
 
     blueprint_path = args.output / "blueprint.json"
-    if args.resume and blueprint_path.exists():
+    if args.resume and blueprint_path.exists() and not args.rebuild_private_layer:
         blueprint = _blueprint_validator(
             json.loads(blueprint_path.read_text(encoding="utf-8")), brief
         )
@@ -484,7 +502,7 @@ def main(argv=None):
                     "temperature": 0.3,
                     "top_p": 0.9,
                     "seed": args.seed + 2,
-                    "max_tokens": 900,
+                    "max_tokens": 1800,
                 },
                 lambda value: _blueprint_core_validator(value, brief),
                 context=f"scenario blueprint core {brief['scenario_id']}",
@@ -493,7 +511,7 @@ def main(argv=None):
             _atomic_json(core_path, core)
 
         runtime_path = args.output / "blueprint_runtime.json"
-        if args.resume and runtime_path.exists():
+        if args.resume and runtime_path.exists() and not args.rebuild_private_layer:
             runtime = json.loads(runtime_path.read_text(encoding="utf-8"))
             blueprint = _blueprint_runtime_validator(runtime, core, brief)
         else:
@@ -512,7 +530,7 @@ def main(argv=None):
                     "temperature": 0.3,
                     "top_p": 0.9,
                     "seed": args.seed + 3,
-                    "max_tokens": 900,
+                    "max_tokens": 1800,
                 },
                 lambda value: (
                     _blueprint_runtime_validator(value, core, brief)
@@ -526,13 +544,13 @@ def main(argv=None):
         _atomic_json(blueprint_path, blueprint)
 
     proposal_path = args.output / "initial_state_proposal.json"
-    if args.resume and proposal_path.exists():
+    if args.resume and proposal_path.exists() and not args.rebuild_private_layer:
         proposal = validate_initial_state_proposal(
             json.loads(proposal_path.read_text(encoding="utf-8")), blueprint
         )
     else:
         state_core_path = args.output / "initial_state_core.json"
-        if args.resume and state_core_path.exists():
+        if args.resume and state_core_path.exists() and not args.rebuild_private_layer:
             state_core = _initial_state_core_validator(
                 json.loads(state_core_path.read_text(encoding="utf-8")), blueprint
             )
@@ -549,7 +567,7 @@ def main(argv=None):
                     "temperature": 0.25,
                     "top_p": 0.9,
                     "seed": args.seed + 4,
-                    "max_tokens": 900,
+                    "max_tokens": 1600,
                 },
                 lambda value: _initial_state_core_validator(value, blueprint),
                 context=f"scenario state values {brief['scenario_id']}",
@@ -558,7 +576,7 @@ def main(argv=None):
             _atomic_json(state_core_path, state_core)
 
         presentation_path = args.output / "initial_presentation.json"
-        if args.resume and presentation_path.exists():
+        if args.resume and presentation_path.exists() and not args.rebuild_private_layer:
             presentation = json.loads(
                 presentation_path.read_text(encoding="utf-8")
             )
@@ -579,7 +597,7 @@ def main(argv=None):
                     "temperature": 0.25,
                     "top_p": 0.9,
                     "seed": args.seed + 5,
-                    "max_tokens": 500,
+                    "max_tokens": 1200,
                 },
                 lambda value: (
                     _initial_presentation_validator(

@@ -1,31 +1,22 @@
-# SocialFlux Direct Scenario Candidate Initialization v1
+# SocialFlux Direct Scenario Candidate Initialization v2
 
-Purpose: propose candidate S0/D0 and observable media triggers for a newly
-normalized scenario blueprint before human Gate 1. The model must never freeze
-or approve its own proposal.
+Purpose: propose candidate S0/D0 and observable media triggers for a v2 blueprint before human Gate 1. The model cannot freeze or approve its proposal.
 
 Constraints:
 
-- initialize only the blueprint's selected state variables on the 0–10 scale;
-- derive every value from the scenario's persona, history, goals, hidden
-  intention, and opening situation;
-- keep persona traits as stable context rather than mutable state;
-- use scenario-specific initial dynamics and leave room for multiple natural
-  trajectories;
-- define exactly three distinct video triggers with unique positive priorities;
-- no threshold or crossing trigger may already be active at S0/D0;
-- every trigger may reference only numeric paths present in initial state or
-  initial dynamics, use cooldown 2–4, and include observable expression;
-- set max_turns to exactly 20 and t3_delayed_horizon to 5–10;
-- do not create action taxonomies, action effects, response templates, best
-  strategies, expected deltas, answers, or trajectories;
+- require `state_contract_version=socialflux_state_v2`;
+- initialize exactly the selected variables under the four families `emotion`, `behavioral_disposition`, `relationship`, and `consequence_risk` on the 0–10 scale;
+- treat persona, role, explicit goal, and hidden intention as stable private context, never mutable state;
+- use 2–5 flat canonical dynamics only: `deadline_pressure`, `resource_scarcity`, `information_asymmetry`, `public_exposure`, `negotiation_openness`, `coordination_stability`, `institutional_constraint`;
+- external dynamics and the character's consequence-risk state must not duplicate each other;
+- derive every value from persona, history, goals, hidden intention, and the opening situation while preserving multiple plausible trajectories;
+- define exactly three distinct video triggers with unique positive priorities; no trigger may already be active at S0/D0;
+- every trigger references only existing numeric state/dynamics paths, uses cooldown 2–4, and includes observable expression;
+- set max_turns to 20 and t3_delayed_horizon to 5–10;
+- do not create action taxonomies, action effects, response templates, best strategies, expected deltas, answers, or trajectories;
 - set status to `candidate_pending_human_freeze`.
 
-Return JSON only with exactly: initial_state, initial_dynamics,
-observable_expression, media_generation, video_triggers, max_turns,
-t3_delayed_horizon, sampling_plan, rationale, trigger_reachability, status. It
-must conform to `schemas/initial_state_proposal.schema.json` and the canonical
-scenario validator.
+Return JSON only with exactly: initial_state, initial_dynamics, observable_expression, media_generation, video_triggers, max_turns, t3_delayed_horizon, sampling_plan, rationale, trigger_reachability, status.
 
 Candidate blueprint:
 {{payload_json}}

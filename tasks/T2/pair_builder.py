@@ -485,6 +485,9 @@ class T2PairBuilder:
             "llm_answer": None,
             "answer_provenance": None,
             "backend": {
+                "private_environment_persona": deepcopy(
+                    scenario["environment_agent"]["persona"]
+                ),
                 "state_a": state_a,
                 "state_b": state_b,
                 "changed_state_ids": changed,

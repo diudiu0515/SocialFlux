@@ -97,10 +97,16 @@ def flat_private(log):
 def selected_state_ids(scenario):
     selected = scenario.get("selected_state_variables", {})
     state_ids = []
-    for group in ("emotion", "motivation", "relationship"):
+    groups = (
+        ("emotion", "behavioral_disposition", "relationship", "consequence_risk")
+        if scenario.get("state_contract_version") == "socialflux_state_v2"
+        else ("emotion", "motivation", "relationship")
+    )
+    for group in groups:
         state_ids.extend(f"{group}.{name}" for name in selected.get(group, []))
-    state_ids.extend(selected.get("dynamics", []))
-    state_ids.extend(selected.get("risk", []))
+    if scenario.get("state_contract_version") != "socialflux_state_v2":
+        state_ids.extend(selected.get("dynamics", []))
+        state_ids.extend(selected.get("risk", []))
     return list(dict.fromkeys(state_ids))
 
 

@@ -11,7 +11,7 @@ Constraints:
 - model one-turn inertia: `similar` and `mild_*` should be common; use `moderate_*` only for clear consequential evidence and `strong_*` only for rare acute, unambiguous, high-impact events;
 - when the appraisal says the newest action delivers a concrete result, verifiable information, or workable cooperation and identifies no fresh threat, deception, evasion, or broken commitment, anger/anxiety/hostility should not increase and trust should not decrease merely because prior history was difficult;
 - a respectful firm boundary is not by itself hostility; only move threat-sensitive variables negatively when the appraisal identifies fresh socially harmful evidence;
-- do not move every variable together merely because the turn is positive or negative; assess emotion, motivation, relationship, and dynamics independently;
+- do not move every variable together merely because the turn is positive or negative; assess emotion, behavioral disposition, relationship, consequence risk, and dynamics independently;
 - if a variable is already at 0 or 10, do not keep selecting a clipped outward delta without new evidence; use `similar` unless the turn supports reversal;
 - distinguish temporary emotional reaction from slower trust, respect, openness, and control changes;
 - output every existing variable exactly once and add no variables;

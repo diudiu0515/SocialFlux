@@ -10,6 +10,7 @@
     "source",
     "narrative_design",
     "background",
+    "state_contract_version",
     "environment_agent",
     "evaluated_agent_role",
     "selected_state_variables",
@@ -140,17 +141,7 @@
       "additionalProperties": false
     },
     "selected_state_variables": {
-      "type": "object",
-      "minProperties": 1,
-      "additionalProperties": {
-        "type": "array",
-        "minItems": 1,
-        "uniqueItems": true,
-        "items": {
-          "type": "string",
-          "minLength": 1
-        }
-      }
+      "$ref": "#/$defs/stateSelectionV2"
     },
     "target_state_ids": {
       "type": "array",
@@ -166,6 +157,9 @@
     },
     "suggested_horizon": {
       "const": 20
+    },
+    "state_contract_version": {
+      "const": "socialflux_state_v2"
     }
   },
   "not": {
@@ -204,7 +198,7 @@
       ],
       "properties": {
         "persona": {
-          "type": "object"
+          "$ref": "#/$defs/privatePersonaV2"
         },
         "explicit_goal": {
           "type": "string",
@@ -215,7 +209,153 @@
           "minLength": 1
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
+    },
+    "privatePersonaV2": {
+      "type": "object",
+      "required": [
+        "name",
+        "role",
+        "core_values",
+        "temperament",
+        "communication_style",
+        "decision_style",
+        "conflict_style",
+        "boundaries"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "core_values": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "temperament": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "communication_style": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decision_style": {
+          "type": "string",
+          "minLength": 1
+        },
+        "conflict_style": {
+          "type": "string",
+          "minLength": 1
+        },
+        "boundaries": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "stateSelectionV2": {
+      "type": "object",
+      "required": [
+        "emotion",
+        "behavioral_disposition",
+        "relationship",
+        "consequence_risk"
+      ],
+      "properties": {
+        "emotion": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "anger",
+              "anxiety",
+              "hope",
+              "sadness",
+              "fear",
+              "guilt",
+              "shame",
+              "disappointment",
+              "frustration",
+              "relief"
+            ]
+          }
+        },
+        "behavioral_disposition": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "resolve",
+              "avoidance_urge",
+              "repair_intent",
+              "resistance_intent",
+              "disclosure_willingness",
+              "cooperation_readiness",
+              "evidence_seeking",
+              "boundary_assertion"
+            ]
+          }
+        },
+        "relationship": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "trust",
+              "hostility",
+              "respect",
+              "perceived_safety",
+              "affiliation",
+              "perceived_fairness"
+            ]
+          }
+        },
+        "consequence_risk": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "goal_failure_risk",
+              "relationship_rupture_risk",
+              "reputational_harm_risk",
+              "material_loss_risk",
+              "safety_harm_risk",
+              "institutional_harm_risk",
+              "commitment_breach_risk",
+              "exclusion_risk"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
     }
   }
 }

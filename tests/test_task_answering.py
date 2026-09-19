@@ -1,11 +1,40 @@
 import unittest
 
+from tasks.T1.answering import answer_prompt as t1_answer_prompt
 from tasks.T1.answering import validate_answer as validate_t1
 from tasks.T3.action_authoring import validate_actions
-from tasks.T3.answering import canonicalize_instance, validate_answer as validate_t3
+from tasks.T3.answering import (
+    answer_prompt as t3_answer_prompt, canonicalize_instance,
+    validate_answer as validate_t3,
+)
 
 
 class TaskAnsweringTest(unittest.TestCase):
+
+    def test_author_answer_prompt_sees_private_persona_without_mutating_instance(self):
+        t1 = {
+            "instance_id": "private_t1",
+            "input": {"history": [{"turn_id": "t1"}]},
+            "target_spec": {"target_state_ids": ["relationship.trust"]},
+        }
+        marker = "PRIVATE_PERSONA_ANSWER_MARKER_4C2D"
+        persona = {"conflict_style": marker}
+        rendered = t1_answer_prompt(t1, persona)
+        self.assertIn(marker, rendered)
+        self.assertNotIn("persona", t1)
+
+        t3 = {
+            "instance_id": "private_t3",
+            "input": {
+                "history": [{"turn_id": "t1"}],
+                "current_observation": {"turn_id": "t2"},
+                "candidate_actions": [{"text": "a"}],
+            },
+            "target_spec": {"target_state_ids": ["relationship.trust"]},
+        }
+        self.assertIn(marker, t3_answer_prompt(t3, persona))
+        self.assertNotIn("persona", t3)
+
     def test_t1_contract(self):
         instance = {
             "instance_id": "x_t1",

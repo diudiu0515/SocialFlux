@@ -9,10 +9,13 @@ Preserve and serialize:
 - the exact requested scenario identity and synthetic-source provenance;
 - the distinctive social mechanism, relationship, power asymmetry, goal
   conflict, information asymmetry, and consequential history;
-- an environment persona with an explicit public goal and a private hidden
-  intention;
-- the evaluated-agent role and explicit goal;
-- scenario-specific state-variable families and target state IDs;
+- a stable private environment persona with `core_values`, `temperament`,
+  communication, decision, conflict style, and boundaries, plus an explicit
+  public goal and private hidden intention;
+- the evaluated-agent role and explicit goal, without private personality fields;
+- `state_contract_version=socialflux_state_v2` and exactly the four canonical
+  state families: emotion, behavioral_disposition, relationship, and
+  consequence_risk;
 - at least three genuinely different meaningful choices, without prescribing a
   best action or outcome;
 - enough causal and temporal depth for a natural 10–20-turn interaction.
