@@ -8,7 +8,7 @@
   </style>
 </head><body><main>
   <div class="eyebrow">SOCIALFLUX · REVIEW</div><h1>人工审核中心</h1>
-  <p class="lead">当前入口是 GPT 小规模设计实验的 Gate 1。旧 Qwen 产物和旧 300 场景已移出活跃目录并保存在本地归档；审核框架、任务页面与 Talking Head 资产继续保留。</p>
+  <p class="lead">当前入口是 GPT 小规模设计实验的 Gate 1。旧 Qwen 产物和旧 300 场景已移出活跃目录并保存在本地归档；审核框架和任务页面继续保留；旧 Talking Head 资产已归档。</p>
   <div class="status"><span class="dot"></span><span id="service">正在读取 GPT Gate 1 队列…</span></div>
   <section class="metrics">
     <div class="metric"><b id="configured">—</b><span>GPT 场景候选</span></div>
@@ -20,7 +20,7 @@
     <article class="card"><h2>① GPT 小规模 Gate 1</h2><p>人工审核新 GPT 场景并冻结 S0/D0；通过后每场景只生成一条自然 rollout。</p><ul><li>自动发现当前 GPT 批次</li><li>完整场景、角色与关键历史</li><li>S0/D0、trigger 与泄漏核验</li><li>带 scenario SHA-256 的审核导出</li></ul><a href="/gpt50_gate1.html">立即审核 GPT 场景</a></article>
     <article class="card archived"><h2>② 历史四 Gate 工作台</h2><p>页面与标注合同仍保留，旧数据不再作为活跃候选。</p><ul><li>旧 300 场景已归档</li><li>旧 Qwen rollout 已归档</li><li>Gate 1–4 表单保留</li><li>新 manifest 接入后可复用</li></ul><a href="/scale150.html">查看历史工作台</a></article>
     <article class="card"><h2>③ T1–T4 任务审核</h2><p>核对任务输入、候选答案、证据与明确记录的构造缺口。</p><ul><li>T1/T2/T3 离线任务</li><li>T4 在线评测</li><li>机器建议不冒充人工 GT</li><li>Gate 4 同样本双人抽查</li></ul><a href="/scale300_tasks.html">打开任务审核页</a></article>
-    <article class="card"><h2>④ 示例与 Talking Head</h2><p>继续保留任务示例、text/video 配对与 Talking Head 素材入口。</p><ul><li>任务示例与证据对照</li><li>音频和视频播放</li><li>多模态触发审核</li><li>不会随旧 Qwen 数据清理</li></ul><a href="/task_examples.html">查看示例与视频</a></article>
+    <article class="card"><h2>④ 示例与媒体框架</h2><p>任务示例页和受限媒体路由保留；当前没有活跃 Talking Head 素材。</p><ul><li>任务示例与证据对照</li><li>旧音视频已归档</li><li>新批次可重新生成</li><li>媒体缺失不会冒充已完成</li></ul><a href="/task_examples.html">查看示例页面</a></article>
   </section>
   <section class="guide"><h2>当前顺序</h2><p>GPT 场景人工 Gate 1 → 单条 rollout → Gate 2 环境有效性 → Gate 3 轨迹准入 → T1/T2/T3 构建与 T4 在线评测 → Gate 4 任务和答案抽查。完成小规模闭环与多模型评估后，再扩大 Claude 主批次。</p></section>
   <p class="foot">浏览器草稿不是正式签名；换浏览器或清缓存前请导出 JSON。旧 20 场景壳页面仍在 <a href="/index.html">Legacy Workbench</a>，其模型产物已归档。</p>

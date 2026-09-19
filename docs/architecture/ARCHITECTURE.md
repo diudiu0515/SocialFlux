@@ -65,7 +65,7 @@ nine-criterion acceptance + human annotation
 
 每个 `scenario_NNN/` 的 JSON 是机器事实源，同名 Markdown 是确定性生成的人类说明，含故事初始化、S0/D0、作者化多片段时间线/事件池、视频阈值与质量状态。批次目录和运行产物分离：场景目录不内嵌历史模型 rollout。JSON 改动后必须刷新确定性文档并重新进行 hash-bound Gate 1；旧签名自动失效。
 
-S0/D0 的候选值与真人冻结协议见 [`S0_D0_REVIEW.md`](../protocols/S0_D0_REVIEW.md)。Talking Head 使用 `media/talking_head/manifest.json` 作为媒体事实源：每个 scenario 三条状态触发视频，请求只含公开表演指令，不泄漏 hidden state、阈值或任务答案；生成后由收集器验证视频流、音轨、时长、分辨率和帧率，再将 media ID 回填 scenario。网站通过受限 `/media/<asset_id>` 路由读取清单中的 MP4，不接受任意文件路径。
+S0/D0 的候选值与真人冻结协议见 [`S0_D0_REVIEW.md`](../protocols/S0_D0_REVIEW.md)。Talking Head 是可选的批次级扩展：当前旧素材与 manifest 已归档，没有活跃媒体资产。生成和审核脚本继续保留；未来新批次必须创建自己的 manifest，请求只含公开表演指令，并通过视频流、音轨、时长、分辨率和帧率检查。网站的受限 `/media/<asset_id>` 路由在没有 manifest 时返回空集，不接受任意文件路径。
 
 影视来源只允许贡献高层社会机制。`extract-structure` 的结构合同强制记录必须丢弃的表层元素以及原创化要求；后续 source 必须使用新人物、新场域、新事件、新 stakes 和原创语言，不复制台词、角色或标志性情节序列。
 
