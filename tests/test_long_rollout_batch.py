@@ -12,6 +12,7 @@ from scripts.generate_long_rollout_pool import (
     _generation_error_retry_allowed,
     _load_progress,
     _new_progress,
+    _quality_rejection_retry_allowed,
     _retry_filter_matches,
     _technical_retry_allowed,
     _unattempted_filter_matches,
@@ -257,6 +258,35 @@ class LongRolloutBatchTest(unittest.TestCase):
         self.assertFalse(_technical_retry_allowed(
             progress, "quality_rejection", error_types=["ValueError"]
         ))
+
+    def test_quality_rejection_retry_is_one_time_and_status_scoped(self):
+        progress = {
+            "attempts": [
+                {"slot_id": "eligible", "status": "machine_rejected"},
+                {"slot_id": "accepted", "status": "accepted"},
+                {
+                    "slot_id": "used",
+                    "status": "machine_rejected",
+                    "quality_retry": True,
+                },
+                {
+                    "slot_id": "failed_replacement",
+                    "status": "machine_rejected",
+                    "quality_retry": True,
+                },
+                {
+                    "slot_id": "failed_replacement",
+                    "status": "generation_error",
+                },
+            ]
+        }
+        self.assertTrue(_quality_rejection_retry_allowed(progress, "eligible"))
+        self.assertFalse(_quality_rejection_retry_allowed(progress, "accepted"))
+        self.assertFalse(_quality_rejection_retry_allowed(progress, "used"))
+        self.assertFalse(_quality_rejection_retry_allowed(
+            progress, "failed_replacement"
+        ))
+        self.assertFalse(_quality_rejection_retry_allowed(progress, "missing"))
 
     def test_provider_overload_circuit_break_classification(self):
         self.assertTrue(_attempts_end_in_provider_overload([{

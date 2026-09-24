@@ -386,6 +386,19 @@ def _technical_retry_allowed(
     )
 
 
+def _quality_rejection_retry_allowed(progress, slot_id):
+    """Allow one replacement sample after the latest machine quality rejection."""
+    attempts = [
+        item for item in progress.get("attempts", [])
+        if item.get("slot_id") == slot_id
+    ]
+    return bool(
+        attempts
+        and attempts[-1].get("status") == "machine_rejected"
+        and not any(item.get("quality_retry") is True for item in attempts)
+    )
+
+
 def _unattempted_filter_matches(progress, slot_id):
     """Select slots that have never produced a persisted attempt."""
     return not any(
@@ -519,12 +532,12 @@ def _verify_completed_slot(output, slot, record):
 
 def run_slot(
     slot, scenario, output, retry_limit, attempt_offset=0,
-    retain_all_candidates=False, technical_retry=False,
+    retain_all_candidates=False, technical_retry=False, quality_retry=False,
 ):
     if (
         slot["config"].get("candidate_strategy") == "single_first_pass"
         and attempt_offset > 0
-        and not technical_retry
+        and not (technical_retry or quality_retry)
     ):
         return None, []
     scenario_dir = Path(output) / slot["scenario_directory"]
@@ -587,6 +600,7 @@ def run_slot(
                 "actual_policy_id": policy.policy_id,
                 "attempt": attempt_number,
                 "technical_retry": technical_retry,
+                "quality_retry": quality_retry,
                 "quality_version": QUALITY_VERSION,
                 "quality_fingerprint": _quality_fingerprint(),
                 "scenario_fingerprint": _scenario_fingerprint(scenario),
@@ -636,6 +650,7 @@ def run_slot(
                 "actual_policy_id": policy.policy_id,
                 "attempt": attempt_number,
                 "technical_retry": technical_retry,
+                "quality_retry": quality_retry,
                 "quality_version": QUALITY_VERSION,
                 "quality_fingerprint": _quality_fingerprint(),
                 "scenario_fingerprint": _scenario_fingerprint(scenario),
@@ -698,6 +713,14 @@ def main(argv=None):
             "on resume, retry each incomplete generation_error slot once with "
             "the original policy id and seed; accepted or quality-rejected "
             "trajectories are never retried"
+        ),
+    )
+    resume_filter.add_argument(
+        "--retry-quality-rejections-once",
+        action="store_true",
+        help=(
+            "on resume, generate one replacement candidate only for slots whose "
+            "latest attempt is machine_rejected; prior evidence is preserved"
         ),
     )
     parser.add_argument("--allow-route-migration", action="store_true")
@@ -906,10 +929,14 @@ def main(argv=None):
             retry_generation_errors_once=args.retry_generation_errors_once,
             error_types=args.retry_error_type,
         )
+        quality_retry = bool(
+            args.retry_quality_rejections_once
+            and _quality_rejection_retry_allowed(progress, slot["slot_id"])
+        )
         if (
             config.get("candidate_strategy") == "single_first_pass"
             and _attempt_offset(progress, slot["slot_id"]) > 0
-            and not technical_retry
+            and not (technical_retry or quality_retry)
         ):
             print(
                 f"[{index}/{len(slots)}] retain exhausted first pass "
@@ -944,7 +971,14 @@ def main(argv=None):
                 flush=True,
             )
             continue
-        pending.append((index, slot, technical_retry))
+        if args.retry_quality_rejections_once and not quality_retry:
+            print(
+                f"[{index}/{len(slots)}] skip non-quality-rejection "
+                f"{slot['slot_id']}",
+                flush=True,
+            )
+            continue
+        pending.append((index, slot, technical_retry, quality_retry))
 
     retry_ceiling = (
         len(pending)
@@ -1021,7 +1055,7 @@ def main(argv=None):
     paused_for_provider_overload = False
     if args.workers == 1:
         consecutive_provider_overloads = 0
-        for index, slot, technical_retry in pending:
+        for index, slot, technical_retry, quality_retry in pending:
             print(f"[{index}/{len(slots)}] generate {slot['slot_id']}", flush=True)
             trajectory, attempts = run_slot(
                 slot,
@@ -1031,6 +1065,7 @@ def main(argv=None):
                 _attempt_offset(progress, slot["slot_id"]),
                 args.retain_all_candidates,
                 technical_retry,
+                quality_retry,
             )
             record_result(index, slot, trajectory, attempts)
             if _attempts_end_in_provider_overload(attempts):
@@ -1072,8 +1107,9 @@ def main(argv=None):
                     _attempt_offset(progress, slot["slot_id"]),
                     args.retain_all_candidates,
                     technical_retry,
+                    quality_retry,
                 ): (index, slot)
-                for index, slot, technical_retry in pending
+                for index, slot, technical_retry, quality_retry in pending
             }
             for future in as_completed(futures):
                 index, slot = futures[future]
