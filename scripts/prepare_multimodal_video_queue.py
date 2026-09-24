@@ -149,7 +149,7 @@ def prepare(args):
     )
     videos_per_node = int(args.videos_per_node or offline["videos_per_node"])
     min_turn_gap = int(args.min_turn_gap or offline["min_turn_gap"])
-    duration = float(args.duration_seconds or offline["duration_seconds"])
+    duration = float(args.duration_seconds) if args.duration_seconds else None
     if not 1 <= nodes_per_trajectory <= 8:
         raise ValueError("important nodes per trajectory must be in 1..8")
     if not 1 <= videos_per_node <= 3:

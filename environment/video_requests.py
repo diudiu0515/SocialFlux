@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import math
+import re
 
 from prompts.loader import render_prompt
 
@@ -10,27 +12,41 @@ from prompts.loader import render_prompt
 TALKING_HEAD_PROMPT_ID = "talking_head_generation_v1"
 
 
+def estimate_spoken_duration(response, *, minimum=3, maximum=15):
+    """Estimate whole-second English speech plus natural lead/tail room."""
+    text = str(response).strip()
+    if not text:
+        raise ValueError("video duration requires a public response")
+    words = re.findall(r"[A-Za-z0-9]+(?:['-][A-Za-z0-9]+)*", text)
+    if not words:
+        raise ValueError("video duration requires an English public response")
+    # Calm dialogue is commonly near 2.5 words/second. One extra second
+    # leaves room for a response beat, breath, and natural closing pause.
+    seconds = 1 + math.ceil(len(words) / 2.5)
+    return float(max(minimum, min(maximum, seconds)))
+
+
 def video_prompt(scenario, response, expression, variant=1):
     persona = scenario["environment_agent"]["persona"]
-    cues = "；".join(str(item) for item in expression.get("behavioral_cues", []))
+    cues = "; ".join(str(item) for item in expression.get("behavioral_cues", []))
     variant_note = (
-        "保持克制的近景构图，强调细微面部变化。"
+        "Use a restrained close-up emphasizing subtle facial changes."
         if variant % 2 == 1
-        else "保持固定机位的中近景构图，强调视线与姿态变化。"
+        else "Use a fixed medium close-up emphasizing gaze and posture changes."
     )
     return render_prompt(
         TALKING_HEAD_PROMPT_ID,
-        character_name=str(persona.get("name", "人物")),
-        character_role=str(persona.get("role", "对话参与者")),
+        character_name=str(persona.get("name", "the character")),
+        character_role=str(persona.get("role", "conversation participant")),
         variant_note=variant_note,
         public_response=str(response),
         facial_expression=str(
-            expression.get("facial_expression", "自然克制")
+            expression.get("facial_expression", "natural and restrained")
         ),
-        gaze=str(expression.get("gaze", "自然注视")),
-        speech_style=str(expression.get("speech_style", "正常语速")),
-        prosody=str(expression.get("prosody", "克制")),
-        behavioral_cues=cues or "自然呼吸、眨眼和轻微头部动作",
+        gaze=str(expression.get("gaze", "natural eye contact")),
+        speech_style=str(expression.get("speech_style", "natural pace")),
+        prosody=str(expression.get("prosody", "restrained")),
+        behavioral_cues=cues or "natural breathing, blinking, and subtle head movement",
     ).strip()
 
 
@@ -39,7 +55,7 @@ def build_video_request(
     response,
     expression,
     *,
-    duration_seconds=5,
+    duration_seconds=None,
     continuity_reference=None,
     variant=1,
 ):
@@ -48,9 +64,13 @@ def build_video_request(
         raise ValueError("video request requires a public response")
     if not isinstance(expression, dict) or not expression:
         raise ValueError("video request requires observable expression")
-    duration_seconds = float(duration_seconds)
-    if not 3 <= duration_seconds <= 8:
-        raise ValueError("video duration must be between 3 and 8 seconds")
+    duration_seconds = float(
+        estimate_spoken_duration(response)
+        if duration_seconds is None
+        else duration_seconds
+    )
+    if not 3 <= duration_seconds <= 15:
+        raise ValueError("video duration must be between 3 and 15 seconds")
     if continuity_reference is not None and not isinstance(
         continuity_reference, str
     ):

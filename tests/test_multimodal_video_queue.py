@@ -5,9 +5,38 @@ import unittest
 
 from scripts.finalize_multimodal_video_queue import main as finalize
 from scripts.prepare_multimodal_video_queue import select_important_turns
+from environment.video_requests import estimate_spoken_duration
+from scripts.run_autodl_seedance_video import validate_payload, video_url
 
 
 class MultimodalVideoQueueTest(unittest.TestCase):
+    def test_seedance_payload_requires_english_synchronized_audio(self):
+        payload = {
+            "model": "doubao-seedance-2-0-260128",
+            "content": [{"type": "text", "text": "A natural English line."}],
+            "duration": 4,
+            "resolution": "480p",
+            "generate_audio": True,
+            "watermark": False,
+        }
+        self.assertIs(validate_payload(payload), payload)
+        payload["content"][0]["text"] = "不能包含中文"
+        with self.assertRaisesRegex(ValueError, "entirely English"):
+            validate_payload(payload)
+
+    def test_seedance_result_requires_https_video(self):
+        self.assertEqual(
+            video_url({"content": {"video_url": "https://example.test/a.mp4"}}),
+            "https://example.test/a.mp4",
+        )
+        with self.assertRaisesRegex(ValueError, "safe HTTPS"):
+            video_url({"content": {"video_url": "http://example.test/a.mp4"}})
+
+    def test_english_speech_duration_is_adaptive_and_bounded(self):
+        self.assertEqual(estimate_spoken_duration("See you tomorrow."), 3.0)
+        self.assertEqual(estimate_spoken_duration("Okay."), 3.0)
+        self.assertEqual(estimate_spoken_duration("word " * 100), 15.0)
+
     def test_important_nodes_prefer_stateful_and_consequential_turns(self):
         turns = [
             {"turn_id": f"t{index}", "numeric_state_delta": {"trust": 0}}

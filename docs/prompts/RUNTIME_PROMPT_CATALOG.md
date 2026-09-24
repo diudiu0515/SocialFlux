@@ -35,7 +35,7 @@ Gate 4 不是任务 T4：Gate 4 的 LLM 预筛当前覆盖 T1–T3，之后仍�
 
 ## 多模态合同
 
-Claude150 与 GPT50 共用 configs/multimodal_generation.json、environment/multimodal.py、environment/video_requests.py 和 talking_head_generation_v1。observable behavior 由 environment_response_v25 产生；没有 caller 的 observable_expression_v1 已删除。在线与离线视频请求都记录 prompt_id=talking_head_generation_v1。
+Claude150 与 GPT50 共用 configs/multimodal_generation.json、environment/multimodal.py、environment/video_requests.py 和 talking_head_generation_v1。observable behavior 由 environment_response_v25 产生；没有 caller 的 observable_expression_v1 已删除。在线与离线视频请求都记录 prompt_id=talking_head_generation_v1。生成 prompt、spoken line 和音频必须全英文；AutoDL Seedance 运行器为 scripts/run_autodl_seedance_video.py。
 
 ## 修改流程
 

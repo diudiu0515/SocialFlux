@@ -6,7 +6,9 @@
     "important_nodes_per_trajectory": 4,
     "videos_per_node": 1,
     "min_turn_gap": 2,
-    "duration_seconds": 5
+    "duration_policy": "estimated_from_public_response_v1",
+    "minimum_duration_seconds": 3,
+    "maximum_duration_seconds": 15
   },
   "online": {
     "profile": "online_relaxed_v1",

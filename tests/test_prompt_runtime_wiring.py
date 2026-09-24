@@ -174,21 +174,21 @@ class PromptRuntimeWiringTest(unittest.TestCase):
         request = build_video_request(
             {
                 "environment_agent": {
-                    "persona": {"name": "乙", "role": "合作者"},
+                    "persona": {"name": "Alex", "role": "collaborator"},
                 },
             },
-            "我们可以继续谈。",
+            "We can continue this conversation.",
             {
-                "facial_expression": "克制",
-                "gaze": "自然注视",
-                "speech_style": "正常语速",
-                "prosody": "平稳",
-                "behavioral_cues": ["轻微点头"],
+                "facial_expression": "restrained",
+                "gaze": "natural eye contact",
+                "speech_style": "normal pace",
+                "prosody": "even",
+                "behavioral_cues": ["subtle nod"],
             },
         )
         self.assertEqual(request["prompt_id"], TALKING_HEAD_PROMPT_ID)
         self.assertEqual(shared["prompt_id"], TALKING_HEAD_PROMPT_ID)
-        self.assertIn("我们可以继续谈。", request["prompt"])
+        self.assertIn("We can continue this conversation.", request["prompt"])
 
 
 if __name__ == "__main__":

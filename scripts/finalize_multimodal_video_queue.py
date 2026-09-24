@@ -89,7 +89,7 @@ def main(argv=None):
         try:
             metadata = {} if args.skip_probe else probe(path)
             duration = metadata.get("duration_seconds_actual")
-            if duration is not None and not 2.5 <= duration <= 8.5:
+            if duration is not None and not 2.5 <= duration <= 15.5:
                 raise ValueError(f"video duration outside allowed range: {duration}")
             item.update({
                 "status": "generated_structural_pass",

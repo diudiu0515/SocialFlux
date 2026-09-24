@@ -1,10 +1,10 @@
-写实、自然、连续的单人对话视频。
-人物：{{character_name}}，身份：{{character_role}}。{{variant_note}}
-人物完整说出：“{{public_response}}”
-面部：{{facial_expression}}；
-视线：{{gaze}}；
-说话方式：{{speech_style}}；
-韵律：{{prosody}}；
-可观察动作：{{behavioral_cues}}。
-保持身份、年龄、服装、背景和光线连续；口型与英文同步；
-不显示字幕、标签、水印、心理状态名称、数值、触发条件或评测答案。
+Photorealistic, natural, continuous single-person dialogue video.
+Character: {{character_name}}. Role: {{character_role}}. {{variant_note}}
+The character says this entire line exactly in English: "{{public_response}}"
+Facial expression: {{facial_expression}};
+Gaze: {{gaze}};
+Speaking style: {{speech_style}};
+Prosody: {{prosody}};
+Observable actions: {{behavioral_cues}}.
+Keep identity, age, clothing, background, and lighting continuous. Lip movements, voice, and timing must match the exact English line.
+Do not show subtitles, labels, watermarks, names of mental states, numeric scores, trigger conditions, or benchmark answers.
