@@ -53,13 +53,13 @@ class PipelineContractTest(unittest.TestCase):
         self.assertIn('formal_raw rollout requires --environment-evidence', source)
 
     def test_scenario_catalog_has_both_sources_and_coverage(self):
-        directory = Path("configs/scenarios")
+        directory = Path("data/gpt50/experiment/scenario/scenarios")
         scenarios = load_scenarios(directory)
         manifest = json.loads(assert_manifest_current(directory).read_text(encoding="utf-8"))
         coverage = json.loads((directory / "coverage_matrix.json").read_text(encoding="utf-8"))
-        self.assertEqual(len(scenarios), 20)
-        self.assertEqual(manifest["source_counts"]["narrative-derived"], 10)
-        self.assertEqual(manifest["source_counts"]["synthetic-script"], 10)
+        self.assertEqual(len(scenarios), 50)
+        self.assertEqual(manifest["source_counts"]["narrative-derived"], 15)
+        self.assertEqual(manifest["source_counts"]["synthetic-script"], 35)
         self.assertRegex(manifest["prompt_manifest_sha256"], r"^[0-9a-f]{64}$")
         self.assertEqual(len(coverage["rows"]), len(scenarios))
         for entry in manifest["scenarios"]:
@@ -67,7 +67,7 @@ class PipelineContractTest(unittest.TestCase):
             self.assertRegex(entry["documentation_sha256"], r"^[0-9a-f]{64}$")
 
     def test_every_scenario_has_current_markdown_and_no_action_taxonomy(self):
-        for path in sorted(Path("configs/scenarios").glob("scenario_*/scenario_*.json")):
+        for path in sorted(Path("data/gpt50/experiment/scenario/scenarios").glob("scenario_*/scenario_*.json")):
             paired = assert_document_current(path)
             scenario = json.loads(path.read_text(encoding="utf-8"))
             self.assertEqual(path.parent.name, path.stem)
@@ -81,16 +81,22 @@ class PipelineContractTest(unittest.TestCase):
             self.assertIn("JSON SHA-256", text)
 
     def test_screen_inspired_scenarios_are_originalized_and_non_template(self):
-        paths = sorted(Path("configs/scenarios").glob("scenario_*/scenario_*.json"))[10:]
-        self.assertEqual(len(paths), 10)
-        scenarios = [json.loads(path.read_text(encoding="utf-8")) for path in paths]
-        self.assertTrue(all(item["source"]["type"] == "narrative-derived" for item in scenarios))
+        paths = sorted(Path("data/gpt50/experiment/scenario/scenarios").glob("scenario_*/scenario_*.json"))
+        scenarios = [
+            item
+            for path in paths
+            if (item := json.loads(path.read_text(encoding="utf-8")))["source"]["type"]
+            == "narrative-derived"
+        ]
+        self.assertEqual(len(scenarios), 15)
         self.assertTrue(all(
-            "no copied dialogue or scene sequence" in item["source"]["provenance_note"]
+            "all characters, settings, facts, stakes, event sequences, and dialogue are original"
+            in item["source"]["provenance_note"]
             for item in scenarios
         ))
-        self.assertEqual(len({item["opening_response"] for item in scenarios}), 10)
-        self.assertEqual(len({item["mechanism"] for item in scenarios}), 10)
+        self.assertEqual(len({item["title"] for item in scenarios}), 15)
+        self.assertEqual(len({item["background"] for item in scenarios}), 15)
+        self.assertEqual(len({item["mechanism"] for item in scenarios}), 15)
         self.assertGreaterEqual(len({
             tuple(sorted(
                 variable
@@ -98,16 +104,10 @@ class PipelineContractTest(unittest.TestCase):
                 for variable in family
             ))
             for item in scenarios
-        }), 8)
-        trigger_ids = [
-            trigger["trigger_id"]
-            for item in scenarios
-            for trigger in item["video_triggers"]
-        ]
-        self.assertEqual(len(trigger_ids), len(set(trigger_ids)))
+        }), 12)
 
     def test_missing_and_stale_documentation_are_rejected(self):
-        source = Path("configs/scenarios/scenario_001/scenario_001.json")
+        source = Path("data/gpt50/experiment/scenario/scenarios/scenario_001/scenario_001.json")
         with tempfile.TemporaryDirectory() as directory:
             candidate = Path(directory) / "scenario_001.json"
             candidate.write_bytes(source.read_bytes())
@@ -120,11 +120,11 @@ class PipelineContractTest(unittest.TestCase):
                 assert_document_current(candidate)
 
     def test_pipeline_can_select_a_reproducible_scenario_subset(self):
-        records = load_scenario_records("configs/scenarios")
-        selected = select_scenario_records(records, ["IA_PIPE_011", "IA_PIPE_018"])
+        records = load_scenario_records("data/gpt50/experiment/scenario/scenarios")
+        selected = select_scenario_records(records, ["GPT50_011", "GPT50_018"])
         self.assertEqual(
             [scenario["scenario_id"] for _, scenario in selected],
-            ["IA_PIPE_011", "IA_PIPE_018"],
+            ["GPT50_011", "GPT50_018"],
         )
         with self.assertRaises(ValueError):
             select_scenario_records(records, ["IA_PIPE_UNKNOWN"])

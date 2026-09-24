@@ -63,6 +63,6 @@ def require_human_frozen(scenario, *, allow_unreviewed=False):
         )
     if status["initial_state"] != "human_frozen":
         raise ValueError(
-            f"{scenario['scenario_id']} S0/D0 is not human_frozen; "
+            f"{scenario['scenario_id']} initial state is not human_frozen; "
             "use --allow-unreviewed only for diagnostics"
         )

@@ -41,7 +41,7 @@ def main():
                 "t1_t4_suitability": None,
             },
             "s0_notes": notes,
-            "d0_notes": scenario.get("initial_dynamics", {}),
+            "runtime_dynamics_seed_notes": scenario.get("initial_dynamics", {}),
             "trigger_notes": scenario.get("initialization_notes", {}).get(
                 "trigger_reachability", []
             ),

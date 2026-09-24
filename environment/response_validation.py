@@ -202,9 +202,7 @@ def _validate_expression(value, controlled):
 
 def validate_structured_response(generator, value, context):
     prompt_id = getattr(generator, "prompt_id", None)
-    expression_mode = prompt_id in {
-        "environment_response_v24", "environment_response_v25"
-    }
+    expression_mode = prompt_id == "environment_response_v25"
     semantic_mode = prompt_id == "environment_response_v25"
     expected_keys = {"response_text", "ledger_events"}
     if expression_mode:

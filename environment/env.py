@@ -17,10 +17,14 @@ from .longitudinal import (
 )
 from .memory import MemoryModule
 from .multimodal import ObservableExpressionLayer
-from .observation import build_policy_observation
+from .observation import (
+    build_policy_observation,
+    build_public_evaluated_role,
+)
 from .public_situation import build_public_situation
 from .state_updater import apply_transition
 from .termination import check_termination
+from .video_requests import attach_online_requests
 from providers.text import normalize_text
 
 
@@ -49,14 +53,19 @@ class StatefulEnvironment:
         response_generator,
         memory=None,
         provenance=None,
+        minimum_natural_turns=1,
+        multimodal_trigger_policy=None,
     ):
         if state_updater is None or response_generator is None:
             raise ValueError("canonical environment requires model-backed state and response components")
         self.scenario = deepcopy(scenario)
         self.state_updater = state_updater
         self.response_generator = response_generator
+        self.minimum_natural_turns = int(minimum_natural_turns)
         self.memory = memory or MemoryModule()
-        self.expression_layer = ObservableExpressionLayer(self.scenario)
+        self.expression_layer = ObservableExpressionLayer(
+            self.scenario, multimodal_trigger_policy
+        )
         self.provenance = deepcopy(provenance or {
             "state_updater": getattr(state_updater, "provenance", {}),
             "response_generator": getattr(response_generator, "provenance", {}),
@@ -251,7 +260,9 @@ class StatefulEnvironment:
                 "background": self.scenario["background"],
                 "public_situation": build_public_situation(self.scenario),
                 "environment_agent": self.scenario["environment_agent"],
-                "evaluated_agent_role": self.scenario["evaluated_agent_role"],
+                "evaluated_agent_role": build_public_evaluated_role(
+                    self.scenario["evaluated_agent_role"]
+                ),
             },
             "turn_id": frame["turn_id"],
             "action": deepcopy(frame["action"]),
@@ -331,6 +342,7 @@ class StatefulEnvironment:
             multimodal["observable_expression"] = deepcopy(
                 response_result["observable_behavior"]
             )
+        multimodal = attach_online_requests(self.scenario, multimodal, text)
         controlled = response_result["controlled_observation"]
         if controlled is not None:
             multimodal["media"] = deepcopy(controlled.get("media", []))
@@ -356,6 +368,7 @@ class StatefulEnvironment:
             "current_response": text,
             "observable_expression": multimodal["observable_expression"],
             "media": multimodal["media"],
+            "video_api_requests": multimodal.get("video_api_requests", []),
             "observable_cues": deepcopy(
                 multimodal["observable_expression"].get("behavioral_cues", [])
             ),
@@ -378,6 +391,7 @@ class StatefulEnvironment:
         natural_completion = (
             getattr(self.response_generator, "horizon_mode", None)
             == "natural_max_20"
+            and frame["turn_id"] >= self.minimum_natural_turns
             and not self.session.get("longitudinal_enabled")
             and (ledger_after.get("latest_obligation") or {}).get("owner")
             != "evaluated_agent"
@@ -462,6 +476,9 @@ class StatefulEnvironment:
             "environment_response": response_result["text"],
             "environment_response_ledger_events": response_result["ledger_events"],
             "trigger_events": multimodal["private_events"],
+            "video_api_requests": deepcopy(
+                multimodal.get("video_api_requests", [])
+            ),
             "observable_expression": multimodal["observable_expression"],
             "media": multimodal["media"],
             "environment_snapshot_before": frame["snapshot_before"],

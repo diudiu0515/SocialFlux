@@ -14,7 +14,7 @@ from tests.support import TextPolicy, environment_factory
 class PipelineAcceptanceTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.scenarios = load_scenarios("configs/scenarios")
+        cls.scenarios = load_scenarios("data/gpt50/experiment/scenario/scenarios")
 
     def test_report_has_nine_revision_criteria_and_no_fake_pass(self):
         report = build_acceptance_report(self.scenarios)

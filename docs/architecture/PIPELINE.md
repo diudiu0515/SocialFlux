@@ -4,7 +4,7 @@
 
 ```text
 N 个 Scenario 候选
-  → Gate 1：Scenario / S0-D0 人工冻结
+  → Gate 1：Scenario / initial-state 人工冻结
   → 每场景 1 条自然 rollout
       Policy 自由文本 action
       → Appraisal LLM
@@ -38,8 +38,8 @@ N 个 Scenario 候选
 
 | Gate | 阻断条件 | 通过后的产物 |
 |---|---|---|
-| Gate 1 | scenario 未 approved，或 S0/D0 未 human_frozen | hash-bound frozen scenario |
-| Gate 2 | environment 的 E1–E6 证据不足或失败 | environment-valid trajectory |
+| Gate 1 | scenario 未 approved，或 initial state 未 human_frozen | hash-bound frozen scenario |
+| Gate 2 | environment 的 E1–E9 证据不足或失败 | environment-valid trajectory |
 | Gate 3 | 唯一轨迹结构、自然结束、语义质量或 history evidence 不合格 | canonical trajectory |
 | Gate 4 | T1/T2/T3/T4 实例或答案抽查未通过 | 可发布任务与答案 |
 
@@ -49,9 +49,9 @@ N 个 Scenario 候选
 
 1. 模型创建完整 canonical scenario JSON。
 2. schema/catalog 校验并生成只读文档；校验脚本不得修改语义。
-3. 人工 Gate 1 绑定最终 JSON 的 SHA-256，冻结 S0/D0。
+3. 人工 Gate 1 绑定最终 JSON 的 SHA-256，冻结 initial state；runtime dynamics seed 只做机器合同校验。
 4. 对已批准场景各运行一个 rollout slot。
-5. Gate 2 完成环境证据，Gate 3 对唯一轨迹作准入/淘汰。
+5. Gate 2 完成 E1–E9 环境证据（E9 为 fast/medium/slow/context-dependent timescale 审核）；Gate 3 用一个质量审核模型全量主筛唯一轨迹，人工抽检。
 6. 仅从 selected root 构建 T1/T2/T3；T4 使用同一 environment runtime。
 7. Gate 4 对机器建议进行同样本双人抽查和分歧仲裁。
 8. strict audit 通过后才能称为正式发布。

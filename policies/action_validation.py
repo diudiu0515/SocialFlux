@@ -6,7 +6,10 @@ from providers.text import follows_dialogue_format, normalize_text
 from . import legacy_action_validation
 
 
-ACTIVE_PROMPT_ID = "task_t4_action_v21"
+ACTIVE_PROMPT_IDS = {
+    "task_t4_action_v21",
+    "task_rollout_action_v1",
+}
 
 
 def _validate_semantic_core(candidate, observation):
@@ -28,7 +31,7 @@ def _validate_semantic_core(candidate, observation):
 
 def validate_candidate_for_profile(policy, candidate, observation):
     if (
-        policy.prompt_id == ACTIVE_PROMPT_ID
+        policy.prompt_id in ACTIVE_PROMPT_IDS
         and policy.validation_profile == "hard_only"
     ):
         return _validate_semantic_core(candidate, observation)
@@ -39,7 +42,7 @@ def validate_candidate_for_profile(policy, candidate, observation):
 
 def retry_guidance(policy, observation):
     """Return generic semantic guidance without topic-specific word rules."""
-    if policy.prompt_id != ACTIVE_PROMPT_ID:
+    if policy.prompt_id not in ACTIVE_PROMPT_IDS:
         return legacy_action_validation.retry_guidance(observation)
     obligation = (
         observation.get("conversation_progress", {}).get("latest_obligation") or {}

@@ -85,7 +85,7 @@ def main():
         "all_complete": all(item["passed"] for item in checks),
         "checks": checks,
         "blocking_clauses": [item["clause"] for item in checks if not item["passed"]],
-        "human_boundary": "Clause 12 requires a passed same-sample Gate 4 human audit (or legacy full human annotation), and scenario/S0-D0 signatures upstream require real human attestations; automation cannot create them.",
+        "human_boundary": "Clause 12 requires a passed same-sample Gate 4 human audit (or legacy full human annotation), and scenario/initial-state signatures upstream require real human attestations; automation cannot create them.",
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

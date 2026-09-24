@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 
+from prompts.loader import render_prompt
 from providers.structured import complete_json
 from scripts.t2_common import call_count
 from tasks.T1.t1_probability_utils import (
@@ -40,24 +41,16 @@ def answer_prompt(instance, private_persona=None):
             for state_id in target_ids
         ],
     }
-    return (
-        "你为 SocialFlux T1 生成机器候选答案，之后由人判断正确与否；答案不是 GT。"
-        "可以使用另附的作者侧私有 Persona 条件化解释，但它不是公开证据，不得引用或泄露。"
-        "只使用 input 中公开可观察的完整历史与 current_checkpoint，判断对象严格是 "
-        "target_character_id。不得读取或推测 latent state、appraisal、私有动机或未来事件。"
-        "对每个 target_state_id 分别估计当前强度和相对最近有意义证据的变化方向；状态可以不变，"
-        "不同状态可以朝不同方向变化。公开证据不足时应给 cannot_determine 较高概率，不要把"
-        "微笑直接等同于高兴，也不要把口头同意直接等同于信任恢复或行动完成。evidence_turn_ids "
-        "只能引用公开 history 中真实存在的 turn_id。每个概率对象的全部值之和必须为 1。"
-        "只输出以下 JSON 结构，不增减字段：\n"
-        + json.dumps(schema, ensure_ascii=False)
-        + "\nT1 实例：\n"
-        + json.dumps(instance, ensure_ascii=False, sort_keys=True)
-        + (
-            "\n作者侧私有 Persona（仅用于条件化解释，不得作为公开证据引用或写入答案）：\n"
-            + json.dumps(private_persona, ensure_ascii=False, sort_keys=True)
-            if private_persona is not None else ""
-        )
+    private_section = (
+        "作者侧私有 Persona（仅用于条件化解释，不得作为公开证据引用或写入答案）：\n"
+        + json.dumps(private_persona, ensure_ascii=False, sort_keys=True)
+        if private_persona is not None else ""
+    )
+    return render_prompt(
+        "task_t1_v1",
+        instance,
+        output_schema_json=json.dumps(schema, ensure_ascii=False),
+        private_persona_section=private_section,
     )
 
 

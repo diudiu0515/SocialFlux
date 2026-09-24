@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from math import ceil
 
 from .delta_mapper import DELTA_TO_INT, flatten_state
 
@@ -66,6 +67,8 @@ def _calibrated_level(impact, feature_value, sensitivity):
     if not impact["new_evidence"] or feature_value == 0:
         return 0
     level = impact["evidence_strength"]
+    if isinstance(level, bool) or not isinstance(level, int) or level not in {1, 2}:
+        raise ValueError("evidence_strength must be an integer in {1, 2}")
     if impact["directness"] == "indirect":
         level -= 1
     if level >= 2 and abs(feature_value) == 2 and sensitivity >= 0.80:
@@ -137,7 +140,14 @@ def _ranked_impacts(
 def _bounded_label(current, requested, minimum=0, maximum=10):
     amount = DELTA_TO_INT[requested]
     applied = max(minimum, min(maximum, current + amount)) - current
-    return {value: key for key, value in DELTA_TO_INT.items()}[applied]
+    if applied == 0:
+        return "similar"
+    canonical_amount = min(3, ceil(abs(applied) - 1e-9))
+    if applied < 0:
+        canonical_amount *= -1
+    return {value: key for key, value in DELTA_TO_INT.items()}[
+        canonical_amount
+    ]
 
 
 class DeterministicStateCalibrator:

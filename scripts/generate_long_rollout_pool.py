@@ -72,6 +72,7 @@ _QUALITY_INPUTS = (
     "rollout/runner.py",
     "prompts/environment_response_v25.md",
     "prompts/task_t4_action_v21.md",
+    "prompts/task_rollout_action_v1.md",
     "prompts/environment_appraisal_v11.md",
     "evaluation/instance_quality.py",
     "evaluation/rollout_gate.py",
@@ -139,7 +140,9 @@ def _atomic_json(path, value):
     os.replace(temporary, path)
 
 
-def _new_progress(config_path, output, slots, config):
+def _new_progress(
+    config_path, output, slots, config, *, retain_all_candidates=False,
+):
     return {
         "format": "socialflux_long_rollout_progress_v1",
         "created_at_utc": _utc_now(),
@@ -153,6 +156,11 @@ def _new_progress(config_path, output, slots, config):
         "quality_version": QUALITY_VERSION,
         "quality_fingerprint": _quality_fingerprint(),
         "output_root": str(Path(output)),
+        "admission_mode": (
+            "human_postfilter"
+            if retain_all_candidates
+            else "machine_precheck"
+        ),
         "max_turns": MAX_TURNS,
         "horizon_contract": "natural_end_at_or_before_max",
         "expected_slot_count": len(slots),
@@ -169,30 +177,110 @@ def _new_progress(config_path, output, slots, config):
     }
 
 
-def _load_progress(path, config_path, slots, config):
+def _load_progress(
+    path,
+    config_path,
+    slots,
+    config,
+    *,
+    retain_all_candidates=False,
+    allow_config_migration=False,
+    allow_route_migration=False,
+    allow_quality_migration=False,
+):
     value = json.loads(Path(path).read_text(encoding="utf-8"))
     if value.get("format") != "socialflux_long_rollout_progress_v1":
         raise ValueError("unsupported long-rollout progress format")
-    if value.get("config_sha256") != _sha256(config_path):
-        raise ValueError("rollout config changed; use a new output directory")
-    if value.get("model_routes_sha256") != (
+    current_config_sha256 = _sha256(config_path)
+    if value.get("config_sha256") != current_config_sha256:
+        if not allow_config_migration:
+            raise ValueError(
+                "rollout config changed; use a new output directory or "
+                "--allow-config-migration"
+            )
+        value.setdefault("config_migration_history", []).append({
+            "migrated_at_utc": _utc_now(),
+            "from_sha256": value.get("config_sha256"),
+            "to_sha256": current_config_sha256,
+            "reason": "explicit_rollout_contract_migration",
+        })
+        value["config_sha256"] = current_config_sha256
+        value["updated_at_utc"] = _utc_now()
+        _atomic_json(path, value)
+    current_routes_sha256 = (
         config.get("model_routes_provenance") or {}
-    ).get("sha256"):
-        raise ValueError("model routes changed; use a new output directory")
+    ).get("sha256")
+    previous_routes_sha256 = value.get("model_routes_sha256")
+    if previous_routes_sha256 != current_routes_sha256:
+        if not allow_route_migration:
+            raise ValueError(
+                "model routes changed; use a new output directory or "
+                "--allow-route-migration"
+            )
+        value.setdefault("model_route_history", []).append({
+            "migrated_at_utc": _utc_now(),
+            "from_sha256": previous_routes_sha256,
+            "to_sha256": current_routes_sha256,
+            "reason": "explicit_endpoint_protocol_migration",
+        })
+        value["model_routes_sha256"] = current_routes_sha256
+        value["updated_at_utc"] = _utc_now()
+        _atomic_json(path, value)
     if value.get("max_turns") != MAX_TURNS:
         raise ValueError("progress file does not use the natural max-20 contract")
+    expected_admission = (
+        "human_postfilter" if retain_all_candidates else "machine_precheck"
+    )
+    if value.get("admission_mode", "machine_precheck") != expected_admission:
+        raise ValueError(
+            "rollout admission mode changed; use a new output directory"
+        )
+    current_quality_fingerprint = _quality_fingerprint()
     if (
         value.get("quality_version") != QUALITY_VERSION
-        or value.get("quality_fingerprint") != _quality_fingerprint()
+        or value.get("quality_fingerprint") != current_quality_fingerprint
     ):
-        raise ValueError(
-            "R3 quality implementation changed; preserve this evidence and use a "
-            "new versioned output directory"
-        )
+        if not allow_quality_migration:
+            raise ValueError(
+                "R3 quality implementation changed; preserve this evidence and "
+                "use a new versioned output directory or "
+                "--allow-quality-migration"
+            )
+        value.setdefault("quality_migration_history", []).append({
+            "migrated_at_utc": _utc_now(),
+            "from_version": value.get("quality_version"),
+            "from_fingerprint": value.get("quality_fingerprint"),
+            "to_version": QUALITY_VERSION,
+            "to_fingerprint": current_quality_fingerprint,
+            "reason": "explicit_runtime_bugfix_migration",
+        })
+        value["quality_version"] = QUALITY_VERSION
+        value["quality_fingerprint"] = current_quality_fingerprint
+        value["updated_at_utc"] = _utc_now()
+        _atomic_json(path, value)
     expected = {slot["slot_id"] for slot in slots}
     unknown = set(value.get("completed_slots", {})) - expected
     if unknown:
         raise ValueError(f"progress contains slots outside this run: {sorted(unknown)}")
+    previous_expected = value.get("expected_slot_count")
+    if previous_expected != len(expected):
+        if (
+            not isinstance(previous_expected, int)
+            or isinstance(previous_expected, bool)
+            or previous_expected > len(expected)
+        ):
+            raise ValueError(
+                "resume slot plan cannot shrink or replace the original batch"
+            )
+        value.setdefault("slot_plan_history", []).append({
+            "expanded_at_utc": _utc_now(),
+            "from_expected_slot_count": previous_expected,
+            "to_expected_slot_count": len(expected),
+            "reason": "newly_completed_scenario_added_to_batch",
+        })
+        value["expected_slot_count"] = len(expected)
+        value["updated_at_utc"] = _utc_now()
+        _atomic_json(path, value)
     return value
 
 
@@ -244,6 +332,54 @@ def _attempt_offset(progress, slot_id):
         if item.get("slot_id") == slot_id and isinstance(item.get("attempt"), int)
     ]
     return max(attempts, default=0)
+
+
+def _generation_error_retry_allowed(progress, slot_id):
+    attempts = [
+        item for item in progress.get("attempts", [])
+        if item.get("slot_id") == slot_id
+    ]
+    return bool(
+        attempts
+        and attempts[-1].get("status") == "generation_error"
+        and not any(item.get("technical_retry") is True for item in attempts)
+    )
+
+
+def _attempts_end_in_provider_overload(attempts):
+    if not attempts:
+        return False
+    latest = attempts[-1]
+    message = str(latest.get("error", "")).lower()
+    return (
+        latest.get("status") == "generation_error"
+        and ("http 429" in message or "overloaded" in message)
+    )
+
+
+def _retry_filter_matches(progress, slot_id, error_types):
+    """Select only the latest failed slots named by an explicit retry filter."""
+    if not error_types:
+        return True
+    attempts = [
+        item for item in progress.get("attempts", [])
+        if item.get("slot_id") == slot_id
+    ]
+    if not attempts:
+        return False
+    latest = attempts[-1]
+    return (
+        latest.get("status") == "generation_error"
+        and latest.get("error_type") in set(error_types)
+    )
+
+
+def _unattempted_filter_matches(progress, slot_id):
+    """Select slots that have never produced a persisted attempt."""
+    return not any(
+        item.get("slot_id") == slot_id
+        for item in progress.get("attempts", [])
+    )
 
 
 def _update_quality_summary(progress):
@@ -318,7 +454,10 @@ def _accepted_trajectories(scenario_dir, progress, scenario_id):
             continue
         path = scenario_dir / record["trajectory_file"]
         trajectory = json.loads(path.read_text(encoding="utf-8"))
-        if not _machine_precheck(trajectory)["passed"]:
+        if (
+            progress.get("admission_mode") != "human_postfilter"
+            and not _machine_precheck(trajectory)["passed"]
+        ):
             raise ValueError(f"completed slot artifact no longer passes: {slot_id}")
         trajectories.append(trajectory)
     trajectories.sort(key=lambda item: item.get("batch_slot_id", ""))
@@ -359,14 +498,21 @@ def _verify_completed_slot(output, slot, record):
     if trajectory.get("batch_slot_id") != slot["slot_id"]:
         raise ValueError(f"completed trajectory slot mismatch: {path}")
     result = _machine_precheck(trajectory)
-    if not result["passed"]:
+    if (
+        record.get("admission") != "human_postfilter"
+        and not result["passed"]
+    ):
         raise ValueError(f"completed trajectory failed resume verification: {path}")
 
 
-def run_slot(slot, scenario, output, retry_limit, attempt_offset=0):
+def run_slot(
+    slot, scenario, output, retry_limit, attempt_offset=0,
+    retain_all_candidates=False, technical_retry=False,
+):
     if (
         slot["config"].get("candidate_strategy") == "single_first_pass"
         and attempt_offset > 0
+        and not technical_retry
     ):
         return None, []
     scenario_dir = Path(output) / slot["scenario_directory"]
@@ -375,7 +521,11 @@ def run_slot(slot, scenario, output, retry_limit, attempt_offset=0):
     attempt_records = []
     for local_attempt_index in range(retry_limit):
         attempt_number = attempt_offset + local_attempt_index + 1
-        replacement = _replacement_spec(slot["spec"], attempt_number - 1)
+        replacement = (
+            deepcopy(slot["spec"])
+            if technical_retry
+            else _replacement_spec(slot["spec"], attempt_number - 1)
+        )
         policy = build_policy(replacement, slot["run_index"])
         started = _utc_now()
         checkpoint_path = (
@@ -413,7 +563,9 @@ def run_slot(slot, scenario, output, retry_limit, attempt_offset=0):
                 "budget_truncated": "budget_truncated",
             }.get(classification, "rejected")
             target_logger = TrajectoryLogger(
-                scenario_dir if precheck["passed"] else scenario_dir / archive_directory
+                scenario_dir
+                if precheck["passed"] or retain_all_candidates
+                else scenario_dir / archive_directory
             )
             path = target_logger.write(trajectory)
             attempt_record = {
@@ -422,6 +574,7 @@ def run_slot(slot, scenario, output, retry_limit, attempt_offset=0):
                 "planned_policy_id": slot["planned_policy_id"],
                 "actual_policy_id": policy.policy_id,
                 "attempt": attempt_number,
+                "technical_retry": technical_retry,
                 "quality_version": QUALITY_VERSION,
                 "quality_fingerprint": _quality_fingerprint(),
                 "scenario_fingerprint": _scenario_fingerprint(scenario),
@@ -437,10 +590,19 @@ def run_slot(slot, scenario, output, retry_limit, attempt_offset=0):
                 "provider_run_metrics": deepcopy(
                     trajectory.get("provider_run_metrics", {})
                 ),
+                "admission": (
+                    "machine_precheck"
+                    if precheck["passed"]
+                    else (
+                        "human_postfilter"
+                        if retain_all_candidates
+                        else "rejected"
+                    )
+                ),
                 "checkpoint_file": str(checkpoint_path.relative_to(scenario_dir)),
             }
             attempt_records.append(attempt_record)
-            if precheck["passed"]:
+            if precheck["passed"] or retain_all_candidates:
                 return trajectory, attempt_records
         except Exception as exc:  # preserve evidence and continue replacement sampling
             partial = getattr(exc, "partial_trajectory", None)
@@ -461,6 +623,7 @@ def run_slot(slot, scenario, output, retry_limit, attempt_offset=0):
                 "planned_policy_id": slot["planned_policy_id"],
                 "actual_policy_id": policy.policy_id,
                 "attempt": attempt_number,
+                "technical_retry": technical_retry,
                 "quality_version": QUALITY_VERSION,
                 "quality_fingerprint": _quality_fingerprint(),
                 "scenario_fingerprint": _scenario_fingerprint(scenario),
@@ -502,12 +665,55 @@ def main(argv=None):
     parser.add_argument("--max-slots", type=int)
     parser.add_argument("--request-budget", type=int, default=150000)
     parser.add_argument("--resume", action="store_true")
+    resume_filter = parser.add_mutually_exclusive_group()
+    resume_filter.add_argument(
+        "--retry-error-type",
+        action="append",
+        help=(
+            "on resume, retry only incomplete slots whose latest attempt has "
+            "this error type; repeat the option to allow more types"
+        ),
+    )
+    resume_filter.add_argument(
+        "--unattempted-only",
+        action="store_true",
+        help="on resume, process only slots with no persisted attempt",
+    )
+    resume_filter.add_argument(
+        "--retry-generation-errors-once",
+        action="store_true",
+        help=(
+            "on resume, retry each incomplete generation_error slot once with "
+            "the original policy id and seed; accepted or quality-rejected "
+            "trajectories are never retried"
+        ),
+    )
+    parser.add_argument("--allow-route-migration", action="store_true")
+    parser.add_argument("--allow-config-migration", action="store_true")
+    parser.add_argument("--allow-quality-migration", action="store_true")
+    parser.add_argument(
+        "--stop-after-consecutive-provider-overloads",
+        type=int,
+        default=0,
+        help=(
+            "with one worker, pause the batch after this many consecutive "
+            "HTTP 429/overloaded generation errors; zero disables the guard"
+        ),
+    )
     parser.add_argument(
         "--revalidate-completed",
         action="store_true",
         help="Move completed artifacts that fail current checks to rejected/ and refill them.",
     )
     parser.add_argument("--allow-unreviewed", action="store_true")
+    parser.add_argument(
+        "--retain-all-candidates",
+        action="store_true",
+        help=(
+            "Retain every schema-valid rollout for later human filtering. "
+            "Machine prechecks remain recorded but do not block downstream work."
+        ),
+    )
     parser.add_argument(
         "--experimental-model",
         help=(
@@ -534,6 +740,14 @@ def main(argv=None):
         raise ValueError("--retry-limit must be positive")
     if not 1 <= args.workers <= 8:
         raise ValueError("--workers must be between 1 and 8")
+    if args.stop_after_consecutive_provider_overloads < 0:
+        raise ValueError(
+            "--stop-after-consecutive-provider-overloads cannot be negative"
+        )
+    if args.stop_after_consecutive_provider_overloads and args.workers != 1:
+        raise ValueError(
+            "provider-overload guard requires --workers 1 for deterministic pausing"
+        )
     config = load_rollout_config(args.rollout_config)
     if (
         config.get("candidate_strategy") == "single_first_pass"
@@ -541,6 +755,14 @@ def main(argv=None):
     ):
         raise ValueError(
             "single_first_pass forbids replacement sampling; use --retry-limit 1"
+        )
+    if (
+        config.get("candidate_strategy") == "single_first_pass"
+        and args.retain_all_candidates
+    ):
+        raise ValueError(
+            "single_first_pass forbids --retain-all-candidates; each scenario "
+            "has one formal trajectory slot"
         )
     if args.experimental_model and args.development_role_partition:
         raise ValueError(
@@ -612,11 +834,16 @@ def main(argv=None):
         if not args.resume:
             raise ValueError("output has progress.json; pass --resume to continue safely")
         progress = _load_progress(
-            progress_path, args.rollout_config, slots, config
+            progress_path, args.rollout_config, slots, config,
+            retain_all_candidates=args.retain_all_candidates,
+            allow_config_migration=args.allow_config_migration,
+            allow_route_migration=args.allow_route_migration,
+            allow_quality_migration=args.allow_quality_migration,
         )
     else:
         progress = _new_progress(
-            args.rollout_config, args.output, slots, config
+            args.rollout_config, args.output, slots, config,
+            retain_all_candidates=args.retain_all_candidates,
         )
         _atomic_json(progress_path, progress)
 
@@ -661,9 +888,14 @@ def main(argv=None):
                     f"{slot['slot_id']}",
                     flush=True,
                 )
+        technical_retry = bool(
+            args.retry_generation_errors_once
+            and _generation_error_retry_allowed(progress, slot["slot_id"])
+        )
         if (
             config.get("candidate_strategy") == "single_first_pass"
             and _attempt_offset(progress, slot["slot_id"]) > 0
+            and not technical_retry
         ):
             print(
                 f"[{index}/{len(slots)}] retain exhausted first pass "
@@ -671,7 +903,34 @@ def main(argv=None):
                 flush=True,
             )
             continue
-        pending.append((index, slot))
+        if args.unattempted_only and not _unattempted_filter_matches(
+            progress, slot["slot_id"]
+        ):
+            print(
+                "[{}/{}] skip previously attempted {}".format(
+                    index, len(slots), slot["slot_id"]
+                ),
+                flush=True,
+            )
+            continue
+        if not _retry_filter_matches(
+            progress, slot["slot_id"], args.retry_error_type
+        ):
+            print(
+                "[{}/{}] skip retry filter {}".format(
+                    index, len(slots), slot["slot_id"]
+                ),
+                flush=True,
+            )
+            continue
+        if args.retry_generation_errors_once and not technical_retry:
+            print(
+                f"[{index}/{len(slots)}] skip non-generation-error "
+                f"{slot['slot_id']}",
+                flush=True,
+            )
+            continue
+        pending.append((index, slot, technical_retry))
 
     retry_ceiling = (
         len(pending)
@@ -706,6 +965,7 @@ def main(argv=None):
         progress["attempts"].extend(attempts)
         _update_quality_summary(progress)
         if trajectory is not None:
+            final_attempt = attempts[-1]
             completed[slot["slot_id"]] = {
                 "scenario_id": slot["scenario_id"],
                 "planned_policy_id": slot["planned_policy_id"],
@@ -715,6 +975,10 @@ def main(argv=None):
                 "turn_count": len(trajectory["turns"]),
                 "scenario_fingerprint": trajectory["scenario_fingerprint"],
                 "accepted_at_utc": _utc_now(),
+                "admission": final_attempt.get("admission"),
+                "machine_precheck_passed": bool(
+                    final_attempt.get("precheck", {}).get("passed")
+                ),
             }
             _refresh_scenario_bundle(
                 args.output,
@@ -723,7 +987,11 @@ def main(argv=None):
                 progress,
                 config,
             )
-            outcome = "accepted"
+            outcome = (
+                "accepted"
+                if final_attempt.get("precheck", {}).get("passed")
+                else "retained for human review"
+            )
         else:
             outcome = "exhausted retries"
         progress["completed_slot_count"] = len(completed)
@@ -736,8 +1004,10 @@ def main(argv=None):
             flush=True,
         )
 
+    paused_for_provider_overload = False
     if args.workers == 1:
-        for index, slot in pending:
+        consecutive_provider_overloads = 0
+        for index, slot, technical_retry in pending:
             print(f"[{index}/{len(slots)}] generate {slot['slot_id']}", flush=True)
             trajectory, attempts = run_slot(
                 slot,
@@ -745,8 +1015,33 @@ def main(argv=None):
                 args.output,
                 args.retry_limit,
                 _attempt_offset(progress, slot["slot_id"]),
+                args.retain_all_candidates,
+                technical_retry,
             )
             record_result(index, slot, trajectory, attempts)
+            if _attempts_end_in_provider_overload(attempts):
+                consecutive_provider_overloads += 1
+            else:
+                consecutive_provider_overloads = 0
+            if (
+                args.stop_after_consecutive_provider_overloads
+                and consecutive_provider_overloads
+                >= args.stop_after_consecutive_provider_overloads
+            ):
+                paused_for_provider_overload = True
+                progress["status"] = "paused_provider_overload"
+                progress["provider_overload_pause"] = {
+                    "paused_at_utc": _utc_now(),
+                    "consecutive_errors": consecutive_provider_overloads,
+                    "last_scenario_id": slot["scenario_id"],
+                }
+                _atomic_json(progress_path, progress)
+                print(
+                    "paused after consecutive provider overloads: "
+                    f"{consecutive_provider_overloads}",
+                    flush=True,
+                )
+                break
     else:
         print(
             f"starting {len(pending)} pending slots with {args.workers} workers",
@@ -761,8 +1056,10 @@ def main(argv=None):
                     args.output,
                     args.retry_limit,
                     _attempt_offset(progress, slot["slot_id"]),
+                    args.retain_all_candidates,
+                    technical_retry,
                 ): (index, slot)
-                for index, slot in pending
+                for index, slot, technical_retry in pending
             }
             for future in as_completed(futures):
                 index, slot = futures[future]
@@ -770,7 +1067,13 @@ def main(argv=None):
                 record_result(index, slot, trajectory, attempts)
 
     progress["status"] = (
-        "completed" if len(completed) == len(slots) else "incomplete_retry_exhausted"
+        "paused_provider_overload"
+        if paused_for_provider_overload
+        else (
+            "completed"
+            if len(completed) == len(slots)
+            else "incomplete_retry_exhausted"
+        )
     )
     progress["completed_slot_count"] = len(completed)
     progress["updated_at_utc"] = _utc_now()

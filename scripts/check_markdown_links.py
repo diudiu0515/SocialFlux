@@ -15,10 +15,14 @@ LINK_RE = re.compile(r"!?\[[^]\n]*\]\(([^)\n]+)\)")
 
 def markdown_files() -> list[Path]:
     result = subprocess.run(
-        ["git", "ls-files", "--cached", "--others", "--exclude-standard", "--", "*.md"],
-        cwd=ROOT, check=True, capture_output=True, text=True,
+        [
+            "git", "-c", "core.quotePath=false", "ls-files", "-z",
+            "--cached", "--others", "--exclude-standard", "--", "*.md",
+        ],
+        cwd=ROOT, check=True, capture_output=True,
     )
-    return [ROOT / line for line in result.stdout.splitlines() if line and (ROOT / line).exists()]
+    paths = result.stdout.decode("utf-8").split("\0")
+    return [ROOT / path for path in paths if path and (ROOT / path).exists()]
 
 
 def local_target(raw: str) -> str | None:

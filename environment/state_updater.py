@@ -1,6 +1,7 @@
 """Deterministic state updates derived from one structured model appraisal."""
 
 from copy import deepcopy
+from math import ceil
 
 from .appraisal import ModelAppraiser
 from .calibration import DeterministicStateCalibrator
@@ -82,7 +83,13 @@ def _canonicalize_bounded_deltas(values, deltas, minimum=0, maximum=10):
             continue
         requested = DELTA_TO_INT[deltas[key]]
         applied = max(minimum, min(maximum, value + requested)) - value
-        canonical[key] = int_to_label[applied]
+        if applied == 0:
+            canonical[key] = "similar"
+            continue
+        canonical_amount = min(3, ceil(abs(applied) - 1e-9))
+        if applied < 0:
+            canonical_amount *= -1
+        canonical[key] = int_to_label[canonical_amount]
     return canonical
 
 
@@ -129,7 +136,7 @@ class ModelStateUpdater:
         return {
             **getattr(self.provider, "provenance", {}),
             "appraisal_prompt_id": getattr(
-                self.appraiser, "prompt_id", "environment_appraisal_v3"
+                self.appraiser, "prompt_id", "environment_appraisal_v11"
             ),
             "state_update": "deterministic",
             **self.calibrator.provenance,

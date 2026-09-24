@@ -5,6 +5,7 @@ from __future__ import annotations
 from copy import deepcopy
 import json
 
+from prompts.loader import render_prompt
 from providers.structured import complete_json
 from scripts.t2_common import call_count
 from tasks.T3.t3_probability_utils import (
@@ -35,7 +36,7 @@ def canonicalize_instance(instance):
     return normalized
 
 
-def answer_prompt(instance, private_persona=None):
+def answer_prompt(instance, private_persona=None, condition="main"):
     state_ids = instance["target_spec"]["target_state_ids"]
     actions = instance["input"]["candidate_actions"]
     schema = {
@@ -56,24 +57,25 @@ def answer_prompt(instance, private_persona=None):
             for index in range(len(actions))
         ],
     }
-    return (
-        "你为 SocialFlux T3 生成机器候选答案，之后由人判断正确与否；答案不是 GT。"
-        "可以使用另附的作者侧私有 Persona 条件化解释，但它不是公开证据，不得引用或泄露。"
-        "所有 candidate_actions 从同一公开 checkpoint 分支。只根据公开 history、current_observation、"
-        "候选行动与统一 horizon，预测每个行动相对 checkpoint 对目标角色状态的即时和延迟影响。"
-        "主任务不提供 latent state；除另附 Persona 外不得推测其他私有信息、引入支线外部事件或把行动承诺当作完成。"
-        "不同动作可能产生相同影响，但不能为了省事把所有动作和状态机械填成同一分布。延迟预测"
-        "必须尊重 target_spec 的共享 continuation protocol 与 frozen event plan；缺少支持时提高 "
-        "cannot_determine。evidence_turn_ids 只能引用输入 history 的真实 turn_id，不能引用候选执行"
-        "后的虚构未来。每个概率对象的全部值之和必须为 1。只输出以下 JSON，不增减字段：\n"
-        + json.dumps(schema, ensure_ascii=False)
-        + "\nT3 实例：\n"
-        + json.dumps(instance, ensure_ascii=False, sort_keys=True)
-        + (
-            "\n作者侧私有 Persona（仅用于条件化解释，不得作为公开证据引用或写入答案）：\n"
-            + json.dumps(private_persona, ensure_ascii=False, sort_keys=True)
-            if private_persona is not None else ""
+    oracle_instruction = ""
+    if condition == "oracle_state_ablation":
+        oracle_instruction = (
+            "这是独立 Oracle-State ablation，不属于主任务。可以读取 input.oracle_state，"
+            "但不得把 oracle 条件或私有数值写入公开证据；答案必须保留同样的输出合同。"
         )
+    elif condition != "main":
+        raise ValueError(f"unsupported T3 answer condition: {condition}")
+    private_section = (
+        "作者侧私有 Persona（仅用于条件化解释，不得作为公开证据引用或写入答案）：\n"
+        + json.dumps(private_persona, ensure_ascii=False, sort_keys=True)
+        if private_persona is not None else ""
+    )
+    return render_prompt(
+        "task_t3_v1",
+        instance,
+        condition_instruction=oracle_instruction,
+        output_schema_json=json.dumps(schema, ensure_ascii=False),
+        private_persona_section=private_section,
     )
 
 
@@ -126,12 +128,13 @@ def validate_answer(value, instance):
 
 def generate_answer(
     provider, instance, seed, *, private_persona=None, max_attempts=3,
+    condition="main",
 ):
     instance = canonicalize_instance(instance)
     start = call_count(provider)
     answer = complete_json(
         provider,
-        [{"role": "user", "content": answer_prompt(instance, private_persona)}],
+        [{"role": "user", "content": answer_prompt(instance, private_persona, condition)}],
         {"temperature": 0.15, "top_p": 0.9, "seed": seed},
         lambda value: validate_answer(value, instance),
         context=f"T3 answer {instance['instance_id']}",

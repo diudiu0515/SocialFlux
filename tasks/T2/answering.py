@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 
+from prompts.loader import render_prompt
 from providers.structured import complete_json
 from scripts.t2_common import DIRECTIONS, call_count
 
@@ -47,25 +48,17 @@ def answer_prompt(instance, private_persona=None):
             "explanation": "去掉历史后为何失去关键依据",
         },
     }
-    return (
-        "你为 SocialFlux T2 生成候选答案，答案之后由人判断正确与否，不是自动 GT。"
-        "可以使用另附的作者侧私有 Persona 条件化解释，但它不是公开证据，不得引用或泄露。只能使用"
-        "公开 History A/B、相同 shared ending 和 target_spec，不得读取后台状态。判断对象是"
-        "input.target_character，也就是 environment_character；evaluated_agent 的言行只能作为"
-        "影响目标角色的事件，不能冒充目标角色状态证据。从候选变量中优先选 1–3 个有双侧证据的"
-        "变量。如果只有一侧存在可引用的目标角色证据，允许另一侧 evidence 和 key events 为空，"
-        "但 cannot_determine 必须是最高概率；两侧都没有证据的变量不要选择。微笑不自动等于高兴，"
-        "同意不自动等于信任恢复。"
-        f"证据 turn_id 只能来自 {visible_ids}，target_quote 必须逐字摘自对应侧、对应轮的 "
-        "environment_character。四项概率之和为 1。只输出以下 JSON 且不增加字段：\n"
-        + json.dumps(schema, ensure_ascii=False)
-        + "\nT2 实例：\n"
-        + json.dumps(instance, ensure_ascii=False, sort_keys=True)
-        + (
-            "\n作者侧私有 Persona（仅用于条件化解释，不得作为公开证据引用或写入答案）：\n"
-            + json.dumps(private_persona, ensure_ascii=False, sort_keys=True)
-            if private_persona is not None else ""
-        )
+    private_section = (
+        "作者侧私有 Persona（仅用于条件化解释，不得作为公开证据引用或写入答案）：\n"
+        + json.dumps(private_persona, ensure_ascii=False, sort_keys=True)
+        if private_persona is not None else ""
+    )
+    return render_prompt(
+        "task_t2_v1",
+        instance,
+        visible_turn_ids_json=json.dumps(visible_ids, ensure_ascii=False),
+        output_schema_json=json.dumps(schema, ensure_ascii=False),
+        private_persona_section=private_section,
     )
 
 

@@ -7,7 +7,10 @@ import json
 from pathlib import Path
 
 from providers.factory import public_provider_config
-from providers.model_assignment import validate_single_model_assignment
+from providers.model_assignment import (
+    SINGLE_MODEL_STRATEGY,
+    validate_single_model_assignment,
+)
 from providers.model_routes import ModelRoutes
 
 from .t4_evaluation import T4_MAX_TURNS
@@ -16,6 +19,9 @@ from .t4_evaluation import T4_MAX_TURNS
 T4_CONFIG_FORMAT = "socialflux_t4_evaluation_v2"
 T4_ACTION_PROMPT = "task_t4_action_v21"
 T4_JUDGE_PROMPT = "t4_judge_v2"
+T4_ROLE_PARTITION_STRATEGY = (
+    "gpt_policy_judge_with_claude_reference_environment"
+)
 
 
 def _resolve_routes(config, config_path):
@@ -48,6 +54,51 @@ def _resolve_routes(config, config_path):
     return config
 
 
+def _validate_model_assignment(config):
+    assignment = config.get("model_assignment")
+    if not isinstance(assignment, dict):
+        raise ValueError("T4 requires explicit model_assignment")
+    providers = {
+        "evaluated_model": config["evaluated_model"]["provider"],
+        "environment_appraisal": config["environment"]["provider"],
+        "environment_response": config["environment"]["response_provider"],
+        "judge": config["judge"]["provider"],
+    }
+    if assignment.get("strategy") == SINGLE_MODEL_STRATEGY:
+        validate_single_model_assignment(
+            assignment,
+            list(providers.values()),
+            require_explicit=True,
+            has_versioned_routes=bool(config.get("model_routes_provenance")),
+        )
+        return
+
+    expected = {
+        "strategy",
+        "evaluated_model",
+        "environment_model",
+        "judge_model",
+        "independent_calls",
+    }
+    if set(assignment) != expected:
+        raise ValueError(
+            "role-partitioned T4 model_assignment fields mismatch"
+        )
+    if assignment["strategy"] != T4_ROLE_PARTITION_STRATEGY:
+        raise ValueError("unsupported T4 model_assignment.strategy")
+    if assignment["independent_calls"] is not True:
+        raise ValueError("T4 roles require independent calls")
+    if providers["evaluated_model"].get("model") != assignment["evaluated_model"]:
+        raise ValueError("T4 evaluated model assignment mismatch")
+    if providers["judge"].get("model") != assignment["judge_model"]:
+        raise ValueError("T4 judge model assignment mismatch")
+    if {
+        providers["environment_appraisal"].get("model"),
+        providers["environment_response"].get("model"),
+    } != {assignment["environment_model"]}:
+        raise ValueError("T4 environment model assignment mismatch")
+
+
 def load_t4_config(path):
     config = json.loads(Path(path).read_text(encoding="utf-8"))
     if config.get("format") != T4_CONFIG_FORMAT:
@@ -63,18 +114,7 @@ def load_t4_config(path):
         raise ValueError(f"T4 judge must use {T4_JUDGE_PROMPT}")
 
     config = _resolve_routes(config, path)
-    providers = [
-        config["evaluated_model"]["provider"],
-        config["environment"]["provider"],
-        config["environment"]["response_provider"],
-        config["judge"]["provider"],
-    ]
-    validate_single_model_assignment(
-        config.get("model_assignment"),
-        providers,
-        require_explicit=True,
-        has_versioned_routes=bool(config.get("model_routes_provenance")),
-    )
+    _validate_model_assignment(config)
     return config
 
 
@@ -101,6 +141,9 @@ def public_t4_config(config):
             ),
             "response_sampling": deepcopy(
                 config["environment"].get("response_sampling", {})
+            ),
+            "multimodal_trigger_policy": deepcopy(
+                config["environment"].get("multimodal_trigger_policy", {})
             ),
         },
         "judge": {

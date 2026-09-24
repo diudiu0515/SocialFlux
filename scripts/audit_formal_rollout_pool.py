@@ -100,7 +100,7 @@ def assert_formal_scenarios(scenario_records, review_registry):
             failures.append(f"{scenario['scenario_id']}: {','.join(failed)}")
     if failures:
         raise ValueError(
-            "formal pool blocked: scenario quality/S0-D0 lack valid bound human approval: "
+            "formal pool blocked: scenario quality/initial-state lack valid bound human approval: "
             + "; ".join(failures)
         )
 
@@ -172,7 +172,7 @@ def main(argv=None):
     parser.add_argument(
         "--environment-evidence",
         type=Path,
-        help="Gate 2 E1-E6 evidence directory (required for formal)",
+        help="Gate 2 E1-E8 evidence directory (required for formal)",
     )
     parser.add_argument(
         "--review-registry",

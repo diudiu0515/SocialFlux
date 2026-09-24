@@ -45,6 +45,9 @@ ENVIRONMENT_EVIDENCE = {
     "E4_paraphrase_robustness": "paraphrase_robustness.json",
     "E5_local_counterfactual": "local_counterfactual.json",
     "E6_backbone_sensitivity": "backbone_sensitivity.json",
+    "E7_persona_intervention": "persona_intervention.json",
+    "E8_video_state_consistency": "video_state_consistency.json",
+    "E9_timescale_validity": "timescale_validity.json",
 }
 
 TASK_REVIEW_RATINGS = {
@@ -146,7 +149,7 @@ def audit_scenario_gate(scenario, scenario_path=None, review_registry=None):
         "narrative_provenance": _check("pass", "synthetic-script has no external source requirement"),
         "narrative_originalization": _check("pass", "synthetic-script has no external source requirement"),
         "quality_checklist": _check("pending", "quality_gate checklist has not been human-reviewed"),
-        "human_approval": _check("pending", "quality approval and S0/D0 freeze require a real reviewer"),
+        "human_approval": _check("pending", "quality approval and initial-state freeze require a real reviewer"),
     }
     if source.get("type") == "narrative-derived":
         missing = [key for key in ("work_title", "year", "medium", "related_characters_or_plot_position") if not source.get(key)]
@@ -296,6 +299,43 @@ def _environment_evidence_passes(name, payload):
         return passed, (
             "requires 10+ matched checkpoints, two different environment model "
             "families, and non-degenerate transition activity from both"
+        )
+    if name == "E7_persona_intervention":
+        passed = (
+            record.get("passed") is True
+            and human_record(1)
+            and record.get("matched_checkpoint_count", 0) >= 10
+            and record.get("same_state_history_action") is True
+        )
+        return passed, (
+            "requires a named human and timestamp, 10+ persona-only matched "
+            "checkpoints, and fixed state/history/action"
+        )
+    if name == "E8_video_state_consistency":
+        passed = (
+            record.get("passed") is True
+            and human_record(1)
+            and record.get("matched_node_count", 0) >= 40
+            and record.get("generated_video_count", 0) >= 40
+            and record.get("request_safety_passed") is True
+        )
+        return passed, (
+            "requires 40+ generated important-node videos, one named human, and state-expression consistency attestation"
+        )
+    if name == "E9_timescale_validity":
+        families = record.get("timescale_families", {})
+        passed = (
+            record.get("passed") is True
+            and human_record(1)
+            and record.get("matched_variable_count", 0) >= 10
+            and isinstance(families, dict)
+            and all(families.get(key, 0) >= 1 for key in ("fast", "medium", "slow"))
+            and record.get("direction_consistency", 0) >= 0.70
+            and record.get("non_degenerate") is True
+        )
+        return passed, (
+            "requires a named human, 10+ matched variables, fast/medium/slow coverage, "
+            "direction consistency >=0.70, and non-degenerate timescale evidence"
         )
     return False, "unknown environment evidence type"
 
@@ -752,5 +792,5 @@ def audit_all_gates(scenarios, trajectories, instances, interventions=None, envi
         "research_ready": all(gate["passed"] for gate in [
             {"passed": gate1_status == "passed"}, gate2, gate3, gate4,
         ]),
-        "human_boundary": "No automated, model, or structural result can replace scenario/S0-D0 approval, environment human validation, blind task review, or formal human GT.",
+        "human_boundary": "No automated, model, or structural result can replace scenario/initial-state approval, environment human validation, blind task review, or formal human GT.",
     }

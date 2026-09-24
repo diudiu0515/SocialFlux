@@ -30,7 +30,7 @@ Contracts:
 - preserve the narrative's causal and temporal depth for 10–20 natural turns;
 - keep each scalar text field to one concise sentence, each history/choice item
   to one sentence, and the entire JSON under 750 words;
-- do not output characters, state variables, S0/D0, thresholds, triggers,
+- do not output characters, state variables, initial numeric values, thresholds, triggers,
   labels, checkpoints, trajectories, or any other top-level key.
 
 Return JSON only.

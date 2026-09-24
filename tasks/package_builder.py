@@ -72,10 +72,13 @@ def _task_record(instance, answer, route_name, provider_config, request_count, s
 class TaskPackageBuilder:
     """Generate one independent, auditable package from an eligible source."""
 
-    def __init__(self, root, model_routes, *, t2_results=None):
+    def __init__(
+        self, root, model_routes, *, t2_results=None, candidate_mode=False,
+    ):
         self.root = root
         self.model_routes = model_routes
         self.t2_results = t2_results or {}
+        self.candidate_mode = candidate_mode
 
     def _provider(self, route_name):
         config = self.model_routes.provider_config(route_name)
@@ -133,10 +136,11 @@ class TaskPackageBuilder:
         pair = result.get("pair") or {}
         if (pair.get("source_a") or {}).get("trajectory_id") != source_trajectory_id:
             return None
-        if (pair.get("model_pair_review") or {}).get("decision") != "approve":
-            return None
-        if (pair.get("model_answer_review") or {}).get("decision") != "approve":
-            return None
+        if not self.candidate_mode:
+            if (pair.get("model_pair_review") or {}).get("decision") != "approve":
+                return None
+            if (pair.get("model_answer_review") or {}).get("decision") != "approve":
+                return None
         instance = deepcopy(pair["instance"])
         answer = deepcopy(pair["llm_answer"])
         assert_no_leaks(instance)
@@ -256,6 +260,38 @@ class TaskPackageBuilder:
         record["formal_pool_blockers"].append(
             "pending_counterfactual_branch_validation"
         )
+        oracle_instance = deepcopy(instance)
+        oracle_instance["instance_id"] = f"{instance['instance_id']}__oracle_state_ablation"
+        oracle_instance["input"]["oracle_state"] = deepcopy(
+            checkpoint_turn.get("state_before", {})
+        )
+        oracle_instance["metadata"] = {
+            **deepcopy(oracle_instance.get("metadata", {})),
+            "condition": "oracle_state_ablation",
+            "main_task": False,
+            "private_state_exposed": True,
+        }
+        try:
+            oracle_answer, oracle_requests = generate_t3_answer(
+                answer_provider,
+                oracle_instance,
+                435000 + ordinal,
+                private_persona=scenario["environment_agent"]["persona"],
+                max_attempts=3,
+                condition="oracle_state_ablation",
+            )
+        except Exception as exc:
+            raise _attach_request_count(exc, action_provider, answer_provider)
+        record["oracle_ablation"] = {
+            "condition": "oracle_state_ablation",
+            "instance": oracle_instance,
+            "llm_answer": oracle_answer,
+            "answer_status": "machine_proposal_pending_human_review",
+            "model_route": "t3_answer",
+            "model_provenance": public_provider_config(answer_config),
+            "request_count": oracle_requests,
+        }
+        record["request_count"] += oracle_requests
         return record
 
     def _t4(self, trajectory, scenario, ordinal):
@@ -275,7 +311,11 @@ class TaskPackageBuilder:
             "candidate_pending_human_review",
         )
 
-    def build(self, ordinal, old_path, old_package, review, scenario):
+    def build(
+        self, ordinal, old_path, old_package, review, scenario, *,
+        candidate_mode=False,
+    ):
+        candidate_mode = bool(candidate_mode or self.candidate_mode)
         started = time.monotonic()
         assessment = assess_source(review, old_package, self.root)
         base = {
@@ -290,8 +330,14 @@ class TaskPackageBuilder:
             "source_artifact": old_package.get("source_artifact"),
             "turn_count": old_package.get("turn_count"),
             "human_review": "pending",
+            "source_admission": {
+                "mode": (
+                    "human_postfilter" if candidate_mode else "quality_gate"
+                ),
+                "gate_bypassed": bool(candidate_mode and not assessment["eligible"]),
+            },
         }
-        if not assessment["eligible"]:
+        if not assessment["eligible"] and not candidate_mode:
             return {
                 **base,
                 "status": "skipped_source_quality",

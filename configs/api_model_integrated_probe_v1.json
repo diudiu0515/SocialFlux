@@ -5,8 +5,8 @@
   "model_routes": "model_routes.frontier_api.json",
   "environment": {
     "horizon_mode": "natural_max_20",
-    "appraisal_prompt_id": "environment_appraisal_v10",
-    "response_prompt_id": "environment_response_v24",
+    "appraisal_prompt_id": "environment_appraisal_v11",
+    "response_prompt_id": "environment_response_v25",
     "response_validation_profile": "hard_only",
     "provider": {
       "model_route": "appraisal"

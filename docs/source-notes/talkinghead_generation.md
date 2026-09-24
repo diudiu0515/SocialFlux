@@ -28,7 +28,7 @@ free-form action
 → optional 3–8 second media request
 ```
 
-`ObservableExpressionLayer` 当前负责确定性 trigger 与 public media metadata。`observable_expression_v1` 和 `talking_head_generation_v1` 固定了未来真实 provider adapter 的输入输出边界；未接 provider 时 `asset_status=spec_only`，不得假装视频已经生成。
+`ObservableExpressionLayer` 当前负责确定性 trigger 与 public media metadata。`environment_response_v25` 和 `talking_head_generation_v1` 固定了未来真实 provider adapter 的输入输出边界；未接 provider 时 `asset_status=spec_only`，不得假装视频已经生成。
 
 ## 隐私边界
 

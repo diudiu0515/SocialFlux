@@ -271,7 +271,7 @@ config 中显式声明并存在于 `prompts/manifest.json`。诊断实验可使�
 
 ## 8. Scenario 创建与冻结
 
-每个 scenario 固定：稳定 persona、社会背景、关系/权力结构、environment explicit goal、author-only hidden intention、evaluated-agent role/goal、候选 S0/D0、终止条件、可观察表达和稀疏 media trigger。
+每个 scenario 固定：稳定 persona、社会背景、关系/权力结构、environment explicit goal、author-only hidden intention、evaluated-agent role/goal、候选 initial state、机器校验的 runtime dynamics seed、终止条件、可观察表达和稀疏 media trigger。
 
 active catalog 使用版本化、批次大小无关的 candidate 路径，不继承旧
 Scale20/100/150/200/300 数据。Claude 是主生成模型；GPT 小批次仅用于端到端
@@ -282,17 +282,17 @@ Scale20/100/150/200/300 数据。Claude 是主生成模型；GPT 小批次仅用
 
 ### 8.1 Synthetic-script
 
-模型先写连贯原创社会叙事，再分别进行 normalization 和 initialization。写故事阶段不能同时为 JSON、S0/D0、threshold、T1/T2/T3 答案或预期 delta 服务。
+模型先写连贯原创社会叙事，再分别进行 normalization 和 initialization。写故事阶段不能同时为 JSON、initial state、runtime dynamics seed、threshold、T1/T2/T3 答案或预期 delta 服务。
 
 ### 8.2 Narrative-derived
 
 只抽取高层社会机制：关系、权力、目标冲突、信息不对称、关键历史和选择空间。必须丢弃原作角色、台词、标志性物件/机构和情节序列，并原创化人物、场域、事件、stakes 与语言。
 
-### 8.3 Gate 1 与 S0/D0
+### 8.3 Gate 1 与 initial state
 
 在进入正式环境前，scenario 必须经过真人审核：social plausibility、real trade-off、longitudinal necessity、nontrivial strategy space、character/goal coherence、information asymmetry、T1/T2/T3 suitability、T4 adaptation opportunity、no universal script 等。Schema 中保留的 `character_motivation_coherence` 只是 Gate 检查 ID，不是 state family。
 
-S0/D0 是候选初始化，不是自动 ground truth。只有真人 reviewer 对精确 JSON hash、来源质量和初始化结果签名后才算 human-frozen。LLM report、机器 gate 和网站草稿不能替代真人签名。
+Initial state 是候选人物状态，不是自动 ground truth。只有真人 reviewer 对精确 JSON hash、来源质量和 initial state 签名后才算 human-frozen。Runtime dynamics seed 是同一 scenario 内的机器运行配置，只由 schema/validator 校验，不设置独立的人工冻结字段。LLM report、机器 gate 和网站草稿不能替代真人签名。
 
 ## 9. Offline 数据与任务构建
 
@@ -302,7 +302,7 @@ S0/D0 是候选初始化，不是自动 ground truth。只有真人 reviewer 对
 - 当前 active baseline 的 policy、Structured Appraisal、Response、T1–T4 构造/答案和自动质量复核统一使用 `claude-fable-5`，模型映射只能来自 `configs/model_routes.frontier_api.json`。这是明确的 single-model baseline，不得误称为跨模型独立性证据。
 - “统一模型”不改变逻辑和物理调用边界：Structured Appraisal 与 Response 必须是两次独立请求，中间仍只允许 Python 确定性更新；policy、任务答案和 judge 也分别请求并记录各自 prompt、sampling、seed、重试和实际请求数。
 - backbone sensitivity 与不同模型族 judge 作为后续单独实验保留，不得把历史多模型配置混入当前 baseline，也不得用旧 benchmark 输出冒充本轮 Claude 产物。
-- 只从同一 frozen S0/D0 启动自然 rollout。
+- 只从同一 human-frozen initial state 和同一 machine-validated runtime dynamics seed 启动自然 rollout。
 - 每条 trajectory 记录完整 private transitions、observable projections、prompt IDs、sampling、seed、environment config 和 ending。
 - 唯一轨迹、失败原因、技术重试、Judge evidence 和 manifest 变化必须留痕。
 
@@ -353,13 +353,13 @@ A/B 分别从分叉 checkpoint 经过正式 Structured Appraisal → 确定性�
 四层不能互相代替：
 
 1. Gate 1：scenario source、质量、原创性和真人 freeze。
-2. Gate 2：environment validity，包括 state-update human agreement、persona sensitivity、paraphrase robustness、history intervention、local action intervention、neutral-state stability、response-state consistency、full-trajectory plausibility，以及必要的 backbone sensitivity。
+2. Gate 2：environment validity，包括 state-update human agreement、persona sensitivity、paraphrase robustness、history intervention、local action intervention、neutral-state stability、response-state consistency、full-trajectory plausibility、timescale validity、video-state consistency，以及必要的 backbone sensitivity。
 3. Gate 3：唯一 raw trajectory 的六维质量、hard reject、history evidence 与 Judge/audit；只做准入/淘汰，不做 best-of-N selection。
 4. Gate 4：T1/T2/T3 instance 的泄漏、可回答性、证据和 machine proposal 人工抽查。
 
 发布前必须同时满足：
 
-- 当前 manifest 中全部 scenario 的 source/quality/S0/D0 evidence 完整；
+- 当前 manifest 中全部 scenario 的 source/quality/initial-state evidence 完整，runtime dynamics seed 通过机器合同校验；
 - environment validity 的真人字段已签名，机器结果不能代签；
 - 每个 scenario 的唯一 raw trajectory 有完整 Judge/history/backbone evidence，并且通过 Gate 3；
 - T1/T2/T3 仅从合格来源构建，manifest、trajectory、audit 和 instance hash 完全一致；
@@ -390,6 +390,6 @@ A/B 分别从分叉 checkpoint 经过正式 Structured Appraisal → 确定性�
 
 当前代码已经实现自由文本 action、单一 environment、private/public boundary、两阶段 appraisal/response、确定性 state update、ledger、自然结束分类、T1/T2/T3 builder、T4 judge packet 和 Gate 结构。
 
-当前仍不能宣称正式发布完成：新批次仍需真人 scenario/S0/D0 freeze、
+当前仍不能宣称正式发布完成：新批次仍需真人 scenario/initial-state freeze、
 唯一正式轨迹、Gate 2/3/4、正式 Judge/history/backbone evidence 和 audited
 machine GT。任何状态更新都必须反映真实文件和报告，不得只改本节文字。

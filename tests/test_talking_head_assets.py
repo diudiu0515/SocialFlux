@@ -46,14 +46,14 @@ class TalkingHeadFrameworkTest(unittest.TestCase):
         self.assertTrue((ROOT / "requirements-video.txt").is_file())
 
     def test_active_scenarios_do_not_claim_deleted_assets(self):
-        paths = sorted((ROOT / "configs" / "scenarios").glob("scenario_*/scenario_*.json"))
-        self.assertEqual(len(paths), 20)
+        root = ROOT / "data" / "gpt50" / "experiment" / "scenario" / "scenarios"
+        paths = sorted(root.glob("scenario_*/scenario_*.json"))
+        self.assertEqual(len(paths), 50)
         for path in paths:
             scenario = json.loads(path.read_text(encoding="utf-8"))
             media = scenario["media_generation"]
-            self.assertEqual(media["asset_status"], "not_generated")
-            self.assertEqual(media["provider"], "external_api_pending")
-            self.assertEqual(media["profile"], "provider_neutral_v1")
+            self.assertEqual(media["asset_status"], "pending")
+            self.assertEqual(media["stage"], "structured_expression")
             self.assertTrue(
                 all(trigger.get("media_asset_id") is None for trigger in scenario["video_triggers"])
             )

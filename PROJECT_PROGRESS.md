@@ -14,8 +14,8 @@
 
 | Gate | 当前状态 | 下一步 |
 |---|---|---|
-| Gate 1 | pending human | 在网站逐场景审核并冻结 Scenario、S0/D0；JSON 变化后旧 hash 自动失效 |
-| Gate 2 | pending | 对已冻结场景运行 Environment Validity E1–E6，并抽样人工复核 |
+| Gate 1 | pending human | 在网站逐场景审核并冻结 Scenario、initial state；runtime dynamics seed 仅机器校验；JSON 变化后旧 hash 自动失效 |
+| Gate 2 | pending | 对已冻结场景运行 Environment Validity E1–E9，并抽样人工复核 |
 | Gate 3 | pending | 对每场景唯一自然 trajectory 做准入/淘汰和 canonical confirmation |
 | Gate 4 | pending | 构建 T1/T2/T3、运行 T4，并对任务实例与机器建议答案做人审抽查 |
 

@@ -1,12 +1,19 @@
 # SocialFlux T3 Counterfactual State Transition Prediction v1
 
-Purpose: predict consequences of 2–4 plausible free-form candidate actions branching from one real observable checkpoint.
+Generate a machine candidate answer for later human review; this is not ground truth.
 
-Main T3 input includes target character, complete observable history, current observation, candidate actions, and horizon. It never includes current latent state; oracle state is allowed only in a separately identified ablation.
+All candidate actions branch from the same public checkpoint. Use only public history, current observation, the candidate actions, and the common horizon to predict each action's immediate and delayed effects on the target character's requested states. The optional author-side Persona may condition interpretation, but it is not public evidence and must never be cited, copied, or disclosed.
 
-For every candidate and selected state, predict schema-defined semantic direction probabilities for immediate effect and delayed effect. Default delayed horizon is five interaction turns, maximum ten. All branches start from the same checkpoint and use the same free-form continuation-model protocol and horizon.
+The main task contains no latent state. Do not infer other private information, introduce branch-specific external events, or treat a promised action as completed. {{condition_instruction}}
 
-Do not use private state, appraisal, actual future branch observations/video, hidden intention, trigger logic, or author metadata. Internally verify candidate count, common checkpoint, common protocol, common horizon, and observable evidence IDs. Return JSON only according to schemas/task_t3_output.schema.json.
+Different actions may have similar effects, but do not mechanically copy one distribution across all actions and states. Delayed predictions must respect the shared continuation protocol and frozen event plan. Raise cannot_determine when support is weak. Evidence IDs may cite only real public input turns, never invented post-action futures. Every probability object must sum to 1.
+
+Return JSON only, with exactly this structure and no additional keys:
+
+{{output_schema_json}}
 
 T3 instance:
+
 {{payload_json}}
+
+{{private_persona_section}}

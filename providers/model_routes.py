@@ -51,6 +51,19 @@ class ModelRoutes:
             raise ValueError(f"model route {name} must be an object")
         if not config.get("provider") or not config.get("model"):
             raise ValueError(f"model route {name} requires provider and model")
+        if "api_key" in config or "api_keys" in config:
+            raise ValueError(
+                f"model route {name} must use api_key_env; inline secrets are forbidden"
+            )
+        if config.get("provider") == "failover":
+            candidates = config.get("candidates")
+            if not isinstance(candidates, list) or not candidates:
+                raise ValueError(
+                    f"model route {name} failover requires non-empty candidates"
+                )
+            for index, candidate in enumerate(candidates):
+                ModelRoutes._validate(f"{name}.candidate[{index}]", candidate)
+            return
         endpoint_sources = [
             bool(config.get("endpoint")),
             bool(config.get("endpoint_env")),
@@ -58,10 +71,6 @@ class ModelRoutes:
         if sum(endpoint_sources) != 1:
             raise ValueError(
                 f"model route {name} requires exactly one of endpoint or endpoint_env"
-            )
-        if "api_key" in config:
-            raise ValueError(
-                f"model route {name} must use api_key_env; inline secrets are forbidden"
             )
 
     def provider_config(self, name):

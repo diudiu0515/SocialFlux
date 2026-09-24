@@ -1909,7 +1909,7 @@ class DistinctTextTest(unittest.TestCase):
         provider = SequenceProvider(["“我建议先量化风险。”"])
         policy = ModelPolicy(
             "p", provider,
-            prompt_id="task_t4_action_diagnostic_v1",
+            prompt_id="task_t4_action_v21",
             validation_profile="hard_only",
         )
         self.assertEqual(
@@ -2410,7 +2410,7 @@ class DistinctTextTest(unittest.TestCase):
         provider = SequenceProvider(["我确认这一点。"] )
         policy = ModelPolicy(
             "p", provider,
-            prompt_id="task_t4_action_diagnostic_v1",
+            prompt_id="task_t4_action_v21",
             validation_profile="hard_only",
         )
         result = policy.generate({

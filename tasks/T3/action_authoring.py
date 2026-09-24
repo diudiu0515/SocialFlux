@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 
+from prompts.loader import render_prompt
 from providers.structured import complete_json
 from scripts.t2_common import call_count
 
@@ -15,15 +16,11 @@ def action_prompt(checkpoint, count=3):
             for index in range(count)
         ]
     }
-    return (
-        "你为 SocialFlux T3 在同一公开 checkpoint 构造自由文本候选行动。候选属于被评估者，"
-        "必须直接回应最新可观察上下文，在该时点可立即执行，并在策略上有实质区别。允许澄清、"
-        "提出有边界的方案、拒绝、暂缓或关系修复；不要只做礼貌程度不同的同义改写。不得新增"
-        "制度、权力、关键事实或已完成行动，不得偷走对方动作，不得读取 latent state 或未来。"
-        f"恰好返回 {count} 个候选；text 只能是 1–3 句自然直接台词。只输出：\n"
-        + json.dumps(schema, ensure_ascii=False)
-        + "\n公开 checkpoint：\n"
-        + json.dumps(checkpoint, ensure_ascii=False, sort_keys=True)
+    return render_prompt(
+        "task_t3_action_candidates_v1",
+        checkpoint,
+        candidate_count=str(count),
+        output_schema_json=json.dumps(schema, ensure_ascii=False),
     )
 
 

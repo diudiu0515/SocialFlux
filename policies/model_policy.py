@@ -14,16 +14,82 @@ from providers.text import (
 )
 
 
+def _text_items(value):
+    if isinstance(value, str):
+        value = [value]
+    if not isinstance(value, (list, tuple)):
+        return []
+    result = []
+    for item in value:
+        text = str(item).strip()
+        if text and text not in result:
+            result.append(text)
+    return result
+
+
+def build_evaluated_role_card(observation):
+    """Build the policy's own-role card only from supplied, policy-visible data."""
+    role = observation.get("role", {})
+    target = observation.get("target_character", {})
+    situation = observation.get("public_situation", {})
+    persona = role.get("persona", {})
+    if not isinstance(persona, dict):
+        persona = {}
+    known = _text_items(role.get("known_experiences"))
+    if not known:
+        known = _text_items(situation.get("relevant_history"))[-4:]
+    preferences = []
+    for key in ("preferences", "boundaries", "authority_limits"):
+        preferences.extend(_text_items(role.get(key)))
+    personality = []
+    for key in (
+        "personality_traits", "communication_tendencies",
+        "expression_tendencies",
+    ):
+        personality.extend(_text_items(role.get(key)))
+    return {
+        "identity_and_relationship": {
+            "self": {"name": role.get("name", ""), "role": role.get("role", "")},
+            "counterpart": {
+                "name": target.get("name", ""), "role": target.get("role", ""),
+            },
+            "relationship": situation.get("relationship_structure", ""),
+            "power_and_cooperation": situation.get("power_structure", ""),
+        },
+        "known_experiences": known,
+        "current_task_goal": role.get(
+            "explicit_goal", observation.get("explicit_goal", "")
+        ),
+        "private_context": _text_items(role.get("private_context")),
+        "preferences_and_boundaries": list(dict.fromkeys(preferences)),
+        "personality_and_expression": list(dict.fromkeys(personality)),
+        "self_persona": {
+            "name": persona.get("name", role.get("name", "")),
+            "role": persona.get("role", role.get("role", "")),
+            "core_values": _text_items(persona.get("core_values")),
+            "temperament": _text_items(persona.get("temperament")),
+            "communication_style": persona.get("communication_style", ""),
+            "decision_style": persona.get("decision_style", ""),
+            "conflict_style": persona.get("conflict_style", ""),
+            "boundaries": _text_items(persona.get("boundaries")),
+        },
+        "missing_information_rule": (
+            "Empty sections were not supplied to the evaluated model; do not invent them."
+        ),
+    }
+
+
 class ModelPolicy:
     def __init__(
         self,
         policy_id,
         provider,
-        prompt_id="task_t4_action_v17",
+        prompt_id="task_t4_action_v21",
         sampling=None,
         provenance_extra=None,
         validation_profile="full",
         horizon_mode="natural_max_20",
+        minimum_natural_turns=1,
     ):
         validate_generation_options(validation_profile, horizon_mode)
         self.policy_id = policy_id
@@ -33,6 +99,7 @@ class ModelPolicy:
         self.provenance_extra = dict(provenance_extra or {})
         self.validation_profile = validation_profile
         self.horizon_mode = horizon_mode
+        self.minimum_natural_turns = int(minimum_natural_turns)
 
     def reset(self):
         reset = getattr(self.provider, "reset", None)
@@ -48,6 +115,7 @@ class ModelPolicy:
             "sampling": dict(self.sampling),
             "validation_profile": self.validation_profile,
             "horizon_mode": self.horizon_mode,
+            "minimum_natural_turns": self.minimum_natural_turns,
             **self.provenance_extra,
         }
 
@@ -136,6 +204,7 @@ class ModelPolicy:
             segment_turn,
             fragment_reference="its public time/event record and opening",
             history_scope="the complete earlier history",
+            minimum_natural_turns=self.minimum_natural_turns,
         )
         if self.validation_profile == "hard_only":
             apply_hard_only_prompt_profile(payload, "conversation_progress")
@@ -171,8 +240,22 @@ class ModelPolicy:
         }
         if runtime_feedback:
             turn_brief["runtime_generation_feedback"] = runtime_feedback
+        if self.prompt_id == "task_t4_action_v21":
+            turn_brief["semantic_aid_provenance"] = {
+                "included_in_primary_t4": True,
+                "fields": ["must_answer_now", "latest_open_proposal"],
+                "source": (
+                    "quote-grounded semantic annotations of observable dialogue "
+                    "plus the deterministic public interaction ledger"
+                ),
+                "excluded": [
+                    "private_state", "hidden_intention", "future_outcome",
+                ],
+            }
         prompt = render_prompt(
-            self.prompt_id, payload, turn_brief_json=turn_brief
+            self.prompt_id, payload,
+            role_card_json=build_evaluated_role_card(observation),
+            turn_brief_json=turn_brief,
         )
         forbidden_echoes = (
             prior_actions

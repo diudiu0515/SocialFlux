@@ -148,6 +148,41 @@ def _validate_policy_pool(config):
         raise ValueError("formal policy specs require source_type and model_family")
 
 
+def _validate_horizon_contract(config):
+    environment_minimum = config["environment"].get(
+        "minimum_natural_turns", 1
+    )
+    if (
+        not isinstance(environment_minimum, int)
+        or isinstance(environment_minimum, bool)
+        or not 1 <= environment_minimum <= 20
+    ):
+        raise ValueError(
+            "environment.minimum_natural_turns must be between 1 and 20"
+        )
+    for policy in config.get("policies", []):
+        policy_minimum = policy.get("minimum_natural_turns", 1)
+        if (
+            not isinstance(policy_minimum, int)
+            or isinstance(policy_minimum, bool)
+            or not 1 <= policy_minimum <= 20
+        ):
+            raise ValueError(
+                "policy.minimum_natural_turns must be between 1 and 20"
+            )
+        if environment_minimum > 1:
+            if policy_minimum != environment_minimum:
+                raise ValueError(
+                    "offline policy and environment minimum natural turns "
+                    "must match"
+                )
+            if policy.get("prompt_id") != "task_rollout_action_v1":
+                raise ValueError(
+                    "minimum-depth offline rollout requires "
+                    "task_rollout_action_v1"
+                )
+
+
 def load_rollout_config(path):
     config = json.loads(Path(path).read_text(encoding="utf-8"))
     if config.get("format") != ROLLOUT_FORMAT:
@@ -158,6 +193,7 @@ def load_rollout_config(path):
         raise ValueError("rollout config requires a construction provider for T2/T3")
     config = _resolve_model_routes(config, path)
     _validate_policy_pool(config)
+    _validate_horizon_contract(config)
     _validate_limits(config)
     _validate_task_selection(config)
     _validate_model_assignment(config)
@@ -180,6 +216,12 @@ def public_rollout_config(config):
             ),
             "appraisal_sampling": deepcopy(environment.get("sampling", {})),
             "response_sampling": deepcopy(environment.get("response_sampling", {})),
+            "multimodal_trigger_policy": deepcopy(
+                environment.get("multimodal_trigger_policy", {})
+            ),
+            "minimum_natural_turns": environment.get(
+                "minimum_natural_turns", 1
+            ),
         },
         "construction": {
             "provider": public_provider_config(config["construction"]["provider"]),
@@ -193,6 +235,9 @@ def public_rollout_config(config):
                 "runs": item.get("runs", 1),
                 "source_type": item.get("source_type", "unknown"),
                 "model_family": item.get("model_family", "unknown"),
+                "minimum_natural_turns": item.get(
+                    "minimum_natural_turns", 1
+                ),
             }
             for item in config["policies"]
         ],

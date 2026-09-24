@@ -1,6 +1,6 @@
 # SocialFlux Initial State Configuration v2
 
-Purpose: propose candidate S0/D0 only after an approved v2 source has been normalized. Solve causal consistency first and serialize last.
+Purpose: propose the candidate initial state and runtime dynamics seed only after an approved v2 source has been normalized. Solve causal consistency first and serialize last.
 
 Inputs include the private stable environment persona, background, goals, hidden intention, canonical selected state variables, and multimodal concepts. This is an author-side prompt; none of its private fields may enter the evaluated model's observation.
 
@@ -13,7 +13,7 @@ Constraints:
 - do not duplicate external dynamics as consequence-risk state;
 - values must follow from persona, background, goals, hidden intention, history, and initial situation;
 - avoid unjustified extremes and preserve several plausible interaction paths; never copy a default state bundle or trigger pair across unrelated scenarios;
-- no video trigger may already be active at S0/D0;
+- no video trigger may already be active at the initial state and dynamics seed;
 - set max_turns to 20 and t3_delayed_horizon to 5–10;
 - create thresholds and observable-expression specifications, never action effects, answers, or a prescribed strategy;
 - status is `candidate_pending_human_freeze`; a model cannot freeze its own proposal.

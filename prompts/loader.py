@@ -3,9 +3,11 @@
 import hashlib
 import json
 from pathlib import Path
+import re
 
 ROOT = Path(__file__).resolve().parent
 MANIFEST_PATH = ROOT / "manifest.json"
+_PLACEHOLDER_PATTERN = re.compile(r"\{\{([A-Za-z0-9_]+)\}\}")
 
 
 def prompt_manifest():
@@ -33,4 +35,9 @@ def render_prompt(prompt_id, payload=None, **values):
     for key, value in values.items():
         rendered = value if isinstance(value, str) else json.dumps(value, ensure_ascii=False, sort_keys=True)
         content = content.replace("{{" + key + "}}", rendered)
+    unresolved = sorted(set(_PLACEHOLDER_PATTERN.findall(content)))
+    if unresolved:
+        raise ValueError(
+            f"prompt {prompt_id} has unresolved placeholders: {unresolved}"
+        )
     return content

@@ -17,10 +17,7 @@ ENV/
 
 # Generated outputs contain private model trajectories and review artifacts
 build/
-data/formal/
-data/smoke/
-data/scenario_authoring/
-data/gpt50/
+data/
 archives/
 reviews/*signed*.json
 configs/scenarios/scenario_*/rollouts/

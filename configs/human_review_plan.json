@@ -5,13 +5,13 @@
   "gate1": {
     "reviewers_required": 1,
     "scope": "all_scenarios",
-    "unit": "scenario_and_frozen_s0_d0"
+    "unit": "scenario_and_frozen_initial_state"
   },
   "gate2": {
     "reviewers_required": 1,
     "scope": "deterministic_experiment_samples",
-    "unit": "environment_validity_e1_to_e5",
-    "note": "E3/E4/E5 are generated automatically; the reviewer validates the experiment and sampled outputs. E6 remains automated."
+    "unit": "environment_validity_e1_to_e9",
+    "note": "Machine experiments and summaries support E1–E9, including E9 timescale validity; required human attestations cannot be automated."
   },
   "gate3": {
     "primary_reviewers": 1,

@@ -493,7 +493,7 @@ def main(argv=None):
     parser.add_argument(
         "--environment-evidence",
         type=Path,
-        help="Gate 2 E1-E6 evidence directory required for formal_raw.",
+        help="Gate 2 E1-E8 evidence directory required for formal_raw.",
     )
     parser.add_argument(
         "--reuse-t3-from",

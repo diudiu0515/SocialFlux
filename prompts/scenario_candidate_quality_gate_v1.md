@@ -20,7 +20,7 @@ Return exactly one JSON object with exactly these six top-level keys:
 
 Reject or revise generic conflicts, copied patterns, interchangeable personas,
 one universally optimal response, missing causal history, fake trade-offs, or a
-later event that does not depend on earlier conduct. Do not produce S0/D0,
+later event that does not depend on earlier conduct. Do not produce initial numeric values,
 actions, deltas, responses, checkpoints, answers, trajectories, numeric scores,
 per-check explanations, or any additional keys.
 

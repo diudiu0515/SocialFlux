@@ -6,8 +6,9 @@ checklist.
 ## Pool stages
 
 - development may use --allow-unreviewed; it never becomes final benchmark.
-- formal_raw requires all scenario quality gates approved and S0/D0
-  human_frozen, uses an isolated rollout root, and contains exactly one logical
+- formal_raw requires all scenario quality gates approved and the initial state
+  human_frozen; the runtime dynamics seed is machine-validated, uses an isolated
+  rollout root, and contains exactly one logical
   natural trajectory per scenario. Transport/schema retries may repair the same
   logical call; failed trajectories are never replaced by another seed.
 - formal_selected is only materialized after quality and history gates pass.
@@ -68,6 +69,7 @@ require exact coverage of current manifest IDs after any replacement.
 `formal_selected` manifests bind the exact trajectory IDs to exact all-passing
 quality-audit IDs. Missing, extra or mismatched files block task construction.
 
+Gate 4 first runs the shared instance_quality_judge_v2 LLM pre-screen over every T1--T3 candidate; this remains machine evidence and cannot sign human acceptance.
 Gate 4 uses a task-specific human checklist rather than a generic approval:
 T1 checks current-only shortcuts and history evidence; T2 checks natural paired
 histories, byte-identical shared observation/media and causal divergence; T3

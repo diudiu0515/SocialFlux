@@ -33,6 +33,7 @@ def assess_source(spec, scenario, source, audit_record, settings=None):
         ["accepted", "short_natural_trajectory", "budget_truncated"],
     ))
     reasons = []
+    quality_reasons = []
     indexes = source_index(source)
     fork_id = spec.get("fork_turn_id")
     ending_id = spec.get("ending_turn_id")
@@ -65,19 +66,28 @@ def assess_source(spec, scenario, source, audit_record, settings=None):
         (machine.get("structural") or {}).get("hard_reject_reasons") or []
     )
     if audit_record is None:
-        reasons.append("source_audit_missing")
+        quality_reasons.append("source_audit_missing")
     else:
         if generation_status not in allowed_generation_statuses:
-            reasons.append("source_generation_status_not_allowed")
+            quality_reasons.append("source_generation_status_not_allowed")
         if model_review.get("decision") == "reject":
-            reasons.append("source_model_semantic_reject")
+            quality_reasons.append("source_model_semantic_reject")
         if hard_rejects:
-            reasons.append("source_machine_hard_reject")
+            quality_reasons.append("source_machine_hard_reject")
+    reasons.extend(quality_reasons)
+    blocking_reasons = (
+        reasons
+        if settings.get("admission_mode") != "human_postfilter"
+        else [reason for reason in reasons if reason not in quality_reasons]
+    )
 
     return {
-        "status": "eligible" if not reasons else "skipped_source_quality",
-        "eligible": not reasons,
+        "status": "eligible" if not blocking_reasons else "skipped_source_quality",
+        "eligible": not blocking_reasons,
         "reasons": reasons,
+        "blocking_reasons": blocking_reasons,
+        "quality_gate_bypassed": bool(quality_reasons and not blocking_reasons),
+        "admission_mode": settings.get("admission_mode", "quality_gate"),
         "metrics": {
             "source_turn_count": len(source.get("turns", [])),
             "history_turns_before_ending": ending_index,

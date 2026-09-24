@@ -100,7 +100,7 @@ def selected_state_ids(scenario):
     groups = (
         ("emotion", "behavioral_disposition", "relationship", "consequence_risk")
         if scenario.get("state_contract_version") == "socialflux_state_v2"
-        else ("emotion", "motivation", "relationship")
+        else ("emotion", "behavioral_disposition", "relationship")
     )
     for group in groups:
         state_ids.extend(f"{group}.{name}" for name in selected.get(group, []))

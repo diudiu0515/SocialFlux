@@ -27,12 +27,12 @@ const LABELS = {
   character_coherence: '人物与动机连贯性',
   interaction_richness: '互动与长期演化容量',
   t1_t4_suitability: 'T1–T4 综合适配度',
-  variables_relevant: 'S0 状态变量与场景相关',
-  values_justified: 'S0/D0 数值有背景依据',
+  variables_relevant: 'Initial state 状态变量与场景相关',
+  values_justified: 'Initial state 数值有背景依据',
   no_policy_effect_baked_in: '初始值未预写某个策略效果',
   initial_triggers_inactive: '视频触发器在初始状态不误触发',
   multiple_future_paths_possible: '允许多条合理未来路径',
-  shared_across_models_and_seeds: 'S0/D0 可跨模型与 seed 共用',
+  shared_across_models_and_seeds: '冻结配置可跨模型与 seed 共用',
   social_mechanism: '社会机制明确',
   real_tradeoff: '存在真实权衡',
   both_sides_have_goals: '双方都有目标',
@@ -47,7 +47,7 @@ const LABELS = {
   narrative_provenance: '叙事来源可追溯',
   narrative_originalization: '影视抽象已原创化',
   quality_checklist: '质量清单完整',
-  human_approval: '真人审核与 S0/D0 冻结',
+  human_approval: '真人审核与 initial state 冻结',
   dialogue_coherence: '对话连贯性',
   history_dependence: '历史依赖',
   character_consistency: '人物一致性',
@@ -196,7 +196,7 @@ function renderOverview() {
   $('#gateBadge').textContent = gate.research_ready || gate.research_acceptance ? 'RESEARCH GATE · PASS' : 'RESEARCH GATE · PENDING';
   const screening = state.data.screening || {};
   const values = [
-    ['SCENARIOS', state.data.scenario_count, '情节与 S0/D0'],
+    ['SCENARIOS', state.data.scenario_count, '情节与 initial state'],
     ['NEW 20T RAW', state.data.long_rollout_generation?.completed_slot_count ?? 0, `目标 ${state.data.long_rollout_generation?.expected_slot_count ?? 0} · ${state.data.long_rollout_generation?.status || 'not_started'}`],
     ['AUDIT QUEUE', screening.human_review_queue_count ?? 0, `库存 ${screening.inventory_count ?? 0} · 每场景最终 1 条`],
     ['PROVISIONAL WINNERS', screening.provisional_selected_count ?? 0, '待人工逐场景确认'],
@@ -269,7 +269,7 @@ function renderScenarioView() {
   const modelContract = state.detail.evaluated_model_contract || {};
   const assets = state.detail.media_assets || [];
   const scenarioIndex = state.data.scenarios.findIndex((item) => item.scenario_id === state.scenarioId);
-  $('#viewToolbar').innerHTML = `<div class="toolbar-group"><button class="icon-button" data-nav-scenario="-1" ${scenarioIndex <= 0 ? 'disabled' : ''}>← 上一条</button><span class="toolbar-title">${scenarioIndex + 1}/20 · 情节全貌</span><button class="icon-button" data-nav-scenario="1" ${scenarioIndex >= state.data.scenarios.length - 1 ? 'disabled' : ''}>下一条 →</button></div><span class="toolbar-note">先判断故事是否值得进入 benchmark，再审核 S0/D0、任务适配与视频阈值</span>`;
+  $('#viewToolbar').innerHTML = `<div class="toolbar-group"><button class="icon-button" data-nav-scenario="-1" ${scenarioIndex <= 0 ? 'disabled' : ''}>← 上一条</button><span class="toolbar-title">${scenarioIndex + 1}/20 · 情节全貌</span><button class="icon-button" data-nav-scenario="1" ${scenarioIndex >= state.data.scenarios.length - 1 ? 'disabled' : ''}>下一条 →</button></div><span class="toolbar-note">先判断故事是否值得进入 benchmark，再审核 initial state、任务适配与视频阈值</span>`;
   $('#viewContent').innerHTML = `
     <section class="panel content-panel">
       <div class="section-kicker">STORY MAP</div>
@@ -346,11 +346,12 @@ function renderScenarioView() {
 
     <section class="panel content-panel">
       <div class="section-kicker">INITIALIZATION</div>
-      <h3>S0 / D0 候选状态</h3>
+      <h3>Initial state 与 runtime dynamics seed</h3>
       <div class="state-columns">
-        <div><h4>人物内部状态 · 0–10</h4>${stateBars(scenario.initial_state)}</div>
-        <div><h4>互动动力 · 0–10</h4>${stateBars(scenario.initial_dynamics)}</div>
+        <div><h4>人物内部状态 · 人工冻结 · 0–10</h4>${stateBars(scenario.initial_state)}</div>
+        <div><h4>互动动力 · 机器校验 · 0–10</h4>${stateBars(scenario.initial_dynamics)}</div>
       </div>
+      <p class="annotation-copy">Runtime dynamics seed 不设置独立人工冻结字段。</p>
       <div class="rationale"><b>初始化说明</b><p>${esc(Object.values(scenario.initialization_notes?.rationale || {}).join(' '))}</p></div>
     </section>
 
@@ -741,12 +742,12 @@ function renderScenarioAnnotation() {
     <div class="audit-callout"><b>本条完成度</b><p>质量评分 ${completion.ratingsDone}/${completion.ratingTotal} · Gate 1 ${completion.checksDone}/${completion.checkTotal} · 冻结确认 ${completion.attestationsDone}/${completion.attestationTotal}</p><small class="mono">SHA-256 ${esc(record.scenario_sha256 || state.detail.gate1_review_packet?.scenario_sha256 || 'missing')}</small></div>
     <div class="form-section"><h4>核心质量 · 1–5</h4>${ratingRows('scenario', id, state.contract.scenario_rating_scale.dimensions, record)}</div>
     <div class="form-section"><h4>Gate 1 全部检查</h4>${triStateRows('scenario', id, state.contract.scenario_checks, record)}</div>
-    <div class="form-section"><h4>S0 / D0 正式冻结确认</h4>${attestationKeys.map((key) => `<label class="check-line"><input type="checkbox" data-kind="scenario" data-id="${esc(id)}" data-path="attestations/${esc(key)}" ${record.attestations?.[key] ? 'checked' : ''}> ${esc(label(key))}</label>`).join('')}</div>
+    <div class="form-section"><h4>Initial state 正式冻结确认</h4>${attestationKeys.map((key) => `<label class="check-line"><input type="checkbox" data-kind="scenario" data-id="${esc(id)}" data-path="attestations/${esc(key)}" ${record.attestations?.[key] ? 'checked' : ''}> ${esc(label(key))}</label>`).join('')}</div>
     <div class="form-section"><h4>按组件记录需修改内容</h4>
       ${issueField(id, record, 'story', '人物、冲突与权力结构')}
       ${issueField(id, record, 'history', '历史、信息不对称与原创性')}
       ${issueField(id, record, 'longitudinal', '10–20 轮片段、时间与事件')}
-      ${issueField(id, record, 's0_d0', 'S0 / D0 数值与理由')}
+      ${issueField(id, record, 'initial_state', 'Initial state 数值与理由')}
       ${issueField(id, record, 'tasks', 'T1–T4 可回答性与区分度')}
       ${issueField(id, record, 'triggers', '视频触发阈值与可达性')}
     </div>
@@ -832,8 +833,8 @@ function renderManualReviewView() {
   const distribution = stabilization.state_distribution || {};
   const distributionChange = distribution.change || {};
   const staffCards = [
-    ['Gate 1', staffing.gate1?.reviewers_required, '1 人全量检查 scenario 与 S0/D0'],
-    ['Gate 2', staffing.gate2?.reviewers_required, '1 人复核 E1–E5；E3/E4/E5 已自动实验'],
+    ['Gate 1', staffing.gate1?.reviewers_required, '1 人全量检查 scenario 与 initial state'],
+    ['Gate 2', staffing.gate2?.reviewers_required, '1 人复核 E1–E9；机器实验不能代签'],
     ['Gate 3', `${staffing.gate3?.primary_reviewers || 1}+${staffing.gate3?.secondary_audit_reviewers || 1}`, `1 人主审 + 第 2 人 ${Math.round((staffing.gate3?.secondary_audit_fraction || .2) * 100)}% audit`],
     ['Gate 4', staffing.gate4?.independent_reviewers, '两人看相同样本；分歧才找第 3 人'],
     ['Video', staffing.video?.reviewers_required, '1 人检查全部 talking-head 视频']
@@ -897,7 +898,7 @@ function renderManualReviewView() {
     <details class="panel document-panel"><summary>SocialFlux Rollout Screening Protocol v1 全文</summary><pre>${esc(review.protocol_document || '')}</pre></details>`;
   $('#annotationPanel').innerHTML = `<div class="annotation-head"><div><div class="section-kicker">NO HIDDEN TODO</div><h3>人工审核边界</h3></div></div>
     <p class="annotation-copy">本页把所有人需要看的材料集中展示。具体 scenario、rollout 与视频仍可在对应页面逐项查看；自动结果不会替代实名、时间戳和 hash-bound 真人确认。</p>
-    <div class="audit-callout"><b>两天内推荐顺序</b><ol><li>Gate 1：1 人冻结 20 个 scenario/S0/D0</li><li>Gate 2：1 人审 E1/E2 抽样与 E3/E4/E5 自动实验</li><li>Gate 3：主审全量，第二人只 audit 20% 与 borderline</li><li>Gate 4：两人独立审同一 6 题，分歧才找第三人</li><li>Video：1 人检查全部 60 个资产</li></ol></div><p class="muted">${esc(workspace.warning || '')}</p>`;
+    <div class="audit-callout"><b>两天内推荐顺序</b><ol><li>Gate 1：1 人冻结 20 个 scenario/initial state；runtime dynamics seed 机器校验</li><li>Gate 2：1 人审 E1–E9 抽样与实验结果</li><li>Gate 3：主审全量，第二人只 audit 20% 与 borderline</li><li>Gate 4：两人独立审同一 6 题，分歧才找第三人</li><li>Video：1 人检查全部 60 个资产</li></ol></div><p class="muted">${esc(workspace.warning || '')}</p>`;
 }
 
 function renderMaterialsView() {

@@ -1,4 +1,5 @@
 import copy
+import json
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -8,9 +9,10 @@ from pipeline.flow import PIPELINE_STAGES, PipelinePreflight
 from pipeline.runtime import (
     assert_development_role_partitioned_rollout_config,
     assert_fable_rollout_config,
-    assert_single_model_rollout_config,
 )
+from policies.model_policy import ModelPolicy
 from providers.model_routes import ModelRoutes
+from prompts.loader import get_prompt
 from rollout.configuration import load_rollout_config, public_rollout_config
 from scripts.generate_long_rollout_pool import run_slot
 
@@ -18,7 +20,7 @@ from scripts.generate_long_rollout_pool import run_slot
 class CanonicalPipelineTest(unittest.TestCase):
     def test_consumed_single_first_pass_cannot_create_replacement(self):
         config = load_rollout_config(
-            "configs/gpt50_experiment/rollout.hybrid.single.json"
+            "configs/gpt50_experiment/rollout.json"
         )
         slot = {
             "config": config,
@@ -33,7 +35,7 @@ class CanonicalPipelineTest(unittest.TestCase):
 
     def test_gpt_policy_claude_environment_partition_is_explicit(self):
         config = load_rollout_config(
-            "configs/gpt50_experiment/rollout.hybrid.single.json"
+            "configs/gpt50_experiment/rollout.json"
         )
         assert_development_role_partitioned_rollout_config(config)
         self.assertEqual(
@@ -43,36 +45,109 @@ class CanonicalPipelineTest(unittest.TestCase):
             config["environment"]["provider"]["model"], "claude-fable-5"
         )
         self.assertEqual(
+            config["environment"]["response_provider"]["model"],
+            "claude-fable-5",
+        )
+        self.assertEqual(
             public_rollout_config(config)["development_role_assignment"],
             config["development_role_assignment"],
         )
 
-    def test_gpt_authoring_uses_autodl_streaming_chat_completions(self):
+    def test_gpt_authoring_uses_autodl_chat_and_responses_failover(self):
         routes = ModelRoutes.load(
             "configs/gpt50_experiment/model_routes.astra.json"
         )
         route = routes.provider_config("scenario_authoring")
+        self.assertEqual(route["provider"], "failover")
         self.assertEqual(
-            route["endpoint"],
-            "https://www.autodl.art/api/v1/chat/completions",
+            {
+                candidate["provider"]: candidate["endpoint"]
+                for candidate in route["candidates"]
+            },
+            {
+                "openai_compatible": (
+                    "https://www.autodl.art/api/v1/chat/completions"
+                ),
+                "openai_responses": "https://www.autodl.art/api/v1/responses",
+            },
         )
-        self.assertTrue(route["stream"])
+        self.assertFalse(route["stream"])
         self.assertEqual(route["model"], "gpt-6-astra")
 
-    def test_experimental_single_model_accepts_exactly_one_seed(self):
+    def test_gpt_rollout_uses_one_offline_policy_slot(self):
         config = load_rollout_config(
-            "configs/gpt50_experiment/rollout.single.json"
+            "configs/gpt50_experiment/rollout.json"
         )
-        assert_single_model_rollout_config(
-            config,
-            expected_model="gpt-6-astra",
-            expected_seed_slots=1,
-            context="test",
+        assert_development_role_partitioned_rollout_config(config)
+        self.assertEqual(len(config["policies"]), 1)
+        self.assertEqual(config["policies"][0]["runs"], 1)
+        self.assertEqual(
+            config["policies"][0]["prompt_id"],
+            "task_rollout_action_v1",
         )
+        self.assertEqual(
+            config["policies"][0]["minimum_natural_turns"], 10
+        )
+        self.assertEqual(
+            config["environment"]["minimum_natural_turns"], 10
+        )
+        offline_prompt = get_prompt("task_rollout_action_v1")
+        online_prompt = get_prompt("task_t4_action_v21")
+        self.assertIn("turn 10", offline_prompt)
+        self.assertIn("10–20 effective turns", offline_prompt)
+        self.assertIn("one local matter is settled", offline_prompt)
+        self.assertIn("timing window, resource", offline_prompt)
+        self.assertIn("repeated contact promise", offline_prompt)
+        self.assertIn("permits closure but does not require it", offline_prompt)
+        self.assertIn("There is no minimum dialogue length", online_prompt)
+        policy = ModelPolicy(
+            "offline-test",
+            None,
+            prompt_id="task_rollout_action_v1",
+            validation_profile="hard_only",
+            minimum_natural_turns=10,
+        )
+        messages, _ = policy._build_request({
+            "history": [],
+            "current_response": "我们需要继续处理这个分歧。",
+            "role": {
+                "name": "甲",
+                "role": "负责人",
+                "explicit_goal": "达成可执行安排",
+            },
+            "target_character": {"name": "乙", "role": "协作者"},
+            "conversation_progress": {},
+        })
+        self.assertEqual([item["role"] for item in messages], ["system", "user"])
+        self.assertIn("turn 10", messages[1]["content"])
+        self.assertIn(
+            "before its minimum effective history depth",
+            messages[1]["content"],
+        )
+        self.assertIn("one material advancement", messages[1]["content"])
+        self.assertIn(
+            "timing window, resource limit, authority boundary",
+            messages[1]["content"],
+        )
+        self.assertIn("bare acknowledgment", messages[1]["content"])
+
+        wrong_prompt = copy.deepcopy(config)
+        wrong_prompt["policies"][0]["prompt_id"] = "task_t4_action_v21"
+        wrong_prompt.pop("model_routes", None)
+        wrong_prompt.pop("model_routes_provenance", None)
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "wrong-prompt.json"
+            path.write_text(
+                json.dumps(wrong_prompt),
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(
+                ValueError, "minimum-depth offline rollout"
+            ):
+                load_rollout_config(path)
 
     def test_archived_scale300_catalog_is_not_active(self):
-        self.assertFalse(Path("configs/scale300_v1/scenarios").exists())
-        self.assertTrue(Path("configs/scale300_v1/CLAUDE_AUTHORING.md").is_file())
+        self.assertFalse(Path("configs/scale300_v1").exists())
         self.assertEqual(ROLLOUTS_PER_SCENARIO, 1)
 
     def test_preflight_blocks_when_no_active_catalog_is_promoted(self):

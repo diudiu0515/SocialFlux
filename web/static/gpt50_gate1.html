@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>SocialFlux GPT-50 · 人工 Gate 1</title>
-  <link rel="stylesheet" href="/gpt50_gate1.css?v=1">
+  <title>SocialFlux GPT-50 · 场景与 Rollout 人工审查</title>
+  <link rel="stylesheet" href="/gpt50_gate1.css?v=3">
 </head>
 <body>
 <div class="shell">
   <aside class="side">
-    <div class="brand"><b>GPT-50 · Gate 1</b><a href="/review.html">审核中心</a></div>
-    <div class="notice">这里是 GPT 小规模设计审计，不是 Claude 主数据。机器检查不能替代真人 Gate 1。</div>
+    <div class="brand"><b>GPT-50 · 人工审查</b><a href="/review.html">审核中心</a></div>
+    <div class="notice">这里同时展示 GPT 场景和完整 rollout。场景 Gate 1 与对话质量结论彼此独立；机器检查不能替代真人判断。</div>
     <label class="reviewer">审核人姓名或 ID<input id="reviewer" autocomplete="name" placeholder="必填"></label>
     <input id="search" class="search" type="search" placeholder="搜索 ID、标题或机制">
     <div id="queue" class="queue"></div>
@@ -23,14 +23,15 @@
   </aside>
   <main class="main">
     <header class="top">
-      <div><div class="eyebrow">PIPELINE DESIGN AUDIT</div><h1>GPT 场景人工 Gate 1</h1><div id="root" class="help"></div></div>
+      <div><div class="eyebrow">PIPELINE DESIGN AUDIT</div><h1>GPT 场景 + Rollout 人工审查</h1><div id="root" class="help"></div></div>
       <span id="count" class="badge">—</span>
     </header>
     <div class="nav"><button id="prev">← 上一个</button><button id="next">下一个 →</button><button id="refresh">刷新数据</button></div>
     <div id="status" class="panel">正在读取 GPT 候选…</div>
+    <div id="rolloutStatus" class="panel">正在读取 GPT rollout 进度…</div>
     <div class="grid"><section id="content"></section><aside id="review" class="panel review"></aside></div>
   </main>
 </div>
-<script src="/gpt50_gate1.js?v=2"></script>
+<script src="/gpt50_gate1.js?v=7"></script>
 </body>
 </html>

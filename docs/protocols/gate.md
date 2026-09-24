@@ -11,7 +11,7 @@ SocialFlux 的 offline T1/T2/T3 数据必须来自 **同一个 online stateful e
 ```text
 Scenario
 ↓
-Frozen S0 / D0
+Frozen initial state and machine-validated runtime dynamics seed
 ↓
 Stateful Environment
 ↓

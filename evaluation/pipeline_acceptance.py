@@ -5,9 +5,9 @@ from pathlib import Path
 
 from .environment_validity import (
     local_action_intervention_evidence,
-    seed_coverage,
     trajectory_structure,
 )
+from .timescale_validity import build_timescale_review_items
 from scripts.scenario_docs import (
     assert_document_current,
     assert_manifest_current,
@@ -24,7 +24,7 @@ CRITERIA = (
     "6. Neutral-State Stability",
     "7. Response-State Consistency",
     "8. Full-Trajectory Plausibility",
-    "9. Seed Robustness",
+    "9. Timescale Validity",
 )
 
 
@@ -109,7 +109,19 @@ def build_acceptance_report(
         for key, branches in intervention_groups.items()
     ]
     local_ready = bool(local_evidence) and all(item["divergent"] for item in local_evidence)
-    seeds = seed_coverage(trajectories)
+    timescale_items = build_timescale_review_items(trajectories, limit=40)
+    timescale_families = {
+        name: sum(
+            item["expected_timescale_prior"] == name
+            for item in timescale_items
+        )
+        for name in ("fast", "medium", "slow", "context_dependent")
+    }
+    timescale_ready = (
+        len(timescale_items) >= 10
+        and all(timescale_families[name] >= 1 for name in ("fast", "medium", "slow"))
+        and any(item["changed_turn_count"] > 0 for item in timescale_items)
+    )
 
     criteria = [
         _pending(
@@ -154,20 +166,25 @@ def build_acceptance_report(
         },
         {
             "criterion": CRITERIA[8],
-            "status": "evidence_ready" if seeds["ready"] else "pending",
-            "seed_coverage": seeds,
+            "status": "evidence_ready" if timescale_ready else "pending",
+            "candidate_variable_count": len(timescale_items),
+            "timescale_families": timescale_families,
+            "review_items": timescale_items,
             "human_judgment": "pending",
-            "requirement": "same model/config across multiple seeds plus qualitative direction comparison",
+            "requirement": (
+                "10+ state variables covering fast/medium/slow priors, with human "
+                "review of context-dependent speed, persistence and reversals"
+            ),
         },
     ]
     return {
-        "format": "socialflux_environment_acceptance_v2",
+        "format": "socialflux_environment_acceptance_v3",
         "scenario_count": len(scenarios),
         "trajectory_count": len(trajectories),
         "trajectory_origin_required": "free_form_model_interaction",
         "criteria": criteria,
         "gate": {
-            "automated_artifacts_ready": trajectory_ready and local_ready and seeds["ready"],
+            "automated_artifacts_ready": trajectory_ready and local_ready and timescale_ready,
             "research_acceptance": all(item["status"] == "passed" for item in criteria),
             "formal_human_pending": [item["criterion"] for item in criteria],
             "deprecated_checks": [

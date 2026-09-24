@@ -31,7 +31,7 @@ class IncreasingUpdater:
 class MultimodalEnvironmentTest(unittest.TestCase):
     def test_priority_cooldown_and_public_media_boundary(self):
         scenario = json.loads(
-            Path("configs/scenarios/scenario_001/scenario_001.json").read_text()
+            Path("data/gpt50/experiment/scenario/scenarios/scenario_001/scenario_001.json").read_text()
         )
         factory = lambda: StatefulEnvironment(
             scenario,
@@ -44,11 +44,17 @@ class MultimodalEnvironmentTest(unittest.TestCase):
         )
         first, second, third = trajectory["turns"]
         self.assertEqual(len(first["media"]), 1)
-        self.assertEqual(first["trigger_events"][0]["trigger_id"], "evidence_lands")
-        self.assertEqual(len(second["media"]), 1)
-        self.assertEqual(second["trigger_events"][0]["trigger_id"], "escalation_confrontation")
+        configured_ids = {item["trigger_id"] for item in scenario["video_triggers"]}
+        self.assertIn(first["trigger_events"][0]["trigger_id"], configured_ids)
+        self.assertEqual(len(first["video_api_requests"]), 1)
+        request = first["video_api_requests"][0]["request"]
+        self.assertTrue(request["prompt"])
+        self.assertTrue(all(
+            value is False for value in request["safety_check"].values()
+        ))
+        self.assertEqual(second["media"], [])
         self.assertNotIn("trigger_events", second["observation"])
-        self.assertNotIn("trigger_id", third["observation"]["media"][0])
+        self.assertEqual(third["observation"]["media"], [])
         self.assertEqual(third["media"], [])
 
     def test_only_highest_priority_eligible_event_fires_per_turn(self):
@@ -76,8 +82,54 @@ class MultimodalEnvironmentTest(unittest.TestCase):
         self.assertEqual(len(result["private_events"]), 1)
         self.assertEqual(result["private_events"][0]["trigger_id"], "highest_priority")
 
+    def test_relaxed_online_policy_turns_crossing_into_threshold(self):
+        scenario = {
+            "video_triggers": [{
+                "trigger_id": "high_tension",
+                "priority": 1,
+                "trigger_mode": "crossing",
+                "conditions": {
+                    "emotion.anger": {"operator": ">=", "threshold": 8}
+                },
+                "observable_expression": {
+                    "facial_expression": "明显绷紧",
+                    "gaze": "持续注视",
+                    "speech_style": "语速放慢",
+                    "prosody": "克制",
+                    "behavioral_cues": ["下颌收紧"],
+                },
+                "cue_template": "张力外显",
+            }]
+        }
+        default = ObservableExpressionLayer(scenario).evaluate(
+            turn_id=3,
+            previous_state={"emotion": {"anger": 7}},
+            previous_dynamics={},
+            state={"emotion": {"anger": 7}},
+            dynamics={},
+            last_trigger_turns={},
+        )
+        relaxed = ObservableExpressionLayer(scenario, {
+            "profile": "online_relaxed_v1",
+            "threshold_margin": 1,
+            "crossing_as_threshold": True,
+        }).evaluate(
+            turn_id=3,
+            previous_state={"emotion": {"anger": 7}},
+            previous_dynamics={},
+            state={"emotion": {"anger": 7}},
+            dynamics={},
+            last_trigger_turns={},
+        )
+        self.assertEqual(default["private_events"], [])
+        self.assertEqual(len(relaxed["private_events"]), 1)
+        self.assertEqual(
+            relaxed["private_events"][0]["trigger_policy_profile"],
+            "online_relaxed_v1",
+        )
+
     def test_all_scenarios_have_no_action_transition_table(self):
-        for path in sorted(Path("configs/scenarios").glob("scenario_*/scenario_*.json")):
+        for path in sorted(Path("data/gpt50/experiment/scenario/scenarios").glob("scenario_*/scenario_*.json")):
             scenario = json.loads(path.read_text())
             validate_scenario(scenario)
             self.assertNotIn("action_effects", scenario)

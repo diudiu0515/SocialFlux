@@ -144,7 +144,14 @@ class T2PairBuilder:
 
     def build(self, spec):
         try:
-            scenario = load(scenario_path(spec["ordinal"]))
+            scenario_reference = spec.get("scenario_file")
+            if scenario_reference:
+                scenario_source = (ROOT / scenario_reference).resolve()
+                if not scenario_source.is_relative_to(ROOT):
+                    raise ValueError("scenario_file must stay within the project root")
+            else:
+                scenario_source = scenario_path(spec["ordinal"])
+            scenario = load(scenario_source)
             source_path = ROOT / spec["source_rollout"]
             source = load(source_path)
         except Exception as exc:

@@ -1,5 +1,7 @@
 import json
+import io
 import unittest
+from urllib.error import HTTPError
 from unittest.mock import patch
 
 from providers.openai_compatible import OpenAICompatibleProvider
@@ -100,6 +102,37 @@ class ProviderSamplingTest(unittest.TestCase):
         provider.reset()
         self.assertEqual(provider.metrics["request_count"], 0)
         self.assertEqual(provider.metrics["failed_request_count"], 0)
+    @patch("providers.openai_compatible._next_key_slot", return_value=0)
+    @patch("providers.openai_compatible.build_opener")
+    def test_key_pool_fails_over_after_http_429(self, mocked, _slot):
+        overloaded = HTTPError(
+            "https://example.invalid/v1/chat/completions",
+            429,
+            "Too Many Requests",
+            {},
+            io.BytesIO(b"overloaded"),
+        )
+        mocked.return_value.open.side_effect = [overloaded, FakeResponse()]
+        provider = OpenAICompatibleProvider(
+            "https://example.invalid/v1/chat/completions",
+            "model",
+            api_keys=["key-a", "key-b"],
+            use_proxy=False,
+        )
+        result = provider.complete([{"role": "user", "content": "test"}])
+        self.assertEqual(result, "ok")
+        requests = [call.args[0] for call in mocked.return_value.open.call_args_list]
+        self.assertEqual(
+            [request.get_header("Authorization") for request in requests],
+            ["Bearer key-a", "Bearer key-b"],
+        )
+        self.assertEqual(provider.metrics["request_count"], 2)
+        self.assertEqual(provider.metrics["failed_request_count"], 1)
+        self.assertEqual(
+            provider.metrics["credential_slot_requests"],
+            {0: 1, 1: 1},
+        )
+
 
 
 if __name__ == "__main__":

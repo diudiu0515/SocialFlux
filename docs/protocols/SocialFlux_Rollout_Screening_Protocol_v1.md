@@ -234,7 +234,7 @@ failure、strategy change。
 
 ``` text
 same scenario
-same frozen S0 / D0
+same frozen initial state and runtime dynamics seed
 same environment configuration
 different rollout model / seed
 ```

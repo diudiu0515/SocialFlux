@@ -185,6 +185,7 @@ def audit_rollout(trajectory, judgment=None, history_evidence=None):
     saturation = _saturation_fraction(trajectory)
     oscillation = _oscillation_fraction(trajectory)
     hard_rejects = []
+    eligibility_failures = []
     if any(marker in public_text for marker in _PRIVATE_MARKERS):
         hard_rejects.append("hidden_state_leakage")
     if not structural["checks"]["actions_nonempty"] or not structural["checks"]["responses_nonempty"]:
@@ -215,6 +216,11 @@ def audit_rollout(trajectory, judgment=None, history_evidence=None):
     )
     if not ending_is_consistent:
         hard_rejects.append("meaningless_premature_ending")
+    elif (
+        ending.get("reason") == "natural_completion"
+        and turn_count < 10
+    ):
+        eligibility_failures.append("short_natural_trajectory")
     if oscillation > 0.5:
         hard_rejects.append("nonsensical_state_oscillation")
 
@@ -265,11 +271,14 @@ def audit_rollout(trajectory, judgment=None, history_evidence=None):
             threshold_failures.append("overall_score")
     passed = (
         not hard_rejects
+        and not eligibility_failures
         and not judge_errors
         and not missing
         and not threshold_failures
     )
-    definitive_quality_failure = bool(hard_rejects or threshold_failures)
+    definitive_quality_failure = bool(
+        hard_rejects or eligibility_failures or threshold_failures
+    )
     pending = (
         bool(missing or judge_errors)
         and not history_evidence_failed
@@ -285,6 +294,7 @@ def audit_rollout(trajectory, judgment=None, history_evidence=None):
         "missing_evidence": missing,
         "judge_errors": judge_errors,
         "hard_reject_reasons": hard_rejects,
+        "eligibility_failures": eligibility_failures,
         "diagnostics": {
             "turn_count": len(turns),
             "heuristic_scores": heuristic_scores,

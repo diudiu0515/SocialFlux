@@ -1,12 +1,19 @@
 # SocialFlux T2 History-Conditioned State Comparison v1
 
-Purpose: compare target-character state under two different observable histories followed by the exact same current observation O*.
+Generate a machine candidate answer for later human review; this is not ground truth.
 
-Invariant: current_observation_A must equal current_observation_B byte-for-byte in text, expression, media, and metadata. Use only history differences to infer state differences.
+Use only public History A, public History B, their exactly shared current ending, and target_spec. The judgment target is input.target_character (the environment character). Evaluated-agent actions are contextual causes, not direct evidence of the target character's state. The optional author-side Persona may condition interpretation, but it is not public evidence and must never be cited, copied, or disclosed. Never use backend state, appraisal, deltas, construction metadata, or future branches.
 
-Do not access private state, hidden intention, appraisal, deltas, source trajectory IDs, construction metadata, or future branches. For each requested state, return the schema-defined directional probability distribution, evidence IDs from A and B, causal relevance, and calibrated confidence. Use cannot_determine when evidence is insufficient.
+Select one to three candidate variables with meaningful evidence. Prefer variables supported on both sides. If only one side has citable target-character evidence, the other side's evidence/key-events may be empty, but cannot_determine must be the highest probability. Do not select variables unsupported on both sides. A smile does not prove happiness; agreement does not prove restored trust.
 
-Internally verify the shared observation is identical and evidence IDs exist. Return JSON only according to schemas/task_t2_output.schema.json.
+Evidence turn IDs must come from {{visible_turn_ids_json}}. Each target_quote must be a verbatim substring of the target character's utterance on the cited side and turn. Every four-way probability object must sum to 1.
+
+Return JSON only, with exactly this structure and no additional keys:
+
+{{output_schema_json}}
 
 T2 instance:
+
 {{payload_json}}
+
+{{private_persona_section}}

@@ -51,7 +51,7 @@ Offline T1/T2/T3 必须来自和 T4 相同的 online stateful environment 中自
 ```text
 Scenario
 ↓
-Frozen S0 / D0
+Frozen initial state and machine-validated runtime dynamics seed
 ↓
 Stateful Environment
 ↓
@@ -65,7 +65,7 @@ Complete Trajectory
 Claude/Fable 是主批次模型；GPT 小批次只做端到端设计审计。不同 provider、
 run ID 和 manifest 的数据不得混为同一批次。
 
-每个通过 Gate 1 的 scenario 从冻结的 S0/D0 只生成 1 条自然 trajectory，
+每个通过 Gate 1 的 scenario 从冻结的 initial state 和机器验证的 runtime dynamics seed 只生成 1 条自然 trajectory，
 使用 1 个记录在 provenance 中的 seed。不做三倍 rollout、best-of-N 或失败后的
 replacement seed。格式重试只修复同一次逻辑调用，不能变成重新抽一条轨迹。
 
@@ -141,9 +141,10 @@ Environment 未通过本 Gate 前，只能产生 development rollout。
 
 Gate 2 的抽样量由 active run manifest 按批次规模声明，不能在协议中写死
 20/100/200/300。E1 抽真实 transition，E2 抽完整 trajectory；
-E3/E4/E5 由脚本先在 matched checkpoint 上自动生成，真人复核实验控制、
-语义等价/社会合理性和抽样结果。E6 是自动 backbone 实验。自动结果不会写入
-`human_attestation`。
+E3/E4/E5/E7 由脚本先在 matched checkpoint 上自动生成，真人复核实验控制、
+语义等价/社会合理性和抽样结果。E6 是自动 backbone 实验。E8 使用重要节点
+视频验证状态外显一致性。自动结果不会写入 `human_attestation`。
+E9 从 private trajectory 生成变量级变化摘要，但变化速度是否合理仍由真人判断。
 
 必须验证：
 
@@ -289,7 +290,7 @@ Human 判断相对方向是否合理。
 
 这只是 validation intervention，不是 rollout strategy。
 
-E3/E4/E5 的覆盖量必须写入当前 run manifest；真人确认前，文件即使 machine
+E3/E4/E5/E7 的覆盖量必须写入当前 run manifest；真人确认前，文件即使 machine
 screen 通过也保持 pending。
 
 ---
@@ -316,6 +317,59 @@ revise state definition
 或
 remove that state
 ```
+
+---
+
+## E7 Persona-Only Intervention
+
+固定同一个 checkpoint 的 state、dynamics、history 和 current action，只改变
+persona 的 temperament、communication style、decision style、conflict style；
+姓名、角色、核心价值与边界保持不变。比较 appraisal 与 state transition 是否产生
+可解释变化。至少保留 10 个 matched checkpoints，机器结果与真人判断分开记录。
+
+---
+
+## E8 Video–State Consistency
+
+从自然 rollout 的重要节点生成视频，抽取至少 40 个跨场景节点。API 请求只包含
+公开 response 与 observable expression，不包含 private state、阈值或答案。
+先做文件结构检查，再由真人检查 state-expression alignment、persona consistency、
+temporal continuity、lip sync 和 private-state leakage。视频缺失时 Gate2 保持
+pending，但不阻塞候选 task 的生成。
+
+---
+
+## E9 Timescale Validity
+
+对每个抽中的 `trajectory × state variable` 统计：
+
+```text
+changed-turn rate
+total / maximum absolute change
+net change
+direction reversal count
+evidence turn IDs
+```
+
+审核先验为：
+
+```text
+Emotion -> fast
+Behavioral Disposition -> medium
+Relationship -> slow
+Interaction Risk -> context-dependent
+```
+
+这些先验不是硬编码更新速度。真人必须结合 action、history、persona 和外生事件判断：
+
+- 快变量是否对有证据的事件及时反应，而非无故抖动；
+- 中速变量是否需要若干相关互动才能稳定变化；
+- 慢变量是否只在累积证据或强诊断事件后显著改变；
+- risk 的跳变或累积是否与威胁强度和历史一致。
+
+至少审核 10 个变量并覆盖 fast / medium / slow；`context-dependent` 单独汇报。
+机器统计只能生成 `timescale_validity.json` 待审包，不能设置
+`human_attestation=true` 或自动通过 Gate 2。
 
 ---
 
@@ -459,7 +513,13 @@ trigger threshold
 
 普通 turn 可以保持 text-only。
 
-Video 应当是 sparse event，不要求每条 trajectory 固定数量。
+Offline 数据构造优先从每条完整 trajectory 的重要节点生成多个视频；默认每条选
+4 个节点，可按预算提高每节点 variant 数。节点优先级来自 state/dynamics 变化、
+已有 trigger、承诺/拒绝等 consequential event，以及后段 history-bearing 位置。
+
+Online T4 使用独立的 runtime trigger policy。当前 `online_relaxed_v1` 将绝对阈值
+与变化阈值各放宽 1、cooldown 设为 2，并允许 crossing 条件持续满足时按 threshold
+触发；仍坚持每轮最多一个最高优先级事件，且普通 turn 可以保持 text-only。
 
 ---
 
@@ -505,6 +565,10 @@ Naturalness >= 4
 
 Gate 3 只做 pass/reject，不排名、不补抽、不在同一 scenario 内择优。通过后该条
 trajectory 成为 canonical；全局 duplicate 检查仍可将其拒绝。
+
+当前活跃 Claude150 批次使用一个质量审核模型对全量 trajectory 执行上述六维和
+hard-reject 检查，随后由人工抽检；不再要求多模型 Gate3 主筛。模型结论只是筛选
+建议，不替代人工验收。
 
 ---
 

@@ -1,0 +1,25 @@
+{
+  "format": "socialflux_multimodal_generation_v1",
+  "prompt_id": "talking_head_generation_v1",
+  "offline": {
+    "selection": "trajectory_importance_v1",
+    "important_nodes_per_trajectory": 4,
+    "videos_per_node": 1,
+    "min_turn_gap": 2,
+    "duration_seconds": 5
+  },
+  "online": {
+    "profile": "online_relaxed_v1",
+    "threshold_margin": 1,
+    "change_threshold_margin": 1,
+    "cooldown_turns": 2,
+    "crossing_as_threshold": true,
+    "max_events_per_turn": 1
+  },
+  "gate2": {
+    "video_review_sample_count": 40,
+    "minimum_generated_video_count": 40,
+    "require_llm_review": false,
+    "require_human_attestation": true
+  }
+}

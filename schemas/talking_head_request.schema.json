@@ -4,12 +4,16 @@
   "title": "Sparse talking-head request",
   "type": "object",
   "required": [
+    "prompt_id",
     "prompt",
     "duration_seconds",
     "continuity_reference",
     "safety_check"
   ],
   "properties": {
+    "prompt_id": {
+      "const": "talking_head_generation_v1"
+    },
     "prompt": {
       "type": "string",
       "minLength": 1

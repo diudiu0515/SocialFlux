@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 
+from prompts.loader import render_prompt
 from providers.structured import complete_json
 from scripts.t2_common import call_count
 
@@ -32,19 +33,10 @@ def branch_prompt(spec, scenario, shared_prefix, source_tail, shared_ending):
         "protected_facts": spec["protected_facts"],
         "shared_ending": shared_ending,
     }
-    return (
-        "为 SocialFlux T2 一次性编写完整 History B 分叉段。它与 A 共享人物、背景、分叉前历史和"
-        "关键事实，只改写指定的关键经历。两个人都必须根据前文自然回应；允许克制、误解、澄清、"
-        "拒绝或有限让步。不要逐轮套用固定节奏，不要为了制造差异新增制度、证据、权力或已经完成的"
-        "行动，不要替对方执行动作。提案、承诺、行为报告和可核验结果必须区分。"
-        "分叉段不跨公开时间/事件边界，视为同一次接触；不要让新提出的未来期限在相邻轮次自动到达，"
-        "也不要把尚未到期的承诺写成已经履约或违约。"
-        "最后给定的 shared ending 在 A/B 两边都要自然，但不要提前复述 ending。只输出指定 JSON，"
-        "不输出隐藏状态或"
-        "构造说明到人物台词中。\n输出结构：\n"
-        + json.dumps(schema, ensure_ascii=False)
-        + "\n材料：\n"
-        + json.dumps(payload, ensure_ascii=False, sort_keys=True)
+    return render_prompt(
+        "task_t2_controlled_branch_v1",
+        payload,
+        output_schema_json=json.dumps(schema, ensure_ascii=False),
     )
 
 

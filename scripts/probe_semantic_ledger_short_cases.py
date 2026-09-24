@@ -128,7 +128,7 @@ def main():
         scenario,
         provider,
         {**config["environment"].get("sampling", {}), "temperature": 0},
-        prompt_id="environment_appraisal_v9",
+        prompt_id="environment_appraisal_v11",
     )
     selected_cases = [
         case for case in CASES
@@ -199,7 +199,7 @@ def main():
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "quality_version": "r3_semantic_ledger_v29",
         "review_status": "automatic_model_probe_not_human_validation",
-        "prompt_id": "environment_appraisal_v9",
+        "prompt_id": "environment_appraisal_v11",
         "model": config["environment"]["provider"]["model"],
         "case_count": len(rows),
         "passed_case_count": passed,

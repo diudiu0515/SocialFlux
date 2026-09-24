@@ -1,4 +1,4 @@
-"""Validate and freeze the scenario's initial latent state and dynamics."""
+"""Validate the scenario's initial latent state and runtime dynamics seed."""
 
 from copy import deepcopy
 
@@ -24,7 +24,7 @@ def _validate_group(value, path):
 
 
 def freeze_initialization(scenario):
-    """Return a deep-copied S0/D0 shared by every policy rollout."""
+    """Return the immutable initial state and runtime dynamics seed."""
     state = scenario.get("initial_state")
     dynamics = scenario.get("initial_dynamics", {})
     if not isinstance(state, dict) or not state:
@@ -51,4 +51,7 @@ def freeze_initialization(scenario):
                     f"v2 initial_state variables do not match selected family {family}"
                 )
         validate_v2_dynamics(dynamics)
-    return {"initial_state": deepcopy(state), "initial_dynamics": deepcopy(dynamics)}
+    return {
+        "initial_state": deepcopy(state),
+        "initial_dynamics": deepcopy(dynamics),
+    }

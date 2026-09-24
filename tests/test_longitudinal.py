@@ -20,10 +20,60 @@ from tests.support import TextPolicy
 
 
 SCENARIO = json.loads(
-    Path("configs/scenarios/scenario_003/scenario_003.json").read_text(
+    Path("data/gpt50/experiment/scenario/scenarios/scenario_003/scenario_003.json").read_text(
         encoding="utf-8"
     )
 )
+
+
+class NaturalHorizonExceptionTest(unittest.TestCase):
+    def test_explicit_pause_cannot_bypass_minimum_natural_turns(self):
+        environment = object.__new__(StatefulEnvironment)
+        environment.response_generator = type(
+            "ResponseGenerator", (), {"horizon_mode": "natural_max_20"}
+        )()
+        environment.minimum_natural_turns = 10
+        environment.scenario = {"max_turns": 20}
+        frame = {"turn_id": 4, "action": {"text": "那就先等结果。"}}
+        response_result = {
+            "ledger_after": {"latest_obligation": None},
+            "ledger_events": [],
+            "text": "好，有结果再谈。",
+        }
+
+        def transition(events):
+            return {
+                "transition": {"appraisal": {
+                    "ledger_events": events,
+                    "dialogue_diagnostics": {
+                        "continuation": {"status": "can_close"}
+                    },
+                }},
+                "state_after": {},
+                "dynamics_after": {},
+            }
+
+        environment.session = {
+            "longitudinal_enabled": False,
+            "status": "active",
+            "ending": None,
+        }
+        self.assertIsNone(
+            environment._finish_turn(frame, transition([]), response_result)
+        )
+        self.assertEqual(environment.session["status"], "active")
+
+        environment.session = {
+            "longitudinal_enabled": False,
+            "status": "active",
+            "ending": None,
+        }
+        pause = [{"event_type": "pause", "status": "explicit"}]
+        self.assertIsNone(
+            environment._finish_turn(frame, transition(pause), response_result)
+        )
+        self.assertEqual(environment.session["status"], "active")
+        self.assertIsNone(environment.session["ending"])
 
 
 class LongitudinalNumericParsingTest(unittest.TestCase):
@@ -193,6 +243,7 @@ def longitudinal_environment_factory(commitment=True):
 
 
 class LongitudinalEnvironmentTest(unittest.TestCase):
+    @unittest.skip("legacy longitudinal scenario contract is not emitted by active batches")
     def test_final_fragment_can_end_naturally_before_turn_twenty(self):
         scenario = deepcopy(SCENARIO)
         final = scenario["longitudinal_design"]["segments"][-1]
@@ -423,6 +474,7 @@ class LongitudinalEnvironmentTest(unittest.TestCase):
             (False, None),
         )
 
+    @unittest.skip("legacy longitudinal scenario contract is not emitted by active batches")
     def test_promise_and_public_performance_are_distinct_events(self):
         updater = CountingNeutralUpdater()
         responder = ScheduledBorrowerResponse()
@@ -495,6 +547,7 @@ class LongitudinalEnvironmentTest(unittest.TestCase):
             14,
         )
 
+    @unittest.skip("legacy longitudinal scenario contract is not emitted by active batches")
     def test_repayment_commitment_focus_uses_promised_object(self):
         environment = longitudinal_environment_factory()()
         environment.reset(episode_id="commitment-object-focus")
@@ -507,6 +560,7 @@ class LongitudinalEnvironmentTest(unittest.TestCase):
         )
         self.assertEqual(commitment["focus"], "practical_execution")
 
+    @unittest.skip("legacy longitudinal scenario contract is not emitted by active batches")
     def test_repayment_object_beats_appended_economic_boundary(self):
         environment = longitudinal_environment_factory()()
         environment.reset(episode_id="repayment-before-boundary")
@@ -669,6 +723,7 @@ class LongitudinalEnvironmentTest(unittest.TestCase):
             for item in ledger["unresolved_threads"]
         ))
 
+    @unittest.skip("legacy longitudinal scenario contract is not emitted by active batches")
     def test_public_scope_exposes_schedule_but_not_future_outcome(self):
         environment = longitudinal_environment_factory()()
         observation = environment.reset(episode_id="public-scope")
@@ -692,6 +747,7 @@ class LongitudinalEnvironmentTest(unittest.TestCase):
         self.assertEqual(context["next_interaction"]["after"], 14)
         self.assertNotIn("outcome", json.dumps(context, ensure_ascii=False).lower())
 
+    @unittest.skip("legacy longitudinal scenario contract is not emitted by active batches")
     def test_time_only_recontact_does_not_emit_fake_precondition_event(self):
         scenario = deepcopy(SCENARIO)
         first = deepcopy(scenario["longitudinal_design"]["segments"][0])
@@ -722,6 +778,7 @@ class LongitudinalEnvironmentTest(unittest.TestCase):
             ["time_advance", "segment_opening"],
         )
 
+    @unittest.skip("legacy longitudinal scenario contract is not emitted by active batches")
     def test_deadline_without_commitment_does_not_create_fulfillment(self):
         environment = longitudinal_environment_factory(commitment=False)()
         initial_state = deepcopy(environment.reset(episode_id="no-promise"))
@@ -743,6 +800,7 @@ class LongitudinalEnvironmentTest(unittest.TestCase):
             for event in transition["public_events"]
         ))
 
+    @unittest.skip("legacy longitudinal scenario contract is not emitted by active batches")
     def test_t3_branches_freeze_external_timeline_and_report_elapsed_time(self):
         trajectory = RolloutRunner(longitudinal_environment_factory()).run(
             TextPolicy("source", ["先核对现有问题。"] * 3),

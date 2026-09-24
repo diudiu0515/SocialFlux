@@ -26,7 +26,7 @@ the other dimensions must each be at least 3 and the overall mean at least 4.0.
 ## 0.5 Environment validity and freeze (blocking prerequisite)
 
 Use the development trajectories—not future formal trajectories—to assemble
-the six independent evidence files under `data/formal/environment/`:
+the nine independent evidence files under `data/formal/environment/`:
 
 - `state_transition_agreement.json`: the manifest-declared stratified transition sample, one named human;
   collapsed direction agreement must be at least 0.70.
@@ -40,6 +40,12 @@ the six independent evidence files under `data/formal/environment/`:
   alternatives and human validity judgment.
 - `backbone_sensitivity.json`: matched checkpoint/action replayed by different
   environment model families.
+- `persona_intervention.json`: same state/history/action with a persona-only
+  intervention and a human interpretation of the resulting difference.
+- `video_state_consistency.json`: important-node video safety plus human review
+  of expression/state fit, continuity, identity and lip sync.
+- `timescale_validity.json`: human-reviewed fast/medium/slow state-variable
+  change-rate evidence, with consequence risk reviewed as context-dependent.
 
 Every human evidence record includes unique reviewer IDs, a timezone-bearing
 UTC timestamp and `human_attestation=true`. The automated backbone experiment
@@ -55,11 +61,11 @@ python scripts/run_backbone_sensitivity.py \
 The manifest records the sample counts and deterministic selection seed; the
 protocol does not hard-code a catalog size. The first command does not approve
 Gate 2 by itself. E1/E2 and the human parts
-of E3–E5 remain real-reviewer work. Formal rollout refuses to start unless all
+of E3–E5 and E7–E9 remain real-reviewer work. Formal rollout refuses to start unless all
 Gate 1 records pass. Gate 2 is checked before canonical selection by
 `python -m pipeline gate3`; it never mutates pending evidence into a pass.
 
-Generate the controlled E3/E4/E5 experiments and all browser-facing packets:
+Generate the controlled E3/E4/E5/E7 experiments and all browser-facing packets:
 
 ```bash
 python scripts/run_environment_interventions.py --resume
@@ -68,8 +74,9 @@ python scripts/prepare_human_review_workspace.py
 
 The first script fixes the checkpoint/persona/state/action controls and writes
 machine screens incrementally. One named Gate 2 reviewer still checks E1/E2,
-paraphrase equivalence, history-intervention validity and counterfactual action
-plausibility before setting `human_attestation=true`.
+paraphrase equivalence, history-intervention validity, counterfactual action
+plausibility, persona-only sensitivity, video-state consistency and timescale
+validity before setting `human_attestation=true`.
 
 ## 1. Validate the active routed runtime
 

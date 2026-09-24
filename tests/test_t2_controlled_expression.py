@@ -13,7 +13,7 @@ from tests.support import ContextualTestUpdater
 
 
 SCENARIO = json.loads(
-    Path("configs/scenarios/scenario_001/scenario_001.json").read_text(
+    Path("data/gpt50/experiment/scenario/scenarios/scenario_001/scenario_001.json").read_text(
         encoding="utf-8"
     )
 )
@@ -29,7 +29,7 @@ BEHAVIOR = {
 
 class ExpressionResponseDouble:
     horizon_mode = "fixed_20"
-    provenance = {"provider": "test-double", "prompt_id": "environment_response_v24"}
+    provenance = {"provider": "test-double", "prompt_id": "environment_response_v25"}
 
     def generate(self, context):
         controlled = context["controlled_observation"]
@@ -38,6 +38,8 @@ class ExpressionResponseDouble:
             "expression_intent": "在不暴露保留意见的情况下维持当前合作。",
             "observable_behavior": deepcopy(controlled["observable_expression"]),
             "ledger_events": [],
+            "consequential_claims": [],
+            "reply_obligation": None,
             "ledger_event_normalizations": [],
         }
 
@@ -54,7 +56,7 @@ class T2ControlledExpressionTest(unittest.TestCase):
             "controlled_observation": controlled,
         }
 
-    def test_v24_keeps_intent_private_and_copies_controlled_ending_exactly(self):
+    def test_v25_keeps_intent_private_and_copies_controlled_ending_exactly(self):
         controlled = {
             "current_response": "好，我们先按这个安排推进。",
             "observable_expression": deepcopy(BEHAVIOR),
@@ -62,7 +64,7 @@ class T2ControlledExpressionTest(unittest.TestCase):
         }
         generator = ModelResponseGenerator(
             None,
-            prompt_id="environment_response_v24",
+            prompt_id="environment_response_v25",
             validation_profile="hard_only",
             horizon_mode="natural_max_20",
         )
@@ -72,6 +74,8 @@ class T2ControlledExpressionTest(unittest.TestCase):
                 "expression_intent": "为维持合作而克制尚未解决的不满。",
                 "observable_behavior": deepcopy(BEHAVIOR),
                 "ledger_events": [],
+            "consequential_claims": [],
+            "reply_obligation": None,
             },
             self._context(controlled),
         )
@@ -79,7 +83,7 @@ class T2ControlledExpressionTest(unittest.TestCase):
         self.assertEqual(normalized["observable_behavior"], BEHAVIOR)
         self.assertIn("克制", normalized["expression_intent"])
 
-    def test_v24_deterministically_binds_controlled_visible_fields(self):
+    def test_v25_deterministically_binds_controlled_visible_fields(self):
         controlled = {
             "current_response": "好，我们先按这个安排推进。",
             "observable_expression": deepcopy(BEHAVIOR),
@@ -89,7 +93,7 @@ class T2ControlledExpressionTest(unittest.TestCase):
         changed["prosody"] = "语气轻快"
         generator = ModelResponseGenerator(
             None,
-            prompt_id="environment_response_v24",
+            prompt_id="environment_response_v25",
             validation_profile="hard_only",
             horizon_mode="natural_max_20",
         )
@@ -99,6 +103,8 @@ class T2ControlledExpressionTest(unittest.TestCase):
                 "expression_intent": "真诚接受当前安排。",
                 "observable_behavior": changed,
                 "ledger_events": [],
+            "consequential_claims": [],
+            "reply_obligation": None,
             },
             self._context(controlled),
         )
@@ -143,7 +149,7 @@ class T2ControlledExpressionTest(unittest.TestCase):
     def test_hard_only_rejects_exact_cross_speaker_copy(self):
         generator = ModelResponseGenerator(
             None,
-            prompt_id="environment_response_v24",
+            prompt_id="environment_response_v25",
             validation_profile="hard_only",
             horizon_mode="natural_max_20",
         )

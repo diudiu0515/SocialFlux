@@ -78,7 +78,7 @@ def gate1(scenario, row):
             "hard-constraint semantic review",
             "six 1-5 quality ratings",
             "source/provenance verification where applicable",
-            "S0/D0 freeze",
+            "initial-state freeze and runtime dynamics seed validation",
         ],
     }
 

@@ -63,6 +63,18 @@ def _semantic_events_of_type(events, event_type, statuses=None):
         and (not allowed or event["status"] in allowed)
     ]
 
+def _record_semantic_proposals(result, *, turn_id, speaker, events):
+    proposals = _semantic_events_of_type(events, "proposal")
+    for index, event in enumerate(proposals, start=1):
+        entry = _entry(
+            turn_id, speaker, "proposal", event["evidence_span"],
+            status=event["status"],
+        )
+        if len(proposals) > 1:
+            entry["id"] = f'{entry["id"]}:{index}'
+        _append_unique(result["active_proposals"], entry)
+
+
 
 def _extract_money_amounts(text):
     amounts = []
@@ -749,7 +761,18 @@ def record_evaluated_action(
         else social_act in _UNRESOLVED_ACTS or _creates_reply_obligation(text)
     )
     resolved = _resolve_owned_obligation(result, "evaluated_agent")
-    if _response_disposition(text) == "direct":
+    ledger_resolutions = appraisal.get("ledger_resolutions") or []
+    if ledger_resolutions:
+        for disposition in ledger_resolutions:
+            _resolve_proposal_by_id(
+                result,
+                disposition["target_id"],
+                resolver="evaluated_agent",
+                turn_id=turn_id,
+                evidence=disposition["evidence_span"],
+                resolution_status=disposition["resolution"],
+            )
+    elif _response_disposition(text) == "direct":
         _resolve_latest_counterparty_proposal(
             result,
             "environment_agent",
@@ -786,11 +809,9 @@ def record_evaluated_action(
         _record_reported_claims(
             result, turn_id=turn_id, speaker="evaluated_agent", events=events
         )
-        for event in _semantic_events_of_type(events, "proposal"):
-            _append_unique(
-                result["active_proposals"],
-                _entry(turn_id, "evaluated_agent", "proposal", event["evidence_span"], status=event["status"]),
-            )
+        _record_semantic_proposals(
+            result, turn_id=turn_id, speaker="evaluated_agent", events=events
+        )
         performed = sum(
             _record_semantic_payment_report(
                 result, speaker="evaluated_agent", event=event
@@ -910,6 +931,35 @@ def _proposal_resolution_status(text):
     return "addressed_uncertain"
 
 
+def _resolve_proposal_by_id(
+    result, target_id, *, resolver, turn_id, evidence, resolution_status
+):
+    selected = next(
+        (
+            item for item in result.get("active_proposals", [])
+            if item.get("id") == target_id
+            and item.get("status") in {"open", "tentative"}
+        ),
+        None,
+    )
+    if selected is None:
+        return 0
+    resolution = {
+        **deepcopy(selected),
+        "resolution_status": resolution_status,
+        "resolved_by": resolver,
+        "resolved_turn_id": f"t{turn_id}",
+        "resolution_evidence": str(evidence).strip(),
+    }
+    result.setdefault("proposal_resolutions", []).append(resolution)
+    del result["proposal_resolutions"][:-8]
+    result["active_proposals"] = [
+        item for item in result.get("active_proposals", [])
+        if item.get("id") != selected.get("id")
+    ]
+    return 1
+
+
 def _resolve_latest_counterparty_proposal(
     result, counterparty, *, resolver, turn_id, evidence
 ):
@@ -1004,11 +1054,9 @@ def record_environment_response(
         _record_reported_claims(
             result, turn_id=turn_id, speaker="environment_agent", events=events
         )
-        for event in _semantic_events_of_type(events, "proposal"):
-            _append_unique(
-                result["active_proposals"],
-                _entry(turn_id, "environment_agent", "proposal", event["evidence_span"], status=event["status"]),
-            )
+        _record_semantic_proposals(
+            result, turn_id=turn_id, speaker="environment_agent", events=events
+        )
         performed = sum(
             _record_semantic_payment_report(
                 result, speaker="environment_agent", event=event

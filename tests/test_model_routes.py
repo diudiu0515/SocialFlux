@@ -5,6 +5,7 @@ import unittest
 from unittest.mock import patch
 
 from providers.factory import build_provider
+from providers.failover import FailoverProvider
 from providers.model_routes import ModelRoutes
 from evaluation.review_configuration import load_review_config
 from evaluation.t4_configuration import load_t4_config
@@ -140,6 +141,59 @@ class ModelRoutesTest(unittest.TestCase):
                 provider = build_provider(config)
             self.assertEqual(provider.api_key, "test-file-key")
             self.assertNotIn("api_key_file", provider.provenance)
+    def test_factory_builds_cross_protocol_failover_without_exposing_secrets(self):
+        with tempfile.TemporaryDirectory() as directory:
+            secret_path = Path(directory) / "api_key"
+            secret_path.write_text("test-file-key\n", encoding="utf-8")
+            config = {
+                "provider": "failover",
+                "model": "model",
+                "candidates": [
+                    {
+                        "provider": "openai_compatible",
+                        "endpoint": "https://example.invalid/v1/chat/completions",
+                        "api_key_file": str(secret_path),
+                        "model": "model",
+                    },
+                    {
+                        "provider": "anthropic",
+                        "endpoint": "https://example.invalid/v1/messages",
+                        "api_key_file": str(secret_path),
+                        "model": "model",
+                    },
+                ],
+            }
+            provider = build_provider(config)
+        self.assertIsInstance(provider, FailoverProvider)
+        self.assertEqual(len(provider.candidates), 2)
+        self.assertNotIn("api_key", str(provider.provenance))
+
+    def test_model_routes_accept_cross_protocol_failover(self):
+        document = {
+            "format": "socialflux_model_routes_v1",
+            "provider_defaults": {
+                "provider": "failover",
+                "model": "model",
+                "candidates": [
+                    {
+                        "provider": "openai_compatible",
+                        "endpoint": "https://example.invalid/v1/chat/completions",
+                        "api_key_file": "/private/key-a",
+                        "model": "model",
+                    },
+                    {
+                        "provider": "anthropic",
+                        "endpoint": "https://example.invalid/v1/messages",
+                        "api_key_file": "/private/key-b",
+                        "model": "model",
+                    },
+                ],
+            },
+            "routes": {"policy": {"max_tokens": 100}},
+        }
+        routes = ModelRoutes(document)
+        self.assertEqual(routes.provider_config("policy")["provider"], "failover")
+
 
 
 if __name__ == "__main__":

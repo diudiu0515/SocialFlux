@@ -2,13 +2,15 @@
 
 SocialFlux 是一个长期社会互动推理 benchmark pipeline。当前实现用同一套私有状态环境生成自然模型轨迹、构建 T1/T2/T3 离线任务，并以同一 runtime 执行 T4 在线评测。
 
-当前不保留旧 300 场景为活跃 catalog。旧 Scale300 与 Qwen 生成产物保存在本地忽略归档；旧 Talking Head 产物、本地模型和本地生成工具已永久删除。媒体协议、触发规则、审核页面与接入框架继续保留，等待新的外部 API。现在先用 GPT 做小规模端到端设计审计；闭环通过后，再扩展 Claude 主批次。无论模型和批次大小，每个通过 Gate 1 的场景只生成 1 条自然 rollout，不做 3 seed 或 best-of-N。
+当前不保留旧 300 场景为活跃 catalog。旧 Scale300、Qwen 生成产物、旧 Talking Head 产物、本地模型和本地生成工具均已永久删除，不进入当前数据路径。现在用 GPT 做小规模人工设计核验，同时执行 Claude150 全量主批次。无论模型和批次大小，每个场景只生成 1 条自然 rollout，不做 3 seed 或 best-of-N。
+
+当前 GPT50 / Claude150 的阶段契约、断点规则、四任务完整性和 Gate2 并行策略见 [`docs/operations/ACTIVE_BATCH_PIPELINE.md`](docs/operations/ACTIVE_BATCH_PIPELINE.md)。
 
 ## Pipeline
 
 ```text
 N 个 Scenario 候选
-→ Gate 1：Scenario / S0-D0 人工冻结
+→ Gate 1：Scenario / initial state 人工冻结；runtime dynamics seed 机器校验
 → 每场景 1 条自然 rollout
     Policy 自由文本 action
     → Appraisal LLM
@@ -16,7 +18,7 @@ N 个 Scenario 候选
     → Response LLM
     → Ledger / 下一轮 observation
 → Gate 2：Environment validity
-→ Gate 3：Trajectory 准入或淘汰
+→ Gate 3：单模型全量筛选 Trajectory，人工抽检
 → T1 / T2 / T3 构建；T4 在线评测
 → Gate 4：任务实例与答案抽查
 ```
@@ -76,9 +78,8 @@ python scripts/verify_gate_md.py
 - `rollout/`、`offline/`、`tasks/`：自然轨迹与 T1/T2/T3/T4。
 - `evaluation/`、`annotation/`：质量门与人工标注合同。
 - `prompts/`、`schemas/`：版本化 prompt 与数据合同。
-- `configs/scale300_v1/CLAUDE_AUTHORING.md`：保留的 Claude 场景创作合同；不代表存在活跃 300 场景。
 - `web/`：Gate、任务、示例和可选媒体审核页面。
-- `scripts/*talking_head*.py`、媒体 prompt/schema 与网页路由：保留的 Talking Head 接入及审核框架；当前没有素材或本地生成引擎，等待外部 API。
+- `scripts/prepare_multimodal_video_queue.py` 与 `scripts/finalize_multimodal_video_queue.py`：准备重要节点视频 API 请求并登记生成结果；当前等待外部视频 API 配置。
 - `archives/`：本地可恢复历史归档，默认不进入 Git。
 
 ## Git 提交纪律

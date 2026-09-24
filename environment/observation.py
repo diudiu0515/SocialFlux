@@ -25,9 +25,45 @@ PUBLIC_OBSERVATION_FIELDS = (
     "status",
 )
 
+PUBLIC_EVALUATED_PERSONA_FIELDS = (
+    "name",
+    "role",
+    "core_values",
+    "temperament",
+    "communication_style",
+    "decision_style",
+    "conflict_style",
+    "boundaries",
+)
+
+PUBLIC_EVALUATED_ROLE_FIELDS = (
+    "character_id", "name", "role", "explicit_goal",
+)
+
+
+def build_public_evaluated_role(evaluated):
+    """Whitelist evaluated-agent information visible across the interaction."""
+    if not isinstance(evaluated, dict):
+        return {}
+    role = {
+        key: deepcopy(evaluated[key])
+        for key in PUBLIC_EVALUATED_ROLE_FIELDS
+        if key in evaluated
+    }
+    own_persona = evaluated.get("persona")
+    if isinstance(own_persona, dict):
+        role["persona"] = {
+            key: deepcopy(own_persona[key])
+            for key in PUBLIC_EVALUATED_PERSONA_FIELDS
+            if key in own_persona
+        }
+    return role
+
+
 PRIVATE_AUTHOR_FIELDS = (
     "environment_agent.hidden_intention",
     "environment_agent.persona stable personality",
+    "evaluated_agent_role.hidden_intention (author-side only, if present)",
     "initial_state/current state",
     "initial_dynamics/current dynamics",
     "appraisal and state deltas",
@@ -40,11 +76,9 @@ def build_policy_observation(scenario, session):
     """Return a defensive copy of policy-visible information only."""
     agent = scenario["environment_agent"]
     persona = agent.get("persona", {})
-    evaluated = scenario.get("evaluated_agent_role", {})
-    role = {
-        key: deepcopy(evaluated.get(key, ""))
-        for key in ("character_id", "name", "role", "explicit_goal")
-    }
+    role = build_public_evaluated_role(
+        scenario.get("evaluated_agent_role", {})
+    )
     return {
         "scenario_id": scenario["scenario_id"],
         "role": role,

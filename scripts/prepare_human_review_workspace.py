@@ -368,6 +368,9 @@ def main():
         ("E4", "paraphrase_robustness.json"),
         ("E5", "local_counterfactual.json"),
         ("E6", "backbone_sensitivity.json"),
+        ("E7", "persona_intervention.json"),
+        ("E8", "video_state_consistency.json"),
+        ("E9", "timescale_validity.json"),
     ):
         gate2[experiment_id] = read_json(args.environment_root / filename, {
             "record": {"review_status": "not_generated", "human_attestation": False},
@@ -404,7 +407,7 @@ def main():
             "videos": len(media.get("assets", [])),
         },
         "gate1": {
-            "instructions": "One reviewer checks every scenario and freezes S0/D0; signed hash-bound approval remains required.",
+            "instructions": "One reviewer checks every scenario and freezes its initial state; the runtime dynamics seed is machine-validated and not separately human-frozen. Signed hash-bound approval remains required.",
             "records": scenario_reviews.get("records", []),
         },
         "gate2": gate2,

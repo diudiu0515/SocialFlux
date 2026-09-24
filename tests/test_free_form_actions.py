@@ -11,7 +11,7 @@ class FreeFormActionTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.scenario = json.loads(
-            Path("configs/scenarios/scenario_001/scenario_001.json").read_text(encoding="utf-8")
+            Path("data/gpt50/experiment/scenario/scenarios/scenario_001/scenario_001.json").read_text(encoding="utf-8")
         )
 
     def test_arbitrary_text_is_preserved_without_taxonomy(self):

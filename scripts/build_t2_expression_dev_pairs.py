@@ -631,8 +631,8 @@ def build_one(spec, model_routes):
     pair["artifact_version"] = {
         "builder": "scripts/build_t2_expression_dev_pairs.py",
         "builder_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-        "appraisal_prompt": "environment_appraisal_v10",
-        "response_prompt": "environment_response_v24",
+        "appraisal_prompt": "environment_appraisal_v11",
+        "response_prompt": "environment_response_v25",
         "answer_schema": "schemas/task_t2_output_v2.schema.json",
         "model_routes_path": str(model_routes.source_path),
         "model_routes_sha256": model_routes.sha256,

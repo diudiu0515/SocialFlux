@@ -53,7 +53,9 @@ def main():
     parser.add_argument("--spec-index", type=int)
     parser.add_argument("--all", action="store_true")
     parser.add_argument("--resume-failed", action="store_true")
+    parser.add_argument("--resume-incomplete", action="store_true")
     parser.add_argument("--skip-existing", action="store_true")
+    parser.add_argument("--require-complete", action="store_true")
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--request-budget", type=int, default=6000)
     parser.add_argument("--summarize", action="store_true")
@@ -79,8 +81,9 @@ def main():
     indexes = list(range(len(specs))) if args.all else [args.spec_index]
     if any(index < 0 or index >= len(specs) for index in indexes):
         parser.error("spec index out of range")
-    if args.resume_failed and args.skip_existing:
-        parser.error("resume-failed and skip-existing are mutually exclusive")
+    resume_modes = (args.resume_failed, args.resume_incomplete, args.skip_existing)
+    if sum(bool(value) for value in resume_modes) > 1:
+        parser.error("resume modes are mutually exclusive")
     retry_ceiling = len(indexes) * 40
     if retry_ceiling > args.request_budget:
         parser.error(
@@ -96,8 +99,8 @@ def main():
     )
     def build_index(index):
         prior_path = run_dir / "results" / result_name(index, specs[index])
-        if args.resume_failed:
-            if not prior_path.exists():
+        if args.resume_failed or (args.resume_incomplete and prior_path.exists()):
+            if args.resume_failed and not prior_path.exists():
                 raise ValueError(f"no saved result to resume: {prior_path}")
             return builder.resume(specs[index], load(prior_path))
         return builder.build(specs[index])
@@ -110,6 +113,10 @@ def main():
             prior_path = run_dir / "results" / result_name(index, specs[index])
             if args.skip_existing and prior_path.exists():
                 continue
+            if args.resume_incomplete and prior_path.exists():
+                prior = load(prior_path)
+                if prior.get("status") == "completed":
+                    continue
             futures[executor.submit(build_index, index)] = index
         for future in as_completed(futures):
             index = futures[future]
@@ -134,7 +141,10 @@ def main():
         raise ValueError(
             f"actual requests {request_count} exceeded budget {args.request_budget}"
         )
-    print(json.dumps(summarize_run(run_dir), ensure_ascii=False, indent=2))
+    summary = summarize_run(run_dir)
+    print(json.dumps(summary, ensure_ascii=False, indent=2))
+    if args.require_complete and summary["status_counts"].get("completed", 0) != len(specs):
+        raise SystemExit(2)
 
 
 if __name__ == "__main__":

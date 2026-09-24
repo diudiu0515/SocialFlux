@@ -1,155 +1,33 @@
-# GPT-50 single-rollout experiment
+# GPT50 实验配置
 
-This development experiment is isolated from the active Fable route. It uses
-`gpt-6-astra` to author 50 fresh candidates and, after human Gate 1, produces
-exactly one logical natural rollout per approved scenario. Astra authors the
-policy actions; Claude Fable supplies the reference appraisal and response
-environment. This role partition tests the GPT policy and downstream task
-design without substituting an unstable environment for the primary system.
+GPT50 是独立的 50 场景试验分支。场景由 GPT-6 Astra 构建；它不读取 Claude150 场景池。
 
-The GPT route never reads the Claude credential. It resolves only
-`AUTODL_GPT_API_KEY` or the repository-external mode-600 file
-`/root/.config/socialflux/autodl_gpt_api_key`; the active Claude route keeps
-using `AUTODL_API_KEY` or `/root/.config/socialflux/autodl_api_key`.
+`rollout.json` 是唯一 rollout 合同：
 
-The Astra route uses AutoDL's OpenAI-compatible streaming Chat Completions at
-`https://www.autodl.art/api/v1/chat/completions`. The provider aggregates SSE
-chunks into one assistant payload before schema validation. A live minimal
-probe returned complete content and usage, and full scenario stages avoided the
-non-streaming read timeouts observed during this audit.
+- GPT-6 Astra 生成 evaluated-participant action；
+- 唯一共享 Environment 由 Claude Fable appraisal、确定性 Python 状态更新、Claude Fable response 组成；
+- 每个场景一个 policy slot、一次正式生成机会、至多一条正式 trajectory；
+- trajectory 必须在第 10–20 轮自然结束；
+- 不做 best-of-N，不用失败轨迹触发替代采样。
 
-The route explicitly uses low reasoning effort. A minimal JSON probe confirmed
-that this endpoint accepts the parameter; without it, the first normalization
-smoke spent 360 seconds without returning a response. This is an experimental
-latency control, while schema validation and human Gate 1 remain the quality
-controls.
+`model_routes.astra.json` 用于 GPT 场景构建以及 rollout 后的 GPT 分支 T1–T4。`model_routes.hybrid.json` 只用于 rollout：policy 路由读取 GPT 凭据，appraisal/response 路由读取 Claude 凭据。两张路由表共享 prompt 家族，但不改变模型职责。
 
-Rollout role budgets are sized to their contracts: policy action 250 tokens,
-structured appraisal 900, and response 300. Larger generic caps caused the
-Astra endpoint to spend minutes before the first logical turn, even though
-measured historical outputs are far smaller. Route-defined appraisal budgets
-take precedence over the legacy 2,800-token fallback; the fallback applies only
-when neither sampling nor the provider route defines a positive output budget.
-
-Scenario authoring uses a 700–1,000-word dossier rather than a screenplay. The
-quality request has an exact six-field JSON contract. These bounds are part of
-the experiment: verbosity and schema-repair loops are counted as failures, not
-hidden by higher concurrency.
-
-The single-rollout rule is strict:
-
-- one policy slot and one seed per scenario;
-- `--retry-limit 1`, so a rejected trajectory is evidence rather than a request
-  for a replacement sample;
-- provider transport recovery and schema correction remain technical retries,
-  but never create an alternative trajectory for selection;
-- Claude transport recovery may resend the same failed request up to four times;
-  after exhaustion, `--resume` retains the failed first pass and cannot create
-  a replacement policy sample;
-- Gate 3 is pass/fail on the sole trajectory; there is no canonical best-of-N
-  selection;
-- task yield and scores always report the original Gate-1-approved denominator,
-  including scenarios whose only rollout failed.
-
-## Scale decision
-
-This 50-scenario GPT run is a pipeline design audit, not the primary dataset.
-It must exercise scenario authoring, human Gate 1, the sole rollout, Gates 2–3,
-all T1/T2/T3 builders, T4, leakage checks, scoring, and a multi-model review.
-Its report must list schema failures, retries, rejected trajectories, task yield,
-ambiguous labels, leakage, and judge disagreement against the original
-Gate-1-approved denominator. GPT artifacts are not silently promoted into the
-Claude corpus.
-
-Only after the audit is reviewed do we freeze the corrected design and start
-the next primary batch: up to 200 Claude-authored scenarios, with the same
-one-rollout rule. The existing 300-scenario catalog remains the compatibility
-baseline until that explicit replacement decision; it is not used as a parent
-template for either new batch.
-
-Formal 50-scenario authoring (deterministic coverage matrix, two scenario workers by default):
+当前场景构建入口：
 
 ```bash
 python scripts/generate_gpt50_scenarios.py
 ```
 
-The construction briefs come from the versioned 50-domain coverage matrix in
-`configs/gpt50_experiment/scenario_matrix.json`, not a
-long batch-model request or any prior scenario catalog. GPT authors every full
-dossier, normalization, and S0/D0 proposal from those briefs.
-
-The formal run writes each completed candidate immediately under
-`data/gpt50/experiment/scenario/scenarios/`, so `/gpt50` exposes progress
-without ever mixing in smoke data. Resume a stopped run with `--resume`.
-
-Smoke authoring:
+当前 rollout 入口（人工确认 prompt 后再运行）：
 
 ```bash
-python scripts/generate_scale300_candidates.py \
-  --brief configs/scale300_v1/authoring_brief.example.json \
-  --model-routes configs/gpt50_experiment/model_routes.astra.json \
-  --expected-model gpt-6-astra \
-  --output data/gpt50/smoke/scenario
+bash scripts/run_gpt50_pipeline.sh
 ```
 
-Every stage is checkpointed. Resume from the first missing or invalid artifact
-with `--resume`; the smoke uses `--max-attempts 1` so a schema failure is
-reported rather than silently replaced by several expensive generations.
+正式运行应使用 Gate 1 签名；`--allow-unreviewed` 只用于明确标记的开发检查。所有 API 失败都作为该场景唯一一次生成的失败证据保留，不产生第二条候选。
 
-Human Gate 1 is available at `/gpt50_gate1.html` (or the short
-`/gpt50` route) on the annotation server. The page automatically selects one
-active GPT batch, shows the exact scenario, roles, history, S0/D0 and triggers,
-and stores hash-bound drafts in the current browser. It never mixes invalid
-authoring checkpoints into the queue.
+## T4 与多模态
 
-After reviewing, export `gpt50-gate1-review.json` from the page. Validate the
-export before changing any scenario:
+t4.json 是 GPT50 的在线任务 T4 合同：evaluated policy 与 T4 judge 使用 GPT-6 Astra，appraisal/response 继续使用同一个 Claude Environment。T4 行动 prompt 固定为 task_t4_action_v21，不复用 10–20 轮离线采集的 task_rollout_action_v1。
 
-```bash
-python scripts/apply_gpt50_gate1.py \
-  --draft /path/to/gpt50-gate1-review.json \
-  --scenarios data/gpt50/smoke/scenario_v2/scenarios \
-  --output data/gpt50/smoke/review.signed.json \
-  --dry-run
-```
-
-When the dry run reports the expected approved IDs, rerun without
-`--dry-run`. That deterministic application step changes only approved
-scenarios to `quality_gate=approved` and `initial_state=human_frozen`,
-refreshes their Markdown projections, and writes the final post-freeze
-SHA-bound registry. Stale hashes, incomplete attestations, missing real
-reviewer identity, or sub-threshold scores stop the operation before mutation.
-
-After human Gate 1, smoke rollout:
-
-```bash
-python -m pipeline rollout \
-  --scenarios data/gpt50/smoke/scenario_v2/scenarios \
-  --rollout-config configs/gpt50_experiment/rollout.hybrid.single.json \
-  --development-role-partition \
-  --review-registry data/gpt50/smoke/review.signed.json \
-  --output data/gpt50/smoke/rollout \
-  --workers 1 --retry-limit 1
-```
-
-`--allow-unreviewed` is permitted only for the one-scenario plumbing smoke. The
-50-scenario experiment waits for real Gate 1 signatures.
-
-`rollout.single.json` is retained as the all-Astra negative probe. Three bounded
-smokes reached the policy action but timed out in appraisal before turn one,
-including after the malformed narrative-list payload was corrected and the
-request shrank by 36%. It is evidence, not a candidate pool or fallback route.
-
-The hybrid smoke crossed the blocked boundary once: Astra policy plus Claude
-appraisal/response completed one full turn. That run then stopped when the next
-Claude appraisal exhausted two 429 retries. A later run used the production-like
-four transport attempts; Astra policy completed in 39.54 seconds, but all four
-Claude appraisal requests received overload responses. Therefore the role
-partition is structurally viable, while the current service window is not ready
-for a 50-scenario launch. Do not start that batch until the human Gate 1 set is
-signed and a fresh sustained-capacity probe crosses several consecutive turns.
-
-The hybrid route table includes every downstream GPT authoring, answer, review,
-and judge role needed for T1/T2/T3/T4 and scoring. Those stages remain an audit
-of pipeline design; they do not silently promote GPT artifacts into the primary
-Claude corpus.
+Claude150 与 GPT50 的在线触发参数、离线重要节点选择、视频请求构造和 prompt 完全统一，均读取 ../multimodal_generation.json 并使用 talking_head_generation_v1。

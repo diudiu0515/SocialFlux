@@ -96,6 +96,34 @@ def validate_private_persona(persona):
     )
     return persona
 
+def validate_evaluated_agent_role(role, *, require_persona=False):
+    if not isinstance(role, dict):
+        raise ValueError("evaluated_agent_role must be an object")
+    base_fields = {"character_id", "name", "role", "explicit_goal"}
+    allowed_fields = base_fields | {"persona"}
+    if set(role) - allowed_fields:
+        raise ValueError("evaluated_agent_role contains private or unsupported fields")
+    for key in base_fields:
+        if not isinstance(role.get(key), str) or not role[key].strip():
+            raise ValueError(f"evaluated_agent_role missing {key}")
+    persona = role.get("persona")
+    if persona is None:
+        if require_persona:
+            raise ValueError("evaluated_agent_role requires its own public persona")
+        return role
+    try:
+        validate_private_persona(persona)
+    except ValueError as exc:
+        raise ValueError(
+            str(exc).replace("environment_agent.persona", "evaluated_agent_role.persona")
+        ) from exc
+    if persona["name"] != role["name"] or persona["role"] != role["role"]:
+        raise ValueError(
+            "evaluated_agent_role persona name/role must match its public role card"
+        )
+    return role
+
+
 
 def validate_v2_state_selection(selected):
     if set(selected) != set(STATE_VARIABLE_ONTOLOGY):
@@ -185,7 +213,7 @@ def _validate_multimodal(scenario):
             operators[condition["operator"]](values[variable], condition["threshold"])
             for variable, condition in conditions.items()
         ):
-            raise ValueError(f"video trigger {trigger['trigger_id']} is active at S0/D0")
+            raise ValueError(f"video trigger {trigger['trigger_id']} is active at initialization")
         change_conditions = trigger.get("change_conditions", {})
         if trigger["trigger_mode"] == "state_change" and not change_conditions:
             raise ValueError("state_change trigger requires change_conditions")
@@ -363,6 +391,9 @@ def validate_blueprint(blueprint):
         raise ValueError("selected_state_variables must contain 4-8 variables")
     if contract_version == STATE_CONTRACT_VERSION:
         validate_private_persona(blueprint["environment_agent"].get("persona"))
+        validate_evaluated_agent_role(
+            blueprint["evaluated_agent_role"], require_persona=True,
+        )
         validate_v2_state_selection(selected)
     targets = blueprint["target_state_ids"]
     if (
@@ -523,7 +554,7 @@ def validate_initial_state_proposal(proposal, blueprint):
             and operators[condition["operator"]](values[variable], condition["threshold"])
             for variable, condition in conditions.items()
         ):
-            raise ValueError(f"video trigger {trigger['trigger_id']} is active at S0/D0")
+            raise ValueError(f"video trigger {trigger['trigger_id']} is active at initialization")
     return proposal
 
 
@@ -587,9 +618,8 @@ def validate_scenario(scenario):
     if not all(value in ("pending", "pass", "fail") for value in scenario["quality_gate"].values()):
         raise ValueError("scenario quality checks must be pending/pass/fail")
     agent = scenario["environment_agent"]
-    for key in ("persona", "explicit_goal", "hidden_intention"):
-        if key not in agent:
-            raise ValueError(f"environment_agent missing {key}")
+    evaluated = scenario["evaluated_agent_role"]
+    validate_evaluated_agent_role(evaluated, require_persona=False)
     persona = agent["persona"]
     if not isinstance(persona, dict):
         raise ValueError("environment_agent.persona must be an object")
@@ -617,10 +647,6 @@ def validate_scenario(scenario):
                     f"v2 initial_state variables do not match selected family {family}"
                 )
         validate_v2_dynamics(scenario["initial_dynamics"])
-    evaluated = scenario["evaluated_agent_role"]
-    for key in ("character_id", "name", "role", "explicit_goal"):
-        if not str(evaluated.get(key, "")).strip():
-            raise ValueError(f"evaluated_agent_role missing {key}")
     _bounded(scenario["initial_state"], "initial_state")
     _bounded(scenario["initial_dynamics"], "initial_dynamics")
     if scenario["max_turns"] != 20:

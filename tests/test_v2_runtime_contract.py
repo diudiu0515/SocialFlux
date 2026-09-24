@@ -1,5 +1,7 @@
 import unittest
 from copy import deepcopy
+from pathlib import Path
+import re
 
 from environment.calibration import DeterministicStateCalibrator
 from environment.initializer import freeze_initialization
@@ -40,6 +42,22 @@ class V2RuntimeContractTest(unittest.TestCase):
         del invalid["initial_state"]["consequence_risk"]
         with self.assertRaisesRegex(ValueError, "exactly the four"):
             freeze_initialization(invalid)
+
+    def test_active_code_does_not_reference_legacy_motivation_state_family(self):
+        roots = (
+            "environment", "evaluation", "pipeline", "rollout", "tasks",
+            "scenario_design", "scripts", "configs", "schemas", "prompts", "web",
+        )
+        forbidden = re.compile(r"(?:motivation)\.[A-Za-z_]")
+        matches = []
+        for root in roots:
+            for path in Path(root).rglob("*"):
+                if not path.is_file() or path.suffix not in {".py", ".json", ".md", ".html"}:
+                    continue
+                text = path.read_text(encoding="utf-8", errors="ignore")
+                if forbidden.search(text):
+                    matches.append(str(path))
+        self.assertEqual(matches, [])
 
     def test_every_turn_assesses_every_selected_state_and_dynamic(self):
         calibrated = DeterministicStateCalibrator(self.scenario).calibrate(

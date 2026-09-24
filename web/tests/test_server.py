@@ -13,6 +13,9 @@ from web.server import (
     credentials_match,
     load_instances,
     load_gpt50_review,
+    load_gpt50_gate2,
+    load_gpt50_rollout,
+    load_gpt50_rollout_progress,
     load_gpt50_scenario,
     load_rollouts,
     load_task_examples,
@@ -27,7 +30,10 @@ class ScenarioWebTest(unittest.TestCase):
             root = Path(directory) / "scenarios"
             target = root / "scenario_001" / "scenario_001.json"
             target.parent.mkdir(parents=True)
-            source = Path("configs/scenarios/scenario_001/scenario_001.json")
+            source = Path(
+                "data/gpt50/experiment/scenario/scenarios/"
+                "scenario_001/scenario_001.json"
+            )
             scenario = json.loads(source.read_text(encoding="utf-8"))
             target.write_text(
                 json.dumps(scenario, ensure_ascii=False, indent=2) + "\n",
@@ -61,13 +67,267 @@ class ScenarioWebTest(unittest.TestCase):
         self.assertFalse(packet["review_ready"])
         self.assertIn("smoke", packet["review_blocker"])
 
+    def test_gpt50_rollout_progress_is_exposed_for_the_review_site(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            progress = {
+                "status": "in_progress",
+                "expected_slot_count": 50,
+                "completed_slots": {
+                    "GPT50_001::policy": {
+                        "scenario_id": "GPT50_001",
+                        "turn_count": 4,
+                        "accepted_at_utc": "2026-09-20T08:00:00+00:00",
+                        "admission": "human_postfilter",
+                        "machine_precheck_passed": False,
+                    }
+                },
+                "attempts": [
+                    {
+                        "scenario_id": "GPT50_002",
+                        "status": "generation_error",
+                        "error_type": "TimeoutError",
+                        "error": "timed out",
+                        "finished_at_utc": "2026-09-20T08:01:00+00:00",
+                    }
+                ],
+                "updated_at_utc": "2026-09-20T08:01:00+00:00",
+            }
+            (root / "progress.json").write_text(
+                json.dumps(progress), encoding="utf-8"
+            )
+            with patch("web.server.GPT50_ROLLOUT_ROOT", root):
+                packet = load_gpt50_rollout_progress()
+                api = api_payload("/api/gpt50-rollout")
+            self.assertTrue(packet["available"])
+            self.assertEqual(packet["completed_count"], 0)
+            self.assertEqual(packet["retained_count"], 1)
+            self.assertEqual(packet["short_trajectory_count"], 1)
+            self.assertEqual(packet["pending_count"], 48)
+            self.assertEqual(packet["reviewable_count"], 1)
+            self.assertEqual(packet["without_readable_rollout_count"], 49)
+            self.assertEqual(
+                packet["by_scenario"]["GPT50_001"]["turn_count"], 4
+            )
+            self.assertEqual(
+                packet["attempt_status_counts"]["generation_error"], 1
+            )
+            self.assertEqual(api["completed_count"], 0)
+
+    def test_gpt50_rollout_detail_exposes_dialogue_for_human_review(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "rollouts"
+            scenario_path = (
+                Path(directory)
+                / "scenarios"
+                / "scenario_001"
+                / "scenario_001.json"
+            )
+            trajectory_path = root / "scenario_001" / "trajectory.json"
+            trajectory_path.parent.mkdir(parents=True)
+            trajectory_path.write_text(json.dumps({
+                "trajectory_id": "trajectory-1",
+                "scenario_id": "GPT50_001",
+                "policy_id": "policy-1",
+                "policy_provenance": {
+                    "prompt_id": "task_rollout_action_v1",
+                    "minimum_natural_turns": 10,
+                },
+                "turns": [{
+                    "turn_id": "t1",
+                    "policy_action": {"text": "policy text"},
+                    "environment_response": "environment text",
+                    "appraisal": {
+                        "social_act": "request",
+                        "speaker_intent": "ask clearly",
+                    },
+                    "state_delta": {"trust": 1},
+                    "dynamics_delta": {},
+                    "trigger_events": [],
+                }],
+                "ending": {"reason": "natural_completion", "turn_id": 1},
+            }), encoding="utf-8")
+            (root / "progress.json").write_text(json.dumps({
+                "completed_slots": {
+                    "GPT50_001::policy": {
+                        "scenario_id": "GPT50_001",
+                        "trajectory_file": "trajectory.json",
+                        "turn_count": 1,
+                    }
+                },
+                "attempts": [],
+            }), encoding="utf-8")
+            records = [(
+                scenario_path,
+                {"scenario_id": "GPT50_001"},
+                "valid",
+                "",
+            )]
+            with (
+                patch("web.server.GPT50_ROLLOUT_ROOT", root),
+                patch(
+                    "web.server._gpt50_scenario_records",
+                    return_value=(scenario_path.parents[1], records, []),
+                ),
+            ):
+                detail = load_gpt50_rollout("GPT50_001")
+            self.assertEqual(detail["status"], "short_trajectory")
+            self.assertEqual(detail["turn_count"], 1)
+            self.assertFalse(detail["gate3_candidate"])
+            self.assertEqual(
+                detail["policy_prompt_id"], "task_rollout_action_v1"
+            )
+            self.assertEqual(detail["minimum_natural_turns"], 10)
+            self.assertIn("不足 10 turn", detail["quality_warning"])
+            self.assertEqual(
+                detail["turns"][0]["policy_action"], "policy text"
+            )
+            self.assertEqual(
+                detail["turns"][0]["environment_response"],
+                "environment text",
+            )
+            self.assertEqual(detail["human_review"], "pending")
+
+    def test_gpt50_rollout_detail_exposes_machine_rejected_dialogue(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "rollouts"
+            scenario_path = (
+                Path(directory)
+                / "scenarios"
+                / "scenario_002"
+                / "scenario_002.json"
+            )
+            rejected = (
+                root / "scenario_002" / "rejected" / "rejected.json"
+            )
+            rejected.parent.mkdir(parents=True)
+            rejected.write_text(json.dumps({
+                "trajectory_id": "trajectory-rejected",
+                "scenario_id": "GPT50_002",
+                "policy_id": "policy-2",
+                "turns": [{
+                    "turn_id": "t1",
+                    "policy_action": {"text": "I can explain what changed."},
+                    "environment_response": "Then start with the missing fact.",
+                    "appraisal": {
+                        "social_act": "challenge",
+                        "speaker_intent": "seek accountability",
+                    },
+                    "state_delta": {},
+                    "dynamics_delta": {},
+                    "trigger_events": [],
+                }],
+                "ending": {"reason": "natural_completion", "turn_id": 1},
+            }), encoding="utf-8")
+            (root / "progress.json").write_text(json.dumps({
+                "completed_slots": {},
+                "attempts": [{
+                    "scenario_id": "GPT50_002",
+                    "slot_id": "GPT50_002::policy",
+                    "status": "machine_rejected",
+                    "attempt": 1,
+                    "trajectory_id": "trajectory-rejected",
+                    "trajectory_file": "rejected.json",
+                    "precheck": {
+                        "candidate_classification": "machine_rejected",
+                        "hard_reject_reasons": ["template_loop"],
+                        "structural": {
+                            "turn_count": 1,
+                            "checks": {"distinct_turns": False},
+                        },
+                    },
+                }],
+            }), encoding="utf-8")
+            records = [(
+                scenario_path,
+                {"scenario_id": "GPT50_002"},
+                "valid",
+                "",
+            )]
+            with (
+                patch("web.server.GPT50_ROLLOUT_ROOT", root),
+                patch(
+                    "web.server._gpt50_scenario_records",
+                    return_value=(scenario_path.parents[1], records, []),
+                ),
+            ):
+                detail = load_gpt50_rollout("GPT50_002")
+            self.assertEqual(detail["status"], "machine_rejected")
+            self.assertEqual(detail["artifact_kind"], "rejected_or_partial")
+            self.assertEqual(detail["turn_count"], 1)
+            self.assertEqual(
+                detail["turns"][0]["environment_response"],
+                "Then start with the missing fact.",
+            )
+            self.assertEqual(
+                detail["machine_review"]["hard_reject_reasons"],
+                ["template_loop"],
+            )
+            self.assertEqual(
+                detail["machine_review"]["false_checks"],
+                ["distinct_turns"],
+            )
+
+    def test_gpt50_gate2_labels_evidence_without_deleting_or_failing_unsampled(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "manifest.json").write_text(json.dumps({
+                "mode": "prepare_only",
+                "e1_review_items": 1,
+            }), encoding="utf-8")
+            (root / "state_transition_agreement.json").write_text(json.dumps({
+                "record": {"review_status": "pending_human"},
+                "review_items": [{
+                    "scenario_id": "GPT50_001",
+                    "review_id": "e1",
+                }],
+            }), encoding="utf-8")
+            (root / "history_intervention.json").write_text(json.dumps({
+                "record": {"machine_screen_passed": False},
+                "records": [{
+                    "scenario_id": "GPT50_001",
+                    "automatic_screen_passed": False,
+                }],
+            }), encoding="utf-8")
+            with patch("web.server.GPT50_GATE2_ROOT", root):
+                packet = load_gpt50_gate2()
+                detail = load_gpt50_gate2("GPT50_001")
+                unsampled = load_gpt50_gate2("GPT50_050")
+            self.assertEqual(packet["deletion_policy"], "retain_all_and_label")
+            self.assertEqual(
+                packet["by_scenario"]["GPT50_001"]["status"],
+                "machine_flagged",
+            )
+            self.assertEqual(
+                detail["scenario_overview"]["evidence_item_count"], 2
+            )
+            self.assertEqual(
+                unsampled["scenario_overview"]["status"], "not_sampled"
+            )
+            e3 = next(
+                item for item in detail["experiments"]
+                if item["experiment_id"] == "E3"
+            )
+            self.assertEqual(
+                e3["items"][0]["gate2_screen_status"], "machine_fail"
+            )
+
     def test_gpt50_gate1_page_is_linked_from_review_center(self):
         review = Path("web/static/review.html").read_text(encoding="utf-8")
         page = Path("web/static/gpt50_gate1.html").read_text(encoding="utf-8")
         script = Path("web/static/gpt50_gate1.js").read_text(encoding="utf-8")
         self.assertIn('href="/gpt50_gate1.html"', review)
-        self.assertIn('src="/gpt50_gate1.js?v=2"', page)
+        self.assertIn('src="/gpt50_gate1.js?v=7"', page)
         self.assertIn("/api/gpt50-review", script)
+        self.assertIn("GPT rollout 与 Gate 2 实时进度", script)
+        self.assertIn("本轮结构化 appraisal 与状态变化", script)
+        self.assertIn("Rollout 人工审查", script)
+        self.assertIn("rollout_review", script)
+        self.assertIn("被测模型扮演", script)
+        self.assertIn("Gate 2 筛选复核", script)
+        self.assertIn("gate2_review", script)
+        self.assertIn("未抽中不等于失败", script)
+        self.assertIn("setInterval", script)
         self.assertIn("human_attestation", script)
 
     def test_basic_auth_credentials(self):

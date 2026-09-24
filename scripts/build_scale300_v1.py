@@ -110,7 +110,7 @@ def build_design_matrix(records):
             "architecture": (
                 "structured appraisal LLM -> deterministic Python update -> response LLM"
             ),
-            "gate1": "human review and S0/D0 freeze before rollout",
+            "gate1": "human review freezes initial state before rollout; runtime dynamics seed is machine-validated",
             "retention_policy": "retain every generated rollout candidate and gate failure",
             "automatic_gate_policy": (
                 "machine validation cannot approve Gate 1 or set human attestation"

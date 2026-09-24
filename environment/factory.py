@@ -19,10 +19,12 @@ class ModelEnvironmentFactory:
         *,
         response_provider_config=None,
         response_sampling=None,
-        appraisal_prompt_id="environment_appraisal_v6",
-        response_prompt_id="environment_response_v18",
+        appraisal_prompt_id="environment_appraisal_v11",
+        response_prompt_id="environment_response_v25",
         response_validation_profile="hard_only",
         horizon_mode="natural_max_20",
+        minimum_natural_turns=1,
+        multimodal_trigger_policy=None,
     ):
         self.scenario = deepcopy(scenario)
         self.provider_config = deepcopy(provider_config)
@@ -37,6 +39,14 @@ class ModelEnvironmentFactory:
         self.response_prompt_id = response_prompt_id
         self.response_validation_profile = response_validation_profile
         self.horizon_mode = horizon_mode
+        if (
+            not isinstance(minimum_natural_turns, int)
+            or isinstance(minimum_natural_turns, bool)
+            or not 1 <= minimum_natural_turns <= 20
+        ):
+            raise ValueError("minimum_natural_turns must be between 1 and 20")
+        self.minimum_natural_turns = minimum_natural_turns
+        self.multimodal_trigger_policy = deepcopy(multimodal_trigger_policy or {})
 
     @property
     def provenance(self):
@@ -54,6 +64,10 @@ class ModelEnvironmentFactory:
             "response_prompt": self.response_prompt_id,
             "response_validation_profile": self.response_validation_profile,
             "horizon_mode": self.horizon_mode,
+            "minimum_natural_turns": self.minimum_natural_turns,
+            "multimodal_trigger_policy": deepcopy(
+                self.multimodal_trigger_policy
+            ),
             "llm_calls_per_step": 2,
             "llm_stage_count_per_step": 2,
             "nominal_llm_calls_per_step_without_retries": 2,
@@ -83,6 +97,9 @@ class ModelEnvironmentFactory:
                 prompt_id=self.response_prompt_id,
                 validation_profile=self.response_validation_profile,
                 horizon_mode=self.horizon_mode,
+                minimum_natural_turns=self.minimum_natural_turns,
             ),
             provenance=self.provenance,
+            minimum_natural_turns=self.minimum_natural_turns,
+            multimodal_trigger_policy=self.multimodal_trigger_policy,
         )

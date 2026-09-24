@@ -14,6 +14,7 @@ from .appraisal_normalization import (
 from .delta_mapper import flatten_state
 from .interaction_ledger import validate_semantic_ledger_events
 from .prompts import build_appraisal_prompt
+from .observation import build_public_evaluated_role
 from .public_situation import render_public_background
 
 
@@ -45,7 +46,11 @@ def _validate_impacts(impacts, allowed_variables, label):
         if impact["direction"] not in {"increase", "decrease"}:
             raise ValueError(f"{label} has invalid direction")
         strength = impact["evidence_strength"]
-        if isinstance(strength, bool) or strength not in {1, 2}:
+        if (
+            isinstance(strength, bool)
+            or not isinstance(strength, int)
+            or strength not in {1, 2}
+        ):
             raise ValueError(f"{label} evidence_strength must be 1 or 2")
         if impact["directness"] not in {"direct", "indirect"}:
             raise ValueError(f"{label} directness must be direct or indirect")
@@ -77,26 +82,16 @@ CLAIM_IMPACT_DOMAINS = {
     "responsibility", "rights", "action_feasibility", "task_answer",
 }
 CLAIM_GROUNDING = {
-    "observable_fact", "proposal_or_hypothetical",
+    "observable_fact", "speaker_report", "proposal_or_hypothetical",
     "unsupported_assertion", "uncertain",
 }
 CONTINUATION_STATUS = {"must_answer", "continue", "can_close"}
 
-_DIALOGUE_DIAGNOSTIC_PROMPTS = frozenset(
-    f"environment_appraisal_v{version}" for version in range(4, 12)
-)
-_AFTER_DIRECT_RESPONSE_PROMPTS = frozenset(
-    f"environment_appraisal_v{version}" for version in range(5, 12)
-)
-_LEDGER_EVENT_PROMPTS = frozenset(
-    f"environment_appraisal_v{version}" for version in range(7, 12)
-)
-_LEDGER_NORMALIZATION_PROMPTS = frozenset(
-    f"environment_appraisal_v{version}" for version in range(8, 12)
-)
-_LIVE_QUESTION_PARTITION_PROMPTS = frozenset(
-    f"environment_appraisal_v{version}" for version in range(6, 10)
-)
+_DIALOGUE_DIAGNOSTIC_PROMPTS = frozenset({"environment_appraisal_v11"})
+_AFTER_DIRECT_RESPONSE_PROMPTS = frozenset({"environment_appraisal_v11"})
+_LEDGER_EVENT_PROMPTS = frozenset({"environment_appraisal_v11"})
+_LEDGER_NORMALIZATION_PROMPTS = frozenset({"environment_appraisal_v11"})
+_LIVE_QUESTION_PARTITION_PROMPTS = frozenset()
 _ASSERTION_MODE_PROMPTS = frozenset({"environment_appraisal_v11"})
 
 
@@ -107,6 +102,37 @@ def _exact_span_or_empty(span, action_text, label, allow_empty=False):
         return
     if not span or span not in action_text:
         raise ValueError(f"{label} evidence span must be an exact latest-action substring")
+
+
+def _validate_ledger_resolutions(value, action_text, active_proposals=None):
+    if not isinstance(value, list) or len(value) > 3:
+        raise ValueError("ledger_resolutions must be a list of at most three")
+    proposal_by_id = {
+        item.get("id"): item
+        for item in (active_proposals or [])
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }
+    seen = set()
+    for resolution in value:
+        if not isinstance(resolution, dict) or set(resolution) != {
+            "target_id", "resolution", "evidence_span"
+        }:
+            raise ValueError("ledger resolution has an invalid shape")
+        target_id = resolution["target_id"]
+        if target_id in seen:
+            raise ValueError("ledger_resolutions repeats target_id")
+        if target_id not in proposal_by_id:
+            raise ValueError("ledger resolution target_id is not an active proposal")
+        if proposal_by_id[target_id].get("speaker") == "evaluated_agent":
+            raise ValueError("evaluated speaker cannot resolve their own proposal")
+        if resolution["resolution"] not in {
+            "accepted", "rejected", "countered"
+        }:
+            raise ValueError("ledger resolution status is invalid")
+        _exact_span_or_empty(
+            resolution["evidence_span"], action_text, "ledger resolution"
+        )
+        seen.add(target_id)
 
 
 def _validate_dialogue_diagnostics(
@@ -344,17 +370,22 @@ def _validate_appraisal(
         "state_impacts", "dynamics_impacts",
     }
     allowed = required | {
-        "dialogue_diagnostics", "ledger_events", "ledger_event_normalizations"
+        "dialogue_diagnostics", "ledger_events", "ledger_resolutions",
+        "ledger_event_normalizations",
     }
     if not required.issubset(appraisal) or not set(appraisal).issubset(allowed):
         raise ValueError(
-            f"structured appraisal must contain {sorted(required)} and only optional dialogue_diagnostics"
+            f"structured appraisal must contain {sorted(required)} and only supported optional fields"
         )
     if require_dialogue_diagnostics and "dialogue_diagnostics" not in appraisal:
         raise ValueError("structured appraisal must include dialogue_diagnostics")
     if require_ledger_events and "ledger_events" not in appraisal:
         raise ValueError("structured appraisal must include ledger_events")
     appraisal.pop("ledger_event_normalizations", None)
+    appraisal.setdefault("ledger_resolutions", [])
+    _validate_ledger_resolutions(
+        appraisal["ledger_resolutions"], str(action_text).strip(), active_proposals
+    )
     if "ledger_events" in appraisal:
         ledger_event_normalizations = []
         appraisal["ledger_events"] = validate_semantic_ledger_events(
@@ -454,7 +485,7 @@ def _validate_appraisal(
 class ModelAppraiser:
     def __init__(
         self, scenario, provider, sampling=None,
-        prompt_id="environment_appraisal_v6",
+        prompt_id="environment_appraisal_v11",
     ):
         self.scenario = deepcopy(scenario)
         self.provider = provider
@@ -496,11 +527,15 @@ class ModelAppraiser:
         longitudinal_context=None, interaction_ledger=None,
     ):
         agent = self.scenario["environment_agent"]
+        evaluated = build_public_evaluated_role(
+            self.scenario.get("evaluated_agent_role", {})
+        )
         prompt = build_appraisal_prompt(
             persona=agent["persona"],
             background=render_public_background(self.scenario),
             explicit_goal=agent["explicit_goal"],
             hidden_intention=agent["hidden_intention"],
+            evaluated_agent=evaluated,
             previous_state=previous_state,
             previous_dynamics=previous_dynamics,
             memory=memory,
@@ -509,7 +544,6 @@ class ModelAppraiser:
             interaction_ledger=interaction_ledger,
             prompt_id=self.prompt_id,
         )
-        evaluated = self.scenario.get("evaluated_agent_role", {})
         environment_persona = agent.get("persona", agent)
         system_prompt = (
             "你是结构化 appraisal 分析器，不扮演任何对话人物。最新 action 的唯一作者是 "

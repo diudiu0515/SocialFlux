@@ -62,6 +62,20 @@ GPT50_SCENARIO_ROOTS = (
     ROOT / "data" / "gpt50" / "scenarios",
 )
 GPT50_EXPECTED_SCENARIO_COUNT = 50
+GPT50_MIN_GATE3_TURNS = 10
+GPT50_ROLLOUT_ROOT = ROOT / "data" / "gpt50" / "experiment" / "rollouts"
+GPT50_GATE2_ROOT = ROOT / "data" / "gpt50" / "experiment" / "gate2"
+GPT50_GATE2_EXPERIMENTS = (
+    ("E1", "state_transition_agreement.json", "状态转移方向一致性", "review_items"),
+    ("E2", "trajectory_plausibility.json", "完整轨迹合理性", "review_items"),
+    ("E3", "history_intervention.json", "历史干预敏感性", "records"),
+    ("E4", "paraphrase_robustness.json", "释义鲁棒性", "records"),
+    ("E5", "local_counterfactual.json", "局部反事实区分度", "records"),
+    ("E6", "backbone_sensitivity.json", "双 backbone 敏感性", "records"),
+    ("E7", "persona_intervention.json", "Persona 干预敏感性", "records"),
+    ("E8", "video_state_consistency.json", "视频状态一致性", "review_items"),
+    ("E9", "timescale_validity.json", "状态时间尺度有效性", "review_items"),
+)
 SCALE150_MODEL_REVIEW_FILES = ()
 SCALE300_AUTOMATIC_GATE_AUDIT = ROOT / "build" / "scale300_v1" / "automatic_gate_audit.json"
 # Switch to build/scale300_tasks only after its summary covers all 300 ordinals.
@@ -119,6 +133,157 @@ def _display_path(path):
         return str(path)
 
 
+def load_gpt50_rollout_progress():
+    """Expose the resumable GPT rollout batch without implying human approval."""
+    progress_path = GPT50_ROLLOUT_ROOT / "progress.json"
+    progress = read_json(progress_path, {}) or {}
+    if not progress:
+        return {
+            "available": False,
+            "status": "not_started",
+            "completed_count": 0,
+            "retained_count": 0,
+            "short_trajectory_count": 0,
+            "expected_count": GPT50_EXPECTED_SCENARIO_COUNT,
+            "pending_count": GPT50_EXPECTED_SCENARIO_COUNT,
+            "reviewable_count": 0,
+            "without_readable_rollout_count": GPT50_EXPECTED_SCENARIO_COUNT,
+            "without_accepted_rollout_count": GPT50_EXPECTED_SCENARIO_COUNT,
+            "attempt_count": 0,
+            "attempt_status_counts": {},
+            "updated_at_utc": None,
+            "progress_path": _display_path(progress_path),
+            "by_scenario": {},
+            "recent_errors": [],
+        }
+    completed = progress.get("completed_slots") or {}
+    by_scenario = {}
+    for record in completed.values():
+        scenario_id = record.get("scenario_id")
+        if not scenario_id:
+            continue
+        turn_count = int(record.get("turn_count") or 0)
+        machine_precheck_passed = record.get(
+            "machine_precheck_passed"
+        ) is True
+        gate3_candidate = (
+            machine_precheck_passed
+            and turn_count >= GPT50_MIN_GATE3_TURNS
+        )
+        if gate3_candidate:
+            rollout_status = "completed"
+        elif turn_count < GPT50_MIN_GATE3_TURNS:
+            rollout_status = "short_trajectory"
+        else:
+            rollout_status = "retained_for_review"
+        by_scenario[scenario_id] = {
+            "status": rollout_status,
+            "turn_count": turn_count,
+            "accepted_at_utc": record.get("accepted_at_utc"),
+            "admission": record.get("admission"),
+            "machine_precheck_passed": machine_precheck_passed,
+            "gate3_candidate": gate3_candidate,
+            "artifact_available": True,
+        }
+    accepted_scenario_ids = set(by_scenario)
+    attempts = progress.get("attempts") or []
+    for attempt in attempts:
+        status = attempt.get("status", "unknown")
+        scenario_id = attempt.get("scenario_id")
+        if not scenario_id or scenario_id in accepted_scenario_ids:
+            continue
+        summary = _gpt50_attempt_summary(attempt)
+        previous = by_scenario.get(scenario_id) or {}
+        attempt_turns = summary.get("turn_count")
+        readable_attempt = bool(
+            (
+                attempt.get("trajectory_file")
+                or attempt.get("partial_trajectory_file")
+            )
+            and isinstance(attempt_turns, int)
+            and attempt_turns > 0
+        )
+        previous_turns = previous.get("turn_count")
+        best_turns = max(
+            [
+                value for value in (previous_turns, attempt_turns)
+                if isinstance(value, int)
+            ],
+            default=None,
+        )
+        by_scenario[scenario_id] = {
+            "status": status,
+            "turn_count": best_turns,
+            "latest_attempt_turn_count": attempt_turns,
+            "machine_precheck_passed": False,
+            "gate3_candidate": False,
+            "artifact_available": (
+                previous.get("artifact_available") is True
+                or readable_attempt
+            ),
+        }
+    latest_attempts = {}
+    for attempt in attempts:
+        identity = attempt.get("slot_id") or attempt.get("scenario_id")
+        if identity:
+            latest_attempts[identity] = attempt
+    status_counts = {}
+    for attempt in latest_attempts.values():
+        status = attempt.get("status", "unknown")
+        status_counts[status] = status_counts.get(status, 0) + 1
+    expected = progress.get(
+        "expected_slot_count", GPT50_EXPECTED_SCENARIO_COUNT
+    )
+    retained_count = len(completed)
+    completed_count = sum(
+        item["gate3_candidate"] for item in by_scenario.values()
+    )
+    short_trajectory_count = sum(
+        item["status"] == "short_trajectory"
+        for item in by_scenario.values()
+    )
+    reviewable_count = sum(
+        item.get("artifact_available") is True
+        for item in by_scenario.values()
+    )
+    recent_errors = [
+        {
+            "scenario_id": attempt.get("scenario_id"),
+            "error_type": attempt.get("error_type"),
+            "error": str(attempt.get("error", ""))[:300],
+            "finished_at_utc": attempt.get("finished_at_utc"),
+        }
+        for attempt in latest_attempts.values()
+        if attempt.get("status") == "generation_error"
+    ][-5:]
+    raw_status = progress.get("status", "unknown")
+    display_status = (
+        "regenerating"
+        if raw_status == "incomplete_requeued_short_trajectories"
+        else raw_status
+    )
+    return {
+        "available": True,
+        "status": display_status,
+        "raw_status": raw_status,
+        "completed_count": completed_count,
+        "retained_count": retained_count,
+        "short_trajectory_count": short_trajectory_count,
+        "expected_count": expected,
+        "pending_count": max(0, expected - len(by_scenario)),
+        "reviewable_count": reviewable_count,
+        "without_readable_rollout_count": max(0, expected - reviewable_count),
+        "without_accepted_rollout_count": max(0, expected - retained_count),
+        "attempt_count": len(attempts),
+        "attempt_status_counts": status_counts,
+        "updated_at_utc": progress.get("updated_at_utc"),
+        "progress_path": _display_path(progress_path),
+        "by_scenario": by_scenario,
+        "recent_errors": recent_errors,
+        "human_review_required": True,
+    }
+
+
 def _gpt50_scenario_records():
     root = _active_gpt50_scenario_root()
     records = []
@@ -149,10 +314,153 @@ def _gpt50_scenario_records():
     return root, records, errors
 
 
+def _gpt50_gate2_item_status(experiment_id, item):
+    if item.get("error") or item.get("replay_errors"):
+        return "machine_error"
+    automatic = item.get("automatic_screen_passed")
+    if isinstance(automatic, bool):
+        return "machine_pass" if automatic else "machine_fail"
+    if experiment_id == "E6":
+        comparison = item.get("comparison") or {}
+        if comparison:
+            passed = (
+                comparison.get("exact_direction_agreement", 0) >= 0.50
+                and comparison.get("true_sign_reversal_rate", 1) <= 0.40
+                and not comparison.get("replay_failed")
+            )
+            return "machine_pass" if passed else "machine_fail"
+    return "pending_human"
+
+
+def load_gpt50_gate2(scenario_id=None):
+    """Expose Gate 2 evidence without turning sampling absence into rejection."""
+    manifest = read_json(GPT50_GATE2_ROOT / "manifest.json", {}) or {}
+    intervention_progress = read_json(
+        GPT50_GATE2_ROOT / "experiments" / "environment_interventions.json",
+        {},
+    ) or {}
+    progress_records = intervention_progress.get("records") or []
+    experiments = []
+    by_scenario = {}
+    for experiment_id, filename, label, items_key in GPT50_GATE2_EXPERIMENTS:
+        payload = read_json(GPT50_GATE2_ROOT / filename, {}) or {}
+        raw_items = payload.get(items_key) or []
+        if not raw_items and experiment_id in {"E3", "E4", "E5", "E7"}:
+            progress_key = experiment_id.lower()
+            raw_items = []
+            for progress_item in progress_records:
+                common = {
+                    "scenario_id": progress_item.get("scenario_id"),
+                    "source_trajectory_id": progress_item.get(
+                        "source_trajectory_id"
+                    ),
+                    "checkpoint_turn_id": progress_item.get(
+                        "checkpoint_turn_id"
+                    ),
+                }
+                if progress_item.get(progress_key):
+                    raw_items.append({
+                        **common,
+                        **progress_item[progress_key],
+                        "evidence_stage": "in_progress_checkpoint",
+                    })
+                elif progress_item.get("error"):
+                    raw_items.append({
+                        **common,
+                        "error": progress_item["error"],
+                        "evidence_stage": "in_progress_error",
+                    })
+        enriched = []
+        counts = {}
+        for raw in raw_items:
+            item = dict(raw)
+            status = _gpt50_gate2_item_status(experiment_id, item)
+            item["gate2_screen_status"] = status
+            counts[status] = counts.get(status, 0) + 1
+            item_scenario_id = item.get("scenario_id")
+            if item_scenario_id:
+                overview = by_scenario.setdefault(item_scenario_id, {
+                    "evidence_item_count": 0,
+                    "experiment_ids": [],
+                    "status_counts": {},
+                })
+                overview["evidence_item_count"] += 1
+                if experiment_id not in overview["experiment_ids"]:
+                    overview["experiment_ids"].append(experiment_id)
+                overview["status_counts"][status] = (
+                    overview["status_counts"].get(status, 0) + 1
+                )
+            if scenario_id is None or item_scenario_id == scenario_id:
+                enriched.append(item)
+        record = payload.get("record", payload) if payload else {}
+        experiments.append({
+            "experiment_id": experiment_id,
+            "label": label,
+            "filename": filename,
+            "available": bool(payload),
+            "batch_record": record,
+            "item_count": len(raw_items),
+            "status_counts": counts,
+            "items": enriched if scenario_id is not None else [],
+        })
+    for item_scenario_id, overview in by_scenario.items():
+        counts = overview["status_counts"]
+        if counts.get("machine_error"):
+            status = "machine_error"
+        elif counts.get("machine_fail"):
+            status = "machine_flagged"
+        elif counts.get("pending_human"):
+            status = "pending_human_review"
+        elif counts.get("machine_pass"):
+            status = "machine_screen_passed"
+        else:
+            status = "not_sampled"
+        overview["status"] = status
+        overview["sampled_experiment_count"] = len(overview["experiment_ids"])
+    selected_overview = by_scenario.get(scenario_id, {
+        "status": "not_sampled",
+        "evidence_item_count": 0,
+        "sampled_experiment_count": 0,
+        "experiment_ids": [],
+        "status_counts": {},
+    }) if scenario_id is not None else None
+    return {
+        "format": "socialflux_gpt50_gate2_review_v1",
+        "gate": "gate_2_environment_validity",
+        "scope": "batch_environment_validity_with_sampled_scenario_evidence",
+        "deletion_policy": "retain_all_and_label",
+        "manifest": manifest,
+        "machine_progress": {
+            "target_scenario_count": 50,
+            "completed_scenario_count": len(progress_records),
+            "successful_scenario_count": sum(
+                not item.get("error") for item in progress_records
+            ),
+            "error_scenario_count": sum(
+                bool(item.get("error")) for item in progress_records
+            ),
+            "last_scenario_id": (
+                progress_records[-1].get("scenario_id")
+                if progress_records else None
+            ),
+        },
+        "experiments": experiments,
+        "by_scenario": by_scenario if scenario_id is None else {},
+        "scenario_overview": selected_overview,
+        "human_review_required": True,
+        "warning": (
+            "Gate 2 是 batch-level Environment validity；未抽中不等于失败，"
+            "机器标记也不等于人工结论。"
+        ),
+    }
+
+
 def load_gpt50_review():
     """Expose the active GPT authoring batch for real, hash-bound Gate 1 review."""
     root, records, errors = _gpt50_scenario_records()
     run_manifest = read_json(root.parent / "run_manifest.json", {}) or {}
+    rollout = load_gpt50_rollout_progress()
+    gate2 = load_gpt50_gate2()
     candidates = []
     for ordinal, (path, scenario, schema_status, schema_error) in enumerate(records, 1):
         design = scenario.get("narrative_design", {})
@@ -168,6 +476,20 @@ def load_gpt50_review():
             "schema_error": schema_error,
             "scenario_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
             "artifact_path": _display_path(path),
+            "rollout": rollout["by_scenario"].get(
+                scenario.get("scenario_id"),
+                {"status": "pending", "turn_count": None},
+            ),
+            "gate2": gate2["by_scenario"].get(
+                scenario.get("scenario_id"),
+                {
+                    "status": "not_sampled",
+                    "evidence_item_count": 0,
+                    "sampled_experiment_count": 0,
+                    "experiment_ids": [],
+                    "status_counts": {},
+                },
+            ),
         })
     scenario_count = len(candidates)
     schema_valid_count = sum(
@@ -208,12 +530,241 @@ def load_gpt50_review():
         "active_scenario_root": _display_path(root),
         "scenario_count": scenario_count,
         "schema_valid_count": schema_valid_count,
+        "rollout": rollout,
+        "gate2": {
+            key: value for key, value in gate2.items()
+            if key != "by_scenario"
+        },
         "candidates": candidates,
         "load_errors": errors,
         "human_review_warning": (
             "机器 schema/quality 检查不构成 Gate 1。只有实名人工审核、完整评分、"
-            "S0/D0 确认和导出的 hash-bound 记录才能冻结场景。"
+            "initial state 确认和导出的 hash-bound 记录才能冻结场景。"
         ),
+    }
+
+
+def _gpt50_trajectory_path(scenario_dir, attempt):
+    """Resolve one current attempt artifact without mixing old review archives."""
+    names = [
+        attempt.get("trajectory_file"),
+        attempt.get("partial_trajectory_file"),
+    ]
+    for name in names:
+        if not name:
+            continue
+        for parent in (
+            scenario_dir,
+            scenario_dir / "rejected",
+            scenario_dir / "budget_truncated",
+            scenario_dir / "short_trajectories",
+        ):
+            target = parent / name
+            if target.is_file():
+                return target
+    return None
+
+
+def _gpt50_attempt_summary(item):
+    precheck = item.get("precheck") or {}
+    structural = precheck.get("structural") or {}
+    checks = structural.get("checks") or {}
+    return {
+        "status": item.get("status"),
+        "attempt": item.get("attempt"),
+        "technical_retry": item.get("technical_retry") is True,
+        "error_type": item.get("error_type"),
+        "error": str(item.get("error", ""))[:500],
+        "finished_at_utc": item.get("finished_at_utc"),
+        "completed_turns_before_error": item.get(
+            "completed_turns_before_error"
+        ),
+        "trajectory_id": item.get("trajectory_id"),
+        "trajectory_file": item.get("trajectory_file"),
+        "partial_trajectory_file": item.get("partial_trajectory_file"),
+        "candidate_classification": precheck.get("candidate_classification"),
+        "hard_reject_reasons": precheck.get("hard_reject_reasons") or [],
+        "false_checks": [key for key, passed in checks.items() if not passed],
+        "turn_count": (
+            structural.get("turn_count")
+            if isinstance(structural.get("turn_count"), int)
+            else item.get("completed_turns_before_error")
+        ),
+    }
+
+
+def load_gpt50_rollout(scenario_id):
+    """Load accepted or rejected GPT dialogue for human inspection."""
+    progress = read_json(GPT50_ROLLOUT_ROOT / "progress.json", {}) or {}
+    raw_attempts = [
+        item for item in progress.get("attempts", [])
+        if item.get("scenario_id") == scenario_id
+    ]
+    attempts = [_gpt50_attempt_summary(item) for item in raw_attempts]
+    completed = next(
+        (
+            item
+            for item in (progress.get("completed_slots") or {}).values()
+            if item.get("scenario_id") == scenario_id
+        ),
+        None,
+    )
+    scenario_record = next(
+        (
+            item
+            for item in _gpt50_scenario_records()[1]
+            if item[1].get("scenario_id") == scenario_id
+        ),
+        None,
+    )
+    if scenario_record is None:
+        return {
+            "status": "artifact_missing",
+            "scenario_id": scenario_id,
+            "record": completed,
+            "attempts": attempts[-5:],
+            "human_review": "pending",
+        }
+    directory = scenario_record[0].parent.name
+    scenario_dir = GPT50_ROLLOUT_ROOT / directory
+    selected_attempt = None
+    trajectory_path = None
+    artifact_kind = None
+    if completed is not None:
+        trajectory_path = scenario_dir / completed["trajectory_file"]
+        artifact_kind = "accepted"
+        selected_attempt = next(
+            (
+                item for item in reversed(raw_attempts)
+                if item.get("trajectory_id") == completed.get("trajectory_id")
+            ),
+            None,
+        )
+    else:
+        artifact_candidates = []
+        for attempt_index, item in enumerate(raw_attempts):
+            candidate = _gpt50_trajectory_path(scenario_dir, item)
+            if candidate is None:
+                continue
+            summary = _gpt50_attempt_summary(item)
+            turn_count = summary.get("turn_count")
+            if not isinstance(turn_count, int):
+                candidate_value = read_json(candidate, {}) or {}
+                turn_count = len(candidate_value.get("turns", []))
+            artifact_candidates.append(
+                (turn_count, attempt_index, item, candidate)
+            )
+        if artifact_candidates:
+            _, _, selected_attempt, trajectory_path = max(
+                artifact_candidates,
+                key=lambda value: (value[0], value[1]),
+            )
+            artifact_kind = "rejected_or_partial"
+    latest_attempt = raw_attempts[-1] if raw_attempts else None
+    if trajectory_path is None or not trajectory_path.is_file():
+        latest_status = (
+            latest_attempt.get("status") if latest_attempt else "pending"
+        )
+        return {
+            "status": latest_status,
+            "scenario_id": scenario_id,
+            "record": completed,
+            "attempts": attempts[-5:],
+            "quality_warning": (
+                "当前尝试没有形成可展示的完整 rollout 对话。"
+                if latest_attempt else "当前场景尚未开始 rollout。"
+            ),
+            "human_review": "pending",
+        }
+    trajectory = read_json(trajectory_path, {}) or {}
+    if not trajectory:
+        return {
+            "status": "artifact_missing",
+            "scenario_id": scenario_id,
+            "record": completed,
+            "artifact_path": _display_path(trajectory_path),
+            "attempts": attempts[-5:],
+            "human_review": "pending",
+        }
+    turns = []
+    for turn in trajectory.get("turns", []):
+        action = turn.get("policy_action") or {}
+        turns.append({
+            "turn_id": turn.get("turn_id"),
+            "policy_action": action.get("text", ""),
+            "environment_response": turn.get("environment_response", ""),
+            "social_act": (turn.get("appraisal") or {}).get("social_act"),
+            "speaker_intent": (turn.get("appraisal") or {}).get(
+                "speaker_intent"
+            ),
+            "state_delta": turn.get("state_delta", {}),
+            "dynamics_delta": turn.get("dynamics_delta", {}),
+            "trigger_events": turn.get("trigger_events", []),
+        })
+    machine_precheck_passed = bool(
+        completed
+        and completed.get("machine_precheck_passed") is True
+    )
+    gate3_candidate = (
+        machine_precheck_passed
+        and len(turns) >= GPT50_MIN_GATE3_TURNS
+    )
+    selected_summary = (
+        _gpt50_attempt_summary(selected_attempt)
+        if selected_attempt else {}
+    )
+    selected_status = (
+        selected_attempt.get("status") if selected_attempt else None
+    )
+    if not turns:
+        rollout_status = selected_status or "artifact_missing"
+        quality_warning = (
+            "技术失败留下了空检查点，但没有形成任何可展示的对话回合。"
+        )
+    elif gate3_candidate:
+        rollout_status = "completed"
+        quality_warning = ""
+    elif selected_status == "generation_error":
+        rollout_status = selected_status
+        quality_warning = (
+            f"技术生成在完成 {len(turns)} 轮后中断；以下只是 partial "
+            "对话，保留供诊断，不是完整候选。"
+        )
+    elif selected_attempt:
+        rollout_status = selected_status or "retained_for_review"
+        quality_warning = (
+            "该对话已生成但机器质量门未通过；页面保留完整内容供人工诊断，"
+            "不能视为 Gate 3 候选。"
+        )
+    elif len(turns) < GPT50_MIN_GATE3_TURNS:
+        rollout_status = "short_trajectory"
+        quality_warning = "该对话不足 10 turn，只能作为失败证据。"
+    else:
+        rollout_status = "retained_for_review"
+        quality_warning = "该对话需要人工诊断，尚未进入 Gate 3。"
+    return {
+        "status": rollout_status,
+        "scenario_id": scenario_id,
+        "trajectory_id": trajectory.get("trajectory_id"),
+        "policy_id": trajectory.get("policy_id"),
+        "policy_prompt_id": (
+            trajectory.get("policy_provenance") or {}
+        ).get("prompt_id"),
+        "minimum_natural_turns": (
+            trajectory.get("policy_provenance") or {}
+        ).get("minimum_natural_turns"),
+        "turn_count": len(turns),
+        "turns": turns,
+        "machine_precheck_passed": machine_precheck_passed,
+        "gate3_candidate": gate3_candidate,
+        "quality_warning": quality_warning,
+        "ending": trajectory.get("ending", {}),
+        "record": completed,
+        "artifact_kind": artifact_kind,
+        "machine_review": selected_summary,
+        "artifact_path": _display_path(trajectory_path),
+        "attempts": attempts[-5:],
+        "human_review": "pending",
     }
 
 
@@ -240,6 +791,8 @@ def load_gpt50_scenario(scenario_id):
             document_path.read_text(encoding="utf-8")
             if document_path.is_file() else ""
         ),
+        "rollout": load_gpt50_rollout(scenario_id),
+        "gate2": load_gpt50_gate2(scenario_id),
         "human_review": "pending",
     }
 
@@ -917,6 +1470,8 @@ def manual_review_catalog():
             "state_transition_agreement.json", "trajectory_plausibility.json",
             "history_intervention.json", "paraphrase_robustness.json",
             "local_counterfactual.json", "backbone_sensitivity.json",
+            "persona_intervention.json", "video_state_consistency.json",
+            "timescale_validity.json",
         )
     }
     long_summary = long_rollout_summary()
@@ -938,11 +1493,11 @@ def manual_review_catalog():
         ["scale20_pilot", "历史 Scale20 审核框架",
          0, 0, "archived",
          "旧模型 rollout 已归档；页面和标注合同保留，等待新批次 manifest。", "历史人审"],
-        ["gate1_scenario", "Gate 1 · Scenario 与 S0/D0 冻结", len(scenario_records), len(scenario_records),
-         quality_status.get("gate_1_scenario_quality", "pending"), "人物、冲突、state、D0、视频阈值、来源原创化及姓名/时间/哈希。", "Scenario 情节"],
+        ["gate1_scenario", "Gate 1 · Scenario 与 initial state 冻结", len(scenario_records), len(scenario_records),
+         quality_status.get("gate_1_scenario_quality", "pending"), "人物、冲突、initial state、视频阈值、来源原创化及姓名/时间/哈希；runtime dynamics seed 仅做机器校验。", "Scenario 情节"],
         ["gate2_environment", "Gate 2 · Environment Validity（1 人实验复核）",
-         sum(value["exists"] for value in environment_files.values()), 6,
-         quality_status.get("gate_2_environment_validity", "pending"), "E1/E2 为确定性抽样；E3/E4/E5 自动跑实验后由 1 人复核；E6 自动。", "人审工作台 · Gate 2"],
+         sum(value["exists"] for value in environment_files.values()), 9,
+         quality_status.get("gate_2_environment_validity", "pending"), "E1/E2 为确定性抽样；E3/E4/E5/E7 自动干预后由 1 人复核；E6 双 backbone；E8 视频状态一致性；E9 timescale validity。", "人审工作台 · Gate 2"],
         ["gate3_rollout", "Gate 3 · Rollout Screening",
          gate3_primary, gate3_required,
          quality_status.get("gate_3_rollout_quality", "pending"), f"主审优先看 {gate3_primary} 条 active candidates；第二人确定性 audit {gate3_secondary} 条。Archive 同步可见，人工可复核，但不会被自动伪装成通过。", "Rollout 筛选 + 人审工作台 audit 清单"],
@@ -1231,7 +1786,7 @@ def scenario_detail(scenario_id):
         "prompt_template": get_prompt(prompt_id),
         "rendered_initial_prompt": render_prompt(prompt_id, initial_observation),
         "boundary_note": (
-            "网页向研究者展示 persona/hidden intention/S0/D0；这些作者侧私有信息"
+            "网页向研究者展示 persona/hidden intention/initial state/runtime dynamics seed；这些作者侧私有信息"
             "不会进入被测模型 observation。"
         ),
     }
@@ -1275,6 +1830,16 @@ def scenario_detail(scenario_id):
 
 def api_payload(path):
     parts = [unquote(part) for part in path.strip("/").split("/") if part]
+    # GPT50 is the active workbench. Resolve it before loading the unrelated
+    # legacy scenario catalog so rollout polling stays lightweight.
+    if parts == ["api", "gpt50-review"]:
+        return load_gpt50_review()
+    if parts == ["api", "gpt50-rollout"]:
+        return load_gpt50_rollout_progress()
+    if len(parts) == 3 and parts[:2] == ["api", "gpt50-rollout"]:
+        return load_gpt50_rollout(parts[2])
+    if len(parts) == 3 and parts[:2] == ["api", "gpt50-scenario"]:
+        return load_gpt50_scenario(parts[2])
     records = load_scenario_records()
     catalog = read_json(SCENARIO_DIR / "manifest.json", {}) or {}
     if parts == ["api", "health"]:
@@ -1295,6 +1860,8 @@ def api_payload(path):
         return load_scale20_combined_review()
     if parts == ["api", "gpt50-review"]:
         return load_gpt50_review()
+    if parts == ["api", "gpt50-rollout"]:
+        return load_gpt50_rollout_progress()
     if len(parts) == 3 and parts[:2] == ["api", "gpt50-scenario"]:
         return load_gpt50_scenario(parts[2])
     if parts == ["api", "scale150-review"]:
@@ -1430,9 +1997,16 @@ class App(SimpleHTTPRequestHandler):
             self.send_json(payload if payload is not None else {"error": "not found"},
                            200 if payload is not None else 404)
             return
-        if parsed.path in ("/", ""):
+        legacy_review_pages = {
+            "/index.html",
+            "/review.html",
+            "/scale150.html",
+            "/scale300_tasks.html",
+            "/t2_dev_review.html",
+        }
+        if parsed.path in ("/", "", "/gpt50", "/gpt50/"):
             self.path = "/gpt50_gate1.html"
-        elif parsed.path in ("/gpt50", "/gpt50/"):
+        elif parsed.path in legacy_review_pages:
             self.path = "/gpt50_gate1.html"
         super().do_GET()
 

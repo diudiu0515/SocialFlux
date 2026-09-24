@@ -8,6 +8,8 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+ROOT = Path(__file__).resolve().parents[1]
+
 from environment.memory import MemoryModule
 from environment.state_updater import ModelStateUpdater, apply_transition
 from evaluation.backbone_sensitivity import compare_transitions, failed_comparison, summarize_backbone_sensitivity
@@ -64,9 +66,17 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--raw-root", type=Path, required=True)
     parser.add_argument("--config", type=Path, required=True)
+    parser.add_argument("--scenario-root", type=Path, default=Path("configs/scenarios"))
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--scenario-limit", type=int)
     args = parser.parse_args()
+    for name in ("raw_root", "config", "scenario_root", "output"):
+        path = Path(getattr(args, name)).expanduser()
+        setattr(
+            args,
+            name,
+            path.resolve() if path.is_absolute() else (ROOT / path).resolve(),
+        )
     config = json.loads(args.config.read_text(encoding="utf-8"))
     backbones = config.get("backbones", [])
     for backbone in backbones:
@@ -77,7 +87,7 @@ def main():
     families = [item.get("model_family") for item in backbones]
     if not all(models) or len(set(models)) != 2 or not all(families) or len(set(families)) != 2:
         raise ValueError("backbones must record two different models and model families")
-    scenarios = {item["scenario_id"]: item for item in load_scenarios("configs/scenarios")}
+    scenarios = {item["scenario_id"]: item for item in load_scenarios(args.scenario_root)}
     records = []
     for trajectory, checkpoint in select_checkpoints(load_records(args.raw_root), args.scenario_limit):
         outputs = []

@@ -2,7 +2,7 @@
 """Directly author fresh Scale300 candidates with Claude Fable.
 
 This path never reads an older scenario catalog. It creates a narrative,
-machine-screens it, normalizes a blueprint, proposes S0/D0, and emits a
+machine-screens it, normalizes a blueprint, proposes an initial state and runtime dynamics seed, and emits a
 schema-valid candidate that remains pending human Gate 1.
 """
 
@@ -26,6 +26,7 @@ from schemas.validate import (
     STATE_CONTRACT_VERSION,
     validate_blueprint,
     validate_initial_state_proposal,
+    validate_evaluated_agent_role,
     validate_quality_report,
     validate_scenario,
     validate_v2_dynamics,
@@ -100,6 +101,17 @@ def _atomic_json(path, value):
         encoding="utf-8",
     )
     temporary.replace(path)
+
+
+def _artifact_has_public_evaluated_persona(path):
+    try:
+        runtime = json.loads(Path(path).read_text(encoding="utf-8"))
+        validate_evaluated_agent_role(
+            runtime.get("evaluated_agent_role"), require_persona=True,
+        )
+    except (OSError, json.JSONDecodeError, ValueError, AttributeError):
+        return False
+    return True
 
 
 def _validate_brief(value):
@@ -220,13 +232,78 @@ def _blueprint_core_validator(value, brief):
     return value
 
 
+def _normalize_runtime_variable_budget(value):
+    """Trim only over-budget valid family lists while preserving model order."""
+    if not isinstance(value, dict):
+        return value
+    selected = value.get("selected_state_variables")
+    if not isinstance(selected, dict) or not all(
+        isinstance(items, list) for items in selected.values()
+    ):
+        return value
+    if sum(len(items) for items in selected.values()) <= 8:
+        return value
+    selected = {
+        family: items[:2]
+        for family, items in selected.items()
+    }
+    allowed = {
+        f"{family}.{variable}"
+        for family, items in selected.items()
+        for variable in items
+    }
+    targets = value.get("target_state_ids")
+    if isinstance(targets, list):
+        targets = list(dict.fromkeys(item for item in targets if item in allowed))
+        if not targets and allowed:
+            targets = [next(iter(allowed))]
+    return {
+        **value,
+        "selected_state_variables": selected,
+        "target_state_ids": targets,
+    }
+
+
 def _blueprint_runtime_validator(value, core, brief):
+    value = _normalize_runtime_variable_budget(value)
     if not isinstance(value, dict) or set(value) != BLUEPRINT_RUNTIME_FIELDS:
         raise ValueError(
             "blueprint runtime fields mismatch: expected "
             f"{sorted(BLUEPRINT_RUNTIME_FIELDS)}"
         )
     return _blueprint_validator({**core, **value}, brief)
+
+
+def _evaluated_persona_validator(value, evaluated_role):
+    candidate = deepcopy(evaluated_role)
+    candidate["persona"] = value
+    validate_evaluated_agent_role(candidate, require_persona=True)
+    return value
+
+
+def _persona_backfill_blueprint(existing, prior_blueprint, persona, brief):
+    evaluated_role = deepcopy(existing["evaluated_agent_role"])
+    evaluated_role["persona"] = deepcopy(persona)
+    blueprint = {
+        key: deepcopy(existing[key])
+        for key in BLUEPRINT_CORE_FIELDS
+    }
+    blueprint.update({
+        "state_contract_version": existing["state_contract_version"],
+        "environment_agent": deepcopy(existing["environment_agent"]),
+        "evaluated_agent_role": evaluated_role,
+        "selected_state_variables": deepcopy(
+            existing["selected_state_variables"]
+        ),
+        "target_state_ids": deepcopy(existing["target_state_ids"]),
+        "multimodal_event_concepts": deepcopy(
+            prior_blueprint.get("multimodal_event_concepts", [])
+        ),
+        "suggested_horizon": 20,
+    })
+    return _blueprint_validator(blueprint, brief)
+
+
 
 
 def _assert_bounded_values(value, label):
@@ -301,7 +378,10 @@ def _assemble_candidate(blueprint, proposal, quality):
         "initial_state": "candidate_pending_human_freeze",
         "quality_gate": "pending_human_review",
     }
-    scenario["quality_gate"] = deepcopy(quality["checks"])
+    scenario["quality_gate"] = {
+        key: "pending" if status == "revise" else status
+        for key, status in quality["checks"].items()
+    }
     scenario["initialization_notes"] = {
         "rationale": deepcopy(proposal["rationale"]),
         "trigger_reachability": deepcopy(proposal["trigger_reachability"]),
@@ -339,6 +419,21 @@ def _run_stage(stage, callback, output, providers):
         raise
 
 
+def _complete_source(provider, messages, generation, max_attempts):
+    """Retry empty/refusal-like prose and rotate pooled credentials."""
+    diagnostics = []
+    for attempt in range(1, max_attempts + 1):
+        text = provider.complete(messages, **generation).strip()
+        word_count = len(text.split())
+        if word_count >= 300:
+            return text
+        diagnostics.append(f"attempt {attempt}: {word_count} words")
+    raise ValueError(
+        "scenario authoring returned empty or too-short source after "
+        f"{max_attempts} attempts ({'; '.join(diagnostics)})"
+    )
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--brief", type=Path, required=True)
@@ -366,7 +461,7 @@ def main(argv=None):
         action="store_true",
         help=(
             "reuse source, quality, and blueprint core, but regenerate stable Persona, "
-            "state vocabulary, S0/D0, and presentation under the current contract"
+            "state vocabulary, initial state, runtime dynamics seed, and presentation under the current contract"
         ),
     )
     args = parser.parse_args(argv)
@@ -408,24 +503,32 @@ def main(argv=None):
     started = _now()
 
     source_path = args.output / "source.md"
+    source_regenerated = False
     if args.resume and source_path.exists():
         source_text = source_path.read_text(encoding="utf-8").strip()
-        if not source_text:
-            raise ValueError("saved source.md is empty")
     else:
-        source_text = _run_stage("scenario_authoring", lambda: providers["scenario_authoring"].complete(
+        source_text = ""
+    if not source_text:
+        source_text = _run_stage("scenario_authoring", lambda: _complete_source(
+            providers["scenario_authoring"],
             [{
                 "role": "user",
-                "content": render_prompt("scenario_candidate_script_v1", brief),
+                "content": render_prompt("scenario_candidate_script_v2", brief),
             }],
-            temperature=0.75,
-            top_p=0.92,
-            seed=args.seed,
-        ).strip(), args.output, providers)
+            {
+                "temperature": 0.75,
+                "top_p": 0.92,
+                "seed": args.seed,
+            },
+            args.max_attempts,
+        ), args.output, providers)
+        if not source_text:
+            raise ValueError("scenario authoring returned empty source")
         source_path.write_text(source_text + "\n", encoding="utf-8")
+        source_regenerated = True
 
     quality_path = args.output / "source_quality.json"
-    if args.resume and quality_path.exists():
+    if args.resume and not source_regenerated and quality_path.exists():
         quality = _quality_validator(
             json.loads(quality_path.read_text(encoding="utf-8")),
             brief["source_type"],
@@ -471,13 +574,85 @@ def main(argv=None):
         raise SystemExit(2)
 
     blueprint_path = args.output / "blueprint.json"
-    if args.resume and blueprint_path.exists() and not args.rebuild_private_layer:
+    existing_scenario_path = (
+        args.output / "scenarios" / "scenario_001" / "scenario_001.json"
+    )
+    if (
+        args.resume
+        and not source_regenerated
+        and existing_scenario_path.exists()
+        and not args.rebuild_private_layer
+        and not _artifact_has_public_evaluated_persona(existing_scenario_path)
+    ):
+        existing = validate_scenario(json.loads(
+            existing_scenario_path.read_text(encoding="utf-8")
+        ))
+        prior_blueprint = (
+            json.loads(blueprint_path.read_text(encoding="utf-8"))
+            if blueprint_path.exists() else {}
+        )
+        evaluated_role = deepcopy(existing["evaluated_agent_role"])
+        persona = _run_stage(
+            "evaluated_persona_backfill",
+            lambda: complete_json(
+                providers["scenario_normalization"],
+                [{
+                    "role": "user",
+                    "content": render_prompt(
+                        "scenario_evaluated_persona_backfill_v1",
+                        {
+                            "relationship_context": existing["narrative_design"].get(
+                                "relationship_structure", ""
+                            ),
+                            "environment_agent": {
+                                "persona": existing["environment_agent"]["persona"],
+                                "explicit_goal": existing["environment_agent"][
+                                    "explicit_goal"
+                                ],
+                            },
+                            "evaluated_agent_role": evaluated_role,
+                        },
+                    ),
+                }],
+                {
+                    "temperature": 0.3,
+                    "top_p": 0.9,
+                    "seed": args.seed + 3,
+                    "max_tokens": 900,
+                },
+                lambda value: _evaluated_persona_validator(
+                    value, evaluated_role
+                ),
+                context=f"evaluated persona backfill {brief['scenario_id']}",
+                max_attempts=args.max_attempts,
+            ),
+            args.output,
+            providers,
+        )
+        blueprint = _persona_backfill_blueprint(
+            existing, prior_blueprint, persona, brief
+        )
+        runtime_path = args.output / "blueprint_runtime.json"
+        runtime = {
+            key: deepcopy(blueprint[key])
+            for key in BLUEPRINT_RUNTIME_FIELDS
+        }
+        _atomic_json(runtime_path, runtime)
+        _atomic_json(blueprint_path, blueprint)
+
+    elif (
+        args.resume
+        and not source_regenerated
+        and blueprint_path.exists()
+        and not args.rebuild_private_layer
+        and _artifact_has_public_evaluated_persona(blueprint_path)
+    ):
         blueprint = _blueprint_validator(
             json.loads(blueprint_path.read_text(encoding="utf-8")), brief
         )
     else:
         core_path = args.output / "blueprint_core.json"
-        if args.resume and core_path.exists():
+        if args.resume and not source_regenerated and core_path.exists():
             core = _blueprint_core_validator(
                 json.loads(core_path.read_text(encoding="utf-8")), brief
             )
@@ -511,7 +686,13 @@ def main(argv=None):
             _atomic_json(core_path, core)
 
         runtime_path = args.output / "blueprint_runtime.json"
-        if args.resume and runtime_path.exists() and not args.rebuild_private_layer:
+        if (
+            args.resume
+            and not source_regenerated
+            and runtime_path.exists()
+            and not args.rebuild_private_layer
+            and _artifact_has_public_evaluated_persona(runtime_path)
+        ):
             runtime = json.loads(runtime_path.read_text(encoding="utf-8"))
             blueprint = _blueprint_runtime_validator(runtime, core, brief)
         else:
@@ -519,7 +700,7 @@ def main(argv=None):
                 providers["scenario_normalization"],
                 [{
                     "role": "user",
-                    "content": render_prompt("scenario_candidate_runtime_design_v1", {
+                    "content": render_prompt("scenario_candidate_runtime_design_v2", {
                         "blueprint_core": core,
                         "construction_brief": brief,
                         "source_material": source_text,
@@ -544,13 +725,13 @@ def main(argv=None):
         _atomic_json(blueprint_path, blueprint)
 
     proposal_path = args.output / "initial_state_proposal.json"
-    if args.resume and proposal_path.exists() and not args.rebuild_private_layer:
+    if args.resume and not source_regenerated and proposal_path.exists() and not args.rebuild_private_layer:
         proposal = validate_initial_state_proposal(
             json.loads(proposal_path.read_text(encoding="utf-8")), blueprint
         )
     else:
         state_core_path = args.output / "initial_state_core.json"
-        if args.resume and state_core_path.exists() and not args.rebuild_private_layer:
+        if args.resume and not source_regenerated and state_core_path.exists() and not args.rebuild_private_layer:
             state_core = _initial_state_core_validator(
                 json.loads(state_core_path.read_text(encoding="utf-8")), blueprint
             )
@@ -567,7 +748,7 @@ def main(argv=None):
                     "temperature": 0.25,
                     "top_p": 0.9,
                     "seed": args.seed + 4,
-                    "max_tokens": 1600,
+                    "max_tokens": 2400,
                 },
                 lambda value: _initial_state_core_validator(value, blueprint),
                 context=f"scenario state values {brief['scenario_id']}",
@@ -576,7 +757,7 @@ def main(argv=None):
             _atomic_json(state_core_path, state_core)
 
         presentation_path = args.output / "initial_presentation.json"
-        if args.resume and presentation_path.exists() and not args.rebuild_private_layer:
+        if args.resume and not source_regenerated and presentation_path.exists() and not args.rebuild_private_layer:
             presentation = json.loads(
                 presentation_path.read_text(encoding="utf-8")
             )
@@ -597,7 +778,7 @@ def main(argv=None):
                     "temperature": 0.25,
                     "top_p": 0.9,
                     "seed": args.seed + 5,
-                    "max_tokens": 1200,
+                    "max_tokens": 2400,
                 },
                 lambda value: (
                     _initial_presentation_validator(
@@ -631,10 +812,11 @@ def main(argv=None):
         "prompts": {
             prompt_id: prompt_manifest()["prompts"][prompt_id]
             for prompt_id in (
-                "scenario_candidate_script_v1",
+                "scenario_candidate_script_v2",
                 "scenario_candidate_quality_gate_v1",
                 "scenario_candidate_core_v1",
-                "scenario_candidate_runtime_design_v1",
+                "scenario_candidate_runtime_design_v2",
+                "scenario_evaluated_persona_backfill_v1",
                 "scenario_candidate_state_values_v1",
                 "scenario_candidate_expression_triggers_v1",
             )

@@ -32,6 +32,50 @@ def _condition_matches(values, conditions):
     return True
 
 
+def _relaxed_conditions(conditions, margin):
+    """Return runtime-only relaxed thresholds without mutating the scenario."""
+    relaxed = deepcopy(conditions)
+    for condition in relaxed.values():
+        operator = condition.get("operator")
+        threshold = condition.get("threshold")
+        if not isinstance(threshold, (int, float)) or not margin:
+            continue
+        if operator in (">=", ">"):
+            condition["threshold"] = threshold - margin
+        elif operator in ("<=", "<"):
+            condition["threshold"] = threshold + margin
+    return relaxed
+
+
+def _trigger_policy(value):
+    policy = {
+        "profile": "scenario_default",
+        "threshold_margin": 0,
+        "change_threshold_margin": 0,
+        "cooldown_turns": None,
+        "crossing_as_threshold": False,
+        "max_events_per_turn": 1,
+    }
+    policy.update(deepcopy(value or {}))
+    for key in ("threshold_margin", "change_threshold_margin"):
+        if (
+            isinstance(policy[key], bool)
+            or not isinstance(policy[key], (int, float))
+            or policy[key] < 0
+        ):
+            raise ValueError(f"multimodal trigger policy {key} must be non-negative")
+    cooldown = policy["cooldown_turns"]
+    if cooldown is not None and (
+        isinstance(cooldown, bool) or not isinstance(cooldown, int) or cooldown < 0
+    ):
+        raise ValueError("multimodal trigger policy cooldown_turns must be null or non-negative")
+    if policy["max_events_per_turn"] != 1:
+        raise ValueError("canonical online runtime allows exactly one media event per turn")
+    if not isinstance(policy["crossing_as_threshold"], bool):
+        raise ValueError("multimodal trigger policy crossing_as_threshold must be boolean")
+    return policy
+
+
 def _public_media(event):
     return {
         "media_type": event["media_type"],
@@ -45,8 +89,9 @@ def _public_media(event):
 class ObservableExpressionLayer:
     """Project private state changes into public behavioral signals."""
 
-    def __init__(self, scenario):
+    def __init__(self, scenario, trigger_policy=None):
         self.scenario = scenario
+        self.trigger_policy = _trigger_policy(trigger_policy)
         self.default_expression = deepcopy(
             scenario.get("observable_expression", {}).get(
                 "default",
@@ -81,20 +126,32 @@ class ObservableExpressionLayer:
             key=lambda item: item.get("priority", 999),
         )
         for trigger in triggers:
-            conditions = trigger.get("conditions", {})
+            conditions = _relaxed_conditions(
+                trigger.get("conditions", {}),
+                self.trigger_policy["threshold_margin"],
+            )
             currently_active = _condition_matches(current_values, conditions)
             mode = trigger.get("trigger_mode", "crossing")
             if mode == "crossing":
                 previously_active = _condition_matches(previous_values, conditions)
-                eligible = currently_active and not previously_active
+                eligible = currently_active and (
+                    self.trigger_policy["crossing_as_threshold"]
+                    or not previously_active
+                )
             elif mode == "threshold":
                 eligible = currently_active
             elif mode == "state_change":
-                eligible = _condition_matches(changes, trigger.get("change_conditions", {}))
+                change_conditions = _relaxed_conditions(
+                    trigger.get("change_conditions", {}),
+                    self.trigger_policy["change_threshold_margin"],
+                )
+                eligible = _condition_matches(changes, change_conditions)
             else:
                 raise ValueError(f"unsupported trigger_mode: {mode}")
             last_turn = last_trigger_turns.get(trigger["trigger_id"])
-            cooldown = trigger.get("cooldown_turns", 0)
+            cooldown = self.trigger_policy["cooldown_turns"]
+            if cooldown is None:
+                cooldown = trigger.get("cooldown_turns", 0)
             if eligible and last_turn is not None and turn_id < last_turn + cooldown:
                 eligible = False
             if not eligible:
@@ -113,6 +170,7 @@ class ObservableExpressionLayer:
                 "cue_template": trigger["cue_template"],
                 "media_asset_id": trigger.get("media_asset_id"),
                 "duration_seconds": trigger.get("duration_seconds", 4),
+                "trigger_policy_profile": self.trigger_policy["profile"],
             }
             private_events.append(event)
             public_expression = expression

@@ -533,5 +533,82 @@ class SemanticLedgerShortCaseTest(unittest.TestCase):
         )
 
 
+    def test_conditional_commitment_is_asserted_not_merely_hypothetical(self):
+        text = "如果你今晚发材料，我明早审完。"
+        event = {
+            "event_type": "commitment",
+            "owner": "evaluated_agent",
+            "action_owner": "evaluated_agent",
+            "evidence_span": "如果你今晚发材料，我明早审完",
+            "status": "conditional",
+            "assertion_mode": "asserted",
+        }
+        normalized = validate_semantic_ledger_events(
+            [event], text, "evaluated_agent", require_assertion_mode=True,
+        )
+        self.assertEqual(
+            (normalized[0]["event_type"], normalized[0]["status"]),
+            ("commitment", "conditional"),
+        )
+
+        hypothetical = dict(event)
+        hypothetical["assertion_mode"] = "hypothetical"
+        normalizations = []
+        self.assertEqual(
+            validate_semantic_ledger_events(
+                [hypothetical], text, "evaluated_agent",
+                require_assertion_mode=True,
+                normalization_log=normalizations,
+            ),
+            [],
+        )
+        self.assertEqual(
+            normalizations[0]["operation"],
+            "exclude_nonasserted_event_candidate",
+        )
+
+    def test_explicit_resolution_updates_only_the_bound_proposal_id(self):
+        proposal_text = "可以先审材料，也可以先开会。"
+        ledger = record_environment_response(
+            initial_ledger(), turn_id=1, response=proposal_text,
+            latest_social_act="proposal",
+            semantic_events=[{
+                "event_type": "proposal", "owner": "environment_agent",
+                "action_owner": "collective", "evidence_span": "先审材料",
+                "status": "open",
+            }, {
+                "event_type": "proposal", "owner": "environment_agent",
+                "action_owner": "collective", "evidence_span": "先开会",
+                "status": "open",
+            }],
+        )
+        proposal_ids = [item["id"] for item in ledger["active_proposals"]]
+        self.assertEqual(len(set(proposal_ids)), 2)
+        action = "我接受先审材料的方案。"
+        appraisal = {
+            "social_act": "concession",
+            "ledger_resolutions": [{
+                "target_id": proposal_ids[0],
+                "resolution": "accepted",
+                "evidence_span": "我接受先审材料的方案",
+            }],
+        }
+        updated = record_evaluated_action(
+            ledger, turn_id=2, action={"text": action}, appraisal=appraisal,
+            semantic_events=[],
+        )
+        self.assertEqual(
+            [item["id"] for item in updated["active_proposals"]],
+            [proposal_ids[1]],
+        )
+        self.assertEqual(
+            updated["proposal_resolutions"][-1]["id"], proposal_ids[0]
+        )
+        self.assertEqual(
+            updated["proposal_resolutions"][-1]["resolution_status"],
+            "accepted",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

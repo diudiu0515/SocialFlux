@@ -76,6 +76,16 @@ class EnvironmentStabilizationTest(unittest.TestCase):
         changed = [value for value in result["state_delta"]["emotion"].values() if value != "similar"]
         self.assertEqual(len(changed), 1)
 
+    def test_fractional_boundary_calibrates_without_key_error(self):
+        state = {"relationship": {"trust": 9.5}}
+        result = DeterministicStateCalibrator(self.scenario).calibrate(
+            appraisal([impact("relationship.trust")]), state, {}
+        )
+        self.assertEqual(
+            result["state_delta"]["relationship"]["trust"],
+            "mild_increase",
+        )
+
     def test_strong_persona_sensitive_event_can_expand_state_budget(self):
         scenario = {
             "environment_agent": {

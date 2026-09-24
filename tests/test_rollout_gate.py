@@ -142,6 +142,17 @@ class RolloutGateTest(unittest.TestCase):
             "meaningless_premature_ending", invalid["hard_reject_reasons"]
         )
 
+    def test_short_natural_trajectory_is_not_canonical_admission(self):
+        item = trajectory()
+        item["turns"] = item["turns"][:7]
+        item["ending"] = {"reason": "natural_completion", "turn_id": 7}
+        result = audit_rollout(
+            item, judgment(item), {"passed": True, "score": 0.8}
+        )
+        self.assertFalse(result["passed"])
+        self.assertEqual(result["status"], "rejected")
+        self.assertIn("short_natural_trajectory", result["eligibility_failures"])
+
 
     def test_pool_contract_enforces_one_raw_trajectory_per_scenario(self):
         items = []

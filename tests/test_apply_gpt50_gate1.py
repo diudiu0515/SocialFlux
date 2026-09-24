@@ -11,7 +11,7 @@ from scripts.scenario_docs import write_document
 
 class ApplyGpt50Gate1Test(unittest.TestCase):
     def _fixture(self, root):
-        source = Path("configs/scenarios/scenario_001/scenario_001.json")
+        source = Path("data/gpt50/experiment/scenario/scenarios/scenario_001/scenario_001.json")
         scenario = json.loads(source.read_text(encoding="utf-8"))
         scenario["construction_status"]["quality_gate"] = "pending_human_review"
         scenario["construction_status"]["initial_state"] = (

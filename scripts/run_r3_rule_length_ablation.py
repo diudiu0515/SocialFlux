@@ -151,10 +151,10 @@ def build_components(scenario, source, condition):
     horizon = condition["horizon_mode"]
     # Keep model prompts and two-stage environment identical across cells.
     # The experiment varies only validator profile and horizon behavior.
-    policy_prompt = "task_t4_action_v9"
-    response_prompt = "environment_response_v11"
+    policy_prompt = "task_t4_action_v21"
+    response_prompt = "environment_response_v25"
     appraisal_prompt = env_cfg.get(
-        "appraisal_prompt_id", "environment_appraisal_v4"
+        "appraisal_prompt_id", "environment_appraisal_v11"
     )
     provenance = {
         "format": VERSION,

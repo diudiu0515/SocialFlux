@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+from tempfile import TemporaryDirectory
 import unittest
 
 from schemas.validate import (
@@ -10,6 +13,8 @@ from scripts.generate_scale300_candidates import (
     _blueprint_validator,
     _validate_brief,
     _quality_validator,
+    _artifact_has_public_evaluated_persona,
+    _persona_backfill_blueprint,
 )
 
 
@@ -43,6 +48,16 @@ class DirectScenarioAuthoringTest(unittest.TestCase):
                 "name": "乙",
                 "role": "项目伙伴",
                 "explicit_goal": "获得可靠决定",
+                "persona": {
+                    "name": "乙",
+                    "role": "项目伙伴",
+                    "core_values": ["准确", "共同负责"],
+                    "temperament": ["耐心", "务实"],
+                    "communication_style": "先确认事实再提出方案",
+                    "decision_style": "权衡证据与可执行性",
+                    "conflict_style": "直接指出分歧并寻找折中",
+                    "boundaries": ["不把未经确认的结论当作事实"],
+                },
             },
             "selected_state_variables": {
                 "emotion": ["anxiety"],
@@ -65,6 +80,21 @@ class DirectScenarioAuthoringTest(unittest.TestCase):
         }
         with self.assertRaisesRegex(ValueError, "exactly emotion"):
             validate_blueprint(drifted)
+
+    def test_v2_blueprint_requires_public_evaluated_persona(self):
+        blueprint = self._v2_blueprint()
+        blueprint["evaluated_agent_role"] = dict(
+            blueprint["evaluated_agent_role"]
+        )
+        blueprint["evaluated_agent_role"].pop("persona")
+        with self.assertRaisesRegex(ValueError, "requires its own public persona"):
+            validate_blueprint(blueprint)
+
+    def test_v2_evaluated_persona_identity_matches_role(self):
+        blueprint = self._v2_blueprint()
+        blueprint["evaluated_agent_role"]["persona"]["name"] = "另一人"
+        with self.assertRaisesRegex(ValueError, "name/role must match"):
+            validate_blueprint(blueprint)
 
     def test_v2_persona_rejects_dynamic_state_traits(self):
         persona = dict(self._v2_blueprint()["environment_agent"]["persona"])
@@ -136,6 +166,47 @@ class DirectScenarioAuthoringTest(unittest.TestCase):
         }
         with self.assertRaisesRegex(ValueError, "persona must be an object"):
             _blueprint_validator(blueprint, brief)
+
+    def test_persona_backfill_freezes_state_and_environment(self):
+        existing = self._v2_blueprint()
+        persona = existing["evaluated_agent_role"].pop("persona")
+        prior = {"multimodal_event_concepts": ["observable pause"]}
+        frozen_selected = json.dumps(
+            existing["selected_state_variables"], sort_keys=True
+        )
+        frozen_environment = json.dumps(
+            existing["environment_agent"], sort_keys=True
+        )
+        result = _persona_backfill_blueprint(
+            existing, prior, persona,
+            {
+                "scenario_id": existing["scenario_id"],
+                "source_type": existing["source"]["type"],
+                "provenance_id": existing["source"].get("provenance_id"),
+            },
+        )
+        self.assertEqual(
+            json.dumps(result["selected_state_variables"], sort_keys=True),
+            frozen_selected,
+        )
+        self.assertEqual(
+            json.dumps(result["environment_agent"], sort_keys=True),
+            frozen_environment,
+        )
+        self.assertEqual(result["evaluated_agent_role"]["persona"], persona)
+
+    def test_resume_rebuilds_only_runtime_when_own_persona_is_missing(self):
+        with TemporaryDirectory() as temporary:
+            path = Path(temporary) / "blueprint_runtime.json"
+            path.write_text(
+                json.dumps({"evaluated_agent_role": {}}), encoding="utf-8"
+            )
+            self.assertFalse(_artifact_has_public_evaluated_persona(path))
+            role = self._v2_blueprint()["evaluated_agent_role"]
+            path.write_text(
+                json.dumps({"evaluated_agent_role": role}), encoding="utf-8"
+            )
+            self.assertTrue(_artifact_has_public_evaluated_persona(path))
 
     def test_quality_validator_preserves_pending_human_boundary(self):
         report = {

@@ -10,6 +10,7 @@ from __future__ import annotations
 from copy import deepcopy
 import json
 
+from prompts.loader import render_prompt
 from providers.structured import complete_json
 
 
@@ -56,17 +57,10 @@ def extraction_prompt(scenario, trajectory):
             "rationale": "why distinct actions could produce comparable consequences",
         },
     }
-    return (
-        "你为 SocialFlux 从一条完整公开互动中提取 T1/T3 构造点。"
-        "只使用提供的公开历史，不推测隐藏动机或 latent 数值。T1 选择 1–2 个真正有历史证据的"
-        "checkpoint；状态必须来自 allowed_target_state_ids，证据轮不得晚于 checkpoint。"
-        "T3 选择一个尚有至少 5 个后续轮次、且当时确有多个可执行行动策略的 checkpoint；"
-        "如果整条轨迹没有这样的 checkpoint，t3 必须返回 null，不能续写历史或缩短窗口。"
-        "future_turns_available 必须等于该 checkpoint 后实际剩余的轮数。不要生成答案或候选台词。"
-        "只返回与下例同结构的 JSON，不要增加字段：\n"
-        + json.dumps(example, ensure_ascii=False)
-        + "\n公开输入：\n"
-        + json.dumps(packet, ensure_ascii=False, sort_keys=True)
+    return render_prompt(
+        "task_checkpoint_extraction_v1",
+        packet,
+        output_schema_json=json.dumps(example, ensure_ascii=False),
     )
 
 

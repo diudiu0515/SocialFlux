@@ -13,12 +13,11 @@ from providers.text import (
 )
 
 from . import response_validation
+from .observation import build_public_evaluated_role
 from .response_completion import complete_environment_response
 
 
-_STRUCTURED_RESPONSE_PROMPTS = frozenset(
-    f"environment_response_v{version}" for version in range(19, 26)
-)
+_STRUCTURED_RESPONSE_PROMPTS = frozenset({"environment_response_v25"})
 
 
 class ResponseGenerator:
@@ -28,8 +27,9 @@ class ResponseGenerator:
 
 class ModelResponseGenerator(ResponseGenerator):
     def __init__(
-        self, provider, sampling=None, prompt_id="environment_response_v18",
+        self, provider, sampling=None, prompt_id="environment_response_v25",
         validation_profile="full", horizon_mode="natural_max_20",
+        minimum_natural_turns=1,
     ):
         validate_generation_options(validation_profile, horizon_mode)
         self.provider = provider
@@ -37,6 +37,7 @@ class ModelResponseGenerator(ResponseGenerator):
         self.prompt_id = prompt_id
         self.validation_profile = validation_profile
         self.horizon_mode = horizon_mode
+        self.minimum_natural_turns = int(minimum_natural_turns)
 
     @property
     def provenance(self):
@@ -46,6 +47,7 @@ class ModelResponseGenerator(ResponseGenerator):
             "sampling": dict(self.sampling),
             "validation_profile": self.validation_profile,
             "horizon_mode": self.horizon_mode,
+            "minimum_natural_turns": self.minimum_natural_turns,
         }
 
     def generate(self, context):
@@ -107,7 +109,11 @@ class ModelResponseGenerator(ResponseGenerator):
         scenario = context.get("scenario", {})
         environment_agent = scenario.get("environment_agent", {})
         environment_persona = environment_agent.get("persona", environment_agent)
-        evaluated_role = scenario.get("evaluated_agent_role", {})
+        evaluated_role = build_public_evaluated_role(
+            scenario.get("evaluated_agent_role", {})
+        )
+        payload["scenario"] = dict(scenario)
+        payload["scenario"]["evaluated_agent_role"] = evaluated_role
         payload["role_lock"] = {
             "you_are": {
                 "name": environment_persona.get("name", "environment participant"),
@@ -139,6 +145,7 @@ class ModelResponseGenerator(ResponseGenerator):
             segment_turn,
             fragment_reference="the public time/event record",
             history_scope="commitments and the complete earlier history",
+            minimum_natural_turns=self.minimum_natural_turns,
         )
         if self.validation_profile == "hard_only":
             apply_hard_only_prompt_profile(payload, "interaction_ledger")

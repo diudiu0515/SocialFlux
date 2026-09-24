@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 
+from prompts.loader import render_prompt
 from providers.structured import complete_json
 from scripts.t2_common import call_count
 from tasks.extraction import public_history
@@ -77,23 +78,10 @@ def spec_prompt(scenario, trajectory, windows):
         "observable_history_a": public_history(trajectory),
         "candidate_windows": windows,
     }
-    return (
-        "为 SocialFlux T2 从一条已通过来源筛选的真实 rollout A 中选择受控改编窗口。"
-        "只能选择 candidate_windows 中的一组 fork/ending。B 保留人物、背景、fork 前共同历史和"
-        "已成立事实，只改变一段会影响情绪、动机或关系理解的经历；不能新增制度、权力、关键证据"
-        "或已完成行动。ending 的台词稍后会从 A 原样复用，因此 history_b_direction 必须说明如何"
-        "让该 ending 在 B 中也自然，但不要预写 B 的逐轮台词。改编点必须来自所选 fork（含）"
-        "到 ending（不含）区间内已经公开发生的台词或事件。source_anchor_evidence 只选择对应"
-        "轮次和说话人，代码会自动附加完整原文，不要自行复制 quote；"
-        "不得新增分叉前往事、区间外事件或隐藏背景来制造差异。B 只能改写锚定区间内的互动。"
-        "候选窗口不跨公开时间/事件边界，因此这些轮次属于同一次接触；新提出的未来期限不能在"
-        "后续相邻轮次中被当作已经到期、履约或违约。"
-        "protected_facts 只列公开已经成立"
-        "且必须保持不变的事实。shared_ending_behavior 只能描述两侧共享的客观可见/可听表现，"
-        "不能直接写隐藏情绪或解释。只输出以下 JSON：\n"
-        + json.dumps(schema, ensure_ascii=False)
-        + "\n材料：\n"
-        + json.dumps(packet, ensure_ascii=False, sort_keys=True)
+    return render_prompt(
+        "task_t2_adaptation_spec_v1",
+        packet,
+        output_schema_json=json.dumps(schema, ensure_ascii=False),
     )
 
 

@@ -39,6 +39,18 @@ DEFAULT_OUTPUT = ROOT / "data" / "claude150_v1"
 BATCH_SIZE = 5
 TOTAL_COUNT = 150
 NARRATIVE_COUNT = 45
+SETTING_FAMILIES = (
+    "family_household",
+    "friendship_peer",
+    "neighborhood_community",
+    "education_mentorship",
+    "care_support",
+    "creative_collaboration",
+    "service_customer",
+    "civic_public",
+    "work_professional",
+    "mixed_private_public",
+)
 BRIEF_FORMAT = "socialflux_claude150_brief_batch_v1"
 RUN_FORMAT = "socialflux_claude150_scenario_run_v1"
 
@@ -69,6 +81,14 @@ def source_type_for_ordinal(ordinal):
     return "narrative-derived" if (ordinal - 1) % 10 < 3 else "synthetic-script"
 
 
+def setting_family_for_ordinal(ordinal):
+    """Balance settings while deconfounding them from the 3:7 source pattern."""
+    if not 1 <= ordinal <= TOTAL_COUNT:
+        raise ValueError(f"ordinal must be in 1..{TOTAL_COUNT}")
+    index = ordinal - 1
+    return SETTING_FAMILIES[(index * 3 + index // 10) % len(SETTING_FAMILIES)]
+
+
 def requested_identity(ordinal):
     source_type = source_type_for_ordinal(ordinal)
     family = "screen" if source_type == "narrative-derived" else "synthetic"
@@ -76,6 +96,7 @@ def requested_identity(ordinal):
         "scenario_id": f"CF150_{ordinal:03d}",
         "source_type": source_type,
         "provenance_id": f"claude-fable5-{family}-{ordinal:03d}",
+        "setting_family": setting_family_for_ordinal(ordinal),
         "ordinal": ordinal,
     }
 
@@ -97,6 +118,8 @@ def validate_brief_batch(value, requested):
             if brief[key] != identity[key]:
                 raise ValueError(f"brief changed requested {key}")
         coverage = brief["coverage_requirements"]
+        if coverage.get("setting_family") != identity["setting_family"]:
+            raise ValueError("brief changed requested setting_family")
         for key in (
             "domain",
             "opening_condition",
@@ -135,6 +158,7 @@ def brief_signature(brief):
         "relationship_structure": brief["relationship_structure"],
         "power_structure": brief["power_structure"],
         "domain": coverage["domain"],
+        "setting_family": coverage["setting_family"],
         "source_work": deepcopy(coverage.get("source_work")),
     }
 
@@ -152,6 +176,23 @@ def load_json(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
+def reusable_brief_batch(args, batch_path, saved_paths, requested):
+    if not (
+        args.resume
+        and batch_path.exists()
+        and all(path.exists() for path in saved_paths)
+    ):
+        return None
+    saved = load_json(batch_path)
+    expected = prompt_manifest()["prompts"]["scenario_brief_batch_v2"]
+    if saved.get("prompt") != expected:
+        return None
+    try:
+        return validate_brief_batch({"briefs": saved["briefs"]}, requested)
+    except (KeyError, TypeError, ValueError):
+        return None
+
+
 def generate_briefs(args, routes):
     route_config = routes.provider_config("scenario_brief_design")
     if route_config.get("model") != "claude-fable-5":
@@ -165,10 +206,10 @@ def generate_briefs(args, routes):
         batch_number = (start - 1) // args.batch_size + 1
         batch_path = output / "brief_batches" / f"batch_{batch_number:03d}.json"
         saved_paths = [brief_path(output, ordinal) for ordinal in ordinals]
-        if args.resume and batch_path.exists() and all(path.exists() for path in saved_paths):
-            saved = load_json(batch_path)
-            briefs = validate_brief_batch({"briefs": saved["briefs"]}, requested)
-        else:
+        briefs = reusable_brief_batch(
+            args, batch_path, saved_paths, requested
+        )
+        if briefs is None:
             payload = {
                 "batch_format": BRIEF_FORMAT,
                 "requested": requested,
@@ -190,7 +231,7 @@ def generate_briefs(args, routes):
                 provider,
                 [{
                     "role": "user",
-                    "content": render_prompt("scenario_brief_batch_v1", payload),
+                    "content": render_prompt("scenario_brief_batch_v2", payload),
                 }],
                 {
                     "temperature": 0.75,
@@ -216,7 +257,7 @@ def generate_briefs(args, routes):
                 "ordinals": ordinals,
                 "briefs": briefs,
                 "model_provenance": public_provider_config(route_config),
-                "prompt": prompt_manifest()["prompts"]["scenario_brief_batch_v1"],
+                "prompt": prompt_manifest()["prompts"]["scenario_brief_batch_v2"],
                 "human_review": "pending",
             })
             for ordinal, brief in zip(ordinals, briefs):
@@ -262,20 +303,57 @@ def generate_briefs(args, routes):
     return generated
 
 
-def _scenario_complete(output, ordinal, routes_sha256):
+def _scenario_complete(
+    output,
+    ordinal,
+    routes_sha256,
+    *,
+    allow_route_migration=False,
+    allow_prompt_migration=False,
+):
     target = scenario_path(output, ordinal)
     run = Path(output) / "authoring" / f"scenario_{ordinal:03d}" / "run_manifest.json"
     if not target.exists() or not run.exists():
         return False
-    manifest = load_json(run)
-    if (
-        manifest.get("status") != "candidate_generated_pending_human_gate1"
-        or manifest.get("model_routes_sha256") != routes_sha256
-    ):
-        return False
     scenario = load_json(target)
     validate_scenario(scenario)
+    persona = scenario.get("evaluated_agent_role", {}).get("persona")
+    if not isinstance(persona, dict) or set(persona) != {
+        "name",
+        "role",
+        "core_values",
+        "temperament",
+        "communication_style",
+        "decision_style",
+        "conflict_style",
+        "boundaries",
+    }:
+        return False
     if scenario.get("state_contract_version") != "socialflux_state_v2":
+        return False
+    manifest = load_json(run)
+    prompt_ids = (
+        "scenario_candidate_script_v2",
+        "scenario_candidate_quality_gate_v1",
+        "scenario_candidate_core_v1",
+        "scenario_candidate_runtime_design_v2",
+                "scenario_evaluated_persona_backfill_v1",
+        "scenario_candidate_state_values_v1",
+        "scenario_candidate_expression_triggers_v1",
+    )
+    expected_prompts = {
+        prompt_id: prompt_manifest()["prompts"][prompt_id]
+        for prompt_id in prompt_ids
+    }
+    prompt_record = manifest.get("prompts")
+    if prompt_record != expected_prompts:
+        return False
+    if manifest.get("status") != "candidate_generated_pending_human_gate1":
+        return False
+    if (
+        not allow_route_migration
+        and manifest.get("model_routes_sha256") != routes_sha256
+    ):
         return False
     return True
 
@@ -283,7 +361,13 @@ def _scenario_complete(output, ordinal, routes_sha256):
 def author_one(args, routes, ordinal):
     output = args.output.resolve()
     target = scenario_path(output, ordinal)
-    if args.resume and _scenario_complete(output, ordinal, routes.sha256):
+    if args.resume and _scenario_complete(
+        output,
+        ordinal,
+        routes.sha256,
+        allow_route_migration=args.allow_route_migration,
+        allow_prompt_migration=args.allow_prompt_migration,
+    ):
         return {
             "ordinal": ordinal,
             "scenario_id": requested_identity(ordinal)["scenario_id"],
@@ -302,8 +386,11 @@ def author_one(args, routes, ordinal):
         "--expected-model", "claude-fable-5",
         "--continue-after-machine-quality",
     ]
-    if args.resume and run_dir.exists():
-        command.extend(("--resume", "--rebuild-private-layer"))
+    resuming_existing = args.resume and run_dir.exists()
+    if resuming_existing:
+        command.append("--resume")
+    if args.rebuild_private_layer and resuming_existing:
+        command.append("--rebuild-private-layer")
     completed = subprocess.run(
         command,
         cwd=ROOT,
@@ -405,7 +492,16 @@ def main(argv=None):
     parser.add_argument("--briefs-only", action="store_true")
     parser.add_argument("--scenarios-only", action="store_true")
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--rebuild-private-layer", action="store_true")
     parser.add_argument("--allow-route-migration", action="store_true")
+    parser.add_argument(
+        "--allow-prompt-migration",
+        action="store_true",
+        help=(
+            "reuse completed scenarios whose prompt IDs, paths, and versions "
+            "match while recording a hash migration"
+        ),
+    )
     args = parser.parse_args(argv)
     if not 1 <= args.count <= TOTAL_COUNT:
         parser.error(f"count must be in 1..{TOTAL_COUNT}")
@@ -415,6 +511,8 @@ def main(argv=None):
         parser.error("workers must be in 1..8")
     if args.briefs_only and args.scenarios_only:
         parser.error("briefs-only and scenarios-only are mutually exclusive")
+    if args.rebuild_private_layer and not args.resume:
+        parser.error("rebuild-private-layer requires --resume")
     args.output = args.output.resolve()
     if args.output.exists() and any(args.output.iterdir()) and not args.resume:
         raise ValueError("output is not empty; use --resume or a new versioned path")
@@ -450,6 +548,7 @@ def main(argv=None):
         "model": "claude-fable-5",
         "model_routes_sha256": routes.sha256,
         "model_route_history": [],
+        "prompt_migration_history": [],
         "parent_catalog": None,
         "qwen_inputs": [],
         "gate_policy": "generate_all_then_human_postfilter",
@@ -473,6 +572,13 @@ def main(argv=None):
                 "reason": "explicit_endpoint_protocol_migration",
             })
         manifest["model_route_history"] = history
+        prompt_history = list(old.get("prompt_migration_history") or [])
+        if args.allow_prompt_migration:
+            prompt_history.append({
+                "migrated_at_utc": now(),
+                "reason": "explicit_prompt_wording_migration_reused_compatible_scenarios",
+            })
+        manifest["prompt_migration_history"] = prompt_history
         manifest["created_at_utc"] = old.get("created_at_utc")
     atomic_json(manifest_path, manifest)
     if not args.scenarios_only:
@@ -516,8 +622,6 @@ def main(argv=None):
         for ordinal in range(1, args.count + 1):
             result = author_one(args, routes, ordinal)
             record(result)
-            if result["status"] == "failed":
-                break
     else:
         with ThreadPoolExecutor(max_workers=args.workers) as executor:
             futures = {

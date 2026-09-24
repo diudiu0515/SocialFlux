@@ -65,9 +65,26 @@ def validate_generation_options(validation_profile, horizon_mode):
 
 
 def horizon_guidance(
-    horizon_mode, turn_number, segment_turn, *, fragment_reference, history_scope
+    horizon_mode, turn_number, segment_turn, *, fragment_reference, history_scope,
+    minimum_natural_turns=1,
 ):
     """Return one horizon instruction without duplicating mode branches."""
+    if (
+        horizon_mode == "natural_max_20"
+        and turn_number < minimum_natural_turns
+    ):
+        return (
+            "The interaction is before its minimum effective history depth. "
+            "Answer the newest substantive move and add one material advancement. "
+            "If the local issue is settled, surface or engage one different grounded "
+            "dimension: a trade-off, timing window, resource limit, authority boundary, "
+            "coordination dependency, verification criterion, or contingency. It may "
+            "be framed as the speaker\x27s concern, uncertainty, or proposal, but never as "
+            "a newly established external fact. A bare acknowledgment, repeated contact "
+            "promise, repeated deadline, or stretched farewell is invalid progression. "
+            "Do not invent a named actor, institution, document, exact rule, evidence, "
+            "completed action, or external event."
+        )
     if horizon_mode == "fixed_20" and turn_number == 20:
         return (
             "Final total turn: close this interaction in the present tense without "

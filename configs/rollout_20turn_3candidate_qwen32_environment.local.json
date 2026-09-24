@@ -3,8 +3,8 @@
   "pool_stage": "development",
   "environment": {
     "horizon_mode": "natural_max_20",
-    "appraisal_prompt_id": "environment_appraisal_v10",
-    "response_prompt_id": "environment_response_v22",
+    "appraisal_prompt_id": "environment_appraisal_v11",
+    "response_prompt_id": "environment_response_v25",
     "provider": {
       "provider": "local_vllm",
       "endpoint": "http://127.0.0.1:8301/v1/chat/completions",
@@ -34,7 +34,7 @@
   "policies": [
     {
       "policy_id": "qwen3_32b_awq_local",
-      "prompt_id": "task_t4_action_v18",
+      "prompt_id": "task_t4_action_v21",
       "horizon_mode": "natural_max_20",
       "source_type": "local",
       "model_family": "qwen",

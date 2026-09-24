@@ -9,7 +9,7 @@ N complete canonical scenario JSON candidates
         ↓
 schema/catalog validation (no model approval)
         ↓
-Gate 1 source/quality review + S0/D0 real reviewer freeze
+Gate 1 source/quality review + initial-state real reviewer freeze
         ↓
 one canonical StatefulEnvironment
         ├── one natural baseline-model rollout per scenario
@@ -63,9 +63,9 @@ nine-criterion acceptance + human annotation
 
 ## Scenario bundle
 
-每个 `scenario_NNN/` 的 JSON 是机器事实源，同名 Markdown 是确定性生成的人类说明，含故事初始化、S0/D0、作者化多片段时间线/事件池、视频阈值与质量状态。批次目录和运行产物分离：场景目录不内嵌历史模型 rollout。JSON 改动后必须刷新确定性文档并重新进行 hash-bound Gate 1；旧签名自动失效。
+每个 `scenario_NNN/` 的 JSON 是机器事实源，同名 Markdown 是确定性生成的人类说明，含故事初始化、initial state、runtime dynamics seed、作者化多片段时间线/事件池、视频阈值与质量状态。批次目录和运行产物分离：场景目录不内嵌历史模型 rollout。JSON 改动后必须刷新确定性文档并重新进行 hash-bound Gate 1；旧签名自动失效。
 
-S0/D0 的候选值与真人冻结协议见 [`S0_D0_REVIEW.md`](../protocols/S0_D0_REVIEW.md)。Talking Head 是可选的批次级扩展：旧素材、manifest、本地模型和本地生成工具已永久删除，没有活跃媒体资产。生成、接入和审核框架继续保留；未来外部 API 新批次必须创建自己的 manifest，请求只含公开表演指令，并通过视频流、音轨、时长、分辨率和帧率检查。网站的受限 `/media/<asset_id>` 路由在没有 manifest 时返回空集，不接受任意文件路径。
+Initial state 的真人冻结协议属于 Gate 1；runtime dynamics seed 由 schema 和 validator 校验，不单独签署。Talking Head 是可选的批次级扩展：旧素材、manifest、本地模型和本地生成工具已永久删除，没有活跃媒体资产。生成、接入和审核框架继续保留；未来外部 API 新批次必须创建自己的 manifest，请求只含公开表演指令，并通过视频流、音轨、时长、分辨率和帧率检查。网站的受限 `/media/<asset_id>` 路由在没有 manifest 时返回空集，不接受任意文件路径。
 
 影视来源只允许贡献高层社会机制。`extract-structure` 的结构合同强制记录必须丢弃的表层元素以及原创化要求；后续 source 必须使用新人物、新场域、新事件、新 stakes 和原创语言，不复制台词、角色或标志性情节序列。
 
@@ -108,7 +108,8 @@ History dependence 的 Full / Recent-k / Critical-event-removed 三个 policy
 当前 Gate 2 固定检查 State-Update Human Agreement、Persona Sensitivity、
 Paraphrase Robustness、History Intervention、Local Action Intervention、
 Neutral-State Stability、Response-State Consistency、Full-Trajectory
-Plausibility，并按 manifest 记录必要的 Backbone Sensitivity。单一自然 rollout
+Plausibility、Persona-Only Intervention 与 Video-State Consistency，并按 manifest
+记录必要的 Backbone Sensitivity。单一自然 rollout
 不要求 multi-seed stability。自动结构证据只能标为
 pending/evidence_ready/provisionally_ready；需要真人的项目没有评审记录不得标
 pass。

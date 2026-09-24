@@ -39,7 +39,7 @@ Contracts:
 - every condition value has exactly the keys `operator` and `threshold`, for
   example `{"coordination.evidence_sharing":{"operator":">=","threshold":6}}`.
   Never use the operator as a key and never use `value` instead of `threshold`;
-- threshold/crossing conditions must not already be active at S0/D0;
+- threshold/crossing conditions must not already be active at initialization;
 - a state-change trigger uses non-empty `change_conditions` and may keep
   `conditions` empty;
 - `trigger_reachability` is exactly three strings, one per trigger, each under

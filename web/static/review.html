@@ -17,7 +17,7 @@
     <div class="metric"><b>1×</b><span>每场景 rollout</span></div>
   </section>
   <section class="cards">
-    <article class="card"><h2>① GPT 小规模 Gate 1</h2><p>人工审核新 GPT 场景并冻结 S0/D0；通过后每场景只生成一条自然 rollout。</p><ul><li>自动发现当前 GPT 批次</li><li>完整场景、角色与关键历史</li><li>S0/D0、trigger 与泄漏核验</li><li>带 scenario SHA-256 的审核导出</li></ul><a href="/gpt50_gate1.html">立即审核 GPT 场景</a></article>
+    <article class="card"><h2>① GPT 小规模 Gate 1</h2><p>人工审核新 GPT 场景并冻结 initial state；runtime dynamics seed 仅做机器校验。通过后每场景只生成一条自然 rollout。</p><ul><li>自动发现当前 GPT 批次</li><li>完整场景、角色与关键历史</li><li>initial state、trigger 与泄漏核验</li><li>带 scenario SHA-256 的审核导出</li></ul><a href="/gpt50_gate1.html">立即审核 GPT 场景</a></article>
     <article class="card archived"><h2>② 历史四 Gate 工作台</h2><p>页面与标注合同仍保留，旧数据不再作为活跃候选。</p><ul><li>旧 300 场景已归档</li><li>旧 Qwen rollout 已归档</li><li>Gate 1–4 表单保留</li><li>新 manifest 接入后可复用</li></ul><a href="/scale150.html">查看历史工作台</a></article>
     <article class="card"><h2>③ T1–T4 任务审核</h2><p>核对任务输入、候选答案、证据与明确记录的构造缺口。</p><ul><li>T1/T2/T3 离线任务</li><li>T4 在线评测</li><li>机器建议不冒充人工 GT</li><li>Gate 4 同样本双人抽查</li></ul><a href="/scale300_tasks.html">打开任务审核页</a></article>
     <article class="card"><h2>④ 示例与媒体框架</h2><p>任务示例页和受限媒体路由保留；当前没有活跃 Talking Head 素材。</p><ul><li>任务示例与证据对照</li><li>旧音视频已永久删除</li><li>等待外部 API 新批次</li><li>媒体缺失不会冒充已完成</li></ul><a href="/task_examples.html">查看示例页面</a></article>

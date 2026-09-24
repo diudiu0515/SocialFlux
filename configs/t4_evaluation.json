@@ -20,6 +20,14 @@
     "response_prompt_id": "environment_response_v25",
     "response_validation_profile": "hard_only",
     "horizon_mode": "natural_max_20",
+    "multimodal_trigger_policy": {
+      "profile": "online_relaxed_v1",
+      "threshold_margin": 1,
+      "change_threshold_margin": 1,
+      "cooldown_turns": 2,
+      "crossing_as_threshold": true,
+      "max_events_per_turn": 1
+    },
     "provider": {"model_route": "appraisal"},
     "sampling": {"temperature": 0.2, "top_p": 0.9, "seed": 7301},
     "response_provider": {"model_route": "response"},

@@ -20,7 +20,7 @@
 - [Formal Rollout Strategy](protocols/gate.md)：正式多模型 raw pool 和发布门槛。
 - [Data Production Quality Gate](protocols/quality_gate.md)：scenario、rollout 和 T1/T2/T3 的质量合同。
 - [Gate Implementation](protocols/GATE_IMPLEMENTATION.md)：上述约束在代码与产物中的映射。
-- [S0/D0 Review](protocols/S0_D0_REVIEW.md)：初始状态人工冻结说明。
+- [Initial State Review](protocols/INITIAL_STATE_REVIEW.md)：initial state 人工冻结与 runtime dynamics seed 机器校验说明。
 
 ## 操作手册
 

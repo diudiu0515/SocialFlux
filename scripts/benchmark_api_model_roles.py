@@ -114,7 +114,7 @@ def appraisal_case(config, model, case, provider=None):
         appraiser=ModelAppraiser(
             scenario, provider,
             {"temperature": 0.1, "top_p": 0.9, "seed": 12001},
-            prompt_id="environment_appraisal_v10",
+            prompt_id="environment_appraisal_v11",
         ),
     )
     output = updater.update(
@@ -158,7 +158,7 @@ def response_case(config, model, case, provider=None):
         response_generator=ModelResponseGenerator(
             provider,
             {"temperature": 0.25, "top_p": 0.9, "seed": 13001},
-            prompt_id="environment_response_v24",
+            prompt_id="environment_response_v25",
             validation_profile="hard_only",
             horizon_mode="natural_max_20",
         ),

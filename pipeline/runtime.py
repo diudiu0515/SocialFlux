@@ -151,6 +151,12 @@ def build_environment_factory(scenario, environment):
             "response_validation_profile", "hard_only"
         ),
         horizon_mode=environment.get("horizon_mode", "natural_max_20"),
+        minimum_natural_turns=environment.get(
+            "minimum_natural_turns", 1
+        ),
+        multimodal_trigger_policy=environment.get(
+            "multimodal_trigger_policy", {}
+        ),
     )
 
 
@@ -183,4 +189,5 @@ def build_policy(spec, run_index=0, *, provenance_extra=None):
         provenance_extra=extra,
         validation_profile=spec.get("validation_profile", "hard_only"),
         horizon_mode=spec.get("horizon_mode", "natural_max_20"),
+        minimum_natural_turns=spec.get("minimum_natural_turns", 1),
     )

@@ -20,6 +20,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from prompts.loader import prompt_manifest
 from providers.model_routes import ModelRoutes
 from schemas.validate import validate_scenario
 from scripts.generate_scale300_candidates import (
@@ -314,6 +315,21 @@ def _scenario_complete(
     if not target.exists() or not run.exists():
         return False
     manifest = load_json(run)
+    prompt_ids = (
+        "scenario_candidate_script_v2",
+        "scenario_candidate_quality_gate_v1",
+        "scenario_candidate_core_v1",
+        "scenario_candidate_runtime_design_v2",
+                "scenario_evaluated_persona_backfill_v1",
+        "scenario_candidate_state_values_v1",
+        "scenario_candidate_expression_triggers_v1",
+    )
+    expected_prompts = {
+        prompt_id: prompt_manifest()["prompts"][prompt_id]
+        for prompt_id in prompt_ids
+    }
+    if manifest.get("prompts") != expected_prompts:
+        return False
     if (
         manifest.get("status") != "candidate_generated_pending_human_gate1"
         or manifest.get("model_routes_sha256") != routes_sha256
@@ -321,6 +337,18 @@ def _scenario_complete(
         return False
     scenario = load_json(target)
     validate_scenario(scenario)
+    persona = scenario.get("evaluated_agent_role", {}).get("persona")
+    if not isinstance(persona, dict) or set(persona) != {
+        "name",
+        "role",
+        "core_values",
+        "temperament",
+        "communication_style",
+        "decision_style",
+        "conflict_style",
+        "boundaries",
+    }:
+        return False
     if (
         required_contract_version is not None
         and scenario.get("state_contract_version") != required_contract_version
@@ -359,9 +387,10 @@ def author_one(args, routes, ordinal):
         "--expected-model", "gpt-6-astra",
         "--continue-after-machine-quality",
     ]
-    if args.resume and run_dir.exists():
+    resuming_existing = args.resume and run_dir.exists()
+    if resuming_existing:
         command.append("--resume")
-    if args.rebuild_private_layer:
+    if args.rebuild_private_layer and resuming_existing:
         command.append("--rebuild-private-layer")
     completed = subprocess.run(
         command,

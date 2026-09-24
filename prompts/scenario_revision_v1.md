@@ -4,7 +4,7 @@ Revise one existing fictional SocialFlux scenario for natural interaction. This
 is a scenario-design call, not a rollout and not a task-answer call.
 
 Preserve every field listed in `immutable_fields`: identity, source provenance,
-state ontology, target IDs, numeric S0/D0, and the maximum 20-turn budget. Return
+state ontology, target IDs, numeric initialization, and the maximum 20-turn budget. Return
 only a patch for the explicitly requested narrative fields. Do not invent a new
 metric, institution, legal right, contract power, or guaranteed outcome.
 
@@ -77,7 +77,7 @@ Return exactly this JSON shape:
       "meaningful_choice_space": ["...", "...", "..."]
     },
     "environment_agent": {
-      "persona": {"name": "...", "role": "...", "patience": 0.5, "empathy": 0.5},
+      "persona": {"name": "...", "role": "...", "core_values": ["...", "..."], "temperament": ["...", "..."], "communication_style": "...", "decision_style": "...", "conflict_style": "...", "boundaries": ["..."]},
       "explicit_goal": "...",
       "hidden_intention": "..."
     },
@@ -85,7 +85,8 @@ Return exactly this JSON shape:
       "character_id": "unchanged",
       "name": "...",
       "role": "...",
-      "explicit_goal": "..."
+      "explicit_goal": "...",
+      "persona": {"name": "...", "role": "...", "core_values": ["...", "..."], "temperament": ["...", "..."], "communication_style": "...", "decision_style": "...", "conflict_style": "...", "boundaries": ["..."]}
     },
     "opening_response": "...",
     "longitudinal_design": null

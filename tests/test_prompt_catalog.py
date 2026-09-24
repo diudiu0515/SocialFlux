@@ -37,6 +37,10 @@ class PromptCatalogTest(unittest.TestCase):
         for path in Path("schemas").glob("*.json"):
             json.loads(path.read_text(encoding="utf-8"))
 
+    def test_render_prompt_rejects_unresolved_placeholders(self):
+        with self.assertRaisesRegex(ValueError, "unresolved placeholders"):
+            render_prompt("task_rollout_action_v1", payload={})
+
     def test_model_policy_returns_text_only_and_passes_sampling(self):
         provider = RecordingProvider()
         policy = ModelPolicy(
@@ -48,7 +52,8 @@ class PromptCatalogTest(unittest.TestCase):
         self.assertEqual(action, {"text": "任意自然语言行动"})
         self.assertEqual(provider.calls[0][1], {"temperature": 0.8, "seed": 7})
         rendered = next(item["content"] for item in provider.calls[0][0] if item["role"] == "user")
-        self.assertIn("role.explicit_goal", rendered)
+        self.assertIn("role_lock", rendered)
+        self.assertIn("goal", rendered)
         self.assertIn("evaluated participant", rendered)
         self.assertIn('"turn_id": 3', rendered)
 
@@ -57,10 +62,10 @@ class PromptCatalogTest(unittest.TestCase):
         normalize_prompt = get_prompt("scenario_normalization_v1")
         initialize_prompt = get_prompt("initial_state_configuration_v1")
         self.assertIn("Do not mention JSON schema", script_prompt)
-        self.assertIn("Do not produce S0/D0", normalize_prompt)
+        self.assertIn("Do not produce initial numeric values", normalize_prompt)
         self.assertIn("scenario_blueprint.schema.json", normalize_prompt)
         self.assertNotIn("initial_state", normalize_prompt)
-        self.assertIn("candidate S0/D0", initialize_prompt)
+        self.assertIn("candidate initial state", initialize_prompt)
 
     def test_narrative_source_prompt_enforces_originality_and_variety(self):
         extraction = get_prompt("narrative_structure_extraction_v1")
@@ -88,15 +93,19 @@ class PromptCatalogTest(unittest.TestCase):
             action={"text": "我想核对事实。"},
         )
         self.assertIn("我想核对事实", rendered)
-        self.assertIn("first and only model call before deterministic state calibration", rendered)
-        self.assertIn("fixed event feature", rendered)
-        self.assertIn("sparse candidate lists, not final", rendered)
-        self.assertIn("Usually identify 0–2 state impacts", rendered)
-        self.assertIn("Do not generate", rendered)
+        self.assertIn("environment LLM call 1", rendered)
+        self.assertIn("event_features", rendered)
+        self.assertIn("sparse candidates", rendered)
+        self.assertIn("state_impacts", rendered)
+        self.assertIn("Do not write", rendered)
+        self.assertIn("newly occurring act is new behavioral evidence", rendered)
+        self.assertIn("condition on a commitment made now", rendered)
+        self.assertIn("ledger_resolutions", rendered)
+        self.assertIn("speaker_report", rendered)
 
-        response = get_prompt("environment_response_v6")
-        self.assertIn("separate LLM call", response)
-        self.assertIn("new consequential constraint", response)
+        response = get_prompt("environment_response_v25")
+        self.assertIn("environment LLM call 2", response)
+        self.assertIn("consequential fact", response)
 
         rollout_judge = get_prompt("rollout_quality_judge_v2")
         self.assertIn("four top-level fields", rollout_judge)

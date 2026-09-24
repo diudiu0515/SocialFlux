@@ -14,14 +14,16 @@ def build_appraisal_prompt(
     previous_dynamics,
     memory,
     action,
+    evaluated_agent=None,
     longitudinal_context=None,
     interaction_ledger=None,
-    prompt_id="environment_appraisal_v6",
+    prompt_id="environment_appraisal_v11",
 ):
     return render_prompt(prompt_id, {
         "persona": persona,
         "background": background,
         "explicit_goal": explicit_goal,
+        "evaluated_agent": evaluated_agent or {},
         "hidden_intention": hidden_intention,
         "previous_state": previous_state,
         "previous_dynamics": previous_dynamics,
@@ -35,4 +37,4 @@ def build_appraisal_prompt(
 
 
 def build_response_prompt(context):
-    return render_prompt("environment_response_v6", context)
+    return render_prompt("environment_response_v25", context)

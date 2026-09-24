@@ -10,7 +10,7 @@ from tests.support import ContextualTestResponse, ContextualTestUpdater, TextPol
 
 
 SCENARIO = json.loads(Path(
-    "configs/scenarios/scenario_001/scenario_001.json"
+    "data/gpt50/experiment/scenario/scenarios/scenario_001/scenario_001.json"
 ).read_text(encoding="utf-8"))
 
 

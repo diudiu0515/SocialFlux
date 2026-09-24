@@ -4,7 +4,7 @@
 
 > 勾选标准：必须有可复核的代码、产物或测试证据。标明需要真人审核、标注员、真实模型 API 或视频资产的条目，在没有对应记录前不勾选。
 
-> 最后自查：2026-09-19。
+> 最后自查：2026-09-23。
 
 > 当前主链：先完成 GPT 小规模端到端设计审计，再扩大 Claude 主批次；每个通过 Gate 1 的场景只生成 1 条自然 rollout，不做 3 seed 或 best-of-N。唯一入口为 `python -m pipeline`。Gate 1–4 的正式人工证据和正式 tasks 尚未完成。以下既有条目与历史记录按维护规则保留，不因主链升级而删除或伪造完成状态。
 
@@ -17,7 +17,7 @@
 | R1 自由 action | 生产环境拒绝 action_id，不存在固定 action taxonomy/effect table | [x] |
 | R2 单一环境 | offline rollout 与 T4 共用 StatefulEnvironment/ModelEnvironmentFactory | [x] |
 | R3 Hybrid source | narrative-derived 与 synthetic-script 进入同一 blueprint/scenario schema | [x] |
-| R4 Scenario review gates | quality 人工批准后 normalization，S0/D0 单独 candidate→freeze | [x] |
+| R4 Scenario review gates | quality 人工批准后 normalization，initial state 单独 candidate→freeze；runtime dynamics seed 机器校验 | [x] |
 | R5 Rollout-derived tasks | T1 natural checkpoint、T2 natural histories+O*、T3 real checkpoint local branch | [x] |
 | R6 九项验收 scaffold | 报告固定九项且无证据不标 pass | [x] |
 | R7 Prompt/schema audit | 30个固定prompt、hash manifest、职责/边界/schema linkage；rollout Judge v2强制逐维turn-ID证据 | [x] |
@@ -47,7 +47,7 @@
 | G6 History dependence | 同 checkpoint 的 Full / Recent-k / Critical-event-removed 同时比较 evaluated action 与 environment interpretation，正式轨迹必须有证据 | [x] |
 | G7 Judge + audit | 全量机器主审 + 跨模型族确定性分层/边缘二审，缺必需audit不能合并完成 | [x] |
 | G8 Backbone sensitivity | 同 checkpoint/action 在两个 environment backbone 重放并设方向阈值 | [ ] |
-| G9 真人签名边界 | scenario/S0-D0 与精确 JSON hash 绑定；Gate 2 要求实名/时间戳；自动化不能签名 | [x] |
+| G9 真人签名边界 | scenario/initial state 与精确 JSON hash 绑定；runtime dynamics seed 不单独人签；Gate 2 要求实名/时间戳；自动化不能签名 | [x] |
 | G10 Gate 4 + audited machine GT | T1/T2/T3机器答案绑定实例hash；两人审同一抽样，分歧由第三人adjudicate | [x] |
 | G11 正式质量候选池 | 20 × 3 本地真实rollout产物通过配置/来源审计 | [ ] |
 | G12 正式发布证据 | 每场景1条human-confirmed selected、Judge/audit、history/backbone、Gate 4抽查全部通过 `verify_gate_md.py --strict` | [ ] |
@@ -60,15 +60,15 @@
 - [x] 禁止从全REJECT场景物化winner；旧原始与淘汰轨迹保留在audit archive，不进入新版canonical pool。
 - [x] 网站展示全部184条旧rollout、180个历史任务、60个视频、完整persona/hidden intention、被测prompt/排除字段和全部人工Gate。
 - [x] 新rollout Judge prompt/schema固定逐维1–3个有效turn ID；caller验证引用，旧证据统一显示warning。
-- [x] 被测模型使用配置指定的T4 prompt（当前示例为`task_t4_action_v17`），固定角色身份、explicit goal、反复述ledger和公开信息边界；T4在自然结束或预算结束后评分。
+- [x] 被测模型使用配置指定的 T4 prompt（在线 T4 为 `task_t4_action_v21`；离线 10–20 轮 rollout 为共享的 `task_rollout_action_v1`），固定角色身份、explicit goal、反复述 ledger 和公开信息边界；T4 在自然结束或预算结束后评分。
 - [x] 20×3质量候选配置与断点生成器已实现；Qwen3.5 environment-only，policy按pilot通过率优先使用Qwen3-32B。
 - [x] Markdown已按架构、协议、操作、Prompt、设计输入和论文证据归档；本轮T4失败与20轮smoke已留痕。
 - [ ] **P0 自动长任务：**完成`build/rollout_20turn_3candidate/progress.json`中的60/60槽位；重试耗尽项不得伪装完成。
 - [ ] **P0 自动+人工筛选：**对新20轮池运行双Judge/history/backbone/Protocol，并在网站逐场景比较后确认20个唯一winner。
 - [ ] **P0 Task重建：**仅从新20轮筛选来源重建每场景T1/T2/T3及自然语言抽查Markdown。
-- [ ] **P0 人工：**审核20个scenario的来源、原创性、六维质量和S0/D0，并生成真实reviewer签名与精确hash绑定的freeze registry。
+- [ ] **P0 人工：**审核20个scenario的来源、原创性、六维质量和initial state，并生成真实reviewer签名与精确hash绑定的freeze registry；runtime dynamics seed 仅做机器校验。
 - [ ] **P0 人工：**逐条检查60个视频的expression–state consistency、temporal continuity、speech naturalness与multimodal utility。
-- [ ] **P0 Gate 2：**由1名审核员完成 E1–E6 环境证据抽查；自动脚本不能代签，E4/E6失败项必须修复后复验。
+- [ ] **P0 Gate 2：**由1名审核员完成 E1–E9 环境证据抽查；自动脚本不能代签，失败项必须修复后复验。
 - [ ] **P1 模型 pilot：**部署并记录 GLM-4-32B 量化服务的显存、吞吐和失败证据；在相同 scenario/seed/budget 下与 Qwen3-32B、DeepSeek 做盲审比较。
 - [ ] **P1 正式 raw：**Gate 1/2 通过后生成或确认 20×3=60 条 environment/policy 分离的自然 rollout；模型只按质量选择并完整记录provenance。
 - [ ] **P1 正式筛选：**对60条使用Judge v2、确定性二审audit、history intervention、backbone sensitivity和Protocol v1；1人主审、第二人少量audit后每场景仅留1条。
@@ -85,8 +85,8 @@
 | 0 | Episode | 定义 max turns、提前结束、关系破裂、goal achieved 等 termination | termination spec | 人工设计 | 🔴 | [ ] |
 | **1** | Scenario Schema | Persona / Background / Goal / Hidden Intention / state subset / triggers schema | `scenario.schema.json` | 否 | 🔴 | [x] |
 | 1 | Scenario 01 | 完整制作第一个 scenario（可继续用 authorship conflict） | `scenario_01.yaml` | 人工审核 | 🔴 | [ ] |
-| 1 | Initial State | 根据 scenario 生成 candidate \(S_0,D_0\) | candidate state | 是 |  | [x] |
-| 1 | Initial State | 人工 review → freeze \(S_0,D_0\) | frozen initial state | 是 | 🔴 | [ ] |
+| 1 | Initial State | 根据 scenario 生成 candidate initial state 与 runtime dynamics seed | candidate state/config | 是 |  | [x] |
+| 1 | Initial State | 人工 review → freeze initial state；机器校验 runtime dynamics seed | frozen initial state | 是 | 🔴 | [ ] |
 | **2** | Provider | OpenAI-compatible / Anthropic / Gemini / vLLM 等统一接口 | `providers/` | 否 | 🔴 | [x] |
 | 2 | Policy | `policy.generate(observation)` | policy abstraction | 否 | 🔴 | [x] |
 | 2 | Memory | full history / retrieval / summary 第一版实现 | memory module | 否 | 🔴 | [x] |
@@ -101,7 +101,7 @@
 | 3 | Video | 接 Talking Head / video generator | media assets | 是/自动 | 🟡 | [x] |
 | **4** | Smoke Test | 手工输入若干 actions 看 state 是否更新 | debug logs | 人工 | 🔴 | [ ] |
 | 4 | Long Rollout | 跑 5 / 10 / 20 turns 检查有没有 state 爆炸、锁死、循环 | debug trajectories | 人工抽查 | 🔴 | [ ] |
-| 4 | API Rollout | 多个模型从相同 \(S_0,D_0\) 正常跑通 | trajectories | 否 | 🔴 | [ ] |
+| 4 | API Rollout | 多个模型从相同 initial state 与 runtime dynamics seed 正常跑通 | trajectories | 否 | 🔴 | [ ] |
 | **5A** | **Deprecated Controlled Sensitivity** | revision 已废弃固定三策略多轮 rollout；仅保留局部 checkpoint intervention | 不再执行 | — | — | [ ] |
 | 5A | Deprecated Controlled Sensitivity | 不用 authored expected direction 验证 environment | 不再执行 | — | — | [ ] |
 | **5B** | **Paraphrase Robustness** | 同 history/state，输入语义等价 action pairs | paired transitions | 是 | 🔴 | [ ] |
@@ -120,7 +120,7 @@
 | **6** | Gate A | Scenario 01 是否通过 Environment Engineering Gate | acceptance report | 是 | 🔴 | [ ] |
 | **7** | Scenario Design | 设计 20 个**主题真正不同**的 social scenarios | 20 scenario specs | 人工 | 🔴 | [ ] |
 | 7 | Coverage | 检查 relationship / conflict / goal / ontology coverage | coverage matrix | 人工 | 🔴 | [ ] |
-| 7 | Initial State | 每个 scenario candidate → review → freeze \(S_0,D_0\) | 20 initial states | 是 | 🔴 | [ ] |
+| 7 | Initial State | 每个 scenario candidate → review → freeze initial state；机器校验 runtime dynamics seed | 20 initial states | 是 | 🔴 | [ ] |
 | 7 | Trigger Rules | 每 scenario 定义 relevant multimodal triggers | trigger configs | 人工 | 🟠 | [ ] |
 | **8** | Rollout Generation | 每个 scenario × 多个 model policies × seeds | master trajectory pool | 否 | 🔴 | [ ] |
 | 8 | Quality Filter | malformed / incoherent / terminated-too-early trajectories 清洗 | clean pool | 自动+抽查 | 🔴 | [x] |
@@ -182,7 +182,7 @@
 | V6 | **Response-State Consistency** | context 固定、state 改变 | response 随 state 合理变化 | state 不是 decorative logging | [ ] |
 | V7 | **History Intervention** | 删除关键历史事件 | 后续 appraisal/state 明显改变 | Environment 真有 longitudinal memory | [ ] |
 | V8 | **Neutral-State Stability** | neutral/no-op action | state 不应无故大幅漂移 | 防止 state random walk | [ ] |
-| V9 | **Seed Robustness** | 相同条件不同 seed | qualitative direction 相对稳定 | simulator 可复现 | [ ] |
+| V9 | **Timescale Validity** | 按状态族抽样变化轨迹 | fast/medium/slow/context-dependent 变化速率与证据一致 | E9 机器统计 + 人工复核 | [ ] |
 | V10 | **T2 Leakage Test** | 只给 current \(O^*\) | 应接近 chance/明显下降 | T2 真测 history | [ ] |
 | V11 | **History Ablation** | Full / Recent / Current / Shuffle | Full History 最好 | benchmark 真测 longitudinal reasoning | [ ] |
 | V12 | **T4 Judge Validation** | Human vs automatic judge | 高相关/高 agreement | online score 值得相信 | [ ] |
