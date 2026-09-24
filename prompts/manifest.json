@@ -128,7 +128,7 @@
     },
     "talking_head_generation_v1": {
       "path": "talking_head_generation_v1.md",
-      "sha256": "36889cc7f3254ca5c15ce852c104e98a8f904321aef210c4953e1fe777229f16",
+      "sha256": "3d554b5b787b2619fc9977dc1cc4f20b9bf0716aa7250c9b23a8d2690a26364b",
       "version": "v1"
     },
     "task_checkpoint_extraction_v1": {

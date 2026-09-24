@@ -65,7 +65,6 @@ def video_prompt(
         speech_style=str(expression.get("speech_style", "natural pace")),
         prosody=str(expression.get("prosody", "restrained")),
         behavioral_cues=cues or "natural breathing, blinking, and subtle head movement",
-        expression_intensity=str(policy["default_intensity"]).replace("_", "-"),
     ).strip()
 
 
