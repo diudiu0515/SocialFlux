@@ -13,6 +13,7 @@ from scripts.generate_long_rollout_pool import (
     _load_progress,
     _new_progress,
     _retry_filter_matches,
+    _technical_retry_allowed,
     _unattempted_filter_matches,
     _update_quality_summary,
     planned_slots,
@@ -231,6 +232,31 @@ class LongRolloutBatchTest(unittest.TestCase):
         self.assertFalse(
             _generation_error_retry_allowed(progress, "never_attempted")
         )
+
+    def test_explicit_error_filter_allows_audited_second_technical_retry(self):
+        progress = {
+            "attempts": [
+                {
+                    "slot_id": "template_failure",
+                    "status": "generation_error",
+                    "error_type": "ValueError",
+                    "technical_retry": True,
+                },
+                {
+                    "slot_id": "quality_rejection",
+                    "status": "machine_rejected",
+                },
+            ]
+        }
+        self.assertTrue(_technical_retry_allowed(
+            progress, "template_failure", error_types=["ValueError"]
+        ))
+        self.assertFalse(_technical_retry_allowed(
+            progress, "template_failure", error_types=["TimeoutError"]
+        ))
+        self.assertFalse(_technical_retry_allowed(
+            progress, "quality_rejection", error_types=["ValueError"]
+        ))
 
     def test_provider_overload_circuit_break_classification(self):
         self.assertTrue(_attempts_end_in_provider_overload([{

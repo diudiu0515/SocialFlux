@@ -374,6 +374,18 @@ def _retry_filter_matches(progress, slot_id, error_types):
     )
 
 
+def _technical_retry_allowed(
+    progress, slot_id, *, retry_generation_errors_once=False, error_types=None,
+):
+    """Allow only explicitly requested retries of persisted generation errors."""
+    if error_types:
+        return _retry_filter_matches(progress, slot_id, error_types)
+    return bool(
+        retry_generation_errors_once
+        and _generation_error_retry_allowed(progress, slot_id)
+    )
+
+
 def _unattempted_filter_matches(progress, slot_id):
     """Select slots that have never produced a persisted attempt."""
     return not any(
@@ -888,9 +900,11 @@ def main(argv=None):
                     f"{slot['slot_id']}",
                     flush=True,
                 )
-        technical_retry = bool(
-            args.retry_generation_errors_once
-            and _generation_error_retry_allowed(progress, slot["slot_id"])
+        technical_retry = _technical_retry_allowed(
+            progress,
+            slot["slot_id"],
+            retry_generation_errors_once=args.retry_generation_errors_once,
+            error_types=args.retry_error_type,
         )
         if (
             config.get("candidate_strategy") == "single_first_pass"
