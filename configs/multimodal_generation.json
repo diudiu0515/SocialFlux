@@ -23,5 +23,13 @@
     "minimum_generated_video_count": 40,
     "require_llm_review": false,
     "require_human_attestation": true
+  },
+  "expression_rendering": {
+    "profile": "subtle_contextual_v1",
+    "default_intensity": "low_to_moderate",
+    "maximum_behavioral_cues": 2,
+    "require_public_text_and_context_alignment": true,
+    "allow_exaggerated_acting": false,
+    "apply_cues_sequentially_when_possible": true
   }
 }

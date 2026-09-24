@@ -200,6 +200,7 @@ def prepare(args):
                     expression,
                     duration_seconds=duration,
                     variant=variant,
+                    expression_policy=config.get("expression_rendering"),
                 )
                 atomic(request_file, request)
                 records.append({

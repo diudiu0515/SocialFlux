@@ -42,6 +42,10 @@ free-form action
 
 Private trajectory 可保留 trigger provenance 供研究者审计，网站作为 researcher view 可以展示它。
 
+## Expression rendering policy
+
+批量生成统一使用 `subtle_contextual_v1`：默认低到中等强度，每个 clip 最多两个可相容的 observable cues，尽量顺序展现而不是同时堆叠。表情必须与 public line 及当前可观察 context 一致，不得为了“有画面”而夸张表演，也不得由 latent state 数值直接机械映射。
+
 ## 资产质量
 
 真实视频需检查 3–15 秒时长、人物身份一致、视线/口型/语调自然、跨轮 temporal continuity、无文字答案泄漏。正式发布还需 MV1 Trigger Validity、MV2 Expression-State Consistency、MV3 Temporal Continuity、MV4 Text vs Text+Video 的人工或实验记录。

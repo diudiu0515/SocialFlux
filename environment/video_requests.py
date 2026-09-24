@@ -10,6 +10,14 @@ from prompts.loader import render_prompt
 
 
 TALKING_HEAD_PROMPT_ID = "talking_head_generation_v1"
+DEFAULT_EXPRESSION_POLICY = {
+    "profile": "subtle_contextual_v1",
+    "default_intensity": "low_to_moderate",
+    "maximum_behavioral_cues": 2,
+    "require_public_text_and_context_alignment": True,
+    "allow_exaggerated_acting": False,
+    "apply_cues_sequentially_when_possible": True,
+}
 
 
 def estimate_spoken_duration(response, *, minimum=3, maximum=15):
@@ -26,9 +34,19 @@ def estimate_spoken_duration(response, *, minimum=3, maximum=15):
     return float(max(minimum, min(maximum, seconds)))
 
 
-def video_prompt(scenario, response, expression, variant=1):
+def video_prompt(
+    scenario, response, expression, variant=1, expression_policy=None
+):
     persona = scenario["environment_agent"]["persona"]
-    cues = "; ".join(str(item) for item in expression.get("behavioral_cues", []))
+    policy = {**DEFAULT_EXPRESSION_POLICY, **(expression_policy or {})}
+    cue_limit = int(policy["maximum_behavioral_cues"])
+    if not 1 <= cue_limit <= 3:
+        raise ValueError("maximum behavioral cues must be in 1..3")
+    cue_items = [
+        str(item).strip() for item in expression.get("behavioral_cues", [])
+        if str(item).strip()
+    ][:cue_limit]
+    cues = "; ".join(cue_items)
     variant_note = (
         "Use a restrained close-up emphasizing subtle facial changes."
         if variant % 2 == 1
@@ -47,6 +65,7 @@ def video_prompt(scenario, response, expression, variant=1):
         speech_style=str(expression.get("speech_style", "natural pace")),
         prosody=str(expression.get("prosody", "restrained")),
         behavioral_cues=cues or "natural breathing, blinking, and subtle head movement",
+        expression_intensity=str(policy["default_intensity"]).replace("_", "-"),
     ).strip()
 
 
@@ -58,6 +77,7 @@ def build_video_request(
     duration_seconds=None,
     continuity_reference=None,
     variant=1,
+    expression_policy=None,
 ):
     response = str(response).strip()
     if not response:
@@ -77,7 +97,9 @@ def build_video_request(
         raise ValueError("video continuity reference must be a string or null")
     return {
         "prompt_id": TALKING_HEAD_PROMPT_ID,
-        "prompt": video_prompt(scenario, response, expression, variant),
+        "prompt": video_prompt(
+            scenario, response, expression, variant, expression_policy
+        ),
         "duration_seconds": duration_seconds,
         "continuity_reference": continuity_reference,
         "safety_check": {

@@ -5,7 +5,11 @@ import unittest
 
 from scripts.finalize_multimodal_video_queue import main as finalize
 from scripts.prepare_multimodal_video_queue import select_important_turns
-from environment.video_requests import estimate_spoken_duration
+from environment.video_requests import (
+    DEFAULT_EXPRESSION_POLICY,
+    build_video_request,
+    estimate_spoken_duration,
+)
 from scripts.run_autodl_seedance_video import validate_payload, video_url
 
 
@@ -31,6 +35,34 @@ class MultimodalVideoQueueTest(unittest.TestCase):
         )
         with self.assertRaisesRegex(ValueError, "safe HTTPS"):
             video_url({"content": {"video_url": "http://example.test/a.mp4"}})
+
+    def test_expression_policy_is_subtle_and_limits_simultaneous_cues(self):
+        config = json.loads(
+            Path("configs/multimodal_generation.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(config["expression_rendering"], DEFAULT_EXPRESSION_POLICY)
+        request = build_video_request(
+            {"environment_agent": {"persona": {
+                "name": "Alex", "role": "project partner",
+            }}},
+            "I understand. Let us review the evidence first.",
+            {
+                "facial_expression": "calm but concerned",
+                "gaze": "steady eye contact",
+                "speech_style": "measured",
+                "prosody": "even",
+                "behavioral_cues": [
+                    "subtle brow tension",
+                    "one small nod",
+                    "dramatic arm movement",
+                ],
+            },
+        )
+        self.assertIn("subtle, context-appropriate guidance", request["prompt"])
+        self.assertIn("subtle brow tension", request["prompt"])
+        self.assertIn("one small nod", request["prompt"])
+        self.assertNotIn("dramatic arm movement", request["prompt"])
+        self.assertIn("low-to-moderate", request["prompt"])
 
     def test_english_speech_duration_is_adaptive_and_bounded(self):
         self.assertEqual(estimate_spoken_duration("See you tomorrow."), 3.0)
