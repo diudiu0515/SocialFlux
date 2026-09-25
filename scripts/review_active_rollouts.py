@@ -70,9 +70,14 @@ def source_rows(batch, count):
         )
         package = load(package_path)
         trajectory_path = ROOT / package["source_artifact"]
+        scenario_artifact = package.get("scenario_artifact")
         scenario_path = (
-            batch / "scenarios" / f"scenario_{ordinal:03d}"
-            / f"scenario_{ordinal:03d}.json"
+            ROOT / scenario_artifact
+            if scenario_artifact
+            else (
+                batch / "scenarios" / f"scenario_{ordinal:03d}"
+                / f"scenario_{ordinal:03d}.json"
+            )
         )
         rows.append({
             "ordinal": ordinal,
