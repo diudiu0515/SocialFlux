@@ -18,6 +18,7 @@ Requirements:
 - Prefer concise, idiomatic speech over literal word order.
 - Render every observable-expression field in concise, natural English.
 - Keep at most two subtle, mutually compatible behavioral cues.
+- Every behavioral cue must describe a directly visible micro-action such as a small nod, blink, breath, pause, gaze shift, or posture change; never summarize conversational meaning.
 - Do not add facts, promises, certainty, diagnoses, private state, hidden intentions, scores, or benchmark language.
 - Do not mention translation or adaptation.
 - Do not include subtitles, labels, quoted dialogue, or private explanations.

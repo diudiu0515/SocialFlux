@@ -87,6 +87,12 @@ class MultimodalVideoQueueTest(unittest.TestCase):
         value["observable_expression"]["gaze"] = "直视对方"
         with self.assertRaisesRegex(ValueError, "not English"):
             validate_public_rendering(value)
+        value["observable_expression"]["gaze"] = "steady eye contact"
+        value["observable_expression"]["behavioral_cues"] = [
+            "Presents both constraints in parallel"
+        ]
+        with self.assertRaisesRegex(ValueError, "visible micro-action"):
+            validate_public_rendering(value)
 
     def test_important_nodes_prefer_stateful_and_consequential_turns(self):
         turns = [

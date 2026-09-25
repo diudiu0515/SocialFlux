@@ -53,6 +53,12 @@ def atomic(path, value):
 VIDEO_RENDERING_ADAPTATION_PROMPT_ID = "video_public_rendering_adaptation_v1"
 _CJK_PATTERN = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]")
 _ENGLISH_WORD = re.compile(r"[A-Za-z0-9]+(?:['-][A-Za-z0-9]+)*")
+_OBSERVABLE_CUE = re.compile(
+    r"\b(nod|blink|breath|breathe|pause|brow|gaze|eye|head|posture|lean|"
+    r"shoulder|hand|mouth|lip|still|movement|exhale|inhale|swallow|shift|"
+    r"tilt)\b",
+    re.IGNORECASE,
+)
 
 
 def rendering_payload(response, expression):
@@ -96,6 +102,8 @@ def validate_public_rendering(value):
         text = str(cue).strip()
         if not text or _CJK_PATTERN.search(text) or not _ENGLISH_WORD.search(text):
             raise ValueError("behavioral cue is not English")
+        if not _OBSERVABLE_CUE.search(text):
+            raise ValueError("behavioral cue must describe a visible micro-action")
         clean_cues.append(text)
     expression["behavioral_cues"] = clean_cues
     return {"english_spoken_line": line, "observable_expression": expression}
