@@ -175,6 +175,11 @@
       "path": "task_t4_action_v21.md",
       "sha256": "6aa43e5a2d092c6992655e45397635820362ad2abde9fd537c2cbff3b363e308",
       "version": "v21"
+    },
+    "video_public_rendering_adaptation_v1": {
+      "path": "video_public_rendering_adaptation_v1.md",
+      "sha256": "240b055d9d23010de116dcae12dfdf6b8df24b3d83a05878a8294dd6616861c1",
+      "version": "v1"
     }
   }
 }

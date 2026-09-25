@@ -47,7 +47,9 @@ fi
   --scenario-root data/gpt50/experiment/scenario/scenarios \
   --rollout-root data/gpt50/experiment/rollouts \
   --config configs/multimodal_generation.json \
-  --expected-count 50
+  --expected-count 50 \
+  --model-routes configs/gpt50_experiment/model_routes.astra.json \
+  --translation-workers "$gpt_workers"
 
 "$SOCIALFLUX_PYTHON" scripts/prepare_batch_gate2.py \
   --batch-root data/gpt50/experiment \

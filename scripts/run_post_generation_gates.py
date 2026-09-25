@@ -167,6 +167,18 @@ def main(argv=None):
             "--output-root", str(audit_root),
             "--expected-count", str(args.expected_count),
         ],
+        "multimodal_plan": [
+            sys.executable, "scripts/prepare_multimodal_video_queue.py",
+            "--batch-root", str(batch),
+            "--scenario-root", str(scenario_root),
+            "--rollout-root", str(audit_root),
+            "--config", "configs/multimodal_generation.json",
+            "--expected-count", str(args.expected_count),
+            "--nodes-per-trajectory", "1",
+            "--videos-per-node", "1",
+            "--model-routes", str(model_routes),
+            "--translation-workers", str(args.workers),
+        ],
         "gate2": [
             sys.executable, "scripts/prepare_batch_gate2.py",
             "--batch-root", str(batch),

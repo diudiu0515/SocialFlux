@@ -135,6 +135,10 @@
     "quality_review": {
       "max_tokens": 1600,
       "timeout": 150
+    },
+    "video_translation": {
+      "max_tokens": 500,
+      "timeout": 90
     }
   }
 }

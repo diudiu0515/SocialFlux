@@ -4,7 +4,10 @@ from tempfile import TemporaryDirectory
 import unittest
 
 from scripts.finalize_multimodal_video_queue import main as finalize
-from scripts.prepare_multimodal_video_queue import select_important_turns
+from scripts.prepare_multimodal_video_queue import (
+    select_important_turns,
+    validate_public_rendering,
+)
 from environment.video_requests import (
     DEFAULT_EXPRESSION_POLICY,
     build_video_request,
@@ -68,6 +71,22 @@ class MultimodalVideoQueueTest(unittest.TestCase):
         self.assertEqual(estimate_spoken_duration("See you tomorrow."), 3.0)
         self.assertEqual(estimate_spoken_duration("Okay."), 3.0)
         self.assertEqual(estimate_spoken_duration("word " * 100), 15.0)
+
+    def test_public_rendering_adaptation_requires_all_english_fields(self):
+        value = {
+            "english_spoken_line": "I will verify the record before deciding.",
+            "observable_expression": {
+                "facial_expression": "calm and attentive",
+                "gaze": "steady eye contact",
+                "speech_style": "measured and direct",
+                "prosody": "even with a slight final rise",
+                "behavioral_cues": ["one small nod", "brief pause"],
+            },
+        }
+        self.assertEqual(validate_public_rendering(value), value)
+        value["observable_expression"]["gaze"] = "直视对方"
+        with self.assertRaisesRegex(ValueError, "not English"):
+            validate_public_rendering(value)
 
     def test_important_nodes_prefer_stateful_and_consequential_turns(self):
         turns = [

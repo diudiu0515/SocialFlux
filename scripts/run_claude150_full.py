@@ -274,6 +274,8 @@ def command_for(stage, args, batch):
             "--rollout-root", str(batch / "rollouts"),
             "--config", "configs/multimodal_generation.json",
             "--expected-count", str(args.count),
+            "--model-routes", str(args.model_routes),
+            "--translation-workers", str(args.task_workers),
         ]
     if stage == "gate2_experiments":
         return [

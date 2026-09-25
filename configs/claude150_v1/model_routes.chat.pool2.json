@@ -146,6 +146,10 @@
     "legacy_task_bundle": {
       "max_tokens": 6500,
       "timeout": 300
+    },
+    "video_translation": {
+      "max_tokens": 500,
+      "timeout": 90
     }
   }
 }

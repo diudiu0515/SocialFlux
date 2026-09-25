@@ -4,10 +4,12 @@
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
+import re
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -17,6 +19,10 @@ from environment.video_requests import (
     TALKING_HEAD_PROMPT_ID,
     build_video_request,
 )
+from prompts.loader import render_prompt
+from providers.factory import build_provider, public_provider_config
+from providers.model_routes import ModelRoutes
+from providers.structured import complete_json
 from scripts.audit_formal_rollout_pool import load_records
 from scripts.run_environment_interventions import load_actual_scenarios
 
@@ -42,6 +48,126 @@ def atomic(path, value):
         encoding="utf-8",
     )
     temporary.replace(path)
+
+
+VIDEO_RENDERING_ADAPTATION_PROMPT_ID = "video_public_rendering_adaptation_v1"
+_CJK_PATTERN = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]")
+_ENGLISH_WORD = re.compile(r"[A-Za-z0-9]+(?:['-][A-Za-z0-9]+)*")
+
+
+def rendering_payload(response, expression):
+    return {
+        "public_response": str(response).strip(),
+        "observable_expression": expression,
+    }
+
+
+def rendering_key(payload):
+    raw = json.dumps(
+        payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
+
+
+def validate_public_rendering(value):
+    if set(value) != {"english_spoken_line", "observable_expression"}:
+        raise ValueError("video rendering adaptation returned unexpected keys")
+    line = str(value["english_spoken_line"]).strip()
+    words = _ENGLISH_WORD.findall(line)
+    if _CJK_PATTERN.search(line) or not 3 <= len(words) <= 32:
+        raise ValueError("English spoken line must contain 3-32 words and no CJK")
+    expression = value["observable_expression"]
+    required = {
+        "facial_expression", "gaze", "speech_style", "prosody",
+        "behavioral_cues",
+    }
+    if not isinstance(expression, dict) or set(expression) != required:
+        raise ValueError("observable expression must contain the exact public fields")
+    for key in required - {"behavioral_cues"}:
+        text = str(expression[key]).strip()
+        if not text or _CJK_PATTERN.search(text) or not _ENGLISH_WORD.search(text):
+            raise ValueError(f"observable expression field {key} is not English")
+        expression[key] = text
+    cues = expression["behavioral_cues"]
+    if not isinstance(cues, list) or len(cues) > 2:
+        raise ValueError("behavioral_cues must be an English list with at most two items")
+    clean_cues = []
+    for cue in cues:
+        text = str(cue).strip()
+        if not text or _CJK_PATTERN.search(text) or not _ENGLISH_WORD.search(text):
+            raise ValueError("behavioral cue is not English")
+        clean_cues.append(text)
+    expression["behavioral_cues"] = clean_cues
+    return {"english_spoken_line": line, "observable_expression": expression}
+
+
+def adapt_public_renderings(payloads, output, model_routes, workers):
+    cache_path = output / "public_rendering_adaptations.json"
+    cache = (
+        load(cache_path)
+        if cache_path.exists()
+        else {
+            "format": "socialflux_video_public_rendering_adaptations_v1",
+            "prompt_id": VIDEO_RENDERING_ADAPTATION_PROMPT_ID,
+            "records": {},
+        }
+    )
+    if cache.get("prompt_id") != VIDEO_RENDERING_ADAPTATION_PROMPT_ID:
+        raise ValueError("video rendering adaptation cache prompt mismatch")
+    records = cache.setdefault("records", {})
+    routes = ModelRoutes.load(model_routes).require(["video_translation"])
+    provider_config = routes.provider_config("video_translation")
+    cache["model_routes_sha256"] = routes.sha256
+    missing = [
+        (key, payload) for key, payload in payloads.items() if key not in records
+    ]
+
+    def adapt_one(key, payload):
+        provider = build_provider(provider_config)
+        seed = 41001 + int(key[:8], 16) % 2_000_000_000
+        adapted = complete_json(
+            provider,
+            [{
+                "role": "user",
+                "content": render_prompt(
+                    VIDEO_RENDERING_ADAPTATION_PROMPT_ID, payload
+                ),
+            }],
+            {"temperature": 0.1, "top_p": 0.9, "seed": seed},
+            validate_public_rendering,
+            context="video public rendering adaptation",
+            max_attempts=3,
+        )
+        return key, {
+            "source": payload,
+            "adapted": adapted,
+            "provider": public_provider_config(provider_config),
+            "request_count": int(getattr(provider, "_call_index", 0) or 0),
+            "adapted_at_utc": now(),
+        }
+
+    if missing:
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = {
+                executor.submit(adapt_one, key, payload): key
+                for key, payload in missing
+            }
+            for future in as_completed(futures):
+                key, record = future.result()
+                records[key] = record
+                atomic(cache_path, cache)
+                print(json.dumps({
+                    "translation_progress": len(records),
+                    "translation_total": len(payloads),
+                }), flush=True)
+    atomic(cache_path, cache)
+    return {key: records[key]["adapted"] for key in payloads}, {
+        "prompt_id": VIDEO_RENDERING_ADAPTATION_PROMPT_ID,
+        "model_routes_sha256": routes.sha256,
+        "unique_input_count": len(payloads),
+        "new_adaptation_count": len(missing),
+        "cache_file": str(cache_path),
+    }
 
 
 def flatten_numeric(value, prefix=""):
@@ -171,6 +297,28 @@ def prepare(args):
 
     output = args.output or args.batch_root / "multimodal"
     requests_root = output / "requests"
+    rendering_payloads = {}
+    for trajectory in sorted(trajectories, key=lambda item: item["scenario_id"]):
+        scenario = scenarios[trajectory["scenario_id"]]
+        for _, _, turn in select_important_turns(
+            trajectory, nodes_per_trajectory, min_turn_gap
+        ):
+            response = str(turn.get("environment_response", "")).strip()
+            if not response:
+                raise ValueError(
+                    f"empty environment response at {trajectory['trajectory_id']} "
+                    f"{turn.get('turn_id')}"
+                )
+            payload = rendering_payload(
+                response, observable_behavior(scenario, turn)
+            )
+            rendering_payloads[rendering_key(payload)] = payload
+    if not args.model_routes:
+        raise ValueError("--model-routes is required for English video rendering")
+    adapted_renderings, translation_provenance = adapt_public_renderings(
+        rendering_payloads, output, args.model_routes, args.translation_workers
+    )
+
     records = []
     for trajectory in sorted(trajectories, key=lambda item: item["scenario_id"]):
         scenario = scenarios[trajectory["scenario_id"]]
@@ -178,13 +326,12 @@ def prepare(args):
             trajectory, nodes_per_trajectory, min_turn_gap
         )
         for score, _, turn in selected:
-            expression = observable_behavior(scenario, turn)
-            response = str(turn.get("environment_response", "")).strip()
-            if not response:
-                raise ValueError(
-                    f"empty environment response at {trajectory['trajectory_id']} "
-                    f"{turn.get('turn_id')}"
-                )
+            source_expression = observable_behavior(scenario, turn)
+            source_response = str(turn.get("environment_response", "")).strip()
+            payload = rendering_payload(source_response, source_expression)
+            adapted = adapted_renderings[rendering_key(payload)]
+            expression = adapted["observable_expression"]
+            response = adapted["english_spoken_line"]
             _, reasons = importance(turn, len(trajectory["turns"]))
             for variant in range(1, videos_per_node + 1):
                 request_id = (
@@ -215,8 +362,11 @@ def prepare(args):
                     "video_file": str(video_file.relative_to(args.batch_root)),
                     "status": "request_ready",
                     "public_action": turn.get("policy_action", {}).get("text", ""),
+                    "source_public_response": source_response,
                     "public_response": response,
+                    "source_observable_expression": source_expression,
                     "observable_expression": expression,
+                    "rendering_adaptation_key": rendering_key(payload),
                     "private_consistency_reference": {
                         "numeric_state_delta": turn.get("numeric_state_delta", {}),
                         "numeric_dynamics_delta": turn.get(
@@ -234,6 +384,7 @@ def prepare(args):
         "prompt_id": TALKING_HEAD_PROMPT_ID,
         "network_requests_performed": 0,
         "provider_status": "awaiting_video_api_configuration",
+        "translation_provenance": translation_provenance,
         "trajectory_count": len(trajectories),
         "important_nodes_per_trajectory": nodes_per_trajectory,
         "videos_per_node": videos_per_node,
@@ -303,7 +454,11 @@ def main(argv=None):
     parser.add_argument("--videos-per-node", type=int)
     parser.add_argument("--min-turn-gap", type=int)
     parser.add_argument("--duration-seconds", type=float)
+    parser.add_argument("--model-routes", type=Path)
+    parser.add_argument("--translation-workers", type=int, default=2)
     args = parser.parse_args(argv)
+    if not 1 <= args.translation_workers <= 8:
+        parser.error("translation-workers must be in 1..8")
     prepare(args)
 
 
