@@ -9,6 +9,8 @@ venv/
 ENV/
 *.egg-info/
 *.orig
+# Required by the active GPT50 frozen code manifest; remove after batch archival.
+!prompts/manifest.json.orig
 *.rej
 *~
 
