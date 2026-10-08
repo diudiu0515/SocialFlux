@@ -14,9 +14,36 @@ http://127.0.0.1:8000/gpt50
 
 ## 启动
 
+日常使用仓库内的 Supervisor 配置，网站进程异常退出后自动重启。
+首次准备独立管理环境（不会修改模型任务的 Python 依赖）：
+
 ```bash
-python -m web.server --host 127.0.0.1 --port 8000
+mkdir -p build/web-service
+python -m venv --system-site-packages build/web-service/venv
+build/web-service/venv/bin/python -m pip install -r configs/web-service.requirements.txt
 ```
+
+启动前用 `status` 确认没有已运行的实例，不要重复启动 daemon：
+
+```bash
+build/web-service/venv/bin/python -m supervisor.supervisorctl -c configs/web.supervisord.conf status
+build/web-service/venv/bin/python -m supervisor.supervisord -c configs/web.supervisord.conf
+```
+
+管理已启动的网站：
+
+```bash
+build/web-service/venv/bin/python -m supervisor.supervisorctl -c configs/web.supervisord.conf restart socialflux-web
+build/web-service/venv/bin/python -m supervisor.supervisorctl -c configs/web.supervisord.conf stop socialflux-web
+```
+
+日志、PID、控制 socket 和管理环境统一放在 Git 忽略的 `build/web-service/`。
+管理 socket 仅允许当前用户访问；网站仍只监听 `127.0.0.1:8000`，远程访问
+继续使用原有 SSH 端口转发。该配置负责进程退出后的恢复；容器重启后仍需执行
+启动命令。
+
+临时前台调试仍用 `python -m web.server --host 127.0.0.1 --port 8000`，
+先停止托管实例以免争用端口。
 
 远程访问：
 
