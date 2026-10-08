@@ -9,6 +9,7 @@ from copy import deepcopy
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 from pathlib import Path
 import sys
 
@@ -79,12 +80,19 @@ def source_rows(batch, count):
                 / f"scenario_{ordinal:03d}.json"
             )
         )
+        for path, key in ((trajectory_path, "source_sha256"),
+                          (scenario_path, "scenario_sha256")):
+            if package.get(key) and hashlib.sha256(path.read_bytes()).hexdigest() != package[key]:
+                raise ValueError(f"Gate3 input changed after preparation: {path}")
         rows.append({
             "ordinal": ordinal,
             "scenario_id": package["scenario_id"],
             "trajectory_id": package["source_trajectory_id"],
             "trajectory_path": trajectory_path,
             "scenario_path": scenario_path,
+            "source_status": package.get("source_status", "unspecified"),
+            "source_sha256": hashlib.sha256(trajectory_path.read_bytes()).hexdigest(),
+            "scenario_sha256": hashlib.sha256(scenario_path.read_bytes()).hexdigest(),
         })
     return rows
 
@@ -155,6 +163,8 @@ def main(argv=None):
     parser.add_argument("--request-budget", type=int, default=450)
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--require-complete", action="store_true")
+    parser.add_argument("--language", choices=["en"],
+                        help="Require English explanations for newly generated reviews")
     args = parser.parse_args(argv)
     if not 1 <= args.workers <= 8:
         parser.error("workers must be in 1..8")
@@ -163,12 +173,23 @@ def main(argv=None):
     routes = ModelRoutes.load(args.model_routes).require(["quality_review"])
     provider_config = routes.provider_config("quality_review")
     rows = source_rows(batch, args.count)
+    input_digest = hashlib.sha256(json.dumps([
+        {key: item[key] for key in ("trajectory_id", "source_sha256", "scenario_sha256")}
+        for item in rows
+    ], sort_keys=True).encode()).hexdigest()
+    run_metadata = {"pid": os.getpid(), "input_sha256": input_digest,
+                    "output_language": args.language,
+                    "human_review_status": "pending"}
 
     records = []
     if args.resume and output.exists():
         saved = load(output)
         if saved.get("model_routes_sha256") != routes.sha256:
             raise ValueError("Gate3 resume model route provenance mismatch")
+        if saved.get("input_sha256") and saved["input_sha256"] != input_digest:
+            raise ValueError("Gate3 resume input provenance mismatch")
+        if saved.get("output_language") != args.language:
+            raise ValueError("Gate3 resume output language mismatch")
         records = list(saved.get("records", []))
     completed = {
         item["trajectory_id"] for item in records
@@ -179,12 +200,22 @@ def main(argv=None):
         raise ValueError("Gate3 retry ceiling exceeds request budget")
 
     failures = []
+    atomic(output, {**run_metadata,
+                   "format": "socialflux_gate3_single_model_reviews_v1",
+                   "status": "running", "updated_at_utc": now(),
+                   "model_count": 1, "model": provider_config["model"],
+                   "model_routes_sha256": routes.sha256,
+                   "expected_count": args.count, "reviewed_count": len(records),
+                   "complete": False, "records": records, "failures": []})
 
     def judge_one(item):
         trajectory = load(item["trajectory_path"])
         scenario = load(item["scenario_path"])
         trajectory_id = item["trajectory_id"]
         provider = build_provider(provider_config)
+        if args.language == "en":
+            from pipeline.localization import EnglishOutputProvider
+            provider = EnglishOutputProvider(provider)
         try:
             judgment = complete_json(
                 provider,
@@ -212,6 +243,8 @@ def main(argv=None):
                 **judgment,
                 "ordinal": item["ordinal"],
                 "scenario_id": item["scenario_id"],
+                "source_status": item["source_status"],
+                "source_sha256": item["source_sha256"],
                 "decision": decision(judgment),
                 "reviewer_type": "single_model_llm_screen_not_human",
                 "model": provider_config["model"],
@@ -242,6 +275,12 @@ def main(argv=None):
                 "error_type": type(exc).__name__,
                 "message": str(exc),
             }
+        finally:
+            atomic(batch / "gate3" / "calls" / f"{item['ordinal']:03d}.json", {
+                "trajectory_id": trajectory_id,
+                "source_sha256": item["source_sha256"],
+                "provider_audit_records": list(getattr(provider, "audit_records", [])),
+            })
 
     with ThreadPoolExecutor(max_workers=args.workers) as executor:
         futures = {executor.submit(judge_one, item): item for item in pending}
@@ -258,6 +297,8 @@ def main(argv=None):
                 failures.append(failure)
             ordered = sorted(records, key=lambda value: int(value["ordinal"]))
             payload = {
+                **run_metadata,
+                "status": "running",
                 "format": "socialflux_gate3_single_model_reviews_v1",
                 "updated_at_utc": now(),
                 "model_count": 1,
@@ -278,6 +319,8 @@ def main(argv=None):
 
     ordered = sorted(records, key=lambda value: int(value["ordinal"]))
     payload = {
+        **run_metadata,
+        "status": "completed" if len(ordered) == args.count and not failures else "finished_with_errors",
         "format": "socialflux_gate3_single_model_reviews_v1",
         "updated_at_utc": now(),
         "model_count": 1,

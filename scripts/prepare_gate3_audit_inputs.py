@@ -55,18 +55,58 @@ def attempt_index(rollout_root):
     }
 
 
+def retained_inputs(coverage_path):
+    """Use the current batch's explicit coverage, including partial failures."""
+    coverage = load(coverage_path)
+    selected = []
+    seen = set()
+    for record in coverage["records"]:
+        scenario_id = record["scenario_id"]
+        if scenario_id in seen:
+            raise ValueError(f"Duplicate scenario in coverage: {scenario_id}")
+        seen.add(scenario_id)
+        if not record["included"]:
+            continue
+        source = Path(record["source_path"])
+        if not source.is_absolute():
+            source = ROOT / source
+        trajectory = load(source)
+        if (trajectory.get("scenario_id") != scenario_id
+                or trajectory.get("trajectory_id") != record["trajectory_id"]
+                or len(trajectory.get("turns", [])) != record["turns"]
+                or not trajectory["turns"]):
+            raise ValueError(f"Retained input changed: {scenario_id}")
+        selected.append({
+            "scenario_id": scenario_id,
+            "source_path": source,
+            "trajectory": trajectory,
+            "source_status": ("completed_unreviewed"
+                              if record["generation_status"] == "completed"
+                              else "generation_error"),
+        })
+    return selected, coverage
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--batch-root", type=Path, required=True)
     parser.add_argument("--scenario-root", type=Path, required=True)
     parser.add_argument("--rollout-root", type=Path, required=True)
     parser.add_argument("--expected-count", type=int, required=True)
+    parser.add_argument("--input-coverage", type=Path,
+                        help="Explicit retained-input coverage from the active batch")
     args = parser.parse_args(argv)
 
     batch = args.batch_root.resolve()
     scenario_root = args.scenario_root.resolve()
     rollout_root = args.rollout_root.resolve()
-    selected = selected_inputs(scenario_root, rollout_root)
+    if args.input_coverage:
+        if (batch / "source_packages" / "summary.json").exists():
+            raise FileExistsError("Gate3 inputs already prepared; preserve existing reviews")
+        selected, coverage = retained_inputs(args.input_coverage)
+    else:
+        selected = selected_inputs(scenario_root, rollout_root)
+        coverage = None
     if len(selected) != args.expected_count:
         raise ValueError(
             f"Gate 3 input requires {args.expected_count} scenarios, "
@@ -76,7 +116,7 @@ def main(argv=None):
         load(path)["scenario_id"]: path
         for path in discover_scenario_paths(scenario_root)
     }
-    attempts = attempt_index(rollout_root)
+    attempts = {} if coverage is not None else attempt_index(rollout_root)
     packages = []
     reviews = []
     audits = []
@@ -94,12 +134,14 @@ def main(argv=None):
             "scenario_id": scenario_id,
             "source_trajectory_id": trajectory_id,
             "source_artifact": project_relative(source_path),
+            "source_sha256": sha256(source_path),
             "scenario_artifact": project_relative(scenario_path),
+            "scenario_sha256": sha256(scenario_path),
             "turn_count": len(trajectory.get("turns", [])),
             "source_status": record["source_status"],
             "admission": "machine_gate3_audit",
             "machine_precheck": attempt.get("precheck", {}),
-            "human_review": "skipped_pending_optional_audit",
+            "human_review": "pending",
         }
         target = (
             batch / "source_packages" / "shard1"
@@ -115,7 +157,7 @@ def main(argv=None):
                 "decision": "pending",
                 "reviewer_type": "not_run",
             },
-            "human_review": "skipped_pending_optional_audit",
+            "human_review": "pending",
             "latest_attempt": {
                 "artifact_path": project_relative(source_path),
                 "artifact_sha256": sha256(source_path),
@@ -128,7 +170,7 @@ def main(argv=None):
             "generation_status": record["source_status"],
             "machine_precheck": attempt.get("precheck", {}),
             "model_semantic_review": {"decision": "pending"},
-            "human_status": "skipped_pending_optional_audit",
+            "human_status": "pending",
             "admission": "machine_gate3_audit",
         }
         audits.append({
@@ -137,7 +179,7 @@ def main(argv=None):
             "trajectory_id": trajectory_id,
             "gates": {
                 "gate1": {"human_status": "pending"},
-                "gate2": {"human_status": "skipped"},
+                "gate2": {"human_status": "pending"},
                 "gate3": gate3,
                 "gate4": {"human_status": "pending"},
             },
@@ -154,7 +196,7 @@ def main(argv=None):
             "reviewed_at_utc": "",
             "decision": "pending",
             "human_attestation": False,
-            "human_execution": "skipped",
+            "human_execution": "pending",
             "notes": "",
         })
 
@@ -162,7 +204,7 @@ def main(argv=None):
         "format": "socialflux_gate3_audit_source_review_v1",
         "candidate_count": len(reviews),
         "admission": "machine_gate3_audit",
-        "human_review": "skipped_pending_optional_audit",
+        "human_review": "pending",
         "candidates": reviews,
     })
     atomic(batch / "automatic_gate_audit.json", {
@@ -171,19 +213,21 @@ def main(argv=None):
         "records": audits,
     })
     atomic(batch / "human_review" / "gate3_rollouts.json", {
-        "format": "socialflux_gate3_optional_human_review_v1",
+        "format": "socialflux_gate3_human_review_v1",
         "created_at_utc": now(),
         "population_count": len(human_records),
         "sample_count": 0,
-        "sampling": "human_execution_skipped",
+        "sampling": "pending_human_sampling",
         "records": human_records,
     })
     atomic(batch / "source_packages" / "summary.json", {
         "format": "socialflux_gate3_audit_source_summary_v1",
         "package_count": len(packages),
         "admission": "machine_gate3_audit",
-        "human_review": "skipped_pending_optional_audit",
+        "human_review": "pending",
     })
+    if coverage is not None:
+        atomic(batch / "input_coverage.json", coverage)
     print(json.dumps({
         "gate3_inputs": len(packages),
         "source_status_counts": {

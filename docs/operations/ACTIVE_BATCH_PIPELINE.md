@@ -15,6 +15,8 @@
 | 英文数值与引用核对 | `pipeline/translation_checks.py` |
 | 批量翻译编排 | `scripts/translate_rollouts.py`，配置 `configs/gpt50_experiment/localization.json` |
 | 自动 Gate2、保留人工待审 | `scripts/auto_gate2_unified_gpt50.py` |
+| Gate3 输入绑定与覆盖记录 | `scripts/prepare_gate3_audit_inputs.py --input-coverage` |
+| Gate3 英文模型审核 | `scripts/review_active_rollouts.py --language en --resume` |
 | 只读网站数据适配 | `web/live_rollouts.py`，页面 `/gpt50-live` |
 
 数据根为
@@ -23,6 +25,14 @@
 `unified_current_trust_v1_gpt50_active/`。每个场景的 `english/` 保存译文、
 文本缓存和翻译状态；原始 `trajectory.json`、中断记录和调用日志保留。
 `language_migration/` 保存语言切换的原始调用前缀及修订依据。
+
+Gate3 从当前 `gate2_followup/input_coverage.json` 选取已有正文，准备到
+当前批次的 `gate3_followup/`，不读取根目录的旧 Gate3 结果。完整轨迹标为
+`completed_unreviewed`，部分失败轨迹标为 `generation_error`，无正文的场景
+保留在覆盖清单中。准备入口保存源文件哈希；审核续跑核对输入、模型路由与
+语言设置。`gate3/model_reviews.json` 记录 PID、运行状态、审核进度及结果，
+`gate3/calls/` 保留实际调用记录。模型 approve/reject 不改人工 decision 或签名。
+Gate2 的干预实验与 Gate3 的正文质量审核可独立运行，不互相冒充完成结果。
 
 运行状态以 `results.json`、`translation_job.json`、`automatic_gate2_job.json`
 及实际 PID 为准，不能只看进程存在或历史网页的完成数。运行中不要重复启动。
