@@ -33,6 +33,9 @@ Gate3 从当前 `gate2_followup/input_coverage.json` 选取已有正文，准备
 语言设置。`gate3/model_reviews.json` 记录 PID、运行状态、审核进度及结果，
 `gate3/calls/` 保留实际调用记录。模型 approve/reject 不改人工 decision 或签名。
 Gate2 的干预实验与 Gate3 的正文质量审核可独立运行，不互相冒充完成结果。
+`/gpt50-live` 在列表与详情显示 Gate3 模型未通过标签、评分、原因和证据轮次，
+并单独标出 Gate2 执行错误。筛选器可定位两类问题；显示前绑定当前轨迹 ID
+及源文件哈希，不把本批结果套到历史记录或已变化的正文，部分轨迹仍标为不完整。
 
 运行状态以 `results.json`、`translation_job.json`、`automatic_gate2_job.json`
 及实际 PID 为准，不能只看进程存在或历史网页的完成数。运行中不要重复启动。

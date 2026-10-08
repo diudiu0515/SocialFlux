@@ -4,9 +4,9 @@
 <body>
 <header class="topbar"><div><a href="/gpt50" class="back">← 人工审核工作台</a><h1>GPT50 <span>场景 · 对话 · 状态 · 多模态</span></h1></div><div class="tools"><span id="updated" aria-live="polite">连接中…</span><button id="refresh">立即刷新</button></div></header>
 <section id="summary" class="summary" aria-label="生成进度"></section>
-<div class="layout"><aside><label for="search">场景列表</label><input id="search" type="search" placeholder="搜索场景编号、标题或人物"><label class="filter"><input id="readableOnly" type="checkbox">只看已有对话的场景</label><nav id="scenarios" aria-label="选择场景"></nav></aside>
+<div class="layout"><aside><label for="search">场景列表</label><input id="search" type="search" placeholder="搜索场景编号、标题或人物"><label class="filter"><input id="readableOnly" type="checkbox">只看已有对话的场景</label><label for="gateFilter">审核筛选</label><select id="gateFilter"><option value="all">全部场景</option><option value="rejected">Gate3 模型未通过</option><option value="errors">Gate2 执行出错</option></select><nav id="scenarios" aria-label="选择场景"></nav></aside>
 <main id="main"><div class="empty">正在加载当前批次…</div></main></div>
 <div id="error" role="alert" hidden></div>
 <script src="/live_multimodal.js?v=1"></script>
-<script src="/gpt50_live.js?v=state-chart-2"></script>
+<script src="/gpt50_live.js?v=gate-status-3"></script>
 </body></html>
