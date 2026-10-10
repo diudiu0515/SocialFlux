@@ -274,14 +274,14 @@ def generate_case(config,number,tasks,*,replay=True):
     return {'scenario_id':source['scenario_id'],'completed_tasks':list(tasks),'source_origin':source['origin'],'source_review_status':source['source_review_status']}
 
 
-def export_batch(config):
+def export_batch(config, *, audit=False, pair_media=None):
     output=Path(config['output']);output.mkdir(parents=True,exist_ok=True)
     with (output/'.export.lock').open('a') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX)
-        return _export_batch(config)
+        return _export_batch(config, audit=audit, pair_media=pair_media)
 
 
-def _export_batch(config):
+def _export_batch(config, *, audit=False, pair_media=None):
     items=[];coverage=[]
     for n in config['scenario_numbers']:
         directory=Path(config['output'])/'sources'/source_name(n)
@@ -297,6 +297,12 @@ def _export_batch(config):
     manifest.update(bank_id=config['bank_id'],requested_scenarios=len(config['scenario_numbers']),
                     expected_items=4*len(config['tasks'])*len(config['scenario_numbers']),paused_tasks=['T2'],scenario_coverage=coverage)
     manifest['complete']=len(items)==manifest['expected_items'] and manifest['replay_ready_count']==len(items)
+    if items and audit:
+        from offline.choice_audit import audit_bundle
+        audit_bundle(items,config['output'])
+    if pair_media:
+        from offline.choice_media import pair_assets
+        manifest['pairing']=pair_assets(items,pair_media,config['output'])
     save(Path(config['output'])/'manifest.json',manifest)
     return items,manifest
 
@@ -340,13 +346,9 @@ def run_batch(config,args):
                     print(json.dumps(row,ensure_ascii=False),flush=True)
                 checkpoint()
                 export_batch(config)
-    items,manifest=export_batch(config)
-    if items:
-        from offline.choice_audit import audit_bundle
-        audit_bundle(items,output)
-    if args.pair_media:
-        from offline.choice_media import pair_assets
-        manifest['pairing']=pair_assets(items,args.pair_media,output)
+    # Keep derived diagnostics and media bound to the same bank version while
+    # other workers may be appending completed groups.
+    items,manifest=export_batch(config,audit=True,pair_media=args.pair_media)
     status.update(status='completed' if manifest['complete'] else 'incomplete',item_count=len(items),expected=manifest['expected_items'])
     if args.export_only:
         save(output/'export_status.json',status)

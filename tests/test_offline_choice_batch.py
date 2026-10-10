@@ -98,6 +98,26 @@ class OfflineBatchTest(unittest.TestCase):
         self.assertEqual(load(output/'run_status_T3.json'),{'status':'running','pid':123})
         self.assertEqual(load(output/'export_status.json')['status'],'incomplete')
 
+    def test_pair_report_identifies_exact_question_version(self):
+        from offline.choice_media import pair_assets
+        from offline.choice_builder import write_bundle,load
+        question=item()
+        question['authoring']['review_notes']='test fixture'
+        question['authoring']['replay_status']='not_required'
+        trajectory=self.root/'media_trajectory.json'
+        save(trajectory,{'turns':[]})
+        question['authoring']['construction_source']={'trajectory_path':str(trajectory)}
+        media_manifest=self.root/'media_manifest.json'
+        save(media_manifest,{'requests':[],'batch_root':str(self.root)})
+        output=self.root/'paired'
+        write_bundle([question],output)
+        report=pair_assets([question],media_manifest,output,frames=False)
+        self.assertEqual(report['items_sha256'],sha(output/'items.jsonl'))
+        self.assertEqual(report['input_item_count'],1)
+        self.assertEqual(report['logical_pairs'],0)
+        self.assertEqual(len(report['gaps']),1)
+        self.assertEqual(load(output/'pairing_report.json'),report)
+
     def test_stable_identity_and_independent_raw_author_cache(self):
         sample=item();raw={k:sample[k] for k in ['question','subtype','options','target_spec']}
         raw.update({k:sample['authoring'][k] for k in ['answer','evidence_ids','rationale','option_errors','option_variable_map']})

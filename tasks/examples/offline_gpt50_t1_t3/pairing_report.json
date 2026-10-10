@@ -1,6 +1,8 @@
 {
-  "logical_pairs": 192,
-  "variants": 384,
+  "input_item_count": 228,
+  "items_sha256": "f9508bfa1047b4e2fbcc1bb7b6250c5448117f67f6eabaa356535f6ca8e72c3c",
+  "logical_pairs": 204,
+  "variants": 408,
   "unique_videos": 44,
   "gaps": [
     {

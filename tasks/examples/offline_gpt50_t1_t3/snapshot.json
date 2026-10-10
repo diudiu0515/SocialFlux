@@ -2,13 +2,13 @@
   "format": "socialflux_offline_choice_snapshot_v1",
   "source_bank": "data/offline_gpt50_t1_t3",
   "status": "generation_in_progress_authorized",
-  "captured_at_utc": "2026-10-10T18:19:15.326748+00:00",
+  "captured_at_utc": "2026-10-10T18:33:23.384571+00:00",
   "expected_items": 400,
-  "actual_items": 220,
+  "actual_items": 228,
   "scenarios": 49,
   "tasks": {
     "T1": 196,
-    "T3": 24
+    "T3": 32
   },
   "complete": false,
   "paused_tasks": [
@@ -17,13 +17,13 @@
   "human_review": "pending",
   "formal_admission": false,
   "source_hashes": {
-    "items.jsonl": "d52a192475f99eb8138bb14e7fc28aff97f04cdca8dcb3e4fe0df2093af7c712",
-    "public.jsonl": "bf521261b666ff07f0dfb0497abf9ae30fb66f65be3dda7ffb574b09b5fb5f85",
-    "examples.md": "61fd9180a598ff8eb8cdf276a51e592343ca83b85ed54e4ffebbe621c619600c",
-    "manifest.json": "904f2a318aa791de097ef95ee1a7461c37ff401063506b091df9bc2a4a625e3f",
-    "development_audit.json": "d9e108dd000ab692f8cf13784a5bc3094037ab307175f8506f233ef491fb53c7",
-    "state_reference_crosscheck.json": "a451dbd4cc519eebc742a1e42ea2900be414b4600eacadb0f1db5173f2949179",
-    "pairing_report.json": "a612b3dc189663cf77df60b0088a192e262e211df343b0f9ebff0cd42b30c773"
+    "items.jsonl": "f9508bfa1047b4e2fbcc1bb7b6250c5448117f67f6eabaa356535f6ca8e72c3c",
+    "public.jsonl": "408c61f2a39a957a30f768641573139f730bf128e9f80d94535cbca59cac7d27",
+    "examples.md": "ee992174089b75dd501c20d05b71e681b2995c5ef2312fd3a1b7308932b9340b",
+    "manifest.json": "26f0c35170d47ae5c03470c05020cdc631fb475f1635c93554fb73181709fde0",
+    "development_audit.json": "e5101724208a7b65ca933efb24dc60faeb3d78d4258503ac7b21ce8cd900254c",
+    "state_reference_crosscheck.json": "f171962eff7d9b9a8ad60e6d384368bf3ee95b706733f805af22e5bdecdd9baf",
+    "pairing_report.json": "d315b1fc8b0a9a36c068abec1d44263b68072eec92e9d8174ea511399478bcb7"
   },
   "runtime_evidence": "Private source files, provider logs and branch checkpoints remain in the local data directory, not in Git."
 }

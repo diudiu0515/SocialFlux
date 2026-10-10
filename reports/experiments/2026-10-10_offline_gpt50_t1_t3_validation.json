@@ -2,28 +2,28 @@
   "format": "socialflux_offline_gpt50_validation_v1",
   "complete": false,
   "status": "generation_in_progress_authorized",
-  "captured_at_utc": "2026-10-10T18:19:15.326748+00:00",
+  "captured_at_utc": "2026-10-10T18:33:23.384571+00:00",
   "requested_scenarios": 50,
   "expected_items": 400,
-  "actual_items": 220,
+  "actual_items": 228,
   "scenarios_with_items": 49,
   "tasks": {
     "T1": 196,
-    "T3": 24
+    "T3": 32
   },
   "task_state_coverage": {
     "T1/Behavioral Disposition": 107,
     "T1/Emotion": 27,
     "T1/Interaction Risk": 22,
-    "T1/Relationship": 61,
-    "T3/Behavioral Disposition": 7,
-    "T3/Emotion": 6,
-    "T3/Interaction Risk": 6,
-    "T3/Relationship": 7
+    "T1/Relationship": 62,
+    "T3/Behavioral Disposition": 9,
+    "T3/Emotion": 7,
+    "T3/Interaction Risk": 9,
+    "T3/Relationship": 9
   },
-  "combinations": 55,
+  "combinations": 57,
   "machine_structure_check": {
-    "validated": 220,
+    "validated": 228,
     "provider_calls": 0
   },
   "formal_check": {
@@ -32,15 +32,15 @@
     "provider_calls": 0
   },
   "regression_tests": {
-    "run": 80,
-    "passed": 72,
+    "run": 81,
+    "passed": 73,
     "skipped": 8,
-    "log": "build/offline_gpt50_t1_t3/regression_resume_v2.log"
+    "log": "build/offline_gpt50_t1_t3/regression_resume_v3.log"
   },
   "focused_python_tests": {
-    "run": 37,
-    "passed": 37,
-    "log": "build/offline_gpt50_t1_t3/focused_resume_tests_v2.log"
+    "run": 38,
+    "passed": 38,
+    "log": "build/offline_gpt50_t1_t3/focused_resume_tests_v3.log"
   },
   "prior_broader_test_limit": "89 checks: 88 passed; one pre-existing missing/stale historical scenario manifest, documented in 2026-10-10_git_checkpoint_validation.json",
   "evidence_smoke": {
@@ -73,16 +73,29 @@
     },
     "label_basis": "provisional_author_answers"
   },
+  "new_t3_smoke": {
+    "path": "data/offline_gpt50_t1_t3/smoke_new_t3_two",
+    "score": {
+      "n": 2,
+      "correct": 1,
+      "accuracy": 0.5,
+      "semantic_errors": 1,
+      "format_failures": 0,
+      "call_failures": 0
+    },
+    "items_sha256": "0819e3dcc0808c33b3f009d1c84af641f6e99705c1dc3cb576ae6c8d45337b6b",
+    "label_changes": false
+  },
   "pairing": {
-    "logical_pairs": 192,
-    "variants": 384,
+    "logical_pairs": 204,
+    "variants": 408,
     "unique_videos": 44
   },
   "case_failure_records": {
     "TimeoutError": 75,
     "RemoteDisconnected": 1,
     "StructuredOutputError": 2,
-    "ValueError": 19,
+    "ValueError": 20,
     "ProviderHTTPError": 2,
     "IncompleteModelOutputError": 2
   },
@@ -102,18 +115,6 @@
   "pending_scenario_tasks": [
     {
       "scenario_id": "GPT50_001",
-      "tasks": [
-        "T3"
-      ]
-    },
-    {
-      "scenario_id": "GPT50_002",
-      "tasks": [
-        "T3"
-      ]
-    },
-    {
-      "scenario_id": "GPT50_006",
       "tasks": [
         "T3"
       ]
@@ -371,6 +372,7 @@
     "passed": true,
     "checks": [
       "GPT50 default and bank selection",
+      "append during detail/reference load",
       "unchanged draft survives append",
       "changed draft archived",
       "old60 retained"

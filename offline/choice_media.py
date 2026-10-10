@@ -1,5 +1,6 @@
 """Pair exact existing source media without modifying a question's labels."""
 from copy import deepcopy
+import hashlib
 import json
 from pathlib import Path
 from offline.choice_builder import load, save, save_text, sha
@@ -52,7 +53,9 @@ def pair_assets(items, manifest_path, output, *, frames=True):
     for name,values in [('paired.items.jsonl',paired),('paired.public.jsonl',[public_instance(x) for x in paired])]:
         save_text(output/name,''.join(json.dumps(x,ensure_ascii=False)+'\n' for x in values))
     save(output/'media.json',media)
-    report={'logical_pairs':len(paired)//2,'variants':len(paired),'unique_videos':len(cache),
+    source_bytes=''.join(json.dumps(x,ensure_ascii=False)+'\n' for x in items).encode()
+    report={'input_item_count':len(items),'items_sha256':hashlib.sha256(source_bytes).hexdigest(),
+            'logical_pairs':len(paired)//2,'variants':len(paired),'unique_videos':len(cache),
             'gaps':gaps,'human_media_review':'pending','frame_transport_limit':'sampled visual frames; no audio/prosody evaluation',
             'nonverbal_history_relation':'see each item authoring.nonverbal_history_relation; T2 reuses exact shared-prefix clip on both sides'}
     save(output/'pairing_report.json',report)

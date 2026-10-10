@@ -110,6 +110,19 @@ async function fetchJSON(url) {
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   return response.json();
 }
+function checkItemVersion(value, id) {
+  const expected = bank.items.find(item => item.instance_id === id);
+  const actual = value.metadata || value;
+  if (!expected || actual.instance_id !== id || actual.item_sha256 !== expected.item_sha256) {
+    throw new Error("当前题目已修改，草稿已保存在浏览器，请刷新题库核对新版");
+  }
+  if (value.bank_sha256 !== bank.bank_sha256) {
+    if (bank.bank_id !== "offline_gpt50_t1_t3") throw new Error("题库版本已更新，请导出草稿后刷新页面");
+    const notice = "题库有更新，当前题目版本未变，可以继续标注；刷新题库可载入新增题目。";
+    const previous = $("message").textContent;
+    if (!previous.includes(notice)) message(previous ? previous + " " + notice : notice);
+  }
+}
 async function selectItem(id) {
   if (!bank.items.some(i => i.instance_id === id)) return;
   const version = ++requestVersion;
@@ -121,7 +134,7 @@ async function selectItem(id) {
   try {
     const value = detailCache.get(id) || await fetchJSON(bankAPI("/api/offline-review/" + encodeURIComponent(id)));
     if (version !== requestVersion) return;
-    if (value.bank_sha256 !== bank.bank_sha256) throw new Error("题库版本已更新，请导出草稿后刷新页面");
+    checkItemVersion(value, id);
     detailCache.set(id, value); detail = value;
     renderItem();
   } catch (error) {
@@ -288,7 +301,7 @@ function renderReference() {
     try {
       const ref = await fetchJSON(bankAPI(`/api/offline-review/${encodeURIComponent(id)}/reference`));
       if (activeId !== id || !section.isConnected) return;
-      if (ref.bank_sha256 !== bank.bank_sha256) throw new Error("题库已更新，请先导出草稿并刷新");
+      checkItemVersion(ref, id);
       const ann = annotation();
       if (!ann.reference_viewed_at) {
         ann.blind_judgment = {answer: ann.answer, acceptable_answers: [...ann.acceptable_answers],
@@ -373,7 +386,7 @@ async function importDraft(file) {
     const meta = bank.items.find(i => i.instance_id === id);
     if (!meta || ann.instance_id !== id || ann.item_sha256 !== meta.item_sha256) throw new Error(`题目版本不匹配：${id}`);
     const item = detailCache.get(id) || await fetchJSON(bankAPI("/api/offline-review/" + encodeURIComponent(id)));
-    if (item.bank_sha256 !== bank.bank_sha256) throw new Error("题库已更新，请刷新后再导入");
+    checkItemVersion(item, id);
     detailCache.set(id, item);
     const errors = validateAnnotation(ann, item.public.options, item.evidence_ids, ann.status === "complete");
     if (ann.status === "complete" && !String(ann.reviewed_by || "").trim()) errors.push("已完成记录缺少标注人");
@@ -396,6 +409,7 @@ async function init() {
   try {
     $('bankSelect').value=bankSelection;
     $('bankSelect').onchange=()=>{location.href='/offline-review?bank='+encodeURIComponent($('bankSelect').value);};
+    $('refreshBank').onclick=()=>{if(bank)save();location.reload();};
     bank = await fetchJSON(bankAPI("/api/offline-review"));
     const summary = bank.summary;
     $("bankMeta").textContent = `${summary.item_count} 题 · ${summary.scenario_count} 个场景 · ${["T1", "T2", "T3"].map(task => `${task} ${summary.tasks[task] || 0}`).join(" / ")} · ${summary.combinations} 道组合题 · ${summary.replay_pending} 题回放待完成`;

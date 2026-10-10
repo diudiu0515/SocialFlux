@@ -82,12 +82,14 @@ python -m pipeline offline-eval --items data/offline_gpt50_t1_t3/replay_ready.it
 `development_audit.json` 记录题型与四维覆盖，
 `state_reference_crosscheck.json` 提供机器 state 的方向交叉检查，
 不把机器一致性当作可见证据充分或人工通过。
-`pairing_report.json` 如实列出缺少既有媒体的题目，不挪用其他轨迹视频。
+`pairing_report.json` 记录输入题库 SHA 与题数，并如实列出缺少既有媒体的题目。
+配对使用当前轨迹明确引用的同场景 response-neutral 事件族视频资产；这些非语言短片可复用，
+不含候选行动的未来台词，不等同于实际拍摄的 rollout。导出、诊断与配对在同一锁内完成。
 
 网站默认 `/offline-review` 打开新批次，也可明确使用 `?bank=gpt50-t1-t3`；旧 60 题仍可在
 `/offline-review?bank=dev60` 标注。页面展示生成进度、来源审核状态、
 题面、分支参考和四项质量判断。新批次追加题目时保留未改变题目的本地草稿；
-题目 SHA 改变时旧稿归档到导出备份，不能自动套用为新版标签。
+题目 SHA 改变时旧稿归档到导出备份，不能自动套用为新版标签。追加其他题目不会中断当前未改动题目的作答、参考查看或导入；“刷新题库”会保留当前草稿并载入新增题目。
 参考答案按需打开，浏览器记录是否已经看过参考。
 
 原始调用、私有分支与视频不上传 Git；代码、配置、可读开发题快照和报告

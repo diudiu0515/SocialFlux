@@ -1,6 +1,6 @@
 # SocialFlux offline T1 / T3 开发题（完整题面与作者参考答案）
 
-本文件包含实际已生成的 220 道题、49 个场景；目标覆盖与缺项见同批 manifest。
+本文件包含实际已生成的 228 道题、49 个场景；目标覆盖与缺项见同批 manifest。
 
 所有答案是待人工审核的开发参考，不是已冻结真值。下面每题先给出完整可见材料，再给出作者侧标注。
 主评测只答 `{"answer":"B"}`。证据诊断另加 `evidence_ids`，分别计分。
@@ -360,6 +360,187 @@ history：
 可接受答案：A
 审核备注：组合区分行为增量与关系判断未知；私有信任持平不能替代公开依据，尤其不可反转既往失约的责任方向。
 分支验证：not_required
+
+## SFG50-002-T3-01 · T3 / immediate_effect
+
+来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill → Sera Dastan。
+
+背景：At the deadline before examination week, the parent advocate asks the counselor to put a side-entrance, private-room, quiet-reset, ordinary-attendance plan in writing before the roster closes, while committee review will occur after the first examinations
+角色目标：Secure an immediate written examination arrangement that protects the student's privacy and dependable access.
+
+relationship_structure：A school counselor and an experienced parent advocate who have previously negotiated access support must revisit their conditional trust after an earlier verbal arrangement failed during a timetable change.
+
+power_structure：The counselor controls immediate rooms, staffing, instructions, and attendance handling, while the advocate can initiate a formal district review that requires the school to account for its decisions.
+
+goal_conflict：They must choose between an immediate informal examination accommodation and waiting for committee review, balancing timely access, privacy, durable accountability, and repair of trust.
+
+relevant_history：A verbal quiet-start arrangement initially improved attendance and completed work, but a timetable change erased it and left the student recorded late with an assessment missing.；The counselor apologized and restored a staff-dependent check-in, so the advocate withheld a drafted complaint while treating further reassurance as conditional.；A committee intake was filed after more incomplete work appeared, but its meeting falls after the first examinations and the student has since concealed a new symptom from school.
+
+history：
+
+- [t1] Sera Dastan：Maren，之前的口头约定被课表变动抹掉过，所以这次请在名单锁定前写明侧门进入、独立房间、需要时安静重置，以及按正常出勤处理；委员会考后再审，不能代替眼前的考试安排。
+  Maren Quill：好的，我现在写下来：考试周侧门进入、二楼216独立房间、需要时安静重置、按正常出勤记录；这份安排在名单锁定前确认，委员会审议是之后的事。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Sera Dastan：谢谢，这样临时安排和委员会审议的阶段分清了。对我来说，隐私也是执行标准：她需要安静重置时，不必在门口或考场解释症状，按这份安排处理即可。
+  Maren Quill：明白了，执行时保护隐私。我会通知考务和侧门值班：学生到达时直接引导到216，无需询问原因；需要离开重置时，陪同人员在门外等候，不在走廊讨论。
+  可见表达：{"facial_expression": "attentive, calm", "gaze": "steady, direct", "speech_style": "clear and practical", "prosody": "even tone with slight emphasis on privacy procedures", "behavioral_cues": ["slight forward lean showing engagement", "brief note-taking gesture"]}
+
+- 候选行动 action_1：这就把隐私落实到现场了；考试周我会以她能否直接到216、需要重置时不被追问，来判断安排是否真正可用。委员会的长期审议仍按原计划留到考后。
+- 候选行动 action_2：请你在名单锁定前把侧门、216和正常出勤写入临时安排。我想先请你把责任岗位及重置时的交接逐项写清，再核对“无需询问即可重置”能否落实；这样更可追责，但可能拖慢确认，也会让她暂时无法确信能免于解释。委员会仍按计划考后审议。
+
+**题目：以t2为基线，若Sera Dastan采取action_2，在紧接着的下一次回应中，Maren Quill对确认整套考试周临时安排的决策准备度最可能如何变化？**
+
+- **A.** 下降
+- **B.** 上升
+- **C.** 基本不变
+
+**作者参考答案：A（待审）**
+
+Maren在t1已答应写下安排，t2又给出具体隐私流程；action_2则要求先列清岗位和交接，再核对免询问能否落实，为整套确认新增前提。因此即时决策准备度更可能下降，而非因核查更细就上升。此判断限于整套确认，不表示她会停止所有分项准备。
+
+证据：t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.decision_readiness"], "time_scope": "t2至执行action_2后的下一次环境回应", "state_owner": "GPT50_002_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "state_dimension_confusion", "C": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.decision_readiness": "decrease"}, "B": {"behavioral_disposition.decision_readiness": "increase"}, "C": {"behavioral_disposition.decision_readiness": "similar"}}
+可接受答案：A
+审核备注：须保留“整套安排”的范围；若改问三项基础安排的推进意愿，下降便不够明确。
+分支验证：validated
+
+## SFG50-002-T3-02 · T3 / delayed_effect
+
+来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill → Sera Dastan。
+
+背景：At the deadline before examination week, the parent advocate asks the counselor to put a side-entrance, private-room, quiet-reset, ordinary-attendance plan in writing before the roster closes, while committee review will occur after the first examinations
+角色目标：Secure an immediate written examination arrangement that protects the student's privacy and dependable access.
+
+relationship_structure：A school counselor and an experienced parent advocate who have previously negotiated access support must revisit their conditional trust after an earlier verbal arrangement failed during a timetable change.
+
+power_structure：The counselor controls immediate rooms, staffing, instructions, and attendance handling, while the advocate can initiate a formal district review that requires the school to account for its decisions.
+
+goal_conflict：They must choose between an immediate informal examination accommodation and waiting for committee review, balancing timely access, privacy, durable accountability, and repair of trust.
+
+relevant_history：A verbal quiet-start arrangement initially improved attendance and completed work, but a timetable change erased it and left the student recorded late with an assessment missing.；The counselor apologized and restored a staff-dependent check-in, so the advocate withheld a drafted complaint while treating further reassurance as conditional.；A committee intake was filed after more incomplete work appeared, but its meeting falls after the first examinations and the student has since concealed a new symptom from school.
+
+history：
+
+- [t1] Sera Dastan：Maren，之前的口头约定被课表变动抹掉过，所以这次请在名单锁定前写明侧门进入、独立房间、需要时安静重置，以及按正常出勤处理；委员会考后再审，不能代替眼前的考试安排。
+  Maren Quill：好的，我现在写下来：考试周侧门进入、二楼216独立房间、需要时安静重置、按正常出勤记录；这份安排在名单锁定前确认，委员会审议是之后的事。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Sera Dastan：谢谢，这样临时安排和委员会审议的阶段分清了。对我来说，隐私也是执行标准：她需要安静重置时，不必在门口或考场解释症状，按这份安排处理即可。
+  Maren Quill：明白了，执行时保护隐私。我会通知考务和侧门值班：学生到达时直接引导到216，无需询问原因；需要离开重置时，陪同人员在门外等候，不在走廊讨论。
+  可见表达：{"facial_expression": "attentive, calm", "gaze": "steady, direct", "speech_style": "clear and practical", "prosody": "even tone with slight emphasis on privacy procedures", "behavioral_cues": ["slight forward lean showing engagement", "brief note-taking gesture"]}
+
+- 候选行动 action_1：这就把隐私落实到现场了；考试周我会以她能否直接到216、需要重置时不被追问，来判断安排是否真正可用。委员会的长期审议仍按原计划留到考后。
+- 候选行动 action_2：请你在名单锁定前把侧门、216和正常出勤写入临时安排。我想先请你把责任岗位及重置时的交接逐项写清，再核对“无需询问即可重置”能否落实；这样更可追责，但可能拖慢确认，也会让她暂时无法确信能免于解释。委员会仍按计划考后审议。
+
+**题目：若Sera Dastan采取action_1，以t2为基线预测至第5轮环境回应结束，Maren Quill未能让考试周临时安排及时且保护隐私地运作的预期风险最可能如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 上升
+
+**作者参考答案：B（待审）**
+
+t1与t2已有房间、出勤及隐私执行路径，action_1进一步确定现场检验标准，并维持考后审议，不让长期程序阻塞近期安排。随着协调继续，执行失败的预期风险更可能下降，而非停留原位。此前口头安排失效仍是边界，不能据此断言书面确认或实际执行已经完成。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "考试周开始时，临时进入、重置及出勤安排未能及时且保护隐私地运作", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "从action_1开始的5轮环境回应，比较t2与第5轮末对考试周执行失败的预期", "state_owner": "GPT50_002_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "similar"}, "B": {"consequence_risk.goal_failure_risk": "decrease"}, "C": {"consequence_risk.goal_failure_risk": "increase"}}
+可接受答案：B
+审核备注：Maren的目标由其承诺与岗位推定为落实安排；答案是机制支持的风险预测，不是已履约标注。
+分支验证：validated
+
+## SFG50-002-T3-03 · T3 / action_comparison
+
+来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill → Sera Dastan。
+
+背景：At the deadline before examination week, the parent advocate asks the counselor to put a side-entrance, private-room, quiet-reset, ordinary-attendance plan in writing before the roster closes, while committee review will occur after the first examinations
+角色目标：Secure an immediate written examination arrangement that protects the student's privacy and dependable access.
+
+relationship_structure：A school counselor and an experienced parent advocate who have previously negotiated access support must revisit their conditional trust after an earlier verbal arrangement failed during a timetable change.
+
+power_structure：The counselor controls immediate rooms, staffing, instructions, and attendance handling, while the advocate can initiate a formal district review that requires the school to account for its decisions.
+
+goal_conflict：They must choose between an immediate informal examination accommodation and waiting for committee review, balancing timely access, privacy, durable accountability, and repair of trust.
+
+relevant_history：A verbal quiet-start arrangement initially improved attendance and completed work, but a timetable change erased it and left the student recorded late with an assessment missing.；The counselor apologized and restored a staff-dependent check-in, so the advocate withheld a drafted complaint while treating further reassurance as conditional.；A committee intake was filed after more incomplete work appeared, but its meeting falls after the first examinations and the student has since concealed a new symptom from school.
+
+history：
+
+- [t1] Sera Dastan：Maren，之前的口头约定被课表变动抹掉过，所以这次请在名单锁定前写明侧门进入、独立房间、需要时安静重置，以及按正常出勤处理；委员会考后再审，不能代替眼前的考试安排。
+  Maren Quill：好的，我现在写下来：考试周侧门进入、二楼216独立房间、需要时安静重置、按正常出勤记录；这份安排在名单锁定前确认，委员会审议是之后的事。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Sera Dastan：谢谢，这样临时安排和委员会审议的阶段分清了。对我来说，隐私也是执行标准：她需要安静重置时，不必在门口或考场解释症状，按这份安排处理即可。
+  Maren Quill：明白了，执行时保护隐私。我会通知考务和侧门值班：学生到达时直接引导到216，无需询问原因；需要离开重置时，陪同人员在门外等候，不在走廊讨论。
+  可见表达：{"facial_expression": "attentive, calm", "gaze": "steady, direct", "speech_style": "clear and practical", "prosody": "even tone with slight emphasis on privacy procedures", "behavioral_cues": ["slight forward lean showing engagement", "brief note-taking gesture"]}
+
+- 候选行动 action_1：这就把隐私落实到现场了；考试周我会以她能否直接到216、需要重置时不被追问，来判断安排是否真正可用。委员会的长期审议仍按原计划留到考后。
+- 候选行动 action_2：请你在名单锁定前把侧门、216和正常出勤写入临时安排。我想先请你把责任岗位及重置时的交接逐项写清，再核对“无需询问即可重置”能否落实；这样更可追责，但可能拖慢确认，也会让她暂时无法确信能免于解释。委员会仍按计划考后审议。
+
+**题目：分别以A表示Sera Dastan采取action_1、B表示采取action_2。比较各自紧接着的下一次环境回应，哪种情况下Maren Quill寻求核实、记录或执行依据的意愿更高？**
+
+- **A.** A较高
+- **B.** 接近
+- **C.** B较高
+
+**作者参考答案：C（待审）**
+
+Maren此前已接纳书面化要求并细化执行；action_2新增岗位、交接和免询问的逐项核对，更可能促使她寻找执行依据。action_1主要由Sera说明自己将怎样检验，不等于Maren主动核查更多。预测依据是新增核实任务，不是把Sera的请求直接算作Maren的行为。
+
+证据：t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "两种候选行动各自执行后的下一次环境回应", "state_owner": "GPT50_002_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "actor_reversal", "B": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "higher_in_a"}, "B": {"behavioral_disposition.evidence_seeking": "similar"}, "C": {"behavioral_disposition.evidence_seeking": "higher_in_b"}}
+可接受答案：C
+审核备注：私有模拟即时两分支核查状态接近；公开行动的新增核实要求更支持B较高，需人工复核区分度。
+分支验证：validated
+
+## SFG50-002-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill → Sera Dastan。
+
+背景：At the deadline before examination week, the parent advocate asks the counselor to put a side-entrance, private-room, quiet-reset, ordinary-attendance plan in writing before the roster closes, while committee review will occur after the first examinations
+角色目标：Secure an immediate written examination arrangement that protects the student's privacy and dependable access.
+
+relationship_structure：A school counselor and an experienced parent advocate who have previously negotiated access support must revisit their conditional trust after an earlier verbal arrangement failed during a timetable change.
+
+power_structure：The counselor controls immediate rooms, staffing, instructions, and attendance handling, while the advocate can initiate a formal district review that requires the school to account for its decisions.
+
+goal_conflict：They must choose between an immediate informal examination accommodation and waiting for committee review, balancing timely access, privacy, durable accountability, and repair of trust.
+
+relevant_history：A verbal quiet-start arrangement initially improved attendance and completed work, but a timetable change erased it and left the student recorded late with an assessment missing.；The counselor apologized and restored a staff-dependent check-in, so the advocate withheld a drafted complaint while treating further reassurance as conditional.；A committee intake was filed after more incomplete work appeared, but its meeting falls after the first examinations and the student has since concealed a new symptom from school.
+
+history：
+
+- [t1] Sera Dastan：Maren，之前的口头约定被课表变动抹掉过，所以这次请在名单锁定前写明侧门进入、独立房间、需要时安静重置，以及按正常出勤处理；委员会考后再审，不能代替眼前的考试安排。
+  Maren Quill：好的，我现在写下来：考试周侧门进入、二楼216独立房间、需要时安静重置、按正常出勤记录；这份安排在名单锁定前确认，委员会审议是之后的事。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Sera Dastan：谢谢，这样临时安排和委员会审议的阶段分清了。对我来说，隐私也是执行标准：她需要安静重置时，不必在门口或考场解释症状，按这份安排处理即可。
+  Maren Quill：明白了，执行时保护隐私。我会通知考务和侧门值班：学生到达时直接引导到216，无需询问原因；需要离开重置时，陪同人员在门外等候，不在走廊讨论。
+  可见表达：{"facial_expression": "attentive, calm", "gaze": "steady, direct", "speech_style": "clear and practical", "prosody": "even tone with slight emphasis on privacy procedures", "behavioral_cues": ["slight forward lean showing engagement", "brief note-taking gesture"]}
+
+- 候选行动 action_1：这就把隐私落实到现场了；考试周我会以她能否直接到216、需要重置时不被追问，来判断安排是否真正可用。委员会的长期审议仍按原计划留到考后。
+- 候选行动 action_2：请你在名单锁定前把侧门、216和正常出勤写入临时安排。我想先请你把责任岗位及重置时的交接逐项写清，再核对“无需询问即可重置”能否落实；这样更可追责，但可能拖慢确认，也会让她暂时无法确信能免于解释。委员会仍按计划考后审议。
+
+**题目：若Sera Dastan采取action_1，相对t2，哪项最合理地组合预测：下一次回应时Maren Quill觉得Sera是否回应了自己的关切，以及第5轮回应结束时Maren对Sera可靠性的信任变化？**
+
+- **A.** 即时觉得关切回应减少；延迟信任方向证据不足
+- **B.** 即时觉得关切回应减少；延迟信任明确下降
+- **C.** 即时觉得关切更获回应；延迟信任方向证据不足
+- **D.** 即时觉得关切更获回应；延迟信任明确上升
+
+**作者参考答案：C（待审）**
+
+Maren提出近期安排与考后审议分开，并说明隐私流程；action_1明确认可现场方案、保留阶段边界，支持她更觉得Sera听取了关切。但认可方案不是可靠履约，公开材料不足以确定五轮后的信任方向。也没有Sera失信的新依据，不能预测信任明确下降。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness", "relationship.trust"], "time_scope": "即时为下一次环境回应；延迟为从action_1开始的第5轮环境回应末，均比较t2", "state_owner": "GPT50_002_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "unsupported_inference", "D": "promise_as_fulfillment"}
+分维映射：{"A": {"relationship.perceived_responsiveness@immediate": "decrease", "relationship.trust@delayed": "cannot_determine"}, "B": {"relationship.perceived_responsiveness@immediate": "decrease", "relationship.trust@delayed": "decrease"}, "C": {"relationship.perceived_responsiveness@immediate": "increase", "relationship.trust@delayed": "cannot_determine"}, "D": {"relationship.perceived_responsiveness@immediate": "increase", "relationship.trust@delayed": "increase"}}
+可接受答案：C
+审核备注：关系方向是Maren评价Sera；既往失约者是校方，不能倒置成Sera失信。
+分支验证：validated
 
 ## SFG50-003-T1-01 · T1 / current_intensity
 
@@ -1622,6 +1803,190 @@ Nessa两轮均把两家书面确认作为发布条件，并持续推进当晚发
 审核备注：基本不变依据是同一确认条件与持续发布目标；需审核是否把流程具体化过度解读为两项都上升。
 分支验证：not_required
 
+## SFG50-006-T3-01 · T3 / immediate_effect
+
+来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale → Ivo Serrin。
+
+背景：At 5:40 p.m., a nonprofit director requests campaign sign-off by six before a matching-funds window closes. Consent review and neighborhood spending authority remain unresolved. The organizer knows both featured families privately withdrew and what material each wants removed.
+角色目标：Pause identifiable stories until each household approves the final material and the neighborhood has written authority over the funds.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：After repeated king-tide flooding, the organizer mapped resident needs and partnered with the nonprofit for fundraising and engineering support.；A previous testimony campaign raised substantial funds, but headquarters selected vendors despite an informal promise of neighborhood control, leaving allocation authority unresolved.；They drafted a protocol requiring featured residents to review and revoke stories and a neighborhood committee to authorize spending, but neither process is complete.；The director later secured a conditional matching grant and commissioned a film after the organizer introduced two families on the understanding that private review would come first.
+
+history：
+
+- [t1] Ivo Serrin：我不能在六点前给这份宣传签字。两户家庭尚未批准最终材料，社区也没有书面资金授权；时间压力不能替代同意。
+  Nessa Vale：配对资金会在午夜关闭，错过就是永久损失。如果两家签书面确认，你能否授权今晚发布？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ivo Serrin：如果两家都书面确认最终材料，我可以支持今晚发布；但资金使用仍须先有社区书面授权，这两件事不能互相替代。
+  Nessa Vale：两家的书面确认能在十点前拿到吗？如果可以，我立刻准备发布流程。
+  可见表达：{"facial_expression": "focused, attentive", "gaze": "direct", "speech_style": "concrete and coordinating", "prosody": "even-paced with practical urgency", "behavioral_cues": ["leaning slightly forward", "task-oriented posture"]}
+
+- 候选行动 action_1：不能保证；两家都已私下撤回并要求删改各自材料，十点前拿到最终书面确认并不现实。我先前的条件不变：确认和社区书面资金授权缺一不可。
+- 候选行动 action_2：我可以不等两家确认，改用完全不含两家身份、影像和故事细节的通用募款稿，在六点前签这份替代稿，并明确资金须待社区书面授权后才可动用；这或能保留配对机会，却削弱说服力，也不能保证赶上或获配。
+
+**题目：相较t2，Ivo Serrin执行action_1后，在下一次环境回应时，Nessa Vale的内心焦虑最可能如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 证据不足
+- **D.** 上升
+
+**作者参考答案：D（待审）**
+
+Nessa在t1强调错过配对的永久损失，t2仍寄望十点前取得确认。action_1新增两家撤回且及时确认不现实的信息，使她面临的目标威胁加重，支持内心焦虑上升，而非只是重复截止压力。消息更明确不等于威胁减轻；这里只预测方向，不凭克制表情判断强度。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["emotion.anxiety"], "time_scope": "从t2至执行action_1后的下一次环境回应", "state_owner": "GPT50_006_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "state_dimension_confusion", "C": "unsupported_inference"}
+分维映射：{"A": {"emotion.anxiety": "similar"}, "B": {"emotion.anxiety": "decrease"}, "C": {"emotion.anxiety": "cannot_determine"}, "D": {"emotion.anxiety": "increase"}}
+可接受答案：D
+审核备注：题目问Nessa的内心体验；上升依据是新出现的撤回障碍，不是Ivo的态度或表情。
+分支验证：validated
+
+## SFG50-006-T3-02 · T3 / delayed_effect
+
+来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale → Ivo Serrin。
+
+背景：At 5:40 p.m., a nonprofit director requests campaign sign-off by six before a matching-funds window closes. Consent review and neighborhood spending authority remain unresolved. The organizer knows both featured families privately withdrew and what material each wants removed.
+角色目标：Pause identifiable stories until each household approves the final material and the neighborhood has written authority over the funds.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：After repeated king-tide flooding, the organizer mapped resident needs and partnered with the nonprofit for fundraising and engineering support.；A previous testimony campaign raised substantial funds, but headquarters selected vendors despite an informal promise of neighborhood control, leaving allocation authority unresolved.；They drafted a protocol requiring featured residents to review and revoke stories and a neighborhood committee to authorize spending, but neither process is complete.；The director later secured a conditional matching grant and commissioned a film after the organizer introduced two families on the understanding that private review would come first.
+
+history：
+
+- [t1] Ivo Serrin：我不能在六点前给这份宣传签字。两户家庭尚未批准最终材料，社区也没有书面资金授权；时间压力不能替代同意。
+  Nessa Vale：配对资金会在午夜关闭，错过就是永久损失。如果两家签书面确认，你能否授权今晚发布？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ivo Serrin：如果两家都书面确认最终材料，我可以支持今晚发布；但资金使用仍须先有社区书面授权，这两件事不能互相替代。
+  Nessa Vale：两家的书面确认能在十点前拿到吗？如果可以，我立刻准备发布流程。
+  可见表达：{"facial_expression": "focused, attentive", "gaze": "direct", "speech_style": "concrete and coordinating", "prosody": "even-paced with practical urgency", "behavioral_cues": ["leaning slightly forward", "task-oriented posture"]}
+
+- 候选行动 action_1：不能保证；两家都已私下撤回并要求删改各自材料，十点前拿到最终书面确认并不现实。我先前的条件不变：确认和社区书面资金授权缺一不可。
+- 候选行动 action_2：我可以不等两家确认，改用完全不含两家身份、影像和故事细节的通用募款稿，在六点前签这份替代稿，并明确资金须待社区书面授权后才可动用；这或能保留配对机会，却削弱说服力，也不能保证赶上或获配。
+
+**题目：相较t2，若Ivo Serrin执行action_2，到从该行动开始的第5轮环境回应末，Nessa Vale因本次宣传暴露两家未经批准的故事而受损的声誉风险，最可能如何变化？**
+
+- **A.** 下降
+- **B.** 证据不足
+- **C.** 上升
+- **D.** 基本不变
+
+**作者参考答案：A（待审）**
+
+此前影片依赖两家材料且审核未完成，t2仍讨论取得确认后发布。action_2改用完全排除两家细节的通用稿，提供减少未经同意曝光的具体路径，结合Ivo持续守住同意边界，支持该声誉风险下降。募款说服力减弱不是同一风险，也不能据此认定删改已完成或风险归零。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "本次宣传暴露两家未经批准的身份、影像或故事，损害Nessa Vale的公众可信度", "target_state_ids": ["consequence_risk.reputational_harm_risk"], "time_scope": "比较t2与从action_2开始的第5轮环境回应末，评估本次宣传的相关声誉风险", "state_owner": "GPT50_006_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "unsupported_inference", "C": "state_dimension_confusion", "D": "history_ignored"}
+分维映射：{"A": {"consequence_risk.reputational_harm_risk": "decrease"}, "B": {"consequence_risk.reputational_harm_risk": "cannot_determine"}, "C": {"consequence_risk.reputational_harm_risk": "increase"}, "D": {"consequence_risk.reputational_harm_risk": "similar"}}
+可接受答案：A
+审核备注：风险限于未经批准故事曝光造成的声誉损害，不涵盖募款不足带来的绩效评价；预测不等于确认履约。
+分支验证：validated
+
+## SFG50-006-T3-03 · T3 / action_comparison
+
+来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale → Ivo Serrin。
+
+背景：At 5:40 p.m., a nonprofit director requests campaign sign-off by six before a matching-funds window closes. Consent review and neighborhood spending authority remain unresolved. The organizer knows both featured families privately withdrew and what material each wants removed.
+角色目标：Pause identifiable stories until each household approves the final material and the neighborhood has written authority over the funds.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：After repeated king-tide flooding, the organizer mapped resident needs and partnered with the nonprofit for fundraising and engineering support.；A previous testimony campaign raised substantial funds, but headquarters selected vendors despite an informal promise of neighborhood control, leaving allocation authority unresolved.；They drafted a protocol requiring featured residents to review and revoke stories and a neighborhood committee to authorize spending, but neither process is complete.；The director later secured a conditional matching grant and commissioned a film after the organizer introduced two families on the understanding that private review would come first.
+
+history：
+
+- [t1] Ivo Serrin：我不能在六点前给这份宣传签字。两户家庭尚未批准最终材料，社区也没有书面资金授权；时间压力不能替代同意。
+  Nessa Vale：配对资金会在午夜关闭，错过就是永久损失。如果两家签书面确认，你能否授权今晚发布？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ivo Serrin：如果两家都书面确认最终材料，我可以支持今晚发布；但资金使用仍须先有社区书面授权，这两件事不能互相替代。
+  Nessa Vale：两家的书面确认能在十点前拿到吗？如果可以，我立刻准备发布流程。
+  可见表达：{"facial_expression": "focused, attentive", "gaze": "direct", "speech_style": "concrete and coordinating", "prosody": "even-paced with practical urgency", "behavioral_cues": ["leaning slightly forward", "task-oriented posture"]}
+
+- 候选行动 action_1：不能保证；两家都已私下撤回并要求删改各自材料，十点前拿到最终书面确认并不现实。我先前的条件不变：确认和社区书面资金授权缺一不可。
+- 候选行动 action_2：我可以不等两家确认，改用完全不含两家身份、影像和故事细节的通用募款稿，在六点前签这份替代稿，并明确资金须待社区书面授权后才可动用；这或能保留配对机会，却削弱说服力，也不能保证赶上或获配。
+
+**题目：以t2为起点，仅比较执行候选行动后的下一次环境回应：A情形为Ivo Serrin执行action_1，B情形为执行action_2。哪种情形下，Nessa Vale更可能觉得Ivo实质回应了她争取今晚发布及配对机会的关切？**
+
+- **A.** 接近
+- **B.** B较高
+- **C.** 证据不足
+- **D.** A较高
+
+**作者参考答案：B（待审）**
+
+Nessa在t1、t2反复追问今晚发布所需确认，表明她关切的是保住时间窗口。action_1直接说明障碍，也算回应；action_2则进一步提出六点前可签的替代稿，把她的时限关切纳入方案，因此更支持B较高。此判断不表示已签署、必获配或Nessa放弃授权要求。
+
+证据：t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "分别执行action_1与action_2后的下一次环境回应", "state_owner": "GPT50_006_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "C": "unsupported_inference", "D": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "similar"}, "B": {"relationship.perceived_responsiveness": "higher_in_b"}, "C": {"relationship.perceived_responsiveness": "cannot_determine"}, "D": {"relationship.perceived_responsiveness": "higher_in_a"}}
+可接受答案：B
+审核备注：私有即时参考将两支该判断记为相同；公开方案的回应深度支持B较高，保留此分歧供审核。
+分支验证：validated
+
+## SFG50-006-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale → Ivo Serrin。
+
+背景：At 5:40 p.m., a nonprofit director requests campaign sign-off by six before a matching-funds window closes. Consent review and neighborhood spending authority remain unresolved. The organizer knows both featured families privately withdrew and what material each wants removed.
+角色目标：Pause identifiable stories until each household approves the final material and the neighborhood has written authority over the funds.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：After repeated king-tide flooding, the organizer mapped resident needs and partnered with the nonprofit for fundraising and engineering support.；A previous testimony campaign raised substantial funds, but headquarters selected vendors despite an informal promise of neighborhood control, leaving allocation authority unresolved.；They drafted a protocol requiring featured residents to review and revoke stories and a neighborhood committee to authorize spending, but neither process is complete.；The director later secured a conditional matching grant and commissioned a film after the organizer introduced two families on the understanding that private review would come first.
+
+history：
+
+- [t1] Ivo Serrin：我不能在六点前给这份宣传签字。两户家庭尚未批准最终材料，社区也没有书面资金授权；时间压力不能替代同意。
+  Nessa Vale：配对资金会在午夜关闭，错过就是永久损失。如果两家签书面确认，你能否授权今晚发布？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ivo Serrin：如果两家都书面确认最终材料，我可以支持今晚发布；但资金使用仍须先有社区书面授权，这两件事不能互相替代。
+  Nessa Vale：两家的书面确认能在十点前拿到吗？如果可以，我立刻准备发布流程。
+  可见表达：{"facial_expression": "focused, attentive", "gaze": "direct", "speech_style": "concrete and coordinating", "prosody": "even-paced with practical urgency", "behavioral_cues": ["leaning slightly forward", "task-oriented posture"]}
+
+- 候选行动 action_1：不能保证；两家都已私下撤回并要求删改各自材料，十点前拿到最终书面确认并不现实。我先前的条件不变：确认和社区书面资金授权缺一不可。
+- 候选行动 action_2：我可以不等两家确认，改用完全不含两家身份、影像和故事细节的通用募款稿，在六点前签这份替代稿，并明确资金须待社区书面授权后才可动用；这或能保留配对机会，却削弱说服力，也不能保证赶上或获配。
+
+**题目：若Ivo Serrin执行action_1，相较t2，Nessa Vale未能在今晚午夜前保住本次配对资金机会的风险，在下一次环境回应时与从该行动开始的第5轮环境回应末，最可能分别如何变化？**
+
+- **A.** 即时下降，延迟上升
+- **B.** 即时基本不变，延迟基本不变
+- **C.** 即时上升，延迟上升
+- **D.** 即时上升，延迟下降
+
+**作者参考答案：C（待审）**
+
+t2尚以两家十点前确认作为推进发布的路径，action_1却说明两家已撤回、及时确认不现实，且社区书面授权仍不可省略。这同时削弱即时及后续争取窗口的可行性，支持两时点风险均上升。没有公开补救机制支持延迟反转，但也不能把五轮结束等同午夜已过。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "未能在今晚午夜配对窗口关闭前保住本次配对资金机会", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "即时为action_1后的下一次环境回应，延迟为从该行动开始的第5轮环境回应末；两者均与t2比较", "state_owner": "GPT50_006_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "B": "history_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk@immediate": "decrease", "consequence_risk.goal_failure_risk@delayed": "increase"}, "B": {"consequence_risk.goal_failure_risk@immediate": "similar", "consequence_risk.goal_failure_risk@delayed": "similar"}, "C": {"consequence_risk.goal_failure_risk@immediate": "increase", "consequence_risk.goal_failure_risk@delayed": "increase"}, "D": {"consequence_risk.goal_failure_risk@immediate": "increase", "consequence_risk.goal_failure_risk@delayed": "decrease"}}
+可接受答案：C
+审核备注：两项均相对t2，不比较延迟与即时；风险上升不表示第5轮必已错过截止或确定失去资金。
+分支验证：validated
+
 ## SFG50-007-T1-01 · T1 / current_intensity
 
 来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn → Dr. Tarek Miro。
@@ -1928,14 +2293,14 @@ history：
 
 **作者参考答案：C（待审）**
 
-Senn在t2接受当天核查并要求界定受影响数据点。A直接接受范围并提出区分标记，B则暂限单点且提议先改措辞，与她提出的结果后讨论顺序不尽一致。故A更贴合已表达关切；B顾及截稿仍有价值，但不等于对此关切回应更多。
+Senn在t2接受当天核查并要求界定受影响数据点。A直接接受范围并提出区分标记，B则优先核查最大表观疗效对应的数据、暂不扩到其余数据点，并提议先改措辞，与她提出的结果后讨论顺序不尽一致。故A更贴合已表达关切；B顾及截稿仍有价值，但不等于对此关切回应更多。 action_1更贴近t2的范围要求，但action_2同样保留透明核查并兼顾截稿目标。整体回应感的差距未必足以区分；接受A较高或接近，不接受B较高。私有即时值相同仅作交叉参考。
 
 证据：context, t1, t2, action_1, action_2
 变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "分别执行action_1或action_2后的下一次环境回应", "state_owner": "GPT50_007_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
-错项类型：{"A": "goal_constraint_ignored", "B": "history_ignored", "D": "history_ignored"}
+错项类型：{"A": "goal_constraint_ignored", "B": "history_ignored"}
 分维映射：{"A": {"relationship.perceived_responsiveness": "higher_in_b"}, "B": {"relationship.perceived_responsiveness": "cannot_determine"}, "C": {"relationship.perceived_responsiveness": "higher_in_a"}, "D": {"relationship.perceived_responsiveness": "similar"}}
-可接受答案：C
-审核备注：两行动都支持协作，区分点只在回应Senn已表达的范围与顺序要求，不能把Miro的目标反当她的关切。
+可接受答案：C, D
+审核备注：两行动都支持协作，区分点只在回应Senn已表达的范围与顺序要求，不能把Miro的目标反当她的关切。 助手审读纠正解释：候选二限定一组数据，不能称为只查单个数据点。 助手审读：允许相近判断，仍待人工审核。
 分支验证：validated
 
 ## SFG50-007-T3-04 · T3 / immediate_delayed
@@ -5074,20 +5439,20 @@ history：
 
 **题目：从 t1 到 t2，Mara 为解决发布前争议而持续推进具体行动的决心如何变化？**
 
-- **A.** 上升
-- **B.** 基本不变
-- **C.** 下降
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 上升
 
 **作者参考答案：A（待审）**
 
-t1 的 Mara 仍在询问删改范围与六点放行条件；到 t2 她明确马上安排删改、提交复核并确认信源通知，推进计划更具体，支持决心上升。材料只证明行动意向增强，未证明所有事项已完成。
+t1 Mara已围绕六点放行积极追问必须删改的内容，说明持续推进目标的决心已有明确依据；t2在条件明确后马上安排执行，体现同一决心的落实。步骤更具体主要来自对方澄清，不足以当作决心增强；两轮都主动推进，支持基本不变。
 
 证据：t1, t2
 变量／时间：{"checkpoint": "t2", "target_state_ids": ["behavioral_disposition.resolve"], "time_scope": "t1→t2 已发生区间", "state_owner": "GPT50_024_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
-错项类型：{"B": "history_ignored", "C": "unsupported_inference"}
-分维映射：{"A": {"behavioral_disposition.resolve": "increase"}, "B": {"behavioral_disposition.resolve": "similar"}, "C": {"behavioral_disposition.resolve": "decrease"}}
+错项类型：{"B": "unsupported_inference", "C": "state_dimension_confusion"}
+分维映射：{"A": {"behavioral_disposition.resolve": "similar"}, "B": {"behavioral_disposition.resolve": "decrease"}, "C": {"behavioral_disposition.resolve": "increase"}}
 可接受答案：A
-审核备注：题目测量决心变化，不把 t2 的行动安排误作完成结果。
+审核备注：助手修订：区分原有推进决心与执行计划的具体程度，仍待人工审核。
 分支验证：not_required
 
 ## SFG50-024-T1-03 · T1 / interval_change
@@ -5158,23 +5523,23 @@ history：
   可见表达：{"facial_expression": "focused, determined", "gaze": "direct", "speech_style": "crisp, action-oriented", "prosody": "brisk tempo, falling terminal pitch", "behavioral_cues": ["already turning toward production workspace"]}
 
 
-**题目：比较 t1 到 t2，Mara 的持续推进决心与主动寻求核查证据的意愿分别如何变化？**
+**题目：从 t1 到 t2，如何联合判断 Mara 持续推进可发布版本的决心，以及她认为对方实质回应自己“怎样才能在六点前放行”这一关切的程度？**
 
-- **A.** 决心基本不变，证据寻求上升
+- **A.** 推进决心下降；对对方回应程度的认可上升
 - **B.** 两者都基本不变
-- **C.** 两者都上升
-- **D.** 决心上升，证据寻求基本不变
+- **C.** 推进决心基本不变；对对方回应程度的认可上升
+- **D.** 推进决心上升；对对方回应程度的认可基本不变
 
 **作者参考答案：C（待审）**
 
-t1 主要讨论删改范围与放行条件；t2 则安排删改、提交复核，并主动确认信源通知，显示推进决心和核查意愿都更具体。材料支持意愿上升，不支持核查已完成，因此不能把计划当作履行结果。
+Mara在t1已积极追问删改范围与六点放行条件，t2仍推进同一发布目标，因此决心基本不变。对方在t2补上三类删改、复核及信源通知这些清晰条件，直接回答她先前的关切；Mara据此安排执行，支持她对对方回应程度的认可上升。新增办法不能同时被算作她本人的决心或求证意愿必然增强。
 
 证据：t1, t2
-变量／时间：{"checkpoint": "t2", "target_state_ids": ["behavioral_disposition.resolve", "behavioral_disposition.evidence_seeking"], "time_scope": "t1→t2 已发生区间", "state_owner": "GPT50_024_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+变量／时间：{"checkpoint": "t2", "target_state_ids": ["behavioral_disposition.resolve", "relationship.perceived_responsiveness"], "time_scope": "t1→t2 已发生区间", "state_owner": "GPT50_024_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
 错项类型：{"A": "unsupported_inference", "B": "history_ignored", "D": "state_dimension_confusion"}
-分维映射：{"A": {"behavioral_disposition.resolve": "similar", "behavioral_disposition.evidence_seeking": "increase"}, "B": {"behavioral_disposition.resolve": "similar", "behavioral_disposition.evidence_seeking": "similar"}, "C": {"behavioral_disposition.resolve": "increase", "behavioral_disposition.evidence_seeking": "increase"}, "D": {"behavioral_disposition.resolve": "increase", "behavioral_disposition.evidence_seeking": "similar"}}
+分维映射：{"A": {"behavioral_disposition.resolve": "decrease", "relationship.perceived_responsiveness": "increase"}, "B": {"behavioral_disposition.resolve": "similar", "relationship.perceived_responsiveness": "similar"}, "C": {"behavioral_disposition.resolve": "similar", "relationship.perceived_responsiveness": "increase"}, "D": {"behavioral_disposition.resolve": "increase", "relationship.perceived_responsiveness": "similar"}}
 可接受答案：C
-审核备注：组合只判断两项行为倾向；复核和信源确认支持证据寻求上升。
+审核备注：助手重写组合：绑定 Mara 的决心及 Mara 对受评人物的回应感，避免把计划具体程度混作两类意愿增强。仍待人工审核。
 分支验证：not_required
 
 ## SFG50-025-T1-01 · T1 / current_intensity
@@ -6329,14 +6694,14 @@ history：
 
 **作者参考答案：C（待审）**
 
-t1中Elian接受书面计划并要求临时改动先确认；t2进一步明确把计划交Mina审核，新增由受影响者核验准确性的步骤。因此较基本不变，更支持核验意愿上升。虽由Leonie提出建议，Elian已明确采纳；这不等于审核已经完成或错误已被发现。
+t1中Elian接受书面计划并要求临时改动先确认；t2进一步明确把计划交Mina审核，新增由受影响者核验准确性的步骤。因此较基本不变，更支持核验意愿上升。虽由Leonie提出建议，Elian已明确采纳；这不等于审核已经完成或错误已被发现。 t1已有明确确认规则，t2采纳Mina审核使核验安排更具体。将此理解为核验意愿略有上升或原有较强意愿基本不变都合理；接受相近判断，不把新增步骤直接当成心理强度提升。
 
 证据：t1, t2
 变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "t1结束至t2结束", "state_owner": "GPT50_030_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
-错项类型：{"A": "unsupported_inference", "B": "unsupported_inference", "D": "history_ignored"}
+错项类型：{"A": "unsupported_inference", "B": "unsupported_inference"}
 分维映射：{"A": {"behavioral_disposition.evidence_seeking": "decrease"}, "B": {"behavioral_disposition.evidence_seeking": "cannot_determine"}, "C": {"behavioral_disposition.evidence_seeking": "increase"}, "D": {"behavioral_disposition.evidence_seeking": "similar"}}
-可接受答案：C
-审核备注：私有参考记为不变，但公开台词新增Mina审核，按可见证据标上升；需审核新增步骤是否足以区分意愿变化。
+可接受答案：C, D
+审核备注：私有参考记为不变，但公开台词新增Mina审核，按可见证据标上升；需审核新增步骤是否足以区分意愿变化。 助手审读：允许相近判断，仍待人工审核。
 分支验证：not_required
 
 ## SFG50-030-T1-03 · T1 / interval_change
@@ -9751,14 +10116,14 @@ history：
 
 **作者参考答案：D（待审）**
 
-t1中Celia的明确限制是暂扣敏感类别；t2又把周边文字能否重构该类别纳入检查，并承诺发现风险就改写或删除相关部分。新增条件及处置步骤支持边界执行意愿上升，不只是重复原有限制。但这证明的是愿意执行更具体的边界，尚非措施已落实。
+t1中Celia的明确限制是暂扣敏感类别；t2又把周边文字能否重构该类别纳入检查，并承诺发现风险就改写或删除相关部分。新增条件及处置步骤支持边界执行意愿上升，不只是重复原有限制。但这证明的是愿意执行更具体的边界，尚非措施已落实。 两轮均明确坚持隐私边界，t2补充可识别性检查和纠偏步骤。可以理解为边界意愿增强，也可以理解为既定意愿落实得更具体；公开材料不足以严格区分这两个相近判断。
 
 证据：t1, t2
 变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.boundary_assertion"], "time_scope": "t1结束至t2结束", "state_owner": "GPT50_050_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
-错项类型：{"A": "history_ignored", "B": "unsupported_inference", "C": "history_ignored"}
+错项类型：{"B": "unsupported_inference", "C": "history_ignored"}
 分维映射：{"A": {"behavioral_disposition.boundary_assertion": "similar"}, "B": {"behavioral_disposition.boundary_assertion": "decrease"}, "C": {"behavioral_disposition.boundary_assertion": "cannot_determine"}, "D": {"behavioral_disposition.boundary_assertion": "increase"}}
-可接受答案：D
-审核备注：私有参考保持同档，公开话语却新增重构风险处置条件；此处依公开增量判上升，需人工审核其是否足以区分基本不变。
+可接受答案：D, A
+审核备注：私有参考保持同档，公开话语却新增重构风险处置条件；此处依公开增量判上升，需人工审核其是否足以区分基本不变。 助手审读：允许相近判断，仍待人工审核。
 分支验证：not_required
 
 ## SFG50-050-T1-04 · T1 / joint_change
@@ -9804,4 +10169,3 @@ t1中Celia已愿意有限发布，但仅询问何时提供文本；t2明确送�
 可接受答案：A
 审核备注：组合恰问合作与核验两项；核验增量取自Celia采纳并安排检查，而非仅取自Jonah提出请求。
 分支验证：not_required
-

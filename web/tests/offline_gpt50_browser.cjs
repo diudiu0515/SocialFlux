@@ -14,6 +14,8 @@ const {chromium} = require('playwright');
     assert(catalog.items.every(item => ['T1','T3'].includes(item.task)));
     const id=catalog.items[0].instance_id;
     const detail=await (await context.request.get(base+'/api/offline-review/'+id+'?bank=gpt50-t1-t3')).json();
+    const reference=await (await context.request.get(base+'/api/offline-review/'+id+'/reference?bank=gpt50-t1-t3')).json();
+    reference.item_sha256=detail.metadata.item_sha256;
     // Pin one coherent read-only view so active generation cannot race the test.
     detail.bank_sha256=catalog.bank_sha256;
     catalog.items.find(item=>item.instance_id===id).item_sha256=detail.metadata.item_sha256;
@@ -21,11 +23,14 @@ const {chromium} = require('playwright');
     await page.route(/\/api\/offline-review(?:\/|\?|$)/,async route=>{
       const url=new URL(route.request().url());
       if(url.searchParams.get('bank')!=='gpt50-t1-t3')return route.continue();
-      const payload=structuredClone(url.pathname==='/api/offline-review'?catalog:detail);
-      payload.bank_sha256='test-growing-bank-'+revision;
+      const isCatalog=url.pathname==='/api/offline-review';
+      const payload=structuredClone(isCatalog?catalog:url.pathname.endsWith('/reference')?reference:detail);
+      // Simulate an append between catalog and detail/reference requests.
+      payload.bank_sha256='test-growing-bank-'+(revision+(isCatalog?0:1));
       if(changed){
         if(payload.items)payload.items.find(item=>item.instance_id===id).item_sha256='changed-question';
-        else payload.metadata.item_sha256='changed-question';
+        else if(payload.metadata)payload.metadata.item_sha256='changed-question';
+        else payload.item_sha256='changed-question';
       }
       await route.fulfill({json:payload});
     });
@@ -33,6 +38,9 @@ const {chromium} = require('playwright');
     await page.waitForSelector('input[name=answer]');
     assert.equal(await page.locator('#bankSelect').inputValue(),'gpt50-t1-t3');
     await page.locator('input[name=answer][value=B]').check();
+    await page.click('#revealReference');
+    await page.waitForSelector('#referenceBody h3');
+    assert.match(await page.locator('#message').innerText(),/当前题目版本未变/);
     revision++;
     await page.reload();
     await page.waitForSelector('input[name=answer]');
@@ -49,6 +57,6 @@ const {chromium} = require('playwright');
     await page.waitForSelector('#itemNav button');
     assert.equal(await page.locator('#itemNav button').count(),60);
     assert.deepEqual(errors,[]);
-    console.log(JSON.stringify({passed:true,checks:['GPT50 default and bank selection','unchanged draft survives append','changed draft archived','old60 retained']}));
+    console.log(JSON.stringify({passed:true,checks:['GPT50 default and bank selection','append during detail/reference load','unchanged draft survives append','changed draft archived','old60 retained']}));
   } finally {await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

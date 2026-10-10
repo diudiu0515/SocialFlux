@@ -1,48 +1,48 @@
 {
   "format": "socialflux_offline_choice_v1",
-  "item_count": 220,
+  "item_count": 228,
   "tasks": {
     "T1": 196,
-    "T3": 24
+    "T3": 32
   },
   "subtypes": {
     "T1/current_intensity": 49,
     "T1/interval_change": 98,
     "T1/joint_change": 49,
-    "T3/immediate_effect": 6,
-    "T3/delayed_effect": 6,
-    "T3/action_comparison": 6,
-    "T3/immediate_delayed": 6
+    "T3/immediate_effect": 8,
+    "T3/delayed_effect": 8,
+    "T3/action_comparison": 8,
+    "T3/immediate_delayed": 8
   },
   "task_state_coverage": {
     "T1/Behavioral Disposition": 107,
     "T1/Emotion": 27,
     "T1/Interaction Risk": 22,
-    "T1/Relationship": 61,
-    "T3/Behavioral Disposition": 7,
-    "T3/Emotion": 6,
-    "T3/Interaction Risk": 6,
-    "T3/Relationship": 7
+    "T1/Relationship": 62,
+    "T3/Behavioral Disposition": 9,
+    "T3/Emotion": 7,
+    "T3/Interaction Risk": 9,
+    "T3/Relationship": 9
   },
   "answer_positions": {
-    "A": 53,
-    "B": 53,
-    "C": 54,
-    "D": 44,
+    "A": 55,
+    "B": 55,
+    "C": 57,
+    "D": 45,
     "E": 8,
     "F": 8
   },
   "scenario_count": 49,
   "formal_admission": false,
   "human_review": "pending",
-  "replay_ready_count": 220,
+  "replay_ready_count": 228,
   "replay_ready_tasks": {
     "T1": 196,
-    "T3": 24
+    "T3": 32
   },
   "replay_pending_ids": [],
-  "items_sha256": "d52a192475f99eb8138bb14e7fc28aff97f04cdca8dcb3e4fe0df2093af7c712",
-  "public_sha256": "bf521261b666ff07f0dfb0497abf9ae30fb66f65be3dda7ffb574b09b5fb5f85",
+  "items_sha256": "f9508bfa1047b4e2fbcc1bb7b6250c5448117f67f6eabaa356535f6ca8e72c3c",
+  "public_sha256": "408c61f2a39a957a30f768641573139f730bf128e9f80d94535cbca59cac7d27",
   "bank_id": "SFG50",
   "requested_scenarios": 50,
   "expected_items": 400,
@@ -73,8 +73,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -133,8 +133,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -799,5 +799,233 @@
       "source_review_status": "approve"
     }
   ],
-  "complete": false
+  "complete": false,
+  "pairing": {
+    "input_item_count": 228,
+    "items_sha256": "f9508bfa1047b4e2fbcc1bb7b6250c5448117f67f6eabaa356535f6ca8e72c3c",
+    "logical_pairs": 204,
+    "variants": 408,
+    "unique_videos": 44,
+    "gaps": [
+      {
+        "instance_id": "SFG50-005-T1-01",
+        "asset_id": "GPT50_005:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-005-T1-01",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-005-T1-02",
+        "asset_id": "GPT50_005:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-005-T1-02",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-005-T1-03",
+        "asset_id": "GPT50_005:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-005-T1-03",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-005-T1-04",
+        "asset_id": "GPT50_005:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-005-T1-04",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-005-T3-01",
+        "asset_id": "GPT50_005:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-005-T3-01",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-005-T3-02",
+        "asset_id": "GPT50_005:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-005-T3-02",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-005-T3-03",
+        "asset_id": "GPT50_005:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-005-T3-03",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-005-T3-04",
+        "asset_id": "GPT50_005:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-005-T3-04",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-020-T1-01",
+        "asset_id": "GPT50_020:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-020-T1-01",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-020-T1-02",
+        "asset_id": "GPT50_020:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-020-T1-02",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-020-T1-03",
+        "asset_id": "GPT50_020:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-020-T1-03",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-020-T1-04",
+        "asset_id": "GPT50_020:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-020-T1-04",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-034-T1-01",
+        "asset_id": "GPT50_034:online_nonverbal_v1:easing_tension",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-034-T1-01",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-034-T1-02",
+        "asset_id": "GPT50_034:online_nonverbal_v1:easing_tension",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-034-T1-02",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-034-T1-03",
+        "asset_id": "GPT50_034:online_nonverbal_v1:easing_tension",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-034-T1-03",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-034-T1-04",
+        "asset_id": "GPT50_034:online_nonverbal_v1:easing_tension",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-034-T1-04",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-036-T1-01",
+        "asset_id": "GPT50_036:online_nonverbal_v1:easing_tension",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-036-T1-01",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-036-T1-02",
+        "asset_id": "GPT50_036:online_nonverbal_v1:easing_tension",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-036-T1-02",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-036-T1-03",
+        "asset_id": "GPT50_036:online_nonverbal_v1:easing_tension",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-036-T1-03",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-036-T1-04",
+        "asset_id": "GPT50_036:online_nonverbal_v1:easing_tension",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-036-T1-04",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-039-T1-01",
+        "asset_id": "GPT50_039:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-039-T1-01",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-039-T1-02",
+        "asset_id": "GPT50_039:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-039-T1-02",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-039-T1-03",
+        "asset_id": "GPT50_039:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-039-T1-03",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-039-T1-04",
+        "asset_id": "GPT50_039:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-039-T1-04",
+        "reason": "no_matched_source_video"
+      }
+    ],
+    "human_media_review": "pending",
+    "frame_transport_limit": "sampled visual frames; no audio/prosody evaluation",
+    "nonverbal_history_relation": "see each item authoring.nonverbal_history_relation; T2 reuses exact shared-prefix clip on both sides"
+  }
 }
