@@ -1,48 +1,48 @@
 {
   "format": "socialflux_offline_choice_v1",
-  "item_count": 356,
+  "item_count": 376,
   "tasks": {
     "T1": 200,
-    "T3": 156
+    "T3": 176
   },
   "subtypes": {
     "T1/current_intensity": 50,
     "T1/interval_change": 100,
     "T1/joint_change": 50,
-    "T3/immediate_effect": 39,
-    "T3/delayed_effect": 39,
-    "T3/action_comparison": 39,
-    "T3/immediate_delayed": 39
+    "T3/immediate_effect": 44,
+    "T3/delayed_effect": 44,
+    "T3/action_comparison": 44,
+    "T3/immediate_delayed": 44
   },
   "task_state_coverage": {
     "T1/Behavioral Disposition": 109,
     "T1/Emotion": 27,
     "T1/Interaction Risk": 22,
     "T1/Relationship": 64,
-    "T3/Behavioral Disposition": 58,
-    "T3/Emotion": 15,
-    "T3/Interaction Risk": 44,
-    "T3/Relationship": 56
+    "T3/Behavioral Disposition": 68,
+    "T3/Emotion": 17,
+    "T3/Interaction Risk": 49,
+    "T3/Relationship": 62
   },
   "answer_positions": {
-    "A": 86,
-    "B": 90,
-    "C": 94,
-    "D": 70,
+    "A": 93,
+    "B": 95,
+    "C": 99,
+    "D": 73,
     "E": 8,
     "F": 8
   },
   "scenario_count": 50,
   "formal_admission": false,
   "human_review": "pending",
-  "replay_ready_count": 356,
+  "replay_ready_count": 376,
   "replay_ready_tasks": {
     "T1": 200,
-    "T3": 156
+    "T3": 176
   },
   "replay_pending_ids": [],
-  "items_sha256": "d5ccd7ea13de8c0f6f7cd490dfc92499a2dca184dad2c321f571ff494bc2b7c6",
-  "public_sha256": "779f6cb4cac6c9d10a5dc562b03766761fae6218a32abc3b0d519eb0c1af311a",
+  "items_sha256": "e4ebe1829b553f0f6e3854af5e5f7a653d07a14775f8ba746a99698e5c20a66f",
+  "public_sha256": "f45cfedda64f05dfd42837bb0c29482b6547b8944ccc579c2fa4d569126db42b",
   "bank_id": "SFG50",
   "requested_scenarios": 50,
   "expected_items": 400,
@@ -253,8 +253,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -493,8 +493,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -508,8 +508,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -523,8 +523,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -643,8 +643,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_partial_rollout",
@@ -803,10 +803,10 @@
   ],
   "complete": false,
   "pairing": {
-    "input_item_count": 356,
-    "items_sha256": "d5ccd7ea13de8c0f6f7cd490dfc92499a2dca184dad2c321f571ff494bc2b7c6",
-    "logical_pairs": 316,
-    "variants": 632,
+    "input_item_count": 376,
+    "items_sha256": "e4ebe1829b553f0f6e3854af5e5f7a653d07a14775f8ba746a99698e5c20a66f",
+    "logical_pairs": 336,
+    "variants": 672,
     "unique_videos": 45,
     "gaps": [
       {

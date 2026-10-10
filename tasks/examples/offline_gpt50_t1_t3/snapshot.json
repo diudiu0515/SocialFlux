@@ -2,13 +2,13 @@
   "format": "socialflux_offline_choice_snapshot_v1",
   "source_bank": "data/offline_gpt50_t1_t3",
   "status": "generation_in_progress_authorized",
-  "captured_at_utc": "2026-10-10T19:49:43.092420+00:00",
+  "captured_at_utc": "2026-10-10T20:21:25.353954+00:00",
   "expected_items": 400,
-  "actual_items": 356,
+  "actual_items": 376,
   "scenarios": 50,
   "tasks": {
     "T1": 200,
-    "T3": 156
+    "T3": 176
   },
   "complete": false,
   "paused_tasks": [
@@ -17,13 +17,14 @@
   "human_review": "pending",
   "formal_admission": false,
   "source_hashes": {
-    "items.jsonl": "d5ccd7ea13de8c0f6f7cd490dfc92499a2dca184dad2c321f571ff494bc2b7c6",
-    "public.jsonl": "779f6cb4cac6c9d10a5dc562b03766761fae6218a32abc3b0d519eb0c1af311a",
-    "examples.md": "d8287f1edb3c9045ae6ee2043b4e3a40f985c92c36a428476d0b8fc72df575a5",
-    "manifest.json": "662a601c949d20fa907d0c0daff193d1156af927794c96c95556682ea84ac3d4",
-    "development_audit.json": "fa4cbc47da48135c6952d125f929bab66ef8134aab76584d83a4ccc990ae341b",
-    "state_reference_crosscheck.json": "27fd9733712a37203d36464213e75966e78fdedaea770dd5164f84af7dcb3d9f",
-    "pairing_report.json": "ae6815a0a805ce6f67e542802aeae413f48acd4c847852fa4fd2609e09869af8"
+    "items.jsonl": "e4ebe1829b553f0f6e3854af5e5f7a653d07a14775f8ba746a99698e5c20a66f",
+    "public.jsonl": "f45cfedda64f05dfd42837bb0c29482b6547b8944ccc579c2fa4d569126db42b",
+    "examples.md": "bf45446f145b5ed1c32681ff4f1786ce437f9d5cdc922fa92c0a31c6186bb811",
+    "manifest.json": "32af64de47207011952dbba51194574184c1cea0398fa25cd2907c28cad74928",
+    "development_audit.json": "2fe1c31b7ec739d3886bd9882c95a974c138a2b6422178bca9fb42291a82c13d",
+    "state_reference_crosscheck.json": "196c365fbf559a0eeb2f52552d771b846fddc1b7930b0c3eb54973da3b02e080",
+    "pairing_report.json": "2b4e619cfebe6a9d8c7f2d58916791f41094e05ea50a0daa13d81b0960af834c",
+    "source_integrity.json": "7a85072e9f9e8e70001faf2d3a2f3129f0cee64fb1166ef8499b14cfb4a214f8"
   },
   "runtime_evidence": "Private source files, provider logs and branch checkpoints remain in the local data directory, not in Git."
 }
