@@ -1,0 +1,10 @@
+GPT50 提前结束配置错误与修复
+
+实际请求使用 policy v2 / response v31，未加载错误模板。
+错误来自 scripts/run_unified_gpt50.py 继承探索配置：environment及policy的minimum_natural_turns从10覆盖为1，response_opportunity_guidance关闭。
+因此最低深度提示缺失，v31 state_transition_opportunity上下文缺失，Python自第1轮允许natural_completion。不能据此认定打磨后的prompt本身失效。
+旧批次已终止；4条完成轨迹和未完成请求原样保留并标记配置错误，不作为修正版结果。
+修正入口：scripts/run_unified_gpt50_corrected.py。读取基础配置中的10轮最低值，恢复v31上下文；保持当前统一trust候选、模型、采样与场景副本。
+回归：38项测试运行，30通过、8跳过；包含50个真实工厂、实际policy/response请求，以及原学校can_close在t1不结束、t10允许结束。
+修正版不回放错误配置的旧输出，因为实际prompt上下文改变。先生成GPT50_002这一正式槽位；10–20轮自然结束后才启动余下49场景，跨场景3并发。每场景1条，不补写旧短轨迹。
+恢复最小轮数不能单独证明自然度或state质量，后续仍按正文审核。

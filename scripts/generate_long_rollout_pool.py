@@ -24,6 +24,8 @@ from evaluation.instance_quality import audit_trajectory
 from evaluation.quality_gates import audit_scenario_gate
 from evaluation.review_registry import load_review_registry
 from evaluation.rollout_gate import audit_rollout
+from evaluation.state_v3_metrics import state_v3_trajectory_metrics
+from environment.state_transition_contract import STATE_TRANSITION_STANDARD_V3
 from pipeline.artifacts import write_dialogues
 from pipeline.constants import ROLLOUT_CONFIG, SCENARIO_ROOT
 from pipeline.runtime import (
@@ -51,11 +53,13 @@ MIN_MAIN_TURNS = 10
 MAX_REQUESTS_PER_TURN = 18
 # Compatibility alias; the contract is a maximum, not an exact target.
 TARGET_TURNS = MAX_TURNS
-QUALITY_VERSION = "socialflux_semantic_events_v1"
+QUALITY_VERSION = "socialflux_semantic_events_state_v3_v1"
 _QUALITY_INPUTS = (
     "configs/model_routes.frontier_api.json",
     "environment/appraisal.py",
+    "environment/appraisal_normalization.py",
     "environment/calibration.py",
+    "environment/env.py",
     "environment/interaction_ledger.py",
     "environment/ledger_events.py",
     "environment/longitudinal.py",
@@ -64,18 +68,38 @@ _QUALITY_INPUTS = (
     "environment/response_generator.py",
     "environment/response_validation.py",
     "environment/state_updater.py",
+    "environment/state_ontology.py",
+    "environment/state_opportunity.py",
+    "environment/state_transition_contract.py",
+    "environment/factory.py",
+    "pipeline/runtime.py",
     "policies/model_policy.py",
     "policies/action_validation.py",
     "providers/anthropic.py",
     "providers/structured.py",
     "providers/text.py",
     "rollout/runner.py",
+    "rollout/configuration.py",
+    "prompts/loader.py",
+    "prompts/manifest.json",
+    "prompts/retired.json",
+    "prompts/environment_state_appraisal_v1_per_variable.md",
+    "prompts/environment_state_appraisal_v6_observed_evidence.md",
+    "prompts/environment_interaction_appraisal_v1.md",
+    "prompts/state_actor_binding_v1.txt",
+    "prompts/interaction_schema_bound_v1.txt",
     "prompts/environment_response_v25.md",
+    "prompts/environment_response_v31_contrastive_event_driven.md",
     "prompts/task_t4_action_v21.md",
     "prompts/task_rollout_action_v1.md",
+    "prompts/task_rollout_action_v2_decision_continuity.md",
     "prompts/environment_appraisal_v11.md",
+    "prompts/environment_appraisal_v12.md",
+    "prompts/environment_appraisal_v22_slow_first.md",
+    "prompts/environment_appraisal_v36_evidence_grounded_state_interpretation.md",
     "evaluation/instance_quality.py",
     "evaluation/rollout_gate.py",
+    "evaluation/state_v3_metrics.py",
 )
 
 
@@ -314,6 +338,16 @@ def _machine_precheck(trajectory):
         "structural_quality": structural["passed"],
         "no_machine_hard_reject": not gate["hard_reject_reasons"],
     }
+    state_transition_standard = (
+        trajectory.get("environment_provenance") or {}
+    ).get("state_transition_standard")
+    state_v3 = None
+    if state_transition_standard == STATE_TRANSITION_STANDARD_V3:
+        state_v3 = state_v3_trajectory_metrics(trajectory)
+        checks["state_v3_update_integrity"] = (
+            state_v3["state_update_integrity_passed"]
+        )
+        # Coverage remains reported in state_v3_metrics but is not correctness.
     classification = _candidate_classification(turn_count, ending, checks)
     return {
         "passed": all(checks.values()),
@@ -321,6 +355,8 @@ def _machine_precheck(trajectory):
         "checks": checks,
         "structural": structural,
         "hard_reject_reasons": gate["hard_reject_reasons"],
+        "state_transition_standard": state_transition_standard,
+        "state_v3_metrics": state_v3,
         "evidence_status": "pending_judge_history_and_human_review",
     }
 
@@ -790,14 +826,6 @@ def main(argv=None):
     ):
         raise ValueError(
             "single_first_pass forbids replacement sampling; use --retry-limit 1"
-        )
-    if (
-        config.get("candidate_strategy") == "single_first_pass"
-        and args.retain_all_candidates
-    ):
-        raise ValueError(
-            "single_first_pass forbids --retain-all-candidates; each scenario "
-            "has one formal trajectory slot"
         )
     if args.experimental_model and args.development_role_partition:
         raise ValueError(

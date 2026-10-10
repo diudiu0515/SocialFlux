@@ -1,0 +1,13 @@
+Actor-bound state interpretation
+
+The payload's state_semantics.actor_binding identifies the concrete state owner and the speaker of the current action. Each variable's definition and perspective bind that construct to actual people; these bindings do not change its evidence criteria or numeric update policy.
+
+For relationship variables, state_owner is the person holding the judgment and relationship_target is the person being judged. Judge the owner's trust in, responsiveness attributed to, safety with, fairness in dealings with, and legitimacy attributed to that target. Never exchange the holder and target. The owner's own conduct is not evidence of the target's reliability merely because the state belongs to the owner.
+
+For emotion and behavioral disposition, infer the state owner's affect or readiness in response to the observed situation; do not copy the current speaker's affect or intentions into the owner's state. Risks and dynamics retain their supplied construct definitions, interpreted from the state owner's perspective.
+
+In every rationale explicitly name the state owner, and for relationship judgments explicitly name the relationship target. Explain the actual direction of evaluation in the sentence, not just a list of names. For no/repeated evidence, name whose judgment lacks new evidence about whom. Before returning, check the grammatical subject and object of the explanation against the binding.
+
+Keep the actual actor of evidence distinct from both the speaker quoting it and the person holding the state. Quoting another person's promise does not make it the current speaker's promise or completed performance. A quotation may support a different current act only if that act has an independently valid variable-specific causal basis. Rewording already present evidence is not a new event; a genuinely new act on the same topic can be new evidence. Apply these principles to every scenario, without creating or suppressing updates to satisfy a quota.
+
+Retain the existing output schema. Do not output numeric deltas or add schema fields. Feature annotations, dialogue labels, and evidence strength do not supply an extra yes/no update gate. Strength governs magnitude under the unchanged Python policy; an unchanged result is correct when evidence is absent or repeated.

@@ -17,11 +17,16 @@ from pipeline.scenarios import load_scenario_records, require_human_frozen
 from prompts.loader import get_prompt
 from rollout.configuration import load_rollout_config
 from schemas.validate import STATE_CONTRACT_VERSION
+from environment.state_transition_contract import (
+    STATE_TRANSITION_STANDARD_V3,
+    validate_state_v3_scenario,
+)
 
 
 def check(scenario_root, rollout_config, *, require_human):
     records = load_scenario_records(scenario_root)
     config = load_rollout_config(rollout_config)
+    standard = config["environment"].get("state_transition_standard")
     failures = []
     for path, scenario in records:
         if scenario.get("state_contract_version") != STATE_CONTRACT_VERSION:
@@ -31,6 +36,11 @@ def check(scenario_root, rollout_config, *, require_human):
                 require_human_frozen(scenario)
             except ValueError as exc:
                 failures.append(f"{scenario['scenario_id']}: {exc}")
+        if standard == STATE_TRANSITION_STANDARD_V3:
+            try:
+                validate_state_v3_scenario(scenario)
+            except ValueError as exc:
+                failures.append(str(exc))
     prompt_ids = {
         config["environment"].get("appraisal_prompt_id"),
         config["environment"].get("response_prompt_id"),
@@ -51,6 +61,7 @@ def check(scenario_root, rollout_config, *, require_human):
         "scenario_count": len(records),
         "rollout_slots": len(records) * len(config["policies"]),
         "state_contract_version": STATE_CONTRACT_VERSION,
+        "state_transition_standard": standard,
         "prompt_ids": sorted(item for item in prompt_ids if item),
         "rollout_config": str(Path(rollout_config)),
     }

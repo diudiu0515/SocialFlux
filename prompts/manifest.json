@@ -11,6 +11,26 @@
       "sha256": "ed178ce98ed29c6eb00b0137d5448f808227f847515faf46eddc205b2d2a6bfd",
       "version": "v11"
     },
+    "environment_appraisal_v12": {
+      "path": "environment_appraisal_v12.md",
+      "sha256": "a926b802f10f6e7565cd4b165b16ab7e38f8ae0519043da3e369d575bffa08a8",
+      "version": "v12"
+    },
+    "environment_appraisal_v22_slow_first": {
+      "path": "environment_appraisal_v22_slow_first.md",
+      "sha256": "a6a49d29bb5d4bcf0175ecb81ab35e888c5c9991ccac2408a20486947c54232e",
+      "version": "v22-slow-first"
+    },
+    "environment_appraisal_v36_evidence_grounded_state_interpretation": {
+      "path": "environment_appraisal_v36_evidence_grounded_state_interpretation.md",
+      "sha256": "853534e3d6f79c3835c2a1741016114da740f661b438a13536bee978c61a7343",
+      "version": "v36-evidence-grounded-state-interpretation"
+    },
+    "environment_interaction_appraisal_v1": {
+      "path": "environment_interaction_appraisal_v1.md",
+      "sha256": "19292b98a9bdb259ed3fe7b9d0fde8eb502ba115a767afec6caaca6e610aeeaf",
+      "version": "v1"
+    },
     "environment_paraphrase_probe_v1": {
       "path": "environment_paraphrase_probe_v1.md",
       "sha256": "356c3ae2083267a732540c087f34980761d2039c973233b86d483e1dced84748",
@@ -25,6 +45,21 @@
       "path": "environment_response_v25.md",
       "sha256": "35fb5d13979433d3f508d0a93e510146b92d3ad9f7ab7a22c3fc399cda043fd9",
       "version": "v25"
+    },
+    "environment_response_v31_contrastive_event_driven": {
+      "path": "environment_response_v31_contrastive_event_driven.md",
+      "sha256": "2f10034b53910485a6cfa428dcfb66c8987f60b9653dc0a16d8d0d43e228a614",
+      "version": "v31-contrastive-event-driven"
+    },
+    "environment_state_appraisal_v1_per_variable": {
+      "path": "environment_state_appraisal_v1_per_variable.md",
+      "sha256": "05bb776a5775777eb2678f18e0cec0fbc5013b40087b729e3d63ade3c10b4881",
+      "version": "v1-per-variable"
+    },
+    "environment_state_appraisal_v6_observed_evidence": {
+      "path": "environment_state_appraisal_v6_observed_evidence.md",
+      "sha256": "4017f16c77e949bc6a7e3198f3d14dd84668552bb2c957d3524be5ce6335739d",
+      "version": "v6-observed-evidence"
     },
     "history_dependence_probe_v1": {
       "path": "history_dependence_probe_v1.md",
@@ -50,6 +85,21 @@
       "path": "narrative_structure_extraction_v1.md",
       "sha256": "4cef0d200fda9473610e080e83130c2c6ef9f526d2771146e7f78389a81b7c09",
       "version": "v1"
+    },
+    "offline_choice_answer_v1": {
+      "path": "offline_choice_answer_v1.md",
+      "sha256": "0a5644e60bd6c82d01ae4563f922ed5923d6dd6e8a8f0141d3447f55eda1c77b",
+      "version": "v1"
+    },
+    "offline_choice_author_v1": {
+      "path": "offline_choice_author_v1.md",
+      "sha256": "efc5607c0c4ab7c6bb5de591d6ee029b4060cc78ea4ba33a237c19e9a732212f",
+      "version": "v1"
+    },
+    "online_nonverbal_event_v3": {
+      "path": "online_nonverbal_event_v3.md",
+      "sha256": "239287bf10fdec00d332687ac8e4fe605b1133a87f3a541de6f1e903aadf6bcc",
+      "version": "v3"
     },
     "rollout_quality_judge_v2": {
       "path": "rollout_quality_judge_v2.md",
@@ -116,6 +166,16 @@
       "sha256": "ba28fa80da94d6ce492c02ade42d3609162dc7dc63ec60b5b0e55c1bea3d807f",
       "version": "v1"
     },
+    "scenario_state_reauthoring_v1": {
+      "path": "scenario_state_reauthoring_v1.md",
+      "sha256": "82b4e3cd42c42c343b591b8708e2219d0fc6061d964444a5fd1d5e10582b5896",
+      "version": "v1"
+    },
+    "scenario_state_semantic_audit_v1": {
+      "path": "scenario_state_semantic_audit_v1.md",
+      "sha256": "2e377c0dbb35d11476e9e46bf8fd68f77c2ad7f9a602fe86d75e551b108a3e4c",
+      "version": "v1"
+    },
     "t2_shared_observation_v3": {
       "path": "t2_shared_observation_v3.md",
       "sha256": "57d8a8c1c41545e7c48935816c64ec92eef9c7bd6a4869722c5f4023d306955d",
@@ -123,13 +183,13 @@
     },
     "t4_judge_v2": {
       "path": "t4_judge_v2.md",
-      "sha256": "da61a307d72d7d0b8ad4d6b278b27410f894e9444b8f4e86efe33d1bbfba04db",
+      "sha256": "b044cab10ab30c1073f0a555c6de6f8f2f21310d08c9e6fcc0530a925989059f",
       "version": "v2"
     },
-    "talking_head_generation_v1": {
-      "path": "talking_head_generation_v1.md",
-      "sha256": "3d554b5b787b2619fc9977dc1cc4f20b9bf0716aa7250c9b23a8d2690a26364b",
-      "version": "v1"
+    "talking_head_generation_v4": {
+      "path": "talking_head_generation_v4.md",
+      "sha256": "5c30dba0981b03480d87d3aeeedbf82ab545f66ff04d391acf9178617baadebf",
+      "version": "v4"
     },
     "task_checkpoint_extraction_v1": {
       "path": "task_checkpoint_extraction_v1.md",
@@ -140,6 +200,11 @@
       "path": "task_rollout_action_v1.md",
       "sha256": "acfff0ee904b4642fbeb877d571a8b8f0533eb4d13ac2cfba71932d4a2a4b475",
       "version": "v1"
+    },
+    "task_rollout_action_v2_decision_continuity": {
+      "path": "task_rollout_action_v2_decision_continuity.md",
+      "sha256": "647951998cc0fd57bf5c4713b9cbf4f7efa9489dd636ce0dacbd5c5ff9753bba",
+      "version": "v2-decision-continuity"
     },
     "task_t1_v1": {
       "path": "task_t1_v1.md",
@@ -175,6 +240,11 @@
       "path": "task_t4_action_v21.md",
       "sha256": "6aa43e5a2d092c6992655e45397635820362ad2abde9fd537c2cbff3b363e308",
       "version": "v21"
+    },
+    "video_public_line_compression_v2": {
+      "path": "video_public_line_compression_v2.md",
+      "sha256": "b3af94525c4969e643c54d1db77ca91f724ae688972869fce0d22479e1aa1d91",
+      "version": "v2"
     },
     "video_public_rendering_adaptation_v1": {
       "path": "video_public_rendering_adaptation_v1.md",

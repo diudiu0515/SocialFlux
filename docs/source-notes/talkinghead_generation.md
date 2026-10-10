@@ -28,7 +28,7 @@ free-form action
 → optional 3–15 second media request
 ```
 
-`ObservableExpressionLayer` 负责确定性 trigger 与 public media metadata。`environment_response_v25` 和 `talking_head_generation_v1` 固定 provider-neutral 输入输出边界；`scripts/run_autodl_seedance_video.py` 负责 AutoDL Seedance 2.0 的付费提交、断点续查、立即下载和 SHA-256 记录。新任务必须显式传入 `--submit-new`，已有 task ID 可安全续跑。
+`ObservableExpressionLayer` 负责确定性 trigger 与 public media metadata。Offline 重要节点由公开 environment response + `talking_head_generation_v4` 生成带自然语音和同步口型的视频；Online T4 则由 `online_nonverbal_event_v1` 预生成 response-neutral、无台词但含同步非语言声音的 cue。`scripts/run_autodl_seedance_video.py` 负责 AutoDL Seedance 2.0 的付费提交、断点续查、立即下载和 SHA-256 记录。新任务必须显式传入 `--submit-new`，已有 task ID 可安全续跑；历史 pilot 仍保留原 provenance。
 
 ## 隐私边界
 

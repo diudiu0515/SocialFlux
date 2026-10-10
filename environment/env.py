@@ -21,11 +21,21 @@ from .observation import (
     build_policy_observation,
     build_public_evaluated_role,
 )
-from .public_situation import build_public_situation
+from .public_situation import build_environment_situation, environment_background
 from .state_updater import apply_transition
+from .appraisal_context import build_appraisal_context
+from .policy_context import shared_initial_background
+from .state_opportunity import (
+    STATE_OPPORTUNITY_PROFILE_V1,
+    STATE_OPPORTUNITY_PROFILE_V2,
+    STATE_OPPORTUNITY_PROFILE_V3,
+    STATE_OPPORTUNITY_PROFILE_V4,
+    STATE_OPPORTUNITY_PROFILE_V5,
+    STATE_OPPORTUNITY_PROFILE_V6,
+    build_state_transition_opportunity,
+)
 from .termination import check_termination
 from .video_requests import attach_online_requests
-from providers.text import normalize_text
 
 
 def coerce_free_form_action(action):
@@ -54,6 +64,7 @@ class StatefulEnvironment:
         memory=None,
         provenance=None,
         minimum_natural_turns=1,
+        response_opportunity_guidance=True,
         multimodal_trigger_policy=None,
     ):
         if state_updater is None or response_generator is None:
@@ -62,6 +73,7 @@ class StatefulEnvironment:
         self.state_updater = state_updater
         self.response_generator = response_generator
         self.minimum_natural_turns = int(minimum_natural_turns)
+        self.response_opportunity_guidance = bool(response_opportunity_guidance)
         self.memory = memory or MemoryModule()
         self.expression_layer = ObservableExpressionLayer(
             self.scenario, multimodal_trigger_policy
@@ -91,7 +103,7 @@ class StatefulEnvironment:
             "media": [],
             "last_trigger_turns": {},
             "interaction_ledger": initial_ledger(
-                self.scenario.get("background", ""),
+                shared_initial_background(self.scenario),
                 self.scenario.get("evaluated_agent_role", {}).get("explicit_goal", ""),
                 self.scenario.get("narrative_design", {}).get(
                     "meaningful_choice_space", []
@@ -193,12 +205,24 @@ class StatefulEnvironment:
     def _run_state_update(self, frame):
         action = frame["action"]
         memory_view = self.memory.retrieve(self.session["history"], action)
-        normalized_action = normalize_text(action["text"])
+        # The action has already been coerced/finalized in _begin_turn.  Only
+        # now regenerate repetition matches; they are evidence matches, not
+        # a proxy for whether an earlier numeric update happened.
+        appraisal_context = build_appraisal_context(
+            history=self.session["history"],
+            turns=self.session["turns"],
+            action=action,
+            current_turn_id=frame["turn_id"],
+            interaction_ledger=frame["ledger_before"],
+            longitudinal_context=public_longitudinal_view(self.session),
+        )
+        memory_view["duplicate_evidence_matches"] = deepcopy(
+            appraisal_context["duplicate_evidence_matches"]
+        )
+        # Keep the old ID field only as an audit compatibility view.
         memory_view["deterministic_surface_duplicate_ids"] = [
-            f"t{item['turn_id']}"
-            for item in self.session["history"]
-            if item.get("role") == "evaluated_agent"
-            and normalize_text(item.get("text", "")) == normalized_action
+            item["historical_turn_id"]
+            for item in appraisal_context["duplicate_evidence_matches"]
         ]
         update_kwargs = {
             "action": action,
@@ -207,12 +231,16 @@ class StatefulEnvironment:
             "memory": memory_view,
         }
         update_parameters = inspect.signature(self.state_updater.update).parameters
+        if "appraisal_context" in update_parameters:
+            update_kwargs["appraisal_context"] = appraisal_context
         if "longitudinal_context" in update_parameters:
             update_kwargs["longitudinal_context"] = public_longitudinal_view(
                 self.session
             )
         if "interaction_ledger" in update_parameters:
             update_kwargs["interaction_ledger"] = frame["ledger_before"]
+        if "current_event_id" in update_parameters:
+            update_kwargs["current_event_id"] = f"t{frame['turn_id']}"
         try:
             transition = self.state_updater.update(**update_kwargs)
         except Exception as exc:
@@ -220,6 +248,7 @@ class StatefulEnvironment:
                 "turn_id": f"t{frame['turn_id']}",
                 "policy_action": deepcopy(action),
                 "memory_view": deepcopy(memory_view),
+                "appraisal_context": deepcopy(appraisal_context),
                 "longitudinal_context": public_longitudinal_view(self.session),
             }
             raise
@@ -240,6 +269,7 @@ class StatefulEnvironment:
         return {
             "transition": transition,
             "memory_view": memory_view,
+            "appraisal_context": appraisal_context,
             "state_after": state_after,
             "dynamics_after": dynamics_after,
             "state_numeric": state_numeric,
@@ -255,10 +285,47 @@ class StatefulEnvironment:
     ):
         transition = transition_result["transition"]
         response_ledger = transition_result["response_ledger"]
+        response_prompt_id = getattr(self.response_generator, "prompt_id", None)
+        opportunity_profile = {
+            "environment_response_v26": STATE_OPPORTUNITY_PROFILE_V1,
+            "environment_response_v27": (
+                STATE_OPPORTUNITY_PROFILE_V3
+                if self.provenance.get(
+                    "state_transition_runtime_revision"
+                ) == "v3.2"
+                else STATE_OPPORTUNITY_PROFILE_V2
+            ),
+            "environment_response_v27_decision_continuity": (
+                STATE_OPPORTUNITY_PROFILE_V2
+            ),
+            "environment_response_v28": STATE_OPPORTUNITY_PROFILE_V4,
+            "environment_response_v29_event_driven": (
+                STATE_OPPORTUNITY_PROFILE_V5
+            ),
+            "environment_response_v30_semantic_event_driven": (
+                STATE_OPPORTUNITY_PROFILE_V6
+            ),
+            "environment_response_v31_contrastive_event_driven": (
+                STATE_OPPORTUNITY_PROFILE_V6
+            ),
+        }.get(response_prompt_id)
+        if not self.response_opportunity_guidance:
+            opportunity_profile = None
+        state_transition_opportunity = (
+            build_state_transition_opportunity(
+                self.scenario,
+                self.session.get("turns", []),
+                transition_result["state_numeric"],
+                frame["turn_id"],
+                profile=opportunity_profile,
+            )
+            if opportunity_profile is not None
+            else None
+        )
         context = {
             "scenario": {
-                "background": self.scenario["background"],
-                "public_situation": build_public_situation(self.scenario),
+                "background": environment_background(self.scenario),
+                "public_situation": build_environment_situation(self.scenario),
                 "environment_agent": self.scenario["environment_agent"],
                 "evaluated_agent_role": build_public_evaluated_role(
                     self.scenario["evaluated_agent_role"]
@@ -274,6 +341,10 @@ class StatefulEnvironment:
             "interaction_ledger": deepcopy(response_ledger),
             "longitudinal_context": public_longitudinal_view(self.session),
         }
+        if state_transition_opportunity is not None:
+            context["state_transition_opportunity"] = deepcopy(
+                state_transition_opportunity
+            )
         if controlled_observation is not None:
             context["controlled_observation"] = deepcopy(controlled_observation)
         try:
@@ -305,6 +376,9 @@ class StatefulEnvironment:
                 "observable_behavior": deepcopy(
                     generated.get("observable_behavior")
                 ),
+                "state_transition_opportunity": deepcopy(
+                    state_transition_opportunity
+                ),
                 "controlled_observation": deepcopy(controlled_observation),
             }
         return {
@@ -316,6 +390,9 @@ class StatefulEnvironment:
             "consequential_claims": [],
             "expression_intent": None,
             "observable_behavior": None,
+            "state_transition_opportunity": deepcopy(
+                state_transition_opportunity
+            ),
             "controlled_observation": deepcopy(controlled_observation),
         }
 
@@ -338,7 +415,11 @@ class StatefulEnvironment:
             dynamics=transition_result["dynamics_after"],
             last_trigger_turns=self.session["last_trigger_turns"],
         )
-        if response_result["observable_behavior"] is not None:
+        response_neutral_event = any(
+            event.get("response_neutral")
+            for event in multimodal["private_events"]
+        )
+        if response_result["observable_behavior"] is not None and not response_neutral_event:
             multimodal["observable_expression"] = deepcopy(
                 response_result["observable_behavior"]
             )
@@ -445,7 +526,10 @@ class StatefulEnvironment:
             "observation": frame["observation_before"],
             "policy_action": deepcopy(frame["action"]),
             "memory_view": transition_result["memory_view"],
+            "appraisal_context": deepcopy(transition_result.get("appraisal_context", {})),
             "appraisal": transition["appraisal"],
+            "state_judgments": deepcopy(transition.get("state_judgments", [])),
+            "dynamics_judgments": deepcopy(transition.get("dynamics_judgments", [])),
             "appraisal_request_retry_diagnostics": deepcopy(
                 transition.get("appraisal_request_retry_diagnostics", [])
             ),
@@ -453,6 +537,9 @@ class StatefulEnvironment:
             "calibration": deepcopy(transition.get("calibration", {})),
             "response_expression_intent": response_result["expression_intent"],
             "response_observable_behavior": response_result["observable_behavior"],
+            "state_transition_opportunity": deepcopy(
+                response_result.get("state_transition_opportunity")
+            ),
             "state_before": frame["state_before"],
             "state_delta": transition["state_delta"],
             "state_after": transition_result["state_after"],
@@ -491,6 +578,9 @@ class StatefulEnvironment:
             "elapsed_time_after": self.session.get("elapsed_time", 0),
         }
         log["observation_after"] = self.observe()
+        for key in ("state_appraisal_call", "interaction_appraisal_call", "combined_appraisal_call"):
+            if key in transition:
+                log[key] = deepcopy(transition[key])
         return log
 
     def private_trajectory(self):

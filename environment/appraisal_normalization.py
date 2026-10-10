@@ -40,7 +40,9 @@ def _resolve_variable(variable, state_variables, dynamics_variables):
     return matches[0] if len(matches) == 1 else None
 
 
-def canonicalize_impact_lists(appraisal, state_variables, dynamics_variables):
+def canonicalize_impact_lists(
+    appraisal, state_variables, dynamics_variables, *, preserve_evidence=False,
+):
     """Normalize equivalent paths and conservatively suppress unusable impacts.
 
     Unknown, malformed, or contradictory duplicate impacts are dropped, which
@@ -53,6 +55,8 @@ def canonicalize_impact_lists(appraisal, state_variables, dynamics_variables):
         "variable", "direction", "evidence_strength",
         "directness", "new_evidence",
     }
+    if preserve_evidence:
+        required |= {"evidence_feature", "evidence_span"}
     collected = {"state": {}, "dynamics": {}}
     conflicts = {"state": set(), "dynamics": set()}
     for source in ("state_impacts", "dynamics_impacts"):

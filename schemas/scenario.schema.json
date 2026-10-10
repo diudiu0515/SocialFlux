@@ -80,6 +80,22 @@
       },
       "additionalProperties": false
     },
+    "policy_background": {"type": "string", "minLength": 1},
+    "environment_background": {"type": "string", "minLength": 1},
+    "shared_background": {"type": "string"},
+    "environment_visible_narrative": {"$ref": "#/properties/policy_visible_narrative"},
+    "policy_visible_narrative": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": {"type": "string", "pattern": "^(relationship_structure|power_structure|goal_conflict|relevant_history\\.(0|[1-9][0-9]*))$"},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "additionalProperties": false
+      }
+    },
     "narrative_design": {
       "type": "object",
       "required": [

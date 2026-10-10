@@ -6,10 +6,16 @@ from copy import deepcopy
 import math
 import re
 
+from .online_multimodal import ONLINE_MULTIMODAL_PROFILE
+from .online_video_assets import online_identity_spec
 from prompts.loader import render_prompt
 
 
-TALKING_HEAD_PROMPT_ID = "talking_head_generation_v1"
+TALKING_HEAD_PROMPT_ID = "talking_head_generation_v4"
+DELIVERY_TALKING_HEAD_PROMPT_IDS = frozenset({
+    "talking_head_generation_v3_delivery",
+    TALKING_HEAD_PROMPT_ID,
+})
 DEFAULT_EXPRESSION_POLICY = {
     "profile": "subtle_contextual_v1",
     "default_intensity": "low_to_moderate",
@@ -38,6 +44,7 @@ def video_prompt(
     scenario, response, expression, variant=1, expression_policy=None
 ):
     persona = scenario["environment_agent"]["persona"]
+    identity = online_identity_spec(scenario)
     policy = {**DEFAULT_EXPRESSION_POLICY, **(expression_policy or {})}
     cue_limit = int(policy["maximum_behavioral_cues"])
     if not 1 <= cue_limit <= 3:
@@ -56,6 +63,10 @@ def video_prompt(
         TALKING_HEAD_PROMPT_ID,
         character_name=str(persona.get("name", "the character")),
         character_role=str(persona.get("role", "conversation participant")),
+        appearance=identity["appearance"],
+        wardrobe=identity["wardrobe"],
+        background=identity["background"],
+        camera=identity["camera"],
         variant_note=variant_note,
         public_response=str(response),
         facial_expression=str(
@@ -101,6 +112,16 @@ def build_video_request(
         ),
         "duration_seconds": duration_seconds,
         "continuity_reference": continuity_reference,
+        "reference_video_file": continuity_reference,
+        "generate_audio": True,
+        "ratio": "16:9",
+        "identity": online_identity_spec(scenario),
+        "audio": {
+            "required": True,
+            "mode": "exact_public_response_with_lip_sync",
+            "spoken_content": True,
+            "exact_line": response,
+        },
         "safety_check": {
             "contains_private_state": False,
             "contains_threshold_logic": False,
@@ -111,6 +132,21 @@ def build_video_request(
 
 def attach_online_requests(scenario, multimodal, response):
     events = multimodal.get("private_events") or []
+    if events and all(
+        event.get("trigger_policy_profile") == ONLINE_MULTIMODAL_PROFILE
+        for event in events
+    ):
+        for event in events:
+            event["video_api_status"] = (
+                "pre_generated_asset_ready"
+                if event.get("asset_path") or event.get("asset_url")
+                else "pre_generated_asset_pending"
+            )
+            event["video_api_request"] = None
+        # Online T4 uses response-neutral, pre-generated nonverbal clips.
+        # Response-conditioned talking heads remain an offline task artifact.
+        multimodal["video_api_requests"] = []
+        return multimodal
     expression = deepcopy(multimodal.get("observable_expression") or {})
     requests = []
     for event in events:

@@ -1,4 +1,5 @@
 import base64
+from contextlib import contextmanager, ExitStack
 import hashlib
 import json
 from pathlib import Path
@@ -6,12 +7,15 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
+import web.server as web_server
+
 from web.server import (
     GPT50_SCENARIO_ROOTS,
     annotation_contract,
     api_payload,
     credentials_match,
     load_instances,
+    load_online_multimodal_review,
     load_gpt50_review,
     load_gpt50_gate2,
     load_gpt50_rollout,
@@ -22,6 +26,45 @@ from web.server import (
     load_scenarios,
     scenario_detail,
 )
+
+
+@contextmanager
+def isolated_scenario_catalog():
+    """Small explicit web fixtures, independent of archived production data."""
+    with tempfile.TemporaryDirectory() as directory, ExitStack() as stack:
+        root = Path(directory)
+        for name, relative in {
+            "ROOT": ".", "SCENARIO_DIR": "scenarios", "PIPELINE_DIR": "pipeline",
+            "LONG_ROLLOUT_ROOT": "rollouts", "SCREENING_REPORT": "screening.json",
+            "SCENARIO_REVIEW_TEMPLATE": "gate1.json", "MEDIA_MANIFEST": "media.json",
+            "R3_DIAGNOSTIC_REVIEW": "r3.json",
+        }.items():
+            stack.enter_context(patch.object(web_server, name, root / relative))
+        records = []
+        for number, source_type in ((1, "original"), (2, "adapted")):
+            scenario_id = f"WEB_TEST_{number:03d}"
+            scenario = {
+                "scenario_id": scenario_id, "title": "交接计划", "mechanism": "有限信任下的合作",
+                "source": {"type": source_type}, "background": "两位同事讨论交接时间。",
+                "narrative_design": {"relevant_history": ["曾发生延期。"]},
+                "environment_agent": {"persona": {"name": "甲", "role": "组长"},
+                                      "hidden_intention": "PRIVATE_ENV_INTENTION_FIXTURE"},
+                "evaluated_agent_role": {"character_id": "EVALUATED_AGENT", "name": "乙",
+                                         "role": "同事", "explicit_goal": "商定可执行的交接安排"},
+                "construction_status": {"quality_gate": "pending", "initial_state": "pending"},
+                "max_turns": 20,
+            }
+            path = root / "scenarios" / f"scenario_{number:03d}" / f"scenario_{number:03d}.json"
+            path.parent.mkdir(parents=True)
+            path.write_text(json.dumps(scenario, ensure_ascii=False), encoding="utf-8")
+            path.with_suffix(".md").write_text(
+                "## 1. 叙事结构与初始化\n\n测试场景。\n\n## 2. 自由交互与状态更新契约\n", encoding="utf-8"
+            )
+            records.append({"scenario_id": scenario_id, "scenario_sha256": hashlib.sha256(path.read_bytes()).hexdigest()})
+        (root / "gate1.json").write_text(json.dumps({
+            "format": "socialflux_scenario_review_registry_v1", "records": records,
+        }), encoding="utf-8")
+        yield root
 
 
 class ScenarioWebTest(unittest.TestCase):
@@ -313,10 +356,10 @@ class ScenarioWebTest(unittest.TestCase):
             )
 
     def test_gpt50_gate1_page_is_linked_from_review_center(self):
-        review = Path("web/static/review.html").read_text(encoding="utf-8")
         page = Path("web/static/gpt50_gate1.html").read_text(encoding="utf-8")
         script = Path("web/static/gpt50_gate1.js").read_text(encoding="utf-8")
-        self.assertIn('href="/gpt50_gate1.html"', review)
+        self.assertIn('href="/gpt50-live"', page)
+        self.assertIn('href="/offline-review"', page)
         self.assertIn('src="/gpt50_gate1.js?v=7"', page)
         self.assertIn("/api/gpt50-review", script)
         self.assertIn("GPT rollout 与 Gate 2 实时进度", script)
@@ -329,6 +372,154 @@ class ScenarioWebTest(unittest.TestCase):
         self.assertIn("未抽中不等于失败", script)
         self.assertIn("setInterval", script)
         self.assertIn("human_attestation", script)
+
+    def test_online_multimodal_page_exposes_recovered_video_assets(self):
+        packet = load_online_multimodal_review()
+        self.assertEqual(packet["scenario_count"], 48)
+        self.assertEqual(packet["expected_scenario_count"], 50)
+        self.assertEqual(packet["missing_scenario_ids"], ["GPT50_036", "GPT50_045"])
+        self.assertEqual(packet["asset_count"], 75)
+        self.assertEqual(packet["structurally_passed_count"], 75)
+        self.assertEqual(packet["human_status_counts"], {"pending": 75})
+        assets = [
+            asset
+            for scenario in packet["scenarios"]
+            for asset in scenario["assets"]
+        ]
+        self.assertTrue(all(
+            asset["url"].startswith((
+                "/online-review-video/", "/online-video/"
+            ))
+            for asset in assets
+        ))
+        self.assertTrue(all(asset["scenario_id"] for asset in assets))
+        self.assertTrue(all(asset["review_loudness_normalized"] for asset in assets))
+        self.assertTrue(all(
+            asset["playback_sha256"] != asset["video_sha256"]
+            if asset["review_loudness_normalized"]
+            else asset["playback_sha256"] == asset["video_sha256"]
+            for asset in assets
+        ))
+        self.assertEqual(
+            api_payload("/api/online-multimodal-review")["asset_count"], 75
+        )
+        page = Path("web/static/multimodal_review.html").read_text(
+            encoding="utf-8"
+        )
+        script = Path("web/static/multimodal_review.js").read_text(
+            encoding="utf-8"
+        )
+        self.assertRegex(page, r'src="/multimodal_review\.js\?v=\d+"')
+        self.assertIn('id="triggerabilityPanel"', page)
+        self.assertIn("/api/online-multimodal-review", script)
+        self.assertIn("预期声音", script)
+        self.assertIn("口型与语音自然同步", script)
+        self.assertIn("no_private_state_leakage", script)
+        self.assertIn("触发条件", script)
+        self.assertIn("四维重放发出来源", script)
+        self.assertIn("下一待审", page)
+        self.assertIn("video_sha256 !== asset.video_sha256", script)
+        self.assertIn('const requestedLane = pageParams.get("lane");', script)
+        self.assertIn(': "online_nonverbal";\n\nconst $', script)
+        self.assertIn("function assetsInScope(scenario)", script)
+        self.assertIn("const items = reviewAssets().map", script)
+        self.assertTrue(packet["triggerability"]["available"])
+        self.assertEqual(
+            packet["triggerability"]["summary"]["scale_recommendation"],
+            "hold_full_scale",
+        )
+        self.assertTrue(all(
+            asset["trigger_conditions"]
+            for scenario in packet["scenarios"]
+            for asset in scenario["assets"]
+        ))
+        self.assertNotIn("media-caption", script)
+        self.assertIn("video.volume = 1", script)
+        self.assertNotIn("<video controls muted", script)
+        gpt_page = Path("web/static/gpt50_gate1.html").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('href="/multimodal"', gpt_page)
+
+    def test_talking_head_packet_exposes_public_fields_not_private_state(self):
+        with tempfile.TemporaryDirectory() as directory:
+            batch_root = Path(directory)
+            online_root = batch_root / "online"
+            talking_root = batch_root / "talking_head"
+            assets = talking_root / "assets"
+            requests = talking_root / "requests"
+            online_root.mkdir()
+            assets.mkdir(parents=True)
+            requests.mkdir()
+            (online_root / "manifest.json").write_text(
+                json.dumps({"requests": []}), encoding="utf-8"
+            )
+            video = assets / "sample.mp4"
+            video.write_bytes(b"video")
+            request_file = requests / "sample.json"
+            request_file.write_text(json.dumps({
+                "identity": {"appearance": "fictional adult"},
+            }), encoding="utf-8")
+            (talking_root / "manifest.json").write_text(json.dumps({
+                "requests": [{
+                    "request_id": "talking-1",
+                    "scenario_id": "GPT50_002",
+                    "trajectory_id": "trajectory-1",
+                    "turn_id": "t4",
+                    "importance_score": 9.0,
+                    "importance_reasons": [
+                        "consequential_claim", "socially_consequential_event"
+                    ],
+                    "request_file": str(request_file.relative_to(batch_root)),
+                    "video_file": str(video.relative_to(batch_root)),
+                    "status": "generated_structural_pass",
+                    "public_response": "I will verify that before deciding.",
+                    "source_public_response": "我会核实后再决定。",
+                    "observable_expression": {
+                        "facial_expression": "restrained concern",
+                        "gaze": "steady eye contact",
+                        "speech_style": "measured",
+                        "prosody": "even",
+                        "behavioral_cues": ["one small nod"],
+                    },
+                    "private_consistency_reference": {
+                        "numeric_state_delta": {"trust": -2}
+                    },
+                }],
+            }), encoding="utf-8")
+            config = {
+                "label": "test",
+                "batch_root": batch_root,
+                "scenario_root": (
+                    Path("data/gpt50/experiment/scenario/scenarios_state_v3")
+                ),
+                "online_root": online_root,
+                "talking_root": talking_root,
+                "expected_scenario_count": 50,
+                "triggerability": None,
+            }
+            with patch.dict(
+                web_server.MULTIMODAL_DELIVERY_BATCHES,
+                {"testtalk": config},
+            ):
+                packet = load_online_multimodal_review("testtalk")
+            self.assertEqual(packet["talking_head_asset_count"], 1)
+            asset = packet["scenarios"][0]["assets"][0]
+            self.assertEqual(asset["asset_type"], "talking_head")
+            self.assertTrue(asset["spoken_content"])
+            self.assertEqual(asset["turn_id"], "t4")
+            self.assertEqual(asset["trajectory_id"], "trajectory-1")
+            self.assertEqual(asset["importance_score"], 9.0)
+            self.assertEqual(
+                asset["importance_reasons"],
+                ["consequential_claim", "socially_consequential_event"],
+            )
+            self.assertTrue(asset["url"].startswith("/talking-video/testtalk/"))
+            self.assertIn("lip_sync_and_speech_naturalness", asset["check_keys"])
+            self.assertIn("voice_delivery_naturalness", asset["check_keys"])
+            self.assertNotIn("private_consistency_reference", json.dumps(packet))
+            self.assertNotIn("numeric_state_delta", json.dumps(packet))
+
 
     def test_basic_auth_credentials(self):
         encoded = base64.b64encode(b"socialflux:correct-horse").decode("ascii")
@@ -343,55 +534,59 @@ class ScenarioWebTest(unittest.TestCase):
         )
 
     def test_scenario_catalog_reads_hybrid_sources(self):
-        payload = api_payload("/api/scenarios")
-        self.assertEqual(len(payload["scenarios"]), len(load_scenarios()))
-        self.assertEqual(len(payload["scenarios"]), 20)
-        self.assertTrue(all(item["source_type"] for item in payload["scenarios"]))
-        self.assertTrue(all("action_ids" not in item for item in payload["scenarios"]))
-        self.assertTrue(all(item["task_count"] <= 3 for item in payload["scenarios"]))
-        self.assertNotEqual(sum(item["task_count"] for item in payload["scenarios"]), 180)
+        with isolated_scenario_catalog() as root:
+            payload = api_payload("/api/scenarios")
+            self.assertEqual(len(payload["scenarios"]), len(load_scenarios()))
+            self.assertEqual(len(payload["scenarios"]), 2)
+            self.assertTrue(all(item["source_type"] for item in payload["scenarios"]))
+            self.assertTrue(all("action_ids" not in item for item in payload["scenarios"]))
+            self.assertTrue(all(item["task_count"] <= 3 for item in payload["scenarios"]))
+            self.assertNotEqual(sum(item["task_count"] for item in payload["scenarios"]), 180)
 
     def test_detail_contains_annotation_materials(self):
-        detail = scenario_detail("IA_PIPE_001")
-        self.assertEqual(detail["summary"]["scenario_id"], "IA_PIPE_001")
-        self.assertEqual(detail["summary"]["screening"]["final_trajectory_count"], 0)
-        self.assertIn("narrative_design", detail["scenario"])
-        self.assertNotIn("action_effects", detail["scenario"])
-        self.assertIn("## 1. 叙事结构与初始化", detail["documentation"])
-        self.assertIn("## 2. 自由交互与状态更新契约", detail["documentation"])
-        self.assertGreaterEqual(
-            len(detail["rollouts"]),
-            detail["long_rollout_generation"]["completed_slot_count"],
-        )
-        self.assertTrue(all("screening" in item for item in detail["rollouts"]))
-        self.assertEqual(
-            detail["summary"]["screening"]["candidate_count"],
-            detail["long_rollout_generation"]["completed_slot_count"],
-        )
-        self.assertLessEqual(len(detail["instances"]), 3)
-        self.assertTrue(
-            {item["task_type"] for item in detail["instances"]}.issubset({
-                "T1_state_tracking",
-                "T2_history_sensitive_merge",
-                "T3_counterfactual_choice_effect",
-            })
-        )
-        self.assertIn("task_review", detail)
-        model_contract = detail["evaluated_model_contract"]
-        self.assertEqual(model_contract["horizon_turns"], 20)
-        self.assertEqual(model_contract["prompt_id"], "task_t4_action_v21")
-        self.assertTrue(model_contract["role_card"]["role"])
-        self.assertTrue(model_contract["role_card"]["explicit_goal"])
-        self.assertIn("{{payload_json}}", model_contract["prompt_template"])
-        rendered = model_contract["rendered_initial_prompt"]
-        self.assertNotIn(
-            detail["scenario"]["environment_agent"]["hidden_intention"], rendered
-        )
-        self.assertIn(
-            "environment_agent.hidden_intention",
-            model_contract["private_author_fields_excluded"],
-        )
-        self.assertEqual(detail["long_rollout_generation"]["required_turns"], 20)
+        with isolated_scenario_catalog() as root:
+            detail = scenario_detail("WEB_TEST_001")
+            self.assertEqual(detail["summary"]["scenario_id"], "WEB_TEST_001")
+            self.assertEqual(detail["summary"]["screening"]["final_trajectory_count"], 0)
+            self.assertIn("narrative_design", detail["scenario"])
+            self.assertNotIn("action_effects", detail["scenario"])
+            self.assertIn("## 1. 叙事结构与初始化", detail["documentation"])
+            self.assertIn("## 2. 自由交互与状态更新契约", detail["documentation"])
+            self.assertGreaterEqual(
+                len(detail["rollouts"]),
+                detail["long_rollout_generation"]["completed_slot_count"],
+            )
+            self.assertTrue(all("screening" in item for item in detail["rollouts"]))
+            self.assertEqual(
+                detail["summary"]["screening"]["candidate_count"],
+                detail["long_rollout_generation"]["completed_slot_count"],
+            )
+            self.assertLessEqual(len(detail["instances"]), 3)
+            self.assertTrue(
+                {item["task_type"] for item in detail["instances"]}.issubset({
+                    "T1_state_tracking",
+                    "T2_history_sensitive_merge",
+                    "T3_counterfactual_choice_effect",
+                })
+            )
+            self.assertIn("task_review", detail)
+            model_contract = detail["evaluated_model_contract"]
+            self.assertEqual(model_contract["horizon_turns"], 20)
+            self.assertEqual(model_contract["prompt_id"], "task_t4_action_v21")
+            self.assertTrue(model_contract["role_card"]["role"])
+            self.assertTrue(model_contract["role_card"]["explicit_goal"])
+            self.assertIn("{{payload_json}}", model_contract["prompt_template"])
+            rendered = model_contract["rendered_initial_prompt"]
+            self.assertNotIn("{{", rendered)
+            self.assertIn(detail["scenario"]["evaluated_agent_role"]["explicit_goal"], rendered)
+            self.assertNotIn(
+                detail["scenario"]["environment_agent"]["hidden_intention"], rendered
+            )
+            self.assertIn(
+                "environment_agent.hidden_intention",
+                model_contract["private_author_fields_excluded"],
+            )
+            self.assertEqual(detail["long_rollout_generation"]["required_turns"], 20)
 
     def test_annotation_contract_uses_canonical_gate_fields(self):
         contract = annotation_contract()
@@ -433,34 +628,36 @@ class ScenarioWebTest(unittest.TestCase):
         self.assertEqual(task_review["candidates"], [])
         self.assertEqual(load_task_examples()["examples"], [])
 
-        detail = scenario_detail("IA_PIPE_003")
-        self.assertEqual(detail["summary"]["scenario_id"], "IA_PIPE_003")
-        self.assertEqual(detail["rollouts"], [])
+        self.assertIsNone(scenario_detail("IA_PIPE_003"))
 
-    def test_rollout_frontend_renders_all_three_stages_per_turn(self):
-        script = Path("web/static/app.js").read_text(encoding="utf-8")
-        self.assertNotIn("innerHTML = `\n  const diagnostic", script)
-        self.assertIn("Structured Appraisal · 独立 LLM 调用", script)
-        self.assertIn("确定性校准与数值更新 · 无 LLM", script)
-        self.assertIn("Response 与 ledger · 第二次独立 LLM 调用后结构记录", script)
-        self.assertIn("被评估 Agent 行动", script)
-        self.assertIn("Environment 角色回应", script)
-        self.assertIn("历史诊断轨迹", script)
+    def test_current_rollout_frontend_shows_action_response_and_state(self):
+        script = Path("web/static/gpt50_live.js").read_text(encoding="utf-8")
+        for field in ("policy_action", "environment_response", "state_before", "state_after"):
+            self.assertIn(field, script)
+        self.assertIn("当前记录没有已完成的对话轮次", script)
+
+    def test_page_routes_keep_bookmarks_without_retired_implementations(self):
+        for route, target in {**web_server.PAGE_ROUTES, **web_server.LEGACY_PAGE_ALIASES}.items():
+            self.assertTrue((web_server.STATIC_DIR / target.lstrip("/")).is_file(), route)
+        for alias in web_server.LEGACY_PAGE_ALIASES:
+            self.assertFalse((web_server.STATIC_DIR / alias.lstrip("/")).exists(), alias)
+        self.assertFalse((web_server.STATIC_DIR / "app.js").exists())
 
     def test_gate1_review_exposes_all_current_hash_bound_scenarios(self):
-        packet = api_payload("/api/gate1-review")
-        self.assertEqual(packet["format"], "socialflux_scenario_review_registry_v1")
-        self.assertEqual(len(packet["records"]), 20)
-        self.assertEqual(len({item["scenario_id"] for item in packet["records"]}), 20)
-        for item in packet["records"]:
-            number = int(item["scenario_id"].rsplit("_", 1)[1])
-            path = Path(f"configs/scenarios/scenario_{number:03d}/scenario_{number:03d}.json")
-            self.assertEqual(
-                item["scenario_sha256"],
-                hashlib.sha256(path.read_bytes()).hexdigest(),
-            )
-            detail = scenario_detail(item["scenario_id"])
-            self.assertEqual(detail["gate1_review_packet"], item)
+        with isolated_scenario_catalog() as root:
+            packet = api_payload("/api/gate1-review")
+            self.assertEqual(packet["format"], "socialflux_scenario_review_registry_v1")
+            self.assertEqual(len(packet["records"]), 2)
+            self.assertEqual(len({item["scenario_id"] for item in packet["records"]}), 2)
+            for item in packet["records"]:
+                number = int(item["scenario_id"].rsplit("_", 1)[1])
+                path = Path(f"{root}/scenarios/scenario_{number:03d}/scenario_{number:03d}.json")
+                self.assertEqual(
+                    item["scenario_sha256"],
+                    hashlib.sha256(path.read_bytes()).hexdigest(),
+                )
+                detail = scenario_detail(item["scenario_id"])
+                self.assertEqual(detail["gate1_review_packet"], item)
 
     def test_gate1_contract_uses_registry_scores_and_all_checks(self):
         contract = annotation_contract()

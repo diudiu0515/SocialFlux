@@ -22,10 +22,19 @@ from scripts.audit_formal_rollout_pool import load_records
 from scripts.run_pipeline import load_scenarios
 
 
-def critical_turn(trajectory, checkpoint):
+def critical_turn(trajectory, checkpoint, relevant_turn_ids=None):
     candidates = trajectory.get("turns", [])[:checkpoint]
     if not candidates:
         return None
+    relevant = {
+        str(item) if str(item).startswith("t") else f"t{item}"
+        for item in (relevant_turn_ids or [])
+    }
+    relevant_candidates = [
+        turn for turn in candidates if str(turn.get("turn_id")) in relevant
+    ]
+    if relevant_candidates:
+        candidates = relevant_candidates
     def magnitude(turn):
         before = flatten_state(turn.get("state_before", {}))
         after = flatten_state(turn.get("state_after", {}))
@@ -38,7 +47,11 @@ def observation_variants(trajectory, recent_k):
     checkpoint = len(turns) - 1
     observation = dict(turns[checkpoint]["observation"])
     history = list(observation.get("history", []))
-    critical = critical_turn(trajectory, checkpoint)
+    critical = critical_turn(
+        trajectory,
+        checkpoint,
+        turns[checkpoint].get("memory_view", {}).get("relevant_turn_ids", []),
+    )
     recent = history[-2 * recent_k:]
     removed = [
         item for item in history
@@ -129,13 +142,77 @@ def _interpretation_comparison(full, variant):
         json.dumps(full.get("appraisal", {}), ensure_ascii=False, sort_keys=True),
         json.dumps(variant.get("appraisal", {}), ensure_ascii=False, sort_keys=True),
     )
+    metric_groups = compare_transition_outputs(full, variant)
+
+    def impact_map(appraisal, name):
+        return {
+            item.get("variable"): item.get("direction")
+            for item in appraisal.get(name, [])
+            if item.get("variable") and item.get("direction")
+        }
+
+    def active_map_agreement(left, right, *, neutral=0):
+        keys = {
+            key for key in set(left) | set(right)
+            if left.get(key, neutral) != neutral or right.get(key, neutral) != neutral
+        }
+        if not keys:
+            return None
+        return sum(left.get(key, neutral) == right.get(key, neutral) for key in keys) / len(keys)
+
+    full_appraisal = full.get("appraisal", {})
+    variant_appraisal = variant.get("appraisal", {})
+    structural_components = [
+        float(
+            full_appraisal.get("social_act")
+            == variant_appraisal.get("social_act")
+        )
+    ]
+    for name, neutral in (
+        ("event_features", 0),
+        ("state_impacts", None),
+        ("dynamics_impacts", None),
+    ):
+        if name == "event_features":
+            left = full_appraisal.get(name, {})
+            right = variant_appraisal.get(name, {})
+        else:
+            left = impact_map(full_appraisal, name)
+            right = impact_map(variant_appraisal, name)
+        agreement = active_map_agreement(left, right, neutral=neutral)
+        if agreement is not None:
+            structural_components.append(agreement)
+    structural_agreement = sum(structural_components) / len(structural_components)
+    state_active_agreement = metric_groups["state"][
+        "active_union_direction_agreement"
+    ]
+    dynamics_active_agreement = metric_groups["dynamics"][
+        "active_union_direction_agreement"
+    ]
+    state_change = (
+        1.0 - state_active_agreement
+        if state_active_agreement is not None else 0.0
+    )
+    dynamics_change = (
+        1.0 - dynamics_active_agreement
+        if dynamics_active_agreement is not None else 0.0
+    )
+    appraisal_structural_change = 1.0 - structural_agreement
     return {
         "state_direction_agreement": round(state_agreement, 4),
         "dynamics_direction_agreement": round(dynamics_agreement, 4),
+        "state_active_union_direction_agreement": state_active_agreement,
+        "dynamics_active_union_direction_agreement": dynamics_active_agreement,
         "appraisal_similarity": round(appraisal_similarity, 4),
+        "appraisal_structural_agreement": round(structural_agreement, 4),
+        "appraisal_structural_change": round(appraisal_structural_change, 4),
+        "legacy_text_change_score": round(1.0 - appraisal_similarity, 4),
         "change_score": round(
-            max(1.0 - state_agreement, 1.0 - dynamics_agreement, 1.0 - appraisal_similarity),
+            max(state_change, dynamics_change, appraisal_structural_change),
             4,
+        ),
+        "change_score_scope": (
+            "active_union_state_or_dynamics_or_structural_appraisal"
         ),
     }
 
@@ -245,6 +322,12 @@ def main():
             scenario,
             config["environment"]["provider"],
             config["environment"].get("sampling", {}),
+            appraisal_prompt_id=config["environment"].get(
+                "appraisal_prompt_id", "environment_appraisal_v11"
+            ),
+            state_calibration_profile=config["environment"].get(
+                "state_calibration_profile", "sparse_v1"
+            ),
         )
         for scenario_id, scenario in scenarios.items()
     }

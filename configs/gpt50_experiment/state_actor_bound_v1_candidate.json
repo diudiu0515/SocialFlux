@@ -1,0 +1,11 @@
+{
+  "format": "actor_bound_state_candidate_v1",
+  "base_rollout_config": "configs/gpt50_experiment/rollout.state_observed_evidence_v6_candidate.json",
+  "factory_adapter": "environment.actor_bound_appraisal.ActorBoundEnvironmentFactory",
+  "binding_profile": "state_actor_binding_v1",
+  "binding_rules": "prompts/state_actor_binding_v1.txt",
+  "validation_workers": 2,
+  "logical_call_deadline_seconds": 600,
+  "semantic_retries": 0,
+  "full_scale_authorized": false
+}

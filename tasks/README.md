@@ -1,4 +1,12 @@
-# SocialFlux Tasks v1
+# SocialFlux Tasks
+
+当前 offline 主评测采用 [T1–T3 选择题协议](../docs/protocols/OFFLINE_T1_T3_CHOICE_V1.md)：只需 `{"answer":"B"}`，证据为独立诊断模式。`socialflux_offline_choice_v1` 使用新协议，下述概率合同保留用于旧资产复现。
+
+Git 中保存了 2026-10-10 的 [60 题完整可读样例](examples/offline_t1_t3_dev60/examples.md)、
+[机器可读题目](examples/offline_t1_t3_dev60/items.jsonl)及 [来源与哈希](examples/offline_t1_t3_dev60/snapshot.json)。
+这是待人工审核的开发快照，4 道 T3 尚缺完整回放，不是正式真值集。网站仍读取
+`data/offline_t1_t3_dev60/` 的工作数据；Git 快照不参与运行时加载，原始调用、
+环境快照、视频与个人标注不包含在其中。
 
 T1/T2/T3 都从自然模型轨迹派生，未标注 candidate 的 `ground_truth` 必须是 `null`。Simulator private state 只能支持环境诊断，不能自动成为正式 human ground truth。
 

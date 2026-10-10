@@ -1,0 +1,222 @@
+{
+  "format": "socialflux_rollout_pool_v1",
+  "pool_stage": "development",
+  "candidate_strategy": "single_first_pass",
+  "model_routes": "model_routes.hybrid.v3_2.json",
+  "development_role_assignment": {
+    "strategy": "gpt_state_judgment_primary_v7_independent_appraisal_claude_response",
+    "policy_model": "gpt-6-astra",
+    "state_appraisal_model": "gpt-6-astra",
+    "environment_response_model": "claude-fable-5",
+    "construction_model": "gpt-6-astra",
+    "independent_calls": true
+  },
+  "environment": {
+    "horizon_mode": "natural_max_20",
+    "minimum_natural_turns": 10,
+    "appraisal_prompt_id": "environment_appraisal_v36_evidence_grounded_state_interpretation",
+    "state_calibration_profile": "state_judgment_primary_hysteretic_v7",
+    "state_transition_standard": "socialflux_state_transition_standard_v3",
+    "state_transition_runtime_revision": "v3.2.24",
+    "response_prompt_id": "environment_response_v31_contrastive_event_driven",
+    "response_validation_profile": "hard_only",
+    "multimodal_trigger_policy": {
+      "profile": "online_multimodal_v2",
+      "threshold_margin": 0,
+      "change_threshold_margin": 0,
+      "cooldown_turns": 2,
+      "crossing_as_threshold": true,
+      "max_events_per_turn": 1,
+      "max_events_per_episode": 5,
+      "max_fires_per_trigger": 1,
+      "global_cooldown_turns": 2,
+      "event_family_cooldown_turns": 3
+    },
+    "provider": {
+      "provider": "failover",
+      "model": "gpt-6-astra",
+      "stream": false,
+      "reasoning_effort": "low",
+      "timeout": 600,
+      "candidates": [
+        {
+          "provider": "openai_compatible",
+          "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+          "use_proxy": false,
+          "api_key_env": "AUTODL_GPT_API_KEY",
+          "api_key_file": "/root/.config/socialflux/autodl_gpt_api_key",
+          "model": "gpt-6-astra",
+          "timeout": 600
+        },
+        {
+          "provider": "openai_responses",
+          "endpoint": "https://www.autodl.art/api/v1/responses",
+          "use_proxy": false,
+          "api_key_env": "AUTODL_GPT_API_KEY",
+          "api_key_file": "/root/.config/socialflux/autodl_gpt_api_key",
+          "model": "gpt-6-astra",
+          "timeout": 600
+        },
+        {
+          "provider": "openai_compatible",
+          "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+          "use_proxy": false,
+          "api_key_file": "/root/.config/socialflux/autodl_api_key",
+          "model": "gpt-6-astra",
+          "timeout": 600
+        },
+        {
+          "provider": "openai_responses",
+          "endpoint": "https://www.autodl.art/api/v1/responses",
+          "use_proxy": false,
+          "api_key_file": "/root/.config/socialflux/autodl_api_key",
+          "model": "gpt-6-astra",
+          "timeout": 600
+        },
+        {
+          "provider": "openai_compatible",
+          "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+          "use_proxy": false,
+          "api_key_file": "/root/.config/socialflux/autodl_api_key_2",
+          "model": "gpt-6-astra",
+          "timeout": 600
+        },
+        {
+          "provider": "openai_responses",
+          "endpoint": "https://www.autodl.art/api/v1/responses",
+          "use_proxy": false,
+          "api_key_file": "/root/.config/socialflux/autodl_api_key_2",
+          "model": "gpt-6-astra",
+          "timeout": 600
+        }
+      ],
+      "circuit_failure_threshold": 2,
+      "circuit_cooldown_seconds": 90,
+      "circuit_max_cooldown_seconds": 300,
+      "failover_backoff_base_seconds": 2,
+      "failover_backoff_max_seconds": 15,
+      "failover_backoff_jitter_seconds": 1.5,
+      "max_candidates_per_request": 6,
+      "max_tokens": 3500
+    },
+    "sampling": {
+      "temperature": 0.0,
+      "top_p": 0.9,
+      "seed": 46100
+    },
+    "response_provider": {
+      "provider": "failover",
+      "model": "claude-fable-5",
+      "stream": false,
+      "timeout": 600,
+      "circuit_failure_threshold": 2,
+      "circuit_cooldown_seconds": 90,
+      "circuit_max_cooldown_seconds": 300,
+      "failover_backoff_base_seconds": 2,
+      "failover_backoff_max_seconds": 15,
+      "failover_backoff_jitter_seconds": 1.5,
+      "max_candidates_per_request": 4,
+      "max_tokens": 2600,
+      "candidates": [
+        {
+          "provider": "anthropic",
+          "endpoint": "https://www.autodl.art/api/v1/anthropic/v1/messages",
+          "use_proxy": false,
+          "auth_scheme": "bearer",
+          "api_key_file": "/root/.config/socialflux/autodl_api_key",
+          "model": "claude-fable-5",
+          "timeout": 600,
+          "max_transport_attempts": 1
+        },
+        {
+          "provider": "openai_compatible",
+          "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+          "use_proxy": false,
+          "api_key_file": "/root/.config/socialflux/autodl_api_key",
+          "model": "claude-fable-5",
+          "timeout": 600
+        },
+        {
+          "provider": "anthropic",
+          "endpoint": "https://www.autodl.art/api/v1/anthropic/v1/messages",
+          "use_proxy": false,
+          "auth_scheme": "bearer",
+          "api_key_file": "/root/.config/socialflux/autodl_api_key_2",
+          "model": "claude-fable-5",
+          "timeout": 600,
+          "max_transport_attempts": 1
+        },
+        {
+          "provider": "openai_compatible",
+          "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+          "use_proxy": false,
+          "api_key_file": "/root/.config/socialflux/autodl_api_key_2",
+          "model": "claude-fable-5",
+          "timeout": 600
+        }
+      ]
+    },
+    "response_sampling": {
+      "temperature": 0.35,
+      "top_p": 0.9,
+      "seed": 46300
+    },
+    "independent_appraisals": true,
+    "state_appraisal_prompt_id": "environment_state_appraisal_v6_observed_evidence",
+    "interaction_appraisal_prompt_id": "environment_interaction_appraisal_v1",
+    "state_appraisal_sampling": {
+      "temperature": 0.0,
+      "top_p": 0.9,
+      "seed": 46100,
+      "max_tokens": 6000
+    },
+    "interaction_appraisal_sampling": {
+      "temperature": 0.0,
+      "top_p": 0.9,
+      "seed": 46101,
+      "max_tokens": 3500
+    }
+  },
+  "construction": {
+    "provider": {
+      "model_route": "t2_branch_authoring"
+    },
+    "sampling": {
+      "temperature": 0.3,
+      "top_p": 0.9,
+      "seed": 47100
+    }
+  },
+  "policies": [
+    {
+      "policy_id": "gpt6_astra_state_v3_2_23_state_judgment_primary_49226",
+      "prompt_id": "task_rollout_action_v2_decision_continuity",
+      "horizon_mode": "natural_max_20",
+      "minimum_natural_turns": 10,
+      "source_type": "api",
+      "model_family": "openai",
+      "provider": {
+        "model_route": "policy"
+      },
+      "sampling": {
+        "temperature": 0.65,
+        "top_p": 0.92,
+        "seed": 49226
+      },
+      "runs": 1
+    }
+  ],
+  "pilot_limits": {
+    "rollout_turns": 20,
+    "t1": 6,
+    "t2": 2,
+    "t3": 1,
+    "t3_horizon": 5
+  },
+  "t2_pairing": "all",
+  "task_source_selection": {
+    "strategy": "quality_gate_then_task_specific_weighted_ranking",
+    "t1_sources": 1,
+    "model_quota": false
+  }
+}

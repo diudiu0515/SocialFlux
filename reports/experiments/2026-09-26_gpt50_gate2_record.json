@@ -1,0 +1,25 @@
+{
+  "record_date_utc": "2026-09-26",
+  "cohort": {
+    "scenarios": 50,
+    "retained_trajectories": 50,
+    "canonical_accepted": 31,
+    "machine_rejected": 15,
+    "generation_error_retained": 4
+  },
+  "formal_status": "incomplete_not_passed",
+  "checks": {
+    "E1": {"records": 100, "human_annotators": 0, "agreement": null, "formal_sample_range": [30, 50], "blocking": ["human_labels_missing", "sample_size_out_of_range"]},
+    "E2": {"records": 50, "human_annotators": 0, "formal_sample_range": [15, 20], "blocking": ["human_scores_missing", "sample_size_out_of_range"]},
+    "E3": {"records": 49, "missing": ["GPT50_019"], "automatic_pass": 32, "automatic_fail": 17, "threshold": 0.15, "failures": ["GPT50_002", "GPT50_005", "GPT50_006", "GPT50_007", "GPT50_009", "GPT50_014", "GPT50_017", "GPT50_025", "GPT50_029", "GPT50_032", "GPT50_035", "GPT50_039", "GPT50_041", "GPT50_043", "GPT50_044", "GPT50_046", "GPT50_048"], "human_pending": true},
+    "E4": {"records": 49, "missing": ["GPT50_019"], "strict_equivalence_precheck_pass": 49, "direction_consistency": 0.9190, "state_agreement": 0.9503, "dynamics_agreement": 0.8694, "change_no_change_agreement": 0.9221, "true_sign_reversal": 0.0031, "mean_ordinal_distance": 0.1181, "per_record_failures": {"GPT50_010/t10": 0.7692, "GPT50_018/t10": 0.7692, "GPT50_023/t11": 0.7500, "GPT50_035/t10": 0.7692, "GPT50_037/t10": 0.7273}, "human_pending": true},
+    "E5": {"records": 49, "missing": ["GPT50_019"], "automatic_pass": 40, "automatic_fail": 9, "failures": ["GPT50_003", "GPT50_011", "GPT50_022", "GPT50_025", "GPT50_029", "GPT50_030", "GPT50_041", "GPT50_045", "GPT50_048"], "human_pending": true},
+    "E6": {"records": 50, "direction_agreement": 0.7817, "severe_reversal_fraction": 0.14, "record_pass_fraction": 0.86, "mean_ordinal_distance": 0.9748, "gpt_active_fraction": 0.54, "claude_active_fraction": 0.62, "replay_failure_count": 7, "replay_failures": ["GPT50_002/t6", "GPT50_005/t2", "GPT50_009/t6", "GPT50_013/t6", "GPT50_019/t4", "GPT50_036/t6", "GPT50_049/t6"], "passed": false},
+    "E7": {"records": 49, "missing": ["GPT50_019"], "automatic_pass": 47, "automatic_fail": 2, "failures": {"GPT50_016/t10": 0.0822, "GPT50_029/t10": 0.0923}, "human_pending": true},
+    "E8": {"selected": 40, "original_generated": 4, "original_provider_failures": 1, "request_ready_unsubmitted": 35, "paid_replacements": 2, "effective_preliminary_visual_pass": 5, "human_av_pending": true, "complete": false},
+    "E9": {"candidates": 200, "fast": 50, "medium": 50, "slow": 50, "context_dependent": 50, "zero_change": 142, "nonzero_change": 58, "human_matches": 0, "direction_consistency": null, "complete": false}
+  },
+  "execution_errors": {"attempt_records": 63, "errors": 14, "missing_provider_text": 10, "appraiser_json_or_schema": 3, "http_502": 1},
+  "manifest_stale": true,
+  "manifest_issue": "manifest predates video_state_consistency.json and reports E8 absent"
+}

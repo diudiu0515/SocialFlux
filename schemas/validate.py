@@ -26,6 +26,7 @@ DELTA_LABELS = {
     "mild_increase", "moderate_increase", "strong_increase",
 }
 STATE_CONTRACT_VERSION = "socialflux_state_v2"
+STATE_ONTOLOGY_VERSION = "socialflux_state_ontology_v3"
 PERSONA_FIELDS = {
     "name", "role", "core_values", "temperament", "communication_style",
     "decision_style", "conflict_style", "boundaries",
@@ -38,16 +39,17 @@ STATE_VARIABLE_ONTOLOGY = {
     "behavioral_disposition": {
         "resolve", "avoidance_urge", "repair_intent", "resistance_intent",
         "disclosure_willingness", "cooperation_readiness", "evidence_seeking",
-        "boundary_assertion",
+        "boundary_assertion", "decision_readiness",
     },
     "relationship": {
         "trust", "hostility", "respect", "perceived_safety", "affiliation",
-        "perceived_fairness",
+        "perceived_fairness", "perceived_responsiveness", "role_legitimacy",
     },
     "consequence_risk": {
         "goal_failure_risk", "relationship_rupture_risk",
         "reputational_harm_risk", "material_loss_risk", "safety_harm_risk",
         "institutional_harm_risk", "commitment_breach_risk", "exclusion_risk",
+        "decision_error_risk", "autonomy_loss_risk",
     },
 }
 DYNAMICS_VARIABLES = {
@@ -138,6 +140,27 @@ def validate_v2_state_selection(selected):
                 f"v2 state family {family} contains unapproved variables: "
                 f"{sorted(unknown)}"
             )
+    return selected
+
+
+def validate_v3_state_selection(selected):
+    validate_v2_state_selection(selected)
+    ranges = {
+        "emotion": (3, 4),
+        "behavioral_disposition": (2, 3),
+        "relationship": (2, 3),
+        "consequence_risk": (2, 3),
+    }
+    total = 0
+    for family, (minimum, maximum) in ranges.items():
+        count = len(selected[family])
+        if not minimum <= count <= maximum:
+            raise ValueError(
+                f"v3 state family {family} must select {minimum}-{maximum} variables"
+            )
+        total += count
+    if not 9 <= total <= 13:
+        raise ValueError("v3 state selection must contain 9-13 variables")
     return selected
 
 
@@ -559,6 +582,17 @@ def validate_initial_state_proposal(proposal, blueprint):
 
 
 def validate_scenario(scenario):
+    from environment.public_situation import build_policy_situation
+    from environment.policy_context import policy_background
+    build_policy_situation(scenario)  # Reject stale or malformed visibility grants.
+    policy_background(scenario)
+    for field in ("environment_background", "shared_background"):
+        if field in scenario and (not isinstance(scenario[field], str) or (field == "environment_background" and not scenario[field].strip())):
+            raise ValueError(f"{field} must be valid text")
+    if "environment_visible_narrative" in scenario:
+        if not scenario.get("environment_background"):
+            raise ValueError("environment visibility requires an explicit background")
+        build_policy_situation({**scenario, "policy_visible_narrative": scenario["environment_visible_narrative"]})
     required = (
         "scenario_id",
         "title",
@@ -634,6 +668,27 @@ def validate_scenario(scenario):
         if not isinstance(selected, dict):
             raise ValueError("v2 scenario requires selected_state_variables")
         validate_v2_state_selection(selected)
+        if scenario.get("state_ontology_version") == STATE_ONTOLOGY_VERSION:
+            validate_v3_state_selection(selected)
+            selected_paths = {
+                f"{family}.{variable}"
+                for family, variables in selected.items()
+                for variable in variables
+            }
+            targets = scenario.get("target_state_ids")
+            if (
+                not isinstance(targets, list)
+                or not 6 <= len(targets) <= 9
+                or len(targets) != len(set(targets))
+                or not set(targets).issubset(selected_paths)
+                or {
+                    path.split(".", 1)[0] for path in targets
+                } != set(STATE_VARIABLE_ONTOLOGY)
+            ):
+                raise ValueError(
+                    "v3 target_state_ids must contain 6-9 selected paths "
+                    "covering all four families"
+                )
         expected_state = {
             family: set(variables) for family, variables in selected.items()
         }

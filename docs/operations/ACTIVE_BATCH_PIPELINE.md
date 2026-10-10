@@ -2,6 +2,27 @@
 
 本文件是当前活跃批次的唯一流程说明。旧 Qwen / Scale300 数据不参与任何阶段。
 
+## Offline T1–T3 开发题与网站（2026-10-10）
+
+已按[当前 prompt 链](../prompts/RUNTIME_PROMPT_CATALOG.md)撤下 39 份中间实验稿。
+当前 offline 来源模板正文未变；旧预注册哈希没有回写。下文冻结批次的续跑说明
+适用于其匹配代码快照，不能在当前清理后的代码上宣称冻结输入未变。
+涉及已删除模板的旧实验需恢复归档，详见 [Prompt 审计](../prompts/PROMPT_AUDIT.md)。
+
+`configs/offline_choice_dev60.json` 固定当前 5 个 scenario 和源 rollout，输出到
+`data/offline_t1_t3_dev60/`。构建入口为 `python -m pipeline offline-build`，
+评分入口为 `python -m pipeline offline-eval`；具体参数见
+[选择题协议](../protocols/OFFLINE_T1_T3_CHOICE_V1.md)。
+
+当前完整设计包 60 题，56 题完成所需回放；GPT50_014 的 4 道 T3 待补完整分支。
+全部答案待人工审核。默认开发评测读取 `replay_ready.items.jsonl`，设计审核可
+读取完整 `items.jsonl`。网页 `/offline-review` 直接读取该题库，支持 text/video
+配对、参考材料和标注导出；`/gpt50-live` 保留当前轨迹与 state 查看入口。
+
+生成与回放可能调用模型；网页标注、已有题目结构检查和已保存回答的评分不调用模型。
+本轮架构整理未更改来源数据、provider 路由或旧实验哈希。下列 GPT/Claude 批次
+说明保留其运行历史；是否仍在运行应核对 manifest 和 PID，不能由文档时态推断。
+
 ## 当前 GPT50 候选：英文续跑与翻译（2026-10-07）
 
 当前正在执行的是 `unified_current_trust_v1_gpt50_active`，不是下文历史

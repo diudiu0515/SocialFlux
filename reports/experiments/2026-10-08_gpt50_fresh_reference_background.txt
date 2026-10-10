@@ -1,0 +1,38 @@
+GPT50 新鲜参考视频补全与 T4 多 API 实验
+记录时间：2026-10-08T13:34:30.635827+08:00
+
+用户已明确授权向现有供应商上传虚构角色参考视频，并要求尽快补生成及继续实验。
+实际上传结果：/api/v1/files 返回 HTTP 502；网站 /api/v1/file/before_upload 使用现有 API key 返回 AuthorizeFailed。
+旧参考视频 URL 已确认签名过期；抽取的参考帧被输入人脸规则拒绝。这些失败保留，不继续尝试变形图像。
+官方资料：https://docs.volcengine.com/docs/ark/seedance-portrait-asset-guide?lang=zh
+官方支持同账号生成的原始视频在 30 天内作为参考；视频 URL 本身仅有效 24 小时。
+
+执行调整
+旧等待进程 175675 已在无进行中视频请求时停止，原记录保留。
+新后台进程：180012
+程序：scripts/complete_gpt50_videos.py
+配置：configs/gpt50_experiment/video_completion.fresh_reference.json
+保留已完整的 GPT50_001 六条资产；其余 49 个场景重新生成基准并马上补齐同场景分支，最多 320 次新视频请求，3 个并发。
+GPT50_036、GPT50_038 使用一次 Mini 渲染模型对照，原提示、身份文字和动作语义不变；原 Standard / Fast 拒绝记录全部保留。
+首批为 002、036、038；至少一个首批场景全部生成成功才扩展后续场景。失败不静默重试、不改为零分。
+新资产在每个场景全套生成并 SHA 验证成功后才发布到审核页，避免新旧人物混用；原有文件不会删除。
+覆盖目标仍然是 50 个场景、326 条 required videos。
+
+后台状态
+build/gpt50_fresh_reference_20261008/status.json
+build/gpt50_fresh_reference_20261008/results.json
+build/gpt50_fresh_reference_20261008/generation.log
+build/gpt50_fresh_reference_20261008/implementation_sha256.json
+
+实验自动交接
+全部视频齐全后自动执行 configs/gpt50_experiment/t4_multimodal_experiment.json。
+实验目录：build/gpt50_full_video_20261008/experiment
+GPT / Claude / DeepSeek 各 50 个 scenario，text_only / text_video 配对；最多 300 个计划槽位。
+真实输入探测已完成：GPT 和 Claude 均通过两组四帧时序控制，采用 video_frames（无音频），不能写成 native_video。
+GPT native_video 控制返回空颜色数组，未通过。DeepSeek 两种输入均返回长度截断，当前探测未通过，未获准进入视频组；不据此推断其他接口下的能力。
+DeepSeek 仍保留 text_only 对照；其视频槽位记 unsupported，不混入配对效果。
+统一 Claude 五维裁判，保留实际请求、返回、视频 SHA、模型配置、轨迹、分数、证据及配对差值。
+视频生成与实验结构相关 30 项单元测试通过。
+机器结构检查与人工审核分开，human review 为 pending，实验为探索性。
+
+另有旧 text 轨迹的多裁判比较在后台进行，目录 build/t4_gpt50_20261008_multimodel/judges；不与本次重新互动的多模型实验混为一谈。

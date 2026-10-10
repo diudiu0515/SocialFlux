@@ -1,0 +1,4432 @@
+{
+  "format": "socialflux_state_v3_readiness_audit_v1",
+  "created_at_utc": "2026-09-27T05:47:21.123875+00:00",
+  "standard": "docs/protocols/STATE_TRANSITION_STANDARD_V3.md",
+  "populations": [
+    {
+      "label": "gpt50",
+      "scenario_root": "data/gpt50/experiment/scenario/scenarios",
+      "scenario_count": 50,
+      "state_ontology_target": "socialflux_state_ontology_v3",
+      "scenarios_with_issues": 50,
+      "suspected_actor_ownership_mismatches": 9,
+      "s0_boundary_values": 0,
+      "s0_value_count": 394,
+      "family_shape_counts": {
+        "1/2/1/2": 1,
+        "1/2/2/2": 3,
+        "1/2/2/3": 8,
+        "1/3/1/2": 1,
+        "1/3/1/3": 2,
+        "1/3/2/2": 18,
+        "2/2/1/3": 4,
+        "2/2/2/2": 12,
+        "2/3/1/2": 1
+      },
+      "selected_variable_counts": {
+        "relationship.trust": 49,
+        "emotion.anxiety": 45,
+        "behavioral_disposition.cooperation_readiness": 40,
+        "relationship.perceived_fairness": 36,
+        "behavioral_disposition.evidence_seeking": 33,
+        "consequence_risk.relationship_rupture_risk": 27,
+        "behavioral_disposition.boundary_assertion": 23,
+        "consequence_risk.goal_failure_risk": 22,
+        "consequence_risk.safety_harm_risk": 18,
+        "behavioral_disposition.disclosure_willingness": 17,
+        "consequence_risk.material_loss_risk": 15,
+        "consequence_risk.institutional_harm_risk": 12,
+        "consequence_risk.reputational_harm_risk": 12,
+        "emotion.frustration": 12,
+        "consequence_risk.commitment_breach_risk": 7,
+        "relationship.perceived_safety": 5,
+        "behavioral_disposition.resolve": 5,
+        "emotion.guilt": 4,
+        "emotion.fear": 3,
+        "behavioral_disposition.repair_intent": 3,
+        "emotion.hope": 2,
+        "behavioral_disposition.resistance_intent": 1,
+        "emotion.disappointment": 1,
+        "consequence_risk.exclusion_risk": 1,
+        "relationship.respect": 1
+      },
+      "target_variable_counts": {
+        "relationship.trust": 44,
+        "emotion.anxiety": 38,
+        "behavioral_disposition.cooperation_readiness": 35,
+        "relationship.perceived_fairness": 32,
+        "behavioral_disposition.evidence_seeking": 27,
+        "consequence_risk.relationship_rupture_risk": 23,
+        "consequence_risk.goal_failure_risk": 21,
+        "consequence_risk.safety_harm_risk": 18,
+        "behavioral_disposition.disclosure_willingness": 17,
+        "behavioral_disposition.boundary_assertion": 17,
+        "consequence_risk.material_loss_risk": 13,
+        "consequence_risk.institutional_harm_risk": 9,
+        "consequence_risk.commitment_breach_risk": 7,
+        "consequence_risk.reputational_harm_risk": 6,
+        "relationship.perceived_safety": 5,
+        "behavioral_disposition.resolve": 4,
+        "emotion.fear": 2,
+        "behavioral_disposition.repair_intent": 2,
+        "behavioral_disposition.resistance_intent": 1,
+        "emotion.frustration": 1,
+        "consequence_risk.exclusion_risk": 1,
+        "emotion.hope": 1
+      },
+      "issues": [
+        {
+          "scenario_id": "GPT50_001",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_001/scenario_001.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "s0_has_fewer_than_four_distinct_levels",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 11,
+            "evaluated_persona": 8
+          }
+        },
+        {
+          "scenario_id": "GPT50_002",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_002/scenario_002.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 4,
+            "evaluated_persona": 5
+          }
+        },
+        {
+          "scenario_id": "GPT50_003",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_003/scenario_003.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 1,
+            "consequence_risk": 3
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "relationship_count_1_outside_2_3",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 8,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "GPT50_004",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_004/scenario_004.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 10,
+            "evaluated_persona": 4
+          }
+        },
+        {
+          "scenario_id": "GPT50_005",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_005/scenario_005.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 6,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "GPT50_006",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_006/scenario_006.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 1,
+            "consequence_risk": 3
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "relationship_count_1_outside_2_3",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 9,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "GPT50_007",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_007/scenario_007.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 1,
+            "consequence_risk": 3
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "relationship_count_1_outside_2_3",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 6,
+            "evaluated_persona": 3
+          }
+        },
+        {
+          "scenario_id": "GPT50_008",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_008/scenario_008.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 3
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 9,
+            "evaluated_persona": 4
+          }
+        },
+        {
+          "scenario_id": "GPT50_009",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_009/scenario_009.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 4,
+            "evaluated_persona": 4
+          }
+        },
+        {
+          "scenario_id": "GPT50_010",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_010/scenario_010.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 3
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 8,
+            "evaluated_persona": 4
+          }
+        },
+        {
+          "scenario_id": "GPT50_011",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_011/scenario_011.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 7,
+            "evaluated_persona": 6
+          }
+        },
+        {
+          "scenario_id": "GPT50_012",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_012/scenario_012.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 7,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_7_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 17,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "GPT50_013",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_013/scenario_013.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "s0_has_fewer_than_four_distinct_levels",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 10,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "GPT50_014",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_014/scenario_014.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 6,
+            "evaluated_persona": 3
+          }
+        },
+        {
+          "scenario_id": "GPT50_015",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_015/scenario_015.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 7,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "GPT50_016",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_016/scenario_016.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 10,
+            "evaluated_persona": 10
+          }
+        },
+        {
+          "scenario_id": "GPT50_017",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_017/scenario_017.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 9,
+            "evaluated_persona": 11
+          }
+        },
+        {
+          "scenario_id": "GPT50_018",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_018/scenario_018.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 1,
+            "consequence_risk": 3
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "relationship_count_1_outside_2_3",
+            "total_state_count_8_outside_9_13",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 6,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "GPT50_019",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_019/scenario_019.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 15,
+            "evaluated_persona": 13
+          }
+        },
+        {
+          "scenario_id": "GPT50_020",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_020/scenario_020.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 1,
+            "consequence_risk": 3
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "relationship_count_1_outside_2_3",
+            "total_state_count_8_outside_9_13",
+            "target_count_5_outside_6_9",
+            "s0_has_fewer_than_four_distinct_levels",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 7,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "GPT50_021",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_021/scenario_021.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 8,
+            "evaluated_persona": 3
+          }
+        },
+        {
+          "scenario_id": "GPT50_022",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_022/scenario_022.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 9,
+            "evaluated_persona": 4
+          }
+        },
+        {
+          "scenario_id": "GPT50_023",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_023/scenario_023.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 7,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_7_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 4,
+            "evaluated_persona": 2
+          }
+        },
+        {
+          "scenario_id": "GPT50_024",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_024/scenario_024.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 6,
+            "evaluated_persona": 9
+          }
+        },
+        {
+          "scenario_id": "GPT50_025",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_025/scenario_025.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 7,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_7_outside_9_13",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 8,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "GPT50_026",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_026/scenario_026.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "s0_has_fewer_than_four_distinct_levels",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 7,
+            "evaluated_persona": 4
+          }
+        },
+        {
+          "scenario_id": "GPT50_027",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_027/scenario_027.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 6,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "GPT50_028",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_028/scenario_028.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 9,
+            "evaluated_persona": 5
+          }
+        },
+        {
+          "scenario_id": "GPT50_029",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_029/scenario_029.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 7,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "GPT50_030",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_030/scenario_030.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 4,
+            "evaluated_persona": 4
+          }
+        },
+        {
+          "scenario_id": "GPT50_031",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_031/scenario_031.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 4,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "GPT50_032",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_032/scenario_032.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 7,
+            "evaluated_persona": 3
+          }
+        },
+        {
+          "scenario_id": "GPT50_033",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_033/scenario_033.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 1,
+            "consequence_risk": 2
+          },
+          "total_state_count": 7,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "relationship_count_1_outside_2_3",
+            "total_state_count_7_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 5,
+            "evaluated_persona": 5
+          }
+        },
+        {
+          "scenario_id": "GPT50_034",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_034/scenario_034.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 3
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 9,
+            "evaluated_persona": 5
+          }
+        },
+        {
+          "scenario_id": "GPT50_035",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_035/scenario_035.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 2,
+            "evaluated_persona": 5
+          }
+        },
+        {
+          "scenario_id": "GPT50_036",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_036/scenario_036.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 3,
+            "relationship": 1,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "relationship_count_1_outside_2_3",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 6,
+            "evaluated_persona": 2
+          }
+        },
+        {
+          "scenario_id": "GPT50_037",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_037/scenario_037.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 2,
+            "relationship": 1,
+            "consequence_risk": 2
+          },
+          "total_state_count": 6,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "relationship_count_1_outside_2_3",
+            "total_state_count_6_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 4,
+            "evaluated_persona": 5
+          }
+        },
+        {
+          "scenario_id": "GPT50_038",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_038/scenario_038.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 9,
+            "evaluated_persona": 3
+          }
+        },
+        {
+          "scenario_id": "GPT50_039",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_039/scenario_039.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 3
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 6,
+            "evaluated_persona": 4
+          }
+        },
+        {
+          "scenario_id": "GPT50_040",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_040/scenario_040.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 3
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 4,
+            "evaluated_persona": 6
+          }
+        },
+        {
+          "scenario_id": "GPT50_041",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_041/scenario_041.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "s0_has_fewer_than_four_distinct_levels",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 12,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "GPT50_042",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_042/scenario_042.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 1,
+            "consequence_risk": 3
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "relationship_count_1_outside_2_3",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 6,
+            "evaluated_persona": 6
+          }
+        },
+        {
+          "scenario_id": "GPT50_043",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_043/scenario_043.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 4,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "GPT50_044",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_044/scenario_044.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 8,
+            "evaluated_persona": 14
+          }
+        },
+        {
+          "scenario_id": "GPT50_045",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_045/scenario_045.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 3
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 4,
+            "evaluated_persona": 10
+          }
+        },
+        {
+          "scenario_id": "GPT50_046",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_046/scenario_046.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 11,
+            "evaluated_persona": 8
+          }
+        },
+        {
+          "scenario_id": "GPT50_047",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_047/scenario_047.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 4,
+            "evaluated_persona": 13
+          }
+        },
+        {
+          "scenario_id": "GPT50_048",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_048/scenario_048.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 3
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "s0_has_fewer_than_four_distinct_levels",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 5,
+            "evaluated_persona": 4
+          }
+        },
+        {
+          "scenario_id": "GPT50_049",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_049/scenario_049.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 3,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 11,
+            "evaluated_persona": 6
+          }
+        },
+        {
+          "scenario_id": "GPT50_050",
+          "path": "data/gpt50/experiment/scenario/scenarios/scenario_050/scenario_050.json",
+          "state_counts": {
+            "emotion": 1,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 3
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_1_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 3,
+            "evaluated_persona": 9
+          }
+        }
+      ]
+    },
+    {
+      "label": "claude150",
+      "scenario_root": "data/claude150_v1/scenarios",
+      "scenario_count": 150,
+      "state_ontology_target": "socialflux_state_ontology_v3",
+      "scenarios_with_issues": 150,
+      "suspected_actor_ownership_mismatches": 12,
+      "s0_boundary_values": 0,
+      "s0_value_count": 1200,
+      "family_shape_counts": {
+        "2/2/2/2": 150
+      },
+      "selected_variable_counts": {
+        "relationship.trust": 148,
+        "emotion.anxiety": 145,
+        "consequence_risk.goal_failure_risk": 114,
+        "behavioral_disposition.disclosure_willingness": 84,
+        "relationship.perceived_fairness": 83,
+        "consequence_risk.reputational_harm_risk": 78,
+        "behavioral_disposition.avoidance_urge": 69,
+        "emotion.guilt": 67,
+        "consequence_risk.relationship_rupture_risk": 64,
+        "behavioral_disposition.resistance_intent": 61,
+        "emotion.frustration": 56,
+        "relationship.perceived_safety": 50,
+        "behavioral_disposition.boundary_assertion": 40,
+        "consequence_risk.institutional_harm_risk": 35,
+        "emotion.fear": 22,
+        "behavioral_disposition.evidence_seeking": 21,
+        "relationship.respect": 17,
+        "behavioral_disposition.resolve": 12,
+        "behavioral_disposition.cooperation_readiness": 11,
+        "emotion.anger": 5,
+        "consequence_risk.safety_harm_risk": 5,
+        "emotion.hope": 3,
+        "consequence_risk.material_loss_risk": 3,
+        "emotion.disappointment": 2,
+        "behavioral_disposition.repair_intent": 2,
+        "relationship.hostility": 2,
+        "consequence_risk.exclusion_risk": 1
+      },
+      "target_variable_counts": {
+        "relationship.trust": 140,
+        "emotion.anxiety": 96,
+        "behavioral_disposition.disclosure_willingness": 73,
+        "consequence_risk.reputational_harm_risk": 42,
+        "behavioral_disposition.resistance_intent": 40,
+        "consequence_risk.institutional_harm_risk": 29,
+        "consequence_risk.goal_failure_risk": 27,
+        "consequence_risk.relationship_rupture_risk": 18,
+        "behavioral_disposition.boundary_assertion": 13,
+        "behavioral_disposition.resolve": 10,
+        "emotion.guilt": 10,
+        "relationship.perceived_fairness": 10,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "consequence_risk.safety_harm_risk": 5,
+        "relationship.perceived_safety": 4,
+        "emotion.frustration": 4,
+        "behavioral_disposition.avoidance_urge": 4,
+        "relationship.respect": 4,
+        "behavioral_disposition.evidence_seeking": 1,
+        "consequence_risk.material_loss_risk": 1,
+        "emotion.fear": 1,
+        "emotion.anger": 1
+      },
+      "issues": [
+        {
+          "scenario_id": "CF150_001",
+          "path": "data/claude150_v1/scenarios/scenario_001/scenario_001.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 7,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "CF150_002",
+          "path": "data/claude150_v1/scenarios/scenario_002/scenario_002.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 2,
+            "evaluated_persona": 2
+          }
+        },
+        {
+          "scenario_id": "CF150_003",
+          "path": "data/claude150_v1/scenarios/scenario_003/scenario_003.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 12,
+            "evaluated_persona": 4
+          }
+        },
+        {
+          "scenario_id": "CF150_004",
+          "path": "data/claude150_v1/scenarios/scenario_004/scenario_004.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 11,
+            "evaluated_persona": 9
+          }
+        },
+        {
+          "scenario_id": "CF150_005",
+          "path": "data/claude150_v1/scenarios/scenario_005/scenario_005.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 10,
+            "evaluated_persona": 10
+          }
+        },
+        {
+          "scenario_id": "CF150_006",
+          "path": "data/claude150_v1/scenarios/scenario_006/scenario_006.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 3,
+            "evaluated_persona": 3
+          }
+        },
+        {
+          "scenario_id": "CF150_007",
+          "path": "data/claude150_v1/scenarios/scenario_007/scenario_007.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 21,
+            "evaluated_persona": 18
+          }
+        },
+        {
+          "scenario_id": "CF150_008",
+          "path": "data/claude150_v1/scenarios/scenario_008/scenario_008.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 5,
+            "evaluated_persona": 5
+          }
+        },
+        {
+          "scenario_id": "CF150_009",
+          "path": "data/claude150_v1/scenarios/scenario_009/scenario_009.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_2_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 13,
+            "evaluated_persona": 6
+          }
+        },
+        {
+          "scenario_id": "CF150_010",
+          "path": "data/claude150_v1/scenarios/scenario_010/scenario_010.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 19,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_011",
+          "path": "data/claude150_v1/scenarios/scenario_011/scenario_011.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 24,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "CF150_012",
+          "path": "data/claude150_v1/scenarios/scenario_012/scenario_012.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 23,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_013",
+          "path": "data/claude150_v1/scenarios/scenario_013/scenario_013.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 21,
+            "evaluated_persona": 5
+          }
+        },
+        {
+          "scenario_id": "CF150_014",
+          "path": "data/claude150_v1/scenarios/scenario_014/scenario_014.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 22,
+            "evaluated_persona": 13
+          }
+        },
+        {
+          "scenario_id": "CF150_015",
+          "path": "data/claude150_v1/scenarios/scenario_015/scenario_015.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 12,
+            "evaluated_persona": 4
+          }
+        },
+        {
+          "scenario_id": "CF150_016",
+          "path": "data/claude150_v1/scenarios/scenario_016/scenario_016.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "s0_has_fewer_than_four_distinct_levels",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 24,
+            "evaluated_persona": 26
+          }
+        },
+        {
+          "scenario_id": "CF150_017",
+          "path": "data/claude150_v1/scenarios/scenario_017/scenario_017.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 25,
+            "evaluated_persona": 11
+          }
+        },
+        {
+          "scenario_id": "CF150_018",
+          "path": "data/claude150_v1/scenarios/scenario_018/scenario_018.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 24,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_019",
+          "path": "data/claude150_v1/scenarios/scenario_019/scenario_019.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 11,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_020",
+          "path": "data/claude150_v1/scenarios/scenario_020/scenario_020.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 7,
+            "evaluated_persona": 6
+          }
+        },
+        {
+          "scenario_id": "CF150_021",
+          "path": "data/claude150_v1/scenarios/scenario_021/scenario_021.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 4,
+            "evaluated_persona": 13
+          }
+        },
+        {
+          "scenario_id": "CF150_022",
+          "path": "data/claude150_v1/scenarios/scenario_022/scenario_022.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 9,
+            "evaluated_persona": 13
+          }
+        },
+        {
+          "scenario_id": "CF150_023",
+          "path": "data/claude150_v1/scenarios/scenario_023/scenario_023.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 21,
+            "evaluated_persona": 13
+          }
+        },
+        {
+          "scenario_id": "CF150_024",
+          "path": "data/claude150_v1/scenarios/scenario_024/scenario_024.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 0,
+            "evaluated_persona": 2
+          }
+        },
+        {
+          "scenario_id": "CF150_025",
+          "path": "data/claude150_v1/scenarios/scenario_025/scenario_025.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 23,
+            "evaluated_persona": 15
+          }
+        },
+        {
+          "scenario_id": "CF150_026",
+          "path": "data/claude150_v1/scenarios/scenario_026/scenario_026.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 8,
+            "evaluated_persona": 10
+          }
+        },
+        {
+          "scenario_id": "CF150_027",
+          "path": "data/claude150_v1/scenarios/scenario_027/scenario_027.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 17,
+            "evaluated_persona": 14
+          }
+        },
+        {
+          "scenario_id": "CF150_028",
+          "path": "data/claude150_v1/scenarios/scenario_028/scenario_028.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 18,
+            "evaluated_persona": 16
+          }
+        },
+        {
+          "scenario_id": "CF150_029",
+          "path": "data/claude150_v1/scenarios/scenario_029/scenario_029.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 24,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_030",
+          "path": "data/claude150_v1/scenarios/scenario_030/scenario_030.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 16,
+            "evaluated_persona": 8
+          }
+        },
+        {
+          "scenario_id": "CF150_031",
+          "path": "data/claude150_v1/scenarios/scenario_031/scenario_031.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 14,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_032",
+          "path": "data/claude150_v1/scenarios/scenario_032/scenario_032.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_2_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 22,
+            "evaluated_persona": 10
+          }
+        },
+        {
+          "scenario_id": "CF150_033",
+          "path": "data/claude150_v1/scenarios/scenario_033/scenario_033.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 2,
+            "evaluated_persona": 2
+          }
+        },
+        {
+          "scenario_id": "CF150_034",
+          "path": "data/claude150_v1/scenarios/scenario_034/scenario_034.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "missing_variable_specific_rationale",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 0,
+            "evaluated_persona": 0
+          }
+        },
+        {
+          "scenario_id": "CF150_035",
+          "path": "data/claude150_v1/scenarios/scenario_035/scenario_035.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 14,
+            "evaluated_persona": 5
+          }
+        },
+        {
+          "scenario_id": "CF150_036",
+          "path": "data/claude150_v1/scenarios/scenario_036/scenario_036.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 12,
+            "evaluated_persona": 6
+          }
+        },
+        {
+          "scenario_id": "CF150_037",
+          "path": "data/claude150_v1/scenarios/scenario_037/scenario_037.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 13,
+            "evaluated_persona": 8
+          }
+        },
+        {
+          "scenario_id": "CF150_038",
+          "path": "data/claude150_v1/scenarios/scenario_038/scenario_038.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 6,
+            "evaluated_persona": 9
+          }
+        },
+        {
+          "scenario_id": "CF150_039",
+          "path": "data/claude150_v1/scenarios/scenario_039/scenario_039.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 16,
+            "evaluated_persona": 10
+          }
+        },
+        {
+          "scenario_id": "CF150_040",
+          "path": "data/claude150_v1/scenarios/scenario_040/scenario_040.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_2_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 13,
+            "evaluated_persona": 11
+          }
+        },
+        {
+          "scenario_id": "CF150_041",
+          "path": "data/claude150_v1/scenarios/scenario_041/scenario_041.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 8,
+            "evaluated_persona": 5
+          }
+        },
+        {
+          "scenario_id": "CF150_042",
+          "path": "data/claude150_v1/scenarios/scenario_042/scenario_042.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 10,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_043",
+          "path": "data/claude150_v1/scenarios/scenario_043/scenario_043.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 17,
+            "evaluated_persona": 14
+          }
+        },
+        {
+          "scenario_id": "CF150_044",
+          "path": "data/claude150_v1/scenarios/scenario_044/scenario_044.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 11,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_045",
+          "path": "data/claude150_v1/scenarios/scenario_045/scenario_045.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 6,
+            "evaluated_persona": 5
+          }
+        },
+        {
+          "scenario_id": "CF150_046",
+          "path": "data/claude150_v1/scenarios/scenario_046/scenario_046.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 19,
+            "evaluated_persona": 17
+          }
+        },
+        {
+          "scenario_id": "CF150_047",
+          "path": "data/claude150_v1/scenarios/scenario_047/scenario_047.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 22,
+            "evaluated_persona": 8
+          }
+        },
+        {
+          "scenario_id": "CF150_048",
+          "path": "data/claude150_v1/scenarios/scenario_048/scenario_048.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 12,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "CF150_049",
+          "path": "data/claude150_v1/scenarios/scenario_049/scenario_049.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 17,
+            "evaluated_persona": 15
+          }
+        },
+        {
+          "scenario_id": "CF150_050",
+          "path": "data/claude150_v1/scenarios/scenario_050/scenario_050.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 16,
+            "evaluated_persona": 15
+          }
+        },
+        {
+          "scenario_id": "CF150_051",
+          "path": "data/claude150_v1/scenarios/scenario_051/scenario_051.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 15,
+            "evaluated_persona": 11
+          }
+        },
+        {
+          "scenario_id": "CF150_052",
+          "path": "data/claude150_v1/scenarios/scenario_052/scenario_052.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 18,
+            "evaluated_persona": 13
+          }
+        },
+        {
+          "scenario_id": "CF150_053",
+          "path": "data/claude150_v1/scenarios/scenario_053/scenario_053.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 22,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_054",
+          "path": "data/claude150_v1/scenarios/scenario_054/scenario_054.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 22,
+            "evaluated_persona": 10
+          }
+        },
+        {
+          "scenario_id": "CF150_055",
+          "path": "data/claude150_v1/scenarios/scenario_055/scenario_055.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 1,
+            "evaluated_persona": 0
+          }
+        },
+        {
+          "scenario_id": "CF150_056",
+          "path": "data/claude150_v1/scenarios/scenario_056/scenario_056.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 20,
+            "evaluated_persona": 13
+          }
+        },
+        {
+          "scenario_id": "CF150_057",
+          "path": "data/claude150_v1/scenarios/scenario_057/scenario_057.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 9,
+            "evaluated_persona": 6
+          }
+        },
+        {
+          "scenario_id": "CF150_058",
+          "path": "data/claude150_v1/scenarios/scenario_058/scenario_058.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 26,
+            "evaluated_persona": 18
+          }
+        },
+        {
+          "scenario_id": "CF150_059",
+          "path": "data/claude150_v1/scenarios/scenario_059/scenario_059.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 17,
+            "evaluated_persona": 9
+          }
+        },
+        {
+          "scenario_id": "CF150_060",
+          "path": "data/claude150_v1/scenarios/scenario_060/scenario_060.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 22,
+            "evaluated_persona": 14
+          }
+        },
+        {
+          "scenario_id": "CF150_061",
+          "path": "data/claude150_v1/scenarios/scenario_061/scenario_061.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 24,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_062",
+          "path": "data/claude150_v1/scenarios/scenario_062/scenario_062.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_2_outside_6_9",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 4,
+            "evaluated_persona": 10
+          }
+        },
+        {
+          "scenario_id": "CF150_063",
+          "path": "data/claude150_v1/scenarios/scenario_063/scenario_063.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 9,
+            "evaluated_persona": 11
+          }
+        },
+        {
+          "scenario_id": "CF150_064",
+          "path": "data/claude150_v1/scenarios/scenario_064/scenario_064.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 13,
+            "evaluated_persona": 19
+          }
+        },
+        {
+          "scenario_id": "CF150_065",
+          "path": "data/claude150_v1/scenarios/scenario_065/scenario_065.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 13,
+            "evaluated_persona": 11
+          }
+        },
+        {
+          "scenario_id": "CF150_066",
+          "path": "data/claude150_v1/scenarios/scenario_066/scenario_066.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 22,
+            "evaluated_persona": 6
+          }
+        },
+        {
+          "scenario_id": "CF150_067",
+          "path": "data/claude150_v1/scenarios/scenario_067/scenario_067.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 27,
+            "evaluated_persona": 18
+          }
+        },
+        {
+          "scenario_id": "CF150_068",
+          "path": "data/claude150_v1/scenarios/scenario_068/scenario_068.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 26,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_069",
+          "path": "data/claude150_v1/scenarios/scenario_069/scenario_069.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 15,
+            "evaluated_persona": 8
+          }
+        },
+        {
+          "scenario_id": "CF150_070",
+          "path": "data/claude150_v1/scenarios/scenario_070/scenario_070.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 9,
+            "evaluated_persona": 4
+          }
+        },
+        {
+          "scenario_id": "CF150_071",
+          "path": "data/claude150_v1/scenarios/scenario_071/scenario_071.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 1,
+            "evaluated_persona": 1
+          }
+        },
+        {
+          "scenario_id": "CF150_072",
+          "path": "data/claude150_v1/scenarios/scenario_072/scenario_072.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_2_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 10,
+            "evaluated_persona": 5
+          }
+        },
+        {
+          "scenario_id": "CF150_073",
+          "path": "data/claude150_v1/scenarios/scenario_073/scenario_073.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 18,
+            "evaluated_persona": 9
+          }
+        },
+        {
+          "scenario_id": "CF150_074",
+          "path": "data/claude150_v1/scenarios/scenario_074/scenario_074.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 20,
+            "evaluated_persona": 13
+          }
+        },
+        {
+          "scenario_id": "CF150_075",
+          "path": "data/claude150_v1/scenarios/scenario_075/scenario_075.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 21,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_076",
+          "path": "data/claude150_v1/scenarios/scenario_076/scenario_076.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 11,
+            "evaluated_persona": 8
+          }
+        },
+        {
+          "scenario_id": "CF150_077",
+          "path": "data/claude150_v1/scenarios/scenario_077/scenario_077.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_2_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 23,
+            "evaluated_persona": 9
+          }
+        },
+        {
+          "scenario_id": "CF150_078",
+          "path": "data/claude150_v1/scenarios/scenario_078/scenario_078.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 26,
+            "evaluated_persona": 22
+          }
+        },
+        {
+          "scenario_id": "CF150_079",
+          "path": "data/claude150_v1/scenarios/scenario_079/scenario_079.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "missing_variable_specific_rationale",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 0,
+            "evaluated_persona": 0
+          }
+        },
+        {
+          "scenario_id": "CF150_080",
+          "path": "data/claude150_v1/scenarios/scenario_080/scenario_080.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 24,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_081",
+          "path": "data/claude150_v1/scenarios/scenario_081/scenario_081.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 17,
+            "evaluated_persona": 17
+          }
+        },
+        {
+          "scenario_id": "CF150_082",
+          "path": "data/claude150_v1/scenarios/scenario_082/scenario_082.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 5,
+            "evaluated_persona": 6
+          }
+        },
+        {
+          "scenario_id": "CF150_083",
+          "path": "data/claude150_v1/scenarios/scenario_083/scenario_083.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 19,
+            "evaluated_persona": 13
+          }
+        },
+        {
+          "scenario_id": "CF150_084",
+          "path": "data/claude150_v1/scenarios/scenario_084/scenario_084.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 36,
+            "evaluated_persona": 22
+          }
+        },
+        {
+          "scenario_id": "CF150_085",
+          "path": "data/claude150_v1/scenarios/scenario_085/scenario_085.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 11,
+            "evaluated_persona": 13
+          }
+        },
+        {
+          "scenario_id": "CF150_086",
+          "path": "data/claude150_v1/scenarios/scenario_086/scenario_086.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 11,
+            "evaluated_persona": 13
+          }
+        },
+        {
+          "scenario_id": "CF150_087",
+          "path": "data/claude150_v1/scenarios/scenario_087/scenario_087.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 25,
+            "evaluated_persona": 9
+          }
+        },
+        {
+          "scenario_id": "CF150_088",
+          "path": "data/claude150_v1/scenarios/scenario_088/scenario_088.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_2_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 21,
+            "evaluated_persona": 9
+          }
+        },
+        {
+          "scenario_id": "CF150_089",
+          "path": "data/claude150_v1/scenarios/scenario_089/scenario_089.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 14,
+            "evaluated_persona": 9
+          }
+        },
+        {
+          "scenario_id": "CF150_090",
+          "path": "data/claude150_v1/scenarios/scenario_090/scenario_090.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 17,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_091",
+          "path": "data/claude150_v1/scenarios/scenario_091/scenario_091.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 13,
+            "evaluated_persona": 9
+          }
+        },
+        {
+          "scenario_id": "CF150_092",
+          "path": "data/claude150_v1/scenarios/scenario_092/scenario_092.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 9,
+            "evaluated_persona": 9
+          }
+        },
+        {
+          "scenario_id": "CF150_093",
+          "path": "data/claude150_v1/scenarios/scenario_093/scenario_093.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 5,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "CF150_094",
+          "path": "data/claude150_v1/scenarios/scenario_094/scenario_094.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 11,
+            "evaluated_persona": 4
+          }
+        },
+        {
+          "scenario_id": "CF150_095",
+          "path": "data/claude150_v1/scenarios/scenario_095/scenario_095.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 29,
+            "evaluated_persona": 16
+          }
+        },
+        {
+          "scenario_id": "CF150_096",
+          "path": "data/claude150_v1/scenarios/scenario_096/scenario_096.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 13,
+            "evaluated_persona": 20
+          }
+        },
+        {
+          "scenario_id": "CF150_097",
+          "path": "data/claude150_v1/scenarios/scenario_097/scenario_097.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 13,
+            "evaluated_persona": 11
+          }
+        },
+        {
+          "scenario_id": "CF150_098",
+          "path": "data/claude150_v1/scenarios/scenario_098/scenario_098.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 24,
+            "evaluated_persona": 16
+          }
+        },
+        {
+          "scenario_id": "CF150_099",
+          "path": "data/claude150_v1/scenarios/scenario_099/scenario_099.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 12,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "CF150_100",
+          "path": "data/claude150_v1/scenarios/scenario_100/scenario_100.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_2_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 29,
+            "evaluated_persona": 16
+          }
+        },
+        {
+          "scenario_id": "CF150_101",
+          "path": "data/claude150_v1/scenarios/scenario_101/scenario_101.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 19,
+            "evaluated_persona": 17
+          }
+        },
+        {
+          "scenario_id": "CF150_102",
+          "path": "data/claude150_v1/scenarios/scenario_102/scenario_102.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 22,
+            "evaluated_persona": 13
+          }
+        },
+        {
+          "scenario_id": "CF150_103",
+          "path": "data/claude150_v1/scenarios/scenario_103/scenario_103.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 17,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_104",
+          "path": "data/claude150_v1/scenarios/scenario_104/scenario_104.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 15,
+            "evaluated_persona": 13
+          }
+        },
+        {
+          "scenario_id": "CF150_105",
+          "path": "data/claude150_v1/scenarios/scenario_105/scenario_105.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 21,
+            "evaluated_persona": 15
+          }
+        },
+        {
+          "scenario_id": "CF150_106",
+          "path": "data/claude150_v1/scenarios/scenario_106/scenario_106.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 18,
+            "evaluated_persona": 9
+          }
+        },
+        {
+          "scenario_id": "CF150_107",
+          "path": "data/claude150_v1/scenarios/scenario_107/scenario_107.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 15,
+            "evaluated_persona": 15
+          }
+        },
+        {
+          "scenario_id": "CF150_108",
+          "path": "data/claude150_v1/scenarios/scenario_108/scenario_108.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 8,
+            "evaluated_persona": 11
+          }
+        },
+        {
+          "scenario_id": "CF150_109",
+          "path": "data/claude150_v1/scenarios/scenario_109/scenario_109.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 8,
+            "evaluated_persona": 4
+          }
+        },
+        {
+          "scenario_id": "CF150_110",
+          "path": "data/claude150_v1/scenarios/scenario_110/scenario_110.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_5_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 16,
+            "evaluated_persona": 16
+          }
+        },
+        {
+          "scenario_id": "CF150_111",
+          "path": "data/claude150_v1/scenarios/scenario_111/scenario_111.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 21,
+            "evaluated_persona": 11
+          }
+        },
+        {
+          "scenario_id": "CF150_112",
+          "path": "data/claude150_v1/scenarios/scenario_112/scenario_112.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 23,
+            "evaluated_persona": 10
+          }
+        },
+        {
+          "scenario_id": "CF150_113",
+          "path": "data/claude150_v1/scenarios/scenario_113/scenario_113.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 21,
+            "evaluated_persona": 13
+          }
+        },
+        {
+          "scenario_id": "CF150_114",
+          "path": "data/claude150_v1/scenarios/scenario_114/scenario_114.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 4,
+            "evaluated_persona": 3
+          }
+        },
+        {
+          "scenario_id": "CF150_115",
+          "path": "data/claude150_v1/scenarios/scenario_115/scenario_115.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_4_outside_6_9",
+            "s0_has_fewer_than_four_distinct_levels",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 0,
+            "evaluated_persona": 0
+          }
+        },
+        {
+          "scenario_id": "CF150_116",
+          "path": "data/claude150_v1/scenarios/scenario_116/scenario_116.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_2_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 23,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_117",
+          "path": "data/claude150_v1/scenarios/scenario_117/scenario_117.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 7,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "CF150_118",
+          "path": "data/claude150_v1/scenarios/scenario_118/scenario_118.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 15,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "CF150_119",
+          "path": "data/claude150_v1/scenarios/scenario_119/scenario_119.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 9,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "CF150_120",
+          "path": "data/claude150_v1/scenarios/scenario_120/scenario_120.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 25,
+            "evaluated_persona": 16
+          }
+        },
+        {
+          "scenario_id": "CF150_121",
+          "path": "data/claude150_v1/scenarios/scenario_121/scenario_121.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 21,
+            "evaluated_persona": 9
+          }
+        },
+        {
+          "scenario_id": "CF150_122",
+          "path": "data/claude150_v1/scenarios/scenario_122/scenario_122.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 16,
+            "evaluated_persona": 19
+          }
+        },
+        {
+          "scenario_id": "CF150_123",
+          "path": "data/claude150_v1/scenarios/scenario_123/scenario_123.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 12,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_124",
+          "path": "data/claude150_v1/scenarios/scenario_124/scenario_124.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "s0_has_fewer_than_four_distinct_levels",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 9,
+            "evaluated_persona": 10
+          }
+        },
+        {
+          "scenario_id": "CF150_125",
+          "path": "data/claude150_v1/scenarios/scenario_125/scenario_125.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 11,
+            "evaluated_persona": 14
+          }
+        },
+        {
+          "scenario_id": "CF150_126",
+          "path": "data/claude150_v1/scenarios/scenario_126/scenario_126.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_2_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 18,
+            "evaluated_persona": 10
+          }
+        },
+        {
+          "scenario_id": "CF150_127",
+          "path": "data/claude150_v1/scenarios/scenario_127/scenario_127.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 21,
+            "evaluated_persona": 13
+          }
+        },
+        {
+          "scenario_id": "CF150_128",
+          "path": "data/claude150_v1/scenarios/scenario_128/scenario_128.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 23,
+            "evaluated_persona": 11
+          }
+        },
+        {
+          "scenario_id": "CF150_129",
+          "path": "data/claude150_v1/scenarios/scenario_129/scenario_129.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 11,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "CF150_130",
+          "path": "data/claude150_v1/scenarios/scenario_130/scenario_130.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 19,
+            "evaluated_persona": 14
+          }
+        },
+        {
+          "scenario_id": "CF150_131",
+          "path": "data/claude150_v1/scenarios/scenario_131/scenario_131.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 18,
+            "evaluated_persona": 9
+          }
+        },
+        {
+          "scenario_id": "CF150_132",
+          "path": "data/claude150_v1/scenarios/scenario_132/scenario_132.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 8,
+            "evaluated_persona": 10
+          }
+        },
+        {
+          "scenario_id": "CF150_133",
+          "path": "data/claude150_v1/scenarios/scenario_133/scenario_133.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 14,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "CF150_134",
+          "path": "data/claude150_v1/scenarios/scenario_134/scenario_134.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 9,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_135",
+          "path": "data/claude150_v1/scenarios/scenario_135/scenario_135.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 23,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "CF150_136",
+          "path": "data/claude150_v1/scenarios/scenario_136/scenario_136.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_5_outside_6_9",
+            "s0_has_fewer_than_four_distinct_levels",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 15,
+            "evaluated_persona": 6
+          }
+        },
+        {
+          "scenario_id": "CF150_137",
+          "path": "data/claude150_v1/scenarios/scenario_137/scenario_137.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 14,
+            "evaluated_persona": 20
+          }
+        },
+        {
+          "scenario_id": "CF150_138",
+          "path": "data/claude150_v1/scenarios/scenario_138/scenario_138.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 19,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_139",
+          "path": "data/claude150_v1/scenarios/scenario_139/scenario_139.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_2_outside_6_9",
+            "s0_has_fewer_than_four_distinct_levels",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 6,
+            "evaluated_persona": 5
+          }
+        },
+        {
+          "scenario_id": "CF150_140",
+          "path": "data/claude150_v1/scenarios/scenario_140/scenario_140.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 16,
+            "evaluated_persona": 11
+          }
+        },
+        {
+          "scenario_id": "CF150_141",
+          "path": "data/claude150_v1/scenarios/scenario_141/scenario_141.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "actor_ownership_review_required",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 10,
+            "evaluated_persona": 17
+          }
+        },
+        {
+          "scenario_id": "CF150_142",
+          "path": "data/claude150_v1/scenarios/scenario_142/scenario_142.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 10,
+            "evaluated_persona": 10
+          }
+        },
+        {
+          "scenario_id": "CF150_143",
+          "path": "data/claude150_v1/scenarios/scenario_143/scenario_143.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 13,
+            "evaluated_persona": 7
+          }
+        },
+        {
+          "scenario_id": "CF150_144",
+          "path": "data/claude150_v1/scenarios/scenario_144/scenario_144.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 7,
+            "evaluated_persona": 6
+          }
+        },
+        {
+          "scenario_id": "CF150_145",
+          "path": "data/claude150_v1/scenarios/scenario_145/scenario_145.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 18,
+            "evaluated_persona": 12
+          }
+        },
+        {
+          "scenario_id": "CF150_146",
+          "path": "data/claude150_v1/scenarios/scenario_146/scenario_146.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "target_count_4_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 8,
+            "evaluated_persona": 6
+          }
+        },
+        {
+          "scenario_id": "CF150_147",
+          "path": "data/claude150_v1/scenarios/scenario_147/scenario_147.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 20,
+            "evaluated_persona": 10
+          }
+        },
+        {
+          "scenario_id": "CF150_148",
+          "path": "data/claude150_v1/scenarios/scenario_148/scenario_148.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_2_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 15,
+            "evaluated_persona": 15
+          }
+        },
+        {
+          "scenario_id": "CF150_149",
+          "path": "data/claude150_v1/scenarios/scenario_149/scenario_149.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 28,
+            "evaluated_persona": 17
+          }
+        },
+        {
+          "scenario_id": "CF150_150",
+          "path": "data/claude150_v1/scenarios/scenario_150/scenario_150.json",
+          "state_counts": {
+            "emotion": 2,
+            "behavioral_disposition": 2,
+            "relationship": 2,
+            "consequence_risk": 2
+          },
+          "total_state_count": 8,
+          "issues": [
+            "emotion_count_2_outside_3_4",
+            "total_state_count_8_outside_9_13",
+            "targets_do_not_cover_four_families",
+            "target_count_3_outside_6_9",
+            "no_turn_responsive_relationship_state"
+          ],
+          "actor_overlap": {
+            "environment_persona": 11,
+            "evaluated_persona": 9
+          }
+        }
+      ]
+    }
+  ]
+}

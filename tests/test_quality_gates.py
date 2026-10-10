@@ -62,6 +62,24 @@ class FourQualityGatesTest(unittest.TestCase):
                 (root / name).write_text(json.dumps(value), encoding="utf-8")
             self.assertTrue(audit_environment_gate([self.scenario], root)["passed"])
 
+    def test_unsigned_human_environment_evidence_remains_pending(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "state_transition_agreement.json").write_text(
+                json.dumps({"record": {
+                    "human_attestation": False,
+                    "review_status": "pending_human",
+                    "transition_count": 40,
+                }}),
+                encoding="utf-8",
+            )
+            result = audit_environment_gate([self.scenario], root)
+            self.assertEqual(
+                result["checks"]["E1_state_transition_agreement"]["status"],
+                "pending",
+            )
+            self.assertFalse(result["passed"])
+
     def test_selected_pool_requires_bound_passing_manifest(self):
         trajectory = {
             "trajectory_id": "traj_1",

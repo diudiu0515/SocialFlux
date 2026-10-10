@@ -1,39 +1,35 @@
 # SocialFlux Project Progress
 
-更新时间：2026-09-19
+更新时间：2026-10-10。这里记录已完成的工程能力；实时批次状态以 manifest 和运行记录为准。
 
-## 当前主线
+## 当前交付
 
-- 唯一生产入口：`python -m pipeline`；网站入口用于人审，不代替 CLI Gate。
-- 先用 GPT 小规模批次完成 Scenario → 单条 rollout → T1/T2/T3/T4 → score 的端到端设计审计，再扩大 Claude 主批次。
-- 每个通过 Gate 1 的场景只生成 **1 条**自然 rollout；不做 3 seed、best-of-N 或模型配额。
-- 旧 Qwen 产物与旧 300 场景不再是活跃数据。Claude 新批次不依赖旧 20/100/200/300 catalog。
-- Policy 输出自由文本 action；Environment 固定为 Appraisal LLM → Python 确定性状态更新 → Response LLM → Ledger/observation。
+- 公共命令入口为 `python -m pipeline`，T1–T3 新协议使用 `offline-build` / `offline-eval`；旧概率题路径保留用于复现。
+- Offline 开发包来自 5 个现有 scenario 和对应 rollout，共 60 题，每个 task 20 题，覆盖四类 state，含 15 道组合题。
+- 56 道题完成所需回放；GPT50_014 的 4 道 T3 仍为待补分支的开发候选。全部答案待人工审核，未写入正式 GT。
+- 主作答协议为 `{"answer":"B"}`，证据诊断、组合分维诊断、格式失败与调用失败分别统计。
+- 网站 `/offline-review` 已同步本批题目，支持历史/视频、按需查看作者参考，以及绑定版本的标注草稿导入导出。
+- `/gpt50-live` 展示当前 GPT50 的场景、轨迹、state、Gate 结果和实际匹配的视频。当前多模态资产已存在；旧 Talking Head 清单为空不代表当前批次没有视频。
 
-## Gate 状态
+完整交付、provider 试答和已知问题见 [Offline 开发题报告](reports/experiments/2026-10-10_offline_t1_t3_dev60.md)。当前批次与恢复入口见 [活跃批次手册](docs/operations/ACTIVE_BATCH_PIPELINE.md)。
 
-| Gate | 当前状态 | 下一步 |
+## 正式准入边界
+
+一场景一条自然 rollout 的规则保持不变，失败仍计入产率。T2 受控改写和 T3 反事实分支都绑定真实来源；当前开发通过不代表正式来源 Gate 通过。
+
+| 阶段 | 当前工程能力 | 正式准入仍需 |
 |---|---|---|
-| Gate 1 | pending human | 在网站逐场景审核并冻结 Scenario、initial state；runtime dynamics seed 仅机器校验；JSON 变化后旧 hash 自动失效 |
-| Gate 2 | pending | 对已冻结场景运行 Environment Validity E1–E9，并抽样人工复核 |
-| Gate 3 | pending | 对每场景唯一自然 trajectory 做准入/淘汰和 canonical confirmation |
-| Gate 4 | pending | 构建 T1/T2/T3、运行 T4，并对任务实例与机器建议答案做人审抽查 |
+| Gate 1 | 原始 scenario、初始 state 和哈希可审核 | 真人冻结及最终来源哈希 |
+| Gate 2/3 | 自动检查、模型审核、失败与来源变更均可记录 | 对应批次的有效证据及人工要求 |
+| Gate 4 | 完整题目、待审答案、证据与错项映射可审核 | 真实独立标注、分歧处理和答案确认 |
+| 视频 | 现有素材可播放、配对、追溯来源 | 对应素材的人工质量与信息边界审核 |
 
-当前没有可发布 benchmark；机器 proposal、浏览器草稿和自动 judge 都不能冒充人工签名或 human GT。
+浏览器草稿、LLM judge 和机器参考答案都不能冒充真人签名或 human GT。当前 60 题开发包不是可发布的正式 benchmark。
 
-## 人工与媒体边界
+## 本轮架构整理
 
-- Web 审核页面、Gate 合同、任务页面和导出能力保留。
-- 旧 Talking Head 资产、归档副本、本地模型和本地生成工具已永久删除。
-- 媒体 trigger、observable-expression 协议、prompt/schema、受限路由和审核框架保留，等待外部 API 接入。
-- 外部 API 产生新媒体后，必须重新完成身份连续性、音画同步、语音自然度、表达一致性和信息效用审核。
+更新模块职责、配置层级、网站入口与产物保留规则；删除已被路由替代的旧前端实现，保留旧 URL 兼容。T2 共用运行服务由 `tasks/T2/runtime.py` 直接提供，仓库调用方不再经过 `scripts/t2_common.py` 转发。
 
-## 当前操作
+原始数据、实验报告、待审标签和当前模型配置保持原位。网站与模块整理的删除清单及恢复副本在 `archives/cleanup-2026-10-10/`；验证记录在 `build/architecture_cleanup_20261010/`。
 
-```bash
-python -m web.server --host 127.0.0.1 --port 8000
-python -m pipeline preflight
-python -m unittest discover -s tests -v
-```
-
-先完成人工 Gate 1；未冻结的场景不得进入正式 rollout。
+随后按确认的 prompt 链删除 39 份被替代模板，注册项由 89 减到 50，并清理旧文本测试和生成指纹依赖。保留模板正文未变；旧配置引用已撤下版本时明确报错，不自动切换。当前链路与兼容入口见 [Prompt 目录](docs/prompts/RUNTIME_PROMPT_CATALOG.md)，恢复及历史冻结限制见 [审计记录](docs/prompts/PROMPT_AUDIT.md)。224 项相关测试通过，56 道开发题入口检查及网站接口检查通过；记录在 `build/prompt_cleanup_20261010/`。

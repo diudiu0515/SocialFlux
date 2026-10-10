@@ -214,6 +214,9 @@ def e1_packet(trajectories, scenarios):
                 "review_id": f"E1:{scenario_id}:{trajectory['trajectory_id']}:{turn['turn_id']}",
                 "scenario_id": scenario_id,
                 "source_trajectory_id": trajectory["trajectory_id"],
+                "source_status": trajectory.get("gate2_audit_input", {}).get(
+                    "source_status", "accepted_or_unspecified"
+                ),
                 "turn_id": turn["turn_id"],
                 "persona": scenario["environment_agent"].get("persona", {}),
                 "relevant_history": turn.get("memory_view", {}),
@@ -237,6 +240,10 @@ def e2_packet(trajectories):
         "review_id": f"E2:{item['scenario_id']}:{item['trajectory_id']}",
         "scenario_id": item["scenario_id"],
         "trajectory_id": item["trajectory_id"],
+        "source_status": item.get("gate2_audit_input", {}).get(
+            "source_status", "accepted_or_unspecified"
+        ),
+        "turn_count": len(item.get("turns", [])),
         "policy_id": item.get("policy_id"),
         "turns": [{
             "turn_id": turn.get("turn_id"),
@@ -257,15 +264,48 @@ def e2_packet(trajectories):
 
 def pending_e1_e2(output_root, e1, e2):
     common = {"human_attestation": False, "reviewers": [], "reviewed_at_utc": "", "review_status": "pending_human"}
+    direction_counts = Counter(
+        direction
+        for item in e1
+        for direction in item.get("machine_directions_after_vote", {}).values()
+    )
+    family_counts = defaultdict(Counter)
+    for item in e1:
+        for state_id, direction in item.get(
+            "machine_directions_after_vote", {}
+        ).items():
+            family_counts[state_id.split(".", 1)[0]][direction] += 1
+    source_status_counts = Counter(
+        item.get("source_status", "accepted_or_unspecified") for item in e1
+    )
+    e2_source_status_counts = Counter(
+        item.get("source_status", "accepted_or_unspecified") for item in e2
+    )
     payloads = {
         "state_transition_agreement.json": {
             "format": "socialflux_state_transition_agreement_v1",
-            "record": {**common, "annotator_count": 0, "transition_count": len(e1), "agreement": None},
+            "record": {
+                **common,
+                "annotator_count": 0,
+                "transition_count": len(e1),
+                "agreement": None,
+                "machine_direction_counts": dict(direction_counts),
+                "machine_direction_counts_by_state_family": {
+                    key: dict(value)
+                    for key, value in sorted(family_counts.items())
+                },
+                "machine_unchanged_fraction": round(
+                    direction_counts.get("similar", 0)
+                    / sum(direction_counts.values()), 4
+                ) if direction_counts else None,
+                "source_status_counts": dict(source_status_counts),
+                "sampling_policy": "stable_hash_over_transitions; independent_of_direction",
+            },
             "review_items": e1,
         },
         "trajectory_plausibility.json": {
             "format": "socialflux_trajectory_plausibility_v1",
-            "record": {**common, "annotator_count": 0, "trajectory_count": len(e2), "scores": {"persona_consistency": None, "history_sensitivity": None, "state_continuity": None, "response_state_consistency": None, "overall": None}},
+            "record": {**common, "annotator_count": 0, "trajectory_count": len(e2), "source_status_counts": dict(e2_source_status_counts), "turn_count_distribution": dict(Counter(item.get("turn_count", 0) for item in e2)), "sampling_policy": "stable_hash_over_trajectories; independent_of_quality_outcome", "scores": {"persona_consistency": None, "history_sensitivity": None, "state_continuity": None, "response_state_consistency": None, "overall": None}},
             "review_items": e2,
         },
     }

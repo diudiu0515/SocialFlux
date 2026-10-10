@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from scripts.t2_common import atomic, load, now
+from tasks.T2.runtime import atomic, load, now
 from tasks.T2.pair_builder import BUILDER_VERSION, sha256_file
 
 

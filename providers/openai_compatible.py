@@ -3,16 +3,24 @@
 import json
 import os
 from threading import Lock
-from time import monotonic
-from urllib.error import HTTPError
+from time import monotonic, sleep
+from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import ProxyHandler, Request, build_opener, urlopen
 
-from .base import ModelProvider
+from .base import IncompleteModelOutputError, ModelProvider
 
 
 _KEY_POOL_LOCK = Lock()
 _KEY_POOL_COUNTER = 0
+
+
+class ProviderHTTPError(RuntimeError):
+    """HTTP failure with a status code usable by bounded retry policy."""
+
+    def __init__(self, status, detail):
+        super().__init__(f"provider HTTP {status}: {detail}")
+        self.status = int(status)
 
 
 def _next_key_slot(size):
@@ -26,7 +34,8 @@ def _next_key_slot(size):
 class OpenAICompatibleProvider(ModelProvider):
     def __init__(
         self, endpoint, model, api_key=None, api_keys=None, timeout=60,
-        use_proxy=True, **generation_defaults,
+        use_proxy=True, max_transport_attempts=1,
+        retry_backoff_seconds=0, **generation_defaults,
     ):
         self.api_key = api_key
         self.api_keys = tuple(api_keys or ())
@@ -39,6 +48,8 @@ class OpenAICompatibleProvider(ModelProvider):
         self.timeout = timeout
         self.generation_defaults = generation_defaults
         self.use_proxy = bool(use_proxy)
+        self.max_transport_attempts = max(1, int(max_transport_attempts))
+        self.retry_backoff_seconds = max(0.0, float(retry_backoff_seconds))
         self._call_index = 0
         self._request_count = 0
         self._failed_request_count = 0
@@ -46,6 +57,8 @@ class OpenAICompatibleProvider(ModelProvider):
         self._usage = {}
         self._finish_reasons = {}
         self._credential_slot_requests = {}
+        self._transport_retry_sleep_seconds = 0.0
+        self._audit_records = []
 
     def reset(self):
         self._call_index = 0
@@ -55,6 +68,15 @@ class OpenAICompatibleProvider(ModelProvider):
         self._usage = {}
         self._finish_reasons = {}
         self._credential_slot_requests = {}
+        self._transport_retry_sleep_seconds = 0.0
+        self._audit_records = []
+
+    @staticmethod
+    def _is_transient(error):
+        return (
+            isinstance(error, ProviderHTTPError)
+            and error.status in {408, 409, 425, 429, 500, 502, 503, 504}
+        ) or isinstance(error, (TimeoutError, URLError))
 
     def _authorization_key(self):
         if not self.api_keys:
@@ -85,6 +107,10 @@ class OpenAICompatibleProvider(ModelProvider):
             self._usage[key] = self._usage.get(key, 0) + amount
         for reason, count in provider._finish_reasons.items():
             self._finish_reasons[reason] = self._finish_reasons.get(reason, 0) + count
+        self._transport_retry_sleep_seconds += (
+            provider._transport_retry_sleep_seconds
+        )
+        self._audit_records.extend(provider.audit_records)
 
     def complete(self, messages, **generation):
         if not self.api_keys:
@@ -107,6 +133,8 @@ class OpenAICompatibleProvider(ModelProvider):
                 api_key=key,
                 timeout=self.timeout,
                 use_proxy=self.use_proxy,
+                max_transport_attempts=self.max_transport_attempts,
+                retry_backoff_seconds=self.retry_backoff_seconds,
             )
             try:
                 content = provider._complete_single(messages, **options)
@@ -148,20 +176,36 @@ class OpenAICompatibleProvider(ModelProvider):
         hostname = urlparse(self.endpoint).hostname
         bypass_proxy = not self.use_proxy or hostname in {"127.0.0.1", "localhost", "::1"}
         opener = build_opener(ProxyHandler({})) if bypass_proxy else None
-        self._request_count += 1
-        started = monotonic()
-        try:
+        response_context = None
+        for attempt in range(1, self.max_transport_attempts + 1):
+            self._request_count += 1
+            started = monotonic()
             try:
-                response_context = (
-                    opener.open(request, timeout=self.timeout)
-                    if opener
-                    else urlopen(request, timeout=self.timeout)
-                )
-            except HTTPError as exc:
-                body = exc.read().decode("utf-8", errors="replace")[-4000:]
-                raise RuntimeError(
-                    f"provider HTTP {exc.code}: {body or exc.reason}"
-                ) from exc
+                try:
+                    response_context = (
+                        opener.open(request, timeout=self.timeout)
+                        if opener
+                        else urlopen(request, timeout=self.timeout)
+                    )
+                except HTTPError as exc:
+                    body = exc.read().decode("utf-8", errors="replace")[-4000:]
+                    raise ProviderHTTPError(
+                        exc.code, body or exc.reason
+                    ) from exc
+                break
+            except Exception as exc:
+                self._failed_request_count += 1
+                if (
+                    attempt >= self.max_transport_attempts
+                    or not self._is_transient(exc)
+                ):
+                    raise
+                delay = self.retry_backoff_seconds * (2 ** (attempt - 1))
+                self._transport_retry_sleep_seconds += delay
+                sleep(delay)
+            finally:
+                self._request_duration_seconds += monotonic() - started
+        try:
             with response_context as response:
                 if options.get("stream"):
                     return self._read_stream(response)
@@ -169,15 +213,33 @@ class OpenAICompatibleProvider(ModelProvider):
         except Exception:
             self._failed_request_count += 1
             raise
-        finally:
-            self._request_duration_seconds += monotonic() - started
         self._record_usage(data.get("usage"))
         try:
             choice = data["choices"][0]
-            self._record_finish_reason(choice.get("finish_reason"))
-            return choice["message"]["content"]
+            finish_reason = choice.get("finish_reason")
+            self._record_finish_reason(finish_reason)
+            raw_output = choice["message"]["content"]
         except (KeyError, IndexError, TypeError) as exc:
-            raise ValueError("provider response lacks choices[0].message.content") from exc
+            raise ValueError(
+                "provider response lacks choices[0].message.content"
+            ) from exc
+        request_payload = json.loads(payload.decode("utf-8"))
+        self._audit_records.append({
+            "request": request_payload,
+            "raw_output": raw_output,
+            "finish_reason": finish_reason,
+            "usage": data.get("usage", {}),
+            "complete": finish_reason not in {"length", "max_tokens"},
+        })
+        if finish_reason in {"length", "max_tokens"}:
+            self._failed_request_count += 1
+            raise IncompleteModelOutputError(
+                f"provider response was truncated: {finish_reason}",
+                finish_reason=finish_reason,
+                raw_output=raw_output,
+                request=request_payload,
+            )
+        return raw_output
 
     def _read_stream(self, response):
         """Aggregate OpenAI-compatible SSE chunks into one assistant message."""
@@ -204,6 +266,10 @@ class OpenAICompatibleProvider(ModelProvider):
         return "".join(parts)
 
     @property
+    def audit_records(self):
+        return [dict(item) for item in self._audit_records]
+
+    @property
     def usage(self):
         return dict(self._usage)
 
@@ -218,6 +284,9 @@ class OpenAICompatibleProvider(ModelProvider):
             "finish_reasons": dict(sorted(self._finish_reasons.items())),
             "credential_pool_size": len(self.api_keys) or int(bool(self.api_key)),
             "credential_slot_requests": dict(self._credential_slot_requests),
+            "transport_retry_sleep_seconds": round(
+                self._transport_retry_sleep_seconds, 3
+            ),
             "usage": self.usage,
         }
 

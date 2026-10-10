@@ -19,6 +19,20 @@ N 个 Scenario 候选
 
 当前先运行 GPT 小规模端到端实验，用来发现 scenario、environment、task 和 score 设计漏洞；审核通过后再扩大 Claude 主批次。旧 Qwen/Scale300 数据已归档，不是 compatibility baseline，也不进入 active pipeline。
 
+## 当前开发入口与正式入口
+
+| 路径 | 命令 / 配置 | 产物 |
+|---|---|---|
+| T1–T3 选择题开发 | `python -m pipeline offline-build --config configs/offline_choice_dev60.json` | 固定来源的开发题、回放、公开投影与可读样例；生成可能调用模型 |
+| 已有题目验证与评分 | `python -m pipeline offline-eval` | 答案、证据、Task×state、组合分维与失败诊断；`--check-only` 或 `--responses` 不调用模型 |
+| 人工题目审核 | 网站 `/offline-review` | 浏览器草稿和绑定题库版本的人工审核导出 |
+| 通用正式路径 | `preflight` / `rollout` / `gate3` / `tasks` / `t4` / `audit` | 按所选批次的 Gate 和来源约束准入 |
+
+`tasks --protocol choice` 是 `offline-build` 的别名；不带该参数时保留旧概率题构建。
+通用正式默认值仍在 `pipeline/constants.py` 中，当前 GPT 开发题显式选择自己的
+配置。不得将开发参考答案、机器通过或网页“建议可用”自动转换成正式标签。
+配置和代码 owner 见[架构说明](ARCHITECTURE.md)。
+
 ## 运行时边界
 
 - 每个批次有独立的 scenario root、manifest、Gate 记录和输出 root。

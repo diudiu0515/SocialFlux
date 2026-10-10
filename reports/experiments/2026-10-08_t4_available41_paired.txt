@@ -1,0 +1,49 @@
+T4 已完整媒体的 41 场景配对实验
+记录时间：2026-10-08T20:54:17.343545+08:00
+用户授权：基于目前已有场景做 text+video 配对实验，同时汇报三个 API 的现有分数。
+
+范围
+按视频覆盖和 SHA 验证选择全部 41 个完整场景，共 269 条视频；不按轨迹得分或模型表现筛选。
+场景清单与排除原因：build/t4_gpt41_paired_20261008/selection.json
+冻结媒体清单：build/t4_gpt41_paired_20261008/video_manifest.json
+排除：GPT50_005, GPT50_007, GPT50_015, GPT50_020, GPT50_025, GPT50_034, GPT50_036, GPT50_037, GPT50_039
+该子集存在媒体可生成性选择偏差，结果仅解释这些 41 个场景，不冒充 GPT50 全量结果。
+
+执行
+后台 PID：197030
+配置：configs/gpt50_experiment/t4_multimodal_experiment.available41.json
+入口：scripts/run_t4_multimodal_experiment.py
+状态：build/t4_gpt41_paired_20261008/run/status.json
+日志：build/t4_gpt41_paired_20261008/run/run.log
+计划 41 × 3 模型 × 2 条件 = 246 个槽位，3 个 episode 并发，请求上限 20000。
+最大 20 轮，允许自然结束；复用 canonical UnifiedEnvironmentFactory / StatefulEnvironment。
+同场景同模型的两条件共享初态、环境、提示和 seed；仅 evaluated policy 的视频输入条件不同。
+公共观察与私有 state 分离，裁判盲于条件，统一 Claude 五维终局评分。
+前两个场景为技术试运行，无有效视频轨迹则停止扩大并保留失败。
+所有已输出和失败的轨迹保留，不根据得分择优重跑。
+
+媒体 API
+先做两组独立四颜色时序控制。视频原生输入优先，未通过则单独验证 video_frames。
+video_frames 指从真实视频抽取 0.25/1.25/2.25/3.25 秒的四帧，包含时间戳，无音频；原生视频与帧输入分别记录。
+本轮探测 max_tokens=4096，避免先前 700 token 对 DeepSeek 截断导致的误判；此前失败探测仍保留。
+未通过的模型只保留 text_only，视频槽位记 unsupported，不伪装视频输入成功。
+结果：build/t4_gpt41_paired_20261008/run/results.json
+逐模型五维统计与配对差值：build/t4_gpt41_paired_20261008/run/summary.json
+逐回合输入、返回、视频证据与评分：build/t4_gpt41_paired_20261008/run/episodes/
+
+现有三 API 分数
+这是同一批 GPT text 轨迹的多裁判分数，和本次不同模型分别互动的实验分开。
+报告：reports/experiments/2026-10-08_t4_three_judge_scores.txt
+JSON：build/t4_gpt50_20261008_multimodel/judges/comparison_summary.json
+CSV：build/t4_gpt50_20261008_multimodel/judges/comparison_scores.csv
+同时报告全部有效评分和三裁判共同成功的 39 条轨迹。
+
+验证与边界
+22 项评分、媒体输入、子集完整性测试通过；41 个场景环境初始化预检通过。
+机器结构检查与人工验收分开：human review/calibration pending，当前为探索性实验。
+代码冻结及资产 SHA 将写入 preregistration.json；原全量和旧 text 评分产物保持独立。
+工作区有大量既有相互依赖改动，保留代码 hash 审计，未将无关改动一起提交或推送。
+
+实际启动确认 2026-10-08T20:58:28.834630+08:00：三个模型媒体探测已结束，GPT/Claude 均通过两组 video_frames 控制；DeepSeek 在原生视频第二组及帧输入中均被 4096 输出预算截断，当前未获准视频组。真实 episode 已开始：GPT 的 text_only/text_video 与 Claude 的 text_only 策略请求已经提交，后续 state/interaction 环境请求正在运行。最终计划 246 槽位，其中 DeepSeek 41 个视频槽位将如实记录为 unsupported；其余 205 个槽位尝试真实互动。
+
+更新：原试运行已于 21:27 因超时停止，完整配对为 0。传输验证通过后于 21:57 启动独立恢复批次；详见 reports/experiments/2026-10-08_t4_available41_transport_recovery.txt。

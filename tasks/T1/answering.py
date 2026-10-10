@@ -11,7 +11,7 @@ import json
 
 from prompts.loader import render_prompt
 from providers.structured import complete_json
-from scripts.t2_common import call_count
+from tasks.T2.runtime import call_count
 from tasks.T1.t1_probability_utils import (
     INTENSITY_LABELS,
     validate_probabilities as validate_intensity_probabilities,
@@ -23,6 +23,9 @@ from tasks.T3.t3_probability_utils import (
 
 
 def answer_prompt(instance, private_persona=None):
+    if instance.get("benchmark_version") == "socialflux_offline_choice_v1":
+        from tasks.offline_choice import answer_prompt as choice_prompt
+        return choice_prompt(instance)
     target_ids = instance["target_spec"]["target_state_ids"]
     schema = {
         "instance_id": instance["instance_id"],
@@ -55,6 +58,12 @@ def answer_prompt(instance, private_persona=None):
 
 
 def validate_answer(value, instance):
+    if instance.get("benchmark_version") == "socialflux_offline_choice_v1":
+        from tasks.offline_choice import parse_answer
+        parsed = parse_answer(json.dumps(value), instance["options"])
+        if parsed["format_error"]:
+            raise ValueError(parsed["format_error"])
+        return {"answer": parsed["answer"]}
     if not isinstance(value, dict) or set(value) != {"instance_id", "predictions"}:
         raise ValueError("T1 answer top keys")
     if value["instance_id"] != instance["instance_id"]:
@@ -98,6 +107,9 @@ def validate_answer(value, instance):
 def generate_answer(
     provider, instance, seed, *, private_persona=None, max_attempts=3,
 ):
+    if instance.get("benchmark_version") == "socialflux_offline_choice_v1":
+        from tasks.offline_choice import generate_answer as choice_answer
+        return choice_answer(provider, instance, seed)
     start = call_count(provider)
     answer = complete_json(
         provider,

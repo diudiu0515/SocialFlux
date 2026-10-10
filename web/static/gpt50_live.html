@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GPT50 · 场景、状态与多模态</title><link rel="stylesheet" href="/gpt50_live.css"><link rel="stylesheet" href="/live_multimodal.css?v=1"></head>
 <body>
-<header class="topbar"><div><a href="/gpt50" class="back">← 人工审核工作台</a><h1>GPT50 <span>场景 · 对话 · 状态 · 多模态</span></h1></div><div class="tools"><span id="updated" aria-live="polite">连接中…</span><button id="refresh">立即刷新</button></div></header>
+<header class="topbar"><div><a href="/gpt50" class="back">← 人工审核工作台</a><h1>GPT50 <span>场景 · 对话 · 状态 · 多模态</span></h1></div><div class="tools"><a href="/offline-review">T1–T3 题目标注</a><span id="updated" aria-live="polite">连接中…</span><button id="refresh">立即刷新</button></div></header>
 <section id="summary" class="summary" aria-label="生成进度"></section>
 <div class="layout"><aside><label for="search">场景列表</label><input id="search" type="search" placeholder="搜索场景编号、标题或人物"><label class="filter"><input id="readableOnly" type="checkbox">只看已有对话的场景</label><label for="gateFilter">审核筛选</label><select id="gateFilter"><option value="all">全部场景</option><option value="rejected">Gate3 模型未通过</option><option value="errors">Gate2 执行出错</option></select><nav id="scenarios" aria-label="选择场景"></nav></aside>
 <main id="main"><div class="empty">正在加载当前批次…</div></main></div>

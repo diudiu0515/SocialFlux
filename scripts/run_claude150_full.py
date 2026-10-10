@@ -228,6 +228,8 @@ def review_index(batch):
 def command_for(stage, args, batch):
     python = sys.executable
     common = ["--count", str(args.count)]
+    scenario_root = args.scenario_root.resolve()
+    rollout_root = args.rollout_root.resolve()
     if stage == "scenarios":
         return [
             python, "scripts/generate_claude150_scenarios.py",
@@ -245,12 +247,16 @@ def command_for(stage, args, batch):
         return [
             python, "scripts/generate_long_rollout_pool.py",
             "--rollout-config", str(args.rollout_config),
-            "--scenarios", str(batch / "scenarios"),
-            "--output", str(batch / "rollouts"),
+            "--scenarios", str(scenario_root),
+            "--output", str(rollout_root),
             "--retry-limit", "1",
             "--workers", str(args.rollout_workers),
             "--request-budget", str(args.count * 20 * 18),
-            "--allow-unreviewed",
+            *(
+                ["--review-registry", str(args.review_registry)]
+                if args.review_registry is not None
+                else ["--allow-unreviewed"]
+            ),
             "--resume",
             *(
                 ["--allow-route-migration"] if args.allow_route_migration else []
@@ -260,8 +266,8 @@ def command_for(stage, args, batch):
         return [
             python, "scripts/prepare_batch_gate2.py",
             "--batch-root", str(batch),
-            "--scenario-root", str(batch / "scenarios"),
-            "--rollout-root", str(batch / "rollouts"),
+            "--scenario-root", str(scenario_root),
+            "--rollout-root", str(rollout_root),
             "--rollout-config", str(args.rollout_config),
             "--scenario-limit", "10",
             "--prepare-only",
@@ -270,8 +276,8 @@ def command_for(stage, args, batch):
         return [
             python, "scripts/prepare_multimodal_video_queue.py",
             "--batch-root", str(batch),
-            "--scenario-root", str(batch / "scenarios"),
-            "--rollout-root", str(batch / "rollouts"),
+            "--scenario-root", str(scenario_root),
+            "--rollout-root", str(rollout_root),
             "--config", "configs/multimodal_generation.json",
             "--expected-count", str(args.count),
             "--model-routes", str(args.model_routes),
@@ -281,8 +287,8 @@ def command_for(stage, args, batch):
         return [
             python, "scripts/prepare_batch_gate2.py",
             "--batch-root", str(batch),
-            "--scenario-root", str(batch / "scenarios"),
-            "--rollout-root", str(batch / "rollouts"),
+            "--scenario-root", str(scenario_root),
+            "--rollout-root", str(rollout_root),
             "--rollout-config", str(args.rollout_config),
             "--scenario-limit", "10",
             "--gpt-routes", "configs/gpt50_experiment/model_routes.astra.json",
@@ -369,6 +375,9 @@ def main(argv=None):
         type=Path,
         default=ROOT / "configs" / "claude150_v1" / "rollout.json",
     )
+    parser.add_argument("--scenario-root", type=Path)
+    parser.add_argument("--rollout-root", type=Path)
+    parser.add_argument("--review-registry", type=Path)
     parser.add_argument("--count", type=int, default=150)
     parser.add_argument("--scenario-workers", type=int, default=1)
     parser.add_argument("--rollout-workers", type=int, default=1)
@@ -383,6 +392,10 @@ def main(argv=None):
     parser.add_argument("--from-stage", choices=STAGES, default=STAGES[0])
     parser.add_argument("--through-stage", choices=STAGES, default=STAGES[-1])
     args = parser.parse_args(argv)
+    if args.scenario_root is None:
+        args.scenario_root = args.batch_root / "scenarios"
+    if args.rollout_root is None:
+        args.rollout_root = args.batch_root / "rollouts"
     start = STAGES.index(args.from_stage)
     end = STAGES.index(args.through_stage)
     if start > end:

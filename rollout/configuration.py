@@ -9,6 +9,10 @@ from pathlib import Path
 from providers.factory import public_provider_config
 from providers.model_assignment import validate_single_model_assignment
 from providers.model_routes import ModelRoutes
+from environment.state_transition_contract import (
+    STATE_V3_STAGE_ORDER,
+    validate_state_transition_environment_config,
+)
 
 
 ROLLOUT_FORMAT = "socialflux_rollout_pool_v1"
@@ -32,6 +36,8 @@ def _resolve_model_routes(config, config_path):
     environment = config["environment"]
     resolve(environment, "provider", "environment.appraisal")
     resolve(environment, "response_provider", "environment.response")
+    resolve(environment, "state_appraisal_provider", "environment.state_appraisal")
+    resolve(environment, "interaction_appraisal_provider", "environment.interaction_appraisal")
     resolve(config["construction"], "provider", "construction.t2_branch")
     for policy in config.get("policies", []):
         reference = policy.get("provider")
@@ -53,11 +59,14 @@ def _validate_model_assignment(config):
         "formal_raw",
         "formal_selected",
     }
+    environment = config["environment"]
     providers = [
-        config["environment"]["provider"],
-        config["environment"].get(
-            "response_provider", config["environment"]["provider"]
-        ),
+        environment["provider"],
+        environment.get("response_provider", environment["provider"]),
+        *([environment["state_appraisal_provider"]]
+          if "state_appraisal_provider" in environment else []),
+        *([environment["interaction_appraisal_provider"]]
+          if "interaction_appraisal_provider" in environment else []),
         config["construction"]["provider"],
         *(item["provider"] for item in config["policies"]),
     ]
@@ -176,10 +185,13 @@ def _validate_horizon_contract(config):
                     "offline policy and environment minimum natural turns "
                     "must match"
                 )
-            if policy.get("prompt_id") != "task_rollout_action_v1":
+            if policy.get("prompt_id") not in {
+                "task_rollout_action_v1",
+                "task_rollout_action_v2_decision_continuity",
+            }:
                 raise ValueError(
                     "minimum-depth offline rollout requires "
-                    "task_rollout_action_v1"
+                    "a decision-continuous rollout action prompt"
                 )
 
 
@@ -194,6 +206,9 @@ def load_rollout_config(path):
     config = _resolve_model_routes(config, path)
     _validate_policy_pool(config)
     _validate_horizon_contract(config)
+    validate_state_transition_environment_config(
+        config["environment"], explicit=True
+    )
     _validate_limits(config)
     _validate_task_selection(config)
     _validate_model_assignment(config)
@@ -215,6 +230,27 @@ def public_rollout_config(config):
                 environment.get("response_provider", environment["provider"])
             ),
             "appraisal_sampling": deepcopy(environment.get("sampling", {})),
+            "independent_appraisals": environment.get(
+                "independent_appraisals", False
+            ),
+            "state_appraisal_provider": public_provider_config(
+                environment.get("state_appraisal_provider", environment["provider"])
+            ),
+            "interaction_appraisal_provider": public_provider_config(
+                environment.get("interaction_appraisal_provider", environment["provider"])
+            ),
+            "state_appraisal_sampling": deepcopy(
+                environment.get("state_appraisal_sampling", {})
+            ),
+            "interaction_appraisal_sampling": deepcopy(
+                environment.get("interaction_appraisal_sampling", {})
+            ),
+            "state_appraisal_prompt_id": environment.get(
+                "state_appraisal_prompt_id"
+            ),
+            "interaction_appraisal_prompt_id": environment.get(
+                "interaction_appraisal_prompt_id"
+            ),
             "response_sampling": deepcopy(environment.get("response_sampling", {})),
             "multimodal_trigger_policy": deepcopy(
                 environment.get("multimodal_trigger_policy", {})
@@ -222,6 +258,18 @@ def public_rollout_config(config):
             "minimum_natural_turns": environment.get(
                 "minimum_natural_turns", 1
             ),
+            "appraisal_prompt_id": environment.get("appraisal_prompt_id"),
+            "state_calibration_profile": environment.get(
+                "state_calibration_profile"
+            ),
+            "response_prompt_id": environment.get("response_prompt_id"),
+            "state_transition_standard": environment.get(
+                "state_transition_standard"
+            ),
+            "state_transition_runtime_revision": environment.get(
+                "state_transition_runtime_revision"
+            ),
+            "state_transition_stage_order": list(STATE_V3_STAGE_ORDER),
         },
         "construction": {
             "provider": public_provider_config(config["construction"]["provider"]),

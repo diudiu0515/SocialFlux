@@ -16,6 +16,7 @@ from .interaction_ledger import validate_semantic_ledger_events
 from .prompts import build_appraisal_prompt
 from .observation import build_public_evaluated_role
 from .public_situation import render_public_background
+from .state_ontology import build_state_semantics
 
 
 SOCIAL_ACTS = {
@@ -24,16 +25,52 @@ SOCIAL_ACTS = {
     "challenge", "accusation", "threat", "boundary", "refusal", "deferral",
     "repair", "withdrawal", "pause", "other",
 }
+STATE_IMPACT_FAMILY_CAPS = {
+    "emotion": 2,
+    "behavioral_disposition": 1,
+    "relationship": 1,
+    "consequence_risk": 1,
+}
+STATE_IMPACT_FAMILY_CAPS_V13 = {
+    "emotion": 1,
+    "behavioral_disposition": 1,
+    "relationship": 1,
+    "consequence_risk": 1,
+}
+STATE_IMPACT_FAMILY_CAPS_V14 = {
+    "emotion": 1,
+    "behavioral_disposition": 1,
+    "relationship": 2,
+    "consequence_risk": 1,
+}
+# v36 lets appraisal expose every evidence-grounded variable candidate.
+# Deterministic calibration retains its separate update budgets.
+STATE_IMPACT_FAMILY_CAPS_V36 = {}
+
+_QUOTE_EQUIVALENCE = str.maketrans({
+    "‘": "'",
+    "’": "'",
+    "“": '"',
+    "”": '"',
+})
 
 
-def _validate_impacts(impacts, allowed_variables, label):
+def _validate_impacts(
+    impacts, allowed_variables, label, *,
+    require_evidence=False, action_text="", family_caps=None,
+    require_distinct_family_evidence_spans=False,
+):
     if not isinstance(impacts, list):
         raise ValueError(f"{label} must be a list")
     seen = set()
+    family_counts = {}
+    family_evidence_spans = {}
     required = {
         "variable", "direction", "evidence_strength",
         "directness", "new_evidence",
     }
+    if require_evidence:
+        required |= {"evidence_feature", "evidence_span"}
     for impact in impacts:
         if not isinstance(impact, dict) or set(impact) != required:
             raise ValueError(f"each {label} entry must contain exactly {sorted(required)}")
@@ -43,6 +80,13 @@ def _validate_impacts(impacts, allowed_variables, label):
         if variable in seen:
             raise ValueError(f"{label} repeats variable {variable!r}")
         seen.add(variable)
+        family = variable.split(".", 1)[0]
+        family_counts[family] = family_counts.get(family, 0) + 1
+        cap = (family_caps or {}).get(family)
+        if cap is not None and family_counts[family] > cap:
+            raise ValueError(
+                f"{label} allows at most {cap} candidate(s) from {family}"
+            )
         if impact["direction"] not in {"increase", "decrease"}:
             raise ValueError(f"{label} has invalid direction")
         strength = impact["evidence_strength"]
@@ -56,6 +100,21 @@ def _validate_impacts(impacts, allowed_variables, label):
             raise ValueError(f"{label} directness must be direct or indirect")
         if not isinstance(impact["new_evidence"], bool):
             raise ValueError(f"{label} new_evidence must be boolean")
+        if require_evidence:
+            if impact["evidence_feature"] not in FEATURE_NAMES:
+                raise ValueError(f"{label} evidence_feature is invalid")
+            impact["evidence_span"] = _exact_span_or_empty(
+                impact["evidence_span"], str(action_text).strip(),
+                f"{label} impact",
+            )
+            if require_distinct_family_evidence_spans:
+                spans = family_evidence_spans.setdefault(family, set())
+                if impact["evidence_span"] in spans:
+                    raise ValueError(
+                        f"{label} candidates from {family} must use distinct "
+                        "evidence spans"
+                    )
+                spans.add(impact["evidence_span"])
 
 
 def appraisal_preserves_action_owner(appraisal, environment_speaker=None):
@@ -87,21 +146,129 @@ CLAIM_GROUNDING = {
 }
 CONTINUATION_STATUS = {"must_answer", "continue", "can_close"}
 
-_DIALOGUE_DIAGNOSTIC_PROMPTS = frozenset({"environment_appraisal_v11"})
-_AFTER_DIRECT_RESPONSE_PROMPTS = frozenset({"environment_appraisal_v11"})
-_LEDGER_EVENT_PROMPTS = frozenset({"environment_appraisal_v11"})
-_LEDGER_NORMALIZATION_PROMPTS = frozenset({"environment_appraisal_v11"})
+_V11_PLUS_PROMPTS = frozenset({
+    "environment_appraisal_v11", "environment_appraisal_v12",
+    "environment_appraisal_v13", "environment_appraisal_v14",
+    "environment_appraisal_v15", "environment_appraisal_v16",
+    "environment_appraisal_v17", "environment_appraisal_v18",
+    "environment_appraisal_v19", "environment_appraisal_v15_environment_owned",
+    "environment_appraisal_v20_slow_evidence_recall",
+    "environment_appraisal_v21_slow_candidate_audit",
+    "environment_appraisal_v22_slow_first",
+    "environment_appraisal_v23_feature_consistent_slow_first",
+    "environment_appraisal_v24_balanced_slow_evidence",
+
+    "environment_appraisal_v25_operational_slow_evidence",
+
+
+    "environment_appraisal_v26_bound_slow_evidence",
+
+
+
+    "environment_appraisal_v27_memory_bound_slow_evidence",
+    "environment_appraisal_v28_actor_memory_bound_slow_evidence",
+    "environment_appraisal_v29_concise_actor_memory_slow_evidence",
+    "environment_appraisal_v30_scope_aware_actor_memory_slow_evidence",
+    "environment_appraisal_v31_scope_novelty_actor_memory_slow_evidence",
+    "environment_appraisal_v32_scope_novelty_strength_actor_memory_slow_evidence",
+    "environment_appraisal_v33_safety_scope_actor_memory_slow_evidence",
+    "environment_appraisal_v34_safety_eligibility_actor_memory_slow_evidence",
+    "environment_appraisal_v35_adjacent_variable_recheck_actor_memory_slow_evidence",
+    "environment_appraisal_v36_evidence_grounded_state_interpretation",
+})
+_DIALOGUE_DIAGNOSTIC_PROMPTS = _V11_PLUS_PROMPTS
+_AFTER_DIRECT_RESPONSE_PROMPTS = _V11_PLUS_PROMPTS
+_LEDGER_EVENT_PROMPTS = _V11_PLUS_PROMPTS
+_LEDGER_NORMALIZATION_PROMPTS = _V11_PLUS_PROMPTS
 _LIVE_QUESTION_PARTITION_PROMPTS = frozenset()
-_ASSERTION_MODE_PROMPTS = frozenset({"environment_appraisal_v11"})
+_ASSERTION_MODE_PROMPTS = _V11_PLUS_PROMPTS
+_IMPACT_EVIDENCE_PROMPTS = frozenset({
+    "environment_appraisal_v12", "environment_appraisal_v13",
+    "environment_appraisal_v14", "environment_appraisal_v15",
+    "environment_appraisal_v16", "environment_appraisal_v17",
+    "environment_appraisal_v18", "environment_appraisal_v19",
+    "environment_appraisal_v15_environment_owned",
+    "environment_appraisal_v20_slow_evidence_recall",
+    "environment_appraisal_v21_slow_candidate_audit",
+    "environment_appraisal_v22_slow_first",
+    "environment_appraisal_v23_feature_consistent_slow_first",
+    "environment_appraisal_v24_balanced_slow_evidence",
+
+    "environment_appraisal_v25_operational_slow_evidence",
+
+
+    "environment_appraisal_v26_bound_slow_evidence",
+
+
+
+    "environment_appraisal_v27_memory_bound_slow_evidence",
+    "environment_appraisal_v28_actor_memory_bound_slow_evidence",
+    "environment_appraisal_v29_concise_actor_memory_slow_evidence",
+    "environment_appraisal_v30_scope_aware_actor_memory_slow_evidence",
+    "environment_appraisal_v31_scope_novelty_actor_memory_slow_evidence",
+    "environment_appraisal_v32_scope_novelty_strength_actor_memory_slow_evidence",
+    "environment_appraisal_v33_safety_scope_actor_memory_slow_evidence",
+    "environment_appraisal_v34_safety_eligibility_actor_memory_slow_evidence",
+    "environment_appraisal_v35_adjacent_variable_recheck_actor_memory_slow_evidence",
+    "environment_appraisal_v36_evidence_grounded_state_interpretation",
+})
+_STATE_IMPACT_FAMILY_CAPS_BY_PROMPT = {
+    "environment_appraisal_v12": STATE_IMPACT_FAMILY_CAPS,
+    "environment_appraisal_v13": STATE_IMPACT_FAMILY_CAPS_V13,
+    "environment_appraisal_v14": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v15": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v16": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v17": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v18": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v19": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v15_environment_owned": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v20_slow_evidence_recall": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v21_slow_candidate_audit": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v22_slow_first": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v23_feature_consistent_slow_first": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v24_balanced_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+
+    "environment_appraisal_v25_operational_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+
+
+    "environment_appraisal_v26_bound_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+
+
+
+    "environment_appraisal_v27_memory_bound_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v28_actor_memory_bound_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v29_concise_actor_memory_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v30_scope_aware_actor_memory_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v31_scope_novelty_actor_memory_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v32_scope_novelty_strength_actor_memory_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v33_safety_scope_actor_memory_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v34_safety_eligibility_actor_memory_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v35_adjacent_variable_recheck_actor_memory_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v36_evidence_grounded_state_interpretation": STATE_IMPACT_FAMILY_CAPS_V36,
+}
 
 
 def _exact_span_or_empty(span, action_text, label, allow_empty=False):
     if not isinstance(span, str):
         raise ValueError(f"{label} evidence span must be text")
     if not span and allow_empty:
-        return
-    if not span or span not in action_text:
-        raise ValueError(f"{label} evidence span must be an exact latest-action substring")
+        return span
+    if span and span in action_text:
+        return span
+    if span:
+        normalized = span.translate(_QUOTE_EQUIVALENCE)
+        width = len(span)
+        matches = [
+            action_text[start:start + width]
+            for start in range(len(action_text) - width + 1)
+            if action_text[start:start + width].translate(_QUOTE_EQUIVALENCE)
+            == normalized
+        ]
+        if len(matches) == 1:
+            return matches[0]
+    raise ValueError(
+        f"{label} evidence span must be an exact latest-action substring"
+    )
 
 
 def _validate_ledger_resolutions(value, action_text, active_proposals=None):
@@ -331,6 +498,10 @@ def _validate_appraisal(
     require_ledger_events=False,
     require_assertion_mode=False,
     normalize_ledger_noise=False,
+    require_impact_evidence=False,
+    state_impact_family_caps=None,
+    require_distinct_family_evidence_spans=False,
+    require_nonzero_impact_features=False,
     active_proposals=None,
 ):
     if not isinstance(result, dict):
@@ -415,7 +586,8 @@ def _validate_appraisal(
     )
     if state_variables is not None and dynamics_variables is not None:
         appraisal = canonicalize_impact_lists(
-            appraisal, state_variables, dynamics_variables
+            appraisal, state_variables, dynamics_variables,
+            preserve_evidence=require_impact_evidence,
         )
         result = dict(result)
         result["appraisal"] = appraisal
@@ -453,11 +625,43 @@ def _validate_appraisal(
     ):
         raise ValueError("every event feature must be an integer from -2 to 2")
     if state_variables is not None:
-        _validate_impacts(appraisal["state_impacts"], set(state_variables), "state_impacts")
+        _validate_impacts(
+            appraisal["state_impacts"], set(state_variables), "state_impacts",
+            require_evidence=require_impact_evidence,
+            action_text=action_text,
+            family_caps=(
+                state_impact_family_caps
+                if state_impact_family_caps is not None
+                else (
+                    STATE_IMPACT_FAMILY_CAPS
+                    if require_impact_evidence else None
+                )
+            ),
+            require_distinct_family_evidence_spans=(
+                require_distinct_family_evidence_spans
+            ),
+        )
     if dynamics_variables is not None:
         _validate_impacts(
-            appraisal["dynamics_impacts"], set(dynamics_variables), "dynamics_impacts"
+            appraisal["dynamics_impacts"], set(dynamics_variables), "dynamics_impacts",
+            require_evidence=require_impact_evidence,
+            action_text=action_text,
         )
+    if require_nonzero_impact_features:
+        zero_feature_impacts = [
+            impact
+            for key in ("state_impacts", "dynamics_impacts")
+            for impact in appraisal.get(key, [])
+            if features.get(impact.get("evidence_feature"), 0) == 0
+        ]
+        if zero_feature_impacts:
+            variables = sorted(
+                impact.get("variable", "") for impact in zero_feature_impacts
+            )
+            raise ValueError(
+                "impact evidence_feature must have a non-zero event feature: "
+                + ", ".join(variables)
+            )
     normalized_impact_count = (
         len(appraisal["state_impacts"]) + len(appraisal["dynamics_impacts"])
     )
@@ -524,7 +728,7 @@ class ModelAppraiser:
 
     def appraise(
         self, *, action, previous_state, previous_dynamics, memory,
-        longitudinal_context=None, interaction_ledger=None,
+        longitudinal_context=None, interaction_ledger=None, appraisal_context=None,
     ):
         agent = self.scenario["environment_agent"]
         evaluated = build_public_evaluated_role(
@@ -542,6 +746,8 @@ class ModelAppraiser:
             action=action,
             longitudinal_context=longitudinal_context,
             interaction_ledger=interaction_ledger,
+            appraisal_context=appraisal_context,
+            state_semantics=build_state_semantics(self.scenario),
             prompt_id=self.prompt_id,
         )
         environment_persona = agent.get("persona", agent)
@@ -554,13 +760,15 @@ class ModelAppraiser:
             "evaluated_agent 此刻在做什么，绝不能把 action 写成 environment_agent 的意图、"
             "请求、承诺或行动。只返回指定 JSON。"
         )
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": prompt},
+        ]
+        audit_start = len(getattr(self.provider, "audit_records", []))
         retry_diagnostics = []
         result = complete_json(
             self.provider,
-            [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": prompt},
-            ],
+            messages,
             self.sampling,
             lambda result: _validate_appraisal(
                 result,
@@ -586,12 +794,80 @@ class ModelAppraiser:
                 normalize_ledger_noise=(
                     self.prompt_id in _LEDGER_NORMALIZATION_PROMPTS
                 ),
+                require_impact_evidence=(
+                    self.prompt_id in _IMPACT_EVIDENCE_PROMPTS
+                ),
+                state_impact_family_caps=(
+                    _STATE_IMPACT_FAMILY_CAPS_BY_PROMPT.get(self.prompt_id)
+                ),
+                require_distinct_family_evidence_spans=(
+                    self.prompt_id in {
+                        "environment_appraisal_v14",
+                        "environment_appraisal_v15",
+                        "environment_appraisal_v16",
+                        "environment_appraisal_v17",
+                        "environment_appraisal_v18",
+                        "environment_appraisal_v20_slow_evidence_recall",
+                        "environment_appraisal_v21_slow_candidate_audit",
+                        "environment_appraisal_v22_slow_first",
+                        "environment_appraisal_v23_feature_consistent_slow_first",
+                        "environment_appraisal_v24_balanced_slow_evidence",
+
+                        "environment_appraisal_v25_operational_slow_evidence",
+
+
+                        "environment_appraisal_v26_bound_slow_evidence",
+
+
+
+                        "environment_appraisal_v27_memory_bound_slow_evidence",
+                        "environment_appraisal_v28_actor_memory_bound_slow_evidence",
+                        "environment_appraisal_v29_concise_actor_memory_slow_evidence",
+                        "environment_appraisal_v30_scope_aware_actor_memory_slow_evidence",
+                        "environment_appraisal_v31_scope_novelty_actor_memory_slow_evidence",
+                        "environment_appraisal_v32_scope_novelty_strength_actor_memory_slow_evidence",
+                        "environment_appraisal_v33_safety_scope_actor_memory_slow_evidence",
+                        "environment_appraisal_v34_safety_eligibility_actor_memory_slow_evidence",
+                        "environment_appraisal_v35_adjacent_variable_recheck_actor_memory_slow_evidence",
+                    }
+                ),
+                require_nonzero_impact_features=(
+                    self.prompt_id in {
+                        "environment_appraisal_v23_feature_consistent_slow_first",
+                        "environment_appraisal_v24_balanced_slow_evidence",
+
+                        "environment_appraisal_v25_operational_slow_evidence",
+
+
+                        "environment_appraisal_v26_bound_slow_evidence",
+
+
+
+                        "environment_appraisal_v27_memory_bound_slow_evidence",
+                        "environment_appraisal_v28_actor_memory_bound_slow_evidence",
+                        "environment_appraisal_v29_concise_actor_memory_slow_evidence",
+                        "environment_appraisal_v30_scope_aware_actor_memory_slow_evidence",
+                        "environment_appraisal_v31_scope_novelty_actor_memory_slow_evidence",
+                        "environment_appraisal_v32_scope_novelty_strength_actor_memory_slow_evidence",
+                        "environment_appraisal_v33_safety_scope_actor_memory_slow_evidence",
+                        "environment_appraisal_v34_safety_eligibility_actor_memory_slow_evidence",
+                        "environment_appraisal_v35_adjacent_variable_recheck_actor_memory_slow_evidence",
+                        "environment_appraisal_v36_evidence_grounded_state_interpretation",
+                    }
+                ),
                 active_proposals=(interaction_ledger or {}).get(
                     "active_proposals", []
                 ),
             ),
             context="model appraiser",
             diagnostics_sink=retry_diagnostics,
+            repair_unescaped_interior_quotes=True,
         )
         result["request_retry_diagnostics"] = retry_diagnostics
+        result["request_messages"] = deepcopy(messages)
+        result["request_sampling"] = dict(self.sampling)
+        result["provider_audit_records"] = deepcopy(
+            getattr(self.provider, "audit_records", [])[audit_start:]
+        )
+
         return result

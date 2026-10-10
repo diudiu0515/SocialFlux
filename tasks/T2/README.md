@@ -1,5 +1,7 @@
 # T2 source-adapted pipeline v2
 
+当前主作答采用 [offline 选择题协议](../../docs/protocols/OFFLINE_T1_T3_CHOICE_V1.md)。下述构造和重放资产仍可复用，概率输出保留旧版兼容。
+
 Before every run, read the repository-wide
 [`DESIGN_CONTRACT.md` pre-run engineering discipline](../../DESIGN_CONTRACT.md#21-每次运行前必读代码结构与修改纪律).
 T2 changes must extend the owner modules below; do not add scenario-specific

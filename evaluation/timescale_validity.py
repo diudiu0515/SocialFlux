@@ -130,6 +130,58 @@ def build_timescale_review_items(trajectories, limit=40):
     return selected[:limit]
 
 
+def timescale_population_summary(trajectories):
+    """Describe every available variable without selecting on change outcome."""
+    items = [
+        item
+        for trajectory in trajectories
+        for item in trajectory_timescale_items(trajectory)
+    ]
+
+    def summary(rows):
+        zero = sum(item["changed_turn_count"] == 0 for item in rows)
+        return {
+            "variable_count": len(rows),
+            "zero_change_variable_count": zero,
+            "zero_change_variable_fraction": (
+                round(zero / len(rows), 4) if rows else None
+            ),
+            "changed_variable_count": len(rows) - zero,
+        }
+
+    by_family = {
+        family: summary([
+            item for item in items if item["state_family"] == family
+        ])
+        for family in sorted(FAMILY_TIMESCALE_PRIORS)
+    }
+    by_expected_timescale = {
+        timescale: summary([
+            item for item in items
+            if item["expected_timescale_prior"] == timescale
+        ])
+        for timescale in ("fast", "medium", "slow", "context_dependent")
+    }
+    status_by_trajectory = {
+        trajectory.get("trajectory_id"): trajectory.get(
+            "gate2_audit_input", {}
+        ).get("source_status", "accepted_or_unspecified")
+        for trajectory in trajectories
+    }
+    by_source_status = {}
+    for status in sorted(set(status_by_trajectory.values())):
+        by_source_status[status] = summary([
+            item for item in items
+            if status_by_trajectory.get(item["source_trajectory_id"]) == status
+        ])
+    return {
+        **summary(items),
+        "by_state_family": by_family,
+        "by_expected_timescale": by_expected_timescale,
+        "by_source_status": by_source_status,
+    }
+
+
 def pending_timescale_payload(trajectories, limit=40):
     """Return an E9 artifact that cannot accidentally claim human approval."""
     review_items = build_timescale_review_items(trajectories, limit=limit)
@@ -137,6 +189,8 @@ def pending_timescale_payload(trajectories, limit=40):
         item["expected_timescale_prior"] for item in review_items
     )
     changed = sum(item["changed_turn_count"] > 0 for item in review_items)
+    population = timescale_population_summary(trajectories)
+    sample_zero = len(review_items) - changed
     return {
         "format": "socialflux_timescale_validity_v1",
         "record": {
@@ -146,10 +200,19 @@ def pending_timescale_payload(trajectories, limit=40):
             "reviewed_at_utc": "",
             "review_status": "pending_human",
             "candidate_variable_count": len(review_items),
+            "review_sample_zero_change_count": sample_zero,
+            "review_sample_zero_change_fraction": (
+                round(sample_zero / len(review_items), 4)
+                if review_items else None
+            ),
             "matched_variable_count": 0,
             "timescale_families": dict(sorted(family_counts.items())),
             "direction_consistency": None,
             "non_degenerate": changed > 0,
+            "sampling_policy": (
+                "stable_hash_with_fast_medium_slow_coverage; independent_of_change_outcome"
+            ),
+            "population_summary": population,
         },
         "review_items": review_items,
         "interpretation": {

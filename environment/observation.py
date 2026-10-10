@@ -2,9 +2,10 @@
 
 from copy import deepcopy
 
-from .interaction_ledger import initial_ledger, public_progress_view
+from .interaction_ledger import initial_ledger
 from .longitudinal import initialize_longitudinal_session, public_longitudinal_view
-from .public_situation import build_public_situation
+from .public_situation import build_policy_situation
+from .policy_context import policy_background, policy_progress_view, shared_initial_background
 
 
 PUBLIC_OBSERVATION_FIELDS = (
@@ -87,11 +88,11 @@ def build_policy_observation(scenario, session):
             "name": persona.get("name", "environment agent"),
             "role": persona.get("role", "environment agent"),
         },
-        "background": scenario.get("background", ""),
-        "public_situation": build_public_situation(scenario),
+        "background": policy_background(scenario),
+        "public_situation": build_policy_situation(scenario),
         "explicit_goal": role.get("explicit_goal", ""),
-        "conversation_progress": public_progress_view(
-            session.get("interaction_ledger", {})
+        "conversation_progress": policy_progress_view(
+            scenario, session.get("interaction_ledger", {})
         ),
         "longitudinal_context": public_longitudinal_view(session),
         "history": deepcopy(session.get("history", [])),
@@ -118,7 +119,7 @@ def build_initial_policy_observation(scenario):
         "turn_id": 0,
         "status": "active",
         "interaction_ledger": initial_ledger(
-            scenario.get("background", ""),
+            shared_initial_background(scenario),
             scenario.get("evaluated_agent_role", {}).get("explicit_goal", ""),
             scenario.get("narrative_design", {}).get("meaningful_choice_space", []),
         ),

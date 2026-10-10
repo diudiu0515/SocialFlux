@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepare offline important-node video API requests without network calls."""
+"""Adapt public renderings and prepare offline important-node video requests."""
 
 from __future__ import annotations
 
@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 import re
 import sys
+import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -22,7 +23,11 @@ from environment.video_requests import (
 from prompts.loader import render_prompt
 from providers.factory import build_provider, public_provider_config
 from providers.model_routes import ModelRoutes
-from providers.structured import complete_json
+from providers.structured import (
+    StructuredOutputError,
+    _parse_json_output,
+    complete_json,
+)
 from scripts.audit_formal_rollout_pool import load_records
 from scripts.run_environment_interventions import load_actual_scenarios
 
@@ -39,6 +44,24 @@ def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
+def continuity_references_from_manifest(path):
+    manifest = load(path)
+    references = {}
+    for record in manifest.get("requests") or []:
+        if record.get("dependency_phase") != 0:
+            continue
+        scenario_id = record.get("scenario_id")
+        video_file = record.get("video_file")
+        if not scenario_id or not video_file:
+            raise ValueError("continuity anchor requires scenario_id and video_file")
+        if scenario_id in references:
+            raise ValueError(f"duplicate continuity anchor: {scenario_id}")
+        references[scenario_id] = video_file
+    if not references:
+        raise ValueError("continuity manifest contains no anchor requests")
+    return references
+
+
 def atomic(path, value):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -51,12 +74,17 @@ def atomic(path, value):
 
 
 VIDEO_RENDERING_ADAPTATION_PROMPT_ID = "video_public_rendering_adaptation_v1"
+VIDEO_PUBLIC_LINE_COMPRESSION_PROMPT_ID = "video_public_line_compression_v2"
 _CJK_PATTERN = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]")
-_ENGLISH_WORD = re.compile(r"[A-Za-z0-9]+(?:['-][A-Za-z0-9]+)*")
+_ENGLISH_WORD = re.compile(
+    r"\d+(?::\d+)+|[A-Za-z0-9]+(?:['’\-][A-Za-z0-9]+)*"
+)
 _OBSERVABLE_CUE = re.compile(
-    r"\b(nod|blink|breath|breathe|pause|brow|gaze|eye|head|posture|lean|"
+    r"\b(?:nod|blink|breath|breathe|pause|brow|gaze|eye|head|posture|lean|"
     r"shoulder|hand|mouth|lip|still|movement|exhale|inhale|swallow|shift|"
-    r"tilt)\b",
+    r"tilt|look|glance|turn|lower|raise|hold|relax|tense|settle|straighten|"
+    r"recoil|withdraw|move|motion|tap|touch|point|gesture|reach|press|rest|"
+    r"clasp|lift)(?:s|es|ed|d|ing)?\b|\b(?:held|withdrew)\b",
     re.IGNORECASE,
 )
 
@@ -73,6 +101,13 @@ def rendering_key(payload):
         payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")
     ).encode("utf-8")
     return hashlib.sha256(raw).hexdigest()
+
+
+def provider_request_count(provider):
+    value = getattr(provider, "_request_count", None)
+    if value is None:
+        value = getattr(provider, "_call_index", 0)
+    return int(value or 0)
 
 
 def validate_public_rendering(value):
@@ -109,8 +144,47 @@ def validate_public_rendering(value):
     return {"english_spoken_line": line, "observable_expression": expression}
 
 
-def adapt_public_renderings(payloads, output, model_routes, workers):
+def validate_compressed_line(value):
+    if not isinstance(value, dict) or set(value) != {"english_spoken_line"}:
+        raise ValueError("compressed line returned unexpected keys")
+    line = str(value["english_spoken_line"]).strip()
+    words = _ENGLISH_WORD.findall(line)
+    if _CJK_PATTERN.search(line) or not 3 <= len(words) <= 32:
+        raise ValueError("compressed English line must contain 3-32 words and no CJK")
+    return {"english_spoken_line": line}
+
+
+def compress_public_line(provider, payload, error):
+    if not isinstance(error, StructuredOutputError):
+        raise error
+    if "English spoken line" not in str(error.last_error):
+        raise error
+    candidate = _parse_json_output(error.last_raw)
+    if not isinstance(candidate, dict):
+        raise error
+    compressed = complete_json(
+        provider,
+        [{
+            "role": "user",
+            "content": render_prompt(
+                VIDEO_PUBLIC_LINE_COMPRESSION_PROMPT_ID,
+                candidate_line=candidate.get("english_spoken_line", ""),
+            ),
+        }],
+        {"temperature": 0.1, "top_p": 0.9},
+        validate_compressed_line,
+        context="video public spoken-line compression",
+        max_attempts=2,
+    )
+    candidate["english_spoken_line"] = compressed["english_spoken_line"]
+    return validate_public_rendering(candidate)
+
+
+def adapt_public_renderings(
+    payloads, output, model_routes, workers, max_attempts=3
+):
     cache_path = output / "public_rendering_adaptations.json"
+    failures_path = output / "public_rendering_adaptation_failures.json"
     cache = (
         load(cache_path)
         if cache_path.exists()
@@ -131,29 +205,64 @@ def adapt_public_renderings(payloads, output, model_routes, workers):
     ]
 
     def adapt_one(key, payload):
-        provider = build_provider(provider_config)
         seed = 41001 + int(key[:8], 16) % 2_000_000_000
-        adapted = complete_json(
-            provider,
-            [{
-                "role": "user",
-                "content": render_prompt(
-                    VIDEO_RENDERING_ADAPTATION_PROMPT_ID, payload
-                ),
-            }],
-            {"temperature": 0.1, "top_p": 0.9, "seed": seed},
-            validate_public_rendering,
+        keywords = dict(
+            validator=validate_public_rendering,
             context="video public rendering adaptation",
-            max_attempts=3,
+            max_attempts=max_attempts,
+            retry_guidance=(
+                "If the spoken line is too long, target 24-28 words and "
+                "never exceed 32 words. Compress wording while preserving "
+                "stance, commitments, boundaries, "
+                "uncertainty, deadlines, and the most material public facts. "
+                "Each behavioral cue must name a directly visible body, "
+                "face, gaze, breath, posture, or hand micro-action."
+            ),
         )
-        return key, {
-            "source": payload,
-            "adapted": adapted,
-            "provider": public_provider_config(provider_config),
-            "request_count": int(getattr(provider, "_call_index", 0) or 0),
-            "adapted_at_utc": now(),
-        }
+        last_transport_error = None
+        request_count = 0
+        for transport_attempt in range(3):
+            provider = build_provider(provider_config)
+            compression_used = False
+            arguments = (
+                provider,
+                [{
+                    "role": "user",
+                    "content": render_prompt(
+                        VIDEO_RENDERING_ADAPTATION_PROMPT_ID, payload
+                    ),
+                }],
+                {"temperature": 0.1, "top_p": 0.9, "seed": seed},
+            )
+            try:
+                try:
+                    adapted = complete_json(*arguments, **keywords)
+                except StructuredOutputError as exc:
+                    adapted = compress_public_line(provider, payload, exc)
+                    compression_used = True
+            except (OSError, TimeoutError) as exc:
+                request_count += provider_request_count(provider)
+                last_transport_error = exc
+                if transport_attempt < 2:
+                    time.sleep(2 ** transport_attempt)
+                    continue
+                raise
+            request_count += provider_request_count(provider)
+            return key, {
+                "source": payload,
+                "adapted": adapted,
+                "provider": public_provider_config(provider_config),
+                "request_count": request_count,
+                "transport_attempt_count": transport_attempt + 1,
+                "line_compression_prompt_id": (
+                    VIDEO_PUBLIC_LINE_COMPRESSION_PROMPT_ID
+                    if compression_used else None
+                ),
+                "adapted_at_utc": now(),
+            }
+        raise last_transport_error
 
+    failures = {}
     if missing:
         with ThreadPoolExecutor(max_workers=workers) as executor:
             futures = {
@@ -161,7 +270,40 @@ def adapt_public_renderings(payloads, output, model_routes, workers):
                 for key, payload in missing
             }
             for future in as_completed(futures):
-                key, record = future.result()
+                key = futures[future]
+                try:
+                    key, record = future.result()
+                except Exception as exc:
+                    error = {
+                        "type": type(exc).__name__,
+                        "message": str(exc),
+                    }
+                    last_error = getattr(exc, "last_error", None)
+                    if last_error is not None:
+                        error["validation_error"] = str(last_error)
+                    last_raw = getattr(exc, "last_raw", None)
+                    if last_raw is not None:
+                        error["last_raw"] = last_raw
+                    diagnostics = getattr(exc, "diagnostics", None)
+                    if diagnostics:
+                        error["diagnostics"] = diagnostics
+                    failures[key] = {
+                        "source": payloads[key],
+                        "error": error,
+                        "failed_at_utc": now(),
+                    }
+                    atomic(failures_path, {
+                        "format": (
+                            "socialflux_video_public_rendering_"
+                            "adaptation_failures_v1"
+                        ),
+                        "failures": failures,
+                    })
+                    print(json.dumps({
+                        "translation_error": key,
+                        **failures[key]["error"],
+                    }), flush=True)
+                    continue
                 records[key] = record
                 atomic(cache_path, cache)
                 print(json.dumps({
@@ -169,11 +311,37 @@ def adapt_public_renderings(payloads, output, model_routes, workers):
                     "translation_total": len(payloads),
                 }), flush=True)
     atomic(cache_path, cache)
+    if failures:
+        raise RuntimeError(
+            f"{len(failures)} public rendering adaptations failed; "
+            f"successful records were retained in {cache_path}"
+        )
+    if failures_path.exists():
+        previous = load(failures_path)
+        active = previous.get("failures") or {}
+        if active:
+            history = previous.setdefault("resolved_failures", {})
+            history.update(active)
+        previous["failures"] = {}
+        previous["active_failure_count"] = 0
+        previous["resolved_failure_count"] = len(
+            previous.get("resolved_failures") or {}
+        )
+        previous["resolved_at_utc"] = now()
+        atomic(failures_path, previous)
+    successful_model_request_count = sum(
+        int(records[key].get("request_count", 0) or 0) for key in payloads
+    )
     return {key: records[key]["adapted"] for key in payloads}, {
         "prompt_id": VIDEO_RENDERING_ADAPTATION_PROMPT_ID,
         "model_routes_sha256": routes.sha256,
         "unique_input_count": len(payloads),
         "new_adaptation_count": len(missing),
+        "cache_hit_count": len(payloads) - len(missing),
+        "logical_adaptation_request_count": len(payloads),
+        "successful_model_request_count_recorded": (
+            successful_model_request_count or None
+        ),
         "cache_file": str(cache_path),
     }
 
@@ -262,13 +430,20 @@ def stable_review_sample(records, count):
         current = best_by_scenario.get(record["scenario_id"])
         if current is None or record["importance_score"] > current["importance_score"]:
             best_by_scenario[record["scenario_id"]] = record
-    ranked = sorted(
+    scenario_coverage = sorted(
         best_by_scenario.values(),
         key=lambda item: hashlib.sha256(
             item["request_id"].encode("utf-8")
         ).hexdigest(),
     )
-    return ranked[:count]
+    covered_ids = {item["request_id"] for item in scenario_coverage}
+    remaining = sorted(
+        (item for item in records if item["request_id"] not in covered_ids),
+        key=lambda item: hashlib.sha256(
+            item["request_id"].encode("utf-8")
+        ).hexdigest(),
+    )
+    return (scenario_coverage + remaining)[:count]
 
 
 def prepare(args):
@@ -295,6 +470,11 @@ def prepare(args):
     for scenario in scenarios_list:
         validate_scenario(scenario)
     scenarios = {item["scenario_id"]: item for item in scenarios_list}
+    continuity_references = (
+        continuity_references_from_manifest(args.continuity_manifest)
+        if args.continuity_manifest
+        else {}
+    )
     trajectories = load_records(args.rollout_root)
     for trajectory in trajectories:
         validate_trajectory(trajectory)
@@ -304,6 +484,9 @@ def prepare(args):
         )
 
     output = args.output or args.batch_root / "multimodal"
+    gate2_output = args.gate2_output or (
+        args.batch_root / "gate2" / "video_state_consistency.json"
+    )
     requests_root = output / "requests"
     rendering_payloads = {}
     for trajectory in sorted(trajectories, key=lambda item: item["scenario_id"]):
@@ -324,7 +507,11 @@ def prepare(args):
     if not args.model_routes:
         raise ValueError("--model-routes is required for English video rendering")
     adapted_renderings, translation_provenance = adapt_public_renderings(
-        rendering_payloads, output, args.model_routes, args.translation_workers
+        rendering_payloads,
+        output,
+        args.model_routes,
+        args.translation_workers,
+        args.translation_max_attempts,
     )
 
     records = []
@@ -354,9 +541,20 @@ def prepare(args):
                     response,
                     expression,
                     duration_seconds=duration,
+                    continuity_reference=continuity_references.get(
+                        trajectory["scenario_id"]
+                    ),
                     variant=variant,
                     expression_policy=config.get("expression_rendering"),
                 )
+                if (
+                    args.require_continuity_reference
+                    and request["reference_video_file"] is None
+                ):
+                    raise ValueError(
+                        "missing scenario continuity reference: "
+                        f"{trajectory['scenario_id']}"
+                    )
                 atomic(request_file, request)
                 records.append({
                     "request_id": request_id,
@@ -384,14 +582,38 @@ def prepare(args):
                     },
                 })
 
+    delivery = config.get("delivery") or {}
     manifest = {
         "format": "socialflux_multimodal_video_queue_v1",
         "created_at_utc": now(),
         "batch_root": str(args.batch_root.resolve()),
+        "gate2_evidence_file": str(gate2_output),
         "mode": "offline_important_nodes",
         "prompt_id": TALKING_HEAD_PROMPT_ID,
         "network_requests_performed": 0,
+        "video_network_requests_performed": 0,
+        "translation_logical_adaptation_count": translation_provenance[
+            "logical_adaptation_request_count"
+        ],
+        "translation_provider_requests_recorded": translation_provenance[
+            "successful_model_request_count_recorded"
+        ],
         "provider_status": "awaiting_video_api_configuration",
+        "provider": {
+            "resolution": delivery.get("resolution", "720p"),
+            "ratio": delivery.get("ratio", "16:9"),
+            "generate_audio": True,
+            "watermark": False,
+        },
+        "continuity": {
+            "manifest": (
+                str(Path(args.continuity_manifest))
+                if args.continuity_manifest
+                else None
+            ),
+            "scenario_reference_count": len(continuity_references),
+            "required": bool(args.require_continuity_reference),
+        },
         "translation_provenance": translation_provenance,
         "trajectory_count": len(trajectories),
         "important_nodes_per_trajectory": nodes_per_trajectory,
@@ -440,13 +662,14 @@ def prepare(args):
             for item in review_records
         ],
     }
-    atomic(args.batch_root / "gate2" / "video_state_consistency.json", gate2)
+    atomic(gate2_output, gate2)
     print(json.dumps({
         "trajectory_count": len(trajectories),
         "request_count": len(records),
         "gate2_review_items": len(review_records),
         "network_requests_performed": 0,
         "output": str(output),
+        "gate2_output": str(gate2_output),
     }, ensure_ascii=False, indent=2))
 
 
@@ -457,6 +680,7 @@ def main(argv=None):
     parser.add_argument("--rollout-root", type=Path, required=True)
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--gate2-output", type=Path)
     parser.add_argument("--expected-count", type=int)
     parser.add_argument("--nodes-per-trajectory", type=int)
     parser.add_argument("--videos-per-node", type=int)
@@ -464,9 +688,14 @@ def main(argv=None):
     parser.add_argument("--duration-seconds", type=float)
     parser.add_argument("--model-routes", type=Path)
     parser.add_argument("--translation-workers", type=int, default=2)
+    parser.add_argument("--translation-max-attempts", type=int, default=3)
+    parser.add_argument("--continuity-manifest", type=Path)
+    parser.add_argument("--require-continuity-reference", action="store_true")
     args = parser.parse_args(argv)
     if not 1 <= args.translation_workers <= 8:
         parser.error("translation-workers must be in 1..8")
+    if not 1 <= args.translation_max_attempts <= 3:
+        parser.error("translation-max-attempts must be in 1..3")
     prepare(args)
 
 

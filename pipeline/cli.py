@@ -10,6 +10,8 @@ from .flow import PipelinePreflight
 
 
 COMMANDS = {
+    "offline-build": "build source-grounded T1–T3 choice development questions",
+    "offline-eval": "validate, call or score the unified offline choice protocol",
     "preflight": "validate the active batch, one rollout, and Fable-only routing",
     "rollout": "generate one natural rollout per approved scenario",
     "gate3": "validate Gates 1-2 and admit or reject each sole trajectory",
@@ -59,6 +61,14 @@ def main(argv=None):
         return
     command = argv[0]
     stage_args = argv[1:]
+    if command == "offline-build":
+        from scripts import build_offline_choice_dev
+        _delegate(build_offline_choice_dev, stage_args)
+        return
+    if command == "offline-eval":
+        from scripts import evaluate_offline_choice
+        _delegate(evaluate_offline_choice, stage_args)
+        return
     if command == "preflight":
         _run_preflight(stage_args)
         return
@@ -66,6 +76,13 @@ def main(argv=None):
         from scripts import generate_long_rollout_pool
 
         _delegate(generate_long_rollout_pool, stage_args)
+        return
+    if command == "tasks" and "--protocol" in stage_args:
+        index = stage_args.index("--protocol")
+        if index + 1 >= len(stage_args) or stage_args[index+1] != "choice":
+            raise ValueError("tasks --protocol currently supports choice")
+        from scripts import build_offline_choice_dev
+        _delegate(build_offline_choice_dev, stage_args[:index] + stage_args[index+2:])
         return
     if command == "tasks":
         from scripts import run_pipeline

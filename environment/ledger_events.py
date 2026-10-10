@@ -23,6 +23,16 @@ _ASSERTION_MODES = {
     "asserted", "negated", "hypothetical", "quoted", "definitional",
 }
 
+ACTION_OWNERS = frozenset({"evaluated_agent", "environment_agent", "collective", "unspecified"})
+LEDGER_EVENT_FIELDS = frozenset({"event_type", "owner", "action_owner", "evidence_span", "status", "assertion_mode"})
+
+
+def semantic_ledger_wire_contract():
+    """Shared source for prompt schema and runtime enum validation."""
+    return {"required_fields": sorted(LEDGER_EVENT_FIELDS),
+            "event_status_pairs": {key: sorted(values) for key, values in _SEMANTIC_LEDGER_EVENT_STATUSES.items()},
+            "assertion_modes": sorted(_ASSERTION_MODES), "action_owners": sorted(ACTION_OWNERS)}
+
 
 _TENTATIVE_COMMITMENT_RE = re.compile(
     r"(?:我|我们)(?:目前|现在|这边)?(?:觉得|认为)?(?:可以|能)?(?:会|将)?"
@@ -194,9 +204,7 @@ def validate_semantic_ledger_events(
     normalized = []
     seen = set()
     for event in events:
-        required_keys = {
-            "event_type", "owner", "action_owner", "evidence_span", "status"
-        }
+        required_keys = set(LEDGER_EVENT_FIELDS) - {"assertion_mode"}
         allowed_keys = required_keys | {"assertion_mode"}
         if (
             not isinstance(event, dict)
@@ -212,7 +220,7 @@ def validate_semantic_ledger_events(
             )
         assertion_mode = event.get("assertion_mode", "asserted")
         if assertion_mode not in _ASSERTION_MODES:
-            raise ValueError("ledger event assertion_mode is invalid")
+            raise ValueError(f"ledger event assertion_mode is invalid: {assertion_mode!r}; allowed={sorted(_ASSERTION_MODES)}")
         preflight_span = event.get("evidence_span")
         preflight_grounded = (
             isinstance(preflight_span, str)
@@ -382,10 +390,8 @@ def validate_semantic_ledger_events(
             raise ValueError(f"invalid {event_type} status {status!r}")
         if event.get("owner") != expected_owner:
             raise ValueError("ledger event owner does not match the current speaker")
-        if event.get("action_owner") not in {
-            "evaluated_agent", "environment_agent", "collective", "unspecified"
-        }:
-            raise ValueError("ledger event action_owner is invalid")
+        if event.get("action_owner") not in ACTION_OWNERS:
+            raise ValueError(f"ledger event action_owner is invalid: {event.get('action_owner')!r}; use role IDs, not names; allowed={sorted(ACTION_OWNERS)}")
         if event_type == "pause" and event.get("action_owner") != expected_owner:
             raise ValueError("pause event must be owned by its speaker")
         if not isinstance(span, str) or not span.strip():

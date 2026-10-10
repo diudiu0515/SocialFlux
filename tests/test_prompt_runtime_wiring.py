@@ -164,8 +164,8 @@ class PromptRuntimeWiringTest(unittest.TestCase):
         )
         policies = []
         for path in (
-            "configs/claude150_v1/rollout.json",
-            "configs/gpt50_experiment/rollout.json",
+            "configs/claude150_v1/rollout.state_v3.json",
+            "configs/gpt50_experiment/rollout.state_v3.json",
         ):
             rollout = load_rollout_config(path)
             policies.append(rollout["environment"]["multimodal_trigger_policy"])

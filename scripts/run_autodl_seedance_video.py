@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import base64
+from copy import deepcopy
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -60,6 +62,63 @@ def prompt_text(payload):
     ).strip()
 
 
+def provider_reference_url(path):
+    """Resolve a local anchor to its matching provider-hosted HTTPS URL."""
+    path = Path(path)
+    expected_sha = sha256(path)
+    state_root = path.parent.parent / "provider_states"
+    for state_path in sorted(state_root.glob(f"{path.stem}*.json")):
+        state = load(state_path)
+        if state.get("status") != "downloaded":
+            continue
+        if state.get("video_sha256") != expected_sha:
+            continue
+        url = str(
+            ((state.get("latest_query_response") or {}).get("content") or {}).get(
+                "video_url", ""
+            )
+        )
+        parsed = urlparse(url)
+        if parsed.scheme == "https" and parsed.netloc:
+            return url
+    raise ValueError(
+        "downloaded provider state with matching SHA and HTTPS reference URL "
+        f"not found for {path}; regenerate or host the anchor before dependents"
+    )
+
+
+def materialize_local_references(payload):
+    """Materialize an explicitly selected local-reference transport."""
+    result = deepcopy(payload)
+    reference = result.pop("local_reference_video", None)
+    transport = result.pop("local_reference_transport", "provider_url")
+    supplied_url = result.pop("local_reference_url", None)
+    if reference is None:
+        return result
+    path = Path(reference)
+    if not path.is_file():
+        raise ValueError(f"local reference video is missing: {path}")
+    if transport == "data_uri":
+        if path.stat().st_size > 20 * 1024 * 1024:
+            raise ValueError("inline reference video exceeds the 20 MiB request budget")
+        reference_url = "data:video/mp4;base64," + base64.b64encode(path.read_bytes()).decode()
+    elif transport == "provided_url":
+        parsed = urlparse(str(supplied_url or ""))
+        if parsed.scheme != "https" or not parsed.netloc:
+            raise ValueError("provided reference must be a valid HTTPS URL")
+        reference_url = supplied_url
+    elif transport == "provider_url":
+        reference_url = provider_reference_url(path)
+    else:
+        raise ValueError("unsupported local reference transport")
+    result.setdefault("content", []).append({
+        "type": "video_url",
+        "video_url": {"url": reference_url},
+        "role": "reference_video",
+    })
+    return result
+
+
 def validate_payload(payload):
     model = payload.get("model")
     if model not in ALLOWED_MODELS:
@@ -74,8 +133,12 @@ def validate_payload(payload):
         raise ValueError("Seedance 2.0 duration must be in 4..15 seconds")
     if payload.get("resolution") not in {"480p", "720p", "1080p"}:
         raise ValueError("unsupported Seedance resolution")
-    if payload.get("generate_audio") is not True:
-        raise ValueError("SocialFlux Seedance requests require synchronized audio")
+    if not isinstance(payload.get("generate_audio"), bool):
+        raise ValueError("Seedance generate_audio must be boolean")
+    if payload.get("ratio", "16:9") not in {
+        "16:9", "9:16", "1:1", "4:3", "3:4"
+    }:
+        raise ValueError("unsupported Seedance ratio")
     if payload.get("watermark") is not False:
         raise ValueError("SocialFlux Seedance requests must disable watermarks")
     if "camera_fixed" in payload:
@@ -108,7 +171,15 @@ class SeedanceClient:
             json=validate_payload(payload),
             timeout=60,
         )
-        response.raise_for_status()
+        if not response.ok:
+            try:
+                detail = response.json()
+            except ValueError:
+                detail = response.text[:2000]
+            raise RuntimeError(json.dumps({
+                "status_code": response.status_code,
+                "provider_error": detail,
+            }, ensure_ascii=False))
         result = response.json()
         if not result.get("id"):
             raise ValueError("Seedance submission returned no task id")
@@ -136,7 +207,7 @@ class SeedanceClient:
 
 def run(args):
     state = load(args.state)
-    payload = validate_payload(state["request"])
+    payload = validate_payload(materialize_local_references(state["request"]))
     token = args.key_file.read_text(encoding="utf-8").strip()
     if not token:
         raise ValueError("empty AutoDL video token")

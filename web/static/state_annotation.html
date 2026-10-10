@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SocialFlux · State 人工标注</title>
+  <link rel="stylesheet" href="/state_annotation.css?v=2">
+  <link rel="stylesheet" href="/state_annotation_readable.css?v=3">
+</head>
+<body>
+  <header>
+    <div><h1>State v7 语义人工标注</h1><p id="packetMeta">正在加载盲化标注包…</p></div>
+    <div class="header-actions">
+      <label>审核人 <input id="reviewer" autocomplete="name" placeholder="姓名或 ID"></label>
+      <button id="exportButton">导出标注 JSON</button>
+      <label class="import-button">导入标注<input id="importFile" type="file" accept="application/json"></label>
+    </div>
+  </header>
+  <div class="notice">这里是历史样本的盲化人工标注页：为避免后文影响判断，目标轮环境回应和未来轮次会隐藏；“转换规则”是变量定义，不是当前批次已生成的结果。<a href="/gpt50-live">查看当前 GPT50 的完整对话与逐轮 state →</a></div>
+  <main>
+    <aside><div id="progress" class="progress"></div><nav id="recordNav"></nav></aside>
+    <section id="workspace"><div id="scenario"></div><div id="targets"></div><div id="dialogue"></div><div id="annotation"></div></section>
+  </main>
+  <script src="/state_annotation.js?v=4"></script>
+</body>
+</html>

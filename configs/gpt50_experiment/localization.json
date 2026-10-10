@@ -1,0 +1,10 @@
+{
+  "output_language": "en",
+  "source_language": "zh_or_mixed",
+  "preserve_originals": true,
+  "translation_workers": 3,
+  "provider_routes": "configs/gpt50_experiment/model_routes.video_translation.json",
+  "sampling": {"temperature": 0, "max_tokens": 10000},
+  "timeout": 600,
+  "human_review_status": "pending"
+}

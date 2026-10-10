@@ -6,25 +6,30 @@
 
 - [项目 README](../README.md)：安装、快速检查、网站和目录概览。
 - [设计约束与核心机制](../DESIGN_CONTRACT.md)：当前研究对象、运行合同、任务来源、验收和发布条件的唯一权威定义。
-- [Project Progress](../PROJECT_PROGRESS.md)：当前工程证据与尚未完成的研究工作。
+- [Project Progress](../PROJECT_PROGRESS.md)：2026-10-10 开发题、网站与正式准入状态。
 - [Self Check / TODO](../self_check.md)：不可删除的持续任务清单。
 
 ## 架构
 
-- [Architecture](architecture/ARCHITECTURE.md)：模块边界、数据流、scenario bundle、Prompt/schema 与正式数据约束。
+- [Architecture](architecture/ARCHITECTURE.md)：模块职责、依赖方向、当前/正式配置、产物分层与清理恢复规则。
 - [Pipeline](architecture/PIPELINE.md)：从 scenario 创建到 rollout、任务构建、视频和网站的运行顺序。
 
 ## 协议与 Gate
+
+- [Offline T1–T3 选择题协议](protocols/OFFLINE_T1_T3_CHOICE_V1.md)：题型、人物与时间语义、统一答案、证据诊断、生成和评测入口。
 
 - [Rollout Screening Protocol v1](protocols/SocialFlux_Rollout_Screening_Protocol_v1.md)：三态筛选、六维评分、10 项 hard reject、抽审与 freeze 规则。
 - [Formal Rollout Strategy](protocols/gate.md)：正式多模型 raw pool 和发布门槛。
 - [Data Production Quality Gate](protocols/quality_gate.md)：scenario、rollout 和 T1/T2/T3 的质量合同。
 - [Gate Implementation](protocols/GATE_IMPLEMENTATION.md)：上述约束在代码与产物中的映射。
 - [Initial State Review](protocols/INITIAL_STATE_REVIEW.md)：initial state 人工冻结与 runtime dynamics seed 机器校验说明。
+- [State Transition Standard v3](protocols/STATE_TRANSITION_STANDARD_V3.md)：四 family 的 S0 形状、变量级快慢变化、防趋同规则与 20 轮实现要求。
 
 ## 操作手册
 
-- [Formal Rollout Runbook](operations/FORMAL_ROLLOUT_RUNBOOK.md)：Gate 1/2、20×3 quality-candidate rollout、Judge/history、selection、Gate 4 与正式 GT 的唯一支持顺序。
+- [Active Batch Pipeline](operations/ACTIVE_BATCH_PIPELINE.md)：GPT50/Claude150、当前 offline 题库和网站的实际入口。
+- [Formal Rollout Runbook](operations/FORMAL_ROLLOUT_RUNBOOK.md)：通用 Fable 正式路径，Gate 1/2、一场景一条 10–20 轮自然 rollout、Judge/history、Gate 4 与正式 GT 的顺序。
+- [Annotation Studio](../web/README.md)：网站运行、素材审核和 T1–T3 标注草稿。
 
 ## Prompt
 

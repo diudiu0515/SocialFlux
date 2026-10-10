@@ -40,7 +40,7 @@ class TalkingHeadFrameworkTest(unittest.TestCase):
         }
         scripts = ROOT / "scripts"
         self.assertTrue(all((scripts / name).is_file() for name in expected_scripts))
-        self.assertTrue((ROOT / "prompts" / "talking_head_generation_v1.md").is_file())
+        self.assertTrue((ROOT / "prompts" / "talking_head_generation_v4.md").is_file())
         self.assertTrue((ROOT / "schemas" / "talking_head_request.schema.json").is_file())
         self.assertTrue((ROOT / "web" / "static" / "task_examples.html").is_file())
         self.assertTrue((ROOT / "requirements-video.txt").is_file())
@@ -78,6 +78,15 @@ class TalkingHeadFrameworkTest(unittest.TestCase):
         self.assertEqual(urgent["profile"], "controlled_urgent")
         self.assertEqual(quiet["profile"], "quiet_reflective")
         self.assertNotEqual(urgent["rate_pct"], quiet["rate_pct"])
+
+    def test_current_delivery_prompt_requires_natural_exact_speech(self):
+        prompt = (
+            ROOT / "prompts" / "talking_head_generation_v4.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("responding in the moment rather than reading a script", prompt)
+        self.assertIn("natural coarticulation", prompt)
+        self.assertIn("Avoid a synthetic monotone", prompt)
+        self.assertIn("Do not add, remove, paraphrase, reorder", prompt)
 
 
 if __name__ == "__main__":

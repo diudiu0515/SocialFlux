@@ -1,5 +1,7 @@
 # T2 Specification v1
 
+当前主评测见 [offline 选择题协议](../../docs/protocols/OFFLINE_T1_T3_CHOICE_V1.md)。本文件描述旧概率接口；新协议只需一个答案，证据另行诊断。
+
 从唯一自然 rollout A 中选择一个有共享前史的 checkpoint，在锚定区间内受控改写
 History B。B 保留角色、background、分叉前历史和已成立事实，不得再生成第二条
 自然 rollout，也不得新增区间外事件来制造差异。

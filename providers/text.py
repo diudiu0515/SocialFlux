@@ -389,10 +389,22 @@ def follows_dialogue_format(value):
     text = str(value).strip()
     has_stage_direction = re.search(r"[（(][^）)]{2,}[）)]", text) is not None
     label_match = re.match(r"^([\w\u4e00-\u9fff·]{1,12})[：:]", text)
-    # Rhetorical lead-ins such as “我建议现在明确：” are dialogue, not labels.
-    rhetorical_lead = re.search(
-        r"(?:建议|提议|明确|确认|询问|结论|决定|说明|补充|接受|同意|认为|要求|回应)",
-        label_match.group(1) if label_match else "",
+    # A short clause before a colon is not necessarily a speaker label.  In
+    # addition to explicit speech-act verbs, recognize modal/conditional and
+    # deictic clause openings such as “不用二选一：” and “两种都要：”.
+    # Keep this anchored for the grammatical cues so proper names containing
+    # the same character are not broadly exempted.
+    label_prefix = label_match.group(1) if label_match else ""
+    rhetorical_lead = (
+        re.search(
+            r"(?:建议|提议|明确|确认|询问|结论|决定|说明|补充|接受|同意|认为|要求|回应)",
+            label_prefix,
+        )
+        or re.match(
+            r"^(?:不用|不要|不必|不能|可以|应该|需要|必须|"
+            r"先|再|两种|无论|如果|若|具体|现在|眼下|当前|这(?:个|件|里))",
+            label_prefix,
+        )
     )
     has_speaker_label = bool(label_match and not rhetorical_lead)
     has_quote_framing = (

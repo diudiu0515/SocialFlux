@@ -1,0 +1,66 @@
+2026-10-06 人物绑定与边界对照：本轮修改记录
+
+本轮只修改判断视角，不改证据定义、数值映射、模型、推理档位或采样。
+旧 observed-evidence v6 六条轨迹继续运行；原冻结文件哈希未变化。
+新候选与旧轨迹成绩分开，不将旧结果算作本次验证。
+
+修改
+- environment/actor_bound_appraisal.py：独立 ActorBoundStateAppraiser。
+  实际 system 和 payload 明确 state owner、relationship target、当前动作 speaker。
+  每个关系变量的 definition 绑定具体姓名。例如：
+  Maren Quill believes Sera Dastan is reliable and will act as represented.
+  每个变量带 perspective；其他 state 明确归属于环境角色，不拷贝当前说话者的情绪或意图。
+  不向实际请求同时发送另一套泛指“对方”的旧定义；原文仍在基线档案可核对。
+- prompts/state_actor_binding_v1.txt：统一人物指代、引用归属及逐条理由检查原则。
+  没有场景编号、目标答案或针对单句话的例外。
+  理由须明确谁在评价谁；姓名出现只作检查提示，不能自动证明语义正确。
+- ActorBoundEnvironmentFactory：可接入真实独立 appraisal 环境，仅替换 state appraiser。
+  interaction、response、校准器和状态更新次数均不改变；policy 输入不增加私有数据。
+  未修改现有 factory 或 prompt manifest，避免扰动正在运行的旧试跑。
+- configs/gpt50_experiment/state_actor_bound_v1_candidate.json：显式候选适配配置。
+  使用 base_rollout_config 构建原工厂后，通过 ActorBoundEnvironmentFactory 包装。
+  不是覆盖旧 rollout 配置，也没有偷偷启用全量生成。
+- scripts/validate_actor_bound_state.py：一次固定验证、真实请求及所有原输出留存、
+  数值实际应用后的 delta 检查、完整性检查、可读理由和幅度复测。
+- tests/test_actor_bound_appraisal.py：真实请求绑定、定义证据规则保持不变、任意姓名、
+  八个关系构念、真实工厂接入、确定性映射、原错误理由不会被代码偷偷改成正确。
+
+固定验证安排
+原人工确认十例，含两个真正负例；保留原两次预定复测。
+新增四例，标签在调用前固定，独立标为待人工确认：
+1. 已知反转原轮：家长直接回答签收时间，目标 perceived_responsiveness 应增加。
+   trust 不强制更新。核对所有关系理由是否仍倒置辅导员和家长。
+2. 换措辞复述原坦诚与分阶段安排：目标 trust 不变。
+3. 引用辅导员已说过的承诺：不能据此增加辅导员对家长的 trust。
+4. 同话题新披露自己的具体错误并撤回原推断：预设 trust 增加；普通/决定性不作门槛。
+   该例同时涉及纠错坦诚与先前错误，方向预设仍需人工核验，不能只凭模型不匹配判系统错。
+
+四个新标签的全文、前史和预设依据：
+data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/actor_bound_v1_fixed/label_review.txt
+
+运行边界
+16 个逻辑观测，2 并发，单个逻辑调用 600 秒预算；允许原有有界格式修复，不做语义重跑。
+沿用 Astra、原推理档位和采样、原已授权路由。
+原 12 个输入先与已保存 v6 请求逐字段相等校验；已知反转重建也与实际旧请求逐字段相等。
+随后只加入人物绑定、具体化定义和统一指代规则。当前行为、历史、ledger、初始状态及证据条件不变。
+所有旧例和新对照结果都保留，不失败后换样例。
+
+幅度与门槛
+同输入的有代价坦诚复测记录 semantic_strength 和最终 numeric delta。
+核验实际请求完全相同，且更新前后都不在 0/10 边界。
++1 和 +2 不一致时记录幅度差异，不因此把正确对象、正确方向的非零更新判失败。
+确定性映射保持原样。
+results.json 中继承的 strength_correct 是原工具的“四类判断标签完全匹配”字段；
+真正的幅度稳定性见 amplitude_retest.strengths/deltas，不能把前者当成单纯数值幅度准确率。
+
+何时继续
+识别与方向通过不能代替主体/对象核验；orientation_gate 明确保持待语义检查。
+已知反转被修正、相关正负例无明确误伤后，才考虑新候选完整轨迹试运行。
+新边界预设未人工确认时单独报告，不并入人工确认准确率。
+强度正式标签仍需核验。六条旧试跑不构成新人物绑定候选的完整轨迹验证。
+本轮没有自动启动新一批完整轨迹或正式 scale。
+
+审核入口（随结果写入更新）
+data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/actor_bound_v1_fixed/review.txt
+同目录 prepared_requests.json、preregistration.json 与各例 requests.json/result.json
+保留完整实际 system/payload、模型原回答、格式修复、校准诊断和最终数值。

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SocialFlux offline choice independent evidence diagnostic",
+  "type": "object",
+  "required": ["answer", "evidence_ids"],
+  "properties": {
+    "answer": {"type": "string", "enum": ["A", "B", "C", "D", "E", "F"]},
+    "evidence_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

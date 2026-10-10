@@ -1,0 +1,53 @@
+{
+  "format": "socialflux_model_routes_v1",
+  "description": "Claude v3.3 same-model technical-retry route with long per-stage read timeouts.",
+  "provider_defaults": {
+    "provider": "failover",
+    "model": "claude-fable-5",
+    "stream": false,
+    "candidates": [
+      {
+        "provider": "anthropic",
+        "endpoint": "https://www.autodl.art/api/v1/anthropic/v1/messages",
+        "use_proxy": false,
+        "auth_scheme": "bearer",
+        "api_key_file": "/root/.config/socialflux/autodl_api_key",
+        "model": "claude-fable-5",
+        "timeout": 600,
+        "max_transport_attempts": 1
+      },
+      {
+        "provider": "openai_compatible",
+        "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+        "use_proxy": false,
+        "api_key_file": "/root/.config/socialflux/autodl_api_key_2",
+        "model": "claude-fable-5",
+        "timeout": 600
+      },
+      {
+        "provider": "anthropic",
+        "endpoint": "https://www.autodl.art/api/v1/anthropic/v1/messages",
+        "use_proxy": false,
+        "auth_scheme": "bearer",
+        "api_key_file": "/root/.config/socialflux/autodl_gpt_api_key",
+        "model": "claude-fable-5",
+        "timeout": 600,
+        "max_transport_attempts": 1
+      }
+    ],
+    "timeout": 600,
+    "circuit_failure_threshold": 2,
+    "circuit_cooldown_seconds": 90,
+    "circuit_max_cooldown_seconds": 300,
+    "failover_backoff_base_seconds": 2,
+    "failover_backoff_max_seconds": 15,
+    "failover_backoff_jitter_seconds": 1.5,
+    "max_candidates_per_request": 3
+  },
+  "routes": {
+    "policy": {"max_tokens": 1200, "timeout": 600},
+    "appraisal": {"max_tokens": 3500, "timeout": 600},
+    "response": {"max_tokens": 2600, "timeout": 600},
+    "t2_branch_authoring": {"max_tokens": 5000, "timeout": 600}
+  }
+}

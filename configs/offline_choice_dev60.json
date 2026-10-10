@@ -1,0 +1,19 @@
+{
+  "format": "socialflux_offline_choice_development_v1",
+  "scenario_numbers": [
+    3,
+    4,
+    14,
+    19,
+    26
+  ],
+  "source_root": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_gpt50_active",
+  "scenario_root": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_gpt50/scenarios",
+  "rollout_config": "configs/gpt50_experiment/rollout.state_observed_evidence_v6_candidate.json",
+  "model_routes": "configs/gpt50_experiment/model_routes.hybrid.v3_2.json",
+  "output": "data/offline_t1_t3_dev60",
+  "workers": 5,
+  "delayed_horizon": 5,
+  "formal_admission": false,
+  "branch_workers": 2
+}

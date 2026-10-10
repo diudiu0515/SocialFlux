@@ -1,0 +1,2600 @@
+{
+  "format": "socialflux_state_transition_ontology_audit_v1",
+  "generated_at_utc": "2026-09-26T16:16:00.209860+00:00",
+  "audit_scope": "offline accepted-cohort evidence only",
+  "model_calls": 0,
+  "source_artifacts_rewritten": false,
+  "input_manifest": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/gate2_input_manifest.json",
+  "source_status_filter": "accepted",
+  "population_source_status_counts": {
+    "machine_rejected": 15,
+    "accepted": 31,
+    "generation_error": 4
+  },
+  "cohort": {
+    "manifest_scenario_count": 31,
+    "evaluated_scenario_count": 31,
+    "trajectory_turn_count": 319,
+    "turn_count_distribution": {
+      "10": 26,
+      "13": 2,
+      "11": 3
+    },
+    "exact_20_turn_count": 0,
+    "missing_source_scenario_ids": []
+  },
+  "ontology_schema": {
+    "scenario_count": 31,
+    "selected_variable_count": 245,
+    "variable_rationale_count": 221,
+    "family_rationale_fallback_count": 24,
+    "transition_spec_count": 0,
+    "generic_reachability_statement_count": 93,
+    "variable_rationale_coverage": 0.902,
+    "family_rationale_fallback_coverage": 0.098,
+    "any_scenario_rationale_coverage": 1.0,
+    "per_variable_transition_spec_coverage": 0.0,
+    "selected_variable_count_distribution": {
+      "6": 1,
+      "7": 1,
+      "8": 29
+    }
+  },
+  "transition_pipeline": {
+    "initial_value_count": 245,
+    "labels": 2521,
+    "unchanged_labels": 2376,
+    "applied": 145,
+    "appraised_candidates": 982,
+    "feature_inferred_candidates": 982,
+    "calibrated_positive": 610,
+    "selected": 312,
+    "selected_numeric_noop": 167,
+    "selected_boundary_noop": 167,
+    "unchanged_label_fraction": 0.9425,
+    "candidate_to_positive_fraction": 0.6212,
+    "positive_to_selected_fraction": 0.5115,
+    "selected_to_applied_fraction": 0.4647,
+    "feature_inferred_fraction": 1.0,
+    "all_time_unchanged_scenario_variable_count": 173,
+    "scenario_variable_count": 245,
+    "all_time_unchanged_scenario_variable_fraction": 0.7061
+  },
+  "by_family": {
+    "behavioral_disposition": {
+      "initial_value_count": 75,
+      "labels": 769,
+      "unchanged_labels": 635,
+      "applied": 134,
+      "appraised_candidates": 470,
+      "feature_inferred_candidates": 470,
+      "calibrated_positive": 452,
+      "selected": 301,
+      "selected_numeric_noop": 167,
+      "selected_boundary_noop": 167,
+      "unchanged_label_fraction": 0.8257,
+      "candidate_to_positive_fraction": 0.9617,
+      "positive_to_selected_fraction": 0.6659,
+      "selected_to_applied_fraction": 0.4452
+    },
+    "consequence_risk": {
+      "initial_value_count": 71,
+      "labels": 728,
+      "unchanged_labels": 720,
+      "appraised_candidates": 156,
+      "feature_inferred_candidates": 156,
+      "calibrated_positive": 74,
+      "applied": 8,
+      "selected": 8,
+      "unchanged_label_fraction": 0.989,
+      "candidate_to_positive_fraction": 0.4744,
+      "positive_to_selected_fraction": 0.1081,
+      "selected_to_applied_fraction": 1.0
+    },
+    "emotion": {
+      "initial_value_count": 42,
+      "labels": 437,
+      "unchanged_labels": 437,
+      "appraised_candidates": 102,
+      "feature_inferred_candidates": 102,
+      "calibrated_positive": 17,
+      "unchanged_label_fraction": 1.0,
+      "candidate_to_positive_fraction": 0.1667,
+      "positive_to_selected_fraction": 0.0,
+      "selected_to_applied_fraction": 0.0
+    },
+    "relationship": {
+      "initial_value_count": 57,
+      "labels": 587,
+      "unchanged_labels": 584,
+      "appraised_candidates": 254,
+      "feature_inferred_candidates": 254,
+      "calibrated_positive": 67,
+      "applied": 3,
+      "selected": 3,
+      "unchanged_label_fraction": 0.9949,
+      "candidate_to_positive_fraction": 0.2638,
+      "positive_to_selected_fraction": 0.0448,
+      "selected_to_applied_fraction": 1.0
+    }
+  },
+  "by_relative_time": {
+    "early": {
+      "labels": 751,
+      "unchanged_labels": 665,
+      "applied": 86,
+      "calibrated_positive": 190,
+      "selected": 94,
+      "appraised_candidates": 314,
+      "feature_inferred_candidates": 314,
+      "unchanged_label_fraction": 0.8855,
+      "candidate_to_positive_fraction": 0.6051,
+      "positive_to_selected_fraction": 0.4947,
+      "selected_to_applied_fraction": 0.9149
+    },
+    "middle": {
+      "labels": 774,
+      "unchanged_labels": 736,
+      "calibrated_positive": 185,
+      "selected": 95,
+      "appraised_candidates": 300,
+      "feature_inferred_candidates": 300,
+      "applied": 38,
+      "unchanged_label_fraction": 0.9509,
+      "candidate_to_positive_fraction": 0.6167,
+      "positive_to_selected_fraction": 0.5135,
+      "selected_to_applied_fraction": 0.4
+    },
+    "late": {
+      "labels": 996,
+      "unchanged_labels": 975,
+      "applied": 21,
+      "calibrated_positive": 235,
+      "selected": 123,
+      "appraised_candidates": 368,
+      "feature_inferred_candidates": 368,
+      "unchanged_label_fraction": 0.9789,
+      "candidate_to_positive_fraction": 0.6386,
+      "positive_to_selected_fraction": 0.5234,
+      "selected_to_applied_fraction": 0.1707
+    }
+  },
+  "by_variable": {
+    "behavioral_disposition.boundary_assertion": {
+      "labels": 121,
+      "applied": 20,
+      "appraised_candidates": 68,
+      "feature_inferred_candidates": 68,
+      "calibrated_positive": 68,
+      "selected": 58,
+      "unchanged_labels": 101,
+      "selected_numeric_noop": 38,
+      "selected_boundary_noop": 38,
+      "unchanged_label_fraction": 0.8347,
+      "candidate_to_positive_fraction": 1.0,
+      "positive_to_selected_fraction": 0.8529,
+      "selected_to_applied_fraction": 0.3448,
+      "scenario_frequency": 12,
+      "initial_values": [
+        7,
+        7,
+        6,
+        7,
+        7,
+        7,
+        8,
+        8,
+        8,
+        8,
+        7,
+        7
+      ]
+    },
+    "behavioral_disposition.cooperation_readiness": {
+      "labels": 279,
+      "unchanged_labels": 201,
+      "appraised_candidates": 243,
+      "feature_inferred_candidates": 243,
+      "calibrated_positive": 233,
+      "applied": 78,
+      "selected": 172,
+      "selected_numeric_noop": 94,
+      "selected_boundary_noop": 94,
+      "unchanged_label_fraction": 0.7204,
+      "candidate_to_positive_fraction": 0.9588,
+      "positive_to_selected_fraction": 0.7382,
+      "selected_to_applied_fraction": 0.4535,
+      "scenario_frequency": 27,
+      "initial_values": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        5,
+        6,
+        7,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        5,
+        6,
+        6,
+        6,
+        7,
+        5,
+        6,
+        6,
+        5,
+        6
+      ]
+    },
+    "behavioral_disposition.disclosure_willingness": {
+      "labels": 91,
+      "applied": 12,
+      "appraised_candidates": 27,
+      "feature_inferred_candidates": 27,
+      "calibrated_positive": 23,
+      "selected": 16,
+      "unchanged_labels": 79,
+      "selected_numeric_noop": 4,
+      "selected_boundary_noop": 4,
+      "unchanged_label_fraction": 0.8681,
+      "candidate_to_positive_fraction": 0.8519,
+      "positive_to_selected_fraction": 0.6957,
+      "selected_to_applied_fraction": 0.75,
+      "scenario_frequency": 9,
+      "initial_values": [
+        5,
+        5,
+        4,
+        4,
+        4,
+        4,
+        7,
+        7,
+        6
+      ]
+    },
+    "behavioral_disposition.evidence_seeking": {
+      "labels": 224,
+      "unchanged_labels": 206,
+      "appraised_candidates": 109,
+      "feature_inferred_candidates": 109,
+      "calibrated_positive": 105,
+      "applied": 18,
+      "selected": 40,
+      "selected_numeric_noop": 22,
+      "selected_boundary_noop": 22,
+      "unchanged_label_fraction": 0.9196,
+      "candidate_to_positive_fraction": 0.9633,
+      "positive_to_selected_fraction": 0.381,
+      "selected_to_applied_fraction": 0.45,
+      "scenario_frequency": 22,
+      "initial_values": [
+        7,
+        8,
+        8,
+        7,
+        8,
+        8,
+        8,
+        8,
+        7,
+        8,
+        8,
+        8,
+        8,
+        8,
+        7,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ]
+    },
+    "behavioral_disposition.repair_intent": {
+      "labels": 10,
+      "unchanged_labels": 10,
+      "appraised_candidates": 1,
+      "feature_inferred_candidates": 1,
+      "calibrated_positive": 1,
+      "unchanged_label_fraction": 1.0,
+      "candidate_to_positive_fraction": 1.0,
+      "positive_to_selected_fraction": 0.0,
+      "selected_to_applied_fraction": 0.0,
+      "scenario_frequency": 1,
+      "initial_values": [
+        7
+      ]
+    },
+    "behavioral_disposition.resistance_intent": {
+      "labels": 10,
+      "unchanged_labels": 9,
+      "appraised_candidates": 3,
+      "feature_inferred_candidates": 3,
+      "calibrated_positive": 3,
+      "applied": 1,
+      "selected": 1,
+      "unchanged_label_fraction": 0.9,
+      "candidate_to_positive_fraction": 1.0,
+      "positive_to_selected_fraction": 0.3333,
+      "selected_to_applied_fraction": 1.0,
+      "scenario_frequency": 1,
+      "initial_values": [
+        7
+      ]
+    },
+    "behavioral_disposition.resolve": {
+      "labels": 34,
+      "applied": 5,
+      "appraised_candidates": 19,
+      "feature_inferred_candidates": 19,
+      "calibrated_positive": 19,
+      "selected": 14,
+      "unchanged_labels": 29,
+      "selected_numeric_noop": 9,
+      "selected_boundary_noop": 9,
+      "unchanged_label_fraction": 0.8529,
+      "candidate_to_positive_fraction": 1.0,
+      "positive_to_selected_fraction": 0.7368,
+      "selected_to_applied_fraction": 0.3571,
+      "scenario_frequency": 3,
+      "initial_values": [
+        7,
+        7,
+        8
+      ]
+    },
+    "consequence_risk.commitment_breach_risk": {
+      "labels": 41,
+      "unchanged_labels": 41,
+      "appraised_candidates": 15,
+      "feature_inferred_candidates": 15,
+      "calibrated_positive": 6,
+      "unchanged_label_fraction": 1.0,
+      "candidate_to_positive_fraction": 0.4,
+      "positive_to_selected_fraction": 0.0,
+      "selected_to_applied_fraction": 0.0,
+      "scenario_frequency": 4,
+      "initial_values": [
+        6,
+        7,
+        8,
+        8
+      ]
+    },
+    "consequence_risk.goal_failure_risk": {
+      "labels": 144,
+      "unchanged_labels": 143,
+      "appraised_candidates": 69,
+      "feature_inferred_candidates": 69,
+      "calibrated_positive": 35,
+      "applied": 1,
+      "selected": 1,
+      "unchanged_label_fraction": 0.9931,
+      "candidate_to_positive_fraction": 0.5072,
+      "positive_to_selected_fraction": 0.0286,
+      "selected_to_applied_fraction": 1.0,
+      "scenario_frequency": 14,
+      "initial_values": [
+        7,
+        7,
+        7,
+        8,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        6,
+        7,
+        7
+      ]
+    },
+    "consequence_risk.institutional_harm_risk": {
+      "labels": 64,
+      "unchanged_labels": 63,
+      "appraised_candidates": 11,
+      "feature_inferred_candidates": 11,
+      "applied": 1,
+      "calibrated_positive": 6,
+      "selected": 1,
+      "unchanged_label_fraction": 0.9844,
+      "candidate_to_positive_fraction": 0.5455,
+      "positive_to_selected_fraction": 0.1667,
+      "selected_to_applied_fraction": 1.0,
+      "scenario_frequency": 6,
+      "initial_values": [
+        7,
+        7,
+        6,
+        7,
+        7,
+        6
+      ]
+    },
+    "consequence_risk.material_loss_risk": {
+      "labels": 80,
+      "unchanged_labels": 79,
+      "appraised_candidates": 9,
+      "feature_inferred_candidates": 9,
+      "calibrated_positive": 3,
+      "applied": 1,
+      "selected": 1,
+      "unchanged_label_fraction": 0.9875,
+      "candidate_to_positive_fraction": 0.3333,
+      "positive_to_selected_fraction": 0.3333,
+      "selected_to_applied_fraction": 1.0,
+      "scenario_frequency": 8,
+      "initial_values": [
+        7,
+        7,
+        6,
+        7,
+        6,
+        7,
+        7,
+        7
+      ]
+    },
+    "consequence_risk.relationship_rupture_risk": {
+      "labels": 194,
+      "unchanged_labels": 193,
+      "appraised_candidates": 16,
+      "feature_inferred_candidates": 16,
+      "calibrated_positive": 2,
+      "applied": 1,
+      "selected": 1,
+      "unchanged_label_fraction": 0.9948,
+      "candidate_to_positive_fraction": 0.125,
+      "positive_to_selected_fraction": 0.5,
+      "selected_to_applied_fraction": 1.0,
+      "scenario_frequency": 19,
+      "initial_values": [
+        6,
+        4,
+        6,
+        6,
+        7,
+        5,
+        7,
+        6,
+        6,
+        6,
+        7,
+        6,
+        6,
+        7,
+        5,
+        6,
+        5,
+        6,
+        6
+      ]
+    },
+    "consequence_risk.reputational_harm_risk": {
+      "labels": 81,
+      "unchanged_labels": 78,
+      "appraised_candidates": 13,
+      "feature_inferred_candidates": 13,
+      "calibrated_positive": 8,
+      "applied": 3,
+      "selected": 3,
+      "unchanged_label_fraction": 0.963,
+      "candidate_to_positive_fraction": 0.6154,
+      "positive_to_selected_fraction": 0.375,
+      "selected_to_applied_fraction": 1.0,
+      "scenario_frequency": 8,
+      "initial_values": [
+        7,
+        7,
+        6,
+        6,
+        7,
+        7,
+        7,
+        6
+      ]
+    },
+    "consequence_risk.safety_harm_risk": {
+      "labels": 124,
+      "unchanged_labels": 123,
+      "appraised_candidates": 23,
+      "feature_inferred_candidates": 23,
+      "calibrated_positive": 14,
+      "applied": 1,
+      "selected": 1,
+      "unchanged_label_fraction": 0.9919,
+      "candidate_to_positive_fraction": 0.6087,
+      "positive_to_selected_fraction": 0.0714,
+      "selected_to_applied_fraction": 1.0,
+      "scenario_frequency": 12,
+      "initial_values": [
+        8,
+        7,
+        8,
+        8,
+        7,
+        8,
+        7,
+        8,
+        8,
+        8,
+        7,
+        8
+      ]
+    },
+    "emotion.anxiety": {
+      "labels": 289,
+      "unchanged_labels": 289,
+      "appraised_candidates": 97,
+      "feature_inferred_candidates": 97,
+      "calibrated_positive": 15,
+      "unchanged_label_fraction": 1.0,
+      "candidate_to_positive_fraction": 0.1546,
+      "positive_to_selected_fraction": 0.0,
+      "selected_to_applied_fraction": 0.0,
+      "scenario_frequency": 28,
+      "initial_values": [
+        7,
+        6,
+        6,
+        7,
+        6,
+        7,
+        7,
+        6,
+        6,
+        6,
+        6,
+        7,
+        6,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        6,
+        6,
+        6,
+        6,
+        7,
+        5,
+        7
+      ]
+    },
+    "emotion.disappointment": {
+      "labels": 10,
+      "unchanged_labels": 10,
+      "unchanged_label_fraction": 1.0,
+      "candidate_to_positive_fraction": 0.0,
+      "positive_to_selected_fraction": 0.0,
+      "selected_to_applied_fraction": 0.0,
+      "scenario_frequency": 1,
+      "initial_values": [
+        6
+      ]
+    },
+    "emotion.fear": {
+      "labels": 20,
+      "unchanged_labels": 20,
+      "unchanged_label_fraction": 1.0,
+      "candidate_to_positive_fraction": 0.0,
+      "positive_to_selected_fraction": 0.0,
+      "selected_to_applied_fraction": 0.0,
+      "scenario_frequency": 2,
+      "initial_values": [
+        7,
+        6
+      ]
+    },
+    "emotion.frustration": {
+      "labels": 88,
+      "unchanged_labels": 88,
+      "appraised_candidates": 5,
+      "feature_inferred_candidates": 5,
+      "calibrated_positive": 2,
+      "unchanged_label_fraction": 1.0,
+      "candidate_to_positive_fraction": 0.4,
+      "positive_to_selected_fraction": 0.0,
+      "selected_to_applied_fraction": 0.0,
+      "scenario_frequency": 8,
+      "initial_values": [
+        4,
+        6,
+        7,
+        7,
+        8,
+        6,
+        6,
+        7
+      ]
+    },
+    "emotion.guilt": {
+      "labels": 20,
+      "unchanged_labels": 20,
+      "unchanged_label_fraction": 1.0,
+      "candidate_to_positive_fraction": 0.0,
+      "positive_to_selected_fraction": 0.0,
+      "selected_to_applied_fraction": 0.0,
+      "scenario_frequency": 2,
+      "initial_values": [
+        6,
+        5
+      ]
+    },
+    "emotion.hope": {
+      "labels": 10,
+      "unchanged_labels": 10,
+      "unchanged_label_fraction": 1.0,
+      "candidate_to_positive_fraction": 0.0,
+      "positive_to_selected_fraction": 0.0,
+      "selected_to_applied_fraction": 0.0,
+      "scenario_frequency": 1,
+      "initial_values": [
+        5
+      ]
+    },
+    "relationship.perceived_fairness": {
+      "labels": 248,
+      "unchanged_labels": 247,
+      "appraised_candidates": 139,
+      "feature_inferred_candidates": 139,
+      "calibrated_positive": 42,
+      "applied": 1,
+      "selected": 1,
+      "unchanged_label_fraction": 0.996,
+      "candidate_to_positive_fraction": 0.3022,
+      "positive_to_selected_fraction": 0.0238,
+      "selected_to_applied_fraction": 1.0,
+      "scenario_frequency": 24,
+      "initial_values": [
+        5,
+        6,
+        5,
+        4,
+        4,
+        3,
+        4,
+        5,
+        5,
+        5,
+        4,
+        4,
+        4,
+        3,
+        4,
+        4,
+        4,
+        4,
+        6,
+        4,
+        4,
+        4,
+        3,
+        4
+      ]
+    },
+    "relationship.perceived_safety": {
+      "labels": 10,
+      "unchanged_labels": 10,
+      "appraised_candidates": 5,
+      "feature_inferred_candidates": 5,
+      "calibrated_positive": 1,
+      "unchanged_label_fraction": 1.0,
+      "candidate_to_positive_fraction": 0.2,
+      "positive_to_selected_fraction": 0.0,
+      "selected_to_applied_fraction": 0.0,
+      "scenario_frequency": 1,
+      "initial_values": [
+        5
+      ]
+    },
+    "relationship.respect": {
+      "labels": 10,
+      "unchanged_labels": 10,
+      "appraised_candidates": 4,
+      "feature_inferred_candidates": 4,
+      "calibrated_positive": 1,
+      "unchanged_label_fraction": 1.0,
+      "candidate_to_positive_fraction": 0.25,
+      "positive_to_selected_fraction": 0.0,
+      "selected_to_applied_fraction": 0.0,
+      "scenario_frequency": 1,
+      "initial_values": [
+        6
+      ]
+    },
+    "relationship.trust": {
+      "labels": 319,
+      "unchanged_labels": 317,
+      "appraised_candidates": 106,
+      "feature_inferred_candidates": 106,
+      "calibrated_positive": 23,
+      "applied": 2,
+      "selected": 2,
+      "unchanged_label_fraction": 0.9937,
+      "candidate_to_positive_fraction": 0.217,
+      "positive_to_selected_fraction": 0.087,
+      "selected_to_applied_fraction": 1.0,
+      "scenario_frequency": 31,
+      "initial_values": [
+        4,
+        5,
+        7,
+        4,
+        5,
+        5,
+        4,
+        5,
+        5,
+        3,
+        4,
+        6,
+        6,
+        4,
+        6,
+        4,
+        4,
+        4,
+        4,
+        5,
+        4,
+        4,
+        3,
+        4,
+        5,
+        7,
+        4,
+        5,
+        5,
+        4,
+        5
+      ]
+    }
+  },
+  "directionality": {
+    "appraised_candidates": {
+      "increase": 756,
+      "decrease": 226
+    },
+    "applied_changes": {
+      "increase": 140,
+      "decrease": 5
+    }
+  },
+  "suppression_reasons": {
+    "legacy_budget_or_rank": 231,
+    "no_calibrated_change": 372,
+    "state_boundary_noop": 64,
+    "semantic_novelty_none": 3
+  },
+  "legacy_ranking_risk": {
+    "turns_with_inferred_top_rank_tie": 80,
+    "turns_where_lexicographically_first_tied_variable_won": 64,
+    "winner_fraction": 0.8
+  },
+  "calibration_diagnostics": {
+    "calibrated_level_counts": {
+      "2": 257,
+      "1": 353,
+      "0": 372
+    },
+    "level_3_candidate_count": 0,
+    "inferred_feature_counts": {
+      "pressure": 3,
+      "goal_alignment": 849,
+      "cooperation_signal": 42,
+      "commitment_signal": 61,
+      "respect_signal": 11,
+      "uncertainty_reduction": 16
+    },
+    "strong_extra_budget_was_reachable": false
+  },
+  "records": [
+    {
+      "scenario_id": "GPT50_002",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_002/scenario_002.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_002/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.boundary_assertion",
+        "behavioral_disposition.evidence_seeking",
+        "relationship.trust",
+        "relationship.perceived_safety",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.relationship_rupture_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 7,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "behavioral_disposition.boundary_assertion": 7,
+        "behavioral_disposition.evidence_seeking": 7,
+        "relationship.trust": 4,
+        "relationship.perceived_safety": 5,
+        "consequence_risk.goal_failure_risk": 7,
+        "consequence_risk.relationship_rupture_risk": 6
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.boundary_assertion",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.evidence_seeking"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.relationship_rupture_risk",
+        "emotion.anxiety",
+        "relationship.perceived_safety",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 36,
+        "calibrated_positive": 19,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_003",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_003/scenario_003.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_003/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.evidence_seeking",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.boundary_assertion",
+        "relationship.trust",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.reputational_harm_risk",
+        "consequence_risk.relationship_rupture_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 6,
+        "behavioral_disposition.evidence_seeking": 8,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "behavioral_disposition.boundary_assertion": 7,
+        "relationship.trust": 5,
+        "consequence_risk.goal_failure_risk": 7,
+        "consequence_risk.reputational_harm_risk": 7,
+        "consequence_risk.relationship_rupture_risk": 4
+      },
+      "variable_rationale_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.boundary_assertion",
+        "behavioral_disposition.cooperation_readiness"
+      ],
+      "all_time_unchanged_state_paths": [
+        "behavioral_disposition.evidence_seeking",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.reputational_harm_risk",
+        "emotion.anxiety",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 30,
+        "calibrated_positive": 20,
+        "selected": 9
+      }
+    },
+    {
+      "scenario_id": "GPT50_004",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_004/scenario_004.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_004/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.fear",
+        "emotion.guilt",
+        "behavioral_disposition.disclosure_willingness",
+        "behavioral_disposition.evidence_seeking",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.material_loss_risk",
+        "consequence_risk.institutional_harm_risk"
+      ],
+      "initial_values": {
+        "emotion.fear": 7,
+        "emotion.guilt": 6,
+        "behavioral_disposition.disclosure_willingness": 5,
+        "behavioral_disposition.evidence_seeking": 8,
+        "relationship.trust": 7,
+        "relationship.perceived_fairness": 5,
+        "consequence_risk.material_loss_risk": 7,
+        "consequence_risk.institutional_harm_risk": 7
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.disclosure_willingness",
+        "behavioral_disposition.evidence_seeking"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.institutional_harm_risk",
+        "consequence_risk.material_loss_risk",
+        "emotion.fear",
+        "emotion.guilt",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 25,
+        "calibrated_positive": 16,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_006",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_006/scenario_006.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_006/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "emotion.frustration",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.disclosure_willingness",
+        "relationship.trust",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.commitment_breach_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 6,
+        "emotion.frustration": 4,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "behavioral_disposition.disclosure_willingness": 5,
+        "relationship.trust": 4,
+        "consequence_risk.goal_failure_risk": 7,
+        "consequence_risk.relationship_rupture_risk": 6,
+        "consequence_risk.commitment_breach_risk": 6
+      },
+      "variable_rationale_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.disclosure_willingness"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.commitment_breach_risk",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.relationship_rupture_risk",
+        "emotion.anxiety",
+        "emotion.frustration",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 30,
+        "calibrated_positive": 19,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_007",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_007/scenario_007.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_007/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.resistance_intent",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.disclosure_willingness",
+        "relationship.trust",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.reputational_harm_risk",
+        "consequence_risk.relationship_rupture_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 7,
+        "behavioral_disposition.resistance_intent": 7,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "behavioral_disposition.disclosure_willingness": 4,
+        "relationship.trust": 5,
+        "consequence_risk.goal_failure_risk": 8,
+        "consequence_risk.reputational_harm_risk": 7,
+        "consequence_risk.relationship_rupture_risk": 6
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.disclosure_willingness",
+        "behavioral_disposition.resistance_intent"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.reputational_harm_risk",
+        "emotion.anxiety",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 30,
+        "calibrated_positive": 18,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_008",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_008/scenario_008.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_008/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.fear",
+        "behavioral_disposition.resolve",
+        "behavioral_disposition.disclosure_willingness",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.safety_harm_risk",
+        "consequence_risk.material_loss_risk",
+        "consequence_risk.institutional_harm_risk"
+      ],
+      "initial_values": {
+        "emotion.fear": 6,
+        "behavioral_disposition.resolve": 7,
+        "behavioral_disposition.disclosure_willingness": 4,
+        "relationship.trust": 5,
+        "relationship.perceived_fairness": 6,
+        "consequence_risk.safety_harm_risk": 8,
+        "consequence_risk.material_loss_risk": 7,
+        "consequence_risk.institutional_harm_risk": 7
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.disclosure_willingness",
+        "behavioral_disposition.resolve"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.institutional_harm_risk",
+        "consequence_risk.material_loss_risk",
+        "consequence_risk.safety_harm_risk",
+        "emotion.fear",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 22,
+        "calibrated_positive": 14,
+        "selected": 8
+      }
+    },
+    {
+      "scenario_id": "GPT50_009",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_009/scenario_009.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_009/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.disappointment",
+        "behavioral_disposition.boundary_assertion",
+        "behavioral_disposition.disclosure_willingness",
+        "behavioral_disposition.cooperation_readiness",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.safety_harm_risk"
+      ],
+      "initial_values": {
+        "emotion.disappointment": 6,
+        "behavioral_disposition.boundary_assertion": 6,
+        "behavioral_disposition.disclosure_willingness": 4,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "relationship.trust": 4,
+        "relationship.perceived_fairness": 5,
+        "consequence_risk.relationship_rupture_risk": 7,
+        "consequence_risk.safety_harm_risk": 7
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.boundary_assertion",
+        "behavioral_disposition.cooperation_readiness"
+      ],
+      "all_time_unchanged_state_paths": [
+        "behavioral_disposition.disclosure_willingness",
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.safety_harm_risk",
+        "emotion.disappointment",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 38,
+        "calibrated_positive": 20,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_010",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_010/scenario_010.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_010/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.evidence_seeking",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.material_loss_risk",
+        "consequence_risk.relationship_rupture_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 6,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "behavioral_disposition.evidence_seeking": 7,
+        "relationship.trust": 5,
+        "relationship.perceived_fairness": 4,
+        "consequence_risk.goal_failure_risk": 7,
+        "consequence_risk.material_loss_risk": 6,
+        "consequence_risk.relationship_rupture_risk": 5
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.evidence_seeking"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.material_loss_risk",
+        "consequence_risk.relationship_rupture_risk",
+        "emotion.anxiety",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 26,
+        "calibrated_positive": 19,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_014",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_014/scenario_014.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_014/trajectory.json",
+      "turn_count": 13,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "emotion.frustration",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.evidence_seeking",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.safety_harm_risk",
+        "consequence_risk.institutional_harm_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 7,
+        "emotion.frustration": 6,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "behavioral_disposition.evidence_seeking": 8,
+        "relationship.trust": 5,
+        "relationship.perceived_fairness": 4,
+        "consequence_risk.safety_harm_risk": 8,
+        "consequence_risk.institutional_harm_risk": 6
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.evidence_seeking",
+        "consequence_risk.institutional_harm_risk",
+        "relationship.trust"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.safety_harm_risk",
+        "emotion.anxiety",
+        "emotion.frustration",
+        "relationship.perceived_fairness"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 37,
+        "calibrated_positive": 21,
+        "selected": 11
+      }
+    },
+    {
+      "scenario_id": "GPT50_015",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_015/scenario_015.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_015/trajectory.json",
+      "turn_count": 11,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "emotion.frustration",
+        "behavioral_disposition.resolve",
+        "behavioral_disposition.cooperation_readiness",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.safety_harm_risk",
+        "consequence_risk.relationship_rupture_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 7,
+        "emotion.frustration": 7,
+        "behavioral_disposition.resolve": 7,
+        "behavioral_disposition.cooperation_readiness": 5,
+        "relationship.trust": 3,
+        "relationship.perceived_fairness": 3,
+        "consequence_risk.safety_harm_risk": 8,
+        "consequence_risk.relationship_rupture_risk": 7
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.resolve",
+        "consequence_risk.safety_harm_risk"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.relationship_rupture_risk",
+        "emotion.anxiety",
+        "emotion.frustration",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 31,
+        "calibrated_positive": 23,
+        "selected": 11
+      }
+    },
+    {
+      "scenario_id": "GPT50_016",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_016/scenario_016.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_016/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.evidence_seeking",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.boundary_assertion",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.material_loss_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 6,
+        "behavioral_disposition.evidence_seeking": 8,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "behavioral_disposition.boundary_assertion": 7,
+        "relationship.trust": 4,
+        "relationship.perceived_fairness": 4,
+        "consequence_risk.goal_failure_risk": 7,
+        "consequence_risk.material_loss_risk": 7
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.boundary_assertion",
+        "behavioral_disposition.cooperation_readiness"
+      ],
+      "all_time_unchanged_state_paths": [
+        "behavioral_disposition.evidence_seeking",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.material_loss_risk",
+        "emotion.anxiety",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 26,
+        "calibrated_positive": 19,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_017",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_017/scenario_017.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_017/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.disclosure_willingness",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.boundary_assertion",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.reputational_harm_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 6,
+        "behavioral_disposition.disclosure_willingness": 4,
+        "behavioral_disposition.cooperation_readiness": 7,
+        "behavioral_disposition.boundary_assertion": 7,
+        "relationship.trust": 6,
+        "relationship.perceived_fairness": 5,
+        "consequence_risk.goal_failure_risk": 7,
+        "consequence_risk.reputational_harm_risk": 6
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.boundary_assertion",
+        "consequence_risk.reputational_harm_risk"
+      ],
+      "all_time_unchanged_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.disclosure_willingness",
+        "consequence_risk.goal_failure_risk",
+        "emotion.anxiety",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 32,
+        "calibrated_positive": 22,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_022",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_022/scenario_022.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_022/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "emotion.guilt",
+        "behavioral_disposition.evidence_seeking",
+        "behavioral_disposition.disclosure_willingness",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.safety_harm_risk",
+        "consequence_risk.relationship_rupture_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 6,
+        "emotion.guilt": 5,
+        "behavioral_disposition.evidence_seeking": 8,
+        "behavioral_disposition.disclosure_willingness": 7,
+        "relationship.trust": 6,
+        "relationship.perceived_fairness": 5,
+        "consequence_risk.safety_harm_risk": 7,
+        "consequence_risk.relationship_rupture_risk": 6
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.disclosure_willingness",
+        "behavioral_disposition.evidence_seeking",
+        "consequence_risk.relationship_rupture_risk"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.safety_harm_risk",
+        "emotion.anxiety",
+        "emotion.guilt",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 26,
+        "calibrated_positive": 15,
+        "selected": 9
+      }
+    },
+    {
+      "scenario_id": "GPT50_023",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_023/scenario_023.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_023/trajectory.json",
+      "turn_count": 11,
+      "selected_state_variable_count": 7,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.evidence_seeking",
+        "behavioral_disposition.cooperation_readiness",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.institutional_harm_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 6,
+        "behavioral_disposition.evidence_seeking": 8,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "relationship.trust": 4,
+        "relationship.perceived_fairness": 5,
+        "consequence_risk.goal_failure_risk": 7,
+        "consequence_risk.institutional_harm_risk": 7
+      },
+      "variable_rationale_coverage": {
+        "covered": 7,
+        "total": 7
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 7
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 7
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.evidence_seeking"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.institutional_harm_risk",
+        "emotion.anxiety",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 31,
+        "calibrated_positive": 22,
+        "selected": 11
+      }
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_024/scenario_024.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_024/trajectory.json",
+      "turn_count": 13,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "emotion.frustration",
+        "behavioral_disposition.resolve",
+        "behavioral_disposition.cooperation_readiness",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.relationship_rupture_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 7,
+        "emotion.frustration": 7,
+        "behavioral_disposition.resolve": 8,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "relationship.trust": 6,
+        "relationship.perceived_fairness": 4,
+        "consequence_risk.goal_failure_risk": 7,
+        "consequence_risk.relationship_rupture_risk": 6
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.resolve"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.relationship_rupture_risk",
+        "emotion.anxiety",
+        "emotion.frustration",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 39,
+        "calibrated_positive": 24,
+        "selected": 13
+      }
+    },
+    {
+      "scenario_id": "GPT50_026",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_026/scenario_026.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_026/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.evidence_seeking",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.boundary_assertion",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.commitment_breach_risk",
+        "consequence_risk.material_loss_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 6,
+        "behavioral_disposition.evidence_seeking": 7,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "behavioral_disposition.boundary_assertion": 7,
+        "relationship.trust": 4,
+        "relationship.perceived_fairness": 4,
+        "consequence_risk.commitment_breach_risk": 7,
+        "consequence_risk.material_loss_risk": 6
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.boundary_assertion",
+        "behavioral_disposition.cooperation_readiness"
+      ],
+      "all_time_unchanged_state_paths": [
+        "behavioral_disposition.evidence_seeking",
+        "consequence_risk.commitment_breach_risk",
+        "consequence_risk.material_loss_risk",
+        "emotion.anxiety",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 37,
+        "calibrated_positive": 22,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_028",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_028/scenario_028.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_028/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "emotion.hope",
+        "behavioral_disposition.evidence_seeking",
+        "behavioral_disposition.cooperation_readiness",
+        "relationship.trust",
+        "relationship.respect",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.safety_harm_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 7,
+        "emotion.hope": 5,
+        "behavioral_disposition.evidence_seeking": 8,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "relationship.trust": 4,
+        "relationship.respect": 6,
+        "consequence_risk.goal_failure_risk": 7,
+        "consequence_risk.safety_harm_risk": 8
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.evidence_seeking"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.safety_harm_risk",
+        "emotion.anxiety",
+        "emotion.hope",
+        "relationship.respect",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 35,
+        "calibrated_positive": 23,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_029",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_029/scenario_029.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_029/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.evidence_seeking",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.boundary_assertion",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.safety_harm_risk",
+        "consequence_risk.relationship_rupture_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 7,
+        "behavioral_disposition.evidence_seeking": 8,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "behavioral_disposition.boundary_assertion": 8,
+        "relationship.trust": 4,
+        "relationship.perceived_fairness": 4,
+        "consequence_risk.safety_harm_risk": 7,
+        "consequence_risk.relationship_rupture_risk": 6
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.boundary_assertion",
+        "behavioral_disposition.cooperation_readiness"
+      ],
+      "all_time_unchanged_state_paths": [
+        "behavioral_disposition.evidence_seeking",
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.safety_harm_risk",
+        "emotion.anxiety",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 36,
+        "calibrated_positive": 24,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_030",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_030/scenario_030.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_030/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "emotion.frustration",
+        "behavioral_disposition.evidence_seeking",
+        "behavioral_disposition.boundary_assertion",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.reputational_harm_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 7,
+        "emotion.frustration": 8,
+        "behavioral_disposition.evidence_seeking": 8,
+        "behavioral_disposition.boundary_assertion": 8,
+        "relationship.trust": 4,
+        "relationship.perceived_fairness": 3,
+        "consequence_risk.relationship_rupture_risk": 7,
+        "consequence_risk.reputational_harm_risk": 6
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.boundary_assertion",
+        "behavioral_disposition.evidence_seeking"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.reputational_harm_risk",
+        "emotion.anxiety",
+        "emotion.frustration",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 26,
+        "calibrated_positive": 16,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_035",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_035/scenario_035.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_035/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "emotion.frustration",
+        "behavioral_disposition.evidence_seeking",
+        "behavioral_disposition.cooperation_readiness",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.safety_harm_risk",
+        "consequence_risk.reputational_harm_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 7,
+        "emotion.frustration": 6,
+        "behavioral_disposition.evidence_seeking": 8,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "relationship.trust": 5,
+        "relationship.perceived_fairness": 4,
+        "consequence_risk.safety_harm_risk": 8,
+        "consequence_risk.reputational_harm_risk": 7
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.evidence_seeking",
+        "consequence_risk.reputational_harm_risk"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.safety_harm_risk",
+        "emotion.anxiety",
+        "emotion.frustration",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 33,
+        "calibrated_positive": 19,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_036",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_036/scenario_036.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_036/trajectory.json",
+      "turn_count": 11,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "emotion.frustration",
+        "behavioral_disposition.disclosure_willingness",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.boundary_assertion",
+        "relationship.trust",
+        "consequence_risk.reputational_harm_risk",
+        "consequence_risk.commitment_breach_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 7,
+        "emotion.frustration": 6,
+        "behavioral_disposition.disclosure_willingness": 7,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "behavioral_disposition.boundary_assertion": 8,
+        "relationship.trust": 4,
+        "consequence_risk.reputational_harm_risk": 7,
+        "consequence_risk.commitment_breach_risk": 8
+      },
+      "variable_rationale_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "relationship.trust"
+      ],
+      "all_time_unchanged_state_paths": [
+        "behavioral_disposition.boundary_assertion",
+        "behavioral_disposition.disclosure_willingness",
+        "consequence_risk.commitment_breach_risk",
+        "consequence_risk.reputational_harm_risk",
+        "emotion.anxiety",
+        "emotion.frustration"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 39,
+        "calibrated_positive": 26,
+        "selected": 11
+      }
+    },
+    {
+      "scenario_id": "GPT50_037",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_037/scenario_037.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_037/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 6,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.evidence_seeking",
+        "relationship.trust",
+        "consequence_risk.material_loss_risk",
+        "consequence_risk.relationship_rupture_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 7,
+        "behavioral_disposition.cooperation_readiness": 5,
+        "behavioral_disposition.evidence_seeking": 8,
+        "relationship.trust": 4,
+        "consequence_risk.material_loss_risk": 7,
+        "consequence_risk.relationship_rupture_risk": 6
+      },
+      "variable_rationale_coverage": {
+        "covered": 6,
+        "total": 6
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 6
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 6
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness"
+      ],
+      "all_time_unchanged_state_paths": [
+        "behavioral_disposition.evidence_seeking",
+        "consequence_risk.material_loss_risk",
+        "consequence_risk.relationship_rupture_risk",
+        "emotion.anxiety",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 29,
+        "calibrated_positive": 16,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_038",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_038/scenario_038.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_038/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.boundary_assertion",
+        "behavioral_disposition.evidence_seeking",
+        "behavioral_disposition.cooperation_readiness",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.safety_harm_risk",
+        "consequence_risk.relationship_rupture_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 7,
+        "behavioral_disposition.boundary_assertion": 8,
+        "behavioral_disposition.evidence_seeking": 7,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "relationship.trust": 3,
+        "relationship.perceived_fairness": 4,
+        "consequence_risk.safety_harm_risk": 8,
+        "consequence_risk.relationship_rupture_risk": 6
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.boundary_assertion",
+        "behavioral_disposition.cooperation_readiness",
+        "relationship.perceived_fairness"
+      ],
+      "all_time_unchanged_state_paths": [
+        "behavioral_disposition.evidence_seeking",
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.safety_harm_risk",
+        "emotion.anxiety",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 33,
+        "calibrated_positive": 19,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_039",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_039/scenario_039.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_039/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.evidence_seeking",
+        "behavioral_disposition.cooperation_readiness",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.safety_harm_risk",
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.material_loss_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 7,
+        "behavioral_disposition.evidence_seeking": 8,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "relationship.trust": 4,
+        "relationship.perceived_fairness": 4,
+        "consequence_risk.safety_harm_risk": 8,
+        "consequence_risk.relationship_rupture_risk": 7,
+        "consequence_risk.material_loss_risk": 7
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.evidence_seeking"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.material_loss_risk",
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.safety_harm_risk",
+        "emotion.anxiety",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 32,
+        "calibrated_positive": 16,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_040",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_040/scenario_040.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_040/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.evidence_seeking",
+        "behavioral_disposition.cooperation_readiness",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.material_loss_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 6,
+        "behavioral_disposition.evidence_seeking": 8,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "relationship.trust": 5,
+        "relationship.perceived_fairness": 4,
+        "consequence_risk.goal_failure_risk": 7,
+        "consequence_risk.relationship_rupture_risk": 5,
+        "consequence_risk.material_loss_risk": 7
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.evidence_seeking",
+        "consequence_risk.material_loss_risk"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.relationship_rupture_risk",
+        "emotion.anxiety",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 36,
+        "calibrated_positive": 22,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_041",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_041/scenario_041.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_041/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.evidence_seeking",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.boundary_assertion",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.safety_harm_risk",
+        "consequence_risk.relationship_rupture_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 6,
+        "behavioral_disposition.evidence_seeking": 8,
+        "behavioral_disposition.cooperation_readiness": 7,
+        "behavioral_disposition.boundary_assertion": 7,
+        "relationship.trust": 7,
+        "relationship.perceived_fairness": 6,
+        "consequence_risk.safety_harm_risk": 7,
+        "consequence_risk.relationship_rupture_risk": 6
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.boundary_assertion",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.evidence_seeking"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.safety_harm_risk",
+        "emotion.anxiety",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 32,
+        "calibrated_positive": 19,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_045",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_045/scenario_045.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_045/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.disclosure_willingness",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.reputational_harm_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 6,
+        "behavioral_disposition.cooperation_readiness": 5,
+        "behavioral_disposition.disclosure_willingness": 6,
+        "relationship.trust": 4,
+        "relationship.perceived_fairness": 4,
+        "consequence_risk.goal_failure_risk": 6,
+        "consequence_risk.relationship_rupture_risk": 5,
+        "consequence_risk.reputational_harm_risk": 7
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.disclosure_willingness",
+        "consequence_risk.goal_failure_risk"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.reputational_harm_risk",
+        "emotion.anxiety",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 31,
+        "calibrated_positive": 21,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_046",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_046/scenario_046.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_046/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.evidence_seeking",
+        "behavioral_disposition.boundary_assertion",
+        "behavioral_disposition.cooperation_readiness",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.institutional_harm_risk",
+        "consequence_risk.commitment_breach_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 6,
+        "behavioral_disposition.evidence_seeking": 8,
+        "behavioral_disposition.boundary_assertion": 7,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "relationship.trust": 5,
+        "relationship.perceived_fairness": 4,
+        "consequence_risk.institutional_harm_risk": 7,
+        "consequence_risk.commitment_breach_risk": 8
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.boundary_assertion",
+        "behavioral_disposition.cooperation_readiness"
+      ],
+      "all_time_unchanged_state_paths": [
+        "behavioral_disposition.evidence_seeking",
+        "consequence_risk.commitment_breach_risk",
+        "consequence_risk.institutional_harm_risk",
+        "emotion.anxiety",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 33,
+        "calibrated_positive": 20,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_047",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_047/scenario_047.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_047/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "emotion.frustration",
+        "behavioral_disposition.evidence_seeking",
+        "behavioral_disposition.cooperation_readiness",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.institutional_harm_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 7,
+        "emotion.frustration": 7,
+        "behavioral_disposition.evidence_seeking": 8,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "relationship.trust": 5,
+        "relationship.perceived_fairness": 4,
+        "consequence_risk.goal_failure_risk": 7,
+        "consequence_risk.institutional_harm_risk": 6
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.evidence_seeking"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.institutional_harm_risk",
+        "emotion.anxiety",
+        "emotion.frustration",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 33,
+        "calibrated_positive": 18,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_049",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_049/scenario_049.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_049/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.repair_intent",
+        "behavioral_disposition.evidence_seeking",
+        "behavioral_disposition.cooperation_readiness",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.reputational_harm_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 5,
+        "behavioral_disposition.repair_intent": 7,
+        "behavioral_disposition.evidence_seeking": 8,
+        "behavioral_disposition.cooperation_readiness": 5,
+        "relationship.trust": 4,
+        "relationship.perceived_fairness": 3,
+        "consequence_risk.relationship_rupture_risk": 6,
+        "consequence_risk.reputational_harm_risk": 6
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.evidence_seeking"
+      ],
+      "all_time_unchanged_state_paths": [
+        "behavioral_disposition.repair_intent",
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.reputational_harm_risk",
+        "emotion.anxiety",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 31,
+        "calibrated_positive": 21,
+        "selected": 10
+      }
+    },
+    {
+      "scenario_id": "GPT50_050",
+      "scenario_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/scenario/scenarios/scenario_050/scenario_050.json",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/accepted_rollout_inputs/scenario_050/trajectory.json",
+      "turn_count": 10,
+      "selected_state_variable_count": 8,
+      "selected_state_paths": [
+        "emotion.anxiety",
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.evidence_seeking",
+        "relationship.trust",
+        "relationship.perceived_fairness",
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.safety_harm_risk"
+      ],
+      "initial_values": {
+        "emotion.anxiety": 7,
+        "behavioral_disposition.cooperation_readiness": 6,
+        "behavioral_disposition.evidence_seeking": 8,
+        "relationship.trust": 5,
+        "relationship.perceived_fairness": 4,
+        "consequence_risk.goal_failure_risk": 7,
+        "consequence_risk.relationship_rupture_risk": 6,
+        "consequence_risk.safety_harm_risk": 8
+      },
+      "variable_rationale_coverage": {
+        "covered": 8,
+        "total": 8
+      },
+      "family_rationale_fallback_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "missing_rationale_state_paths": [],
+      "per_variable_transition_spec_coverage": {
+        "covered": 0,
+        "total": 8
+      },
+      "generic_trigger_reachability_statements": 3,
+      "changed_state_paths": [
+        "behavioral_disposition.cooperation_readiness",
+        "behavioral_disposition.evidence_seeking"
+      ],
+      "all_time_unchanged_state_paths": [
+        "consequence_risk.goal_failure_risk",
+        "consequence_risk.relationship_rupture_risk",
+        "consequence_risk.safety_harm_risk",
+        "emotion.anxiety",
+        "relationship.perceived_fairness",
+        "relationship.trust"
+      ],
+      "stage_counts": {
+        "appraised_candidates": 27,
+        "calibrated_positive": 17,
+        "selected": 9
+      }
+    }
+  ]
+}

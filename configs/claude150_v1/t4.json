@@ -12,21 +12,27 @@
     "prompt_id": "task_t4_action_v21",
     "horizon_mode": "natural_max_20",
     "validation_profile": "hard_only",
+    "observation_condition": "text_only",
     "provider": {"model_route": "policy"},
     "sampling": {"temperature": 0.6, "top_p": 0.9, "seed": 7201}
   },
   "environment": {
-    "appraisal_prompt_id": "environment_appraisal_v11",
+    "appraisal_prompt_id": "environment_appraisal_v12",
+    "state_calibration_profile": "evidence_bound_sparse_v2",
     "response_prompt_id": "environment_response_v25",
     "response_validation_profile": "hard_only",
     "horizon_mode": "natural_max_20",
     "multimodal_trigger_policy": {
-      "profile": "online_relaxed_v1",
-      "threshold_margin": 1,
-      "change_threshold_margin": 1,
+      "profile": "online_multimodal_v2",
+      "threshold_margin": 0,
+      "change_threshold_margin": 0,
       "cooldown_turns": 2,
       "crossing_as_threshold": true,
-      "max_events_per_turn": 1
+      "max_events_per_turn": 1,
+      "max_events_per_episode": 5,
+      "max_fires_per_trigger": 1,
+      "global_cooldown_turns": 2,
+      "event_family_cooldown_turns": 3
     },
     "provider": {"model_route": "appraisal"},
     "sampling": {"temperature": 0.2, "top_p": 0.9, "seed": 7301},

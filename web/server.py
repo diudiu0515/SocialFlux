@@ -21,18 +21,38 @@ from environment.observation import (
     PUBLIC_OBSERVATION_FIELDS,
     build_initial_policy_observation,
 )
+from environment.online_multimodal import build_online_multimodal_profile
 from evaluation.quality_gates import SCENARIO_CHECKS, TASK_REVIEW_RATINGS
 from evaluation.rollout_gate import (
     HARD_REJECT_REASONS, QUALITY_DIMENSIONS, infer_observed_outcome,
 )
-from prompts.loader import get_prompt, render_prompt
+from policies.model_policy import ModelPolicy
+from prompts.loader import get_prompt
 from schemas.validate import validate_scenario
 from scripts.scenario_docs import discover_scenario_paths
+from web.live_rollouts import load_live
+from web.offline_review import load_review as load_offline_review
 
 SCENARIO_DIR = ROOT / "configs" / "scenarios"
 PIPELINE_DIR = ROOT / "build" / "pipeline_20turn_selected"
 ACCEPTANCE_DIR = ROOT / "build" / "acceptance_v2"
 STATIC_DIR = Path(__file__).resolve().parent / "static"
+# One page registry owns both current entries and old bookmark compatibility.
+# Retired HTML/JS implementations are not needed to serve these aliases.
+PAGE_ROUTES = {
+    "/": "/gpt50_gate1.html", "": "/gpt50_gate1.html",
+    "/gpt50": "/gpt50_gate1.html", "/gpt50/": "/gpt50_gate1.html",
+    "/gpt50-live": "/gpt50_live.html", "/gpt50-live/": "/gpt50_live.html",
+    "/multimodal": "/multimodal_review.html", "/multimodal/": "/multimodal_review.html",
+    "/state-annotation": "/state_annotation.html", "/state-annotation/": "/state_annotation.html",
+    "/offline-review": "/offline_review.html", "/offline-review/": "/offline_review.html",
+}
+LEGACY_PAGE_ALIASES = {
+    path: "/gpt50_gate1.html" for path in (
+        "/index.html", "/review.html", "/scale150.html",
+        "/scale300_tasks.html", "/t2_dev_review.html",
+    )
+}
 MEDIA_MANIFEST = ROOT / "media" / "talking_head" / "manifest.json"
 SCREENING_REPORT = ROOT / "build" / "screening_report.json"
 LONG_ROLLOUT_ROOT = ROOT / "build" / "rollouts"
@@ -52,6 +72,11 @@ QUALITY_GATE_REPORT = ROOT / "build" / "quality_gates" / "report.json"
 R3_DIAGNOSTIC_REVIEW = (
     ROOT / "data" / "formal" / "environment" / "r3_current_diagnostic_review.json"
 )
+STATE_HUMAN_ANNOTATION_PACKET = (
+    ROOT
+    / "data/gpt50/experiment/state_v3_validation"
+    / "human_annotation_round1/packet.json"
+)
 SCALE20_PILOT_REVIEW = ROOT / "build" / "scale20_v1" / "pilot_review.json"
 SCALE20_FULL20_REVIEW = ROOT / "build" / "scale20_v1" / "full20_human_review.json"
 SCALE20_V2_REVIEW = ROOT / "build" / "scale20_v2" / "review.json"
@@ -65,6 +90,103 @@ GPT50_EXPECTED_SCENARIO_COUNT = 50
 GPT50_MIN_GATE3_TURNS = 10
 GPT50_ROLLOUT_ROOT = ROOT / "data" / "gpt50" / "experiment" / "rollouts"
 GPT50_GATE2_ROOT = ROOT / "data" / "gpt50" / "experiment" / "gate2"
+GPT50_ONLINE_MULTIMODAL_ROOT = (
+    ROOT / "data" / "gpt50" / "experiment" / "online_multimodal"
+)
+GPT50_ONLINE_MULTIMODAL_ASSET_ROOT = GPT50_ONLINE_MULTIMODAL_ROOT / "assets"
+GPT50_ONLINE_MULTIMODAL_REVIEW_ASSET_ROOT = (
+    GPT50_ONLINE_MULTIMODAL_ROOT / "review_assets"
+)
+GPT50_ONLINE_MULTIMODAL_TRIGGERABILITY = (
+    ROOT
+    / "reports"
+    / "experiments"
+    / "2026-09-30_online_multimodal_triggerability_v1.json"
+)
+MULTIMODAL_DELIVERY_BATCHES = {
+    "gpt": {
+        "label": "GPT50",
+        "batch_root": ROOT / "data" / "gpt50" / "experiment",
+        "scenario_root": (
+            ROOT
+            / "data"
+            / "gpt50"
+            / "experiment"
+            / "scenario"
+            / "scenarios_state_v3"
+        ),
+        "online_root": (
+            ROOT
+            / "data"
+            / "gpt50"
+            / "experiment"
+            / "multimodal_delivery_v1"
+            / "online_multimodal"
+        ),
+        "talking_root": (
+            ROOT
+            / "data"
+            / "gpt50"
+            / "experiment"
+            / "multimodal_delivery_v1"
+            / "talking_head_v4_pilot"
+        ),
+        "expected_scenario_count": 50,
+        "triggerability": GPT50_ONLINE_MULTIMODAL_TRIGGERABILITY,
+    },
+    "claude": {
+        "label": "Claude150",
+        "batch_root": ROOT / "data" / "claude150_v1",
+        "scenario_root": (
+            ROOT / "data" / "claude150_v1" / "scenarios_state_v3"
+        ),
+        "online_root": (
+            ROOT
+            / "data"
+            / "claude150_v1"
+            / "multimodal_delivery_v1"
+            / "online_multimodal"
+        ),
+        "talking_root": (
+            ROOT
+            / "data"
+            / "claude150_v1"
+            / "multimodal_delivery_v1"
+            / "talking_head"
+        ),
+        "expected_scenario_count": 150,
+        "triggerability": None,
+    },
+}
+ONLINE_EVENT_FAMILY_LABELS = {
+    "activated_tension": "紧张激活",
+    "cautious_relief": "谨慎缓和",
+    "easing_tension": "压力减退",
+    "firm_boundary": "坚定边界",
+    "guarded_withdrawal": "防御退缩",
+    "open_engagement": "开放投入",
+    "risk_concern": "风险担忧",
+}
+ONLINE_MULTIMODAL_REVIEW_CHECKS = (
+    "identity_matches_anchor",
+    "family_cue_alignment",
+    "audio_track_present",
+    "family_audio_cue_alignment",
+    "no_speech_or_mouthing",
+    "no_visible_text_or_branding",
+    "subtle_natural_motion",
+    "natural_synchronized_audio",
+)
+TALKING_HEAD_REVIEW_CHECKS = (
+    "identity_matches_anchor",
+    "exact_spoken_line",
+    "lip_sync_and_speech_naturalness",
+    "voice_delivery_naturalness",
+    "expression_matches_state",
+    "factual_consistency",
+    "no_private_state_leakage",
+    "no_visible_text_or_branding",
+)
 GPT50_GATE2_EXPERIMENTS = (
     ("E1", "state_transition_agreement.json", "状态转移方向一致性", "review_items"),
     ("E2", "trajectory_plausibility.json", "完整轨迹合理性", "review_items"),
@@ -116,6 +238,15 @@ def read_jsonl(path):
 def load_r3_diagnostic_review():
     """Load current R3 evidence without treating it as formal acceptance."""
     return read_json(R3_DIAGNOSTIC_REVIEW, {}) or {}
+
+
+def load_state_human_annotation_packet():
+    """Expose the frozen blind packet without injecting model answers."""
+    return read_json(STATE_HUMAN_ANNOTATION_PACKET, {}) or {
+        "format": "socialflux_state_human_annotation_round_v1",
+        "status": "not_generated",
+        "records": [],
+    }
 
 
 def _active_gpt50_scenario_root():
@@ -1326,6 +1457,356 @@ def load_media_assets():
     return manifest.get("assets", [])
 
 
+def _online_multimodal_prompt_cue(request):
+    lines = [
+        line.strip()
+        for line in str(request.get("prompt", "")).splitlines()
+        if line.strip()
+    ]
+    for index, line in enumerate(lines):
+        if line.startswith("Camera and lighting:") and index + 1 < len(lines):
+            return lines[index + 1]
+    return ""
+
+
+def load_online_multimodal_review(batch=None):
+    """Expose generated online videos as a bounded browser review packet."""
+    legacy = batch is None
+    if legacy:
+        batch = "legacy_gpt"
+        batch_config = {
+            "label": "GPT50 legacy",
+            "batch_root": ROOT / "data" / "gpt50" / "experiment",
+            "scenario_root": _active_gpt50_scenario_root(),
+            "online_root": GPT50_ONLINE_MULTIMODAL_ROOT,
+            "expected_scenario_count": 50,
+            "triggerability": GPT50_ONLINE_MULTIMODAL_TRIGGERABILITY,
+        }
+    elif batch not in MULTIMODAL_DELIVERY_BATCHES:
+        raise ValueError(f"unknown multimodal delivery batch: {batch}")
+    else:
+        batch_config = MULTIMODAL_DELIVERY_BATCHES[batch]
+    batch_root = batch_config["batch_root"]
+    online_root = batch_config["online_root"]
+    asset_root = online_root / "assets"
+    review_asset_root = online_root / "review_assets"
+    manifest = read_json(online_root / "manifest.json", {}) or {}
+    review = read_json(online_root / "asset_review.json", {}) or {}
+    review_by_id = {
+        item.get("request_id"): item
+        for item in review.get("items", [])
+        if item.get("request_id")
+    }
+    scenario_by_id = {
+        scenario.get("scenario_id"): scenario
+        for path in discover_scenario_paths(batch_config["scenario_root"])
+        for scenario in [read_json(path, {}) or {}]
+        if scenario.get("scenario_id")
+    }
+    triggerability_path = batch_config["triggerability"]
+    triggerability = (
+        read_json(triggerability_path, {}) or {}
+        if triggerability_path is not None
+        else {}
+    )
+    triggerability_by_id = {
+        item.get("scenario_id"): item
+        for item in triggerability.get("records", [])
+        if item.get("scenario_id")
+    }
+    profiles_by_id = {
+        scenario_id: build_online_multimodal_profile(scenario)
+        for scenario_id, scenario in scenario_by_id.items()
+    }
+    grouped = {}
+    status_counts = {}
+    for record in manifest.get("requests", []):
+        if record.get("status") != "generated_structural_pass":
+            continue
+        target = (batch_root / Path(record.get("video_file", ""))).resolve()
+        resolved_asset_root = asset_root.resolve()
+        if (
+            target.parent != resolved_asset_root
+            or target.suffix.lower() != ".mp4"
+        ):
+            continue
+        if not target.is_file():
+            continue
+        request = read_json(
+            batch_root / Path(record.get("request_file", "")),
+            {},
+        ) or {}
+        review_item = review_by_id.get(record.get("request_id"), {})
+        human_status = review_item.get("human_status", "pending")
+        status_counts[human_status] = status_counts.get(human_status, 0) + 1
+        checksum = record.get("video_sha256") or hashlib.sha256(
+            target.read_bytes()
+        ).hexdigest()
+        review_target = (
+            review_asset_root / target.name
+        ).resolve()
+        review_root = review_asset_root.resolve()
+        playback_target = target
+        playback_prefix = (
+            "/online-video/" if legacy else f"/online-video/{batch}/"
+        )
+        playback_checksum = checksum
+        if review_target.parent == review_root and review_target.is_file():
+            playback_target = review_target
+            playback_prefix = (
+                "/online-review-video/"
+                if legacy
+                else f"/online-review-video/{batch}/"
+            )
+            playback_checksum = hashlib.sha256(
+                review_target.read_bytes()
+            ).hexdigest()
+        scenario_id = record.get("scenario_id")
+        scenario = scenario_by_id.get(scenario_id, {})
+        profile = profiles_by_id.get(scenario_id, {})
+        scenario_triggerability = triggerability_by_id.get(scenario_id, {})
+        family = record.get("event_family")
+        trigger_conditions = [
+            {
+                "trigger_id": trigger.get("trigger_id"),
+                "priority": trigger.get("priority"),
+                "trigger_mode": trigger.get("trigger_mode"),
+                "source_state_family": trigger.get("source_state_family"),
+                "source_state_variable": trigger.get("source_state_variable"),
+                "source_direction": trigger.get("source_direction"),
+                "conditions": trigger.get("conditions", {}),
+            }
+            for trigger in profile.get("triggers", [])
+            if trigger.get("event_family") == family
+        ]
+        observed_events = [
+            event
+            for event in scenario_triggerability.get("events", [])
+            if event.get("event_family") == family
+        ]
+        triggerability_keys = (
+            "trajectory_turns", "evaluable_turns", "event_count",
+            "distinct_event_family_count", "distinct_state_family_count",
+            "eligible_turn_count", "eligible_turn_fraction",
+            "fire_given_eligible_turn_fraction", "first_fire_turn",
+            "near_miss_turn_count", "minimum_unmet_distance",
+            "triggerability_tier", "blocked_reason_counts", "events",
+            "skipped_turns",
+        )
+        scenario_triggerability_compact = (
+            {
+                key: scenario_triggerability.get(key)
+                for key in triggerability_keys
+            }
+            if scenario_triggerability else None
+        )
+        group = grouped.setdefault(scenario_id, {
+            "scenario_id": scenario_id,
+            "title": scenario.get("title", ""),
+            "background": scenario.get("background", ""),
+            "environment_character": (
+                (scenario.get("environment_agent") or {})
+                .get("persona", {})
+                .get("name", "")
+            ),
+            "triggerability": scenario_triggerability_compact,
+            "assets": [],
+        })
+        group["assets"].append({
+            "asset_type": "online_nonverbal",
+            "lane_label": "状态触发素材 · 无台词",
+            "spoken_content": False,
+            "request_id": record.get("request_id"),
+            "scenario_id": scenario_id,
+            "media_asset_id": record.get("media_asset_id"),
+            "event_family": record.get("event_family"),
+            "event_family_label": ONLINE_EVENT_FAMILY_LABELS.get(
+                record.get("event_family"), record.get("event_family")
+            ),
+            "dependency_phase": record.get("dependency_phase"),
+            "is_anchor": record.get("dependency_phase") == 0,
+            "trigger_conditions": trigger_conditions,
+            "observed_trigger_events": observed_events,
+            "expected_cue": _online_multimodal_prompt_cue(request),
+            "expected_audio": (request.get("audio") or {}).get("direction", ""),
+            "identity": request.get("identity", {}),
+            "url": (
+                f"{playback_prefix}{playback_target.name}"
+                f"?v={playback_checksum[:12]}"
+            ),
+            "video_sha256": checksum,
+            "playback_sha256": playback_checksum,
+            "review_loudness_normalized": playback_target == review_target,
+            "video_bytes": record.get("video_bytes", target.stat().st_size),
+            "structural_metadata": record.get("structural_metadata", {}),
+            "human_status": human_status,
+            "checks": review_item.get("checks", {}),
+            "notes": review_item.get("notes", ""),
+            "check_keys": list(ONLINE_MULTIMODAL_REVIEW_CHECKS),
+        })
+    talking_root = batch_config.get("talking_root")
+    talking_manifest = (
+        read_json(talking_root / "manifest.json", {}) or {}
+        if talking_root is not None else {}
+    )
+    talking_review = (
+        read_json(talking_root / "asset_review.json", {}) or {}
+        if talking_root is not None else {}
+    )
+    talking_review_by_id = {
+        item.get("request_id"): item
+        for item in talking_review.get("items", [])
+        if item.get("request_id")
+    }
+    talking_asset_root = (
+        (talking_root / "assets").resolve()
+        if talking_root is not None else None
+    )
+    for record in talking_manifest.get("requests", []):
+        if record.get("status") != "generated_structural_pass":
+            continue
+        target = (batch_root / Path(record.get("video_file", ""))).resolve()
+        if (
+            talking_asset_root is None
+            or target.parent != talking_asset_root
+            or target.suffix.lower() != ".mp4"
+            or not target.is_file()
+        ):
+            continue
+        scenario_id = record.get("scenario_id")
+        scenario = scenario_by_id.get(scenario_id, {})
+        request = read_json(
+            batch_root / Path(record.get("request_file", "")), {}
+        ) or {}
+        expression = record.get("observable_expression") or {}
+        cue_parts = [
+            expression.get("facial_expression"),
+            expression.get("gaze"),
+            expression.get("speech_style"),
+            expression.get("prosody"),
+            "; ".join(expression.get("behavioral_cues") or []),
+        ]
+        review_item = talking_review_by_id.get(record.get("request_id"), {})
+        human_status = review_item.get("human_status", "pending")
+        status_counts[human_status] = status_counts.get(human_status, 0) + 1
+        checksum = record.get("video_sha256") or hashlib.sha256(
+            target.read_bytes()
+        ).hexdigest()
+        group = grouped.setdefault(scenario_id, {
+            "scenario_id": scenario_id,
+            "title": scenario.get("title", ""),
+            "background": scenario.get("background", ""),
+            "environment_character": (
+                (scenario.get("environment_agent") or {})
+                .get("persona", {})
+                .get("name", "")
+            ),
+            "triggerability": triggerability_by_id.get(scenario_id),
+            "assets": [],
+        })
+        group["assets"].append({
+            "asset_type": "talking_head",
+            "lane_label": "响应口型视频 · 有语音",
+            "spoken_content": True,
+            "request_id": record.get("request_id"),
+            "scenario_id": scenario_id,
+            "trajectory_id": record.get("trajectory_id"),
+            "turn_id": record.get("turn_id"),
+            "importance_score": record.get("importance_score"),
+            "importance_reasons": record.get("importance_reasons", []),
+            "prompt_id": record.get(
+                "prompt_id", talking_manifest.get("prompt_id")
+            ),
+            "media_asset_id": record.get("request_id"),
+            "event_family": "talking_head",
+            "event_family_label": f"口型台词 · {record.get('turn_id', '')}",
+            "dependency_phase": None,
+            "is_anchor": False,
+            "trigger_conditions": [],
+            "observed_trigger_events": [],
+            "expected_cue": " · ".join(
+                str(value).strip() for value in cue_parts if value
+            ),
+            "expected_audio": record.get("public_response", ""),
+            "source_public_response": record.get(
+                "source_public_response", ""
+            ),
+            "identity": request.get("identity", {}),
+            "url": (
+                f"/talking-video/{batch}/{target.name}?v={checksum[:12]}"
+            ),
+            "video_sha256": checksum,
+            "playback_sha256": checksum,
+            "review_loudness_normalized": False,
+            "video_bytes": record.get("video_bytes", target.stat().st_size),
+            "structural_metadata": record.get("structural_metadata", {}),
+            "human_status": human_status,
+            "checks": review_item.get("checks", {}),
+            "notes": review_item.get("notes", ""),
+            "check_keys": list(TALKING_HEAD_REVIEW_CHECKS),
+        })
+    scenarios = sorted(grouped.values(), key=lambda item: item["scenario_id"])
+    for scenario in scenarios:
+        scenario["assets"].sort(key=lambda item: (
+            0 if item["is_anchor"] else 1,
+            0 if item.get("asset_type") == "online_nonverbal" else 1,
+            item["event_family"],
+            item["request_id"],
+        ))
+        scenario["asset_count"] = len(scenario["assets"])
+    active_scenario_ids = {item["scenario_id"] for item in scenarios}
+    expected_scenario_ids = set(scenario_by_id)
+    missing_scenario_ids = sorted(expected_scenario_ids - active_scenario_ids)
+    return {
+        "format": "socialflux_online_multimodal_browser_review_v1",
+        "batch": batch,
+        "batch_label": batch_config["label"],
+        "profile": manifest.get("profile"),
+        "asset_version": manifest.get("asset_version"),
+        "scenario_count": len(scenarios),
+        "expected_scenario_count": batch_config["expected_scenario_count"],
+        "missing_scenario_ids": missing_scenario_ids,
+        "asset_count": sum(item["asset_count"] for item in scenarios),
+        "online_asset_count": sum(
+            asset.get("asset_type") == "online_nonverbal"
+            for item in scenarios for asset in item["assets"]
+        ),
+        "talking_head_asset_count": sum(
+            asset.get("asset_type") == "talking_head"
+            for item in scenarios for asset in item["assets"]
+        ),
+        "structurally_passed_count": sum(
+            item["asset_count"] for item in scenarios
+        ),
+        "human_status_counts": status_counts,
+        "triggerability": {
+            "available": bool(triggerability.get("records")),
+            "format": triggerability.get("format"),
+            "evaluated_scenario_count": triggerability.get(
+                "evaluated_scenario_count", 0
+            ),
+            "audit_scope": triggerability.get("audit_scope"),
+            "model_calls": triggerability.get("model_calls"),
+            "state_snapshots_reused": triggerability.get(
+                "state_snapshots_reused"
+            ),
+            "policy": triggerability.get("policy", {}),
+            "tier_definition": triggerability.get("tier_definition", {}),
+            "summary": triggerability.get("summary", {}),
+            "warning": (
+                "触发难度来自保存状态轨迹的反事实重放；它不改写 response，"
+                "也不证明被测模型对状态变化具有单独因果控制。"
+            ),
+        },
+        "requirements": review.get("requirements", {}),
+        "check_keys": list(ONLINE_MULTIMODAL_REVIEW_CHECKS),
+        "talking_head_check_keys": list(TALKING_HEAD_REVIEW_CHECKS),
+        "scenarios": scenarios,
+        "storage": "browser_local_draft",
+        "human_review_required": True,
+    }
+
+
 def load_task_examples():
     """Load T1–T3 review examples without promoting machine answers to GT."""
     packet = read_json(TASK_EXAMPLES, {}) or {}
@@ -1776,6 +2257,11 @@ def scenario_detail(scenario_id):
     screening = load_screening_report()
     initial_observation = build_initial_policy_observation(scenario)
     prompt_id = "task_t4_action_v21"
+    # Reuse the real policy renderer so role-card/turn-brief placeholders cannot
+    # drift from the runtime. Building a request does not call a provider.
+    preview_messages, _ = ModelPolicy(
+        "web-prompt-preview", provider=None, prompt_id=prompt_id,
+    )._build_request(initial_observation)
     model_contract = {
         "prompt_id": prompt_id,
         "horizon_turns": 20,
@@ -1784,7 +2270,7 @@ def scenario_detail(scenario_id):
         "private_author_fields_excluded": list(PRIVATE_AUTHOR_FIELDS),
         "initial_observation": initial_observation,
         "prompt_template": get_prompt(prompt_id),
-        "rendered_initial_prompt": render_prompt(prompt_id, initial_observation),
+        "rendered_initial_prompt": preview_messages[-1]["content"],
         "boundary_note": (
             "网页向研究者展示 persona/hidden intention/initial state/runtime dynamics seed；这些作者侧私有信息"
             "不会进入被测模型 observation。"
@@ -1830,12 +2316,31 @@ def scenario_detail(scenario_id):
 
 def api_payload(path):
     parts = [unquote(part) for part in path.strip("/").split("/") if part]
+    if parts == ["api", "offline-review"]:
+        return load_offline_review()
+    if len(parts) == 3 and parts[:2] == ["api", "offline-review"]:
+        return load_offline_review(parts[2])
+    if len(parts) == 4 and parts[:2] == ["api", "offline-review"] and parts[3] == "reference":
+        return load_offline_review(parts[2], reference=True)
+    if parts == ["api", "gpt50-live"]:
+        return load_live()
+    if len(parts) == 3 and parts[:2] == ["api", "gpt50-live"]:
+        return load_live(parts[2])
     # GPT50 is the active workbench. Resolve it before loading the unrelated
     # legacy scenario catalog so rollout polling stays lightweight.
     if parts == ["api", "gpt50-review"]:
         return load_gpt50_review()
     if parts == ["api", "gpt50-rollout"]:
         return load_gpt50_rollout_progress()
+    if parts == ["api", "online-multimodal-review"]:
+        return load_online_multimodal_review()
+    if parts == ["api", "state-annotation"]:
+        return load_state_human_annotation_packet()
+    if (
+        len(parts) == 3
+        and parts[:2] == ["api", "online-multimodal-review"]
+    ):
+        return load_online_multimodal_review(parts[2])
     if len(parts) == 3 and parts[:2] == ["api", "gpt50-rollout"]:
         return load_gpt50_rollout(parts[2])
     if len(parts) == 3 and parts[:2] == ["api", "gpt50-scenario"]:
@@ -1951,6 +2456,97 @@ class App(SimpleHTTPRequestHandler):
         if not self.authenticate():
             return
         parsed = urlparse(self.path)
+        if parsed.path.startswith((
+            "/online-video/", "/online-review-video/", "/talking-video/"
+        )):
+            talking_head = parsed.path.startswith("/talking-video/")
+            review_copy = parsed.path.startswith("/online-review-video/")
+            prefix = (
+                "/talking-video/"
+                if talking_head
+                else "/online-review-video/"
+                if review_copy
+                else "/online-video/"
+            )
+            relative = unquote(parsed.path.removeprefix(prefix))
+            batch_name, separator, batch_filename = relative.partition("/")
+            if talking_head:
+                if not separator or batch_name not in MULTIMODAL_DELIVERY_BATCHES:
+                    self.send_error(404, "talking-head video not found")
+                    return
+                talking_root = MULTIMODAL_DELIVERY_BATCHES[batch_name].get(
+                    "talking_root"
+                )
+                if talking_root is None:
+                    self.send_error(404, "talking-head video not found")
+                    return
+                asset_root = (talking_root / "assets").resolve()
+                filename = batch_filename
+            elif separator and batch_name in MULTIMODAL_DELIVERY_BATCHES:
+                online_root = MULTIMODAL_DELIVERY_BATCHES[batch_name][
+                    "online_root"
+                ]
+                asset_root = (
+                    online_root / (
+                        "review_assets" if review_copy else "assets"
+                    )
+                ).resolve()
+                filename = batch_filename
+            else:
+                asset_root = (
+                    GPT50_ONLINE_MULTIMODAL_REVIEW_ASSET_ROOT
+                    if review_copy
+                    else GPT50_ONLINE_MULTIMODAL_ASSET_ROOT
+                ).resolve()
+                filename = relative
+            target = (asset_root / filename).resolve()
+            if (
+                target.parent != asset_root
+                or target.suffix.lower() != ".mp4"
+                or not target.is_file()
+            ):
+                self.send_error(
+                    404,
+                    "talking-head video not found"
+                    if talking_head else "online multimodal video not found",
+                )
+                return
+            size = target.stat().st_size
+            start, end = 0, size - 1
+            range_header = self.headers.get("Range", "")
+            partial = False
+            if range_header.startswith("bytes=") and "," not in range_header:
+                try:
+                    left, right = range_header[6:].split("-", 1)
+                    if left:
+                        start = int(left)
+                        end = int(right) if right else end
+                    elif right:
+                        length = int(right)
+                        start = max(0, size - length)
+                    partial = 0 <= start <= end < size
+                except (TypeError, ValueError):
+                    partial = False
+            if not partial:
+                start, end = 0, size - 1
+            self.send_response(206 if partial else 200)
+            self.send_header("Content-Type", "video/mp4")
+            self.send_header("Accept-Ranges", "bytes")
+            self.send_header("Content-Length", str(end - start + 1))
+            if partial:
+                self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
+            self.send_header("Cache-Control", "public, max-age=3600")
+            self.end_headers()
+            with target.open("rb") as stream:
+                stream.seek(start)
+                remaining = end - start + 1
+                while remaining:
+                    chunk = stream.read(min(1024 * 1024, remaining))
+                    if not chunk:
+                        break
+                    self.wfile.write(chunk)
+                    remaining -= len(chunk)
+            return
         if parsed.path.startswith("/task-media/"):
             filename = unquote(parsed.path.removeprefix("/task-media/"))
             target = (TASK_EXAMPLE_MEDIA_ROOT / filename).resolve()
@@ -1997,17 +2593,7 @@ class App(SimpleHTTPRequestHandler):
             self.send_json(payload if payload is not None else {"error": "not found"},
                            200 if payload is not None else 404)
             return
-        legacy_review_pages = {
-            "/index.html",
-            "/review.html",
-            "/scale150.html",
-            "/scale300_tasks.html",
-            "/t2_dev_review.html",
-        }
-        if parsed.path in ("/", "", "/gpt50", "/gpt50/"):
-            self.path = "/gpt50_gate1.html"
-        elif parsed.path in legacy_review_pages:
-            self.path = "/gpt50_gate1.html"
+        self.path = PAGE_ROUTES.get(parsed.path, LEGACY_PAGE_ALIASES.get(parsed.path, self.path))
         super().do_GET()
 
     def log_message(self, format, *args):

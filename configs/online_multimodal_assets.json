@@ -1,0 +1,40 @@
+{
+  "format": "socialflux_online_multimodal_assets_v1",
+  "profile": "online_multimodal_v2",
+  "prompt_id": "online_nonverbal_event_v3",
+  "asset_version": "online_nonverbal_v1",
+  "duration_seconds": 4,
+  "anchor_event_family": "activated_tension",
+  "provider": {
+    "model": "doubao-seedance-2-0-260128",
+    "resolution": "720p",
+    "ratio": "16:9",
+    "generate_audio": true,
+    "watermark": false
+  },
+  "continuity": {
+    "identity_strategy": "scenario_hash_fictional_identity_v1",
+    "dependent_asset_reference": "anchor_reference_video",
+    "cross_scenario_identity_reuse": false
+  },
+  "content_constraints": {
+    "response_neutral": true,
+    "spoken_content": false,
+    "nonverbal_audio": true,
+    "subtitles": false,
+    "visible_text": false,
+    "private_state_leakage": false,
+    "threshold_leakage": false,
+    "exaggerated_acting": false
+  },
+  "review": {
+    "require_every_asset_reviewed": true,
+    "require_identity_match_to_anchor": true,
+    "require_family_cue_alignment": true,
+    "require_audio_track": true,
+    "require_family_audio_cue_alignment": true,
+    "require_no_speech_or_mouthing": true,
+    "require_no_visible_text": true,
+    "require_natural_synchronized_audio": true
+  }
+}

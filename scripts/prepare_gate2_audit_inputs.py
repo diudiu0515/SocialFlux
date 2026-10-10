@@ -127,12 +127,26 @@ def main(argv=None):
     parser.add_argument("--rollout-root", type=Path, required=True)
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--expected-count", type=int, default=50)
+    parser.add_argument(
+        "--source-status",
+        choices=("all", "accepted", "machine_rejected", "generation_error"),
+        default="all",
+        help="materialize one explicit provenance cohort; never infer acceptance from depth",
+    )
     args = parser.parse_args(argv)
 
-    records = selected_inputs(
+    population_records = selected_inputs(
         args.scenario_root.resolve(),
         args.rollout_root.resolve(),
     )
+    population_status_counts = Counter(
+        item["source_status"] for item in population_records
+    )
+    records = [
+        item for item in population_records
+        if args.source_status == "all"
+        or item["source_status"] == args.source_status
+    ]
     if len(records) != args.expected_count:
         raise ValueError(
             f"Gate 2 audit input requires {args.expected_count} scenarios, "
@@ -170,9 +184,21 @@ def main(argv=None):
         ),
         "deletion_policy": "retain_all_source_artifacts",
         "scenario_count": len(manifest_records),
+        "source_status_filter": args.source_status,
+        "population_scenario_count": len(population_records),
+        "population_source_status_counts": dict(population_status_counts),
         "source_status_counts": dict(Counter(
             item["source_status"] for item in manifest_records
         )),
+        "turn_count_distribution": dict(Counter(
+            item["turn_count"] for item in manifest_records
+        )),
+        "exact_20_turn_count": sum(
+            item["turn_count"] == 20 for item in manifest_records
+        ),
+        "main_10_to_20_turn_count": sum(
+            10 <= item["turn_count"] <= 20 for item in manifest_records
+        ),
         "records": manifest_records,
     }
     atomic(args.output_root / "gate2_input_manifest.json", manifest)

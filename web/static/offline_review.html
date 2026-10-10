@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SocialFlux · T1–T3 题目标注</title>
+  <link rel="stylesheet" href="/offline_review.css?v=1">
+</head>
+<body>
+  <header>
+    <div><a href="/gpt50-live">← 场景与对话</a><h1>T1–T3 题目标注</h1><p id="bankMeta">正在读取题库…</p></div>
+    <div class="tools">
+      <label>标注人 <input id="reviewer" autocomplete="name" placeholder="姓名或 ID"></label>
+      <button id="exportButton" type="button">导出标注</button>
+      <label class="import-button">导入标注<input id="importFile" type="file" accept=".json,application/json"></label>
+    </div>
+  </header>
+  <p class="notice">先根据题目材料独立作答，再按需查看作者参考。标注自动保存在当前浏览器，可导出备份或导入继续；不会自动转为正式答案。</p>
+  <div id="message" role="status" aria-live="polite"></div>
+  <div class="layout">
+    <aside>
+      <p id="progress"></p>
+      <label>任务<select id="taskFilter"><option value="">全部 T1–T3</option><option>T1</option><option>T2</option><option>T3</option></select></label>
+      <label>状态维度<select id="familyFilter"><option value="">全部四维</option><option value="Emotion">情绪体验</option><option value="Behavioral Disposition">行为倾向</option><option value="Relationship">关系判断</option><option value="Interaction Risk">互动风险</option></select></label>
+      <label>题目结构<select id="shapeFilter"><option value="">全部结构</option><option value="single">单维题</option><option value="combo">组合题</option></select></label>
+      <label>标注进度<select id="statusFilter"><option value="">全部题目</option><option value="pending">待完成</option><option value="complete">已完成</option><option value="replay_pending">回放待完成</option></select></label>
+      <label>搜索<input id="search" type="search" placeholder="题目、场景或编号"></label>
+      <nav id="itemNav" aria-label="题目列表"></nav>
+    </aside>
+    <main id="workspace" aria-busy="true"><p>正在加载…</p></main>
+  </div>
+  <script src="/offline_review.js?v=1"></script>
+</body>
+</html>

@@ -36,7 +36,7 @@ from evaluation.rollout_semantic_review import (
     deterministic_review_sampling,
     validate_judgment,
 )
-from scripts.t2_common import ROOT, atomic, load, scenario_path
+from tasks.T2.runtime import ROOT, atomic, load, scenario_path
 from tasks.T2.answering import generate_answer
 from tasks.T2.branch_authoring import author_branch
 from tasks.T2.pair_builder import public_source_turn

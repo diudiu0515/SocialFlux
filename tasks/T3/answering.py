@@ -7,7 +7,7 @@ import json
 
 from prompts.loader import render_prompt
 from providers.structured import complete_json
-from scripts.t2_common import call_count
+from tasks.T2.runtime import call_count
 from tasks.T3.t3_probability_utils import (
     DIRECTION_LABELS,
     validate_probabilities,
@@ -37,6 +37,9 @@ def canonicalize_instance(instance):
 
 
 def answer_prompt(instance, private_persona=None, condition="main"):
+    if instance.get("benchmark_version") == "socialflux_offline_choice_v1":
+        from tasks.offline_choice import answer_prompt as choice_prompt
+        return choice_prompt(instance)
     state_ids = instance["target_spec"]["target_state_ids"]
     actions = instance["input"]["candidate_actions"]
     schema = {
@@ -80,6 +83,12 @@ def answer_prompt(instance, private_persona=None, condition="main"):
 
 
 def validate_answer(value, instance):
+    if instance.get("benchmark_version") == "socialflux_offline_choice_v1":
+        from tasks.offline_choice import parse_answer
+        parsed = parse_answer(json.dumps(value), instance["options"])
+        if parsed["format_error"]:
+            raise ValueError(parsed["format_error"])
+        return {"answer": parsed["answer"]}
     if not isinstance(value, dict) or set(value) != {"instance_id", "options"}:
         raise ValueError("T3 answer top keys")
     if value["instance_id"] != instance["instance_id"]:
@@ -130,6 +139,9 @@ def generate_answer(
     provider, instance, seed, *, private_persona=None, max_attempts=3,
     condition="main",
 ):
+    if instance.get("benchmark_version") == "socialflux_offline_choice_v1":
+        from tasks.offline_choice import generate_answer as choice_answer
+        return choice_answer(provider, instance, seed)
     instance = canonicalize_instance(instance)
     start = call_count(provider)
     answer = complete_json(

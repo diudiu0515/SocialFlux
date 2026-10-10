@@ -65,6 +65,17 @@ class TimescaleValidityTest(unittest.TestCase):
         self.assertIsNone(payload["record"]["passed"])
         self.assertFalse(payload["record"]["human_attestation"])
         self.assertTrue(payload["record"]["non_degenerate"])
+        self.assertEqual(
+            payload["record"]["population_summary"]["variable_count"], 12
+        )
+        self.assertIn(
+            "by_state_family", payload["record"]["population_summary"]
+        )
+        self.assertEqual(
+            payload["record"]["population_summary"]["by_expected_timescale"]
+            ["slow"]["variable_count"],
+            3,
+        )
         self.assertTrue(machine_timescale_packet_ready(payload))
 
     def test_packet_readiness_requires_all_three_explicit_priors(self):

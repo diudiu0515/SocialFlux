@@ -1,5 +1,30 @@
 # SocialFlux Annotation Studio
 
+Offline T1–T3 开发题标注入口：
+
+```text
+http://127.0.0.1:8000/offline-review
+```
+
+直接读取 `data/offline_t1_t3_dev60/items.jsonl`，目前是 5 个 scenario 的
+60 道题（每个 task 20 道）。来源是固定版本的 scenario + rollout；T2
+另有受控历史对，T3 另有候选行动分支。入口也在 `/gpt50` 和 `/gpt50-live` 导航中。
+支持任务、四维 state、单维／组合、标注进度筛选，以及按题号或场景搜索。
+可用 `/offline-review#SFO-005` 直接打开某题。
+
+默认只读取模型可见材料；点击“查看参考答案与来源”才请求作者参考、原始 scenario、
+相关 state、T2 改写位置和 T3 未来分支。原始 source 路径与 SHA 必须匹配才会展示；
+接口不传出 provider 原始请求、调用日志或运行快照。参考答案仍待人工审核，
+4 道未完成 T3 回放会显示为开发候选。文字／视频模式复用已配对资产，视频绑定
+历史证据 ID，并检查文件 SHA；T2 视频只对应共同前缀，不充当共同 ending。
+
+标注内容包括个人答案、其他可接受选项、证据 ID、四项质量判断、题目审核意见及
+修改建议。草稿保存在当前浏览器；完成标注须填标注人，导出保留题库 SHA、逐题
+SHA、标注人及查看参考的记录。导入严格匹配版本，保留未涉及的本地题目；已查看
+参考的题目不能通过旧导入恢复成盲标。网页不调用模型，也不自动写入正式 GT 或
+放行来源 Gate。导出的 `socialflux_offline_choice_annotations_v1` 是待汇总的人工
+审核记录，不能直接作为 `offline-eval --responses` 的模型回答文件。
+
 当前默认页面是 GPT 小规模实验的人工 Gate 1：
 
 ```text
@@ -8,7 +33,26 @@ http://127.0.0.1:8000/gpt50
 
 它展示完整 scenario、角色、关键历史、initial state、runtime dynamics seed、trigger 与 schema 状态，并导出绑定 scenario SHA-256 的人工审核草稿。Gate 1 只人工冻结 initial state，runtime dynamics seed 由机器合同校验；通过后每个场景只生成一条 rollout。
 
-旧 Qwen rollout 和旧 Scale300 场景已移出活跃目录，保存在本地忽略归档中。历史四 Gate 页面、任务审核页、示例页和可选媒体路由仍保留；旧 Talking Head 素材与本地生成引擎已永久删除，当前媒体清单为空；接入与审核框架等待外部 API。没有活跃数据时页面会显示归档状态，不会将旧结果当作当前候选。
+当前在线多模态有效批次的视频审核页：
+
+```text
+http://127.0.0.1:8000/multimodal
+```
+
+`/gpt50-live` 的场景详情已内嵌只读多模态播放器，沿用浅绿主题。
+支持状态表达／语音口型筛选、有声播放，以及所选轨迹的原始触发证据。
+视频不会自动播放，不叠加字幕；非语言素材没有台词。
+素材预览不等于轨迹实际触发：状态素材只按同场景、精确素材 ID 关联；
+口型视频还须匹配轨迹 ID、轮次及回复正文。缺少对应视频时明确显示待补。
+触发记录来自原始 rollout，即使正文正在展示英文翻译也不会用翻译结果替换事件。
+此入口不生成新素材、不调用模型、不更改 policy 输入，也不自动批准人工审核。
+
+旧 Qwen rollout 和旧 Scale300 场景不在活跃目录。已被现有路由替代的旧
+index/review/scale150/scale300_tasks/t2_dev_review 页面及专用 app.js 已删除；
+旧 URL 仍映射到 GPT50 工作台，统一由 `web/server.py` 的页面注册表管理。
+仍可直接访问的 `task_examples.html` 及其 styles.css 保留用于旧示例协议复现。
+旧 Talking Head manifest 与当前 GPT50/Claude150 多模态批次相互独立；旧清单
+为空不代表当前批次没有视频。接口没有对应数据时返回空集，不把旧结果当作当前候选。
 
 浏览器记录仅保存在 localStorage，不写仓库，也不构成真人签名、Gate 通过或 human GT。正式 Gate 4 仍要求两人独立审核同一确定性样本，只有分歧项进入仲裁。
 

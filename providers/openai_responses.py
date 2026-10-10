@@ -8,7 +8,7 @@ from urllib.error import HTTPError
 from urllib.parse import urlparse
 from urllib.request import ProxyHandler, Request, build_opener, urlopen
 
-from .base import ModelProvider
+from .base import IncompleteModelOutputError, ModelProvider
 
 
 class OpenAIResponsesProvider(ModelProvider):
@@ -33,6 +33,7 @@ class OpenAIResponsesProvider(ModelProvider):
         self._request_duration_seconds = 0.0
         self._usage = {}
         self._statuses = {}
+        self._audit_records = []
 
     def reset(self):
         self._call_index = 0
@@ -43,6 +44,7 @@ class OpenAIResponsesProvider(ModelProvider):
         self._statuses = {}
 
     def _record_usage(self, value):
+        self._audit_records = []
         if not isinstance(value, dict):
             return
         for key, amount in value.items():
@@ -148,9 +150,31 @@ class OpenAIResponsesProvider(ModelProvider):
         if data.get("error"):
             raise RuntimeError(f"provider response error: {data['error']}")
         self._record_usage(data.get("usage"))
-        self._record_status(data.get("status"))
-        return self._extract_text(data)
-
+        status = data.get("status")
+        self._record_status(status)
+        try:
+            raw_output = self._extract_text(data)
+        except ValueError:
+            if status != "incomplete":
+                raise
+            raw_output = ""
+        incomplete_reason = (data.get("incomplete_details") or {}).get("reason")
+        self._audit_records.append({
+            "request": payload,
+            "raw_output": raw_output,
+            "finish_reason": incomplete_reason or status,
+            "usage": data.get("usage", {}),
+            "complete": status != "incomplete",
+        })
+        if status == "incomplete":
+            self._failed_request_count += 1
+            raise IncompleteModelOutputError(
+                f"provider response was incomplete: {incomplete_reason or status}",
+                finish_reason=incomplete_reason or status,
+                raw_output=raw_output,
+                request=payload,
+            )
+        return raw_output
     def _read_stream(self, response):
         parts = []
         final_response = None
@@ -183,6 +207,10 @@ class OpenAIResponsesProvider(ModelProvider):
     @property
     def usage(self):
         return dict(self._usage)
+
+    @property
+    def audit_records(self):
+        return [dict(item) for item in self._audit_records]
 
     @property
     def metrics(self):

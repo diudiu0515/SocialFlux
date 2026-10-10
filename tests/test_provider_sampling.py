@@ -133,6 +133,36 @@ class ProviderSamplingTest(unittest.TestCase):
             {0: 1, 1: 1},
         )
 
+    @patch("providers.openai_compatible.sleep")
+    @patch("providers.openai_compatible.build_opener")
+    def test_single_key_retries_transient_http_429_with_backoff(
+        self, mocked, mocked_sleep
+    ):
+        overloaded = HTTPError(
+            "https://example.invalid/v1/chat/completions",
+            429,
+            "Too Many Requests",
+            {},
+            io.BytesIO(b"overloaded"),
+        )
+        mocked.return_value.open.side_effect = [overloaded, FakeResponse()]
+        provider = OpenAICompatibleProvider(
+            "https://example.invalid/v1/chat/completions",
+            "model",
+            api_key="key-a",
+            use_proxy=False,
+            max_transport_attempts=3,
+            retry_backoff_seconds=0.25,
+        )
+        result = provider.complete([{"role": "user", "content": "test"}])
+        self.assertEqual(result, "ok")
+        mocked_sleep.assert_called_once_with(0.25)
+        self.assertEqual(provider.metrics["request_count"], 2)
+        self.assertEqual(provider.metrics["failed_request_count"], 1)
+        self.assertEqual(
+            provider.metrics["transport_retry_sleep_seconds"], 0.25
+        )
+
 
 
 if __name__ == "__main__":

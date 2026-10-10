@@ -1,0 +1,45 @@
+新版 Astra：两处漏识别（按冻结的人工标签评估）
+
+不改标签，不改 prompt。完整补测仍在运行。两例均没有产生新增 trust 候选，并非 feature 或 dialogue 否决了有效候选。
+
+trust_gpt002_historical_anchor__negative
+背景：At the deadline before examination week, the parent advocate asks the counselor to put a side-entrance, private-room, quiet-reset, ordinary-attendance plan in writing before the roster closes, while committee review will occur after the first examinations
+关系结构：A school counselor and an experienced parent advocate who have previously negotiated access support must revisit their conditional trust after an earlier verbal arrangement failed during a timetable change.
+权力结构：The counselor controls immediate rooms, staffing, instructions, and attendance handling, while the advocate can initiate a formal district review that requires the school to account for its decisions.
+当前冲突：They must choose between an immediate informal examination accommodation and waiting for committee review, balancing timely access, privacy, durable accountability, and repair of trust.
+既有历史：A verbal quiet-start arrangement initially improved attendance and completed work, but a timetable change erased it and left the student recorded late with an assessment missing.；The counselor apologized and restored a staff-dependent check-in, so the advocate withheld a drafted complaint while treating further reassurance as conditional.；A committee intake was filed after more incomplete work appeared, but its meeting falls after the first examinations and the student has since concealed a new symptom from school.
+历史：
+t1 被测方：我需要在名单锁定前把考试期间的安排写下来：侧门进入、需要时使用私密房间安静调整，并按普通出勤记录。委员会审查可以在首场考试后进行，但不能替代这份即时、保护隐私的保障。
+t1 环境方：侧门和普通出勤记录我现在就写。私密房间这一项，我需要知道是短暂独处、感官缓冲还是别的，才能确认安全并落实。
+t2 被测方：我不能替她把需要预先归成固定类别，也不认为落实安排需要更多症状细节；用“感官缓冲”这一层描述就足够了。
+t2 环境方：感官缓冲我接受。文件里会写：学生需要时可使用独立安静空间自行调整，工作人员在门外确认安全即可。
+t3 被测方：门外确认可以，但请把启动方式也写清楚：由她自行示意即可，不需要当众解释；另外这份安排应在考试周内对所有相关工作人员可见。
+t3 环境方：自行示意和不当众解释这两条我现在加进去。工作人员可见这一点，考前简报里我会口头说明；如果你需要书面分发版本，我明天确认副校长是否批准。
+当前动作：口头说明可以先保证考试周执行，但在副校长决定前，书面安排仍应作为当前版本保留；若书面分发暂缓，请确保值班人员能看到同一份内容。
+最新待答问题：ledger 未列出；上方保留完整最近发言
+冻结人工标签：普通新增 trust 证据，方向增加。
+模型判断：no_relevant_evidence
+模型依据（原文）：This is an aligned procedural accommodation, not verified follow-through, costly honesty, or new evidence establishing Sera's dependability.
+最终 delta：0
+原文重复匹配：[]
+完整实际请求与原始回答：data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/context_samples_v724_transport_recovery/01_trust_gpt002_historical_anchor__negative/requests.json
+
+trust_gpt003__negative
+背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
+关系结构：An investigations editor and a reporter with a mentor-protégé bond share loyalty and source-protection duties, but an earlier correction has made their trust conditional.
+权力结构：The editor controls the only pre-vote lead slot and scarce legal review, while the reporter controls the source, raw recordings, and safe chain of custody, so either can veto the other's plan.
+当前冲突：At the five o'clock lock, the reporter asks the editor to hold a time-sensitive corruption allegation with one disputed instruction until the following Monday's scheduled records release, file an expedited request, and arrange a secure source meeting, while the editor weighs publication before the council vote against legal exposure, source retaliation, and suppression during the delay.
+既有历史：Months of reporting assembled contracts, invoices, meeting records, and a source account suggesting that an emergency electric-bus charging award was steered toward one vendor, but the sealed vendor-ranking worksheet remains unavailable.；An earlier investigation misstated the number of homes affected by a zoning failure, and the editor accepted public responsibility while retaining the reporter and imposing stricter verification.；After officials noticed the inquiries, the source was transferred and system access was narrowed, making any new attempt to retrieve the worksheet potentially traceable.；Before the deadline, counsel found that the source had accepted off-hours consulting fees from a subcontractor during the bidding period, a conflict the editor has not yet disclosed to the reporter.；A public-records release scheduled for the following Monday
+历史：
+t1 被测方：我不建议把那条争议指令写成既成事实，但也不想让明早的表决在沉默里过去。今晚先刊出合同、付款和会议记录能支撑的采购疑点，明确标注指令尚未核实，给涉事方回应机会；周一记录公开后再补核，源头细节继续按安全边界处理。
+t1 环境方：分阶段刊出我同意。不过源头细节不只是保护身份——你现在能确认这位线人在采购期间没有任何利益关联吗？
+t2 被测方：不能确认，我手头没有足够材料排除线人在采购期间存在利益关联，因此不能把他的说法当作独立佐证。分阶段刊出的安排仍可保留，但今晚的稿子必须把记录能证实的事实与尚未核清的来源陈述分开。
+t2 环境方：好。今晚这条指令你准备怎么写——完全不提，还是标注为待核实的说法？
+当前动作：标注为待核实的来源说法，明确写出目前没有独立材料印证；主标题和结论只用记录能支撑的事实，避免让这条指令替它们背书。
+最新待答问题：好。今晚这条指令你准备怎么写——完全不提，还是标注为待核实的说法？
+冻结人工标签：普通新增 trust 证据，方向增加。
+模型判断：repeated_evidence_only
+模型依据（原文）：承认来源说法不能独立佐证及不得冒充确定事实的诚实姿态此前已经存在；新增写作约束不是已验证履约，也没有新的代价性披露。
+最终 delta：0
+原文重复匹配：[]
+完整实际请求与原始回答：data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/context_samples_v724_transport_recovery/03_trust_gpt003__negative/requests.json

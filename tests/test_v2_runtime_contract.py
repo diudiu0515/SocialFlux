@@ -43,6 +43,45 @@ class V2RuntimeContractTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "exactly the four"):
             freeze_initialization(invalid)
 
+    def test_v3_initialization_enforces_confirmed_family_counts(self):
+        valid = deepcopy(self.scenario)
+        valid["state_ontology_version"] = "socialflux_state_ontology_v3"
+        valid["selected_state_variables"] = {
+            "emotion": ["anxiety", "frustration", "hope"],
+            "behavioral_disposition": ["resolve", "decision_readiness"],
+            "relationship": ["trust", "perceived_responsiveness"],
+            "consequence_risk": [
+                "goal_failure_risk", "decision_error_risk"
+            ],
+        }
+        valid["initial_state"] = {
+            family: {variable: 5 for variable in variables}
+            for family, variables in valid[
+                "selected_state_variables"
+            ].items()
+        }
+        self.assertEqual(
+            len({
+                f"{family}.{variable}"
+                for family, variables in valid[
+                    "selected_state_variables"
+                ].items()
+                for variable in variables
+            }),
+            9,
+        )
+        freeze_initialization(valid)
+
+        invalid = deepcopy(valid)
+        invalid["selected_state_variables"]["emotion"] = [
+            "anxiety", "frustration"
+        ]
+        invalid["initial_state"]["emotion"] = {
+            "anxiety": 5, "frustration": 5
+        }
+        with self.assertRaisesRegex(ValueError, "emotion must select 3-4"):
+            freeze_initialization(invalid)
+
     def test_active_code_does_not_reference_legacy_motivation_state_family(self):
         roots = (
             "environment", "evaluation", "pipeline", "rollout", "tasks",

@@ -1,0 +1,51 @@
+2026-10-06：新版 Astra state 验证最终报告
+
+结论：有效新增证据能触发更新；无关与原样重复两个负例没有误报。但固定集仍漏识别两例 trust，不能直接 scale。
+
+本次没有改 prompt、人工标签、模型、推理档位或校准器。恢复 600 秒超时预算，将补测绑定到此前成功的 chat 路由，并发 3。
+先补三个关键边界，全部完整返回后补其余缺失项；未重跑已经有语义答案的样例来挑结果。预定复测单列。
+代码与旧请求哈希校验通过。本次输入与前一轮冻结输入一致，旧超时记录未删除、未覆盖。
+
+固定集：10 例均取得有效答案（前轮 2 例 + 本次补齐 8 例）
+变量识别：8 个新增证据正例识别到 6 个，漏识别 2 个；2 个真正负例均正确不更新。
+误报：0/2，仅针对人工标注的目标变量；小样本不能证明总体零误报。
+强度：7/10 与标签一致。坦诚正例判普通而不是决定性，但照样产生 +1。
+最终更新：按有无更新及方向判断，8/10 正确；不是要求幅度完全一致。
+完整性：原轮 12 次调用中 2 次完整、10 次超时；本次补测 10/10 完整。合计 22 次逻辑调用，12 次完整、10 次超时。
+新增证据正确识别的 6 个固定正例全部按正确方向更新，没有 feature 或 dialogue 阻断；这不代表其余未标注变量都正确。
+
+逐例对照（旧名称中的 negative 不代表当前标签；8 个既有样例的人工标签都是新增证据）
+序号 | 样例 | 冻结标签 | 模型判断 | 最终 delta | 有无更新及方向符合标签
+1 | trust_gpt002_historical_anchor__positive | 普通新增 | 普通新增 | +1 | 是
+2 | trust_gpt002_historical_anchor__negative | 普通新增 | 无相关证据 | +0 | 否
+3 | trust_gpt003__positive | 决定性新增 | 普通新增 | +1 | 是
+4 | trust_gpt003__negative | 普通新增 | 仅重复 | +0 | 否
+5 | fairness_gpt026__positive | 普通新增 | 普通新增 | +1 | 是
+6 | fairness_gpt026__negative | 普通新增 | 普通新增 | +1 | 是
+7 | safety_claude030__positive | 普通新增 | 普通新增 | +1 | 是
+8 | safety_claude030__negative | 普通新增 | 普通新增 | -1 | 是
+9 | trust_gpt003_irrelevant_copyedit_control | 无相关证据 | 无相关证据 | +0 | 是
+10 | trust_gpt003_exact_restatement_control | 仅重复 | 仅重复 | +0 | 是
+
+两次预定复测
+trust_gpt003__positive：普通新增，delta 1；与首次有效返回一致。
+trust_gpt003_exact_restatement_control：仅重复，delta 0；与首次有效返回一致。
+
+剩余问题
+1. GPT002 的书面安排/口头说明衔接：标签认为新增 trust 证据，模型认为只是程序配合，delta 0。
+2. GPT003 的标题与结论取证限制：标签认为同话题下的新行为，模型仍判重复，delta 0。
+3. 背景可见性：003 的记者 policy 输入包含编辑尚未告知记者的线人利益冲突；本地已复现，尚未修复。它独立于上述两例语义漏识别，不能宣称两者已证实有因果关系。
+4. 调用慢：本次成功恢复不等于服务稳定；保留全部超时。此轮没有验证 Fable，也没有验证未看样例或完整轨迹。
+
+决定：不再在本轮追加 prompt 特例，不用改标签或改分掩盖这两例失败；不启动全量生成。尚未生成六条人工审核轨迹。
+
+可读证据入口
+reports/experiments/2026-10-06_state_context_boundary_recovery.txt
+reports/experiments/2026-10-06_state_context_remaining_false_negatives.txt
+reports/experiments/2026-10-06_policy_background_visibility_gap.txt
+
+原始证据入口
+data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/context_samples_v724_corrected/results.json
+data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/context_samples_v724_transport_recovery/preregistration.json
+data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/context_samples_v724_transport_recovery/results.json
+两轮各编号子目录 requests.json 保存实际完整请求及原始回答/异常；result.json 保存 state 判断和校准结果。

@@ -6,3 +6,4 @@
 @media(max-width:720px){.persona-grid{grid-template-columns:1fr}.utterance{width:96%}}
 
 .gate2-panel{border-color:#6e5f35}.gate2-experiment{margin-top:14px;padding:13px;border:1px solid #554a2c;border-radius:10px;background:#15150f}.gate2-experiment h4{margin:0 0 9px;color:var(--amber)}.gate2-item{padding:11px;margin-top:9px;border-radius:9px;background:#0a1520;border:1px solid #2b4258}.gate2-item-head{display:flex;justify-content:space-between;gap:12px;color:var(--cyan)}.gate2-item p{margin:7px 0}
+.video-review-link{display:inline-flex;align-items:center;margin-left:auto;padding:9px 12px;border-radius:8px;background:linear-gradient(90deg,#35caba,#568ff0);color:#071019;text-decoration:none;font-weight:800}

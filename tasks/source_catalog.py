@@ -5,7 +5,7 @@ from __future__ import annotations
 from copy import deepcopy
 from pathlib import Path
 
-from scripts.t2_common import load
+from tasks.T2.runtime import load
 
 
 ELIGIBLE_GENERATION_STATUSES = {

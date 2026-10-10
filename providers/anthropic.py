@@ -8,7 +8,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import ProxyHandler, Request, build_opener, urlopen
 
-from .base import ModelProvider
+from .base import IncompleteModelOutputError, ModelProvider
 
 
 class ProviderHTTPError(RuntimeError):
@@ -51,6 +51,7 @@ class AnthropicProvider(ModelProvider):
         self._request_duration_seconds = 0.0
         self._failed_request_count = 0
         self._stop_reasons = {}
+        self._audit_records = []
 
     def reset(self):
         self._call_index = 0
@@ -59,6 +60,7 @@ class AnthropicProvider(ModelProvider):
         self._request_duration_seconds = 0.0
         self._failed_request_count = 0
         self._stop_reasons = {}
+        self._audit_records = []
 
     @staticmethod
     def _messages(messages):
@@ -67,11 +69,25 @@ class AnthropicProvider(ModelProvider):
         for message in messages:
             role = message.get("role")
             content = message.get("content")
-            if not isinstance(content, str):
-                raise ValueError("Anthropic message content must be text")
             if role == "system":
+                if not isinstance(content, str):
+                    raise ValueError("Anthropic system content must be text")
                 system.append(content)
             elif role in {"user", "assistant"}:
+                if isinstance(content, list):
+                    for block in content:
+                        if not isinstance(block, dict) or block.get("type") not in {"text", "image"}:
+                            raise ValueError("Anthropic content must contain text or image blocks")
+                        if block["type"] == "text" and not isinstance(block.get("text"), str):
+                            raise ValueError("Anthropic text block requires text")
+                        if block["type"] == "image":
+                            source = block.get("source", {})
+                            if source.get("type") != "base64" or source.get("media_type") not in {
+                                "image/jpeg", "image/png", "image/gif", "image/webp"
+                            } or not isinstance(source.get("data"), str) or not source["data"]:
+                                raise ValueError("Anthropic image block requires base64 image data")
+                elif not isinstance(content, str):
+                    raise ValueError("Anthropic message content must be text or content blocks")
                 conversation.append({"role": role, "content": content})
             else:
                 raise ValueError(f"unsupported Anthropic message role: {role}")
@@ -180,7 +196,27 @@ class AnthropicProvider(ModelProvider):
         ]
         if not parts:
             raise ValueError("provider response lacks a text content block")
-        return "".join(parts)
+        raw_output = "".join(parts)
+        self._audit_records.append({
+            "request": payload,
+            "raw_output": raw_output,
+            "finish_reason": stop_reason,
+            "usage": data.get("usage", {}),
+            "complete": stop_reason != "max_tokens",
+        })
+        if stop_reason == "max_tokens":
+            self._failed_request_count += 1
+            raise IncompleteModelOutputError(
+                "provider response was truncated at max_tokens",
+                finish_reason=stop_reason,
+                raw_output=raw_output,
+                request=payload,
+            )
+        return raw_output
+
+    @property
+    def audit_records(self):
+        return [dict(item) for item in self._audit_records]
 
     @property
     def usage(self):

@@ -9,6 +9,7 @@ from . import legacy_action_validation
 ACTIVE_PROMPT_IDS = {
     "task_t4_action_v21",
     "task_rollout_action_v1",
+    "task_rollout_action_v2_decision_continuity",
 }
 
 

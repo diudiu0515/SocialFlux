@@ -144,16 +144,39 @@ def build_environment_factory(scenario, environment):
         environment["provider"],
         environment.get("sampling", {}),
         response_provider_config=environment["response_provider"],
+        independent_appraisals=environment.get("independent_appraisals", False),
+        state_appraisal_provider_config=environment.get(
+            "state_appraisal_provider", environment["provider"]
+        ),
+        interaction_appraisal_provider_config=environment.get(
+            "interaction_appraisal_provider", environment["provider"]
+        ),
+        state_appraisal_sampling=environment.get("state_appraisal_sampling"),
+        interaction_appraisal_sampling=environment.get(
+            "interaction_appraisal_sampling"
+        ),
+        state_appraisal_prompt_id=environment.get("state_appraisal_prompt_id", "environment_state_appraisal_v1_per_variable"),
+        interaction_appraisal_prompt_id=environment.get("interaction_appraisal_prompt_id", "environment_interaction_appraisal_v1"),
         response_sampling=environment.get("response_sampling", {}),
         appraisal_prompt_id=environment.get("appraisal_prompt_id", APPRAISAL_PROMPT),
         response_prompt_id=environment.get("response_prompt_id", RESPONSE_PROMPT),
         response_validation_profile=environment.get(
             "response_validation_profile", "hard_only"
         ),
+        state_calibration_profile=environment.get(
+            "state_calibration_profile", "sparse_v1"
+        ),
+        state_transition_standard=environment.get(
+            "state_transition_standard"
+        ),
+        state_transition_runtime_revision=environment.get(
+            "state_transition_runtime_revision"
+        ),
         horizon_mode=environment.get("horizon_mode", "natural_max_20"),
         minimum_natural_turns=environment.get(
             "minimum_natural_turns", 1
         ),
+        response_opportunity_guidance=environment.get("response_opportunity_guidance", True),
         multimodal_trigger_policy=environment.get(
             "multimodal_trigger_policy", {}
         ),
@@ -190,4 +213,8 @@ def build_policy(spec, run_index=0, *, provenance_extra=None):
         validation_profile=spec.get("validation_profile", "hard_only"),
         horizon_mode=spec.get("horizon_mode", "natural_max_20"),
         minimum_natural_turns=spec.get("minimum_natural_turns", 1),
+        observation_condition=spec.get(
+            "observation_condition", "text_only"
+        ),
+        media_input_format=spec.get("media_input_format"),
     )

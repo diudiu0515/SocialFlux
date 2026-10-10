@@ -17,7 +17,15 @@ from .observation import build_public_evaluated_role
 from .response_completion import complete_environment_response
 
 
-_STRUCTURED_RESPONSE_PROMPTS = frozenset({"environment_response_v25"})
+_STRUCTURED_RESPONSE_PROMPTS = frozenset({
+    "environment_response_v25",
+    "environment_response_v26",
+    "environment_response_v27",
+    "environment_response_v27_decision_continuity",
+    "environment_response_v29_event_driven",
+    "environment_response_v30_semantic_event_driven",
+    "environment_response_v31_contrastive_event_driven",
+})
 
 
 class ResponseGenerator:
@@ -163,6 +171,16 @@ class ModelResponseGenerator(ResponseGenerator):
             if event.get("event_type") in {"proposal", "commitment", "payment"}
             and event.get("action_owner") == "evaluated_agent"
         ]
+        active_pending_commitments = [
+            {
+                "speaker": item.get("speaker", ""),
+                "text": item.get("text", ""),
+                "status": item.get("status", ""),
+                "turn_id": item.get("turn_id", ""),
+            }
+            for item in brief_ledger.get("commitments", [])
+            if item.get("status") == "pending"
+        ]
         turn_brief = {
             "total_turn": turn_number,
             "segment_turn": segment_turn + 1,
@@ -172,6 +190,15 @@ class ModelResponseGenerator(ResponseGenerator):
             "other_speaker_self_owned_moves_do_not_take_over": (
                 other_speaker_self_owned_moves
             ),
+            "decision_continuity": {
+                "active_pending_commitments": active_pending_commitments,
+                "instruction": (
+                    "Before accepting or proposing a different plan on the same "
+                    "decision object, explicitly preserve the earlier decision, "
+                    "distinguish its stage, add a grounded condition, or amend/rescind "
+                    "it with a public reason. Never silently replace it."
+                ),
+            },
             "suggested_live_question": guide.get("suggested_live_question", ""),
             "guidance_mode": guide.get("mode", ""),
             "do_not_repeat_own_utterances": prior_responses[-3:],

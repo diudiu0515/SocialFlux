@@ -1,0 +1,49 @@
+GPT50 全量视频补生成与 T4 配对实验后台任务
+记录时间：2026-10-08T13:19:34.613471+08:00
+
+用户目标：补齐 50 个场景全部所需在线视频，然后进行 text / text+video 多 API 实验。
+覆盖目标：326 条视频，50/50 个场景的所有可达事件族齐全；沿用 53 条已有成功资产。
+后台进程 PID：175675
+后台主程序：scripts/complete_gpt50_videos.py
+状态：build/gpt50_full_video_20261008/status.json
+逐任务结果：build/gpt50_full_video_20261008/results.json
+日志：build/gpt50_full_video_20261008/generation.log
+
+生成配置与边界
+最多 2 个视频任务并发，最多 273 次新增缺失资产生成尝试。
+GPT50_036 / GPT50_038 使用一次 Seedance Fast 渲染组件对照，原提示与虚构身份不变；原供应商失败及请求文件保留。
+271 条依赖视频等待相应基准视频和可读取参考 URL。普通已有成功资产不重生成。
+已实测旧参考 URL 返回 403；inline Base64 reference_video 被供应商明确拒绝，要求 web URL。
+向同一供应商 /api/v1/files 上传一条虚构角色基准视频的验证请求被自动审批拒绝，尚未执行。
+原因：此独立上传接口未验证，原授权未明确包含向该接口上传视频；已向用户请求明确授权，答复前不通过其他方式绕过。
+新渲染结果中 GPT50_036 与 GPT50_038 均再次被供应商以 OutputVideoSensitiveContentDetected.PolicyViolation 拒绝，不自动反复重试。
+
+完成后自动交接
+全部 326 条视频存在、SHA 匹配，并满足 720p、24fps、4 秒容差和音轨要求后，自动执行：
+python -u scripts/run_t4_multimodal_experiment.py --config configs/gpt50_experiment/t4_multimodal_experiment.json --output build/gpt50_full_video_20261008/experiment
+
+实验设计
+GPT、Claude、DeepSeek 分别作为被测策略，50 个 scenario 各运行 text_only / text_video 条件。
+使用 canonical UnifiedEnvironmentFactory / StatefulEnvironment，逐场景共享初态、提示、策略 seed、环境设置，最大 20 轮，允许 1 轮后自然结束。
+统一 Claude 五维终局裁判；保留失败、截断、未触发视频、不支持视觉等结果，不补零、不静默文字降级。
+先用两个固定时序视频检测模型是否读取视频；不支持原生视频时单独验证 4 帧时序输入，标注 video_frames（不含音频），不能假称原生音视频。
+前两个场景作为技术试运行，无有效视频轨迹则停止扩大，保存原因。
+3 个 episode 并发，总请求上限 20000。模型采样、源场景、视频、代码、API 输入与输出、分数和差值均保存。
+这是探索性实验：资产审核与评分人工校准仍是 pending，不伪造 human-reviewed 状态或正式验收。
+
+当前状态快照
+{
+  "status": "waiting_for_reference_urls",
+  "updated_at": "2026-10-08T13:19:31.586010+08:00",
+  "generated": 53,
+  "required": 326,
+  "fully_covered_scenarios": 1,
+  "active_jobs": 0,
+  "attempted": 2,
+  "human_review_status": "pending",
+  "experiment_started": false
+}
+
+状态文件会由后台进程更新。此记录不表示视频已经补齐，也不表示完整多模态实验已经运行。
+
+最新状态：两个基准视频均被供应商拒绝；后台进程存活，当前等待可读取参考 URL，没有进行中的视频生成请求；仍为 53/326，完整实验未启动。

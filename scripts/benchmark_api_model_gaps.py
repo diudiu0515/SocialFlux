@@ -29,7 +29,7 @@ from evaluation.rollout_semantic_review import (
     deterministic_review_sampling,
     validate_judgment,
 )
-from scripts.t2_common import ROOT, atomic, load
+from tasks.T2.runtime import ROOT, atomic, load
 from tasks.extraction import generate_extraction
 
 

@@ -7,6 +7,7 @@ import re
 
 ROOT = Path(__file__).resolve().parent
 MANIFEST_PATH = ROOT / "manifest.json"
+RETIRED_PATH = ROOT / "retired.json"
 _PLACEHOLDER_PATTERN = re.compile(r"\{\{([A-Za-z0-9_]+)\}\}")
 
 
@@ -17,6 +18,13 @@ def prompt_manifest():
 def get_prompt(prompt_id):
     manifest = prompt_manifest()["prompts"]
     if prompt_id not in manifest:
+        retired = json.loads(RETIRED_PATH.read_text(encoding="utf-8"))["prompts"]
+        if prompt_id in retired:
+            raise KeyError(
+                f"retired prompt id: {prompt_id}; use an active configuration. "
+                "Historical reproduction requires the matching archived snapshot; "
+                "see docs/prompts/PROMPT_AUDIT.md. No automatic substitution."
+            )
         raise KeyError(f"unknown prompt id: {prompt_id}")
     entry = manifest[prompt_id]
     path = ROOT / entry["path"]

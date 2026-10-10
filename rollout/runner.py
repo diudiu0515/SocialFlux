@@ -4,7 +4,7 @@ import json
 from copy import deepcopy
 
 from schemas.validate import validate_trajectory
-from environment.public_situation import build_public_situation
+from environment.policy_context import public_scenario_context
 from environment.state_updater import UnsupportedConsequentialClaim
 
 
@@ -23,29 +23,33 @@ def _provider_metrics(provider):
     return value if isinstance(value, dict) else None
 
 
-def _actual_request_counts(environment, policy):
+def _role_providers(environment, policy):
     providers = {
         "policy": getattr(policy, "provider", None),
         "appraisal": getattr(environment.state_updater, "provider", None),
         "response": getattr(environment.response_generator, "provider", None),
     }
+    interaction = getattr(environment.state_updater, "interaction_appraiser", None)
+    if interaction is not None:
+        providers["interaction_appraisal"] = getattr(interaction, "provider", None)
+    return providers
+
+
+def _actual_request_counts(environment, policy):
+    providers = _role_providers(environment, policy)
     counts = {
         role: _provider_request_count(provider)
         for role, provider in providers.items()
     }
     known = [value for value in counts.values() if isinstance(value, int)]
-    counts["total"] = sum(known) if len(known) == 3 else None
-    counts["environment_stage_count_per_turn"] = 2
+    counts["total"] = sum(known) if len(known) == len(providers) else None
+    counts["environment_stage_count_per_turn"] = len(providers) - 1
     counts["actual_requests_can_include_retries"] = True
     return counts
 
 
 def _provider_run_metrics(environment, policy):
-    providers = {
-        "policy": getattr(policy, "provider", None),
-        "appraisal": getattr(environment.state_updater, "provider", None),
-        "response": getattr(environment.response_generator, "provider", None),
-    }
+    providers = _role_providers(environment, policy)
     by_role = {
         role: metrics
         for role, provider in providers.items()
@@ -95,16 +99,7 @@ class RolloutRunner:
     @staticmethod
     def _trajectory_snapshot(environment, policy):
         trajectory = environment.private_trajectory()
-        trajectory["public_scenario_context"] = {
-            "background": environment.scenario.get("background", ""),
-            "public_situation": build_public_situation(environment.scenario),
-            "evaluated_agent_role": environment.scenario.get(
-                "evaluated_agent_role", {}
-            ),
-            "environment_role": environment.scenario.get(
-                "environment_agent", {}
-            ).get("persona", {}),
-        }
+        trajectory["public_scenario_context"] = public_scenario_context(environment.scenario)
         trajectory["policy_id"] = policy.policy_id
         trajectory["policy_provenance"] = getattr(
             policy,

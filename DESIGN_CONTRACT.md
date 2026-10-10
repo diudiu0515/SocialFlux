@@ -167,18 +167,27 @@ name/role，不能看到其性格字段。background 属于公开输入，因此
 
 Persona、role、explicit goal 和 hidden intention 是稳定上下文，不是 mutable state。
 
-S_t 必须且只能包含以下四个 family，每个 family 至少选择一个变量，全场景合计
-选择 4–8 个变量：
+S_t 必须且只能包含以下四个 family。采用
+socialflux_state_ontology_v3 的场景在 S0 选择 9–13 个变量，通常为
+10–11 个：emotion 选择 3–4 个，其余三个 family 各选择 2–3 个。每个变量
+都必须有独立数值、环境角色初始化理由，以及场景可达但不强制发生的双向证据：
 
 - emotion：即时主观体验，例如 anger、anxiety、hope、sadness、fear、guilt、shame、disappointment、frustration、relief；
-- behavioral_disposition：即时行动倾向，例如 resolve、avoidance_urge、repair_intent、resistance_intent、disclosure_willingness、cooperation_readiness、evidence_seeking、boundary_assertion；
-- relationship：关系信念或立场，例如 trust、hostility、respect、perceived_safety、affiliation、perceived_fairness；
-- consequence_risk：当前互动造成后果的风险，例如 goal_failure_risk、relationship_rupture_risk、reputational_harm_risk、material_loss_risk、safety_harm_risk、institutional_harm_risk、commitment_breach_risk、exclusion_risk。
+- behavioral_disposition：即时行动倾向，例如 resolve、avoidance_urge、repair_intent、resistance_intent、disclosure_willingness、cooperation_readiness、evidence_seeking、boundary_assertion、decision_readiness；
+- relationship：关系信念或立场，例如 trust、hostility、respect、perceived_safety、affiliation、perceived_fairness、perceived_responsiveness、role_legitimacy；
+- consequence_risk：当前互动造成后果的风险，例如 goal_failure_risk、relationship_rupture_risk、reputational_harm_risk、material_loss_risk、safety_harm_risk、institutional_harm_risk、commitment_breach_risk、exclusion_risk、decision_error_risk、autonomy_loss_risk。
 
 每轮必须对四个 family 中所有选中变量逐项评估并在完整 delta 中各输出一次。
 “更新”是完成评估与状态转移，不等于每项必须发生数值变化；没有新的相关证据时
 必须输出 `similar`。只有证据支持的少数变量可以非零变化，不能为了覆盖四维而
 伪造联动。相反方向变量不强制互补。
+
+快慢变化按具体变量定义，不能把整个 family 统一设为快或慢。快变量可在一次直接
+新证据后变化；慢变量只有在一次经过验证的决定性事件，或跨轮两次独立且同向的
+证据后才能变化。每条用于 state-transition Gate 的有效 20 轮轨迹必须在四个
+family 中各实现至少一次非零变化，并同时包含合规的快变化和慢变化；未达到时
+如实判为失败，不得强制 delta、放宽阈值或只保留成功样本。完整细则见
+docs/protocols/STATE_TRANSITION_STANDARD_V3.md。
 
 ### 4.2 Interaction dynamics
 
@@ -210,6 +219,11 @@ D_t 是人物之外的外部互动条件，与 S_t 分开。每个 scenario 从�
 同一事件可以降低 consequence risk、缓解 emotion，却不恢复 trust 或
 behavioral disposition。重复确认不自动等于零变化，也不自动持续加分；
 是否变化必须由当前语义、历史和证据决定。
+
+普通事件最多应用两个具有独立证据的跨 family 更新，决定性事件最多三个；每个
+family 的稀疏上限仍独立执行。普通同向证据从 S0 累积两点后进入强化平台，只有
+决定性新证据才能继续向边界移动。重复承诺、重复理由、改写表达和同一证据 span
+不得使多个变量一起趋同。
 
 ## 5. 每轮调用合同
 
@@ -324,6 +338,8 @@ T1、T2、T3 在合格池上独立选源，一个模型可以零入选，也可�
 
 ## 10. T1/T2/T3 合同
 
+2026-10-10 offline 开发版采用[统一选择题协议](docs/protocols/OFFLINE_T1_T3_CHOICE_V1.md)：单维为主体，跨维／跨时间为增强；主作答只需 `{"answer":"B"}`。能力标签、state 路径、错项归因保存在作者侧，证据为独立诊断。下面的构造与公开边界继续适用；概率输出仅保留旧版复现。新题的机器参考答案保持待人工审核，不能写为正式 ground truth。
+
 ### T1
 
 从自然 trajectory checkpoint 提取完整公开历史和当前 observation，让模型估计持有 latent state 的 environment character 的当前状态、变化方向和证据。target 必须是环境角色，不能误设成输出 action 的 evaluated model。simulator state 只能作为诊断参考，正式 GT 必须经过人工审核。
@@ -332,7 +348,7 @@ T1、T2、T3 在合格池上独立选源，一个模型可以零入选，也可�
 
 从一条通过来源质量筛选的真实 rollout A 中选择有共享前史的 checkpoint，定位 A 分叉段内可引用的公开证据，再一次性编写连贯的对应 History B。B 保留角色、背景、分叉前历史和已成立事实，只改写锚定区间内有研究意义的互动；不得新增分叉前往事或区间外事件来制造差异。
 
-A/B 分别从分叉 checkpoint 经过正式 Structured Appraisal → 确定性更新 → Response 路径重放，B 不能沿用 A 的后续状态。ending 的台词和可观察行为必须字节级一致，并在两侧都自然；有媒体时两侧引用同一资产。题面显式携带 target environment character 和少量有证据的 target state IDs，模型答案包含差异判断、双侧证据、关键历史事件和表达解释。
+A/B 分别从分叉 checkpoint 经过正式 Structured Appraisal → 确定性更新 → Response 路径重放，B 不能沿用 A 的后续状态。ending 的台词和可观察行为必须字节级一致，并在两侧都自然；有媒体时两侧引用同一资产。题面以自然语言显式说明 target environment character、人物方向与判断变量；作者侧保存少量有证据的 target state IDs。主评测选择答案，表达解释采用选项，双侧证据和关键历史事件用于作者审查及独立证据诊断。
 
 若 shared ending 暴露历史差异、发生角色互换、含重复历史、把承诺写成完成、时间/事件顺序错误或对任一历史不自然，则拒绝该 pair。自动 pair review 与 answer review 是模型语义复核，不是人工验收；通过后仍保持 pending human review。
 

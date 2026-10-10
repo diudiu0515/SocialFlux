@@ -13,7 +13,8 @@
   "environment": {
     "horizon_mode": "natural_max_20",
     "minimum_natural_turns": 10,
-    "appraisal_prompt_id": "environment_appraisal_v11",
+    "appraisal_prompt_id": "environment_appraisal_v12",
+    "state_calibration_profile": "evidence_bound_sparse_v2",
     "response_prompt_id": "environment_response_v25",
     "response_validation_profile": "hard_only",
     "multimodal_trigger_policy": {

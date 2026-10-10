@@ -1,0 +1,208 @@
+"""Read-only, hash-bound review of the existing offline choice bank.
+
+Public questions and author references have separate endpoints. Browser drafts
+never promote proposals to ground truth or change source admission.
+"""
+
+from collections import Counter
+from copy import deepcopy
+from functools import lru_cache
+import hashlib
+import json
+from pathlib import Path
+from urllib.parse import quote
+
+from environment.state_ontology import STATE_VARIABLE_ONTOLOGY
+from tasks.offline_choice import FAMILIES, public_instance, visible_evidence
+
+ROOT = Path(__file__).resolve().parents[1]
+BANK = ROOT / "data/offline_t1_t3_dev60"
+VIDEO_ROOT = ROOT / "data/gpt50/experiment/multimodal_delivery_v1/online_multimodal/assets"
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def item_digest(item):
+    return digest(json.dumps(item, ensure_ascii=False, sort_keys=True,
+                             separators=(",", ":")).encode())
+
+
+def load_bank():
+    path = BANK / "items.jsonl"
+    if not path.is_file():
+        return [], None
+    raw = path.read_bytes()
+    items = [json.loads(line) for line in raw.splitlines() if line.strip()]
+    if len({item["instance_id"] for item in items}) != len(items):
+        raise ValueError("duplicate offline instance ID")
+    return items, digest(raw)
+
+
+def read_json(path, fallback=None):
+    return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else fallback
+
+
+def metadata(item):
+    author = item["authoring"]
+    return {
+        "instance_id": item["instance_id"], "task": item["task"],
+        "subtype": item["subtype"], "scenario_id": item["story_id"],
+        "trajectory_id": item["metadata"]["source_trajectory_id"],
+        "pair_id": item.get("pair_id"), "item_sha256": item_digest(item),
+        "question": item["question"],
+        "families": sorted({FAMILIES[p.split(".")[0]] for p in
+                            item["target_spec"]["target_state_ids"]}),
+        "combination": len(next(iter(author["option_variable_map"].values()))) > 1,
+        "replay_status": author.get("replay_status", "pending"),
+        "label_status": item["label_status"],
+    }
+
+
+def checked_source(relative, expected):
+    """Only load an explicitly hash-bound artifact inside this repository."""
+    path = (ROOT / relative).resolve()
+    if ROOT.resolve() not in path.parents or not path.is_file() or not expected:
+        return None
+    raw = path.read_bytes()
+    if digest(raw) != expected:
+        return None
+    return json.loads(raw)
+
+
+@lru_cache(maxsize=2)
+def _paired_items(raw):
+    # Key on contents: this workspace can retain identical file mtimes on writes.
+    return {item["instance_id"]: item for line in raw.splitlines()
+            if line.strip() for item in [json.loads(line)]}
+
+
+def pair_matches(item):
+    path = BANK / "paired.items.jsonl"
+    if not path.is_file():
+        return False
+    pairs = _paired_items(path.read_bytes())
+    for suffix, modality in (("", "text"), ("-video", "text+video")):
+        paired = deepcopy(pairs.get(item["instance_id"] + suffix))
+        if not paired or paired["modality"] != modality:
+            return False
+        if paired["metadata"].pop("modality_pair_id", None) != item["instance_id"]:
+            return False
+        paired["instance_id"], paired["modality"] = item["instance_id"], item["modality"]
+        for key in ("media_manifest", "media_human_review", "matched_assets"):
+            paired["authoring"].pop(key, None)
+        if paired != item:
+            return False
+    return True
+
+
+def media_records(item):
+    if not pair_matches(item):
+        return []
+    records = read_json(BANK / "media.json", {}).get(item["instance_id"] + "-video", [])
+    result = []
+    for record in records:
+        path = (ROOT / record["path"]).resolve()
+        available = path.parent == VIDEO_ROOT.resolve() and path.is_file()
+        if available:
+            available = digest(path.read_bytes()) == record["sha256"]
+        result.append({
+            "asset_id": record["source_asset_id"], "sha256": record["sha256"],
+            "evidence_ids": record.get("evidence_ids", []),
+            "human_review": record.get("human_review", "pending"),
+            "available": available,
+            "url": "/online-video/gpt/" + quote(path.name) if available else None,
+        })
+    return result
+
+
+def _state_values(state, variables):
+    result = {}
+    for variable in variables:
+        family, name = variable.split(".")
+        result[variable] = state.get(family, {}).get(name)
+    return result
+
+
+def _review_turn(turn, variables):
+    """No raw API requests, provider audits, memories or runtime snapshots."""
+    return {**{k: turn.get(k) for k in (
+        "turn_id", "policy_action", "environment_response", "observable_expression",
+        "environment_response_ledger_events", "trigger_events")},
+        "state_before": _state_values(turn.get("state_before", {}), variables),
+        "state_after": _state_values(turn.get("state_after_public_events", turn.get("state_after", {})), variables)}
+
+
+def author_reference(item, bank_sha):
+    author = item["authoring"]
+    source = author["construction_source"]
+    variables = item["target_spec"]["target_state_ids"]
+    scenario = checked_source(source["scenario_path"], source.get("scenario_sha256"))
+    trajectory = checked_source(source["trajectory_path"], source.get("trajectory_sha256"))
+    checks = {"scenario": scenario is not None, "trajectory": trajectory is not None}
+    reference = {
+        "instance_id": item["instance_id"], "bank_sha256": bank_sha,
+        "item_sha256": item_digest(item),
+        "authoring": author, "ground_truth": item.get("ground_truth"),
+        "target_spec": item["target_spec"], "source_checks": checks,
+        "scenario": scenario, "state_semantics": {
+            variable: STATE_VARIABLE_ONTOLOGY[variable] for variable in variables},
+        "source_turns": [], "replays": [],
+    }
+    # The source history shown in review matches the question's own cutoff.
+    if trajectory:
+        visible = visible_evidence(item)
+        reference["source_turns"] = [_review_turn(t, variables) for t in trajectory.get("turns", [])
+                                     if t["turn_id"] in visible or "A:" + t["turn_id"] in visible]
+    if source.get("replay_path"):
+        replay = checked_source(source["replay_path"], source.get("replay_sha256"))
+        checks["replay"] = replay is not None
+        if replay is not None and item["task"] == "T2":
+            reference["replays"] = [{"label": "History " + side.upper(),
+                                      "turns": [_review_turn(replay[side], variables)]}
+                                     for side in ("a", "b")]
+        elif replay is not None and item["task"] == "T3":
+            actions = item["input"]["candidate_actions"]
+            matches = len(actions) == len(replay) and all(
+                action["text"] == branch["candidate_action"]["text"]
+                for action, branch in zip(actions, replay))
+            checks["branch_action_match"] = matches
+            if matches:
+                reference["replays"] = [{
+                    "label": action["action_id"],
+                    "window_complete": branch.get("window_complete", False),
+                    "delayed_horizon": branch["delayed_horizon"],
+                    "turns": [_review_turn(t, variables) for t in branch["future_turns"]],
+                } for action, branch in zip(actions, replay)]
+    crosscheck = read_json(BANK / "state_reference_crosscheck.json", {})
+    if crosscheck.get("items_sha256") == bank_sha:
+        reference["state_crosscheck"] = next((row for row in crosscheck["rows"]
+                                              if row["instance_id"] == item["instance_id"]), None)
+    return reference
+
+
+def load_review(instance_id=None, reference=False):
+    items, bank_sha = load_bank()
+    if instance_id is None:
+        rows = [metadata(item) for item in items]
+        return {
+            "format": "socialflux_offline_choice_review_v1", "bank_id": BANK.name,
+            "bank_sha256": bank_sha, "status": "available" if items else "not_generated",
+            "summary": {
+                "item_count": len(items), "scenario_count": len({i["story_id"] for i in items}),
+                "tasks": dict(Counter(i["task"] for i in items)),
+                "combinations": sum(row["combination"] for row in rows),
+                "replay_pending": sum(row["task"] in {"T2", "T3"} and
+                                      row["replay_status"] != "validated" for row in rows),
+            }, "items": rows,
+        }
+    item = next((item for item in items if item["instance_id"] == instance_id), None)
+    if item is None:
+        return None
+    if reference:
+        return author_reference(item, bank_sha)
+    return {"bank_sha256": bank_sha, "metadata": metadata(item),
+            "public": public_instance(item), "evidence_ids": sorted(visible_evidence(item)),
+            "media": media_records(item),
+            "nonverbal_history_relation": item["authoring"].get("nonverbal_history_relation")}

@@ -1,0 +1,14 @@
+{
+  "format": "unified_state_candidate_v1",
+  "base_rollout_config": "configs/gpt50_experiment/rollout.state_observed_evidence_v6_candidate.json",
+  "factory_adapter": "environment.unified_appraisal.UnifiedEnvironmentFactory",
+  "trust_policy": "configs/state_trust_current_evidence_v1.json",
+  "state_binding_profile": "state_actor_binding_v1",
+  "interaction_schema_profile": "interaction_wire_schema_v1",
+  "validation_workers": 2,
+  "logical_call_deadline_seconds": 600,
+  "semantic_retries": 0,
+  "pilot_three": ["gpt_003", "gpt_026", "claude_044"],
+  "stages": ["one_fixed_validation", "three_full_trajectories", "quality_review", "twenty_scenarios", "constructibility_review", "approximately_150_and_formal_annotation"],
+  "automatic_formal_admission": false
+}

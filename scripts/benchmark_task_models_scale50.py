@@ -23,7 +23,7 @@ from evaluation.t4_evaluation import public_t4_judge_packet, validate_t4_judgmen
 from prompts.loader import render_prompt
 from providers.factory import build_provider, public_provider_config
 from providers.structured import complete_json
-from scripts.t2_common import ROOT, atomic, load
+from tasks.T2.runtime import ROOT, atomic, load
 from tasks.T1.answering import generate_answer as generate_t1_answer
 from tasks.T2.answering import generate_answer as generate_t2_answer
 from tasks.T3.action_authoring import generate_actions

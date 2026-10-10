@@ -1,0 +1,1556 @@
+{
+  "format": "socialflux_online_multimodal_reachability_audit_v2",
+  "profile": "online_multimodal_v2",
+  "audit_scope": "counterfactual_trigger_replay_only",
+  "model_calls": 0,
+  "source_trajectories_rewritten": false,
+  "response_text_regenerated": false,
+  "state_snapshots_reused": true,
+  "scenario_count": 50,
+  "evaluated_scenario_count": 50,
+  "missing_trajectory_scenario_ids": [],
+  "summary": {
+    "at_least_two_event_count": 45,
+    "at_least_two_event_fraction": 0.9,
+    "at_least_three_event_count": 18,
+    "at_least_three_event_fraction": 0.36,
+    "median_event_count": 2.0,
+    "minimum_event_count": 1,
+    "maximum_event_count": 5,
+    "target": {
+      "at_least_two_event_fraction": 0.9,
+      "median_event_count": 3
+    },
+    "target_pass": false
+  },
+  "records": [
+    {
+      "scenario_id": "GPT50_001",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_001/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_disclosure_willingness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.disclosure_willingness": 9
+          }
+        },
+        {
+          "turn_id": "t4",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 9
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_002/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 3,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 9
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 7
+          }
+        },
+        {
+          "turn_id": "t6",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 9
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_003",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_003/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 8
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 9
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_004",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_004/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_disclosure_willingness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.disclosure_willingness": 7
+          }
+        },
+        {
+          "turn_id": "t5",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_005",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_005/trajectory.json",
+      "trajectory_turns": 3,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 1,
+      "at_least_two_events": false,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_disclosure_willingness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.disclosure_willingness": 8
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_006",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_006/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_disclosure_willingness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.disclosure_willingness": 7
+          }
+        },
+        {
+          "turn_id": "t4",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 9
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_007",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_007/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 3,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_disclosure_willingness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.disclosure_willingness": 6
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_behavioral_disposition_resistance_intent_up",
+          "event_family": "activated_tension",
+          "trigger_variables": {
+            "behavioral_disposition.resistance_intent": 9
+          }
+        },
+        {
+          "turn_id": "t5",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_008",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_008/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_resolve_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.resolve": 9
+          }
+        },
+        {
+          "turn_id": "t4",
+          "trigger_id": "ommv2_behavioral_disposition_disclosure_willingness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.disclosure_willingness": 5
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_009",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_009/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 8
+          }
+        },
+        {
+          "turn_id": "t6",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 8
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_010",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_010/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 7
+          }
+        },
+        {
+          "turn_id": "t7",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 9
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_011",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_011/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 9
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_012",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_012/trajectory.json",
+      "trajectory_turns": 2,
+      "profile_trigger_count": 14,
+      "replayed_event_count": 1,
+      "at_least_two_events": false,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_013",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_013/trajectory.json",
+      "trajectory_turns": 11,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 3,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_relationship_trust_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "relationship.trust": 7
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 9
+          }
+        },
+        {
+          "turn_id": "t5",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_014",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_014/trajectory.json",
+      "trajectory_turns": 13,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 4,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 8
+          }
+        },
+        {
+          "turn_id": "t4",
+          "trigger_id": "ommv2_relationship_trust_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "relationship.trust": 7
+          }
+        },
+        {
+          "turn_id": "t7",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        },
+        {
+          "turn_id": "t10",
+          "trigger_id": "ommv2_consequence_risk_institutional_harm_risk_up",
+          "event_family": "risk_concern",
+          "trigger_variables": {
+            "consequence_risk.institutional_harm_risk": 8
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_015",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_015/trajectory.json",
+      "trajectory_turns": 11,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 3,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_resolve_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.resolve": 9
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_consequence_risk_safety_harm_risk_up",
+          "event_family": "risk_concern",
+          "trigger_variables": {
+            "consequence_risk.safety_harm_risk": 10
+          }
+        },
+        {
+          "turn_id": "t5",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 7
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_016",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_016/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 9
+          }
+        },
+        {
+          "turn_id": "t10",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 8
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_017",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_017/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 9
+          }
+        },
+        {
+          "turn_id": "t8",
+          "trigger_id": "ommv2_consequence_risk_reputational_harm_risk_down",
+          "event_family": "cautious_relief",
+          "trigger_variables": {
+            "consequence_risk.reputational_harm_risk": 4
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_018",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_018/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 3,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_consequence_risk_safety_harm_risk_down",
+          "event_family": "cautious_relief",
+          "trigger_variables": {
+            "consequence_risk.safety_harm_risk": 6
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        },
+        {
+          "turn_id": "t6",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 9
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_019",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_019/trajectory.json",
+      "trajectory_turns": 6,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 10
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_behavioral_disposition_disclosure_willingness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.disclosure_willingness": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_020",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_020/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_resolve_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.resolve": 9
+          }
+        },
+        {
+          "turn_id": "t4",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 8
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_021",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_021/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 5,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_down",
+          "event_family": "guarded_withdrawal",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 6
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 10
+          }
+        },
+        {
+          "turn_id": "t5",
+          "trigger_id": "ommv2_relationship_trust_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "relationship.trust": 6
+          }
+        },
+        {
+          "turn_id": "t7",
+          "trigger_id": "ommv2_emotion_anxiety_up",
+          "event_family": "activated_tension",
+          "trigger_variables": {
+            "emotion.anxiety": 8
+          }
+        },
+        {
+          "turn_id": "t9",
+          "trigger_id": "ommv2_relationship_perceived_safety_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "relationship.perceived_safety": 6
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_022",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_022/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 3,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_disclosure_willingness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.disclosure_willingness": 9
+          }
+        },
+        {
+          "turn_id": "t4",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        },
+        {
+          "turn_id": "t10",
+          "trigger_id": "ommv2_consequence_risk_relationship_rupture_risk_down",
+          "event_family": "cautious_relief",
+          "trigger_variables": {
+            "consequence_risk.relationship_rupture_risk": 4
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_023",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_023/trajectory.json",
+      "trajectory_turns": 11,
+      "profile_trigger_count": 14,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 7
+          }
+        },
+        {
+          "turn_id": "t4",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_024/trajectory.json",
+      "trajectory_turns": 13,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_resolve_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.resolve": 10
+          }
+        },
+        {
+          "turn_id": "t4",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_025",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_025/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 14,
+      "replayed_event_count": 3,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 8
+          }
+        },
+        {
+          "turn_id": "t6",
+          "trigger_id": "ommv2_relationship_perceived_fairness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "relationship.perceived_fairness": 5
+          }
+        },
+        {
+          "turn_id": "t9",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 9
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_026",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_026/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 9
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 8
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_027",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_027/trajectory.json",
+      "trajectory_turns": 11,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 10
+          }
+        },
+        {
+          "turn_id": "t6",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 9
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_028",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_028/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        },
+        {
+          "turn_id": "t4",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_029",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_029/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 8
+          }
+        },
+        {
+          "turn_id": "t5",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_030",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_030/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 10
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_031",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_031/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 3,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 9
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 8
+          }
+        },
+        {
+          "turn_id": "t8",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_032",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_032/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 3,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 10
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 10
+          }
+        },
+        {
+          "turn_id": "t6",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_033",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_033/trajectory.json",
+      "trajectory_turns": 2,
+      "profile_trigger_count": 14,
+      "replayed_event_count": 1,
+      "at_least_two_events": false,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 8
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_034",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_034/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 1,
+      "at_least_two_events": false,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 9
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_035",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_035/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 3,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_consequence_risk_reputational_harm_risk_up",
+          "event_family": "risk_concern",
+          "trigger_variables": {
+            "consequence_risk.reputational_harm_risk": 9
+          }
+        },
+        {
+          "turn_id": "t5",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_036",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_036/trajectory.json",
+      "trajectory_turns": 11,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 7
+          }
+        },
+        {
+          "turn_id": "t5",
+          "trigger_id": "ommv2_relationship_trust_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "relationship.trust": 6
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_037",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_037/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 12,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_down",
+          "event_family": "guarded_withdrawal",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 3
+          }
+        },
+        {
+          "turn_id": "t4",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 7
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_038",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_038/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 3,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 8
+          }
+        },
+        {
+          "turn_id": "t7",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 9
+          }
+        },
+        {
+          "turn_id": "t9",
+          "trigger_id": "ommv2_relationship_perceived_fairness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "relationship.perceived_fairness": 6
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_039",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_039/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 7
+          }
+        },
+        {
+          "turn_id": "t8",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_040",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_040/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 3,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        },
+        {
+          "turn_id": "t4",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 10
+          }
+        },
+        {
+          "turn_id": "t6",
+          "trigger_id": "ommv2_consequence_risk_material_loss_risk_up",
+          "event_family": "risk_concern",
+          "trigger_variables": {
+            "consequence_risk.material_loss_risk": 9
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_041",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_041/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 3,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 9
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 10
+          }
+        },
+        {
+          "turn_id": "t8",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_042",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_042/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 8
+          }
+        },
+        {
+          "turn_id": "t4",
+          "trigger_id": "ommv2_behavioral_disposition_disclosure_willingness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.disclosure_willingness": 7
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_043",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_043/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 1,
+      "at_least_two_events": false,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_disclosure_willingness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.disclosure_willingness": 6
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_044",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_044/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 3,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 10
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_consequence_risk_reputational_harm_risk_down",
+          "event_family": "cautious_relief",
+          "trigger_variables": {
+            "consequence_risk.reputational_harm_risk": 6
+          }
+        },
+        {
+          "turn_id": "t5",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 7
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_045",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_045/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 3,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_consequence_risk_goal_failure_risk_up",
+          "event_family": "risk_concern",
+          "trigger_variables": {
+            "consequence_risk.goal_failure_risk": 8
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 8
+          }
+        },
+        {
+          "turn_id": "t6",
+          "trigger_id": "ommv2_behavioral_disposition_disclosure_willingness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.disclosure_willingness": 8
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_046",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_046/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_boundary_assertion_up",
+          "event_family": "firm_boundary",
+          "trigger_variables": {
+            "behavioral_disposition.boundary_assertion": 9
+          }
+        },
+        {
+          "turn_id": "t7",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 8
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_047",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_047/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 3,
+      "at_least_two_events": true,
+      "at_least_three_events": true,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        },
+        {
+          "turn_id": "t3",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_down",
+          "event_family": "guarded_withdrawal",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 5
+          }
+        },
+        {
+          "turn_id": "t5",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 8
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_048",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_048/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 9
+          }
+        },
+        {
+          "turn_id": "t4",
+          "trigger_id": "ommv2_behavioral_disposition_disclosure_willingness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.disclosure_willingness": 8
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_049",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_049/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        },
+        {
+          "turn_id": "t4",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 10
+          }
+        }
+      ],
+      "skipped_turns": []
+    },
+    {
+      "scenario_id": "GPT50_050",
+      "trajectory_path": "/root/autodl-tmp/emotree/data/gpt50/experiment/gate2/all50_rollout_inputs/scenario_050/trajectory.json",
+      "trajectory_turns": 10,
+      "profile_trigger_count": 16,
+      "replayed_event_count": 2,
+      "at_least_two_events": true,
+      "at_least_three_events": false,
+      "events": [
+        {
+          "turn_id": "t1",
+          "trigger_id": "ommv2_behavioral_disposition_evidence_seeking_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.evidence_seeking": 10
+          }
+        },
+        {
+          "turn_id": "t4",
+          "trigger_id": "ommv2_behavioral_disposition_cooperation_readiness_up",
+          "event_family": "open_engagement",
+          "trigger_variables": {
+            "behavioral_disposition.cooperation_readiness": 9
+          }
+        }
+      ],
+      "skipped_turns": []
+    }
+  ]
+}

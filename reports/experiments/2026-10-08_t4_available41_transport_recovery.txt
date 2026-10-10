@@ -1,0 +1,33 @@
+T4 text / text+video 配对实验传输恢复
+记录时间：2026-10-08T21:59:49.427504+08:00
+
+前批次已停止：build/t4_gpt41_paired_20261008/run
+停止时间：2026-10-08 21:27:15 +08:00
+首批 2 个场景的 12 槽位：10 条互动因读超时失败，2 条 DeepSeek 视频输入未获准。有效完整配对为 0，五维终局评分未产出。
+GPT50_001/gpt/text_video 曾实际发送 1 次视频帧并完成策略返回，但环境后续超时，不能作为完整配对结果。
+失败主要位于共享 GPT state / interaction 环境调用，而非所有模型的策略调用。
+
+修复验证
+用两条原始失败请求验证流式输出和 600 秒读超时，state 与 interaction 均返回可解析的非空 JSON；这是传输验证，不作为轨迹分数。
+原始证据：build/t4_gpt41_transport_probe_20261008/results.json
+不据仅两次验证宣称已证明根因或未来不会超时。
+
+恢复批次
+实际启动时间：2026-10-08 21:57:51 +08:00
+实际实验 PID：428887；后台交接进程 PID：428886。
+配置：configs/gpt50_experiment/t4_multimodal_experiment.available41_stream.json
+唯一执行入口仍是 scripts/run_t4_multimodal_experiment.py。
+变化：GPT 响应采用流式返回；读超时 360→600 秒；episode 并发 3→1。
+不变：41 场景、269 视频、模型 ID、随机种子、state/interaction 提示、canonical 环境和五维标准。
+旧失败全部保留；新批次是传输修复后的独立复验，不从多次输出中按得分择优。
+视频输入能力沿用同模型、同接口、同媒体序列化的真实验证记录，出处及 SHA 见 capability_reuse.json；DeepSeek 视频失败不会被忽略。
+相关测试 23 项通过，41 个场景初始化预检通过。
+一次性后台交接脚本只等待传输验证并调用 canonical runner，不新增评测实现；该脚本只服务本 run。
+
+当前结果
+恢复实验仍在运行，目前没有完整五维配对分数。
+状态：build/t4_gpt41_paired_stream_20261008/run/status.json
+结果：build/t4_gpt41_paired_stream_20261008/run/results.json
+五维分数及配对差值：build/t4_gpt41_paired_stream_20261008/run/summary.json
+交接证据：build/t4_gpt41_paired_stream_20261008/run/handoff.json
+该文件为状态快照，后续以后台 status/results 为准。

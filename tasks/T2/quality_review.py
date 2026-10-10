@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 
 from providers.structured import complete_json
-from scripts.t2_common import call_count
+from tasks.T2.runtime import call_count
 
 
 ENVIRONMENT_ISSUE_CATEGORIES = {

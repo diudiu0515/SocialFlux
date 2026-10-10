@@ -107,13 +107,13 @@ function drawContent(){
  var s=detail.scenario,d=s.narrative_design||{},env=s.environment_agent||{},persona=env.persona||{},role=s.evaluated_agent_role||{},rolePersona=role.persona||{},source=s.source||{};
  var schema=detail.schema_status==="valid"?'<span class="good">schema valid</span>':'<span class="error">schema invalid：'+esc(detail.schema_error)+'</span>';
  document.getElementById("content").innerHTML=
- '<section class="panel"><h2>'+esc(s.title)+'</h2><div class="meta"><div><span>Scenario</span>'+esc(s.scenario_id)+'</div><div><span>核心机制</span>'+esc(s.mechanism)+'</div><div><span>来源</span>'+esc(source.type)+' · '+esc(source.provenance_id)+'</div><div><span>机器结构检查</span>'+schema+'</div></div><h3 class="section-title">故事背景</h3><p class="long narrative">'+esc(s.background)+'</p><div class="help">SHA-256 '+esc(detail.scenario_sha256)+'</div></section>'+
+ '<section class="panel"><p class="help">这里展示原审核批次。<a href="/gpt50-live#'+encodeURIComponent(s.scenario_id)+'">查看此场景当前批次的 rollout 和 state →</a></p><h2>'+esc(s.title)+'</h2><div class="meta"><div><span>Scenario</span>'+esc(s.scenario_id)+'</div><div><span>核心机制</span>'+esc(s.mechanism)+'</div><div><span>来源</span>'+esc(source.type)+' · '+esc(source.provenance_id)+'</div><div><span>机器结构检查</span>'+schema+'</div></div><h3 class="section-title">故事背景</h3><p class="long narrative">'+esc(s.background)+'</p><div class="help">SHA-256 '+esc(detail.scenario_sha256)+'</div></section>'+
  '<section class="panel"><h3>两个人为什么会陷入这场冲突</h3><p><b>关系：</b>'+esc(d.relationship_structure)+'</p><p><b>谁掌握什么：</b>'+esc(d.power_structure)+'</p><p><b>眼下的分歧：</b>'+esc(d.goal_conflict)+'</p><p><b>彼此不知道的部分：</b>'+esc(d.information_asymmetry)+'</p></section>'+
  '<section class="panel"><h3>对话双方的人物设定</h3><div class="persona-grid">'+personaHtml("被测模型扮演",rolePersona,role.explicit_goal,"","") + personaHtml("环境扮演",persona,env.explicit_goal,env.hidden_intention,"hidden-author")+'</div></section>'+
  '<section class="panel"><h3>走到今天之前发生了什么</h3>'+list(d.relevant_history)+'<h3>对话中真正可选的路径</h3>'+list(d.meaningful_choice_space)+'</section>'+
  '<section class="panel"><h3>起始人物状态</h3><p class="help">这是互动开始时冻结的状态，不是预写的结局。</p><table class="state">'+rows(s.initial_state)+'</table><details><summary>查看 runtime dynamics seed 与初始化依据</summary><table class="state">'+rows(s.initial_dynamics)+'</table><div class="raw">'+esc(JSON.stringify((s.initialization_notes||{}).rationale||{},null,2))+'</div></details></section>'+
- gate2Html(detail.gate2)+
- rolloutHtml(detail.rollout,role.name||rolePersona.name,persona.name);
+ rolloutHtml(detail.rollout,role.name||rolePersona.name,persona.name)+
+ gate2Html(detail.gate2);
 }
 function approvedCheck(r,c){
  var values=dimensions.map(function(x){return Number((r.quality_scores||{})[x[0]]);});

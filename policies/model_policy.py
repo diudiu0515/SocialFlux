@@ -26,6 +26,40 @@ def _text_items(value):
             result.append(text)
     return result
 
+_POLICY_OBSERVATION_CONDITIONS = {"text_only", "text_video"}
+_MEDIA_INPUT_FORMATS = {"openai_video_url"}
+
+
+def _media_content_blocks(media, media_input_format):
+    if not media:
+        return []
+    if media_input_format not in _MEDIA_INPUT_FORMATS:
+        raise ValueError(
+            "text_video policy requires a supported media_input_format"
+        )
+    blocks = []
+    for item in media:
+        if not isinstance(item, dict) or item.get("media_type") != "video":
+            raise ValueError("text_video policy accepts video media records only")
+        asset_url = str(item.get("asset_url") or "").strip()
+        if not asset_url:
+            raise ValueError(
+                "text_video policy requires a resolved asset_url for every event"
+            )
+        blocks.append({
+            "type": "video_url",
+            "video_url": {"url": asset_url},
+        })
+    return blocks
+
+
+def _sanitized_policy_payload(observation):
+    payload = dict(observation)
+    media = payload.pop("media", [])
+    payload.pop("observable_cues", None)
+    payload.pop("observable_expression", None)
+    return payload, media
+
 
 def build_evaluated_role_card(observation):
     """Build the policy's own-role card only from supplied, policy-visible data."""
@@ -90,8 +124,17 @@ class ModelPolicy:
         validation_profile="full",
         horizon_mode="natural_max_20",
         minimum_natural_turns=1,
+        observation_condition="text_only",
+        media_input_format=None,
     ):
         validate_generation_options(validation_profile, horizon_mode)
+        if observation_condition not in _POLICY_OBSERVATION_CONDITIONS:
+            raise ValueError("unsupported policy observation condition")
+        if (
+            observation_condition == "text_video"
+            and media_input_format not in _MEDIA_INPUT_FORMATS
+        ):
+            raise ValueError("text_video policy requires media_input_format")
         self.policy_id = policy_id
         self.provider = provider
         self.prompt_id = prompt_id
@@ -100,6 +143,8 @@ class ModelPolicy:
         self.validation_profile = validation_profile
         self.horizon_mode = horizon_mode
         self.minimum_natural_turns = int(minimum_natural_turns)
+        self.observation_condition = observation_condition
+        self.media_input_format = media_input_format
 
     def reset(self):
         reset = getattr(self.provider, "reset", None)
@@ -116,6 +161,8 @@ class ModelPolicy:
             "validation_profile": self.validation_profile,
             "horizon_mode": self.horizon_mode,
             "minimum_natural_turns": self.minimum_natural_turns,
+            "observation_condition": self.observation_condition,
+            "media_input_format": self.media_input_format,
             **self.provenance_extra,
         }
 
@@ -158,7 +205,7 @@ class ModelPolicy:
             if item.get("role") == "environment_agent"
         ]
         turn_number = len(prior_actions) + 1
-        payload = dict(observation)
+        payload, media = _sanitized_policy_payload(observation)
         runtime_feedback = payload.pop("runtime_generation_feedback", None)
         payload["anti_repetition"] = {
             "current_turn": turn_number,
@@ -215,6 +262,16 @@ class ModelPolicy:
             if item.get("speaker") == "environment_agent"
             and item.get("status") in {"open", "tentative"}
         ), None)
+        active_pending_commitments = [
+            {
+                "speaker": item.get("speaker", ""),
+                "text": item.get("text", ""),
+                "status": item.get("status", ""),
+                "turn_id": item.get("turn_id", ""),
+            }
+            for item in brief_ledger.get("commitments", [])
+            if item.get("status") == "pending"
+        ]
         guide = segment.get("turn_guidance", {})
         turn_brief = {
             "total_turn": turn_number,
@@ -233,6 +290,15 @@ class ModelPolicy:
                 } if latest_open_proposal else None
             ),
             "newest_other_utterance": observation.get("current_response", ""),
+            "decision_continuity": {
+                "active_pending_commitments": active_pending_commitments,
+                "instruction": (
+                    "Before proposing a different plan on the same decision object, "
+                    "explicitly preserve the earlier decision, distinguish its stage, "
+                    "add a grounded condition, or amend/rescind it with a public reason. "
+                    "Never silently replace it."
+                ),
+            },
             "suggested_live_question": guide.get("suggested_live_question", ""),
             "guidance_mode": guide.get("mode", ""),
             "do_not_repeat_own_utterances": prior_actions[-3:],
@@ -270,11 +336,19 @@ class ModelPolicy:
             "绝不能被改写成你的行动、承诺、完成或立场。不要复述对方整句，也不要用"
             "‘我理解/我接受，但还需要明确’作为默认句式；直接作出这一个角色此刻最自然的反应。"
         )
+        media_blocks = self._observation_media_blocks(media)
+        user_content = prompt
+        if media_blocks:
+            user_content = [{"type": "text", "text": prompt}, *media_blocks]
         messages = [
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": prompt},
+            {"role": "user", "content": user_content},
         ]
         return messages, forbidden_echoes
+
+    def _observation_media_blocks(self, media):
+        return (_media_content_blocks(media, self.media_input_format)
+                if self.observation_condition == "text_video" else [])
 
     def _validate_candidate_for_profile(self, candidate, observation):
         return action_validation.validate_candidate_for_profile(

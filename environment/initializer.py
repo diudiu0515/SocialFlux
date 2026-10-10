@@ -4,8 +4,10 @@ from copy import deepcopy
 
 from schemas.validate import (
     STATE_CONTRACT_VERSION,
+    STATE_ONTOLOGY_VERSION,
     validate_v2_dynamics,
     validate_v2_state_selection,
+    validate_v3_state_selection,
 )
 
 
@@ -38,6 +40,8 @@ def freeze_initialization(scenario):
         if not isinstance(selected, dict):
             raise ValueError("v2 scenario requires selected_state_variables")
         validate_v2_state_selection(selected)
+        if scenario.get("state_ontology_version") == STATE_ONTOLOGY_VERSION:
+            validate_v3_state_selection(selected)
         if set(state) != set(selected):
             raise ValueError(
                 "v2 initial_state must contain exactly the four selected state families"

@@ -293,6 +293,14 @@ class FailoverProvider(ModelProvider):
         raise RuntimeError("failover provider candidate pool is empty")
 
     @property
+    def audit_records(self):
+        records = []
+        for slot, candidate in enumerate(self.candidates):
+            for item in getattr(candidate, "audit_records", []):
+                records.append({"candidate_slot": slot, **item})
+        return records
+
+    @property
     def usage(self):
         totals = {}
         for candidate in self.candidates:

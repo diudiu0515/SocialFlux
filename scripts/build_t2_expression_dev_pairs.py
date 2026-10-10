@@ -15,7 +15,7 @@ from evaluation.leakage import assert_no_leaks
 from providers.factory import build_provider
 from providers.model_routes import ModelRoutes
 from providers.structured import complete_json
-from scripts.t2_common import (
+from tasks.T2.runtime import (
     DIRECTIONS,
     ROOT,
     atomic,

@@ -1660,6 +1660,12 @@ class DistinctTextTest(unittest.TestCase):
         self.assertTrue(follows_dialogue_format(
             "我提议就此明确：注释页只陈述事实。今天先谈到这里。"
         ))
+        self.assertTrue(follows_dialogue_format(
+            "两种都要：训练中出现不适就停止，训练后出现也及时反馈。"
+        ))
+        self.assertTrue(follows_dialogue_format(
+            "不用二选一：当场不适立即停下，之后出现也当天反馈。"
+        ))
         self.assertFalse(follows_dialogue_format("程野：今天先谈到这里。"))
 
     def test_questions_and_proposals_do_not_ground_institutional_answers(self):

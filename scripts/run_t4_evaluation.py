@@ -50,6 +50,8 @@ def judge_episode(trajectory, scenario, config):
     seed = judge.get("sampling", {}).get("seed", 7401)
     packet, judgment, request_count = generate_judgment(
         provider, trajectory, scenario, seed, max_attempts=5,
+        observation_condition=judge.get("observation_condition", "text_only"),
+        sampling=judge.get("sampling", {}),
     )
     return packet, judgment, request_count
 
@@ -61,9 +63,18 @@ def main(argv=None):
     parser.add_argument("--scenario-id", action="append")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--resume", action="store_true", help="reuse a saved valid 20-turn trajectory")
+    parser.add_argument("--trajectory-manifest", type=Path, help="score saved terminal trajectories without generating episodes")
+    parser.add_argument("--workers", type=int, default=3)
+    parser.add_argument("--judge-attempts", type=int, default=2)
     args = parser.parse_args(argv)
 
     config = load_t4_config(args.config)
+    if args.trajectory_manifest:
+        from evaluation.t4_batch import run_saved_batch
+        summary = run_saved_batch(args.trajectory_manifest, args.output, config,
+                                  workers=args.workers, max_attempts=args.judge_attempts, resume=args.resume)
+        print(json.dumps(summary, ensure_ascii=False))
+        return
     assert_fable_t4_config(config)
     scenarios = load_scenarios(args.scenarios)
     requested = set(args.scenario_id or [])

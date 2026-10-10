@@ -37,7 +37,7 @@ class T4ContractTest(unittest.TestCase):
         self.assertTrue(observation["role"]["explicit_goal"])
         self.assertEqual(
             observation["public_situation"]["relevant_history"],
-            self.scenario["narrative_design"]["relevant_history"],
+            [],  # Unreviewed author narrative is not public by field name.
         )
         self.assertNotIn("discussion_dimensions", observation["public_situation"])
         rendered = json.dumps(observation, ensure_ascii=False)
@@ -101,6 +101,56 @@ class T4ContractTest(unittest.TestCase):
         self.assertNotIn(
             self.scenario["environment_agent"]["hidden_intention"], prompt
         )
+
+    def test_text_and_video_conditions_share_identical_text_without_cue_metadata(self):
+        observation = build_initial_policy_observation(self.scenario)
+        observation["observable_cues"] = ["CUE_MARKER_SHOULD_NOT_BE_TEXT"]
+        observation["observable_expression"] = {
+            "facial_expression": "EXPRESSION_MARKER_SHOULD_NOT_BE_TEXT"
+        }
+        observation["media"] = [{
+            "media_type": "video",
+            "asset_status": "available",
+            "asset_url": "https://assets.example.test/cue-01.mp4",
+            "asset_path": None,
+            "media_asset_id": "cue-01",
+            "duration_seconds": 4,
+        }]
+        text_policy = ModelPolicy(
+            "text-condition",
+            None,
+            prompt_id="task_t4_action_v21",
+            validation_profile="hard_only",
+            observation_condition="text_only",
+        )
+        video_policy = ModelPolicy(
+            "video-condition",
+            None,
+            prompt_id="task_t4_action_v21",
+            validation_profile="hard_only",
+            observation_condition="text_video",
+            media_input_format="openai_video_url",
+        )
+        text_messages, _ = text_policy._build_request(observation)
+        video_messages, _ = video_policy._build_request(observation)
+        text_prompt = text_messages[1]["content"]
+        video_content = video_messages[1]["content"]
+
+        self.assertIsInstance(text_prompt, str)
+        self.assertEqual(video_content[0], {"type": "text", "text": text_prompt})
+        self.assertEqual(
+            video_content[1],
+            {
+                "type": "video_url",
+                "video_url": {
+                    "url": "https://assets.example.test/cue-01.mp4"
+                },
+            },
+        )
+        rendered_text = json.dumps(text_prompt, ensure_ascii=False)
+        self.assertNotIn("CUE_MARKER_SHOULD_NOT_BE_TEXT", rendered_text)
+        self.assertNotIn("EXPRESSION_MARKER_SHOULD_NOT_BE_TEXT", rendered_text)
+        self.assertNotIn("cue-01", rendered_text)
 
     def test_own_persona_reaches_rollout_and_t4_without_target_secrets(self):
         scenario = deepcopy(self.scenario)

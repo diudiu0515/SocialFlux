@@ -1,0 +1,157 @@
+三个探索场景：完整正文与关键状态证据
+
+本轮不因固定集三个争议标签阻止试跑。原标签、原分数不变；没有继续修改 state prompt。
+三个不同场景最终均自然结束：新闻 3 轮、丧葬 5 轮、HR／EAP 2 轮。未补写到 10 轮。
+首批一次完成一条，另两条的回应分别截断、返回空内容；各做一次工程恢复，原失败保留。
+HR：首轮 policy/state/interaction 原样回放；回应预算 2600→6000。后续第二轮正常新生成。
+丧葬：五轮 state、五次 policy、六次 interaction 与七次回应输出原样回放；只新增最后一次回应调用。
+两次恢复都逐请求校验原输入；不重新生成既有语义判断，也不将失败覆盖成成功。
+助手已检查正文、关系变量理由、重复更新、数值映射与跨轮衔接；尚未正式人工 annotation。
+
+实际观察
+- 新闻 trust 为 5→6→7→9；各轮有新增依据，但响应性和角色正当性很快到 10，需观察累计速度。
+- 丧葬第 3、4 轮重复确认，全部 state/dynamics 保持不变；第 5 轮拒绝拿未读笔记替任何方作证，被判有限的新公平性/角色证据。
+- HR 第二轮重复周一期限没有继续加压；信息不对称 +1 的依据主要是重申缺口，新增性偏弱。
+- 三条未发现数值映射、0–10 边界、跨轮状态衔接或无证据/重复证据却非零更新的机械矛盾。
+- 这不等于所有语义都正确：HR 的回复边界有张力，丧葬后半段重复确认偏多，三条都未达到长度目标。
+- 完整轨迹共保留 state 格式修复 2 次、interaction 1 次、response 8 次；两次原始回应失败另计。
+
+其他复核项
+- 新闻首轮回应加入“法务昨天告诉我”，原背景只确立法务已告知，没有确立“昨天”。
+- 新闻账本中多条首轮承诺共用一个 ID；承诺原文和人物仍各自保留，下游 ID 引用影响尚未验证。
+- 不据此增加 prompt 特例；不把曲线变化多寡当作质量分数。
+- 20／150 场景及正式人工 annotation 尚未启动；本包是探索样本，不是正式准入结论。
+
+================================================
+新闻编辑｜3 轮｜编辑 Inez Calder 评价记者 Sami Osei
+背景（被测方可见）：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
+
+t1
+被测方：我建议把那条有争议的指令留到周一公开记录后核验，今晚争取先发材料撑得住的部分，不把偏袒嫌疑写成定论。我会申请加急公开，并安排安全的信源会面，不让信源冒险再取评分表。
+环境方：同意这个分段方案。不过法务昨天告诉我，信源在投标期间从分包商那里收过咨询费，你知道这件事吗？
+关系状态：
+  relationship.perceived_responsiveness: 6 → 7；ordinary_new_evidence
+  依据：Inez Calder has new evidence that Sami Osei incorporates her established verification concern into the proposed framing; this does not answer the financial conflict she has not disclosed.
+  relationship.role_legitimacy: 7 → 8；ordinary_new_evidence
+  依据：Inez Calder sees Sami Osei exercise the reporter role appropriately by consulting on publication scope and making verification limits transparent rather than unilaterally asserting a settled allegation.
+  relationship.trust: 5 → 6；ordinary_new_evidence
+  依据：After the earlier reporting error, Inez Calder has a specific concern about Sami Osei's evidentiary reliability. Sami Osei now distinguishes supportable material from suspicion and narrows the requested publication, providing limited present evidence of improved judgment rather than proof of future follow-through.
+
+t2
+被测方：我此前不知道这笔咨询费；这会实质影响信源证词的分量，但不自动否定其他材料。今晚我不会让他的说法单独支撑偏袒指控，稿子先立在能独立核对的事实上。
+环境方：好，那今晚就以这个框架走。你手上独立核对的材料现在能撑住哪几条具体指控？
+关系状态：
+  relationship.perceived_responsiveness: 7 → 9；decisive_new_evidence
+  依据：Inez Calder sees Sami Osei directly answer her knowledge question and substantively incorporate her financial-conflict concern. This completes the present responsive act rather than merely promising a later answer.
+  relationship.role_legitimacy: 8 → 9；ordinary_new_evidence
+  依据：Inez Calder sees Sami Osei exercise accountable reporting judgment by distinguishing compromised testimony from independent material, transparently calibrating the reporter's evidentiary scope to the new conflict.
+  relationship.trust: 6 → 7；ordinary_new_evidence
+  依据：After the earlier reporting error, Inez Calder doubts Sami Osei's evidentiary reliability. Sami now admits a knowledge gap and assigns adverse weight to information undermining the source, providing new present evidence against defensive overclaiming; the admission is not independently verified and implementation remains ahead.
+
+t3
+被测方：我得把结论说窄：目前没有一条具体偏袒行为能被独立材料坐实。我们可以报道授标事实和现有记录呈现的决策过程，但我不会把它写成评分遭到操纵。
+环境方：可以。今晚就围绕授标事实和决策过程的透明度缺口来写，不碰操纵结论。你现在改稿，我去通知法务按这个框架把关。
+关系状态：
+  relationship.perceived_responsiveness: 9 → 10；decisive_new_evidence
+  依据：Inez Calder sees Sami Osei directly settle her current question about which specific accusations independent materials support. Answering none is a substantive completed answer, not evasion or a future undertaking.
+  relationship.role_legitimacy: 9 → 10；ordinary_new_evidence
+  依据：Inez Calder sees Sami Osei transparently delimit the reporter's actual evidentiary mandate, separating documented process from accusations rather than leaving the independent support unspecified.
+  relationship.trust: 7 → 9；decisive_new_evidence
+  依据：Inez Calder's concern about Sami Osei overstating evidence after the earlier correction is directly addressed by his present, costly admission that no specific favoritism act is corroborated. Unlike prior general caution, he now relinquishes the substantive allegation he sought to publish; this establishes candid calibration now, not later drafting performance.
+
+自然结束：{'reason': 'natural_completion', 'turn_id': 3}
+逐变量完整证据：data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_exploratory_three/00_GPT50_003_gpt/evidence_review.txt
+曲线：data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_exploratory_three/00_GPT50_003_gpt/state_curves.png
+
+================================================
+丧葬协商｜5 轮｜殡葬经理 Mara Ellery 评价家族代表 Silas Venn
+背景（被测方可见）：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
+
+t1
+被测方：我现在不能签这份直接火化授权。阿达先前预付的是简单火化、不要公开仪式，可家里现在提出守夜、瞻仰，也希望那位被排除的亲人能参与；在弄清这些愿望如何并存前，我不愿让最终处置变得不可逆。
+环境方：明白了。那位亲属可以参与守夜或瞻仰，前提是我们先确认这些活动本身如何进行——阿达预付的方案没有包含公开仪式，现在增加这部分需要家属授权和费用安排。
+关系状态：
+  relationship.perceived_fairness: 5 → 6；ordinary_new_evidence
+  依据：Silas Venn explicitly includes the previously excluded relative and recognizes competing family wishes, giving Mara Ellery new evidence of more inclusive voice and fairer burden allocation by Silas Venn.
+  relationship.perceived_responsiveness: 4 → 4；no_relevant_evidence
+  依据：No concern from Mara Ellery is being answered in this turn, so Silas Venn's act provides no new evidence about whether he substantively addresses Mara Ellery's concerns.
+  relationship.role_legitimacy: 6 → 8；decisive_new_evidence
+  依据：Silas Venn uses his spokesperson role transparently to withhold authorization until affected wishes are clarified, directly establishing justified consultation and appropriate authority use in Mara Ellery's judgment.
+
+t2
+被测方：那位亲属参与守夜或瞻仰，我可以先纳入家属授权范围；但我不授权公开仪式或未说明的费用，也不会因此签下不可逆的火化授权。
+环境方：好，我记录你授权这位亲属参与守夜和瞻仰。火化授权我们现在不处理，等你们确认规划笔记内容。
+关系状态：
+  relationship.perceived_fairness: 6 → 7；ordinary_new_evidence
+  依据：Mara Ellery can view Silas Venn's treatment of the excluded relative as fairer because he moves from reporting a family wish to accepting inclusion within his authorization scope; actual access remains unsettled.
+  relationship.perceived_responsiveness: 4 → 5；ordinary_new_evidence
+  依据：Mara Ellery receives a substantive answer from Silas Venn about family authorization and fee scope, although he does not yet specify how the activities will occur or be funded.
+  relationship.role_legitimacy: 8 → 9；ordinary_new_evidence
+  依据：Mara Ellery gains new evidence that Silas Venn uses his spokesperson authority with transparent, differentiated scope rather than letting inclusion imply unrestricted ceremony or financial consent.
+
+t3
+被测方：好，这项授权先单独算：让那位亲属参与，不等于家里已经对仪式形式有了共识。
+环境方：明白，这项授权独立记录。仪式形式和费用安排仍待家属达成一致，到时再补充文件。
+关系状态：
+  relationship.perceived_fairness: 7 → 7；repeated_evidence_only
+  依据：Mara Ellery already had evidence that Silas Venn allowed the excluded relative's participation; he allocates no new voice or burden here.
+  relationship.perceived_responsiveness: 5 → 5；repeated_evidence_only
+  依据：Silas Venn repeats the authorization distinction already answering Mara Ellery's procedural concern in t2, without addressing activity arrangements or funding further.
+  relationship.role_legitimacy: 9 → 9；repeated_evidence_only
+  依据：Mara Ellery already saw Silas Venn transparently limit his authorization mandate; denying implied ceremony consensus restates that scope without a new procedural consequence.
+
+t4
+被测方：好，先这样分开记录。规划笔记读完前，现有授权边界不变，火化授权先不签。
+环境方：好的，那我们等规划笔记读完后再讨论火化授权，这段时间内亲属参与的这项授权继续有效。
+关系状态：
+  relationship.perceived_fairness: 7 → 7；repeated_evidence_only
+  依据：Mara Ellery already knew Silas Venn preserved the relative's limited participation without claiming broader family consensus. Maintaining that arrangement allocates no new voice or burden.
+  relationship.perceived_responsiveness: 5 → 5；repeated_evidence_only
+  依据：Mara Ellery receives from Silas Venn the same acknowledgment of separate authorization and deferred disposition already present in the exchange, not a further answer about arrangements or fees.
+  relationship.role_legitimacy: 9 → 9；repeated_evidence_only
+  依据：Mara Ellery already had evidence that Silas Venn transparently limited his spokesperson authorization and withheld irreversible consent pending clarification. This act adds no new procedural consequence.
+
+t5
+被测方：好，亲属参与的许可照旧，我们先停在这里；笔记读完前，我不想拿尚未读到的内容替任何一方作证。
+环境方：明白，授权记录保持不变，这段时间我也不会推动新决定。笔记读完后我们再谈。
+关系状态：
+  relationship.perceived_fairness: 7 → 8；ordinary_new_evidence
+  依据：Mara Ellery gains new evidence that Silas Venn applies the same evidentiary restriction to all sides, rather than reserving uncertain notes for his preferred interpretation. Broader process fairness remains unsettled.
+  relationship.perceived_responsiveness: 5 → 5；repeated_evidence_only
+  依据：Mara Ellery receives from Silas Venn the same acknowledgment of continuing participation permission and deferred discussion; no outstanding concern receives an additional substantive answer.
+  relationship.role_legitimacy: 9 → 10；ordinary_new_evidence
+  依据：Mara Ellery sees Silas Venn specifically limit his spokesperson role by declining to claim evidentiary authority over unread material. This adds transparent epistemic scope beyond his previously stated authorization boundaries.
+
+自然结束：{'reason': 'natural_completion', 'turn_id': 5}
+逐变量完整证据：data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_empty_response_recovery/01_GPT50_026_gpt/evidence_review.txt
+曲线：data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_empty_response_recovery/01_GPT50_026_gpt/state_curves.png
+
+================================================
+HR／EAP 协商｜2 轮｜EAP 负责人 Lena Ortiz 评价 HR 主管 David Kemper
+背景（被测方可见）：At a 280-person manufacturing company, HR received an anonymous hotline report about an employee's concerning workplace statements and behavior, without an articulated specific threat. By Monday HR must decide whether to use administrative leave, seek a fitness evaluation, or take no action. The insurance carrier is pressing for tighter workplace-violence protocols after an external incident. HR seeks guidance from the in-house EAP director within professional confidentiality boundaries. HR knows the anonymous caller used workplace-training language, which could reflect an overinterpretation of ordinary frustration. An executive review is scheduled in three weeks. The counselor has not disclosed this employee's clinical history or current care status.
+
+t1
+被测方：Lena，我需要你帮我评估一个情况。周一之前我得决定要不要让一个员工行政休假或做适岗评估。匿名热线报告说这人最近对管理层有激烈言论、在卡车那边表现焦躁，但没有具体威胁描述。你那边如果有任何能帮我判断实际风险程度的信息，在保密范围内能说多少是多少——我得知道这是真的安全隐患还是同事过度解读了正常的工作不满。
+环境方：David，我明白周一决策的压力。但我需要明确告诉你：在没有即刻伤害风险的情况下，我不能确认任何员工是否在接受EAP服务，也不能提供个案信息——这个界限保护的是整个项目的可信度。如果你需要专业评估，可以直接联系该员工并建议他授权我们沟通；我也可以跟你讨论一般性的风险判断框架，但无法针对具体个人给出意见。
+关系状态：
+  relationship.perceived_responsiveness: 4 → 5；ordinary_new_evidence
+  依据：Lena Ortiz可据此认为David Kemper在请求中承认并纳入了她的核心保密顾虑；但措辞宽泛，尚未具体解决能否确认客户身份或提供个案判断的问题。
+  relationship.respect: 6 → 7；ordinary_new_evidence
+  依据：Lena Ortiz可因David Kemper没有直接把员工不满病理化或危险化、而保留非威胁性解释，提高对其判断能力和维护员工尊严的专业操守的认可。
+  relationship.role_legitimacy: 6 → 7；ordinary_new_evidence
+  依据：David Kemper交代了咨询所服务的具体HR决定，并在同一请求中限定保密范围；Lena Ortiz因此获得其透明说明职责范围、在决策前咨询专业意见的证据，而不只是看到他援引职权。
+
+t2
+被测方：我接受保密界限，但直接联系这个员工本身就是个风险决策——如果情况确实严重，提前告知可能让事态升级；如果只是误判，强制要求他授权EAP沟通等于公开暗示他有问题。一般性框架帮不了我周一做具体判断。你能不能至少告诉我：基于匿名报告里的这些行为描述，按临床标准看是不是该立即介入的信号？不涉及他是否你的个案。
+环境方：David，我明白你的两难。但即使不提具体个案，对这份报告给临床判断本身就构成了间接确认。我能说的是披露门槛：明确的伤害计划、具体的武器获取途径、或者有时间地点的威胁陈述——你描述的内容没到这个程度。
+关系状态：
+  relationship.perceived_responsiveness: 5 → 6；ordinary_new_evidence
+  依据：David Kemper明确承认Lena Ortiz的保密界限，并将问题改写为不询问其是否为个案对象；这使Lena Ortiz看到David Kemper部分听取并纳入了她的核心顾虑，虽未完全解决个案判断边界。
+  relationship.respect: 7 → 8；ordinary_new_evidence
+  依据：David Kemper明确排除询问员工是否为Lena Ortiz个案，承认Lena Ortiz的专业隐私边界和裁量空间，因此为Lena Ortiz对David Kemper尊重其专业地位与边界的判断提供了新证据。
+  relationship.role_legitimacy: 7 → 8；ordinary_new_evidence
+  依据：David Kemper透明说明其请求仅针对匿名行为描述和一般临床介入标准，并保留HR作安全判断的职责范围；这使Lena Ortiz有一定理由认为David Kemper在其职权内寻求专业咨询，而非直接要求确认个案身份。
+
+自然结束：{'reason': 'natural_completion', 'turn_id': 2}
+逐变量完整证据：data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_response_budget_recovery/02_CF150_044_claude/evidence_review.txt
+曲线：data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_response_budget_recovery/02_CF150_044_claude/state_curves.png

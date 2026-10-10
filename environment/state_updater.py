@@ -1,5 +1,6 @@
 """Deterministic state updates derived from one structured model appraisal."""
 
+from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
 from math import ceil
 
@@ -118,53 +119,169 @@ def apply_transition(state, dynamics, transition):
 
 
 class ModelStateUpdater:
-    """Compatibility name for structured appraisal + deterministic calibration.
+    """Run appraisal(s), deterministic selection, and exactly one state update."""
 
-    The provider is called exactly once here. The next model call belongs to the
-    response generator, after the calibrated transition has been applied.
-    """
-
-    def __init__(self, scenario, provider, sampling=None, appraiser=None, calibrator=None):
+    def __init__(
+        self, scenario, provider, sampling=None, appraiser=None, calibrator=None,
+        calibration_profile="sparse_v1", state_appraiser=None,
+        interaction_appraiser=None,
+    ):
         self.scenario = deepcopy(scenario)
         self.provider = provider
         self.sampling = dict(sampling or {})
-        self.appraiser = appraiser or ModelAppraiser(scenario, provider, sampling)
-        self.calibrator = calibrator or DeterministicStateCalibrator(scenario)
+        self.state_appraiser = state_appraiser
+        self.interaction_appraiser = interaction_appraiser
+        if (state_appraiser is None) != (interaction_appraiser is None):
+            raise ValueError(
+                "state_appraiser and interaction_appraiser must be supplied together"
+            )
+        self.appraiser = (
+            appraiser or ModelAppraiser(scenario, provider, sampling)
+            if state_appraiser is None else None
+        )
+        self.calibrator = calibrator or DeterministicStateCalibrator(
+            scenario, profile=calibration_profile
+        )
 
     @property
     def provenance(self):
+        if self.state_appraiser is None:
+            appraisal_provenance = {
+                "appraisal_mode": "combined",
+                "appraisal_prompt_id": getattr(
+                    self.appraiser, "prompt_id", "environment_appraisal_v11"
+                ),
+            }
+        else:
+            appraisal_provenance = {
+                "appraisal_mode": "independent_parallel",
+                "state_appraisal": self.state_appraiser.provenance,
+                "interaction_appraisal": self.interaction_appraiser.provenance,
+            }
         return {
             **getattr(self.provider, "provenance", {}),
-            "appraisal_prompt_id": getattr(
-                self.appraiser, "prompt_id", "environment_appraisal_v11"
-            ),
-            "state_update": "deterministic",
+            **appraisal_provenance,
+            "state_update": "deterministic_single_apply",
             **self.calibrator.provenance,
             "sampling": dict(self.sampling),
         }
 
-    def update(
+    @staticmethod
+    def _appraisal_kwargs(*, action, previous_state, previous_dynamics, memory,
+                          longitudinal_context, interaction_ledger,
+                          appraisal_context=None):
+        # Both independent calls receive copies of the same pre-update snapshot.
+        return {
+            "action": deepcopy(action),
+            "previous_state": deepcopy(previous_state),
+            "previous_dynamics": deepcopy(previous_dynamics),
+            "memory": deepcopy(memory),
+            "longitudinal_context": deepcopy(longitudinal_context),
+            "interaction_ledger": deepcopy(interaction_ledger),
+            "appraisal_context": deepcopy(appraisal_context),
+        }
+
+    def _independent_appraisal(
         self, *, action, previous_state, previous_dynamics, memory,
-        longitudinal_context=None, interaction_ledger=None,
+        longitudinal_context, interaction_ledger,
+        appraisal_context=None,
     ):
-        appraisal = self.appraiser.appraise(
+        kwargs = self._appraisal_kwargs(
             action=action,
             previous_state=previous_state,
             previous_dynamics=previous_dynamics,
             memory=memory,
             longitudinal_context=longitudinal_context,
             interaction_ledger=interaction_ledger,
+            appraisal_context=appraisal_context,
         )
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            state_future = executor.submit(self.state_appraiser.appraise, **kwargs)
+            interaction_future = executor.submit(
+                self.interaction_appraiser.appraise, **kwargs
+            )
+            state_result = state_future.result()
+            interaction_result = interaction_future.result()
+
+        merged = {
+            **deepcopy(interaction_result["appraisal"]),
+            **deepcopy(state_result["appraisal"]),
+        }
+        evidence_ids = []
+        for item in (
+            state_result.get("evidence_turn_ids", [])
+            + interaction_result.get("evidence_turn_ids", [])
+        ):
+            if item not in evidence_ids:
+                evidence_ids.append(item)
+            if len(evidence_ids) == 4:
+                break
+        return {
+            "appraisal": merged,
+            "evidence_turn_ids": evidence_ids,
+            "state_judgments": deepcopy(state_result["state_judgments"]),
+            "dynamics_judgments": deepcopy(state_result["dynamics_judgments"]),
+            "state_appraisal_call": {
+                "request_messages": deepcopy(state_result.get("request_messages", [])),
+                "request_sampling": deepcopy(state_result.get("request_sampling", {})),
+                "provider_audit_records": deepcopy(
+                    state_result.get("provider_audit_records", [])
+                ),
+                "request_retry_diagnostics": deepcopy(
+                    state_result.get("request_retry_diagnostics", [])
+                ),
+            },
+            "interaction_appraisal_call": {
+                "request_messages": deepcopy(
+                    interaction_result.get("request_messages", [])
+                ),
+                "request_sampling": deepcopy(
+                    interaction_result.get("request_sampling", {})
+                ),
+                "provider_audit_records": deepcopy(
+                    interaction_result.get("provider_audit_records", [])
+                ),
+                "request_retry_diagnostics": deepcopy(
+                    interaction_result.get("request_retry_diagnostics", [])
+                ),
+            },
+        }
+
+    def update(
+        self, *, action, previous_state, previous_dynamics, memory,
+        longitudinal_context=None, interaction_ledger=None,
+        current_event_id=None,
+        appraisal_context=None,
+    ):
+        if self.state_appraiser is None:
+            appraisal = self.appraiser.appraise(
+                action=action,
+                previous_state=previous_state,
+                previous_dynamics=previous_dynamics,
+                memory=memory,
+                longitudinal_context=longitudinal_context,
+                interaction_ledger=interaction_ledger,
+                appraisal_context=appraisal_context,
+            )
+        else:
+            appraisal = self._independent_appraisal(
+                action=action,
+                previous_state=previous_state,
+                previous_dynamics=previous_dynamics,
+                memory=memory,
+                longitudinal_context=longitudinal_context,
+                interaction_ledger=interaction_ledger,
+                appraisal_context=appraisal_context,
+            )
         unsupported = unsupported_consequential_claims(appraisal["appraisal"])
         if unsupported:
-            raise UnsupportedConsequentialClaim(
-                unsupported, appraisal["appraisal"]
-            )
+            raise UnsupportedConsequentialClaim(unsupported, appraisal["appraisal"])
         calibrated = self.calibrator.calibrate(
             appraisal["appraisal"], previous_state, previous_dynamics,
             surface_duplicate_evidence_ids=memory.get(
                 "deterministic_surface_duplicate_ids", []
             ),
+            current_event_id=current_event_id,
         )
         transition = {
             "appraisal": appraisal["appraisal"],
@@ -174,9 +291,26 @@ class ModelStateUpdater:
             ),
             **calibrated,
         }
+        if self.state_appraiser is None:
+            transition["combined_appraisal_call"] = {
+                "request_messages": deepcopy(
+                    appraisal.get("request_messages", [])
+                ),
+                "request_sampling": deepcopy(
+                    appraisal.get("request_sampling", {})
+                ),
+                "provider_audit_records": deepcopy(
+                    appraisal.get("provider_audit_records", [])
+                ),
+            }
+
+        for key in (
+            "state_judgments", "dynamics_judgments",
+            "state_appraisal_call", "interaction_appraisal_call",
+        ):
+            if key in appraisal:
+                transition[key] = deepcopy(appraisal[key])
         validate_transition(transition, previous_state, previous_dynamics)
         return canonicalize_bounded_transition(
-            transition,
-            previous_state,
-            previous_dynamics,
+            transition, previous_state, previous_dynamics
         )

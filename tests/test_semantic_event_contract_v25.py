@@ -90,6 +90,32 @@ class SemanticEventContractV25Test(unittest.TestCase):
         )
         self.assertEqual(result["ledger_events"], [])
 
+    def test_v26_inherits_v25_structured_semantic_schema(self):
+        generator = ModelResponseGenerator(
+            UnusedProvider(),
+            prompt_id="environment_response_v26",
+            validation_profile="hard_only",
+            horizon_mode="natural_max_20",
+        )
+        value = response_value("我会先回答你刚才的问题。")
+        result = generator._validate_structured_response(value, self.context)
+        self.assertEqual(result["response_text"], value["response_text"])
+        self.assertEqual(result["expression_intent"], value["expression_intent"])
+        self.assertEqual(
+            result["observable_behavior"], value["observable_behavior"]
+        )
+
+    def test_v27_inherits_v25_structured_semantic_schema(self):
+        generator = ModelResponseGenerator(
+            UnusedProvider(),
+            prompt_id="environment_response_v27",
+            validation_profile="hard_only",
+            horizon_mode="natural_max_20",
+        )
+        value = response_value("我会先回答你刚才的问题。")
+        result = generator._validate_structured_response(value, self.context)
+        self.assertEqual(result["response_text"], value["response_text"])
+
     def test_v25_rejects_unsupported_consequential_response_claim(self):
         text = "学院已经决定取消你的资格。"
         value = response_value(text, consequential_claims=[{

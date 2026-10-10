@@ -1,87 +1,81 @@
 # SocialFlux
 
-SocialFlux 是一个长期社会互动推理 benchmark pipeline。当前实现用同一套私有状态环境生成自然模型轨迹、构建 T1/T2/T3 离线任务，并以同一 runtime 执行 T4 在线评测。
+SocialFlux 使用同一套社会状态环境生成 rollout、构建 T1–T3 离线题目，并执行 T4 在线评测。四类 state 为 Emotion、Behavioral Disposition、Relationship、Interaction Risk；内部风险路径沿用 `consequence_risk`。
 
-当前不保留旧 300 场景为活跃 catalog。旧 Scale300、Qwen 生成产物、旧 Talking Head 产物、本地模型和本地生成工具均已永久删除，不进入当前数据路径。现在用 GPT 做小规模人工设计核验，同时执行 Claude150 全量主批次。无论模型和批次大小，每个场景只生成 1 条自然 rollout，不做 3 seed 或 best-of-N。
+当前开发入口包括 GPT50 场景与轨迹、多模态资产，以及基于其中 5 个场景的 60 道 T1–T3 选择题。开发题已有 56 道完成所需回放，4 道 T3 待补；全部答案仍待人工审核。数量与状态以对应批次 manifest 为准，详见 [项目进度](PROJECT_PROGRESS.md) 和 [开发题报告](reports/experiments/2026-10-10_offline_t1_t3_dev60.md)。
 
-当前 GPT50 / Claude150 的阶段契约、断点规则、四任务完整性和 Gate2 并行策略见 [`docs/operations/ACTIVE_BATCH_PIPELINE.md`](docs/operations/ACTIVE_BATCH_PIPELINE.md)。
+## 从哪里开始
 
-## Pipeline
+| 目标 | 入口 |
+|---|---|
+| 理解模块职责、依赖与数据流 | [项目架构](docs/architecture/ARCHITECTURE.md) |
+| 理解 Gate 与运行顺序 | [Pipeline](docs/architecture/PIPELINE.md) |
+| 查找当前批次、配置和恢复方式 | [活跃批次手册](docs/operations/ACTIVE_BATCH_PIPELINE.md)、[配置索引](configs/README.md) |
+| 开发 T1–T3 题目与评分 | [选择题协议](docs/protocols/OFFLINE_T1_T3_CHOICE_V1.md)、[任务说明](tasks/README.md) |
+| 查看场景、对话、视频或标注题目 | [网站说明](web/README.md) |
+| 查阅设计约束与历史实验 | [DESIGN_CONTRACT](DESIGN_CONTRACT.md)、[文档索引](docs/README.md)、[报告索引](reports/README.md) |
 
-```text
-N 个 Scenario 候选
-→ Gate 1：Scenario / initial state 人工冻结；runtime dynamics seed 机器校验
-→ 每场景 1 条自然 rollout
-    Policy 自由文本 action
-    → Appraisal LLM
-    → Python 确定性状态更新
-    → Response LLM
-    → Ledger / 下一轮 observation
-→ Gate 2：Environment validity
-→ Gate 3：单模型全量筛选 Trajectory，人工抽检
-→ T1 / T2 / T3 构建；T4 在线评测
-→ Gate 4：任务实例与答案抽查
+## 当前可用入口
+
+公共命令统一从 `python -m pipeline` 进入；`scripts/` 保存具体编排与专项实验入口。查看帮助不会发起模型调用：
+
+```bash
+python -m pipeline --help
+python -m pipeline offline-build --help
+python -m pipeline offline-eval --help
 ```
 
-GPT 批次用于发现设计、任务构造和评分漏洞，不替代后续 Claude 主数据。失败 rollout 计入真实产率，不补抽另一个 seed。
+对已有开发题进行零模型调用检查：
 
-全部不可变约束以 [DESIGN_CONTRACT.md](DESIGN_CONTRACT.md) 为准；运行顺序见 [Pipeline](docs/architecture/PIPELINE.md)，运行时边界见 [Architecture](docs/architecture/ARCHITECTURE.md)。
+```bash
+python -m pipeline offline-eval --items data/offline_t1_t3_dev60/replay_ready.items.jsonl --output build/offline-check --check-only
+```
 
-## 人工 Gate 1 网站
+新协议作答只需 `{"answer":"B"}`。`tasks --protocol choice` 与 `offline-build` 走同一构建路径；不带协议参数的 `tasks` 保留旧概率题流程。重新生成、回放或试答可能调用 provider，参数见协议。CLI 的通用正式默认配置仍为 Fable；当前 GPT/offline 批次显式选择自己的配置，不要把默认值视为当前实验的模型配置。
 
-启动服务：
+网站日常由 [Supervisor 配置](configs/web.supervisord.conf) 管理。临时启动前先确认没有实例占用 8000 端口：
 
 ```bash
 python -m web.server --host 127.0.0.1 --port 8000
 ```
 
-本机打开：
+| 页面 | 用途 |
+|---|---|
+| `/gpt50` | 场景与 Gate 人工审核 |
+| `/gpt50-live` | 当前轨迹、逐轮 state、Gate 结果与视频 |
+| `/offline-review` | T1–T3 题目标注、参考材料与草稿导入导出 |
+| `/multimodal` | 多模态素材审核 |
+| `/state-annotation` | 固定历史样本的 state 标注 |
 
-```text
-http://127.0.0.1:8000/gpt50
-```
+远程服务器沿用 SSH 隧道：`ssh -p 22 -L 8000:127.0.0.1:8000 root@SERVER_IP`，然后打开 `http://127.0.0.1:8000/offline-review`。标注草稿保存在当前浏览器，换浏览器或清缓存前应导出 JSON。
 
-远程服务器先建立隧道，并保持终端不关闭：
+## 模块与产物
 
-```bash
-ssh -p 22 -L 8000:127.0.0.1:8000 root@SERVER_IP
-```
+| 目录 | 职责 |
+|---|---|
+| `pipeline/` | 公开 CLI、配置编排、运行时装配与翻译 |
+| `environment/`、`policies/`、`providers/` | 环境状态推进、行动策略、模型调用适配 |
+| `rollout/` | 自然轨迹与从真实 checkpoint 开始的反事实分支 |
+| `offline/`、`tasks/`、`evaluation/` | 出题、输入/回答协议、评分与质量门 |
+| `scenario_design/`、`annotation/` | 场景修订与人工审核合同 |
+| `configs/`、`prompts/`、`schemas/`、`shared/` | 配置、版本化提示词、结构与语义约定 |
+| `web/` | 只读材料接口与浏览器标注工作台 |
+| `scripts/`、`tests/` | 批次/实验命令和验证 |
+| `data/` | 场景、轨迹、题库、视频及其 manifest；本地数据，不进入 Git |
+| `build/` | 实验产物、验证结果和网站服务环境；并非都可重新生成的缓存 |
+| `reports/`、`docs/`、`reviews/` | 结论与证据索引、说明、审核模板 |
+| `archives/` | 不作为活跃入口的本地恢复副本 |
 
-然后在本机浏览器打开同一地址。根路径 `/` 也会进入 GPT Gate 1。浏览器草稿不是正式签名，换浏览器或清缓存前必须导出 JSON。
+已按[确认的 prompt 链](docs/prompts/RUNTIME_PROMPT_CATALOG.md)删除 39 份中间实验模板，并从注册表撤下。历史配置与结果保留来源信息；旧模板复现需使用匹配的归档，不能直接启动已撤下版本。`prompts/manifest.json.orig` 仅保留为冻结记录输入。`.secrets/`、服务环境和浏览器草稿不属于普通清理对象。范围与恢复说明见[架构文档](docs/architecture/ARCHITECTURE.md#维护与清理)。
 
-## 运行与验证
-
-场景批次必须有独立目录和 manifest，Gate 1 记录必须绑定最终 scenario 文件 SHA-256。正式命令统一从 `python -m pipeline` 进入：
-
-```bash
-python -m pipeline preflight --scenarios path/to/frozen-scenarios
-python -m pipeline rollout --scenarios path/to/frozen-scenarios --review-registry path/to/gate1.json --output data/formal/raw --workers 4 --retry-limit 1 --resume
-python -m pipeline gate3 --scenarios path/to/frozen-scenarios --raw-root data/formal/raw --stage formal --review-registry path/to/gate1.json --environment-evidence data/formal/environment --judgments data/formal/judgments.json --history-evidence data/formal/history.json --output data/formal/gate3.json --selected-root data/formal/selected
-python -m pipeline tasks --scenarios path/to/frozen-scenarios --rollout-root data/formal/selected --review-registry path/to/gate1.json --environment-evidence data/formal/environment --gate3-report data/formal/gate3.json --output data/formal/tasks
-python -m pipeline t4 --scenarios path/to/frozen-scenarios --output data/formal/t4
-python -m pipeline audit --scenario-root path/to/frozen-scenarios --rollout-stage selected --raw-root data/formal/selected --pipeline-output data/formal/tasks --review-registry path/to/gate1.json --environment-evidence data/formal/environment --judgments data/formal/judgments.json --history-evidence data/formal/history.json --human-task-review data/formal/gate4.json --output data/formal/four_gate_report.json --strict
-```
-
-常用检查：
+## 验证与正式发布
 
 ```bash
 python scripts/check_markdown_links.py
-python -m unittest discover -s tests -v
 python -m unittest discover -s web/tests -v
-python scripts/verify_gate_md.py
+python -m unittest tests.test_offline_choice tests.test_t2_source_adaptation -v
 ```
 
-## 目录
+全量回归另用 `python -m unittest discover -s tests -v`；部分历史集成测试需要各自冻结的数据资产，不应为通过测试而补造旧场景。
 
-- `pipeline/`：Gate 1–4 阶段顺序与公开 CLI。
-- `environment/`：Appraisal、确定性状态更新、Response、Ledger 和终止逻辑。
-- `rollout/`、`offline/`、`tasks/`：自然轨迹与 T1/T2/T3/T4。
-- `evaluation/`、`annotation/`：质量门与人工标注合同。
-- `prompts/`、`schemas/`：版本化 prompt 与数据合同。
-- `web/`：Gate、任务、示例和可选媒体审核页面。
-- `scripts/prepare_multimodal_video_queue.py` 与 `scripts/finalize_multimodal_video_queue.py`：准备重要节点视频 API 请求并登记生成结果；当前等待外部视频 API 配置。
-- `archives/`：本地可恢复历史归档，默认不进入 Git。
-
-## Git 提交纪律
-
-每个通过相关检查的完整工作单元都应及时 commit 并 push 当前分支。只提交本工作单元相关文件；不得提交密钥、浏览器草稿、模型原始大产物或 `archives/`。提交信息使用 `type(scope): imperative summary`，例如 `feat(web): add GPT Gate 1 review`、`chore(data): archive legacy Qwen outputs`。不要改写共享分支历史；详细规则见 [Git 提交与推送纪律](DESIGN_CONTRACT.md#22-git-提交与推送纪律)。
+正式流程为 Gate 1 → 一场景一条自然 rollout → Gate 2/3 → T1–T3/T4 → Gate 4。开发产物、模型审核和浏览器草稿均不代表正式 human GT。正式命令与证据要求见 [Formal Rollout Runbook](docs/operations/FORMAL_ROLLOUT_RUNBOOK.md)。不可变约束及提交规则见 [DESIGN_CONTRACT](DESIGN_CONTRACT.md)。

@@ -1,9 +1,10 @@
+import ast
 import json
 import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.t2_common import ROOT, load, scenario_path
+from tasks.T2.runtime import ROOT, load, scenario_path
 from tasks.T2.answering import validate_answer
 from tasks.T2.branch_authoring import validate_authored_branch
 from tasks.T2.configuration import load_t2_config
@@ -23,6 +24,14 @@ AUDIT = ROOT / "build" / "scale300_v1" / "automatic_gate_audit.json"
 
 
 class T2SourceAdaptationTest(unittest.TestCase):
+    def test_task_packages_import_runtime_without_cli_dependencies(self):
+        for path in (ROOT / "tasks").rglob("*.py"):
+            for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
+                if isinstance(node, ast.ImportFrom):
+                    self.assertFalse((node.module or "").startswith("scripts."), str(path))
+                elif isinstance(node, ast.Import):
+                    self.assertFalse(any(n.name == "scripts" or n.name.startswith("scripts.") for n in node.names), str(path))
+
     @classmethod
     def setUpClass(cls):
         cls.config, cls.specs, cls.pair_source, cls.model_routes = load_t2_config(

@@ -19,6 +19,7 @@ from .t4_evaluation import T4_MAX_TURNS
 T4_CONFIG_FORMAT = "socialflux_t4_evaluation_v2"
 T4_ACTION_PROMPT = "task_t4_action_v21"
 T4_JUDGE_PROMPT = "t4_judge_v2"
+T4_OBSERVATION_CONDITIONS = {"text_only", "text_video"}
 T4_ROLE_PARTITION_STRATEGY = (
     "gpt_policy_judge_with_claude_reference_environment"
 )
@@ -112,6 +113,28 @@ def load_t4_config(path):
         raise ValueError(f"T4 evaluated model must use {T4_ACTION_PROMPT}")
     if config["judge"].get("prompt_id") != T4_JUDGE_PROMPT:
         raise ValueError(f"T4 judge must use {T4_JUDGE_PROMPT}")
+    if (
+        config["environment"].get("state_calibration_profile")
+        == "evidence_balanced_v2"
+        and config["environment"].get("appraisal_prompt_id")
+        != "environment_appraisal_v12"
+    ):
+        raise ValueError(
+            "evidence_balanced_v2 requires environment_appraisal_v12"
+        )
+    condition = config["evaluated_model"].get(
+        "observation_condition", "text_only"
+    )
+    if condition not in T4_OBSERVATION_CONDITIONS:
+        raise ValueError(
+            "T4 evaluated model observation_condition is invalid"
+        )
+    if (
+        condition == "text_video"
+        and config["evaluated_model"].get("media_input_format")
+        != "openai_video_url"
+    ):
+        raise ValueError("T4 text_video requires openai_video_url input format")
 
     config = _resolve_routes(config, path)
     _validate_model_assignment(config)
@@ -128,8 +151,26 @@ def public_t4_config(config):
             "provider": public_provider_config(config["evaluated_model"]["provider"]),
             "prompt_id": config["evaluated_model"]["prompt_id"],
             "sampling": deepcopy(config["evaluated_model"].get("sampling", {})),
+            "observation_condition": config["evaluated_model"].get(
+                "observation_condition", "text_only"
+            ),
+            "media_input_format": config["evaluated_model"].get(
+                "media_input_format"
+            ),
         },
         "environment": {
+            "appraisal_prompt_id": config["environment"].get(
+                "appraisal_prompt_id"
+            ),
+            "state_calibration_profile": config["environment"].get(
+                "state_calibration_profile", "sparse_v1"
+            ),
+            "response_prompt_id": config["environment"].get(
+                "response_prompt_id"
+            ),
+            "response_validation_profile": config["environment"].get(
+                "response_validation_profile"
+            ),
             "appraisal_provider": public_provider_config(
                 config["environment"]["provider"]
             ),

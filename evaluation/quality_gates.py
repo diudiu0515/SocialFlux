@@ -50,6 +50,17 @@ ENVIRONMENT_EVIDENCE = {
     "E9_timescale_validity": "timescale_validity.json",
 }
 
+HUMAN_ATTESTED_ENVIRONMENT_EVIDENCE = {
+    "E1_state_transition_agreement",
+    "E2_full_trajectory_plausibility",
+    "E3_history_intervention",
+    "E4_paraphrase_robustness",
+    "E5_local_counterfactual",
+    "E7_persona_intervention",
+    "E8_video_state_consistency",
+    "E9_timescale_validity",
+}
+
 TASK_REVIEW_RATINGS = {
     "T1_state_tracking": {
         "from_free_form_rollout", "target_state_meaningful",
@@ -348,6 +359,17 @@ def audit_environment_gate(scenarios, evidence_root=None):
         evidence[name] = {"file": filename, "present": value is not None}
         if value is None:
             checks[name] = _check("pending", f"missing independent evidence file {filename}")
+            continue
+        record = value.get("record", value) if isinstance(value, dict) else {}
+        if (
+            name in HUMAN_ATTESTED_ENVIRONMENT_EVIDENCE
+            and isinstance(record, dict)
+            and record.get("human_attestation") is not True
+        ):
+            checks[name] = _check(
+                "pending",
+                "named human attestation is pending; machine evidence cannot substitute for it",
+            )
             continue
         passed, reason = _environment_evidence_passes(name, value)
         checks[name] = _check("pass" if passed else "fail", reason)

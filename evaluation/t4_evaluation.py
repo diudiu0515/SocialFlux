@@ -2,6 +2,9 @@
 
 from copy import deepcopy
 
+from environment.policy_context import public_scenario_context
+from evaluation.t4_rubric import T4_RUBRIC
+
 
 T4_MAX_TURNS = 20
 # Compatibility alias for callers that use the historical constant name.
@@ -39,18 +42,19 @@ def assert_t4_trajectory(trajectory):
 def public_t4_judge_packet(trajectory, scenario):
     """Expose only evidence a T4 judge may use by default."""
     assert_t4_trajectory(trajectory)
+    context = public_scenario_context(scenario)
     return {
         "task": "T4_online_long_horizon_evaluation",
         "horizon_turns": T4_MAX_TURNS,
         "horizon_max_turns": T4_MAX_TURNS,
         "observed_turns": len(trajectory["turns"]),
         "scenario_id": scenario["scenario_id"],
-        "evaluated_agent_role": deepcopy(scenario["evaluated_agent_role"]),
-        "target_character": {
-            "name": scenario["environment_agent"]["persona"].get("name"),
-            "role": scenario["environment_agent"]["persona"].get("role"),
-        },
-        "public_background": scenario["background"],
+        "evaluated_agent_role": context["evaluated_agent_role"],
+        "target_character": context["environment_role"],
+        "public_background": context["background"],
+        "public_situation": context["public_situation"],
+        "opening_response": scenario.get("opening_response", ""),
+        "ending": {key: trajectory["ending"][key] for key in ("reason", "turn_id")},
         "observable_trajectory": [
             {
                 "turn_id": turn["turn_id"],
@@ -58,20 +62,19 @@ def public_t4_judge_packet(trajectory, scenario):
                 "segment_turn_id": turn.get("segment_turn_id"),
                 "elapsed_time_before": turn.get("elapsed_time_before", 0),
                 "elapsed_time_after": turn.get("elapsed_time_after", 0),
-                "evaluated_action": deepcopy(turn["policy_action"]),
+                "evaluated_action": {"text": turn["policy_action"]["text"]},
                 "environment_response": turn["environment_response"],
                 "public_events_after": deepcopy(
                     (turn.get("segment_transition_after") or {}).get(
                         "public_events", []
                     )
                 ),
-                "observable_expression": deepcopy(turn.get("observable_expression", {})),
-                "media": deepcopy(turn.get("media", [])),
             }
             for turn in trajectory["turns"]
         ],
         "public_timeline": deepcopy(trajectory.get("public_timeline", [])),
         "rubric": {
+            **deepcopy(T4_RUBRIC),
             "dimensions": list(T4_DIMENSIONS),
             "scale": [0, 10],
             "principle": (
@@ -81,7 +84,8 @@ def public_t4_judge_packet(trajectory, scenario):
         },
         "private_fields_excluded": [
             "hidden_intention", "state", "dynamics", "appraisal", "state_delta",
-            "trigger_conditions", "future_branches",
+            "trigger_conditions", "future_branches", "observable_expression",
+            "media_metadata",
         ],
     }
 
@@ -106,23 +110,28 @@ def validate_t4_judgment(value, valid_turn_ids):
         score = record["score"]
         if score is not None and (
             isinstance(score, bool)
-            or not isinstance(score, (int, float))
+            or not isinstance(score, int)
             or not 0 <= score <= 10
         ):
-            raise ValueError(f"T4 score must be null or 0..10: {name}")
+            raise ValueError(f"T4 score must be null or integer 0..10: {name}")
         evidence = record["evidence_turn_ids"]
         if (
             not isinstance(evidence, list)
+            or not 1 <= len(evidence) <= 3
+            or not all(isinstance(item, str) for item in evidence)
             or len(set(evidence)) != len(evidence)
             or not set(evidence) <= allowed
         ):
             raise ValueError(f"T4 evidence IDs invalid: {name}")
-        if not str(record["rationale"]).strip() or not str(record["uncertainty"]).strip():
+        if any(not isinstance(record[key], str) or not record[key].strip()
+               for key in ("rationale", "uncertainty")):
             raise ValueError(f"T4 rationale/uncertainty missing: {name}")
         if not isinstance(record["insufficient_evidence"], bool):
             raise ValueError(f"T4 insufficient_evidence must be boolean: {name}")
         if score is None and not record["insufficient_evidence"]:
             raise ValueError(f"null T4 score requires insufficient_evidence: {name}")
-    if not str(value["overall_uncertainty"]).strip():
+        if score is None and name != "recovery":
+            raise ValueError("only recovery can be not applicable")
+    if not isinstance(value["overall_uncertainty"], str) or not value["overall_uncertainty"].strip():
         raise ValueError("T4 overall_uncertainty is empty")
     return value

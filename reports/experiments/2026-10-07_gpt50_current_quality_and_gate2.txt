@@ -1,0 +1,9 @@
+当前质量与Gate2状态
+
+修正版仅有GPT50_002的8轮部分轨迹；第9轮state和interaction均收到HTTP500，未完成自然结束；其余49场景未启动。
+state算术检查未见无证据非零更新等机械矛盾；t5、t7重复证据保持不变，t4明确现场补救与审查关系后trust+1。
+正文问题：t1新增二楼216（场景与首轮实际请求均无216）；t7双方道别后t8再开话题；响应性4→10、角色正当性6→10，累计速度需人工审核。
+Gate2初次准备失败源于适配器错误：将50个场景policy写成单一single_first_pass配置的50个policy样本。已改为1个逻辑policy，并添加回归，12项相关测试通过。
+已实际生成E1两项、E2一项、E9十二项人工包，human_attestation均为false、pending_human。
+当前只有1个保留场景，低于自动实验最低10场景门槛，E3–E7尚未执行，无通过结论；E8无视频证据。
+Gate2目录：data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_gpt50_corrected_transport/gate2_followup/gate2

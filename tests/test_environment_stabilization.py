@@ -32,15 +32,21 @@ def appraisal(state_impacts=None, dynamics_impacts=None):
     }
 
 
-def impact(variable, *, feature="cooperation_signal", strength=1, direct="direct", new=True):
-    return {
+def impact(
+    variable, *, feature="cooperation_signal", strength=1, direct="direct",
+    new=True, span=None, direction="increase",
+):
+    value = {
         "variable": variable,
-        "direction": "increase",
+        "direction": direction,
         "evidence_feature": feature,
         "evidence_strength": strength,
         "directness": direct,
         "new_evidence": new,
     }
+    if span is not None:
+        value["evidence_span"] = span
+    return value
 
 
 class EnvironmentStabilizationTest(unittest.TestCase):
@@ -75,6 +81,485 @@ class EnvironmentStabilizationTest(unittest.TestCase):
         )
         changed = [value for value in result["state_delta"]["emotion"].values() if value != "similar"]
         self.assertEqual(len(changed), 1)
+
+    def test_bounded_noop_does_not_consume_change_budget(self):
+        state = {"behavioral_disposition": {"cooperation": 10, "resolve": 5}}
+        result = DeterministicStateCalibrator(self.scenario).calibrate(
+            appraisal([
+                impact("behavioral_disposition.cooperation", strength=2),
+                impact("behavioral_disposition.resolve", strength=1),
+            ]),
+            state,
+            {},
+        )
+        self.assertEqual(
+            result["state_delta"]["behavioral_disposition"]["cooperation"],
+            "similar",
+        )
+        self.assertEqual(
+            result["state_delta"]["behavioral_disposition"]["resolve"],
+            "mild_increase",
+        )
+        diagnostics = {
+            item["variable"]: item.get("suppressed_by")
+            for item in result["calibration"]["state_impacts"]
+        }
+        self.assertEqual(
+            diagnostics["behavioral_disposition.cooperation"],
+            "state_boundary_noop",
+        )
+
+    def test_v2_ordinary_event_updates_at_most_two_independently_supported_variables(self):
+        state = {
+            "emotion": {"anxiety": 5, "hope": 5},
+            "behavioral_disposition": {"resolve": 5},
+            "relationship": {"trust": 5},
+            "consequence_risk": {"goal_failure_risk": 5},
+        }
+        scenario = {
+            **self.scenario,
+            "initial_state": state,
+        }
+        result = DeterministicStateCalibrator(
+            scenario, profile="evidence_balanced_v2"
+        ).calibrate(
+            appraisal([
+                impact("emotion.anxiety", span="解释了原因"),
+                impact("behavioral_disposition.resolve", span="提出了方案"),
+                impact("emotion.hope", span="确认了时间"),
+            ]),
+            state,
+            {},
+        )
+        changed = [
+            path
+            for family, values in result["state_delta"].items()
+            for path, value in values.items()
+            if value != "similar"
+        ]
+        self.assertEqual(len(changed), 2)
+        self.assertEqual(
+            result["calibration"]["ordinary_change_budget"]["state"], 2
+        )
+
+    def test_evidence_bound_sparse_preserves_one_change_ordinary_budget(self):
+        state = {
+            "emotion": {"anxiety": 5},
+            "behavioral_disposition": {"resolve": 5},
+        }
+        scenario = {**self.scenario, "initial_state": state}
+        result = DeterministicStateCalibrator(
+            scenario, profile="evidence_bound_sparse_v2"
+        ).calibrate(
+            appraisal([
+                impact("emotion.anxiety", span="新增不确定性"),
+                impact("behavioral_disposition.resolve", span="作出决定"),
+            ]),
+            state,
+            {},
+        )
+        changed = sum(
+            value != "similar"
+            for family in result["state_delta"].values()
+            for value in family.values()
+        )
+        self.assertEqual(changed, 1)
+        self.assertEqual(
+            result["calibration"]["ordinary_change_budget"]["state"], 1
+        )
+
+    def test_v3_applies_two_independent_cross_family_impacts(self):
+        state = {
+            "emotion": {"anxiety": 5},
+            "behavioral_disposition": {"decision_readiness": 5},
+        }
+        scenario = {**self.scenario, "initial_state": state}
+        value = appraisal([
+            impact(
+                "emotion.anxiety",
+                feature="pressure",
+                span="期限提前了",
+            ),
+            impact(
+                "behavioral_disposition.decision_readiness",
+                feature="goal_alignment",
+                span="我现在选择第二个方案",
+            ),
+        ])
+        value["event_features"]["pressure"] = 1
+        result = DeterministicStateCalibrator(
+            scenario, profile="evidence_independent_hysteretic_v3"
+        ).calibrate(value, state, {})
+        changed = sum(
+            item != "similar"
+            for family in result["state_delta"].values()
+            for item in family.values()
+        )
+        self.assertEqual(changed, 2)
+
+    def test_v3_rejects_feature_variable_mismatch(self):
+        state = {"relationship": {"trust": 5}}
+        scenario = {**self.scenario, "initial_state": state}
+        result = DeterministicStateCalibrator(
+            scenario, profile="evidence_independent_hysteretic_v3"
+        ).calibrate(
+            appraisal([
+                impact(
+                    "relationship.trust",
+                    feature="cooperation_signal",
+                    strength=2,
+                    span="我愿意一起讨论",
+                )
+            ]),
+            state,
+            {},
+        )
+        self.assertEqual(
+            result["state_delta"]["relationship"]["trust"], "similar"
+        )
+        self.assertEqual(
+            result["calibration"]["state_impacts"][0]["suppressed_by"],
+            "feature_variable_mismatch",
+        )
+
+    def test_v4_rejects_disclosure_feature_direction_mismatch(self):
+        state = {"behavioral_disposition": {"disclosure_willingness": 5}}
+        scenario = {**self.scenario, "initial_state": state}
+        calibrator = DeterministicStateCalibrator(
+            scenario,
+            profile="evidence_independent_directional_hysteretic_v4",
+        )
+        pressure_increase = appraisal([
+            impact(
+                "behavioral_disposition.disclosure_willingness",
+                feature="pressure",
+                strength=2,
+                span="你也得告诉我你的说法",
+                direction="increase",
+            )
+        ])
+        pressure_increase["event_features"]["pressure"] = 1
+        result = calibrator.calibrate(pressure_increase, state, {})
+        self.assertEqual(
+            result["state_delta"]["behavioral_disposition"][
+                "disclosure_willingness"
+            ],
+            "similar",
+        )
+        self.assertEqual(
+            result["calibration"]["state_impacts"][0]["suppressed_by"],
+            "feature_direction_mismatch",
+        )
+
+        commitment_decrease = appraisal([
+            impact(
+                "behavioral_disposition.disclosure_willingness",
+                feature="commitment_signal",
+                strength=2,
+                span="我不替你写说明",
+                direction="decrease",
+            )
+        ])
+        commitment_decrease["event_features"]["commitment_signal"] = 2
+        result = calibrator.calibrate(commitment_decrease, state, {})
+        self.assertEqual(
+            result["calibration"]["state_impacts"][0]["suppressed_by"],
+            "feature_direction_mismatch",
+        )
+
+    def test_v4_keeps_subject_aligned_disclosure_commitment(self):
+        state = {"behavioral_disposition": {"disclosure_willingness": 5}}
+        scenario = {**self.scenario, "initial_state": state}
+        value = appraisal([
+            impact(
+                "behavioral_disposition.disclosure_willingness",
+                feature="commitment_signal",
+                strength=2,
+                span="我会主动写明文件在我手上",
+                direction="increase",
+            )
+        ])
+        value["event_features"]["commitment_signal"] = 2
+        result = DeterministicStateCalibrator(
+            scenario,
+            profile="evidence_independent_directional_hysteretic_v4",
+        ).calibrate(value, state, {})
+        self.assertEqual(
+            result["state_delta"]["behavioral_disposition"][
+                "disclosure_willingness"
+            ],
+            "moderate_increase",
+        )
+        self.assertTrue(
+            result["calibration"]["feature_direction_compatibility_enforced"]
+        )
+
+    def test_v3_requires_decisive_evidence_beyond_reinforcement_plateau(self):
+        initial = {
+            "behavioral_disposition": {"cooperation_readiness": 6}
+        }
+        current = {
+            "behavioral_disposition": {"cooperation_readiness": 8}
+        }
+        scenario = {**self.scenario, "initial_state": initial}
+        value = appraisal([
+            impact(
+                "behavioral_disposition.cooperation_readiness",
+                feature="cooperation_signal",
+                strength=2,
+                span="我继续配合",
+            )
+        ])
+        value["dialogue_diagnostics"] = {
+            "substantive_novelty": {"label": "new_position"}
+        }
+        calibrator = DeterministicStateCalibrator(
+            scenario, profile="evidence_independent_hysteretic_v3"
+        )
+        routine = calibrator.calibrate(value, current, {})
+        self.assertEqual(
+            routine["state_delta"]["behavioral_disposition"][
+                "cooperation_readiness"
+            ],
+            "similar",
+        )
+        self.assertEqual(
+            routine["calibration"]["state_impacts"][0]["suppressed_by"],
+            "reinforcement_plateau_requires_decisive_evidence",
+        )
+        value["event_features"]["cooperation_signal"] = 2
+        decisive = calibrator.calibrate(value, current, {})
+        self.assertNotEqual(
+            decisive["state_delta"]["behavioral_disposition"][
+                "cooperation_readiness"
+            ],
+            "similar",
+        )
+
+    def test_v3_slow_state_accepts_second_independent_consistent_event(self):
+        state = {"relationship": {"trust": 5}}
+        scenario = {**self.scenario, "initial_state": state}
+        calibrator = DeterministicStateCalibrator(
+            scenario, profile="evidence_independent_hysteretic_v3"
+        )
+        first_value = appraisal([
+            impact(
+                "relationship.trust",
+                feature="commitment_signal",
+                span="第一项独立履约证据",
+            )
+        ])
+        first_value["event_features"]["commitment_signal"] = 1
+        first_value["dialogue_diagnostics"] = {
+            "substantive_novelty": {"label": "new_evidence"}
+        }
+        first = calibrator.calibrate(first_value, state, {})
+        self.assertEqual(
+            first["state_delta"]["relationship"]["trust"], "similar"
+        )
+        self.assertEqual(
+            first["calibration"]["state_impacts"][0]["suppressed_by"],
+            "slow_variable_requires_decisive_or_two_independent_events",
+        )
+
+        second_value = appraisal([
+            impact(
+                "relationship.trust",
+                feature="commitment_signal",
+                span="第二项独立履约证据",
+            )
+        ])
+        second_value["event_features"]["commitment_signal"] = 1
+        second_value["dialogue_diagnostics"] = {
+            "substantive_novelty": {"label": "new_evidence"}
+        }
+        second = calibrator.calibrate(second_value, state, {})
+        self.assertEqual(
+            second["state_delta"]["relationship"]["trust"], "mild_increase"
+        )
+        self.assertEqual(
+            second["calibration"]["state_impacts"][0][
+                "prior_consistent_evidence"
+            ],
+            1,
+        )
+
+    def test_v2_strong_event_allows_three_with_emotion_capped_at_two(self):
+        state = {
+            "emotion": {"a": 5, "b": 5, "c": 5},
+            "relationship": {"trust": 5},
+        }
+        scenario = {**self.scenario, "initial_state": state}
+        value = appraisal([
+            impact("emotion.a", strength=2, span="第一项证据"),
+            impact("emotion.b", strength=2, span="第二项证据"),
+            impact("emotion.c", strength=2, span="第三项证据"),
+            impact("relationship.trust", strength=2, span="第四项证据"),
+        ])
+        value["event_features"]["cooperation_signal"] = 2
+        result = DeterministicStateCalibrator(
+            scenario, profile="evidence_balanced_v2"
+        ).calibrate(value, state, {})
+        changed = [
+            value
+            for family in result["state_delta"].values()
+            for value in family.values()
+            if value != "similar"
+        ]
+        self.assertEqual(len(changed), 3)
+        self.assertEqual(
+            sum(
+                value != "similar"
+                for value in result["state_delta"]["emotion"].values()
+            ),
+            2,
+        )
+        suppressed = {
+            item["variable"]: item.get("suppressed_by")
+            for item in result["calibration"]["state_impacts"]
+        }
+        self.assertEqual(
+            suppressed["emotion.c"], "dimension_change_budget"
+        )
+
+    def test_v2_reuses_neither_evidence_span_nor_correlated_state(self):
+        state = {
+            "emotion": {"hope": 5},
+            "behavioral_disposition": {"resolve": 5},
+        }
+        scenario = {**self.scenario, "initial_state": state}
+        result = DeterministicStateCalibrator(
+            scenario, profile="evidence_balanced_v2"
+        ).calibrate(
+            appraisal([
+                impact("emotion.hope", span="同一条证据"),
+                impact("behavioral_disposition.resolve", span="同一条证据"),
+            ]),
+            state,
+            {},
+        )
+        changed = sum(
+            value != "similar"
+            for family in result["state_delta"].values()
+            for value in family.values()
+        )
+        self.assertEqual(changed, 1)
+        self.assertIn(
+            "evidence_already_supports_another_change",
+            {
+                item.get("suppressed_by")
+                for item in result["calibration"]["state_impacts"]
+            },
+        )
+
+    def test_v5_allows_one_event_to_have_distinct_cross_family_effects(self):
+        state = {
+            "emotion": {"hope": 5},
+            "behavioral_disposition": {"cooperation_readiness": 5},
+        }
+        scenario = {**self.scenario, "initial_state": state}
+        result = DeterministicStateCalibrator(
+            scenario, profile="evidence_causal_hysteretic_v5"
+        ).calibrate(
+            appraisal([
+                impact("emotion.hope", strength=2, span="同一条可执行新方案"),
+                impact(
+                    "behavioral_disposition.cooperation_readiness",
+                    strength=2,
+                    span="同一条可执行新方案",
+                ),
+            ]),
+            state,
+            {},
+        )
+        changed = sum(
+            value != "similar"
+            for family in result["state_delta"].values()
+            for value in family.values()
+        )
+        self.assertEqual(changed, 2)
+        self.assertTrue(
+            result["calibration"][
+                "shared_evidence_across_distinct_variables_allowed"
+            ]
+        )
+
+    def test_v6_prefers_equally_strong_decisive_slow_candidate_before_lexical_tie_break(self):
+        state = {
+            "emotion": {"frustration": 5},
+            "behavioral_disposition": {"decision_readiness": 5},
+            "relationship": {"trust": 5},
+            "consequence_risk": {"goal_failure_risk": 5},
+        }
+        scenario = {**self.scenario, "initial_state": state}
+        value = appraisal([
+            impact(
+                "behavioral_disposition.decision_readiness",
+                feature="commitment_signal", strength=2,
+                span="采用当前安排",
+            ),
+            impact(
+                "consequence_risk.goal_failure_risk",
+                feature="goal_alignment", strength=2,
+                span="采用当前安排", direction="decrease",
+            ),
+            impact(
+                "emotion.frustration",
+                feature="cooperation_signal", strength=2,
+                span="采用当前安排", direction="decrease",
+            ),
+            impact(
+                "relationship.trust",
+                feature="commitment_signal", strength=2,
+                span="采用当前安排",
+            ),
+        ])
+        value["event_features"].update({
+            "commitment_signal": 2,
+            "goal_alignment": 2,
+            "cooperation_signal": 2,
+        })
+        value["dialogue_diagnostics"] = {
+            "substantive_novelty": {"label": "new_decision"}
+        }
+        result = DeterministicStateCalibrator(
+            scenario, profile="evidence_causal_slow_priority_hysteretic_v6"
+        ).calibrate(value, state, {})
+        self.assertEqual(
+            result["state_delta"]["relationship"]["trust"],
+            "moderate_increase",
+        )
+        self.assertEqual(
+            result["state_delta"]["emotion"]["frustration"], "similar"
+        )
+        diagnostics = {
+            item["variable"]: item for item in result["calibration"]["state_impacts"]
+        }
+        self.assertEqual(
+            diagnostics["emotion.frustration"]["suppressed_by"],
+            "event_change_budget",
+        )
+        self.assertTrue(result["calibration"]["decisive_slow_tie_break"])
+
+    def test_v2_slow_dimension_requires_strong_or_cumulative_evidence(self):
+        state = {"relationship": {"trust": 5}}
+        scenario = {**self.scenario, "initial_state": state}
+        calibrator = DeterministicStateCalibrator(
+            scenario, profile="evidence_balanced_v2"
+        )
+        weak = appraisal([
+            impact("relationship.trust", span="新增合作信号")
+        ])
+        first = calibrator.calibrate(weak, state, {})
+        cumulative = calibrator.calibrate(
+            weak, {"relationship": {"trust": 6}}, {}
+        )
+        self.assertEqual(
+            first["state_delta"]["relationship"]["trust"], "similar"
+        )
+        self.assertEqual(
+            cumulative["state_delta"]["relationship"]["trust"], "mild_increase"
+        )
 
     def test_fractional_boundary_calibrates_without_key_error(self):
         state = {"relationship": {"trust": 9.5}}

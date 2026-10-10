@@ -20,7 +20,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from providers.factory import build_provider, public_provider_config
 from providers.model_routes import ModelRoutes
-from scripts.t2_common import ROOT, atomic, load, now, scenario_path
+from tasks.T2.runtime import ROOT, atomic, load, now, scenario_path
 from tasks.T2.spec_authoring import author_spec, candidate_windows
 from tasks.source_catalog import (
     assess_source,

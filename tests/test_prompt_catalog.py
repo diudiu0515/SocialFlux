@@ -2,10 +2,13 @@ import json
 import re
 import unittest
 from pathlib import Path
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
 
 from environment.prompts import build_appraisal_prompt
 from policies.model_policy import ModelPolicy
 from prompts.loader import get_prompt, prompt_manifest, render_prompt
+from scripts.update_prompt_manifest import build_manifest
 
 
 class RecordingProvider:
@@ -28,6 +31,46 @@ class PromptCatalogTest(unittest.TestCase):
         registered = {entry["path"] for entry in manifest["prompts"].values()}
         on_disk = {path.name for path in Path("prompts").glob("*.md")}
         self.assertEqual(registered, on_disk)
+
+    def test_manifest_regeneration_supports_current_descriptive_versions(self):
+        self.assertEqual(build_manifest(), prompt_manifest())
+
+    def test_retired_templates_cannot_load_or_be_registered_again(self):
+        retired = json.loads(Path("prompts/retired.json").read_text())["prompts"]
+        for prompt_id, entry in retired.items():
+            with self.subTest(prompt_id=prompt_id):
+                self.assertNotIn(prompt_id, prompt_manifest()["prompts"])
+                self.assertFalse((Path("prompts") / entry["path"]).exists())
+                with self.assertRaisesRegex(KeyError, "retired prompt id"):
+                    get_prompt(prompt_id)
+        with self.assertRaisesRegex(KeyError, "unknown prompt id"):
+            get_prompt("not_a_prompt")
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            prompt_id = next(iter(retired))
+            (root / "retired.json").write_text(json.dumps({"prompts": retired}))
+            (root / f"{prompt_id}.md").write_text("obsolete template")
+            with patch("scripts.update_prompt_manifest.PROMPT_DIR", root):
+                with self.assertRaisesRegex(ValueError, "retired prompt"):
+                    build_manifest()
+
+    def test_retired_environment_config_fails_before_provider_construction(self):
+        from environment.factory import ModelEnvironmentFactory
+
+        scenario = {"scenario_id": "prompt_preflight", "initial_state": {}}
+        configurations = [
+            {"appraisal_prompt_id": "environment_appraisal_v13"},
+            {"response_prompt_id": "environment_response_v27"},
+            {"independent_appraisals": True,
+             "state_appraisal_prompt_id": "environment_state_appraisal_v5_immediate_context"},
+        ]
+        for configuration in configurations:
+            with self.subTest(configuration=configuration):
+                factory = ModelEnvironmentFactory(scenario, {}, **configuration)
+                with patch("environment.factory.build_provider") as build_provider:
+                    with self.assertRaisesRegex(KeyError, "retired prompt id"):
+                        factory()
+                    build_provider.assert_not_called()
 
     def test_prompt_schema_references_exist(self):
         for path in Path("prompts").glob("*.md"):
@@ -112,6 +155,31 @@ class PromptCatalogTest(unittest.TestCase):
         self.assertIn('"hard_reject_reasons":[]', rollout_judge)
         self.assertIn('"history_dependence":["t2"]', rollout_judge)
         self.assertIn("future_information_leakage", rollout_judge)
+
+    def test_appraisal_v22_runs_slow_pass_before_relationship_cap(self):
+        appraisal = get_prompt("environment_appraisal_v22_slow_first")
+        self.assertIn("Slow pass first", appraisal)
+        self.assertIn("reserve one of the two", appraisal)
+        self.assertIn("If and only if", appraisal)
+        self.assertIn("does not itself prove trust changed", appraisal)
+
+    def test_response_v31_uses_grounded_contrast_not_invented_logistics(self):
+        response = get_prompt("environment_response_v31_contrastive_event_driven")
+        self.assertIn("one unresolved contrast shared", response)
+        self.assertIn("Do not invent a room, resource, actor", response)
+        self.assertIn("Do not list the two", response)
+        self.assertIn("only when that boundary is already present", response)
+
+    def test_appraisal_v36_is_complete_evidence_grounded_rewrite(self):
+        appraisal = get_prompt(
+            "environment_appraisal_v36_evidence_grounded_state_interpretation"
+        )
+        self.assertIn("Interpret the current act in context", appraisal)
+        self.assertIn("Judge novelty and evidence strength separately", appraisal)
+        self.assertIn("Weak but relevant evidence is different", appraisal)
+        self.assertIn("Do not impose a one-candidate-per-family limit", appraisal)
+        self.assertIn("More candidates do not imply more actual updates", appraisal)
+
 
 if __name__ == "__main__":
     unittest.main()

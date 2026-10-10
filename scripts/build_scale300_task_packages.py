@@ -13,7 +13,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from providers.model_routes import ModelRoutes
-from scripts.t2_common import ROOT, atomic, load, scenario_path
+from tasks.T2.runtime import ROOT, atomic, load, scenario_path
 from tasks.package_builder import BUILDER_ID, TaskPackageBuilder
 from tasks.source_catalog import (
     assess_source,
