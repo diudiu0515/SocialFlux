@@ -4,9 +4,9 @@
 
 ## 当前交付
 
-- GPT50 T1/T3 扩展固定 50 个场景、目标 400 题；T2 暂停新增。完成数和缺项以新批次 manifest 为准。
-- 扩展批次复用同源视频形成文字／视频版本，答案保持一致；缺少匹配资产的题目单列。全部待人工审核。
-- 用户已明确授权现有 `autodl.art` 的场景／对话／state 调用；正从已保存断点补齐。旧批次与失败记录保留。
+- GPT50 T1/T3 扩展已完成 50 个场景、400 道开发题，T1、T3 各 200 道，含 100 道组合题；T2 暂停新增。
+- 100 条 T3 分支均保存完整五轮回应。360 道题复用 45 个同源视频形成 720 个文字／视频版本，配对答案保持一致；缺少匹配资产的 40 道题单列。
+- 现有 `autodl.art` 的授权调用已完成，旧批次、失败、中断及助手修订记录保留。全部答案仍待人工审核，正式准入为 0。
 - 网站支持新旧题库切换及增量题库的草稿保留；生成与数据状态见[扩展说明](docs/operations/OFFLINE_GPT50_T1_T3.md)。
 
 - 公共命令入口为 `python -m pipeline`，T1–T3 新协议使用 `offline-build` / `offline-eval`；旧概率题路径保留用于复现。
@@ -16,7 +16,7 @@
 - 网站 `/offline-review` 已同步本批题目，支持历史/视频、按需查看作者参考，以及绑定版本的标注草稿导入导出。
 - `/gpt50-live` 展示当前 GPT50 的场景、轨迹、state、Gate 结果和实际匹配的视频。当前多模态资产已存在；旧 Talking Head 清单为空不代表当前批次没有视频。
 
-完整交付、provider 试答和已知问题见 [Offline 开发题报告](reports/experiments/2026-10-10_offline_t1_t3_dev60.md)。当前批次与恢复入口见 [活跃批次手册](docs/operations/ACTIVE_BATCH_PIPELINE.md)。
+扩展批次的完整交付、provider 试答和已知问题见 [GPT50 T1/T3 报告](reports/experiments/2026-10-10_offline_gpt50_t1_t3.md)；此前 60 题见 [原开发题报告](reports/experiments/2026-10-10_offline_t1_t3_dev60.md)。当前批次与恢复入口见 [活跃批次手册](docs/operations/ACTIVE_BATCH_PIPELINE.md)。
 
 ## 正式准入边界
 
@@ -29,7 +29,7 @@
 | Gate 4 | 完整题目、待审答案、证据与错项映射可审核 | 真实独立标注、分歧处理和答案确认 |
 | 视频 | 现有素材可播放、配对、追溯来源 | 对应素材的人工质量与信息边界审核 |
 
-浏览器草稿、LLM judge 和机器参考答案都不能冒充真人签名或 human GT。当前 60 题开发包不是可发布的正式 benchmark。
+浏览器草稿、LLM judge 和机器参考答案都不能冒充真人签名或 human GT。400 题扩展包与原 60 题开发包均未作为正式 benchmark 放行。
 
 ## 本轮架构整理
 

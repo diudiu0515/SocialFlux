@@ -2,7 +2,7 @@
 
 SocialFlux 使用同一套社会状态环境生成 rollout、构建 T1–T3 离线题目，并执行 T4 在线评测。四类 state 为 Emotion、Behavioral Disposition、Relationship、Interaction Risk；内部风险路径沿用 `consequence_risk`。
 
-当前主要开发题库为固定 50 场景的 [T1/T3 扩展批次](docs/operations/OFFLINE_GPT50_T1_T3.md)，每场景 4 道 T1、4 道 T3，目标 400 题；T2 暂停新增。实际完成数见[交付报告](reports/experiments/2026-10-10_offline_gpt50_t1_t3.md)和[版本快照](tasks/examples/offline_gpt50_t1_t3/snapshot.json)。全部参考答案仍待人工审核。
+当前主要开发题库为固定 50 场景的 [T1/T3 扩展批次](docs/operations/OFFLINE_GPT50_T1_T3.md)，已完成 400 题：每场景 4 道 T1、4 道 T3；T2 暂停新增。完整题面、来源检查与覆盖情况见[交付报告](reports/experiments/2026-10-10_offline_gpt50_t1_t3.md)和[版本快照](tasks/examples/offline_gpt50_t1_t3/snapshot.json)。全部参考答案仍待人工审核。
 
 网页入口为 `/offline-review?bank=gpt50-t1-t3`。此前基于 5 个场景的 60 道 T1–T3 题目保持独立，可在 `?bank=dev60` 查看；该旧批次有 56 道完成所需回放、4 道 T3 待补，不与扩展批次混算。详见[项目进度](PROJECT_PROGRESS.md)。
 

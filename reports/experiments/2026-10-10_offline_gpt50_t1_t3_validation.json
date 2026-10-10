@@ -1,32 +1,34 @@
 {
   "format": "socialflux_offline_gpt50_validation_v1",
-  "complete": false,
-  "status": "generation_in_progress_authorized",
-  "captured_at_utc": "2026-10-10T20:44:26.820428+00:00",
+  "complete": true,
+  "status": "complete_pending_human_review",
+  "captured_at_utc": "2026-10-10T21:14:16.665997+00:00",
   "requested_scenarios": 50,
   "expected_items": 400,
-  "actual_items": 392,
+  "actual_items": 400,
   "scenarios_with_items": 50,
   "tasks": {
     "T1": 200,
-    "T3": 192
+    "T3": 200
   },
   "task_state_coverage": {
     "T1/Behavioral Disposition": 109,
     "T1/Emotion": 27,
     "T1/Interaction Risk": 22,
     "T1/Relationship": 64,
-    "T3/Behavioral Disposition": 72,
+    "T3/Behavioral Disposition": 74,
     "T3/Emotion": 19,
-    "T3/Interaction Risk": 55,
-    "T3/Relationship": 67
+    "T3/Interaction Risk": 58,
+    "T3/Relationship": 72
   },
-  "combinations": 98,
+  "combinations": 100,
   "machine_structure_check": {
-    "validated": 392,
+    "validated": 400,
     "provider_calls": 0
   },
   "formal_check": {
+    "entrypoint": "python -m pipeline offline-eval --formal",
+    "items_sha256": "bae4e73a7b8decc19bfc1d34e84298977be00a55aa44ddb1f4a5018d6fdfc690",
     "blocked": true,
     "reason": "formal scoring requires human ground truth",
     "provider_calls": 0
@@ -92,14 +94,14 @@
     "label_changes": false
   },
   "pairing": {
-    "logical_pairs": 352,
-    "variants": 704,
+    "logical_pairs": 360,
+    "variants": 720,
     "unique_videos": 45
   },
   "case_failure_records": {
     "TimeoutError": 78,
     "RemoteDisconnected": 1,
-    "ValueError": 43,
+    "ValueError": 44,
     "StructuredOutputError": 12,
     "ProviderHTTPError": 2,
     "IncompleteModelOutputError": 2
@@ -117,20 +119,7 @@
     "model_reject": 9,
     "model_not_reviewed": 4
   },
-  "pending_scenario_tasks": [
-    {
-      "scenario_id": "GPT50_009",
-      "tasks": [
-        "T3"
-      ]
-    },
-    {
-      "scenario_id": "GPT50_012",
-      "tasks": [
-        "T3"
-      ]
-    }
-  ],
+  "pending_scenario_tasks": [],
   "human_ground_truth_items": 0,
   "browser_gpt50": {
     "passed": true,
@@ -151,10 +140,28 @@
     "T1/current_intensity": 50,
     "T1/interval_change": 100,
     "T1/joint_change": 50,
-    "T3/immediate_effect": 48,
-    "T3/delayed_effect": 48,
-    "T3/action_comparison": 48,
-    "T3/immediate_delayed": 48
+    "T3/immediate_effect": 50,
+    "T3/delayed_effect": 50,
+    "T3/action_comparison": 50,
+    "T3/immediate_delayed": 50
+  },
+  "reference_quality_review": {
+    "reviewer_type": "assistant_not_human",
+    "status": "pending_human_review",
+    "source": {
+      "path": "data/offline_gpt50_t1_t3/sources/GPT50_009/t3_branches.json",
+      "sha256": "eced0480686ad0d5b589737e398896086a995a17f424d1b7e3957408030d09f0"
+    },
+    "findings": [
+      {
+        "branch_index": 1,
+        "turn_id": "t7",
+        "issue": "unsupported_specific_external_timing_in_utterance",
+        "quote": "明天车来前当面确认装载",
+        "analysis": "The source specifies a departing-truck deadline but not a calendar date. The final utterance introduces tomorrow without a supported external event. It does not change the simulator external-event schedule, and the delayed state was appraised before this response. Preserve the raw response and flag it for human source review; do not use the new date in public questions or answer reasoning.",
+        "label_rule": "Use public pre-action history, candidates and grounded mechanisms; no inference of extra time from tomorrow."
+      }
+    ]
   },
   "browser_observed_prefix": {
     "passed": true,
@@ -169,15 +176,95 @@
   },
   "machine_reference_flags": {
     "opposite_direction": 0,
-    "machine_changed_despite_similar": 29,
+    "machine_changed_despite_similar": 30,
     "machine_unchanged_despite_direction": 9
   },
   "source_integrity": {
-    "items_sha256": "548cab155b2abb8dc83ef8766f4e5beaa327d15d839960f994b247451cd0c32f",
-    "items_checked": 392,
+    "items_sha256": "bae4e73a7b8decc19bfc1d34e84298977be00a55aa44ddb1f4a5018d6fdfc690",
+    "items_checked": 400,
     "scenarios_checked": 50,
-    "t3_scenarios_checked": 48,
-    "branches_checked": 96,
+    "t3_scenarios_checked": 50,
+    "branches_checked": 100,
     "provider_calls": 0
+  },
+  "final_delivery_checks": {
+    "items": 400,
+    "scenarios": 50,
+    "tasks": {
+      "T1": 200,
+      "T3": 200
+    },
+    "public_projection_exact": true,
+    "paired_public_projection_exact": true,
+    "paired_answers_consistent": true,
+    "logical_pairs": 360,
+    "variants": 720,
+    "answer_positions": {
+      "6": {
+        "A": 9,
+        "B": 9,
+        "C": 8,
+        "D": 8,
+        "E": 8,
+        "F": 8
+      },
+      "4": {
+        "B": 68,
+        "C": 67,
+        "D": 67,
+        "A": 65
+      },
+      "3": {
+        "A": 26,
+        "B": 27,
+        "C": 30
+      }
+    },
+    "formal_path": {
+      "entrypoint": "python -m pipeline offline-eval --formal",
+      "items_sha256": "bae4e73a7b8decc19bfc1d34e84298977be00a55aa44ddb1f4a5018d6fdfc690",
+      "blocked": true,
+      "reason": "formal scoring requires human ground truth",
+      "provider_calls": 0
+    },
+    "source_integrity": {
+      "items_sha256": "bae4e73a7b8decc19bfc1d34e84298977be00a55aa44ddb1f4a5018d6fdfc690",
+      "items_checked": 400,
+      "scenarios_checked": 50,
+      "t3_scenarios_checked": 50,
+      "branches_checked": 100
+    },
+    "provider_calls": 0
+  },
+  "final_cli_checks": {
+    "snapshot_items": 400,
+    "paired_variants": 720,
+    "provider_calls": 0,
+    "entrypoint": "python -m pipeline offline-eval --check-only"
+  },
+  "live_annotation_catalog": {
+    "gpt50-t1-t3": 400,
+    "dev60": 60,
+    "local_base_url": "http://127.0.0.1:8000",
+    "external_access_verified": false
+  },
+  "execution_summary": {
+    "status": "completed_pending_human_review",
+    "updated_at_utc": "2026-10-10T21:15:07.040846+00:00",
+    "active_jobs": [],
+    "destination": "https://www.autodl.art",
+    "payload": "Synthetic GPT50 scenarios, dialogue, and machine state for task authoring and canonical replay",
+    "authorization": "User explicitly authorized the existing provider destination and data scope.",
+    "complete": true,
+    "actual_items": 400,
+    "items_sha256": "bae4e73a7b8decc19bfc1d34e84298977be00a55aa44ddb1f4a5018d6fdfc690",
+    "tasks": {
+      "T1": 200,
+      "T3": 200
+    },
+    "t2": "paused",
+    "formal_admission": false,
+    "previous_statuses": "execution_status_history/",
+    "run_history": "runs/"
   }
 }

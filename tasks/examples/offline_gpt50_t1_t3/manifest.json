@@ -1,48 +1,48 @@
 {
   "format": "socialflux_offline_choice_v1",
-  "item_count": 392,
+  "item_count": 400,
   "tasks": {
     "T1": 200,
-    "T3": 192
+    "T3": 200
   },
   "subtypes": {
     "T1/current_intensity": 50,
     "T1/interval_change": 100,
     "T1/joint_change": 50,
-    "T3/immediate_effect": 48,
-    "T3/delayed_effect": 48,
-    "T3/action_comparison": 48,
-    "T3/immediate_delayed": 48
+    "T3/immediate_effect": 50,
+    "T3/delayed_effect": 50,
+    "T3/action_comparison": 50,
+    "T3/immediate_delayed": 50
   },
   "task_state_coverage": {
     "T1/Behavioral Disposition": 109,
     "T1/Emotion": 27,
     "T1/Interaction Risk": 22,
     "T1/Relationship": 64,
-    "T3/Behavioral Disposition": 72,
+    "T3/Behavioral Disposition": 74,
     "T3/Emotion": 19,
-    "T3/Interaction Risk": 55,
-    "T3/Relationship": 67
+    "T3/Interaction Risk": 58,
+    "T3/Relationship": 72
   },
   "answer_positions": {
-    "A": 98,
-    "B": 101,
-    "C": 103,
-    "D": 74,
+    "A": 100,
+    "B": 104,
+    "C": 105,
+    "D": 75,
     "E": 8,
     "F": 8
   },
   "scenario_count": 50,
   "formal_admission": false,
   "human_review": "pending",
-  "replay_ready_count": 392,
+  "replay_ready_count": 400,
   "replay_ready_tasks": {
     "T1": 200,
-    "T3": 192
+    "T3": 200
   },
   "replay_pending_ids": [],
-  "items_sha256": "548cab155b2abb8dc83ef8766f4e5beaa327d15d839960f994b247451cd0c32f",
-  "public_sha256": "1d93b9c83b007104041c6112056e739d8c0c1c3293dd180ba7275f427a93d03d",
+  "items_sha256": "bae4e73a7b8decc19bfc1d34e84298977be00a55aa44ddb1f4a5018d6fdfc690",
+  "public_sha256": "5d7a1f31f93f5e1c9c3cabe33f20a7310c927b2dabac74b017ef3d1ccd08fc6d",
   "bank_id": "SFG50",
   "requested_scenarios": 50,
   "expected_items": 400,
@@ -178,8 +178,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "new_offline_source_prefix_original_failure_preserved",
@@ -223,8 +223,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -801,12 +801,12 @@
       "source_review_status": "approve"
     }
   ],
-  "complete": false,
+  "complete": true,
   "pairing": {
-    "input_item_count": 392,
-    "items_sha256": "548cab155b2abb8dc83ef8766f4e5beaa327d15d839960f994b247451cd0c32f",
-    "logical_pairs": 352,
-    "variants": 704,
+    "input_item_count": 400,
+    "items_sha256": "bae4e73a7b8decc19bfc1d34e84298977be00a55aa44ddb1f4a5018d6fdfc690",
+    "logical_pairs": 360,
+    "variants": 720,
     "unique_videos": 45,
     "gaps": [
       {

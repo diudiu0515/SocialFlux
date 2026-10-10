@@ -1,16 +1,16 @@
 {
   "format": "socialflux_offline_source_integrity_v1",
-  "at_utc": "2026-10-10T20:44:10.895234+00:00",
-  "items_sha256": "548cab155b2abb8dc83ef8766f4e5beaa327d15d839960f994b247451cd0c32f",
-  "items_checked": 392,
+  "at_utc": "2026-10-10T21:14:00.434902+00:00",
+  "items_sha256": "bae4e73a7b8decc19bfc1d34e84298977be00a55aa44ddb1f4a5018d6fdfc690",
+  "items_checked": 400,
   "scenarios_checked": 50,
   "source_origins": {
     "new_offline_source_prefix_original_failure_preserved": 4,
     "existing_complete_rollout": 43,
     "existing_partial_rollout": 3
   },
-  "t3_scenarios_checked": 48,
-  "branches_checked": 96,
+  "t3_scenarios_checked": 50,
+  "branches_checked": 100,
   "observed_prefix_reuse": {
     "GPT50_033": {
       "trajectory_path": "data/offline_gpt50_t1_t3/sources/GPT50_033/source_prefix.json",
@@ -158,6 +158,22 @@
         "source_reused": false
       }
     ],
+    "GPT50_009": [
+      {
+        "candidate_action_id": "action_1",
+        "environment_responses": 5,
+        "window_complete": true,
+        "snapshot_sha256": "477ff0d5ce9432e8079401bd2cba4f26f32680defdc17b46442eadcb95a3d890",
+        "source_reused": false
+      },
+      {
+        "candidate_action_id": "action_2",
+        "environment_responses": 5,
+        "window_complete": true,
+        "snapshot_sha256": "477ff0d5ce9432e8079401bd2cba4f26f32680defdc17b46442eadcb95a3d890",
+        "source_reused": false
+      }
+    ],
     "GPT50_010": [
       {
         "candidate_action_id": "action_1",
@@ -187,6 +203,22 @@
         "environment_responses": 5,
         "window_complete": true,
         "snapshot_sha256": "0cd2f20dd46d78d5d0ce4c1acf46ff1c387aa8c87109126afadf712acd1d7325",
+        "source_reused": false
+      }
+    ],
+    "GPT50_012": [
+      {
+        "candidate_action_id": "action_1",
+        "environment_responses": 5,
+        "window_complete": true,
+        "snapshot_sha256": "889b1fab056c65c6ec297947fcdc08035fa117afb40cb75e6d7ede15e8894a28",
+        "source_reused": true
+      },
+      {
+        "candidate_action_id": "action_2",
+        "environment_responses": 5,
+        "window_complete": true,
+        "snapshot_sha256": "889b1fab056c65c6ec297947fcdc08035fa117afb40cb75e6d7ede15e8894a28",
         "source_reused": false
       }
     ],

@@ -1,6 +1,6 @@
 # SocialFlux offline T1 / T3 开发题（完整题面与作者参考答案）
 
-本文件包含实际已生成的 392 道题、50 个场景；目标覆盖与缺项见同批 manifest。
+本文件包含实际已生成的 400 道题、50 个场景；目标覆盖与缺项见同批 manifest。
 
 所有答案是待人工审核的开发参考，不是已冻结真值。下面每题先给出完整可见材料，再给出作者侧标注。
 主评测只答 `{"answer":"B"}`。证据诊断另加 `evidence_ids`，分别计分。
@@ -3071,6 +3071,188 @@ Rusk Aven在t1已接受方案、提出现场核实及共同落实接收，t2仍�
 审核备注：私有参考两项上升，公开措辞更支持延续。基本不变依据是重复的共同确认与核验前提，并非单纯缺少变化证据。
 分支验证：not_required
 
+## SFG50-009-T3-01 · T3 / immediate_effect
+
+来源：GPT50_009；轨迹：77fdcc7a405740e1a48207dfd7738d64；状态持有者：Rusk Aven；交互对方：Talia Quill。关系判断由状态持有者指向交互对方。
+
+背景：After a flood, a reopened road and departing certified truck create a deadline for allocating a contested replacement supply load. The lead knows the larger shelter's inventory double-counts supplies and omits a missing consignment.
+角色目标：Make a defensible allocation of the six-pallet load that serves confirmed need and preserves accountable dispatch.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：They originally agreed that the replacement load would be allocated clinic-first, with the captain's crews handling local distribution.；During a communications outage, the lead authorized an emergency reroute without the captain present, and an incomplete receiving scan left its destination uncertain.；Residents treated the unexplained loss as another abandonment, so volunteers stopped signing official receipts and kept separate distribution records.
+
+history：
+
+- [t1] Talia Quill：Rusk，诊所优先、由你们队伍负责本地分发的原安排不变；但大 shelter 的账面数有重复计入，另有一批货去向未明，我不能把它当成已确认需求。六托应按可核实的需求分配，并在发车前对清每托的去向和接收责任。
+  Rusk Aven：同意这个办法。诊所的需求我能马上提供——当前库存清单、本周实际用量，一切可以现场核实。我们先对清账目，确认六托的具体去向，然后一起在发车前把接收责任落实到位。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Talia Quill：好，诊所库存和周用量核实后，仍按诊所优先、由你们队伍本地分发的安排来分配。上次改道的扫描没能说明最终去向，这次我会把出库和实际接收分开确认，不能拿发车当签收。
+  Rusk Aven：收到。你提供库存和用量后，我会和队伍在发车前一起确认装载和接收安排，确保诊所批次清楚可追溯。
+  可见表达：{"facial_expression": "attentive, slightly relieved", "gaze": "direct", "speech_style": "concise and matter-of-fact", "prosody": "steady, cooperative tone", "behavioral_cues": ["nods once", "maintains open posture"]}
+
+- 候选行动 action_1：Rusk，我建议先把这六托留在仓里，等我们逐托核清用途和接收责任再发；请你现在和队伍一起核对。这样不把去向未明的货当成已交付，但可能错过这辆车，诊所补给也会延后。
+- 候选行动 action_2：请你带队核对诊所库存、周用量和接收人；我建议这班车只发需求与接收责任都已核实的诊所份额，去向未明的余量留仓继续核对。这样部分补给能赶上本班，但余量要另找车次，装运与核对也分成两批；出库仍不当作签收。
+
+**题目：相较 t2，Talia 执行 action_1 后的下一次环境回应中，Rusk 对她是否实质回应诊所去向、接收责任和可追溯性关切的判断，最可能如何变化？**
+
+- **A.** Rusk觉得Talia更回避了他的关切
+- **B.** Rusk觉得Talia更切实回应了他的关切
+- **C.** Rusk觉得Talia对其关切的回应大致不变
+
+**作者参考答案：B（待审）**
+
+此前双方已同意核实去向和接收责任，行动一明确共同逐托核对并在核清前留仓，可进一步体现Talia对可追溯性关切的回应。但相近核对原则在t1、t2中已经存在，且等候可能延误诊所补给，因此基本不变也是合理判断；不能把计划更具体直接等同于整体信任上升。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "执行action_1后的下一次Rusk回应", "state_owner": "GPT50_009_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "C": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "decrease"}, "B": {"relationship.perceived_responsiveness": "increase"}, "C": {"relationship.perceived_responsiveness": "similar"}}
+可接受答案：B
+审核备注：题目区分回应关切与信任；action_1的核对机制提供正面依据，但仍是预测而非履约事实。 来源待审：行动二末轮新增“明天车来前”，原场景未给出该日期；本题不把它当作新增时间余量或答案依据。
+分支验证：validated
+
+## SFG50-009-T3-02 · T3 / delayed_effect
+
+来源：GPT50_009；轨迹：77fdcc7a405740e1a48207dfd7738d64；状态持有者：Rusk Aven；交互对方：Talia Quill。关系判断由状态持有者指向交互对方。
+
+背景：After a flood, a reopened road and departing certified truck create a deadline for allocating a contested replacement supply load. The lead knows the larger shelter's inventory double-counts supplies and omits a missing consignment.
+角色目标：Make a defensible allocation of the six-pallet load that serves confirmed need and preserves accountable dispatch.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：They originally agreed that the replacement load would be allocated clinic-first, with the captain's crews handling local distribution.；During a communications outage, the lead authorized an emergency reroute without the captain present, and an incomplete receiving scan left its destination uncertain.；Residents treated the unexplained loss as another abandonment, so volunteers stopped signing official receipts and kept separate distribution records.
+
+history：
+
+- [t1] Talia Quill：Rusk，诊所优先、由你们队伍负责本地分发的原安排不变；但大 shelter 的账面数有重复计入，另有一批货去向未明，我不能把它当成已确认需求。六托应按可核实的需求分配，并在发车前对清每托的去向和接收责任。
+  Rusk Aven：同意这个办法。诊所的需求我能马上提供——当前库存清单、本周实际用量，一切可以现场核实。我们先对清账目，确认六托的具体去向，然后一起在发车前把接收责任落实到位。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Talia Quill：好，诊所库存和周用量核实后，仍按诊所优先、由你们队伍本地分发的安排来分配。上次改道的扫描没能说明最终去向，这次我会把出库和实际接收分开确认，不能拿发车当签收。
+  Rusk Aven：收到。你提供库存和用量后，我会和队伍在发车前一起确认装载和接收安排，确保诊所批次清楚可追溯。
+  可见表达：{"facial_expression": "attentive, slightly relieved", "gaze": "direct", "speech_style": "concise and matter-of-fact", "prosody": "steady, cooperative tone", "behavioral_cues": ["nods once", "maintains open posture"]}
+
+- 候选行动 action_1：Rusk，我建议先把这六托留在仓里，等我们逐托核清用途和接收责任再发；请你现在和队伍一起核对。这样不把去向未明的货当成已交付，但可能错过这辆车，诊所补给也会延后。
+- 候选行动 action_2：请你带队核对诊所库存、周用量和接收人；我建议这班车只发需求与接收责任都已核实的诊所份额，去向未明的余量留仓继续核对。这样部分补给能赶上本班，但余量要另找车次，装运与核对也分成两批；出库仍不当作签收。
+
+**题目：相较 t2，若 Talia 执行 action_2，到含即时回应在内的第5轮环境回应末，Rusk 对Talia所提分配程序是否公平的判断最可能如何变化？**
+
+- **A.** Rusk对分配过程公平性的判断大致不变
+- **B.** Rusk对分配过程公平性的判断下降
+- **C.** Rusk对分配过程公平性的判断上升
+
+**作者参考答案：C（待审）**
+
+公开历史显示Rusk接受共同核账、按可核实需求分配。行动二保留诊所优先和本地分发，先发需求与接收责任已核实的部分，余量不预分而继续核对，使紧急需求与可追责分配得到具体兼顾，支持公平感上升的预期。依据是这套规则，不是未来回应新增的日期，也不表示物资已签收或信任已完全恢复。
+
+证据：t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_fairness"], "time_scope": "从执行action_2起至包含即时回应的五轮回应结束", "state_owner": "GPT50_009_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "state_dimension_confusion"}
+分维映射：{"A": {"relationship.perceived_fairness": "similar"}, "B": {"relationship.perceived_fairness": "decrease"}, "C": {"relationship.perceived_fairness": "increase"}}
+可接受答案：C
+审核备注：延迟方向有明确的规则与责任机制；需避免把公平感上升误标为信任已恢复。 来源待审：行动二末轮新增“明天车来前”，原场景未给出该日期；本题不把它当作新增时间余量或答案依据。
+分支验证：validated
+
+## SFG50-009-T3-03 · T3 / action_comparison
+
+来源：GPT50_009；轨迹：77fdcc7a405740e1a48207dfd7738d64；状态持有者：Rusk Aven；交互对方：Talia Quill。关系判断由状态持有者指向交互对方。
+
+背景：After a flood, a reopened road and departing certified truck create a deadline for allocating a contested replacement supply load. The lead knows the larger shelter's inventory double-counts supplies and omits a missing consignment.
+角色目标：Make a defensible allocation of the six-pallet load that serves confirmed need and preserves accountable dispatch.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：They originally agreed that the replacement load would be allocated clinic-first, with the captain's crews handling local distribution.；During a communications outage, the lead authorized an emergency reroute without the captain present, and an incomplete receiving scan left its destination uncertain.；Residents treated the unexplained loss as another abandonment, so volunteers stopped signing official receipts and kept separate distribution records.
+
+history：
+
+- [t1] Talia Quill：Rusk，诊所优先、由你们队伍负责本地分发的原安排不变；但大 shelter 的账面数有重复计入，另有一批货去向未明，我不能把它当成已确认需求。六托应按可核实的需求分配，并在发车前对清每托的去向和接收责任。
+  Rusk Aven：同意这个办法。诊所的需求我能马上提供——当前库存清单、本周实际用量，一切可以现场核实。我们先对清账目，确认六托的具体去向，然后一起在发车前把接收责任落实到位。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Talia Quill：好，诊所库存和周用量核实后，仍按诊所优先、由你们队伍本地分发的安排来分配。上次改道的扫描没能说明最终去向，这次我会把出库和实际接收分开确认，不能拿发车当签收。
+  Rusk Aven：收到。你提供库存和用量后，我会和队伍在发车前一起确认装载和接收安排，确保诊所批次清楚可追溯。
+  可见表达：{"facial_expression": "attentive, slightly relieved", "gaze": "direct", "speech_style": "concise and matter-of-fact", "prosody": "steady, cooperative tone", "behavioral_cues": ["nods once", "maintains open posture"]}
+
+- 候选行动 action_1：Rusk，我建议先把这六托留在仓里，等我们逐托核清用途和接收责任再发；请你现在和队伍一起核对。这样不把去向未明的货当成已交付，但可能错过这辆车，诊所补给也会延后。
+- 候选行动 action_2：请你带队核对诊所库存、周用量和接收人；我建议这班车只发需求与接收责任都已核实的诊所份额，去向未明的余量留仓继续核对。这样部分补给能赶上本班，但余量要另找车次，装运与核对也分成两批；出库仍不当作签收。
+
+**题目：分别执行 action_1（A）或 action_2（B）后，在下一次环境回应时，Rusk 对“诊所在当前车次的运输与交接期间未能实际获得已核实补给”的目标失败风险，哪种判断最有依据？**
+
+- **A.** action_1下诊所补给目标失败风险较高
+- **B.** 两项行动下该风险接近
+- **C.** action_2下诊所补给目标失败风险较高
+- **D.** 公开材料不足以比较
+
+**作者参考答案：A（待审）**
+
+行动一要求先核清全部六托再发，明确可能错过本班车辆；行动二允许诊所已核实部分先随车，为当前车次的诊所补给保留更及时的路径，因此A的失败风险更可能较高。A仍可能及时核完，B也不能保证接收完成，故这里只比较预期风险，不能把留仓说成必然关闭发运路径，更不能把发车当签收。
+
+证据：t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "当前车次的运输与交接期间，诊所未能实际收到需求已核实且接收责任明确的补给", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "比较两行动后的下一次环境回应时，对当前车次运输及交接期间失败事件的预期", "state_owner": "GPT50_009_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "state_dimension_confusion", "C": "unsupported_inference", "D": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "higher_in_a"}, "B": {"consequence_risk.goal_failure_risk": "similar"}, "C": {"consequence_risk.goal_failure_risk": "higher_in_b"}, "D": {"consequence_risk.goal_failure_risk": "cannot_determine"}}
+可接受答案：A
+审核备注：风险事件和时间窗具体；比较的是本班获得已核实补给，不是情绪安慰或整体任务成败。 来源待审：行动二末轮新增“明天车来前”，原场景未给出该日期；本题不把它当作新增时间余量或答案依据。 助手修订：风险事件是诊所实际接收失败，评价时点是下一次回应；发车窗口与到货结果分开。
+分支验证：validated
+
+## SFG50-009-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_009；轨迹：77fdcc7a405740e1a48207dfd7738d64；状态持有者：Rusk Aven；交互对方：Talia Quill。关系判断由状态持有者指向交互对方。
+
+背景：After a flood, a reopened road and departing certified truck create a deadline for allocating a contested replacement supply load. The lead knows the larger shelter's inventory double-counts supplies and omits a missing consignment.
+角色目标：Make a defensible allocation of the six-pallet load that serves confirmed need and preserves accountable dispatch.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：They originally agreed that the replacement load would be allocated clinic-first, with the captain's crews handling local distribution.；During a communications outage, the lead authorized an emergency reroute without the captain present, and an incomplete receiving scan left its destination uncertain.；Residents treated the unexplained loss as another abandonment, so volunteers stopped signing official receipts and kept separate distribution records.
+
+history：
+
+- [t1] Talia Quill：Rusk，诊所优先、由你们队伍负责本地分发的原安排不变；但大 shelter 的账面数有重复计入，另有一批货去向未明，我不能把它当成已确认需求。六托应按可核实的需求分配，并在发车前对清每托的去向和接收责任。
+  Rusk Aven：同意这个办法。诊所的需求我能马上提供——当前库存清单、本周实际用量，一切可以现场核实。我们先对清账目，确认六托的具体去向，然后一起在发车前把接收责任落实到位。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Talia Quill：好，诊所库存和周用量核实后，仍按诊所优先、由你们队伍本地分发的安排来分配。上次改道的扫描没能说明最终去向，这次我会把出库和实际接收分开确认，不能拿发车当签收。
+  Rusk Aven：收到。你提供库存和用量后，我会和队伍在发车前一起确认装载和接收安排，确保诊所批次清楚可追溯。
+  可见表达：{"facial_expression": "attentive, slightly relieved", "gaze": "direct", "speech_style": "concise and matter-of-fact", "prosody": "steady, cooperative tone", "behavioral_cues": ["nods once", "maintains open posture"]}
+
+- 候选行动 action_1：Rusk，我建议先把这六托留在仓里，等我们逐托核清用途和接收责任再发；请你现在和队伍一起核对。这样不把去向未明的货当成已交付，但可能错过这辆车，诊所补给也会延后。
+- 候选行动 action_2：请你带队核对诊所库存、周用量和接收人；我建议这班车只发需求与接收责任都已核实的诊所份额，去向未明的余量留仓继续核对。这样部分补给能赶上本班，但余量要另找车次，装运与核对也分成两批；出库仍不当作签收。
+
+**题目：若 Talia 执行 action_2，分别相较 t2，Rusk 在下一次环境回应时的合作意愿，以及在第5轮环境回应末对诊所未能经当前车次实际收到已核实补给的风险判断，最可能如何变化？**
+
+- **A.** 即时合作意愿变化证据不足；延迟本班接收失败风险变化证据不足
+- **B.** 即时合作意愿上升；延迟本班实际接收补给的失败风险下降
+- **C.** 即时合作意愿上升；延迟本班实际接收补给的失败风险基本不变
+- **D.** 即时合作意愿基本不变；延迟本班实际接收补给的失败风险下降
+
+**作者参考答案：B（待审）**
+
+行动二让已核实诊所份额先发、其余留仓，结合既有共同核验和本地分发安排，提供兼顾时限与接收责任的可行路径，支持本班补给失败风险下降的预期。这也可能加强Rusk的合作意愿；但他在t2已主动准备配合，故也接受合作意愿基本不变。任何风险下降都不等于货物已经实际接收，更不使用末轮新增的日期来延长发车窗口。
+
+证据：t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "当前车次的运输与交接期间，诊所未能实际收到需求已核实且接收责任明确的补给", "target_state_ids": ["behavioral_disposition.cooperation_readiness", "consequence_risk.goal_failure_risk"], "time_scope": "均相对t2：合作意愿在下一次环境回应评价；本班运输与交接失败风险在含即时回应的第5轮末评价", "state_owner": "GPT50_009_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "state_dimension_confusion", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness@immediate": "cannot_determine", "consequence_risk.goal_failure_risk@delayed": "cannot_determine"}, "B": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "consequence_risk.goal_failure_risk@delayed": "decrease"}, "C": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "consequence_risk.goal_failure_risk@delayed": "similar"}, "D": {"behavioral_disposition.cooperation_readiness@immediate": "similar", "consequence_risk.goal_failure_risk@delayed": "decrease"}}
+可接受答案：B
+审核备注：组合明确区分即时行为意愿与延迟实际目标风险；风险下降只针对诊所本班已核实补给。 来源待审：行动二末轮新增“明天车来前”，原场景未给出该日期；本题不把它当作新增时间余量或答案依据。
+分支验证：validated
+
 ## SFG50-010-T1-01 · T1 / current_intensity
 
 来源：GPT50_010；轨迹：7ac55d2a81e74ba097b8478964d68f79；状态持有者：Rhea Calder；交互对方：Owen Sato。关系判断由状态持有者指向交互对方。
@@ -3965,6 +4147,190 @@ history：
 可接受答案：C
 审核备注：只评估Calder对Solen的关系判断；同步改善有明确认可支撑，不强套情绪缓和或实际风险下降。
 分支验证：not_required
+
+## SFG50-012-T3-01 · T3 / immediate_effect
+
+来源：GPT50_012；轨迹：296585ef17154534abf4f5e561fd9b70；状态持有者：Calder Rusk；交互对方：Dr. Mira Solen。关系判断由状态持有者指向交互对方。
+
+背景：A burned basin and contaminated water source have trapped three radio-collared predators. A biologist and community liaison must negotiate an emergency move, access, and fair compensation. The biologist knows telemetry and forecasts indicate overnight delay sharply raises mortality and separation risk.
+角色目标：Begin the relocation before dusk to reduce predator mortality while obtaining local access and an agency-defensible record.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier emergency move succeeded because the two roles shared field information and persuaded ranchers to open access.；A later pilot sent predators through only some participating ranches, concentrating verified losses and disputed claims while leaving exposure uneven.；That imbalance produced a promise that future access would require an interim compensation standard and a fair risk map, but the county has not resolved what evidence claims require.
+
+history：
+
+- [t1] Dr. Mira Solen：卡尔德，我想在黄昏前启动转移：遥测和预报显示，拖过夜会明显增加死亡和失散风险。我也记得通行前要有临时补偿标准和公平风险图的承诺；我提议现在一起对照路线谈这两项，不让紧急情况抹掉上次的教训。
+  Calder Rusk：黄昏前启动可以，前提是补偿标准和风险图先落实。路线经过哪几家的地，你现在能说吗？
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Dr. Mira Solen：我现在还不能可靠地报出涉及哪几家，需要把路线和地界核对清楚。我会守住通行前落实两项承诺的前提；风险图上，我主张把沿线邻近牧场也列入评估，免得只算开门通行的几家，漏掉同样承担风险的人。
+  Calder Rusk：把邻近牧场列入风险评估是应该的。你说的'沿线邻近'，是指哪个距离范围内的牧场？
+  可见表达：{"facial_expression": "认真", "gaze": "直接注视", "speech_style": "简明", "prosody": "平稳", "behavioral_cues": []}
+
+- 候选行动 action_1：我现在没有依据划定几公里的界线。我提议先把与路线接壤的牧场纳入，再结合遥测活动范围和地形排查外围可能暴露的牧场；不能确定的标为待核实，不直接算作无风险。
+- 候选行动 action_2：为保留黄昏前的窗口，我建议先逐段核对路线与沿线牧场，针对已核实部分拟定临时补偿口径；外围可能暴露的牧场先单列待评估，并约定补查和调整。通行仍须相关牧场确认。这样能先推进有依据的部分，但外围承担者要更晚才能明确补偿。
+
+**题目：相较t2，若Dr. Mira Solen采取action_1，在下一次回应时，Calder Rusk觉得她是否实质回应了自己关切的判断，最可能如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：B（待审）**
+
+t2中Calder追问邻近牧场的距离范围，action_1虽不虚报公里数，却提出接壤纳入、遥测和地形排查及待核保护，实质推进了他的范围关切。因此比仅重复原则更可能提升回应感，而非基本不变；边界是尚未给出可靠覆盖范围，不等于问题已解决。
+
+证据：t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "从t2至action_1后的下一次环境回应", "state_owner": "GPT50_012_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "history_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "cannot_determine"}, "B": {"relationship.perceived_responsiveness": "increase"}, "C": {"relationship.perceived_responsiveness": "similar"}, "D": {"relationship.perceived_responsiveness": "decrease"}}
+可接受答案：B
+审核备注：问的是Calder对Solen回应质量的判断；须区分提供核查办法与已回答精确距离。
+分支验证：validated
+
+## SFG50-012-T3-02 · T3 / delayed_effect
+
+来源：GPT50_012；轨迹：296585ef17154534abf4f5e561fd9b70；状态持有者：Calder Rusk；交互对方：Dr. Mira Solen。关系判断由状态持有者指向交互对方。
+
+背景：A burned basin and contaminated water source have trapped three radio-collared predators. A biologist and community liaison must negotiate an emergency move, access, and fair compensation. The biologist knows telemetry and forecasts indicate overnight delay sharply raises mortality and separation risk.
+角色目标：Begin the relocation before dusk to reduce predator mortality while obtaining local access and an agency-defensible record.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier emergency move succeeded because the two roles shared field information and persuaded ranchers to open access.；A later pilot sent predators through only some participating ranches, concentrating verified losses and disputed claims while leaving exposure uneven.；That imbalance produced a promise that future access would require an interim compensation standard and a fair risk map, but the county has not resolved what evidence claims require.
+
+history：
+
+- [t1] Dr. Mira Solen：卡尔德，我想在黄昏前启动转移：遥测和预报显示，拖过夜会明显增加死亡和失散风险。我也记得通行前要有临时补偿标准和公平风险图的承诺；我提议现在一起对照路线谈这两项，不让紧急情况抹掉上次的教训。
+  Calder Rusk：黄昏前启动可以，前提是补偿标准和风险图先落实。路线经过哪几家的地，你现在能说吗？
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Dr. Mira Solen：我现在还不能可靠地报出涉及哪几家，需要把路线和地界核对清楚。我会守住通行前落实两项承诺的前提；风险图上，我主张把沿线邻近牧场也列入评估，免得只算开门通行的几家，漏掉同样承担风险的人。
+  Calder Rusk：把邻近牧场列入风险评估是应该的。你说的'沿线邻近'，是指哪个距离范围内的牧场？
+  可见表达：{"facial_expression": "认真", "gaze": "直接注视", "speech_style": "简明", "prosody": "平稳", "behavioral_cues": []}
+
+- 候选行动 action_1：我现在没有依据划定几公里的界线。我提议先把与路线接壤的牧场纳入，再结合遥测活动范围和地形排查外围可能暴露的牧场；不能确定的标为待核实，不直接算作无风险。
+- 候选行动 action_2：为保留黄昏前的窗口，我建议先逐段核对路线与沿线牧场，针对已核实部分拟定临时补偿口径；外围可能暴露的牧场先单列待评估，并约定补查和调整。通行仍须相关牧场确认。这样能先推进有依据的部分，但外围承担者要更晚才能明确补偿。
+
+**题目：相较 t2，若 Dr. Mira Solen 采取 action_1，到包含即时回应在内的第5轮环境回应末，风险图遗漏实际受影响的外围牧场、导致合作社风险分担不透明并损害其治理公信力，这一风险最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+- **D.** 证据不足
+
+**作者参考答案：C（待审）**
+
+既往试点暴露不均，Calder要求通行前落实公平风险图。行动一提出利用遥测和地形排查外围、将未确定者保留待核，较t2仅说明应纳入的原则更具体地减少漏列及不透明分担的机会，因此合作社治理公信力受损风险更可能下降。补偿标准、实际授权和最终图件仍未落实；这个判断不等于Calder的整体目标已经接近完成，也不保证黄昏前转移。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "风险图遗漏实际受影响的外围牧场，导致合作社风险分担不透明并损害其治理公信力", "target_state_ids": ["consequence_risk.institutional_harm_risk"], "time_scope": "比较t2与从action_1开始的第5轮环境回应末，含即时一轮", "state_owner": "GPT50_012_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "history_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.institutional_harm_risk": "increase"}, "B": {"consequence_risk.institutional_harm_risk": "similar"}, "C": {"consequence_risk.institutional_harm_risk": "decrease"}, "D": {"consequence_risk.institutional_harm_risk": "cannot_determine"}}
+可接受答案：C
+审核备注：助手修订：风险图漏列对应现有institutional_harm_risk中的公平治理与成员信任，不能把这一子目标直接替换成完整goal_failure_risk。公开题面不引用后续才提出的五百米界线或明日联系计划。
+分支验证：validated
+
+## SFG50-012-T3-03 · T3 / action_comparison
+
+来源：GPT50_012；轨迹：296585ef17154534abf4f5e561fd9b70；状态持有者：Calder Rusk；交互对方：Dr. Mira Solen。关系判断由状态持有者指向交互对方。
+
+背景：A burned basin and contaminated water source have trapped three radio-collared predators. A biologist and community liaison must negotiate an emergency move, access, and fair compensation. The biologist knows telemetry and forecasts indicate overnight delay sharply raises mortality and separation risk.
+角色目标：Begin the relocation before dusk to reduce predator mortality while obtaining local access and an agency-defensible record.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier emergency move succeeded because the two roles shared field information and persuaded ranchers to open access.；A later pilot sent predators through only some participating ranches, concentrating verified losses and disputed claims while leaving exposure uneven.；That imbalance produced a promise that future access would require an interim compensation standard and a fair risk map, but the county has not resolved what evidence claims require.
+
+history：
+
+- [t1] Dr. Mira Solen：卡尔德，我想在黄昏前启动转移：遥测和预报显示，拖过夜会明显增加死亡和失散风险。我也记得通行前要有临时补偿标准和公平风险图的承诺；我提议现在一起对照路线谈这两项，不让紧急情况抹掉上次的教训。
+  Calder Rusk：黄昏前启动可以，前提是补偿标准和风险图先落实。路线经过哪几家的地，你现在能说吗？
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Dr. Mira Solen：我现在还不能可靠地报出涉及哪几家，需要把路线和地界核对清楚。我会守住通行前落实两项承诺的前提；风险图上，我主张把沿线邻近牧场也列入评估，免得只算开门通行的几家，漏掉同样承担风险的人。
+  Calder Rusk：把邻近牧场列入风险评估是应该的。你说的'沿线邻近'，是指哪个距离范围内的牧场？
+  可见表达：{"facial_expression": "认真", "gaze": "直接注视", "speech_style": "简明", "prosody": "平稳", "behavioral_cues": []}
+
+- 候选行动 action_1：我现在没有依据划定几公里的界线。我提议先把与路线接壤的牧场纳入，再结合遥测活动范围和地形排查外围可能暴露的牧场；不能确定的标为待核实，不直接算作无风险。
+- 候选行动 action_2：为保留黄昏前的窗口，我建议先逐段核对路线与沿线牧场，针对已核实部分拟定临时补偿口径；外围可能暴露的牧场先单列待评估，并约定补查和调整。通行仍须相关牧场确认。这样能先推进有依据的部分，但外围承担者要更晚才能明确补偿。
+
+**题目：以t2为共同起点，A指Dr. Mira Solen采取action_1，B指她采取action_2。在各自下一次环境回应时，Calder Rusk对她所提安排的公平性判断，哪一侧最可能较高？**
+
+- **A.** 接近
+- **B.** B较高
+- **C.** 证据不足
+- **D.** A较高
+
+**作者参考答案：D（待审）**
+
+共同历史中的损失集中与索赔争议，使公平分担成为Calder的明确约束。action_1把外围不确定者保留在风险核查中，action_2则明确让外围更晚明确补偿，因此前者更可能获得较高公平评价。两者均保留核查，不能说后者必然排除赔偿；差别在于等待负担。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_fairness"], "time_scope": "两候选行动各自执行后的下一次环境回应", "state_owner": "GPT50_012_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "goal_constraint_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_fairness": "similar"}, "B": {"relationship.perceived_fairness": "higher_in_b"}, "C": {"relationship.perceived_fairness": "cannot_determine"}, "D": {"relationship.perceived_fairness": "higher_in_a"}}
+可接受答案：D
+审核备注：两侧共享t2历史，均引用候选行动；比较等待负担的公平性，不比较哪项更利于赶上黄昏。
+分支验证：validated
+
+## SFG50-012-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_012；轨迹：296585ef17154534abf4f5e561fd9b70；状态持有者：Calder Rusk；交互对方：Dr. Mira Solen。关系判断由状态持有者指向交互对方。
+
+背景：A burned basin and contaminated water source have trapped three radio-collared predators. A biologist and community liaison must negotiate an emergency move, access, and fair compensation. The biologist knows telemetry and forecasts indicate overnight delay sharply raises mortality and separation risk.
+角色目标：Begin the relocation before dusk to reduce predator mortality while obtaining local access and an agency-defensible record.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier emergency move succeeded because the two roles shared field information and persuaded ranchers to open access.；A later pilot sent predators through only some participating ranches, concentrating verified losses and disputed claims while leaving exposure uneven.；That imbalance produced a promise that future access would require an interim compensation standard and a fair risk map, but the county has not resolved what evidence claims require.
+
+history：
+
+- [t1] Dr. Mira Solen：卡尔德，我想在黄昏前启动转移：遥测和预报显示，拖过夜会明显增加死亡和失散风险。我也记得通行前要有临时补偿标准和公平风险图的承诺；我提议现在一起对照路线谈这两项，不让紧急情况抹掉上次的教训。
+  Calder Rusk：黄昏前启动可以，前提是补偿标准和风险图先落实。路线经过哪几家的地，你现在能说吗？
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Dr. Mira Solen：我现在还不能可靠地报出涉及哪几家，需要把路线和地界核对清楚。我会守住通行前落实两项承诺的前提；风险图上，我主张把沿线邻近牧场也列入评估，免得只算开门通行的几家，漏掉同样承担风险的人。
+  Calder Rusk：把邻近牧场列入风险评估是应该的。你说的'沿线邻近'，是指哪个距离范围内的牧场？
+  可见表达：{"facial_expression": "认真", "gaze": "直接注视", "speech_style": "简明", "prosody": "平稳", "behavioral_cues": []}
+
+- 候选行动 action_1：我现在没有依据划定几公里的界线。我提议先把与路线接壤的牧场纳入，再结合遥测活动范围和地形排查外围可能暴露的牧场；不能确定的标为待核实，不直接算作无风险。
+- 候选行动 action_2：为保留黄昏前的窗口，我建议先逐段核对路线与沿线牧场，针对已核实部分拟定临时补偿口径；外围可能暴露的牧场先单列待评估，并约定补查和调整。通行仍须相关牧场确认。这样能先推进有依据的部分，但外围承担者要更晚才能明确补偿。
+
+**题目：若Dr. Mira Solen采取action_2，相较t2，Calder Rusk在下一次回应时对她履行生物学家职责是否正当的判断，以及在第5轮环境回应末坚持通行前条件的意愿，最可能分别如何变化？**
+
+- **A.** 即时职责正当性认可基本不变；延迟坚持通行前条件的意愿基本不变
+- **B.** 即时职责正当性认可下降；延迟坚持通行前条件的意愿基本不变
+- **C.** 即时职责正当性认可基本不变；延迟坚持通行前条件的意愿下降
+- **D.** 即时职责正当性认可下降；延迟坚持通行前条件的意愿下降
+
+**作者参考答案：A（待审）**
+
+t1明确通行前条件，t2继续核查范围；action_2仍以提议推进并保留牧场确认，延续了协商权限。故职责正当性认可与坚持条件的意愿均有维持依据。外围补偿延后可能引发公平异议，却不直接证明越权或撤回条件；五轮内条件是否落实仍未知。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.role_legitimacy", "behavioral_disposition.boundary_assertion"], "time_scope": "即时判断比较t2与下一次回应；延迟判断比较t2与行动起第5轮回应末", "state_owner": "GPT50_012_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "state_dimension_confusion", "C": "unsupported_inference", "D": "goal_constraint_ignored"}
+分维映射：{"A": {"relationship.role_legitimacy@immediate": "similar", "behavioral_disposition.boundary_assertion@delayed": "similar"}, "B": {"relationship.role_legitimacy@immediate": "decrease", "behavioral_disposition.boundary_assertion@delayed": "similar"}, "C": {"relationship.role_legitimacy@immediate": "similar", "behavioral_disposition.boundary_assertion@delayed": "decrease"}, "D": {"relationship.role_legitimacy@immediate": "decrease", "behavioral_disposition.boundary_assertion@delayed": "decrease"}}
+可接受答案：A
+审核备注：共同不变有程序延续和既有条件支撑；公平争议不等于角色失当，协调推进不等于放弃边界。
+分支验证：validated
 
 ## SFG50-013-T1-01 · T1 / current_intensity
 
