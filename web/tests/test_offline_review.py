@@ -100,6 +100,7 @@ class OfflineReviewTest(unittest.TestCase):
         self.item.update(task="T3", subtype="immediate_effect")
         self.item["input"]["candidate_actions"] = [{"action_id": "action_1", "text": "cooperate"}]
         branch = [{"candidate_action": {"text": "cooperate"}, "delayed_horizon": 5,
+                   "experiment": "observed_prefix_plus_new_continuation", "prefix_reuse": {"environment_responses": 1},
                    "window_complete": True, "future_turns": [{"turn_id": "t2", "environment_response": "BRANCH_ONLY"}]}]
         self.item["authoring"]["construction_source"].update(
             replay_path="branch.json", replay_sha256=self.write("branch.json", branch))
@@ -107,6 +108,8 @@ class OfflineReviewTest(unittest.TestCase):
         self.save_bank()
         self.assertNotIn("BRANCH_ONLY", json.dumps(review.load_review("q1")))
         self.assertIn("BRANCH_ONLY", json.dumps(review.load_review("q1", reference=True)))
+        self.assertEqual(review.load_review("q1", reference=True)["replays"][0]["reused_prefix_responses"], 1)
+        self.assertNotIn("reused_prefix_responses", json.dumps(review.load_review("q1")))
         branch[0]["candidate_action"]["text"] = "different"
         self.item["authoring"]["construction_source"]["replay_sha256"] = self.write("branch.json", branch)
         self.save_bank()

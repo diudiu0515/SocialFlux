@@ -339,7 +339,10 @@ function renderReference() {
       }
       referenceTurns("原轨迹对应历史与 state", ref.source_turns);
       ref.replays.forEach(replay => {
-        const source = replay.construction === "existing_factual_continuation" ? "原轨迹后续复用" : "候选行动环境回放";
+        const source = replay.construction === "existing_factual_continuation" ? "原轨迹后续复用"
+          : replay.construction === "observed_prefix_plus_new_continuation"
+            ? `实际前缀 ${replay.reused_prefix_responses} 轮 + 新续演 ${replay.delayed_horizon - replay.reused_prefix_responses} 轮`
+            : "候选行动环境回放";
         referenceTurns(`${replay.label} · ${replay.delayed_horizon ? `后续 ${replay.delayed_horizon} 次回应 · ${replay.window_complete ? "窗口完整" : "窗口未完成"} · ${source}` : "受控回放"}`, replay.turns);
       });
       if (detail.metadata.task !== "T1" && !ref.replays.length) body.append(el("p", "warning", "没有可核查的完整回放，不能据此批准分支标注。"));

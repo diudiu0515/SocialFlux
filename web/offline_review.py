@@ -205,6 +205,7 @@ def author_reference(item, bank_sha):
                     "window_complete": branch.get("window_complete", False),
                     "delayed_horizon": branch["delayed_horizon"],
                     "construction": branch.get("experiment"),
+                    "reused_prefix_responses": (branch.get("prefix_reuse") or {}).get("environment_responses", 0),
                     "external_conditions": branch.get("counterfactual_timeline_control"),
                     "turns": [_review_turn(t, variables) for t in branch["future_turns"]],
                 } for action, branch in zip(actions, replay)]
