@@ -1,48 +1,48 @@
 {
   "format": "socialflux_offline_choice_v1",
-  "item_count": 376,
+  "item_count": 392,
   "tasks": {
     "T1": 200,
-    "T3": 176
+    "T3": 192
   },
   "subtypes": {
     "T1/current_intensity": 50,
     "T1/interval_change": 100,
     "T1/joint_change": 50,
-    "T3/immediate_effect": 44,
-    "T3/delayed_effect": 44,
-    "T3/action_comparison": 44,
-    "T3/immediate_delayed": 44
+    "T3/immediate_effect": 48,
+    "T3/delayed_effect": 48,
+    "T3/action_comparison": 48,
+    "T3/immediate_delayed": 48
   },
   "task_state_coverage": {
     "T1/Behavioral Disposition": 109,
     "T1/Emotion": 27,
     "T1/Interaction Risk": 22,
     "T1/Relationship": 64,
-    "T3/Behavioral Disposition": 68,
-    "T3/Emotion": 17,
-    "T3/Interaction Risk": 49,
-    "T3/Relationship": 62
+    "T3/Behavioral Disposition": 72,
+    "T3/Emotion": 19,
+    "T3/Interaction Risk": 55,
+    "T3/Relationship": 67
   },
   "answer_positions": {
-    "A": 93,
-    "B": 95,
-    "C": 99,
-    "D": 73,
+    "A": 98,
+    "B": 101,
+    "C": 103,
+    "D": 74,
     "E": 8,
     "F": 8
   },
   "scenario_count": 50,
   "formal_admission": false,
   "human_review": "pending",
-  "replay_ready_count": 376,
+  "replay_ready_count": 392,
   "replay_ready_tasks": {
     "T1": 200,
-    "T3": 176
+    "T3": 192
   },
   "replay_pending_ids": [],
-  "items_sha256": "e4ebe1829b553f0f6e3854af5e5f7a653d07a14775f8ba746a99698e5c20a66f",
-  "public_sha256": "f45cfedda64f05dfd42837bb0c29482b6547b8944ccc579c2fa4d569126db42b",
+  "items_sha256": "548cab155b2abb8dc83ef8766f4e5beaa327d15d839960f994b247451cd0c32f",
+  "public_sha256": "1d93b9c83b007104041c6112056e739d8c0c1c3293dd180ba7275f427a93d03d",
   "bank_id": "SFG50",
   "requested_scenarios": 50,
   "expected_items": 400,
@@ -268,8 +268,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -283,8 +283,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -298,8 +298,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -538,8 +538,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "new_offline_source_prefix_original_failure_preserved",
@@ -803,10 +803,10 @@
   ],
   "complete": false,
   "pairing": {
-    "input_item_count": 376,
-    "items_sha256": "e4ebe1829b553f0f6e3854af5e5f7a653d07a14775f8ba746a99698e5c20a66f",
-    "logical_pairs": 336,
-    "variants": 672,
+    "input_item_count": 392,
+    "items_sha256": "548cab155b2abb8dc83ef8766f4e5beaa327d15d839960f994b247451cd0c32f",
+    "logical_pairs": 352,
+    "variants": 704,
     "unique_videos": 45,
     "gaps": [
       {

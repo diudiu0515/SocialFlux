@@ -1,17 +1,32 @@
 {
   "format": "socialflux_offline_source_integrity_v1",
-  "at_utc": "2026-10-10T20:20:44.963333+00:00",
-  "items_sha256": "e4ebe1829b553f0f6e3854af5e5f7a653d07a14775f8ba746a99698e5c20a66f",
-  "items_checked": 376,
+  "at_utc": "2026-10-10T20:44:10.895234+00:00",
+  "items_sha256": "548cab155b2abb8dc83ef8766f4e5beaa327d15d839960f994b247451cd0c32f",
+  "items_checked": 392,
   "scenarios_checked": 50,
   "source_origins": {
     "new_offline_source_prefix_original_failure_preserved": 4,
     "existing_complete_rollout": 43,
     "existing_partial_rollout": 3
   },
-  "t3_scenarios_checked": 44,
-  "branches_checked": 88,
-  "observed_prefix_reuse": {},
+  "t3_scenarios_checked": 48,
+  "branches_checked": 96,
+  "observed_prefix_reuse": {
+    "GPT50_033": {
+      "trajectory_path": "data/offline_gpt50_t1_t3/sources/GPT50_033/source_prefix.json",
+      "trajectory_sha256": "d4bb8603e0b64208e069a0fad44215f75473299cc8580430b85b7d96d9f3ba45",
+      "checkpoint_path": "data/offline_gpt50_t1_t3/sources/GPT50_033/source_attempts/20261010T185322780575Z/checkpoint.json",
+      "checkpoint_sha256": "be77f2c9f685909594b93d8c1d82474d76a31830879f2a63c12ea1f0a19b39bc",
+      "branch_index": 0,
+      "observed_turns": [
+        "t3"
+      ],
+      "environment_responses": 1,
+      "continuation_responses_required": 4,
+      "control_adjustment": "Only counterfactual_timeline_lock enabled on actual before/after snapshots; verified no external event, segment, elapsed time or state reconstruction.",
+      "human_review": "pending"
+    }
+  },
   "provider_calls": 0,
   "human_approval": false,
   "branches": {
@@ -204,6 +219,54 @@
         "environment_responses": 5,
         "window_complete": true,
         "snapshot_sha256": "329acb155b6071513035551e17a3ffe4962b5b056d46ece84636e0c1073656c5",
+        "source_reused": false
+      }
+    ],
+    "GPT50_015": [
+      {
+        "candidate_action_id": "action_1",
+        "environment_responses": 5,
+        "window_complete": true,
+        "snapshot_sha256": "153a3a02080da34f98dea8a33656d04804f9e654907b8504aa3a844221ef663b",
+        "source_reused": true
+      },
+      {
+        "candidate_action_id": "action_2",
+        "environment_responses": 5,
+        "window_complete": true,
+        "snapshot_sha256": "153a3a02080da34f98dea8a33656d04804f9e654907b8504aa3a844221ef663b",
+        "source_reused": false
+      }
+    ],
+    "GPT50_016": [
+      {
+        "candidate_action_id": "action_1",
+        "environment_responses": 5,
+        "window_complete": true,
+        "snapshot_sha256": "eff24ae58a53bde3989cabfd0475a317a0d102dc54065e0d5b7ebc52fe8a52ca",
+        "source_reused": true
+      },
+      {
+        "candidate_action_id": "action_2",
+        "environment_responses": 5,
+        "window_complete": true,
+        "snapshot_sha256": "eff24ae58a53bde3989cabfd0475a317a0d102dc54065e0d5b7ebc52fe8a52ca",
+        "source_reused": false
+      }
+    ],
+    "GPT50_017": [
+      {
+        "candidate_action_id": "action_1",
+        "environment_responses": 5,
+        "window_complete": true,
+        "snapshot_sha256": "df4a18dd3a88b00c00c090ca8a2bc177cc633416d38dbaabb21e9928ba4f47a7",
+        "source_reused": true
+      },
+      {
+        "candidate_action_id": "action_2",
+        "environment_responses": 5,
+        "window_complete": true,
+        "snapshot_sha256": "df4a18dd3a88b00c00c090ca8a2bc177cc633416d38dbaabb21e9928ba4f47a7",
         "source_reused": false
       }
     ],
@@ -444,6 +507,22 @@
         "environment_responses": 5,
         "window_complete": true,
         "snapshot_sha256": "f49f05a771861ebc85c68f5f78d69aee38a5a68f51230c2daa9008d031e30340",
+        "source_reused": false
+      }
+    ],
+    "GPT50_033": [
+      {
+        "candidate_action_id": "action_1",
+        "environment_responses": 5,
+        "window_complete": true,
+        "snapshot_sha256": "ac9495336c5e4ed03ff27774b3613bf257b88a88cb4cc722bd1ec286dd0adba4",
+        "source_reused": false
+      },
+      {
+        "candidate_action_id": "action_2",
+        "environment_responses": 5,
+        "window_complete": true,
+        "snapshot_sha256": "ac9495336c5e4ed03ff27774b3613bf257b88a88cb4cc722bd1ec286dd0adba4",
         "source_reused": false
       }
     ],

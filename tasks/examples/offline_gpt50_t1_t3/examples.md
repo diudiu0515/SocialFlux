@@ -1,6 +1,6 @@
 # SocialFlux offline T1 / T3 开发题（完整题面与作者参考答案）
 
-本文件包含实际已生成的 376 道题、50 个场景；目标覆盖与缺项见同批 manifest。
+本文件包含实际已生成的 392 道题、50 个场景；目标覆盖与缺项见同批 manifest。
 
 所有答案是待人工审核的开发参考，不是已冻结真值。下面每题先给出完整可见材料，再给出作者侧标注。
 主评测只答 `{"answer":"B"}`。证据诊断另加 `evidence_ids`，分别计分。
@@ -670,14 +670,14 @@ history：
 
 **作者参考答案：C（待审）**
 
-Maren此前已接纳书面化要求并细化执行；action_2新增岗位、交接和免询问的逐项核对，更可能促使她寻找执行依据。action_1主要由Sera说明自己将怎样检验，不等于Maren主动核查更多。预测依据是新增核实任务，不是把Sera的请求直接算作Maren的行为。
+Maren此前已接纳书面化要求并细化执行；action_2新增岗位、交接和免询问的逐项核对，更可能促使她寻找执行依据。action_1主要由Sera说明自己将怎样检验，不等于Maren主动核查更多。预测依据是新增核实任务，不是把Sera的请求直接算作Maren的行为。 助手复核：更多待核查事项首先改变核查任务与范围，不必然意味着当前求证意愿更强；两种行动都延续已明确的核实取向。因此也接受两者接近，不能把步骤数量直接换算成心理强度。
 
 证据：t1, t2, action_1, action_2
 变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "两种候选行动各自执行后的下一次环境回应", "state_owner": "GPT50_002_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
 错项类型：{"A": "actor_reversal", "B": "history_ignored"}
 分维映射：{"A": {"behavioral_disposition.evidence_seeking": "higher_in_a"}, "B": {"behavioral_disposition.evidence_seeking": "similar"}, "C": {"behavioral_disposition.evidence_seeking": "higher_in_b"}}
 可接受答案：C
-审核备注：私有模拟即时两分支核查状态接近；公开行动的新增核实要求更支持B较高，需人工复核区分度。
+审核备注：私有模拟即时两分支核查状态接近；公开行动的新增核实要求更支持B较高，需人工复核区分度。 补充可接受的相近判断：新增任务与更强求证意愿的推断仍待人工确认。
 分支验证：validated
 
 ## SFG50-002-T3-04 · T3 / immediate_delayed
@@ -4862,6 +4862,190 @@ Nessa从强调今日保留房间的重要性，到核实退款并追问截止前
 审核备注：决心不变依据目标持续，风险不变依据同一未解除危险。尚无医疗后续记录，需审核短区间接近的证据是否充分。
 分支验证：not_required
 
+## SFG50-015-T3-01 · T3 / immediate_effect
+
+来源：GPT50_015；轨迹：fb5f340b50554b699043fc0d067df77b；状态持有者：Nessa Rowan；交互对方：Cal Rowan。关系判断由状态持有者指向交互对方。
+
+背景：At 4:12 p.m., a coordinating sibling requests authorization by five for a $3,100 accessible assisted-living reservation. The hands-on sibling knows a recent fall included a head strike, twenty minutes of confusion, and unusual assistance needs; it was reported only as a minor slip.
+角色目标：Obtain an independent capacity and home-safety review before any permanent placement, while ensuring the hands-on care burden is represented in the decision.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Three years of unequal caregiving left one sibling carrying daily and overnight labor while the other handled appointments, paperwork, and family communication without a mutually recognized division.；A previous aide arrangement was described to relatives as evidence that the hands-on sibling was overwhelmed, so the aide was canceled and later problems went unreported.；Eight months ago, a missed medical recertification caused the parent's home-care credit to lapse, leaving the hands-on sibling to absorb the lost hours while an appeal continued.；Six weeks ago, the coordinating sibling presented the scarce assisted-living suite as a safe solution while alarms, meals, repairs, and nighttime searches remained largely invisible.
+
+history：
+
+- [t1] Cal Rowan：我暂时不能授权这3100美元。露丝那次摔倒撞了头，迷糊了二十分钟，需要的帮忙也明显比平时多，不能只当小滑倒；我主张先尽快就医，永久安置前再做独立的决策能力和居家安全评估。
+  Nessa Rowan：摔倒这么严重,医疗评估必须做。但这个位置今天可能就没了,完整评估通常要几周;现在放弃预订的话,之后很难再找到合适的无障碍房间。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Cal Rowan：我也怕错过房间，但这笔钱暂时仍不能授权。如果能全额退款、只保留选择而不承诺入住，我愿意考虑预订；你能先核实吗？永久安置仍要等独立评估，也要听露丝的意见。
+  Nessa Rowan：我现在就打电话问退款条款，但不确定赶得上五点前拿到明确答复。如果他们今天回不了，你希望怎么处理？
+  可见表达：{"facial_expression": "focused, slightly tense", "gaze": "direct, engaged", "speech_style": "quick, purposeful", "prosody": "measured pace with slight urgency", "behavioral_cues": ["already reaching for phone", "slight forward lean"]}
+
+- 候选行动 action_1：如果五点前还没有明确的全额退款条件，就先不授权这笔钱；房间可以再想办法，但不能让退款不明的预订变成既成事实。
+- 候选行动 action_2：我愿意先授权这笔预订，即使退款条款还没核实，也想争取保住这个无障碍房；但这只是在保留选择，不等于同意入住或永久安置。请继续核实费用风险，后续仍要等独立评估并听露丝的意见。
+
+**题目：相较于 t2，Cal Rowan 执行行动二后，在下一次环境回应时，Nessa Rowan 觉得 Cal 是否实质回应自己关切的判断最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+- **D.** 证据不足
+
+**作者参考答案：A（待审）**
+
+Nessa在t1强调无障碍房间稀缺且可能当天失去，t2仍为授权条件寻求答复。行动二将暂不授权改为同意先保房，直接回应她最迫切的关切，因此上升比不变更有依据。保留评估条件不等于忽略她，也不证明她已全面信任Cal。
+
+证据：t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "比较t2与行动二执行后的下一次环境回应", "state_owner": "GPT50_015_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "history_ignored", "C": "goal_constraint_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "increase"}, "B": {"relationship.perceived_responsiveness": "similar"}, "C": {"relationship.perceived_responsiveness": "decrease"}, "D": {"relationship.perceived_responsiveness": "cannot_determine"}}
+可接受答案：A
+审核备注：判断方向为Nessa看待Cal；授权回应保房关切，不代表同意永久安置。
+分支验证：validated
+
+## SFG50-015-T3-02 · T3 / delayed_effect
+
+来源：GPT50_015；轨迹：fb5f340b50554b699043fc0d067df77b；状态持有者：Nessa Rowan；交互对方：Cal Rowan。关系判断由状态持有者指向交互对方。
+
+背景：At 4:12 p.m., a coordinating sibling requests authorization by five for a $3,100 accessible assisted-living reservation. The hands-on sibling knows a recent fall included a head strike, twenty minutes of confusion, and unusual assistance needs; it was reported only as a minor slip.
+角色目标：Obtain an independent capacity and home-safety review before any permanent placement, while ensuring the hands-on care burden is represented in the decision.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Three years of unequal caregiving left one sibling carrying daily and overnight labor while the other handled appointments, paperwork, and family communication without a mutually recognized division.；A previous aide arrangement was described to relatives as evidence that the hands-on sibling was overwhelmed, so the aide was canceled and later problems went unreported.；Eight months ago, a missed medical recertification caused the parent's home-care credit to lapse, leaving the hands-on sibling to absorb the lost hours while an appeal continued.；Six weeks ago, the coordinating sibling presented the scarce assisted-living suite as a safe solution while alarms, meals, repairs, and nighttime searches remained largely invisible.
+
+history：
+
+- [t1] Cal Rowan：我暂时不能授权这3100美元。露丝那次摔倒撞了头，迷糊了二十分钟，需要的帮忙也明显比平时多，不能只当小滑倒；我主张先尽快就医，永久安置前再做独立的决策能力和居家安全评估。
+  Nessa Rowan：摔倒这么严重,医疗评估必须做。但这个位置今天可能就没了,完整评估通常要几周;现在放弃预订的话,之后很难再找到合适的无障碍房间。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Cal Rowan：我也怕错过房间，但这笔钱暂时仍不能授权。如果能全额退款、只保留选择而不承诺入住，我愿意考虑预订；你能先核实吗？永久安置仍要等独立评估，也要听露丝的意见。
+  Nessa Rowan：我现在就打电话问退款条款，但不确定赶得上五点前拿到明确答复。如果他们今天回不了，你希望怎么处理？
+  可见表达：{"facial_expression": "focused, slightly tense", "gaze": "direct, engaged", "speech_style": "quick, purposeful", "prosody": "measured pace with slight urgency", "behavioral_cues": ["already reaching for phone", "slight forward lean"]}
+
+- 候选行动 action_1：如果五点前还没有明确的全额退款条件，就先不授权这笔钱；房间可以再想办法，但不能让退款不明的预订变成既成事实。
+- 候选行动 action_2：我愿意先授权这笔预订，即使退款条款还没核实，也想争取保住这个无障碍房；但这只是在保留选择，不等于同意入住或永久安置。请继续核实费用风险，后续仍要等独立评估并听露丝的意见。
+
+**题目：以 Nessa Rowan 希望当天保住该无障碍房间这一明确目标为限，Cal Rowan 执行行动二后，从 t2 到第五轮环境回应末，因未获授权而错失当天预订机会的预期风险最可能如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 证据不足
+- **D.** 上升
+
+**作者参考答案：B（待审）**
+
+公开背景给出当天授权截止，Nessa在t1担心房间流失，t2说明退款答复可能赶不上。行动二解除等待退款确认才能授权的障碍，为及时预订提供可信路径，故风险更可能下降而非维持。授权尚非预订成功，也不降低所有安置风险。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "因未获授权而错失当天该无障碍房间的预订机会", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "比较t2与行动二开始后含即时一轮在内的第五轮环境回应末，评估当天保房失败风险", "state_owner": "GPT50_015_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "C": "unsupported_inference", "D": "goal_constraint_ignored"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "similar"}, "B": {"consequence_risk.goal_failure_risk": "decrease"}, "C": {"consequence_risk.goal_failure_risk": "cannot_determine"}, "D": {"consequence_risk.goal_failure_risk": "increase"}}
+可接受答案：B
+审核备注：只评估Nessa的保房目标，不将Cal的独立评估目标代入；不保证实际订到。
+分支验证：validated
+
+## SFG50-015-T3-03 · T3 / action_comparison
+
+来源：GPT50_015；轨迹：fb5f340b50554b699043fc0d067df77b；状态持有者：Nessa Rowan；交互对方：Cal Rowan。关系判断由状态持有者指向交互对方。
+
+背景：At 4:12 p.m., a coordinating sibling requests authorization by five for a $3,100 accessible assisted-living reservation. The hands-on sibling knows a recent fall included a head strike, twenty minutes of confusion, and unusual assistance needs; it was reported only as a minor slip.
+角色目标：Obtain an independent capacity and home-safety review before any permanent placement, while ensuring the hands-on care burden is represented in the decision.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Three years of unequal caregiving left one sibling carrying daily and overnight labor while the other handled appointments, paperwork, and family communication without a mutually recognized division.；A previous aide arrangement was described to relatives as evidence that the hands-on sibling was overwhelmed, so the aide was canceled and later problems went unreported.；Eight months ago, a missed medical recertification caused the parent's home-care credit to lapse, leaving the hands-on sibling to absorb the lost hours while an appeal continued.；Six weeks ago, the coordinating sibling presented the scarce assisted-living suite as a safe solution while alarms, meals, repairs, and nighttime searches remained largely invisible.
+
+history：
+
+- [t1] Cal Rowan：我暂时不能授权这3100美元。露丝那次摔倒撞了头，迷糊了二十分钟，需要的帮忙也明显比平时多，不能只当小滑倒；我主张先尽快就医，永久安置前再做独立的决策能力和居家安全评估。
+  Nessa Rowan：摔倒这么严重,医疗评估必须做。但这个位置今天可能就没了,完整评估通常要几周;现在放弃预订的话,之后很难再找到合适的无障碍房间。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Cal Rowan：我也怕错过房间，但这笔钱暂时仍不能授权。如果能全额退款、只保留选择而不承诺入住，我愿意考虑预订；你能先核实吗？永久安置仍要等独立评估，也要听露丝的意见。
+  Nessa Rowan：我现在就打电话问退款条款，但不确定赶得上五点前拿到明确答复。如果他们今天回不了，你希望怎么处理？
+  可见表达：{"facial_expression": "focused, slightly tense", "gaze": "direct, engaged", "speech_style": "quick, purposeful", "prosody": "measured pace with slight urgency", "behavioral_cues": ["already reaching for phone", "slight forward lean"]}
+
+- 候选行动 action_1：如果五点前还没有明确的全额退款条件，就先不授权这笔钱；房间可以再想办法，但不能让退款不明的预订变成既成事实。
+- 候选行动 action_2：我愿意先授权这笔预订，即使退款条款还没核实，也想争取保住这个无障碍房；但这只是在保留选择，不等于同意入住或永久安置。请继续核实费用风险，后续仍要等独立评估并听露丝的意见。
+
+**题目：将行动一记为A、行动二记为B。比较执行行动后下一次环境回应时，Nessa Rowan 因可能错失房间而产生的内心焦虑，哪种判断最有依据？**
+
+- **A.** B较高
+- **B.** 证据不足
+- **C.** A较高
+- **D.** 接近
+
+**作者参考答案：C（待审）**
+
+Nessa反复强调房源可能当天失去，又指出退款确认未必赶上截止。行动一保留这个授权瓶颈，行动二则允许直接争取预订，使她对错失房间的控制感更有改善依据。因此A较高更合理；这不预测她全部焦虑或外在表达强度。
+
+证据：t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["emotion.anxiety"], "time_scope": "比较行动一与行动二各自执行后的下一次环境回应", "state_owner": "GPT50_015_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "actor_reversal", "B": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"emotion.anxiety": "higher_in_b"}, "B": {"emotion.anxiety": "cannot_determine"}, "C": {"emotion.anxiety": "higher_in_a"}, "D": {"emotion.anxiety": "similar"}}
+可接受答案：C
+审核备注：只比较房源相关的内心焦虑；退款费用与医疗忧虑仍可能存在。
+分支验证：validated
+
+## SFG50-015-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_015；轨迹：fb5f340b50554b699043fc0d067df77b；状态持有者：Nessa Rowan；交互对方：Cal Rowan。关系判断由状态持有者指向交互对方。
+
+背景：At 4:12 p.m., a coordinating sibling requests authorization by five for a $3,100 accessible assisted-living reservation. The hands-on sibling knows a recent fall included a head strike, twenty minutes of confusion, and unusual assistance needs; it was reported only as a minor slip.
+角色目标：Obtain an independent capacity and home-safety review before any permanent placement, while ensuring the hands-on care burden is represented in the decision.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Three years of unequal caregiving left one sibling carrying daily and overnight labor while the other handled appointments, paperwork, and family communication without a mutually recognized division.；A previous aide arrangement was described to relatives as evidence that the hands-on sibling was overwhelmed, so the aide was canceled and later problems went unreported.；Eight months ago, a missed medical recertification caused the parent's home-care credit to lapse, leaving the hands-on sibling to absorb the lost hours while an appeal continued.；Six weeks ago, the coordinating sibling presented the scarce assisted-living suite as a safe solution while alarms, meals, repairs, and nighttime searches remained largely invisible.
+
+history：
+
+- [t1] Cal Rowan：我暂时不能授权这3100美元。露丝那次摔倒撞了头，迷糊了二十分钟，需要的帮忙也明显比平时多，不能只当小滑倒；我主张先尽快就医，永久安置前再做独立的决策能力和居家安全评估。
+  Nessa Rowan：摔倒这么严重,医疗评估必须做。但这个位置今天可能就没了,完整评估通常要几周;现在放弃预订的话,之后很难再找到合适的无障碍房间。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Cal Rowan：我也怕错过房间，但这笔钱暂时仍不能授权。如果能全额退款、只保留选择而不承诺入住，我愿意考虑预订；你能先核实吗？永久安置仍要等独立评估，也要听露丝的意见。
+  Nessa Rowan：我现在就打电话问退款条款，但不确定赶得上五点前拿到明确答复。如果他们今天回不了，你希望怎么处理？
+  可见表达：{"facial_expression": "focused, slightly tense", "gaze": "direct, engaged", "speech_style": "quick, purposeful", "prosody": "measured pace with slight urgency", "behavioral_cues": ["already reaching for phone", "slight forward lean"]}
+
+- 候选行动 action_1：如果五点前还没有明确的全额退款条件，就先不授权这笔钱；房间可以再想办法，但不能让退款不明的预订变成既成事实。
+- 候选行动 action_2：我愿意先授权这笔预订，即使退款条款还没核实，也想争取保住这个无障碍房；但这只是在保留选择，不等于同意入住或永久安置。请继续核实费用风险，后续仍要等独立评估并听露丝的意见。
+
+**题目：Cal Rowan 执行行动二后，Nessa Rowan 觉得 Cal 是否回应自己关切的判断，相对 t2 在即时下一次回应及第五轮回应末最可能呈现哪种组合？**
+
+- **A.** 即时上升；延迟低于t2基线
+- **B.** 即时基本不变；延迟也接近t2基线
+- **C.** 即时下降；延迟高于t2基线
+- **D.** 即时上升；延迟也高于t2基线
+
+**作者参考答案：D（待审）**
+
+t1至t2中Nessa持续关切保房时限，并已着手核实退款；行动二给出保房授权，同时保留核查任务，形成可延续的协调路径。因此即时和延迟都较可能高于基线，不需假设先恶化再修复；延迟判断不要求房间必然订到。
+
+证据：t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "两项分别比较t2与下一次环境回应、t2与含即时一轮在内的第五轮环境回应末", "state_owner": "GPT50_015_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "history_ignored", "C": "goal_constraint_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness@immediate": "increase", "relationship.perceived_responsiveness@delayed": "decrease"}, "B": {"relationship.perceived_responsiveness@immediate": "similar", "relationship.perceived_responsiveness@delayed": "similar"}, "C": {"relationship.perceived_responsiveness@immediate": "decrease", "relationship.perceived_responsiveness@delayed": "increase"}, "D": {"relationship.perceived_responsiveness@immediate": "increase", "relationship.perceived_responsiveness@delayed": "increase"}}
+可接受答案：D
+审核备注：延迟上升指高于t2，不指每轮继续增长；target_state_ids仅使用规范路径。
+分支验证：validated
+
 ## SFG50-016-T1-01 · T1 / current_intensity
 
 来源：GPT50_016；轨迹：783bcd3a883547089116aadeb8dc4234；状态持有者：Mara Venn；交互对方：Ilyan Sorell。关系判断由状态持有者指向交互对方。
@@ -5040,6 +5224,187 @@ t1的Mara尚待确认范围，t2已明确接受并筹划渠道窗口，决策准
 审核备注：履职认可的变化弱于决策变化，依据是安全条件被纳入计划而非单纯同意；需人工重点审核区分度。
 分支验证：not_required
 
+## SFG50-016-T3-01 · T3 / immediate_effect
+
+来源：GPT50_016；轨迹：783bcd3a883547089116aadeb8dc4234；状态持有者：Mara Venn；交互对方：Ilyan Sorell。关系判断由状态持有者指向交互对方。
+
+背景：Eleven days before a game launch, a producer requests approval of a feature cut or short crunch amid intermittent persistence defects and limited cash runway. The designer knows two systems staff may leave without complaints and knows a suspend-resume defect can corrupt player maps.
+角色目标：Protect release safety and the fatigued feature team by requiring an honest Tide Atlas scope and reproducible evidence before sign-off, with no further unpaid labor.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Their earlier launches repeatedly converted invisible labor into schedule certainty, leaving trust strained between them.；Four months earlier, they made Tide Atlas the centerpiece of a preorder campaign without expanding the original launch schedule.；An alpha workaround replaced the intended save architecture, and intermittent persistence defects were deferred after isolated demonstrations passed.；The last milestone was rescued by an unpaid weekend, which was recorded as evidence of good planning rather than added capacity.；A recent console playtest exposed lost map progress, a blocked route, and a broken accessibility prompt after reconnecting.
+
+history：
+
+- [t1] Ilyan Sorell：我不能为 Tide Atlas 现有范围签安全通过；先按可验证的功能收缩范围，并用可复现的挂起恢复、重连和无障碍流程结果作为签署依据。任何补救都要计入付费工时，不能再靠无偿加班填补排期。
+  Mara Venn：收缩到什么程度？你给我一个可以守住的范围，我确认后立刻开会调整宣传和渠道预期。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Ilyan Sorell：我建议把收缩底线定为：首发移除 Tide Atlas，保留不依赖它的主线进度与无障碍流程。这个范围仍需验证移除后不会丢进度或堵路；如果无法安全拆开，我会建议延期，不能把功能下线当作缺陷已经消失。
+  Mara Venn：可以，这个范围我接受。你多久能完成拆分验证？我需要这个时间点来倒推渠道通知和物料调整窗口。
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "direct", "speech_style": "crisp and transactional", "prosody": "steady pace, slight emphasis on time question", "behavioral_cues": ["slight forward posture", "hands still"]}
+
+- 候选行动 action_1：按现有付费工时，我会在三天内给出拆分验证结果；若挂起恢复、重连或无障碍流程仍有阻断，就维持延期建议，不能用加班把结论提前。
+- 候选行动 action_2：我的建议是现在就按延期准备，不把三天拆分验证当作保住本次首发的前提；先用现有付费工时验证挂起恢复、重连和无障碍阻断，再据结果评估可保留范围。这样能减少继续押排期的风险，但可能过早放弃可安全保留的首发内容。
+
+**题目：Ilyan执行action_1后，下一次Mara的回应中，她对Ilyan是否回应自己时间与排期关切的判断最可能如何变化？**
+
+- **A.** Mara认为Ilyan对她的关切回应程度基本不变
+- **B.** Mara认为Ilyan回避了她的时间与排期关切
+- **C.** Mara认为Ilyan更直接回应了她的时间与排期关切
+
+**作者参考答案：C（待审）**
+
+t2中Mara明确要求完成时间以倒推渠道通知，action_1直接承诺三天内给出拆分验证结果，并说明阻断时维持延期建议，正面回应了她的排期需要。因此更可能上升，而非仅保持或回避；但这只说明回应性改善，不等于风险已解除。
+
+证据：t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "action_1执行后的下一次Mara回应", "state_owner": "GPT50_016_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "B": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "similar"}, "B": {"relationship.perceived_responsiveness": "decrease"}, "C": {"relationship.perceived_responsiveness": "increase"}}
+可接受答案：C
+审核备注：题目区分回应关切与实际通过；三天承诺是行动计划，不应误判为缺陷已解决。
+分支验证：validated
+
+## SFG50-016-T3-02 · T3 / delayed_effect
+
+来源：GPT50_016；轨迹：783bcd3a883547089116aadeb8dc4234；状态持有者：Mara Venn；交互对方：Ilyan Sorell。关系判断由状态持有者指向交互对方。
+
+背景：Eleven days before a game launch, a producer requests approval of a feature cut or short crunch amid intermittent persistence defects and limited cash runway. The designer knows two systems staff may leave without complaints and knows a suspend-resume defect can corrupt player maps.
+角色目标：Protect release safety and the fatigued feature team by requiring an honest Tide Atlas scope and reproducible evidence before sign-off, with no further unpaid labor.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Their earlier launches repeatedly converted invisible labor into schedule certainty, leaving trust strained between them.；Four months earlier, they made Tide Atlas the centerpiece of a preorder campaign without expanding the original launch schedule.；An alpha workaround replaced the intended save architecture, and intermittent persistence defects were deferred after isolated demonstrations passed.；The last milestone was rescued by an unpaid weekend, which was recorded as evidence of good planning rather than added capacity.；A recent console playtest exposed lost map progress, a blocked route, and a broken accessibility prompt after reconnecting.
+
+history：
+
+- [t1] Ilyan Sorell：我不能为 Tide Atlas 现有范围签安全通过；先按可验证的功能收缩范围，并用可复现的挂起恢复、重连和无障碍流程结果作为签署依据。任何补救都要计入付费工时，不能再靠无偿加班填补排期。
+  Mara Venn：收缩到什么程度？你给我一个可以守住的范围，我确认后立刻开会调整宣传和渠道预期。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Ilyan Sorell：我建议把收缩底线定为：首发移除 Tide Atlas，保留不依赖它的主线进度与无障碍流程。这个范围仍需验证移除后不会丢进度或堵路；如果无法安全拆开，我会建议延期，不能把功能下线当作缺陷已经消失。
+  Mara Venn：可以，这个范围我接受。你多久能完成拆分验证？我需要这个时间点来倒推渠道通知和物料调整窗口。
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "direct", "speech_style": "crisp and transactional", "prosody": "steady pace, slight emphasis on time question", "behavioral_cues": ["slight forward posture", "hands still"]}
+
+- 候选行动 action_1：按现有付费工时，我会在三天内给出拆分验证结果；若挂起恢复、重连或无障碍流程仍有阻断，就维持延期建议，不能用加班把结论提前。
+- 候选行动 action_2：我的建议是现在就按延期准备，不把三天拆分验证当作保住本次首发的前提；先用现有付费工时验证挂起恢复、重连和无障碍阻断，再据结果评估可保留范围。这样能减少继续押排期的风险，但可能过早放弃可安全保留的首发内容。
+
+**题目：相较 t2，若 Ilyan 执行 action_2，到含即时回应在内的第五轮环境回应末，Mara 无法在原定首发日期推出具备安全依据的版本，其目标失败风险最可能如何变化？**
+
+- **A.** 五轮回应后，Mara认为本次首发目标失败风险上升
+- **B.** 五轮回应后，Mara认为本次首发目标失败风险基本不变
+- **C.** 五轮回应后，Mara认为本次首发目标失败风险下降
+
+**作者参考答案：A（待审）**
+
+t2中双方仍试图通过移除Tide Atlas、完成拆分验证来保留原定首发日期。行动二现在就按延期准备，并承认可能过早放弃安全可保留内容，因而对按原日期推出安全版本这一目标，失败风险更可能上升。这里不要求恢复原先全部宣传功能，也不把延期准备视为已决定延期或实际错过日期。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "无法在原定首发日期推出具备安全依据的版本，允许已商定的范围收缩", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "从action_2开始至包含即时回应的五轮Mara回应结束", "state_owner": "GPT50_016_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "goal_constraint_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "increase"}, "B": {"consequence_risk.goal_failure_risk": "similar"}, "C": {"consequence_risk.goal_failure_risk": "decrease"}}
+可接受答案：A
+审核备注：助手澄清：目标限定为原日期推出安全版本，允许已接受的范围收缩；准备方向支持预期风险变化，不代表结果已发生。
+分支验证：validated
+
+## SFG50-016-T3-03 · T3 / action_comparison
+
+来源：GPT50_016；轨迹：783bcd3a883547089116aadeb8dc4234；状态持有者：Mara Venn；交互对方：Ilyan Sorell。关系判断由状态持有者指向交互对方。
+
+背景：Eleven days before a game launch, a producer requests approval of a feature cut or short crunch amid intermittent persistence defects and limited cash runway. The designer knows two systems staff may leave without complaints and knows a suspend-resume defect can corrupt player maps.
+角色目标：Protect release safety and the fatigued feature team by requiring an honest Tide Atlas scope and reproducible evidence before sign-off, with no further unpaid labor.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Their earlier launches repeatedly converted invisible labor into schedule certainty, leaving trust strained between them.；Four months earlier, they made Tide Atlas the centerpiece of a preorder campaign without expanding the original launch schedule.；An alpha workaround replaced the intended save architecture, and intermittent persistence defects were deferred after isolated demonstrations passed.；The last milestone was rescued by an unpaid weekend, which was recorded as evidence of good planning rather than added capacity.；A recent console playtest exposed lost map progress, a blocked route, and a broken accessibility prompt after reconnecting.
+
+history：
+
+- [t1] Ilyan Sorell：我不能为 Tide Atlas 现有范围签安全通过；先按可验证的功能收缩范围，并用可复现的挂起恢复、重连和无障碍流程结果作为签署依据。任何补救都要计入付费工时，不能再靠无偿加班填补排期。
+  Mara Venn：收缩到什么程度？你给我一个可以守住的范围，我确认后立刻开会调整宣传和渠道预期。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Ilyan Sorell：我建议把收缩底线定为：首发移除 Tide Atlas，保留不依赖它的主线进度与无障碍流程。这个范围仍需验证移除后不会丢进度或堵路；如果无法安全拆开，我会建议延期，不能把功能下线当作缺陷已经消失。
+  Mara Venn：可以，这个范围我接受。你多久能完成拆分验证？我需要这个时间点来倒推渠道通知和物料调整窗口。
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "direct", "speech_style": "crisp and transactional", "prosody": "steady pace, slight emphasis on time question", "behavioral_cues": ["slight forward posture", "hands still"]}
+
+- 候选行动 action_1：按现有付费工时，我会在三天内给出拆分验证结果；若挂起恢复、重连或无障碍流程仍有阻断，就维持延期建议，不能用加班把结论提前。
+- 候选行动 action_2：我的建议是现在就按延期准备，不把三天拆分验证当作保住本次首发的前提；先用现有付费工时验证挂起恢复、重连和无障碍阻断，再据结果评估可保留范围。这样能减少继续押排期的风险，但可能过早放弃可安全保留的首发内容。
+
+**题目：比较Ilyan分别执行action_1与action_2后的即时环境回应，Mara对Ilyan回应自己排期关切的判断哪项更可能成立？**
+
+- **A.** 执行action_2时，Mara觉得Ilyan比执行action_1更回应她的排期关切
+- **B.** 执行action_1时，Mara觉得Ilyan比执行action_2更回应她的排期关切
+- **C.** 两种行动下，Mara觉得Ilyan回应她的排期关切程度接近
+
+**作者参考答案：B（待审）**
+
+t2表明Mara需要明确时间点来倒推渠道通知和物料调整。action_1给出三天内完成验证的明确节点，并规定阻断时的决策规则；action_2强调延期准备，却未给出完成时点。因此前者更直接回应排期关切，但不代表行动1能保证首发。
+
+证据：t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "两种候选行动执行后的下一次环境回应", "state_owner": "GPT50_016_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "state_dimension_confusion"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "higher_in_b"}, "B": {"relationship.perceived_responsiveness": "higher_in_a"}, "C": {"relationship.perceived_responsiveness": "similar"}}
+可接受答案：B
+审核备注：两侧均引用t1、t2历史；比较的是Mara感到被回应的程度，不是哪个方案更安全。
+分支验证：validated
+
+## SFG50-016-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_016；轨迹：783bcd3a883547089116aadeb8dc4234；状态持有者：Mara Venn；交互对方：Ilyan Sorell。关系判断由状态持有者指向交互对方。
+
+背景：Eleven days before a game launch, a producer requests approval of a feature cut or short crunch amid intermittent persistence defects and limited cash runway. The designer knows two systems staff may leave without complaints and knows a suspend-resume defect can corrupt player maps.
+角色目标：Protect release safety and the fatigued feature team by requiring an honest Tide Atlas scope and reproducible evidence before sign-off, with no further unpaid labor.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Their earlier launches repeatedly converted invisible labor into schedule certainty, leaving trust strained between them.；Four months earlier, they made Tide Atlas the centerpiece of a preorder campaign without expanding the original launch schedule.；An alpha workaround replaced the intended save architecture, and intermittent persistence defects were deferred after isolated demonstrations passed.；The last milestone was rescued by an unpaid weekend, which was recorded as evidence of good planning rather than added capacity.；A recent console playtest exposed lost map progress, a blocked route, and a broken accessibility prompt after reconnecting.
+
+history：
+
+- [t1] Ilyan Sorell：我不能为 Tide Atlas 现有范围签安全通过；先按可验证的功能收缩范围，并用可复现的挂起恢复、重连和无障碍流程结果作为签署依据。任何补救都要计入付费工时，不能再靠无偿加班填补排期。
+  Mara Venn：收缩到什么程度？你给我一个可以守住的范围，我确认后立刻开会调整宣传和渠道预期。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Ilyan Sorell：我建议把收缩底线定为：首发移除 Tide Atlas，保留不依赖它的主线进度与无障碍流程。这个范围仍需验证移除后不会丢进度或堵路；如果无法安全拆开，我会建议延期，不能把功能下线当作缺陷已经消失。
+  Mara Venn：可以，这个范围我接受。你多久能完成拆分验证？我需要这个时间点来倒推渠道通知和物料调整窗口。
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "direct", "speech_style": "crisp and transactional", "prosody": "steady pace, slight emphasis on time question", "behavioral_cues": ["slight forward posture", "hands still"]}
+
+- 候选行动 action_1：按现有付费工时，我会在三天内给出拆分验证结果；若挂起恢复、重连或无障碍流程仍有阻断，就维持延期建议，不能用加班把结论提前。
+- 候选行动 action_2：我的建议是现在就按延期准备，不把三天拆分验证当作保住本次首发的前提；先用现有付费工时验证挂起恢复、重连和无障碍阻断，再据结果评估可保留范围。这样能减少继续押排期的风险，但可能过早放弃可安全保留的首发内容。
+
+**题目：若Ilyan执行action_1，Mara对“原计划还是延期”的决策准备度，相比t2基线在即时回应时及五轮回应结束时分别最可能如何变化？**
+
+- **A.** 即时决策准备度高于t2；第五轮末仍高于t2
+- **B.** 即时决策准备度高于t2；第五轮末与t2接近
+- **C.** 即时决策准备度与t2接近；第五轮末高于t2
+- **D.** 即时决策准备度低于t2；第五轮末仍低于t2
+
+**作者参考答案：A（待审）**
+
+t2中Mara已接受收缩底线，但仍需要时间点安排渠道与物料；action_1提供三天验证窗口，并以阻断结果作为延期规则。这一可执行框架更可能即时提升决策准备度，之后继续支撑她作出选择；但不能推出验证成功或一定按期发布。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.decision_readiness"], "time_scope": "相对t2基线，比较行动后即时回应与包含即时回应的五轮回应结束", "state_owner": "GPT50_016_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "immediate_delayed_confusion", "C": "immediate_delayed_confusion", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.decision_readiness@immediate": "increase", "behavioral_disposition.decision_readiness@delayed": "increase"}, "B": {"behavioral_disposition.decision_readiness@immediate": "increase", "behavioral_disposition.decision_readiness@delayed": "similar"}, "C": {"behavioral_disposition.decision_readiness@immediate": "similar", "behavioral_disposition.decision_readiness@delayed": "increase"}, "D": {"behavioral_disposition.decision_readiness@immediate": "decrease", "behavioral_disposition.decision_readiness@delayed": "decrease"}}
+可接受答案：A
+审核备注：四项分别覆盖同步上升、仅即时上升、仅延迟上升及同步下降；计划提供决策框架，不等于测试已完成。 助手修订：两时点均与t2比较，上升不意味着从即时到第五轮又进一步上升；时间坐标只在选项映射中保留。
+分支验证：validated
+
 ## SFG50-017-T1-01 · T1 / current_intensity
 
 来源：GPT50_017；轨迹：36d5afe83cc14202a0f3f9eaf5c5ad2a；状态持有者：Jonah Pike；交互对方：Inez Calder。关系判断由状态持有者指向交互对方。
@@ -5217,6 +5582,187 @@ t2接纳授权核实并形成三方通话方案，Jonah能立即参与，配合�
 可接受答案：D
 审核备注：风险下降依据是可执行新路径，非付款完成；本题不将缓和误写为任务风险已修复。
 分支验证：not_required
+
+## SFG50-017-T3-01 · T3 / immediate_effect
+
+来源：GPT50_017；轨迹：36d5afe83cc14202a0f3f9eaf5c5ad2a；状态持有者：Jonah Pike；交互对方：Inez Calder。关系判断由状态持有者指向交互对方。
+
+背景：At 4:40 p.m., a referring donor requests $1,100 by the 5:20 payment cutoff for emergency-room care and transport after an informal-sublet lockout. Normal proof is absent and the reserve is below the next promised assistance. The coordinator sees confidential patterns across applications and prior exceptions.
+角色目标：Choose a fair, auditable response to the urgent request while stewarding limited reserves and protecting future access.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous exception was criticized because its rationale remained private, leaving the fund's public fairness standard contested.；The donor's earlier referrals have connected the fund to people outside formal records, but each referral has tied the donor's reputation to the coordinator's explanation.
+
+history：
+
+- [t1] Inez Calder：我愿意考虑替代证明，但现在不能承诺1100美元，储备连下一笔已承诺的援助都不够。能先告诉我，5:20前必须支付的医疗和交通费用各是多少、可以向谁核实吗？
+  Jonah Pike：急诊750美元，往返交通350美元。医疗中心账单办公室可以核实账单，我能提供他本人的电话授权和书面担保。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Inez Calder：我可以凭本人授权向账单办公室核实，书面担保不必把责任压在你身上。我仍不能承诺拨款；核实时，我会问清5:20前最低须付多少，以及能否延期或分期，看看能否缩小眼前的缺口。
+  Jonah Pike：感谢你愿意核实。我这边现在就给医疗中心打电话，三方通话可以让授权和问询同时完成，能节省一些时间。
+  可见表达：{"facial_expression": "focused, slightly relieved", "gaze": "direct, engaged", "speech_style": "purposeful and collaborative", "prosody": "steady with constructive energy", "behavioral_cues": ["reaching for phone", "ready posture"]}
+
+- 候选行动 action_1：可以，就按三方通话核实；这不改变我暂不承诺拨款的决定，我会根据确认的最低急付金额和可延期部分，再判断是否能动用有限储备。
+- 候选行动 action_2：先不用接三方通话。请你把医疗和交通费用分别列清，并问医疗中心能否提供最低急付额及延期或分期的书面说明；我凭授权再核验。仍不承诺拨款，但整理书面依据可能赶不上截止。
+
+**题目：相较于 t2，在 Inez Calder 执行action_1并收到下一次环境回应后，Jonah Pike 的合作意愿最可能如何变化？**
+
+- **A.** 合作意愿上升
+- **B.** 合作意愿基本不变
+- **C.** 合作意愿下降
+
+**作者参考答案：A（待审）**
+
+t2中Jonah已主动联系医疗中心并准备三方通话；action_1接受该协调方式，并共同核实金额、期限及延期条件，形成具体的任务分工。因此合作意愿更可能上升，而非仅因礼貌保持不变或无依据地下降。边界是行动仍未承诺拨款，但没有拒绝协调。
+
+证据：t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness"], "time_scope": "从t2到动作1后下一次环境回应", "state_owner": "GPT50_017_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "unsupported_inference", "C": "state_dimension_confusion"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness": "increase"}, "B": {"behavioral_disposition.cooperation_readiness": "similar"}, "C": {"behavioral_disposition.cooperation_readiness": "decrease"}}
+可接受答案：A
+审核备注：区分协调意愿与拨款结果；action_1提供共同核验机制，方向区分度较好。
+分支验证：validated
+
+## SFG50-017-T3-02 · T3 / delayed_effect
+
+来源：GPT50_017；轨迹：36d5afe83cc14202a0f3f9eaf5c5ad2a；状态持有者：Jonah Pike；交互对方：Inez Calder。关系判断由状态持有者指向交互对方。
+
+背景：At 4:40 p.m., a referring donor requests $1,100 by the 5:20 payment cutoff for emergency-room care and transport after an informal-sublet lockout. Normal proof is absent and the reserve is below the next promised assistance. The coordinator sees confidential patterns across applications and prior exceptions.
+角色目标：Choose a fair, auditable response to the urgent request while stewarding limited reserves and protecting future access.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous exception was criticized because its rationale remained private, leaving the fund's public fairness standard contested.；The donor's earlier referrals have connected the fund to people outside formal records, but each referral has tied the donor's reputation to the coordinator's explanation.
+
+history：
+
+- [t1] Inez Calder：我愿意考虑替代证明，但现在不能承诺1100美元，储备连下一笔已承诺的援助都不够。能先告诉我，5:20前必须支付的医疗和交通费用各是多少、可以向谁核实吗？
+  Jonah Pike：急诊750美元，往返交通350美元。医疗中心账单办公室可以核实账单，我能提供他本人的电话授权和书面担保。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Inez Calder：我可以凭本人授权向账单办公室核实，书面担保不必把责任压在你身上。我仍不能承诺拨款；核实时，我会问清5:20前最低须付多少，以及能否延期或分期，看看能否缩小眼前的缺口。
+  Jonah Pike：感谢你愿意核实。我这边现在就给医疗中心打电话，三方通话可以让授权和问询同时完成，能节省一些时间。
+  可见表达：{"facial_expression": "focused, slightly relieved", "gaze": "direct, engaged", "speech_style": "purposeful and collaborative", "prosody": "steady with constructive energy", "behavioral_cues": ["reaching for phone", "ready posture"]}
+
+- 候选行动 action_1：可以，就按三方通话核实；这不改变我暂不承诺拨款的决定，我会根据确认的最低急付金额和可延期部分，再判断是否能动用有限储备。
+- 候选行动 action_2：先不用接三方通话。请你把医疗和交通费用分别列清，并问医疗中心能否提供最低急付额及延期或分期的书面说明；我凭授权再核验。仍不承诺拨款，但整理书面依据可能赶不上截止。
+
+**题目：从 Inez Calder 执行action_2开始，经过包含即时回应在内的五轮环境回应后，Jonah Pike 的证据寻求意愿最可能如何变化？**
+
+- **A.** 证据寻求意愿下降
+- **B.** 证据寻求意愿上升
+- **C.** 证据寻求意愿基本不变
+
+**作者参考答案：B（待审）**
+
+Jonah已主动安排带授权的三方核实，显示明确求证取向。行动二把核实转为分项与书面说明，他既有的配合模式为继续深化求证提供依据；但改变核实方式和增加步骤并不必然强化意愿，因此也接受基本不变。不能把Inez提出书面要求等同于Jonah已取得材料或一定更想求证。
+
+证据：t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "从动作2开始至五轮环境回应结束", "state_owner": "GPT50_017_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "C": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "decrease"}, "B": {"behavioral_disposition.evidence_seeking": "increase"}, "C": {"behavioral_disposition.evidence_seeking": "similar"}}
+可接受答案：B
+审核备注：求证意愿与核实方式分开判断，接受上升或基本不变；该边界待人工确认。
+分支验证：validated
+
+## SFG50-017-T3-03 · T3 / action_comparison
+
+来源：GPT50_017；轨迹：36d5afe83cc14202a0f3f9eaf5c5ad2a；状态持有者：Jonah Pike；交互对方：Inez Calder。关系判断由状态持有者指向交互对方。
+
+背景：At 4:40 p.m., a referring donor requests $1,100 by the 5:20 payment cutoff for emergency-room care and transport after an informal-sublet lockout. Normal proof is absent and the reserve is below the next promised assistance. The coordinator sees confidential patterns across applications and prior exceptions.
+角色目标：Choose a fair, auditable response to the urgent request while stewarding limited reserves and protecting future access.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous exception was criticized because its rationale remained private, leaving the fund's public fairness standard contested.；The donor's earlier referrals have connected the fund to people outside formal records, but each referral has tied the donor's reputation to the coordinator's explanation.
+
+history：
+
+- [t1] Inez Calder：我愿意考虑替代证明，但现在不能承诺1100美元，储备连下一笔已承诺的援助都不够。能先告诉我，5:20前必须支付的医疗和交通费用各是多少、可以向谁核实吗？
+  Jonah Pike：急诊750美元，往返交通350美元。医疗中心账单办公室可以核实账单，我能提供他本人的电话授权和书面担保。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Inez Calder：我可以凭本人授权向账单办公室核实，书面担保不必把责任压在你身上。我仍不能承诺拨款；核实时，我会问清5:20前最低须付多少，以及能否延期或分期，看看能否缩小眼前的缺口。
+  Jonah Pike：感谢你愿意核实。我这边现在就给医疗中心打电话，三方通话可以让授权和问询同时完成，能节省一些时间。
+  可见表达：{"facial_expression": "focused, slightly relieved", "gaze": "direct, engaged", "speech_style": "purposeful and collaborative", "prosody": "steady with constructive energy", "behavioral_cues": ["reaching for phone", "ready posture"]}
+
+- 候选行动 action_1：可以，就按三方通话核实；这不改变我暂不承诺拨款的决定，我会根据确认的最低急付金额和可延期部分，再判断是否能动用有限储备。
+- 候选行动 action_2：先不用接三方通话。请你把医疗和交通费用分别列清，并问医疗中心能否提供最低急付额及延期或分期的书面说明；我凭授权再核验。仍不承诺拨款，但整理书面依据可能赶不上截止。
+
+**题目：分别执行 action_1（A）或 action_2（B）后，在下一次环境回应时，Jonah Pike 所援助的申请人未能在5:20付款截止前获得所需急付援助，这一目标失败风险哪种情况下较高？**
+
+- **A.** 采取action_1时较高
+- **B.** 两种动作下接近
+- **C.** 采取action_2时较高
+
+**作者参考答案：C（待审）**
+
+t2中Inez提出凭授权核实最低急付额并询问能否延期，仍未承诺拨款。行动一即时采用Jonah建议的三方通话；行动二先整理书面材料再核验，并明确可能赶不上截止。因此对按时争取所需援助，B的失败风险更高。核实与评估是争取援助的路径，不是目标已经达成；基金不足仍限制两项行动，也不能把未获援助直接写成已造成医疗伤害。
+
+证据：t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "Jonah所援助的申请人未能在5:20付款截止前获得所需急付援助", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "从t2到相应动作后的下一次环境回应", "state_owner": "GPT50_017_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "goal_constraint_ignored", "B": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "higher_in_a"}, "B": {"consequence_risk.goal_failure_risk": "similar"}, "C": {"consequence_risk.goal_failure_risk": "higher_in_b"}}
+可接受答案：C
+审核备注：目标归属Jonah帮助申请人及时获得急付援助；不把完成评估替代完整目标。时间点是下一次回应时的预期，不是付款已发生。
+分支验证：validated
+
+## SFG50-017-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_017；轨迹：36d5afe83cc14202a0f3f9eaf5c5ad2a；状态持有者：Jonah Pike；交互对方：Inez Calder。关系判断由状态持有者指向交互对方。
+
+背景：At 4:40 p.m., a referring donor requests $1,100 by the 5:20 payment cutoff for emergency-room care and transport after an informal-sublet lockout. Normal proof is absent and the reserve is below the next promised assistance. The coordinator sees confidential patterns across applications and prior exceptions.
+角色目标：Choose a fair, auditable response to the urgent request while stewarding limited reserves and protecting future access.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous exception was criticized because its rationale remained private, leaving the fund's public fairness standard contested.；The donor's earlier referrals have connected the fund to people outside formal records, but each referral has tied the donor's reputation to the coordinator's explanation.
+
+history：
+
+- [t1] Inez Calder：我愿意考虑替代证明，但现在不能承诺1100美元，储备连下一笔已承诺的援助都不够。能先告诉我，5:20前必须支付的医疗和交通费用各是多少、可以向谁核实吗？
+  Jonah Pike：急诊750美元，往返交通350美元。医疗中心账单办公室可以核实账单，我能提供他本人的电话授权和书面担保。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Inez Calder：我可以凭本人授权向账单办公室核实，书面担保不必把责任压在你身上。我仍不能承诺拨款；核实时，我会问清5:20前最低须付多少，以及能否延期或分期，看看能否缩小眼前的缺口。
+  Jonah Pike：感谢你愿意核实。我这边现在就给医疗中心打电话，三方通话可以让授权和问询同时完成，能节省一些时间。
+  可见表达：{"facial_expression": "focused, slightly relieved", "gaze": "direct, engaged", "speech_style": "purposeful and collaborative", "prosody": "steady with constructive energy", "behavioral_cues": ["reaching for phone", "ready posture"]}
+
+- 候选行动 action_1：可以，就按三方通话核实；这不改变我暂不承诺拨款的决定，我会根据确认的最低急付金额和可延期部分，再判断是否能动用有限储备。
+- 候选行动 action_2：先不用接三方通话。请你把医疗和交通费用分别列清，并问医疗中心能否提供最低急付额及延期或分期的书面说明；我凭授权再核验。仍不承诺拨款，但整理书面依据可能赶不上截止。
+
+**题目：若 Inez Calder 执行 action_1，分别将下一次环境回应时、以及含即时回应在内的第5轮末与 t2 比较，Jonah Pike 的焦虑最可能呈现哪种组合？**
+
+- **A.** 两个时点的焦虑变化都证据不足
+- **B.** 即时焦虑低于t2；第五轮末也低于t2
+- **C.** 即时焦虑低于t2；第五轮末与t2接近
+- **D.** 即时焦虑与t2接近；第五轮末低于t2
+
+**作者参考答案：B（待审）**
+
+Jonah在t2提议三方通话以节省时间；action_1接受该办法，延续询问最低急付额和可延期部分的计划，为缩小不确定性提供可执行路径。根据此前双方主动核实的互动，焦虑在即时和五轮末都较可能低于t2，而非需要假设继续逐轮下降。拨款仍未承诺、资源仍有限，不能据此判断焦虑消失或援助已落实。
+
+证据：t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["emotion.anxiety"], "time_scope": "从t2到动作1后下一次回应及五轮回应结束", "state_owner": "GPT50_017_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "immediate_delayed_confusion", "D": "unsupported_inference"}
+分维映射：{"A": {"emotion.anxiety@immediate": "cannot_determine", "emotion.anxiety@delayed": "cannot_determine"}, "B": {"emotion.anxiety@immediate": "decrease", "emotion.anxiety@delayed": "decrease"}, "C": {"emotion.anxiety@immediate": "decrease", "emotion.anxiety@delayed": "similar"}, "D": {"emotion.anxiety@immediate": "similar", "emotion.anxiety@delayed": "decrease"}}
+可接受答案：B
+审核备注：两个时点均相对t2；机制提供有依据的预期，不引用未来回应为公开证据，也不推断已拨款。
+分支验证：validated
 
 ## SFG50-018-T1-01 · T1 / current_intensity
 
@@ -8042,14 +8588,14 @@ history：
 
 **作者参考答案：A（待审）**
 
-Milan已连续提出向客户确认参数，显示其愿意承接核验任务。行动一提供与流程容忍度直接相关、范围受限的日志请求，行动二则明确暂不扩展请求，前者更可能推动追加取证。判断依据是既有承接模式，不是把Sera的建议直接当成Milan已采取的行为。
+Milan已连续提出向客户确认参数，显示其愿意承接核验任务。行动一提供与流程容忍度直接相关、范围受限的日志请求，行动二则明确暂不扩展请求，前者更可能推动追加取证。判断依据是既有承接模式，不是把Sera的建议直接当成Milan已采取的行为。 助手复核：更多待核查事项首先改变核查任务与范围，不必然意味着当前求证意愿更强；两种行动都延续已明确的核实取向。因此也接受两者接近，不能把步骤数量直接换算成心理强度。
 
 证据：t1, t2, action_1, action_2
 变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "分别采取两项候选行动后的下一次环境回应", "state_owner": "GPT50_025_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
 错项类型：{"B": "history_ignored", "C": "state_dimension_confusion", "D": "unsupported_inference"}
 分维映射：{"A": {"behavioral_disposition.evidence_seeking": "higher_in_a"}, "B": {"behavioral_disposition.evidence_seeking": "similar"}, "C": {"behavioral_disposition.evidence_seeking": "higher_in_b"}, "D": {"behavioral_disposition.evidence_seeking": "cannot_determine"}}
 可接受答案：A
-审核备注：私有即时取证状态相同；公开方案支持取证范围增量，但范围不必然等于意愿强度，须重点人工复核。
+审核备注：私有即时取证状态相同；公开方案支持取证范围增量，但范围不必然等于意愿强度，须重点人工复核。 补充可接受的相近判断：新增任务与更强求证意愿的推断仍待人工确认。
 分支验证：validated
 
 ## SFG50-025-T3-04 · T3 / immediate_delayed
@@ -10799,6 +11345,187 @@ Niko在t1已把审查、理由及装运前记录设为条件，t2继续要求审
 可接受答案：D
 审核备注：共同不变依据是条件与核验持续适用；需审核新增记录细节是否被误读为意愿升级。
 分支验证：not_required
+
+## SFG50-033-T3-01 · T3 / immediate_effect
+
+来源：GPT50_033；轨迹：66f3aca8755f43598dfd264740e8ee43；状态持有者：Niko Ader；交互对方：Dr. Sera Vale。关系判断由状态持有者指向交互对方。
+
+背景：At a tidal-excavation storm deadline, a field director requests authorization to move newly exposed organic remains with only a few controlled crates and one outbound barge available. The director examined a fragile resin layer that storm exposure may dissolve.
+角色目标：Preserve the maximum scientifically meaningful evidence while maintaining defensible documentation and chain of custody.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous surge response at a different marsh left the stratigraphic map incomplete and some recovered material never returned to the community archive, leaving both partners wary of emergency action.；After that failure, the community council adopted a written custody compact requiring notice and review before any material leaves the site, with no automatic weather exception.；A resupply failure has left only a few climate-controlled crates and one outbound barge available before the storm.；The newly exposed deposit was expected to remain under vented shelters until a council session later in the week, but the forecast has moved the hazard ahead of that meeting.
+
+history：
+
+- [t1] Dr. Sera Vale：风暴可能赶在议会开会前冲到这处暴露层，我看过的树脂层也可能被潮水溶掉；我不想把天气当成豁免。你能否启动紧急审查，让我优先申请转移最脆弱、信息价值最高的遗存，并把有限箱位和装运前的来源记录一并纳入审查？
+  Niko Ader：可以启动紧急审查。审查会核实脆弱性判断和信息价值依据，同时确认箱位分配和来源记录在装运前完成；你需要在申请中列明每件遗存的这两项理由。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Dr. Sera Vale：我会逐件说明脆弱性和信息价值。如果有已脱离的碎片，我想将它们与原位遗存分开申请和记录。你能说明紧急审查时，现场封存和获准离场这两类安排各需要什么确认吗？未获许可前，我不会安排遗存离场。
+  Niko Ader：现场封存需要位置照片和编号标签；获准离场需要通过紧急审查、装箱后登记照片，并附上审查批准记录。脱离碎片可以单独列明，但也要说明它们与原位的空间关系。
+  可见表达：{"facial_expression": "专注", "gaze": "直视对方", "speech_style": "平稳、条理清晰", "prosody": "语调平稳，列举时略有停顿", "behavioral_cues": ["身体微微前倾", "手指轻点桌面强调要点"]}
+
+- 候选行动 action_1：明白，我会把现场封存与获准离场的记录分开，脱离碎片也注明它们与原位的空间关系。箱位若不足，我会按脆弱性和信息价值排序，宁可缩小申请范围，也不省略来源记录。
+- 候选行动 action_2：我先不申请遗存离场。请协助按原位封存要求核对位置照片和编号标签，我会优先补齐全层记录；若有脱离碎片，再单列其空间关系另行申请审查。这样先守住记录与程序，但暴露层可能等不到风暴前转移。
+
+**题目：若 Dr. Sera Vale 执行 action_1，相比 t2，Niko Ader 在下一次回应时，觉得 Dr. Sera Vale 实质回应了自己关切的程度最可能如何变化？**
+
+- **A.** 下降
+- **B.** 上升
+- **C.** 基本不变
+
+**作者参考答案：B（待审）**
+
+Niko 在前两轮要求说明遴选理由、区分封存与离场记录，并交代碎片空间关系。行动一逐项吸收这些要求，还明确箱位不足也不省略来源记录，因此较仅询问程序时更能体现回应，而非停留原处。这里只预测被理解感增强，不把计划当成已经履约。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "从 t2 至执行 action_1 后的下一次环境回应", "state_owner": "GPT50_033_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "decrease"}, "B": {"relationship.perceived_responsiveness": "increase"}, "C": {"relationship.perceived_responsiveness": "similar"}}
+可接受答案：B
+审核备注：关系方向为 Niko 判断 Sera 是否回应自己；新增依据是具体吸收要求，不是 Niko 的耐心说明。
+分支验证：validated
+
+## SFG50-033-T3-02 · T3 / delayed_effect
+
+来源：GPT50_033；轨迹：66f3aca8755f43598dfd264740e8ee43；状态持有者：Niko Ader；交互对方：Dr. Sera Vale。关系判断由状态持有者指向交互对方。
+
+背景：At a tidal-excavation storm deadline, a field director requests authorization to move newly exposed organic remains with only a few controlled crates and one outbound barge available. The director examined a fragile resin layer that storm exposure may dissolve.
+角色目标：Preserve the maximum scientifically meaningful evidence while maintaining defensible documentation and chain of custody.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous surge response at a different marsh left the stratigraphic map incomplete and some recovered material never returned to the community archive, leaving both partners wary of emergency action.；After that failure, the community council adopted a written custody compact requiring notice and review before any material leaves the site, with no automatic weather exception.；A resupply failure has left only a few climate-controlled crates and one outbound barge available before the storm.；The newly exposed deposit was expected to remain under vented shelters until a council session later in the week, but the forecast has moved the hazard ahead of that meeting.
+
+history：
+
+- [t1] Dr. Sera Vale：风暴可能赶在议会开会前冲到这处暴露层，我看过的树脂层也可能被潮水溶掉；我不想把天气当成豁免。你能否启动紧急审查，让我优先申请转移最脆弱、信息价值最高的遗存，并把有限箱位和装运前的来源记录一并纳入审查？
+  Niko Ader：可以启动紧急审查。审查会核实脆弱性判断和信息价值依据，同时确认箱位分配和来源记录在装运前完成；你需要在申请中列明每件遗存的这两项理由。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Dr. Sera Vale：我会逐件说明脆弱性和信息价值。如果有已脱离的碎片，我想将它们与原位遗存分开申请和记录。你能说明紧急审查时，现场封存和获准离场这两类安排各需要什么确认吗？未获许可前，我不会安排遗存离场。
+  Niko Ader：现场封存需要位置照片和编号标签；获准离场需要通过紧急审查、装箱后登记照片，并附上审查批准记录。脱离碎片可以单独列明，但也要说明它们与原位的空间关系。
+  可见表达：{"facial_expression": "专注", "gaze": "直视对方", "speech_style": "平稳、条理清晰", "prosody": "语调平稳，列举时略有停顿", "behavioral_cues": ["身体微微前倾", "手指轻点桌面强调要点"]}
+
+- 候选行动 action_1：明白，我会把现场封存与获准离场的记录分开，脱离碎片也注明它们与原位的空间关系。箱位若不足，我会按脆弱性和信息价值排序，宁可缩小申请范围，也不省略来源记录。
+- 候选行动 action_2：我先不申请遗存离场。请协助按原位封存要求核对位置照片和编号标签，我会优先补齐全层记录；若有脱离碎片，再单列其空间关系另行申请审查。这样先守住记录与程序，但暴露层可能等不到风暴前转移。
+
+**题目：若 Dr. Sera Vale 执行 action_1，相比 t2，到含即时回应在内的第5轮末，Niko Ader 对本次风暴前处置因来源记录缺失或绕过审查而损害议会保管制度的风险判断，最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+
+**作者参考答案：C（待审）**
+
+既往抢救曾留下记录不全与归档失败，现行制度要求离场前审查。行动一把记录分类、空间关系和缩减申请范围连成可执行控制，符合此前接受许可约束的表现，支持制度风险预期下降。风暴威胁仍在，但不能据此判制度风险上升，也不能认定控制已落实。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "本次风暴前遗存处置因来源记录缺失或绕过审查而损害议会保管制度", "target_state_ids": ["consequence_risk.institutional_harm_risk"], "time_scope": "从 t2 至执行 action_1 起含即时回应的第5轮末", "state_owner": "GPT50_033_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "B": "history_ignored"}
+分维映射：{"A": {"consequence_risk.institutional_harm_risk": "increase"}, "B": {"consequence_risk.institutional_harm_risk": "similar"}, "C": {"consequence_risk.institutional_harm_risk": "decrease"}}
+可接受答案：C
+审核备注：下降是具体控制机制下的预期，不是已完成审核；不预测风险归零或后续归还已经有保障。
+分支验证：validated
+
+## SFG50-033-T3-03 · T3 / action_comparison
+
+来源：GPT50_033；轨迹：66f3aca8755f43598dfd264740e8ee43；状态持有者：Niko Ader；交互对方：Dr. Sera Vale。关系判断由状态持有者指向交互对方。
+
+背景：At a tidal-excavation storm deadline, a field director requests authorization to move newly exposed organic remains with only a few controlled crates and one outbound barge available. The director examined a fragile resin layer that storm exposure may dissolve.
+角色目标：Preserve the maximum scientifically meaningful evidence while maintaining defensible documentation and chain of custody.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous surge response at a different marsh left the stratigraphic map incomplete and some recovered material never returned to the community archive, leaving both partners wary of emergency action.；After that failure, the community council adopted a written custody compact requiring notice and review before any material leaves the site, with no automatic weather exception.；A resupply failure has left only a few climate-controlled crates and one outbound barge available before the storm.；The newly exposed deposit was expected to remain under vented shelters until a council session later in the week, but the forecast has moved the hazard ahead of that meeting.
+
+history：
+
+- [t1] Dr. Sera Vale：风暴可能赶在议会开会前冲到这处暴露层，我看过的树脂层也可能被潮水溶掉；我不想把天气当成豁免。你能否启动紧急审查，让我优先申请转移最脆弱、信息价值最高的遗存，并把有限箱位和装运前的来源记录一并纳入审查？
+  Niko Ader：可以启动紧急审查。审查会核实脆弱性判断和信息价值依据，同时确认箱位分配和来源记录在装运前完成；你需要在申请中列明每件遗存的这两项理由。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Dr. Sera Vale：我会逐件说明脆弱性和信息价值。如果有已脱离的碎片，我想将它们与原位遗存分开申请和记录。你能说明紧急审查时，现场封存和获准离场这两类安排各需要什么确认吗？未获许可前，我不会安排遗存离场。
+  Niko Ader：现场封存需要位置照片和编号标签；获准离场需要通过紧急审查、装箱后登记照片，并附上审查批准记录。脱离碎片可以单独列明，但也要说明它们与原位的空间关系。
+  可见表达：{"facial_expression": "专注", "gaze": "直视对方", "speech_style": "平稳、条理清晰", "prosody": "语调平稳，列举时略有停顿", "behavioral_cues": ["身体微微前倾", "手指轻点桌面强调要点"]}
+
+- 候选行动 action_1：明白，我会把现场封存与获准离场的记录分开，脱离碎片也注明它们与原位的空间关系。箱位若不足，我会按脆弱性和信息价值排序，宁可缩小申请范围，也不省略来源记录。
+- 候选行动 action_2：我先不申请遗存离场。请协助按原位封存要求核对位置照片和编号标签，我会优先补齐全层记录；若有脱离碎片，再单列其空间关系另行申请审查。这样先守住记录与程序，但暴露层可能等不到风暴前转移。
+
+**题目：分别执行 action_1（A）或 action_2（B）后，在下一次回应时，Niko Ader 对暴露树脂层在本次风暴中受潮溶解、造成不可逆材料损失的风险判断，哪一侧最可能较高？**
+
+- **A.** B较高
+- **B.** A较高
+- **C.** 接近
+
+**作者参考答案：A（待审）**
+
+风暴提前且仅剩有限箱位和一班驳船，使转移窗口具有实际意义。行动一保留按脆弱性申请转移的路径，行动二先不申请离场并承认可能错过窗口，因此后者的材料损失预期较高。程序记录更完整不等于实物更安全；比较不意味着前者已获批或必能救出树脂层。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "暴露树脂层在本次风暴中受潮溶解并造成不可逆材料损失", "target_state_ids": ["consequence_risk.material_loss_risk"], "time_scope": "比较两项候选行动各自执行后的下一次环境回应", "state_owner": "GPT50_033_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "state_dimension_confusion", "C": "goal_constraint_ignored"}
+分维映射：{"A": {"consequence_risk.material_loss_risk": "higher_in_b"}, "B": {"consequence_risk.material_loss_risk": "higher_in_a"}, "C": {"consequence_risk.material_loss_risk": "similar"}}
+可接受答案：A
+审核备注：比较的是即时形成的风暴损失预期，不是即时已损失数量；两方案均未实际转移，不能写成确定获救。
+分支验证：validated
+
+## SFG50-033-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_033；轨迹：66f3aca8755f43598dfd264740e8ee43；状态持有者：Niko Ader；交互对方：Dr. Sera Vale。关系判断由状态持有者指向交互对方。
+
+背景：At a tidal-excavation storm deadline, a field director requests authorization to move newly exposed organic remains with only a few controlled crates and one outbound barge available. The director examined a fragile resin layer that storm exposure may dissolve.
+角色目标：Preserve the maximum scientifically meaningful evidence while maintaining defensible documentation and chain of custody.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous surge response at a different marsh left the stratigraphic map incomplete and some recovered material never returned to the community archive, leaving both partners wary of emergency action.；After that failure, the community council adopted a written custody compact requiring notice and review before any material leaves the site, with no automatic weather exception.；A resupply failure has left only a few climate-controlled crates and one outbound barge available before the storm.；The newly exposed deposit was expected to remain under vented shelters until a council session later in the week, but the forecast has moved the hazard ahead of that meeting.
+
+history：
+
+- [t1] Dr. Sera Vale：风暴可能赶在议会开会前冲到这处暴露层，我看过的树脂层也可能被潮水溶掉；我不想把天气当成豁免。你能否启动紧急审查，让我优先申请转移最脆弱、信息价值最高的遗存，并把有限箱位和装运前的来源记录一并纳入审查？
+  Niko Ader：可以启动紧急审查。审查会核实脆弱性判断和信息价值依据，同时确认箱位分配和来源记录在装运前完成；你需要在申请中列明每件遗存的这两项理由。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Dr. Sera Vale：我会逐件说明脆弱性和信息价值。如果有已脱离的碎片，我想将它们与原位遗存分开申请和记录。你能说明紧急审查时，现场封存和获准离场这两类安排各需要什么确认吗？未获许可前，我不会安排遗存离场。
+  Niko Ader：现场封存需要位置照片和编号标签；获准离场需要通过紧急审查、装箱后登记照片，并附上审查批准记录。脱离碎片可以单独列明，但也要说明它们与原位的空间关系。
+  可见表达：{"facial_expression": "专注", "gaze": "直视对方", "speech_style": "平稳、条理清晰", "prosody": "语调平稳，列举时略有停顿", "behavioral_cues": ["身体微微前倾", "手指轻点桌面强调要点"]}
+
+- 候选行动 action_1：明白，我会把现场封存与获准离场的记录分开，脱离碎片也注明它们与原位的空间关系。箱位若不足，我会按脆弱性和信息价值排序，宁可缩小申请范围，也不省略来源记录。
+- 候选行动 action_2：我先不申请遗存离场。请协助按原位封存要求核对位置照片和编号标签，我会优先补齐全层记录；若有脱离碎片，再单列其空间关系另行申请审查。这样先守住记录与程序，但暴露层可能等不到风暴前转移。
+
+**题目：若 Dr. Sera Vale 执行 action_2，以 t2 为基线，哪组判断最符合对 Niko Ader 的预测：下一次回应时坚持处置边界的意愿，以及到含即时回应的第5轮末对暴露树脂层在本次风暴中不可逆损失的风险判断？**
+
+- **A.** 即时边界意愿上升；延迟材料风险下降
+- **B.** 即时边界意愿基本不变；延迟材料风险上升
+- **C.** 即时边界意愿下降；延迟材料风险上升
+- **D.** 即时边界意愿基本不变；延迟材料风险下降
+
+**作者参考答案：B（待审）**
+
+Niko 已明确离场须审查、封存须照片标签，行动二沿用这套条件并将碎片另行送审，支持边界延续而非撤回或加码。与此同时，先补全层记录而暂缓申请会挤压风暴前窗口，支持延迟材料风险上升。记录保护的是可追溯性，不能保证树脂层免遭溶解。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "暴露树脂层在本次风暴中因未及时转移而发生不可逆材料损失", "target_state_ids": ["behavioral_disposition.boundary_assertion", "consequence_risk.material_loss_risk"], "time_scope": "边界意愿比较 t2 与下一次回应；材料风险比较 t2 与从行动起第5轮末", "state_owner": "GPT50_033_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "unsupported_inference", "D": "state_dimension_confusion"}
+分维映射：{"A": {"behavioral_disposition.boundary_assertion@immediate": "increase", "consequence_risk.material_loss_risk@delayed": "decrease"}, "B": {"behavioral_disposition.boundary_assertion@immediate": "similar", "consequence_risk.material_loss_risk@delayed": "increase"}, "C": {"behavioral_disposition.boundary_assertion@immediate": "decrease", "consequence_risk.material_loss_risk@delayed": "increase"}, "D": {"behavioral_disposition.boundary_assertion@immediate": "similar", "consequence_risk.material_loss_risk@delayed": "decrease"}}
+可接受答案：B
+审核备注：基本不变有沿用既有条件的正面依据；延迟判断依赖窗口受挤压，不断言第五轮已经发生实物损失。
+分支验证：validated
 
 ## SFG50-034-T1-01 · T1 / current_intensity
 
