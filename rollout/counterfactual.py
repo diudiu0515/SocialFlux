@@ -132,7 +132,9 @@ def branch_counterfactuals(
                 # Let the caller resume the latest persisted step after an
                 # upstream empty response; restarting the whole branch would
                 # discard paid, successful environment transitions.
-                if type(exc) is ValueError and str(exc) == 'provider returned empty content':
+                if type(exc) is ValueError and str(exc) in {
+                    'provider returned empty content', 'provider response lacks a text content block',
+                }:
                     raise
                 last_error = exc
         else:

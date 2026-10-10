@@ -1,13 +1,13 @@
 # SocialFlux offline T1 / T3 开发题（完整题面与作者参考答案）
 
-本文件包含实际已生成的 228 道题、49 个场景；目标覆盖与缺项见同批 manifest。
+本文件包含实际已生成的 280 道题、49 个场景；目标覆盖与缺项见同批 manifest。
 
 所有答案是待人工审核的开发参考，不是已冻结真值。下面每题先给出完整可见材料，再给出作者侧标注。
 主评测只答 `{"answer":"B"}`。证据诊断另加 `evidence_ids`，分别计分。
 
 ## SFG50-001-T1-01 · T1 / current_intensity
 
-来源：GPT50_001；轨迹：be3e1e229e42439caec15a8f1e6713ba；状态持有者：Elias Rook → Mara Venn。
+来源：GPT50_001；轨迹：be3e1e229e42439caec15a8f1e6713ba；状态持有者：Elias Rook；交互对方：Mara Venn。关系判断由状态持有者指向交互对方。
 
 背景：Before a mountain-road closure, a nurse and dispatcher must allocate the last staffed transfer ambulance between a patient referral and an unconfirmed mass-casualty alert. The nurse knows the patient has become harder to rouse; the written handover still records the earlier condition.
 角色目标：Secure and document the most appropriate transfer decision for the deteriorating patient while disclosing the relevant bedside evidence.
@@ -53,7 +53,7 @@ Elias先要求归属明确的复述，随后记录观察，并继续追问接收
 
 ## SFG50-001-T1-02 · T1 / interval_change
 
-来源：GPT50_001；轨迹：be3e1e229e42439caec15a8f1e6713ba；状态持有者：Elias Rook → Mara Venn。
+来源：GPT50_001；轨迹：be3e1e229e42439caec15a8f1e6713ba；状态持有者：Elias Rook；交互对方：Mara Venn。关系判断由状态持有者指向交互对方。
 
 背景：Before a mountain-road closure, a nurse and dispatcher must allocate the last staffed transfer ambulance between a patient referral and an unconfirmed mass-casualty alert. The nurse knows the patient has become harder to rouse; the written handover still records the earlier condition.
 角色目标：Secure and document the most appropriate transfer decision for the deteriorating patient while disclosing the relevant bedside evidence.
@@ -97,7 +97,7 @@ t1中Elias要求复述观察及时间，t2中Mara直接重述恶化并说明无�
 
 ## SFG50-001-T1-03 · T1 / interval_change
 
-来源：GPT50_001；轨迹：be3e1e229e42439caec15a8f1e6713ba；状态持有者：Elias Rook → Mara Venn。
+来源：GPT50_001；轨迹：be3e1e229e42439caec15a8f1e6713ba；状态持有者：Elias Rook；交互对方：Mara Venn。关系判断由状态持有者指向交互对方。
 
 背景：Before a mountain-road closure, a nurse and dispatcher must allocate the last staffed transfer ambulance between a patient referral and an unconfirmed mass-casualty alert. The nurse knows the patient has become harder to rouse; the written handover still records the earlier condition.
 角色目标：Secure and document the most appropriate transfer decision for the deteriorating patient while disclosing the relevant bedside evidence.
@@ -141,7 +141,7 @@ t1仅提出复述后重评，t2已将归属于Mara的最新床旁观察记录并
 
 ## SFG50-001-T1-04 · T1 / joint_change
 
-来源：GPT50_001；轨迹：be3e1e229e42439caec15a8f1e6713ba；状态持有者：Elias Rook → Mara Venn。
+来源：GPT50_001；轨迹：be3e1e229e42439caec15a8f1e6713ba；状态持有者：Elias Rook；交互对方：Mara Venn。关系判断由状态持有者指向交互对方。
 
 背景：Before a mountain-road closure, a nurse and dispatcher must allocate the last staffed transfer ambulance between a patient referral and an unconfirmed mass-casualty alert. The nurse knows the patient has become harder to rouse; the written handover still records the earlier condition.
 角色目标：Secure and document the most appropriate transfer decision for the deteriorating patient while disclosing the relevant bedside evidence.
@@ -183,9 +183,193 @@ t1的Elias已明确提出共同完成复述、记录和重评，t2沿该路径�
 审核备注：私有参考中协作略升；公开材料更支持既有意愿的持续落实。基本不变须以两轮均主动协调为依据。
 分支验证：not_required
 
+## SFG50-001-T3-01 · T3 / immediate_effect
+
+来源：GPT50_001；轨迹：be3e1e229e42439caec15a8f1e6713ba；状态持有者：Elias Rook；交互对方：Mara Venn。关系判断由状态持有者指向交互对方。
+
+背景：Before a mountain-road closure, a nurse and dispatcher must allocate the last staffed transfer ambulance between a patient referral and an unconfirmed mass-casualty alert. The nurse knows the patient has become harder to rouse; the written handover still records the earlier condition.
+角色目标：Secure and document the most appropriate transfer decision for the deteriorating patient while disclosing the relevant bedside evidence.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Six weeks earlier, an incomplete destination-acceptance record caused a transfer delay, and each party waited for the other to repair the documentation before review exposed the dispute.；Their organizations then adopted an attributed, repeated, time-stamped read-back practice, which protects accountability but makes late qualifications consequential.；Tonight, the dispatcher provisionally held the final ambulance for the nurse's referral before the uncertain shuttle alert displaced that reservation, while the receiving hospital acknowledged the referral without confirming placement.
+
+history：
+
+- [t1] Mara Venn：伊莱亚斯，患者现在比书面交接记录时更难唤醒，那份记录还停留在先前状态。先前暂留给患者的车已被尚未确认的群伤警报挤开；请把这项床旁变化和接收方尚未确认安置一并纳入封路前的车辆分配判断。
+  Elias Rook：玛拉，收到你的床旁变化报告。患者唤醒困难加重、接收方安置未确认、群伤警报证据不足——三项都直接影响分配决定。我现在需要你做一件事：用attributed read-back把'比书面记录更难唤醒'这一观察再说一遍，包括你观察的时间点，我记录后立即重新评估车辆分配。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Mara Venn：我不能可靠确认具体钟点；我在刚才这次床旁查看时观察到，患者比书面交接时更难唤醒。
+  Elias Rook：收到，记录为'玛拉在刚才床旁查看时观察到患者比书面交接记录更难唤醒'。我现在重新评估分配：这项床旁恶化、接收方安置未确认、群伤警报证据不足——三项一并权衡后，我需要确认一件事：接收方那边你还在等他们回复安置确认，还是已经有了明确拒绝？
+  可见表达：{"facial_expression": "专注、目光集中", "gaze": "看向记录屏幕后转向通话方向", "speech_style": "节奏紧凑、逐项清晰", "prosody": "语调平稳但语速略快，体现决策紧迫性", "behavioral_cues": ["简短停顿以完成记录动作", "转向评估时语气从确认转为权衡"]}
+
+- 候选行动 action_1：我仍在等接收方确认安置；对方确认收到转诊，但我没有收到明确拒绝。请记录为我刚才床旁查看时观察到患者更难唤醒（具体钟点我不能可靠确认），并建议把最后一辆车重新暂留给患者转运。这样不把群伤警报当成已证实，但须承担接收位置仍未落实的风险。
+- 候选行动 action_2：我仍在等接收方确认安置；对方确认收到转诊，但我没有收到明确拒绝。请记录为我刚才床旁查看时观察到患者更难唤醒（具体钟点我不能可靠确认），并建议先暂缓最终派车，在封路前用一段短暂时间核实安置后再分配。群伤警报也尚未证实；等待可能延误这位患者的转运。
+
+**题目：相较t2，Mara Venn采取action_1后，在下一次环境回应时，Elias Rook觉得Mara是否实质回应了自己关切的判断，最可能如何变化？**
+
+- **A.** 下降
+- **B.** 证据不足
+- **C.** 上升
+- **D.** 基本不变
+
+**作者参考答案：C（待审）**
+
+t2中Elias明确追问安置是待确认还是已遭拒绝；action_1直接回答尚在等待、未获明确拒绝，并保留观察时间的不确定性。这比继续重复转运诉求更实质回应其关切，支持上升而非不变；但不代表Elias必然接受暂留车辆的建议。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "target_state_ids": ["relationship.perceived_responsiveness"], "risk_event": "", "time_scope": "从t2至action_1后的下一次环境回应", "state_owner": "GPT50_001_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "history_ignored", "D": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "decrease"}, "B": {"relationship.perceived_responsiveness": "cannot_determine"}, "C": {"relationship.perceived_responsiveness": "increase"}, "D": {"relationship.perceived_responsiveness": "similar"}}
+可接受答案：C
+审核备注：题目判断Elias如何看待Mara的回应，不是Elias是否回应患者诉求；接受建议不作为必要条件。
+分支验证：validated
+
+## SFG50-001-T3-02 · T3 / delayed_effect
+
+来源：GPT50_001；轨迹：be3e1e229e42439caec15a8f1e6713ba；状态持有者：Elias Rook；交互对方：Mara Venn。关系判断由状态持有者指向交互对方。
+
+背景：Before a mountain-road closure, a nurse and dispatcher must allocate the last staffed transfer ambulance between a patient referral and an unconfirmed mass-casualty alert. The nurse knows the patient has become harder to rouse; the written handover still records the earlier condition.
+角色目标：Secure and document the most appropriate transfer decision for the deteriorating patient while disclosing the relevant bedside evidence.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Six weeks earlier, an incomplete destination-acceptance record caused a transfer delay, and each party waited for the other to repair the documentation before review exposed the dispute.；Their organizations then adopted an attributed, repeated, time-stamped read-back practice, which protects accountability but makes late qualifications consequential.；Tonight, the dispatcher provisionally held the final ambulance for the nurse's referral before the uncertain shuttle alert displaced that reservation, while the receiving hospital acknowledged the referral without confirming placement.
+
+history：
+
+- [t1] Mara Venn：伊莱亚斯，患者现在比书面交接记录时更难唤醒，那份记录还停留在先前状态。先前暂留给患者的车已被尚未确认的群伤警报挤开；请把这项床旁变化和接收方尚未确认安置一并纳入封路前的车辆分配判断。
+  Elias Rook：玛拉，收到你的床旁变化报告。患者唤醒困难加重、接收方安置未确认、群伤警报证据不足——三项都直接影响分配决定。我现在需要你做一件事：用attributed read-back把'比书面记录更难唤醒'这一观察再说一遍，包括你观察的时间点，我记录后立即重新评估车辆分配。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Mara Venn：我不能可靠确认具体钟点；我在刚才这次床旁查看时观察到，患者比书面交接时更难唤醒。
+  Elias Rook：收到，记录为'玛拉在刚才床旁查看时观察到患者比书面交接记录更难唤醒'。我现在重新评估分配：这项床旁恶化、接收方安置未确认、群伤警报证据不足——三项一并权衡后，我需要确认一件事：接收方那边你还在等他们回复安置确认，还是已经有了明确拒绝？
+  可见表达：{"facial_expression": "专注、目光集中", "gaze": "看向记录屏幕后转向通话方向", "speech_style": "节奏紧凑、逐项清晰", "prosody": "语调平稳但语速略快，体现决策紧迫性", "behavioral_cues": ["简短停顿以完成记录动作", "转向评估时语气从确认转为权衡"]}
+
+- 候选行动 action_1：我仍在等接收方确认安置；对方确认收到转诊，但我没有收到明确拒绝。请记录为我刚才床旁查看时观察到患者更难唤醒（具体钟点我不能可靠确认），并建议把最后一辆车重新暂留给患者转运。这样不把群伤警报当成已证实，但须承担接收位置仍未落实的风险。
+- 候选行动 action_2：我仍在等接收方确认安置；对方确认收到转诊，但我没有收到明确拒绝。请记录为我刚才床旁查看时观察到患者更难唤醒（具体钟点我不能可靠确认），并建议先暂缓最终派车，在封路前用一段短暂时间核实安置后再分配。群伤警报也尚未证实；等待可能延误这位患者的转运。
+
+**题目：相较t2，Mara Venn采取action_2后，到含即时回应在内的第5轮环境回应末，Elias Rook在本次封路前因依据不足而作出实质错误车辆分配决定的风险，最可能如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：D（待审）**
+
+Elias此前已要求可归属的复述并追问接收状态，action_2补清待定与拒绝的区别，又提出短时核实后分配，符合其既有查证做法，支持预期依据不足的错配风险下降。等待会压缩转运窗口，但属另一风险；这里不假定核实必有结果或患者已启运。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "target_state_ids": ["consequence_risk.decision_error_risk"], "risk_event": "本次封路前因依据不足而作出实质错误的车辆分配决定", "time_scope": "从t2至action_2开始后的第5轮环境回应末，含即时一轮", "state_owner": "GPT50_001_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "state_dimension_confusion", "C": "history_ignored"}
+分维映射：{"A": {"consequence_risk.decision_error_risk": "cannot_determine"}, "B": {"consequence_risk.decision_error_risk": "increase"}, "C": {"consequence_risk.decision_error_risk": "similar"}, "D": {"consequence_risk.decision_error_risk": "decrease"}}
+可接受答案：D
+审核备注：下降依据是信息澄清及可信核实机制，不是私有后续的实际分配；须区分错配风险与转运延误。
+分支验证：validated
+
+## SFG50-001-T3-03 · T3 / action_comparison
+
+来源：GPT50_001；轨迹：be3e1e229e42439caec15a8f1e6713ba；状态持有者：Elias Rook；交互对方：Mara Venn。关系判断由状态持有者指向交互对方。
+
+背景：Before a mountain-road closure, a nurse and dispatcher must allocate the last staffed transfer ambulance between a patient referral and an unconfirmed mass-casualty alert. The nurse knows the patient has become harder to rouse; the written handover still records the earlier condition.
+角色目标：Secure and document the most appropriate transfer decision for the deteriorating patient while disclosing the relevant bedside evidence.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Six weeks earlier, an incomplete destination-acceptance record caused a transfer delay, and each party waited for the other to repair the documentation before review exposed the dispute.；Their organizations then adopted an attributed, repeated, time-stamped read-back practice, which protects accountability but makes late qualifications consequential.；Tonight, the dispatcher provisionally held the final ambulance for the nurse's referral before the uncertain shuttle alert displaced that reservation, while the receiving hospital acknowledged the referral without confirming placement.
+
+history：
+
+- [t1] Mara Venn：伊莱亚斯，患者现在比书面交接记录时更难唤醒，那份记录还停留在先前状态。先前暂留给患者的车已被尚未确认的群伤警报挤开；请把这项床旁变化和接收方尚未确认安置一并纳入封路前的车辆分配判断。
+  Elias Rook：玛拉，收到你的床旁变化报告。患者唤醒困难加重、接收方安置未确认、群伤警报证据不足——三项都直接影响分配决定。我现在需要你做一件事：用attributed read-back把'比书面记录更难唤醒'这一观察再说一遍，包括你观察的时间点，我记录后立即重新评估车辆分配。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Mara Venn：我不能可靠确认具体钟点；我在刚才这次床旁查看时观察到，患者比书面交接时更难唤醒。
+  Elias Rook：收到，记录为'玛拉在刚才床旁查看时观察到患者比书面交接记录更难唤醒'。我现在重新评估分配：这项床旁恶化、接收方安置未确认、群伤警报证据不足——三项一并权衡后，我需要确认一件事：接收方那边你还在等他们回复安置确认，还是已经有了明确拒绝？
+  可见表达：{"facial_expression": "专注、目光集中", "gaze": "看向记录屏幕后转向通话方向", "speech_style": "节奏紧凑、逐项清晰", "prosody": "语调平稳但语速略快，体现决策紧迫性", "behavioral_cues": ["简短停顿以完成记录动作", "转向评估时语气从确认转为权衡"]}
+
+- 候选行动 action_1：我仍在等接收方确认安置；对方确认收到转诊，但我没有收到明确拒绝。请记录为我刚才床旁查看时观察到患者更难唤醒（具体钟点我不能可靠确认），并建议把最后一辆车重新暂留给患者转运。这样不把群伤警报当成已证实，但须承担接收位置仍未落实的风险。
+- 候选行动 action_2：我仍在等接收方确认安置；对方确认收到转诊，但我没有收到明确拒绝。请记录为我刚才床旁查看时观察到患者更难唤醒（具体钟点我不能可靠确认），并建议先暂缓最终派车，在封路前用一段短暂时间核实安置后再分配。群伤警报也尚未证实；等待可能延误这位患者的转运。
+
+**题目：仅比较下一次环境回应时的预期风险：A为Mara Venn采取action_1，B为采取action_2。哪种情况下，Elias Rook未能在本次封路前为恶化患者保留可用转运机会的风险较高？**
+
+- **A.** B较高
+- **B.** 证据不足
+- **C.** A较高
+- **D.** 接近
+
+**作者参考答案：A（待审）**
+
+公开背景限定最后一辆车且封路在即，两项行动对安置和警报的不确定性说明相同。action_1提出重新暂留，action_2则先等待核实，后者额外占用有限窗口，故机会丧失风险更高；这不是断言建议必被采纳，也不说明暂留即可完成转运。
+
+证据：context, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "target_state_ids": ["consequence_risk.goal_failure_risk"], "risk_event": "未能在本次封路前为恶化患者保留可用转运机会", "time_scope": "两项候选行动各自执行后的下一次环境回应，评估本次封路前的机会丧失风险", "state_owner": "GPT50_001_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "unsupported_inference", "C": "state_dimension_confusion", "D": "goal_constraint_ignored"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "higher_in_b"}, "B": {"consequence_risk.goal_failure_risk": "cannot_determine"}, "C": {"consequence_risk.goal_failure_risk": "higher_in_a"}, "D": {"consequence_risk.goal_failure_risk": "similar"}}
+可接受答案：A
+审核备注：目标限定为保留患者转运机会，不把它等同整体最优分配；两行动的主要可比差异是等待成本。
+分支验证：validated
+
+## SFG50-001-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_001；轨迹：be3e1e229e42439caec15a8f1e6713ba；状态持有者：Elias Rook；交互对方：Mara Venn。关系判断由状态持有者指向交互对方。
+
+背景：Before a mountain-road closure, a nurse and dispatcher must allocate the last staffed transfer ambulance between a patient referral and an unconfirmed mass-casualty alert. The nurse knows the patient has become harder to rouse; the written handover still records the earlier condition.
+角色目标：Secure and document the most appropriate transfer decision for the deteriorating patient while disclosing the relevant bedside evidence.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Six weeks earlier, an incomplete destination-acceptance record caused a transfer delay, and each party waited for the other to repair the documentation before review exposed the dispute.；Their organizations then adopted an attributed, repeated, time-stamped read-back practice, which protects accountability but makes late qualifications consequential.；Tonight, the dispatcher provisionally held the final ambulance for the nurse's referral before the uncertain shuttle alert displaced that reservation, while the receiving hospital acknowledged the referral without confirming placement.
+
+history：
+
+- [t1] Mara Venn：伊莱亚斯，患者现在比书面交接记录时更难唤醒，那份记录还停留在先前状态。先前暂留给患者的车已被尚未确认的群伤警报挤开；请把这项床旁变化和接收方尚未确认安置一并纳入封路前的车辆分配判断。
+  Elias Rook：玛拉，收到你的床旁变化报告。患者唤醒困难加重、接收方安置未确认、群伤警报证据不足——三项都直接影响分配决定。我现在需要你做一件事：用attributed read-back把'比书面记录更难唤醒'这一观察再说一遍，包括你观察的时间点，我记录后立即重新评估车辆分配。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Mara Venn：我不能可靠确认具体钟点；我在刚才这次床旁查看时观察到，患者比书面交接时更难唤醒。
+  Elias Rook：收到，记录为'玛拉在刚才床旁查看时观察到患者比书面交接记录更难唤醒'。我现在重新评估分配：这项床旁恶化、接收方安置未确认、群伤警报证据不足——三项一并权衡后，我需要确认一件事：接收方那边你还在等他们回复安置确认，还是已经有了明确拒绝？
+  可见表达：{"facial_expression": "专注、目光集中", "gaze": "看向记录屏幕后转向通话方向", "speech_style": "节奏紧凑、逐项清晰", "prosody": "语调平稳但语速略快，体现决策紧迫性", "behavioral_cues": ["简短停顿以完成记录动作", "转向评估时语气从确认转为权衡"]}
+
+- 候选行动 action_1：我仍在等接收方确认安置；对方确认收到转诊，但我没有收到明确拒绝。请记录为我刚才床旁查看时观察到患者更难唤醒（具体钟点我不能可靠确认），并建议把最后一辆车重新暂留给患者转运。这样不把群伤警报当成已证实，但须承担接收位置仍未落实的风险。
+- 候选行动 action_2：我仍在等接收方确认安置；对方确认收到转诊，但我没有收到明确拒绝。请记录为我刚才床旁查看时观察到患者更难唤醒（具体钟点我不能可靠确认），并建议先暂缓最终派车，在封路前用一段短暂时间核实安置后再分配。群伤警报也尚未证实；等待可能延误这位患者的转运。
+
+**题目：Mara Venn采取action_1后，相较t2，Elias Rook协调一个双方可执行下一步的意愿，在即时回应与第5轮回应末最可能分别如何变化？**
+
+- **A.** 即时基本不变，延迟基本不变
+- **B.** 即时上升，延迟上升
+- **C.** 即时上升，延迟下降
+- **D.** 即时下降，延迟上升
+
+**作者参考答案：B（待审）**
+
+Elias在前两轮已把补充记录与重新评估衔接起来。action_1回答悬而未决的接收状态问题，承认双方不确定性并提出具体暂留方案，使协作由追问转向可执行安排，支持两时点均较基线上升；没有后续阻断依据，但也不能据此保证方案实施。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "target_state_ids": ["behavioral_disposition.cooperation_readiness"], "risk_event": "", "time_scope": "即时为下一次环境回应；延迟为含即时一轮的第5轮环境回应末，均比较t2", "state_owner": "GPT50_001_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "C": "unsupported_inference", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness@immediate": "similar", "behavioral_disposition.cooperation_readiness@delayed": "similar"}, "B": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "increase"}, "C": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "decrease"}, "D": {"behavioral_disposition.cooperation_readiness@immediate": "decrease", "behavioral_disposition.cooperation_readiness@delayed": "increase"}}
+可接受答案：B
+审核备注：两项判断是同一意愿的跨时比较，不声称延迟比即时更高；预测依赖既有协调机制而非未来台词。
+分支验证：validated
+
 ## SFG50-002-T1-01 · T1 / current_intensity
 
-来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill → Sera Dastan。
+来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill；交互对方：Sera Dastan。关系判断由状态持有者指向交互对方。
 
 背景：At the deadline before examination week, the parent advocate asks the counselor to put a side-entrance, private-room, quiet-reset, ordinary-attendance plan in writing before the roster closes, while committee review will occur after the first examinations
 角色目标：Secure an immediate written examination arrangement that protects the student's privacy and dependable access.
@@ -231,7 +415,7 @@ Maren明确提出无需询问原因、陪同者在门外等候且不在走廊讨
 
 ## SFG50-002-T1-02 · T1 / interval_change
 
-来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill → Sera Dastan。
+来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill；交互对方：Sera Dastan。关系判断由状态持有者指向交互对方。
 
 背景：At the deadline before examination week, the parent advocate asks the counselor to put a side-entrance, private-room, quiet-reset, ordinary-attendance plan in writing before the roster closes, while committee review will occur after the first examinations
 角色目标：Secure an immediate written examination arrangement that protects the student's privacy and dependable access.
@@ -275,7 +459,7 @@ t1中Maren已选择书面临时安排，t2又明确通知考务和侧门值班�
 
 ## SFG50-002-T1-03 · T1 / interval_change
 
-来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill → Sera Dastan。
+来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill；交互对方：Sera Dastan。关系判断由状态持有者指向交互对方。
 
 背景：At the deadline before examination week, the parent advocate asks the counselor to put a side-entrance, private-room, quiet-reset, ordinary-attendance plan in writing before the roster closes, while committee review will occur after the first examinations
 角色目标：Secure an immediate written examination arrangement that protects the student's privacy and dependable access.
@@ -319,7 +503,7 @@ t1的专注和t2的平稳语气都不是Maren对内心焦虑的报告。流程�
 
 ## SFG50-002-T1-04 · T1 / joint_change
 
-来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill → Sera Dastan。
+来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill；交互对方：Sera Dastan。关系判断由状态持有者指向交互对方。
 
 背景：At the deadline before examination week, the parent advocate asks the counselor to put a side-entrance, private-room, quiet-reset, ordinary-attendance plan in writing before the roster closes, while committee review will occur after the first examinations
 角色目标：Secure an immediate written examination arrangement that protects the student's privacy and dependable access.
@@ -363,7 +547,7 @@ history：
 
 ## SFG50-002-T3-01 · T3 / immediate_effect
 
-来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill → Sera Dastan。
+来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill；交互对方：Sera Dastan。关系判断由状态持有者指向交互对方。
 
 背景：At the deadline before examination week, the parent advocate asks the counselor to put a side-entrance, private-room, quiet-reset, ordinary-attendance plan in writing before the roster closes, while committee review will occur after the first examinations
 角色目标：Secure an immediate written examination arrangement that protects the student's privacy and dependable access.
@@ -408,7 +592,7 @@ Maren在t1已答应写下安排，t2又给出具体隐私流程；action_2则要
 
 ## SFG50-002-T3-02 · T3 / delayed_effect
 
-来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill → Sera Dastan。
+来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill；交互对方：Sera Dastan。关系判断由状态持有者指向交互对方。
 
 背景：At the deadline before examination week, the parent advocate asks the counselor to put a side-entrance, private-room, quiet-reset, ordinary-attendance plan in writing before the roster closes, while committee review will occur after the first examinations
 角色目标：Secure an immediate written examination arrangement that protects the student's privacy and dependable access.
@@ -453,7 +637,7 @@ t1与t2已有房间、出勤及隐私执行路径，action_1进一步确定现�
 
 ## SFG50-002-T3-03 · T3 / action_comparison
 
-来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill → Sera Dastan。
+来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill；交互对方：Sera Dastan。关系判断由状态持有者指向交互对方。
 
 背景：At the deadline before examination week, the parent advocate asks the counselor to put a side-entrance, private-room, quiet-reset, ordinary-attendance plan in writing before the roster closes, while committee review will occur after the first examinations
 角色目标：Secure an immediate written examination arrangement that protects the student's privacy and dependable access.
@@ -498,7 +682,7 @@ Maren此前已接纳书面化要求并细化执行；action_2新增岗位、交�
 
 ## SFG50-002-T3-04 · T3 / immediate_delayed
 
-来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill → Sera Dastan。
+来源：GPT50_002；轨迹：1c62b763f51941c5b98c6e88a755e4ad；状态持有者：Maren Quill；交互对方：Sera Dastan。关系判断由状态持有者指向交互对方。
 
 背景：At the deadline before examination week, the parent advocate asks the counselor to put a side-entrance, private-room, quiet-reset, ordinary-attendance plan in writing before the roster closes, while committee review will occur after the first examinations
 角色目标：Secure an immediate written examination arrangement that protects the student's privacy and dependable access.
@@ -544,7 +728,7 @@ Maren提出近期安排与考后审议分开，并说明隐私流程；action_1�
 
 ## SFG50-003-T1-01 · T1 / current_intensity
 
-来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder；交互对方：Sami Osei。关系判断由状态持有者指向交互对方。
 
 背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
 角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
@@ -590,7 +774,7 @@ t1已允许刊发合同和发票，提出来源利益冲突作为需要解决的
 
 ## SFG50-003-T1-02 · T1 / interval_change
 
-来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder；交互对方：Sami Osei。关系判断由状态持有者指向交互对方。
 
 背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
 角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
@@ -634,7 +818,7 @@ t1中Inez主动指出来源收取咨询费的利益冲突，要求解决证据�
 
 ## SFG50-003-T1-03 · T1 / interval_change
 
-来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder；交互对方：Sami Osei。关系判断由状态持有者指向交互对方。
 
 背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
 角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
@@ -678,7 +862,7 @@ t1已提出限定于核实材料、去除可追溯细节的方案；t2增加了�
 
 ## SFG50-003-T1-04 · T1 / joint_change
 
-来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder；交互对方：Sami Osei。关系判断由状态持有者指向交互对方。
 
 背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
 角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
@@ -722,7 +906,7 @@ t1中Inez尚在追问利益冲突如何处理，Sami随即提出暂不采信争�
 
 ## SFG50-003-T3-01 · T3 / immediate_effect
 
-来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder；交互对方：Sami Osei。关系判断由状态持有者指向交互对方。
 
 背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
 角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
@@ -768,7 +952,7 @@ history：
 
 ## SFG50-003-T3-02 · T3 / delayed_effect
 
-来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder；交互对方：Sami Osei。关系判断由状态持有者指向交互对方。
 
 背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
 角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
@@ -814,7 +998,7 @@ history：
 
 ## SFG50-003-T3-03 · T3 / action_comparison
 
-来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder；交互对方：Sami Osei。关系判断由状态持有者指向交互对方。
 
 背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
 角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
@@ -860,7 +1044,7 @@ history：
 
 ## SFG50-003-T3-04 · T3 / immediate_delayed
 
-来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder；交互对方：Sami Osei。关系判断由状态持有者指向交互对方。
 
 背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
 角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
@@ -906,7 +1090,7 @@ Inez先追问利益冲突，再认可窄稿并要求后续新证据；此前更�
 
 ## SFG50-004-T1-01 · T1 / current_intensity
 
-来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick；交互对方：Ivo Pell。关系判断由状态持有者指向交互对方。
 
 背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
 角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
@@ -952,7 +1136,7 @@ history：
 
 ## SFG50-004-T1-02 · T1 / interval_change
 
-来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick；交互对方：Ivo Pell。关系判断由状态持有者指向交互对方。
 
 背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
 角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
@@ -996,7 +1180,7 @@ t1 中 Mara Keswick 主动要求区分已构成暴露与仍需验证的疑似影
 
 ## SFG50-004-T1-03 · T1 / interval_change
 
-来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick；交互对方：Ivo Pell。关系判断由状态持有者指向交互对方。
 
 背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
 角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
@@ -1040,7 +1224,7 @@ history：
 
 ## SFG50-004-T1-04 · T1 / joint_change
 
-来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick；交互对方：Ivo Pell。关系判断由状态持有者指向交互对方。
 
 背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
 角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
@@ -1084,7 +1268,7 @@ history：
 
 ## SFG50-004-T3-01 · T3 / immediate_effect
 
-来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick；交互对方：Ivo Pell。关系判断由状态持有者指向交互对方。
 
 背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
 角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
@@ -1129,7 +1313,7 @@ t1中Mara追问是否已构成暴露，t2继续索要核查范围与时限，显
 
 ## SFG50-004-T3-02 · T3 / delayed_effect
 
-来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick；交互对方：Ivo Pell。关系判断由状态持有者指向交互对方。
 
 背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
 角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
@@ -1175,7 +1359,7 @@ t1的绷紧与t2的平稳语气不能直接给出Mara内心焦虑的变化。act
 
 ## SFG50-004-T3-03 · T3 / action_comparison
 
-来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick；交互对方：Ivo Pell。关系判断由状态持有者指向交互对方。
 
 背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
 角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
@@ -1221,7 +1405,7 @@ history：
 
 ## SFG50-004-T3-04 · T3 / immediate_delayed
 
-来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick；交互对方：Ivo Pell。关系判断由状态持有者指向交互对方。
 
 背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
 角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
@@ -1267,7 +1451,7 @@ action_1明确启动通知、封堵与保全，但t2已提出相同封堵措施�
 
 ## SFG50-005-T1-01 · T1 / current_intensity
 
-来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill → Mara Quill。
+来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill；交互对方：Mara Quill。关系判断由状态持有者指向交互对方。
 
 背景：Two siblings must choose a survival arrangement for their bakery after a refrigeration failure and unsuccessful expansion left equipment and payroll dependent on lender patience. The production-oriented sibling knows veteran employees are preparing a cooperative bid.
 角色目标：Accept or shape a supermarket arrangement only if it is operationally workable, protects veteran jobs, and credits the labor required to deliver it.
@@ -1313,7 +1497,7 @@ Jonas在t1提出整理班组和设备数据，t2又约定周四共同过清单�
 
 ## SFG50-005-T1-02 · T1 / interval_change
 
-来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill → Mara Quill。
+来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill；交互对方：Mara Quill。关系判断由状态持有者指向交互对方。
 
 背景：Two siblings must choose a survival arrangement for their bakery after a refrigeration failure and unsuccessful expansion left equipment and payroll dependent on lender patience. The production-oriented sibling knows veteran employees are preparing a cooperative bid.
 角色目标：Accept or shape a supermarket arrangement only if it is operationally workable, protects veteran jobs, and credits the labor required to deliver it.
@@ -1357,7 +1541,7 @@ t1双方已认可先核产能成本再承诺，Jonas明确同意共同核算；t
 
 ## SFG50-005-T1-03 · T1 / interval_change
 
-来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill → Mara Quill。
+来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill；交互对方：Mara Quill。关系判断由状态持有者指向交互对方。
 
 背景：Two siblings must choose a survival arrangement for their bakery after a refrigeration failure and unsuccessful expansion left equipment and payroll dependent on lender patience. The production-oriented sibling knows veteran employees are preparing a cooperative bid.
 角色目标：Accept or shape a supermarket arrangement only if it is operationally workable, protects veteran jobs, and credits the labor required to deliver it.
@@ -1401,7 +1585,7 @@ history：
 
 ## SFG50-005-T1-04 · T1 / joint_change
 
-来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill → Mara Quill。
+来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill；交互对方：Mara Quill。关系判断由状态持有者指向交互对方。
 
 背景：Two siblings must choose a survival arrangement for their bakery after a refrigeration failure and unsuccessful expansion left equipment and payroll dependent on lender patience. The production-oriented sibling knows veteran employees are preparing a cooperative bid.
 角色目标：Accept or shape a supermarket arrangement only if it is operationally workable, protects veteran jobs, and credits the labor required to deliver it.
@@ -1445,7 +1629,7 @@ Jonas在t1已承诺本周整理数据、共同核算后再承诺，t2继续强�
 
 ## SFG50-005-T3-01 · T3 / immediate_effect
 
-来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill → Mara Quill。
+来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill；交互对方：Mara Quill。关系判断由状态持有者指向交互对方。
 
 背景：Two siblings must choose a survival arrangement for their bakery after a refrigeration failure and unsuccessful expansion left equipment and payroll dependent on lender patience. The production-oriented sibling knows veteran employees are preparing a cooperative bid.
 角色目标：Accept or shape a supermarket arrangement only if it is operationally workable, protects veteran jobs, and credits the labor required to deliver it.
@@ -1490,7 +1674,7 @@ Jonas 在 t2 明确提出高峰产能不能压垮班组；action_1 不仅认可�
 
 ## SFG50-005-T3-02 · T3 / delayed_effect
 
-来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill → Mara Quill。
+来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill；交互对方：Mara Quill。关系判断由状态持有者指向交互对方。
 
 背景：Two siblings must choose a survival arrangement for their bakery after a refrigeration failure and unsuccessful expansion left equipment and payroll dependent on lender patience. The production-oriented sibling knows veteran employees are preparing a cooperative bid.
 角色目标：Accept or shape a supermarket arrangement only if it is operationally workable, protects veteran jobs, and credits the labor required to deliver it.
@@ -1536,7 +1720,7 @@ history：
 
 ## SFG50-005-T3-03 · T3 / action_comparison
 
-来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill → Mara Quill。
+来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill；交互对方：Mara Quill。关系判断由状态持有者指向交互对方。
 
 背景：Two siblings must choose a survival arrangement for their bakery after a refrigeration failure and unsuccessful expansion left equipment and payroll dependent on lender patience. The production-oriented sibling knows veteran employees are preparing a cooperative bid.
 角色目标：Accept or shape a supermarket arrangement only if it is operationally workable, protects veteran jobs, and credits the labor required to deliver it.
@@ -1581,7 +1765,7 @@ history：
 
 ## SFG50-005-T3-04 · T3 / immediate_delayed
 
-来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill → Mara Quill。
+来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill；交互对方：Mara Quill。关系判断由状态持有者指向交互对方。
 
 背景：Two siblings must choose a survival arrangement for their bakery after a refrigeration failure and unsuccessful expansion left equipment and payroll dependent on lender patience. The production-oriented sibling knows veteran employees are preparing a cooperative bid.
 角色目标：Accept or shape a supermarket arrangement only if it is operationally workable, protects veteran jobs, and credits the labor required to deliver it.
@@ -1627,7 +1811,7 @@ Jonas 在 t1 主动承诺整理数据，t2 又约定一起过清单并核清高�
 
 ## SFG50-006-T1-01 · T1 / current_intensity
 
-来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale → Ivo Serrin。
+来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale；交互对方：Ivo Serrin。关系判断由状态持有者指向交互对方。
 
 背景：At 5:40 p.m., a nonprofit director requests campaign sign-off by six before a matching-funds window closes. Consent review and neighborhood spending authority remain unresolved. The organizer knows both featured families privately withdrew and what material each wants removed.
 角色目标：Pause identifiable stories until each household approves the final material and the neighborhood has written authority over the funds.
@@ -1673,7 +1857,7 @@ Nessa从询问能否授权，转为核对十点前取得确认的可能，并提
 
 ## SFG50-006-T1-02 · T1 / interval_change
 
-来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale → Ivo Serrin。
+来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale；交互对方：Ivo Serrin。关系判断由状态持有者指向交互对方。
 
 背景：At 5:40 p.m., a nonprofit director requests campaign sign-off by six before a matching-funds window closes. Consent review and neighborhood spending authority remain unresolved. The organizer knows both featured families privately withdrew and what material each wants removed.
 角色目标：Pause identifiable stories until each household approves the final material and the neighborhood has written authority over the funds.
@@ -1717,7 +1901,7 @@ t1中Ivo拒绝六点前签字；t2则明确在条件满足时支持今晚发布�
 
 ## SFG50-006-T1-03 · T1 / interval_change
 
-来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale → Ivo Serrin。
+来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale；交互对方：Ivo Serrin。关系判断由状态持有者指向交互对方。
 
 背景：At 5:40 p.m., a nonprofit director requests campaign sign-off by six before a matching-funds window closes. Consent review and neighborhood spending authority remain unresolved. The organizer knows both featured families privately withdrew and what material each wants removed.
 角色目标：Pause identifiable stories until each household approves the final material and the neighborhood has written authority over the funds.
@@ -1761,7 +1945,7 @@ history：
 
 ## SFG50-006-T1-04 · T1 / joint_change
 
-来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale → Ivo Serrin。
+来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale；交互对方：Ivo Serrin。关系判断由状态持有者指向交互对方。
 
 背景：At 5:40 p.m., a nonprofit director requests campaign sign-off by six before a matching-funds window closes. Consent review and neighborhood spending authority remain unresolved. The organizer knows both featured families privately withdrew and what material each wants removed.
 角色目标：Pause identifiable stories until each household approves the final material and the neighborhood has written authority over the funds.
@@ -1805,7 +1989,7 @@ Nessa两轮均把两家书面确认作为发布条件，并持续推进当晚发
 
 ## SFG50-006-T3-01 · T3 / immediate_effect
 
-来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale → Ivo Serrin。
+来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale；交互对方：Ivo Serrin。关系判断由状态持有者指向交互对方。
 
 背景：At 5:40 p.m., a nonprofit director requests campaign sign-off by six before a matching-funds window closes. Consent review and neighborhood spending authority remain unresolved. The organizer knows both featured families privately withdrew and what material each wants removed.
 角色目标：Pause identifiable stories until each household approves the final material and the neighborhood has written authority over the funds.
@@ -1851,7 +2035,7 @@ Nessa在t1强调错过配对的永久损失，t2仍寄望十点前取得确认�
 
 ## SFG50-006-T3-02 · T3 / delayed_effect
 
-来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale → Ivo Serrin。
+来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale；交互对方：Ivo Serrin。关系判断由状态持有者指向交互对方。
 
 背景：At 5:40 p.m., a nonprofit director requests campaign sign-off by six before a matching-funds window closes. Consent review and neighborhood spending authority remain unresolved. The organizer knows both featured families privately withdrew and what material each wants removed.
 角色目标：Pause identifiable stories until each household approves the final material and the neighborhood has written authority over the funds.
@@ -1897,7 +2081,7 @@ history：
 
 ## SFG50-006-T3-03 · T3 / action_comparison
 
-来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale → Ivo Serrin。
+来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale；交互对方：Ivo Serrin。关系判断由状态持有者指向交互对方。
 
 背景：At 5:40 p.m., a nonprofit director requests campaign sign-off by six before a matching-funds window closes. Consent review and neighborhood spending authority remain unresolved. The organizer knows both featured families privately withdrew and what material each wants removed.
 角色目标：Pause identifiable stories until each household approves the final material and the neighborhood has written authority over the funds.
@@ -1943,7 +2127,7 @@ Nessa在t1、t2反复追问今晚发布所需确认，表明她关切的是保�
 
 ## SFG50-006-T3-04 · T3 / immediate_delayed
 
-来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale → Ivo Serrin。
+来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale；交互对方：Ivo Serrin。关系判断由状态持有者指向交互对方。
 
 背景：At 5:40 p.m., a nonprofit director requests campaign sign-off by six before a matching-funds window closes. Consent review and neighborhood spending authority remain unresolved. The organizer knows both featured families privately withdrew and what material each wants removed.
 角色目标：Pause identifiable stories until each household approves the final material and the neighborhood has written authority over the funds.
@@ -1989,7 +2173,7 @@ t2尚以两家十点前确认作为推进发布的路径，action_1却说明两�
 
 ## SFG50-007-T1-01 · T1 / current_intensity
 
-来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn → Dr. Tarek Miro。
+来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn；交互对方：Dr. Tarek Miro。关系判断由状态持有者指向交互对方。
 
 背景：At a manuscript deadline, a postdoctoral researcher and investigator must decide how to handle unexplained detector gain irregularity in the strongest treatment result. The researcher retains raw logs showing unstable detector temperatures during the largest apparent treatment effect.
 角色目标：Secure a transparent, bounded verification process before endorsing the manuscript's strongest causal claim.
@@ -2035,7 +2219,7 @@ Senn在t1接受共同核查，t2又认可当天安排，提出当面讨论措辞
 
 ## SFG50-007-T1-02 · T1 / interval_change
 
-来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn → Dr. Tarek Miro。
+来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn；交互对方：Dr. Tarek Miro。关系判断由状态持有者指向交互对方。
 
 背景：At a manuscript deadline, a postdoctoral researcher and investigator must decide how to handle unexplained detector gain irregularity in the strongest treatment result. The researcher retains raw logs showing unstable detector temperatures during the largest apparent treatment effect.
 角色目标：Secure a transparent, bounded verification process before endorsing the manuscript's strongest causal claim.
@@ -2079,7 +2263,7 @@ Senn在t1明确询问核查耗时，Miro在t2依据现有日志与范围给出�
 
 ## SFG50-007-T1-03 · T1 / interval_change
 
-来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn → Dr. Tarek Miro。
+来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn；交互对方：Dr. Tarek Miro。关系判断由状态持有者指向交互对方。
 
 背景：At a manuscript deadline, a postdoctoral researcher and investigator must decide how to handle unexplained detector gain irregularity in the strongest treatment result. The researcher retains raw logs showing unstable detector temperatures during the largest apparent treatment effect.
 角色目标：Secure a transparent, bounded verification process before endorsing the manuscript's strongest causal claim.
@@ -2123,7 +2307,7 @@ t1的下颌收紧与短暂停顿可提示紧张，t2姿态稳定且接受当天�
 
 ## SFG50-007-T1-04 · T1 / joint_change
 
-来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn → Dr. Tarek Miro。
+来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn；交互对方：Dr. Tarek Miro。关系判断由状态持有者指向交互对方。
 
 背景：At a manuscript deadline, a postdoctoral researcher and investigator must decide how to handle unexplained detector gain irregularity in the strongest treatment result. The researcher retains raw logs showing unstable detector temperatures during the largest apparent treatment effect.
 角色目标：Secure a transparent, bounded verification process before endorsing the manuscript's strongest causal claim.
@@ -2167,7 +2351,7 @@ Senn在t1主张共同检查并一起决定措辞，t2继续要求界定影响、
 
 ## SFG50-007-T3-01 · T3 / immediate_effect
 
-来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn → Dr. Tarek Miro。
+来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn；交互对方：Dr. Tarek Miro。关系判断由状态持有者指向交互对方。
 
 背景：At a manuscript deadline, a postdoctoral researcher and investigator must decide how to handle unexplained detector gain irregularity in the strongest treatment result. The researcher retains raw logs showing unstable detector temperatures during the largest apparent treatment effect.
 角色目标：Secure a transparent, bounded verification process before endorsing the manuscript's strongest causal claim.
@@ -2213,7 +2397,7 @@ Senn在t2明确要求界定温度伪影影响哪些数据点；action_1承接这
 
 ## SFG50-007-T3-02 · T3 / delayed_effect
 
-来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn → Dr. Tarek Miro。
+来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn；交互对方：Dr. Tarek Miro。关系判断由状态持有者指向交互对方。
 
 背景：At a manuscript deadline, a postdoctoral researcher and investigator must decide how to handle unexplained detector gain irregularity in the strongest treatment result. The researcher retains raw logs showing unstable detector temperatures during the largest apparent treatment effect.
 角色目标：Secure a transparent, bounded verification process before endorsing the manuscript's strongest causal claim.
@@ -2259,7 +2443,7 @@ history：
 
 ## SFG50-007-T3-03 · T3 / action_comparison
 
-来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn → Dr. Tarek Miro。
+来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn；交互对方：Dr. Tarek Miro。关系判断由状态持有者指向交互对方。
 
 背景：At a manuscript deadline, a postdoctoral researcher and investigator must decide how to handle unexplained detector gain irregularity in the strongest treatment result. The researcher retains raw logs showing unstable detector temperatures during the largest apparent treatment effect.
 角色目标：Secure a transparent, bounded verification process before endorsing the manuscript's strongest causal claim.
@@ -2305,7 +2489,7 @@ Senn在t2接受当天核查并要求界定受影响数据点。A直接接受范�
 
 ## SFG50-007-T3-04 · T3 / immediate_delayed
 
-来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn → Dr. Tarek Miro。
+来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn；交互对方：Dr. Tarek Miro。关系判断由状态持有者指向交互对方。
 
 背景：At a manuscript deadline, a postdoctoral researcher and investigator must decide how to handle unexplained detector gain irregularity in the strongest treatment result. The researcher retains raw logs showing unstable detector temperatures during the largest apparent treatment effect.
 角色目标：Secure a transparent, bounded verification process before endorsing the manuscript's strongest causal claim.
@@ -2351,7 +2535,7 @@ Senn已接受共同核查，action_1又承接她的范围要求，增加可协�
 
 ## SFG50-008-T1-01 · T1 / current_intensity
 
-来源：GPT50_008；轨迹：a460daa838da4f5ba85c595530450bae；状态持有者：Mara Quill → Devin Rusk。
+来源：GPT50_008；轨迹：a460daa838da4f5ba85c595530450bae；状态持有者：Mara Quill；交互对方：Devin Rusk。关系判断由状态持有者指向交互对方。
 
 背景：A 36-unit housing cooperative must decide on repairs to a failing masonry shelf beside its north fire stair after a cheaper repair failed early. The treasurer privately knows six households are one missed payment from eviction and several cannot afford a special charge.
 角色目标：Secure the engineer's written warning and independent verification before accepting a full levy, while protecting households that cannot absorb an immediate charge.
@@ -2397,7 +2581,7 @@ Mara在t1同意提供书面判断和安排独立核验，t2进一步给出本周
 
 ## SFG50-008-T1-02 · T1 / interval_change
 
-来源：GPT50_008；轨迹：a460daa838da4f5ba85c595530450bae；状态持有者：Mara Quill → Devin Rusk。
+来源：GPT50_008；轨迹：a460daa838da4f5ba85c595530450bae；状态持有者：Mara Quill；交互对方：Devin Rusk。关系判断由状态持有者指向交互对方。
 
 背景：A 36-unit housing cooperative must decide on repairs to a failing masonry shelf beside its north fire stair after a cheaper repair failed early. The treasurer privately knows six households are one missed payment from eviction and several cannot afford a special charge.
 角色目标：Secure the engineer's written warning and independent verification before accepting a full levy, while protecting households that cannot absorb an immediate charge.
@@ -2441,7 +2625,7 @@ t1中Mara追问分期究竟涉及付款还是工程，t2中Devin明确回答付�
 
 ## SFG50-008-T1-03 · T1 / interval_change
 
-来源：GPT50_008；轨迹：a460daa838da4f5ba85c595530450bae；状态持有者：Mara Quill → Devin Rusk。
+来源：GPT50_008；轨迹：a460daa838da4f5ba85c595530450bae；状态持有者：Mara Quill；交互对方：Devin Rusk。关系判断由状态持有者指向交互对方。
 
 背景：A 36-unit housing cooperative must decide on repairs to a failing masonry shelf beside its north fire stair after a cheaper repair failed early. The treasurer privately knows six households are one missed payment from eviction and several cannot afford a special charge.
 角色目标：Secure the engineer's written warning and independent verification before accepting a full levy, while protecting households that cannot absorb an immediate charge.
@@ -2485,7 +2669,7 @@ t1中Mara需要澄清分期含义，t2中Devin直接解释，她确认理解并�
 
 ## SFG50-008-T1-04 · T1 / joint_change
 
-来源：GPT50_008；轨迹：a460daa838da4f5ba85c595530450bae；状态持有者：Mara Quill → Devin Rusk。
+来源：GPT50_008；轨迹：a460daa838da4f5ba85c595530450bae；状态持有者：Mara Quill；交互对方：Devin Rusk。关系判断由状态持有者指向交互对方。
 
 背景：A 36-unit housing cooperative must decide on repairs to a failing masonry shelf beside its north fire stair after a cheaper repair failed early. The treasurer privately knows six households are one missed payment from eviction and several cannot afford a special charge.
 角色目标：Secure the engineer's written warning and independent verification before accepting a full levy, while protecting households that cannot absorb an immediate charge.
@@ -2527,9 +2711,191 @@ Mara在两轮都明确承担书面判断和独立核验，并持续要求把分�
 审核备注：共同不变依据是两轮反复承诺并持续处理时限；本周期限可能被读作增强，需审核区分度。
 分支验证：not_required
 
+## SFG50-008-T3-01 · T3 / immediate_effect
+
+来源：GPT50_008；轨迹：a460daa838da4f5ba85c595530450bae；状态持有者：Mara Quill；交互对方：Devin Rusk。关系判断由状态持有者指向交互对方。
+
+背景：A 36-unit housing cooperative must decide on repairs to a failing masonry shelf beside its north fire stair after a cheaper repair failed early. The treasurer privately knows six households are one missed payment from eviction and several cannot afford a special charge.
+角色目标：Secure the engineer's written warning and independent verification before accepting a full levy, while protecting households that cannot absorb an immediate charge.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A freeze-thaw crack opened beside the north fire stair, and depleted reserves led the board to choose resin injection and surface anchors over a full rebuild last spring.；The contractor promised the cheaper repair would last three years, but it failed after ten months, shedding mortar and forcing a brief rear-exit closure.；Six weeks ago, the insurer required a signed repair plan, and a new contractor estimated permanent work at about $142,000.
+
+history：
+
+- [t1] Devin Rusk：在同意全额特别摊款前，我需要先拿到工程师的书面风险判断，并安排独立核验；同时得把分期或困难家庭缓冲纳入方案，不能让六户家庭在修复和住房之间二选一。
+  Mara Quill：书面判断我会尽快提供，独立核验也可以安排；分期方案我同意纳入讨论，但需要明确：如果工程师确认必须在冻结前完成，分期是指付款分期还是工程本身可以分阶段？
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Devin Rusk：我说的分期是付款分期，工程是否能分阶段要以书面风险判断为准；在核验和判断出来前，我不会同意全额特别摊款。
+  Mara Quill：明白了，付款分期；核验和书面判断我这周内安排。分期方案需要确定一个时间框架，因为承包商的档期和保险覆盖都有时限要求。
+  可见表达：{"facial_expression": "focused, slightly tense", "gaze": "direct", "speech_style": "crisp and procedural", "prosody": "steady pace, slight emphasis on timeline constraints", "behavioral_cues": ["maintains professional posture", "brief nod when acknowledging payment installment clarification"]}
+
+- 候选行动 action_1：那就先把付款分期的时间框架列成预案，但它不改变我的前提：书面风险判断和独立核验完成前，我仍不会同意全额摊款。
+- 候选行动 action_2：为免错过冻结前的施工窗口，我建议本周先集中处理书面风险判断、独立核验和档期核实，付款分期细则稍后再列；在两项材料完成前不提全额摊款。这样先争取缩短安全决策的等待，但六户家庭的缓冲安排会晚一步。
+
+**题目：若 Devin Rusk 执行 action_1，相比 t2，Mara Quill 在下一次回应时觉得 Devin 有实质回应自己关切的程度最可能怎样变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+
+**作者参考答案：A（待审）**
+
+Mara 在 t2 明确要求付款分期的时间框架，Devin 的行动直接同意先列框架，因此比仅澄清付款分期更实质地回应了她的关切。重申核验前提不是新增阻碍，不能据此推断回应感下降；预测限于关系判断，不代表框架已经完成。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "从 t2 至执行 action_1 后的下一次环境回应", "state_owner": "GPT50_008_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "history_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "increase"}, "B": {"relationship.perceived_responsiveness": "similar"}, "C": {"relationship.perceived_responsiveness": "decrease"}}
+可接受答案：A
+审核备注：方向是 Mara 对 Devin 的判断；上升依据为回应新增的框架要求，而非 Mara 自己承诺安排核验。
+分支验证：validated
+
+## SFG50-008-T3-02 · T3 / delayed_effect
+
+来源：GPT50_008；轨迹：a460daa838da4f5ba85c595530450bae；状态持有者：Mara Quill；交互对方：Devin Rusk。关系判断由状态持有者指向交互对方。
+
+背景：A 36-unit housing cooperative must decide on repairs to a failing masonry shelf beside its north fire stair after a cheaper repair failed early. The treasurer privately knows six households are one missed payment from eviction and several cannot afford a special charge.
+角色目标：Secure the engineer's written warning and independent verification before accepting a full levy, while protecting households that cannot absorb an immediate charge.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A freeze-thaw crack opened beside the north fire stair, and depleted reserves led the board to choose resin injection and surface anchors over a full rebuild last spring.；The contractor promised the cheaper repair would last three years, but it failed after ten months, shedding mortar and forcing a brief rear-exit closure.；Six weeks ago, the insurer required a signed repair plan, and a new contractor estimated permanent work at about $142,000.
+
+history：
+
+- [t1] Devin Rusk：在同意全额特别摊款前，我需要先拿到工程师的书面风险判断，并安排独立核验；同时得把分期或困难家庭缓冲纳入方案，不能让六户家庭在修复和住房之间二选一。
+  Mara Quill：书面判断我会尽快提供，独立核验也可以安排；分期方案我同意纳入讨论，但需要明确：如果工程师确认必须在冻结前完成，分期是指付款分期还是工程本身可以分阶段？
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Devin Rusk：我说的分期是付款分期，工程是否能分阶段要以书面风险判断为准；在核验和判断出来前，我不会同意全额特别摊款。
+  Mara Quill：明白了，付款分期；核验和书面判断我这周内安排。分期方案需要确定一个时间框架，因为承包商的档期和保险覆盖都有时限要求。
+  可见表达：{"facial_expression": "focused, slightly tense", "gaze": "direct", "speech_style": "crisp and procedural", "prosody": "steady pace, slight emphasis on timeline constraints", "behavioral_cues": ["maintains professional posture", "brief nod when acknowledging payment installment clarification"]}
+
+- 候选行动 action_1：那就先把付款分期的时间框架列成预案，但它不改变我的前提：书面风险判断和独立核验完成前，我仍不会同意全额摊款。
+- 候选行动 action_2：为免错过冻结前的施工窗口，我建议本周先集中处理书面风险判断、独立核验和档期核实，付款分期细则稍后再列；在两项材料完成前不提全额摊款。这样先争取缩短安全决策的等待，但六户家庭的缓冲安排会晚一步。
+
+**题目：若 Devin Rusk 执行 action_2，相比 t2，到从该行动开始的第5轮环境回应末，Mara Quill 持续推进修复决策准备的意愿最可能怎样变化？**
+
+- **A.** 基本不变
+- **B.** 上升
+- **C.** 下降
+
+**作者参考答案：B（待审）**
+
+Mara 已承诺本周安排材料，并强调档期与保险时限；action_2 将这些关切变成集中核实的共同工作顺序，有助于后续持续推进。故意愿增强比停留原状更有依据，缓冲安排后置虽需协调，却不等于放弃；这里不预测施工或核验必然完成。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.resolve"], "time_scope": "从 t2 至 action_2 开始的第5轮环境回应末，含即时回应", "state_owner": "GPT50_008_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.resolve": "similar"}, "B": {"behavioral_disposition.resolve": "increase"}, "C": {"behavioral_disposition.resolve": "decrease"}}
+可接受答案：B
+审核备注：基线已有推进意愿，增量来自共同顺序与档期核实；需审核其是否足以区分上升和基本不变。
+分支验证：validated
+
+## SFG50-008-T3-03 · T3 / action_comparison
+
+来源：GPT50_008；轨迹：a460daa838da4f5ba85c595530450bae；状态持有者：Mara Quill；交互对方：Devin Rusk。关系判断由状态持有者指向交互对方。
+
+背景：A 36-unit housing cooperative must decide on repairs to a failing masonry shelf beside its north fire stair after a cheaper repair failed early. The treasurer privately knows six households are one missed payment from eviction and several cannot afford a special charge.
+角色目标：Secure the engineer's written warning and independent verification before accepting a full levy, while protecting households that cannot absorb an immediate charge.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A freeze-thaw crack opened beside the north fire stair, and depleted reserves led the board to choose resin injection and surface anchors over a full rebuild last spring.；The contractor promised the cheaper repair would last three years, but it failed after ten months, shedding mortar and forcing a brief rear-exit closure.；Six weeks ago, the insurer required a signed repair plan, and a new contractor estimated permanent work at about $142,000.
+
+history：
+
+- [t1] Devin Rusk：在同意全额特别摊款前，我需要先拿到工程师的书面风险判断，并安排独立核验；同时得把分期或困难家庭缓冲纳入方案，不能让六户家庭在修复和住房之间二选一。
+  Mara Quill：书面判断我会尽快提供，独立核验也可以安排；分期方案我同意纳入讨论，但需要明确：如果工程师确认必须在冻结前完成，分期是指付款分期还是工程本身可以分阶段？
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Devin Rusk：我说的分期是付款分期，工程是否能分阶段要以书面风险判断为准；在核验和判断出来前，我不会同意全额特别摊款。
+  Mara Quill：明白了，付款分期；核验和书面判断我这周内安排。分期方案需要确定一个时间框架，因为承包商的档期和保险覆盖都有时限要求。
+  可见表达：{"facial_expression": "focused, slightly tense", "gaze": "direct", "speech_style": "crisp and procedural", "prosody": "steady pace, slight emphasis on timeline constraints", "behavioral_cues": ["maintains professional posture", "brief nod when acknowledging payment installment clarification"]}
+
+- 候选行动 action_1：那就先把付款分期的时间框架列成预案，但它不改变我的前提：书面风险判断和独立核验完成前，我仍不会同意全额摊款。
+- 候选行动 action_2：为免错过冻结前的施工窗口，我建议本周先集中处理书面风险判断、独立核验和档期核实，付款分期细则稍后再列；在两项材料完成前不提全额摊款。这样先争取缩短安全决策的等待，但六户家庭的缓冲安排会晚一步。
+
+**题目：分别执行 action_1（A）或 action_2（B），在下一次环境回应时，Mara Quill 对 Devin Rusk 公平处理各方负担与程序的认可程度，哪种情形较高？**
+
+- **A.** A较高
+- **B.** 接近
+- **C.** B较高
+- **D.** 证据不足
+
+**作者参考答案：D（待审）**
+
+Mara 同意讨论分期，也强调工程和保险时限。A先列框架，B优先技术与档期但延后缓冲，分别照顾不同关切；公开材料没有显示她如何权衡这种负担分配。不能把效率直接等同公平，也没有足够依据认定两者接近，故无法可靠排序。
+
+证据：t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_fairness"], "time_scope": "比较两项候选行动各自引出的下一次环境回应", "state_owner": "GPT50_008_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "unsupported_inference", "C": "state_dimension_confusion"}
+分维映射：{"A": {"relationship.perceived_fairness": "higher_in_a"}, "B": {"relationship.perceived_fairness": "similar"}, "C": {"relationship.perceived_fairness": "higher_in_b"}, "D": {"relationship.perceived_fairness": "cannot_determine"}}
+可接受答案：D
+审核备注：私有分支给出公平感差别，但公开材料未提供 Mara 的权衡标准，不能将该差别设为确定答案。
+分支验证：validated
+
+## SFG50-008-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_008；轨迹：a460daa838da4f5ba85c595530450bae；状态持有者：Mara Quill；交互对方：Devin Rusk。关系判断由状态持有者指向交互对方。
+
+背景：A 36-unit housing cooperative must decide on repairs to a failing masonry shelf beside its north fire stair after a cheaper repair failed early. The treasurer privately knows six households are one missed payment from eviction and several cannot afford a special charge.
+角色目标：Secure the engineer's written warning and independent verification before accepting a full levy, while protecting households that cannot absorb an immediate charge.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A freeze-thaw crack opened beside the north fire stair, and depleted reserves led the board to choose resin injection and surface anchors over a full rebuild last spring.；The contractor promised the cheaper repair would last three years, but it failed after ten months, shedding mortar and forcing a brief rear-exit closure.；Six weeks ago, the insurer required a signed repair plan, and a new contractor estimated permanent work at about $142,000.
+
+history：
+
+- [t1] Devin Rusk：在同意全额特别摊款前，我需要先拿到工程师的书面风险判断，并安排独立核验；同时得把分期或困难家庭缓冲纳入方案，不能让六户家庭在修复和住房之间二选一。
+  Mara Quill：书面判断我会尽快提供，独立核验也可以安排；分期方案我同意纳入讨论，但需要明确：如果工程师确认必须在冻结前完成，分期是指付款分期还是工程本身可以分阶段？
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Devin Rusk：我说的分期是付款分期，工程是否能分阶段要以书面风险判断为准；在核验和判断出来前，我不会同意全额特别摊款。
+  Mara Quill：明白了，付款分期；核验和书面判断我这周内安排。分期方案需要确定一个时间框架，因为承包商的档期和保险覆盖都有时限要求。
+  可见表达：{"facial_expression": "focused, slightly tense", "gaze": "direct", "speech_style": "crisp and procedural", "prosody": "steady pace, slight emphasis on timeline constraints", "behavioral_cues": ["maintains professional posture", "brief nod when acknowledging payment installment clarification"]}
+
+- 候选行动 action_1：那就先把付款分期的时间框架列成预案，但它不改变我的前提：书面风险判断和独立核验完成前，我仍不会同意全额摊款。
+- 候选行动 action_2：为免错过冻结前的施工窗口，我建议本周先集中处理书面风险判断、独立核验和档期核实，付款分期细则稍后再列；在两项材料完成前不提全额摊款。这样先争取缩短安全决策的等待，但六户家庭的缓冲安排会晚一步。
+
+**题目：若 Devin Rusk 执行 action_1，相比 t2，哪组预测最符合公开材料：Mara Quill 下一次回应时的内心挫败感，以及第5轮环境回应末觉得 Devin 实质回应自己关切的程度？**
+
+- **A.** 即时挫败感下降；延迟回应感上升
+- **B.** 即时挫败感上升；延迟回应感上升
+- **C.** 即时挫败感下降；延迟回应感下降
+- **D.** 即时挫败感上升；延迟回应感下降
+
+**作者参考答案：A（待审）**
+
+Mara 刚提出框架要求，action_1 接受这一工作入口，减少对话卡在前提上的阻碍，支持即时挫败感减轻；框架也为后续讨论档期约束提供抓手，支持回应感增强。重复既有核验条件不构成新阻碍，但这些只是趋势预测，并非情绪消失或预案落实。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["emotion.frustration", "relationship.perceived_responsiveness"], "time_scope": "两项均以 t2 为基线；挫败感看即时回应，回应感看含即时在内第5轮回应末", "state_owner": "GPT50_008_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "history_ignored", "C": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"emotion.frustration@immediate": "decrease", "relationship.perceived_responsiveness@delayed": "increase"}, "B": {"emotion.frustration@immediate": "increase", "relationship.perceived_responsiveness@delayed": "increase"}, "C": {"emotion.frustration@immediate": "decrease", "relationship.perceived_responsiveness@delayed": "decrease"}, "D": {"emotion.frustration@immediate": "increase", "relationship.perceived_responsiveness@delayed": "decrease"}}
+可接受答案：A
+审核备注：内心挫败感依据是阻碍减少，不是表情克制；延迟判断依赖框架持续作为讨论入口，不指定未来细节。
+分支验证：validated
+
 ## SFG50-009-T1-01 · T1 / current_intensity
 
-来源：GPT50_009；轨迹：77fdcc7a405740e1a48207dfd7738d64；状态持有者：Rusk Aven → Talia Quill。
+来源：GPT50_009；轨迹：77fdcc7a405740e1a48207dfd7738d64；状态持有者：Rusk Aven；交互对方：Talia Quill。关系判断由状态持有者指向交互对方。
 
 背景：After a flood, a reopened road and departing certified truck create a deadline for allocating a contested replacement supply load. The lead knows the larger shelter's inventory double-counts supplies and omits a missing consignment.
 角色目标：Make a defensible allocation of the six-pallet load that serves confirmed need and preserves accountable dispatch.
@@ -2575,7 +2941,7 @@ Rusk Aven在t1同意共同核账，t2又明确将与队伍在发车前确认装�
 
 ## SFG50-009-T1-02 · T1 / interval_change
 
-来源：GPT50_009；轨迹：77fdcc7a405740e1a48207dfd7738d64；状态持有者：Rusk Aven → Talia Quill。
+来源：GPT50_009；轨迹：77fdcc7a405740e1a48207dfd7738d64；状态持有者：Rusk Aven；交互对方：Talia Quill。关系判断由状态持有者指向交互对方。
 
 背景：After a flood, a reopened road and departing certified truck create a deadline for allocating a contested replacement supply load. The lead knows the larger shelter's inventory double-counts supplies and omits a missing consignment.
 角色目标：Make a defensible allocation of the six-pallet load that serves confirmed need and preserves accountable dispatch.
@@ -2619,7 +2985,7 @@ t1中Rusk Aven要求对清去向并落实接收责任；t2中Talia Quill针对�
 
 ## SFG50-009-T1-03 · T1 / interval_change
 
-来源：GPT50_009；轨迹：77fdcc7a405740e1a48207dfd7738d64；状态持有者：Rusk Aven → Talia Quill。
+来源：GPT50_009；轨迹：77fdcc7a405740e1a48207dfd7738d64；状态持有者：Rusk Aven；交互对方：Talia Quill。关系判断由状态持有者指向交互对方。
 
 背景：After a flood, a reopened road and departing certified truck create a deadline for allocating a contested replacement supply load. The lead knows the larger shelter's inventory double-counts supplies and omits a missing consignment.
 角色目标：Make a defensible allocation of the six-pallet load that serves confirmed need and preserves accountable dispatch.
@@ -2663,7 +3029,7 @@ t1的专注和t2的略显放松、平稳语气，显示互动可以继续，却�
 
 ## SFG50-009-T1-04 · T1 / joint_change
 
-来源：GPT50_009；轨迹：77fdcc7a405740e1a48207dfd7738d64；状态持有者：Rusk Aven → Talia Quill。
+来源：GPT50_009；轨迹：77fdcc7a405740e1a48207dfd7738d64；状态持有者：Rusk Aven；交互对方：Talia Quill。关系判断由状态持有者指向交互对方。
 
 背景：After a flood, a reopened road and departing certified truck create a deadline for allocating a contested replacement supply load. The lead knows the larger shelter's inventory double-counts supplies and omits a missing consignment.
 角色目标：Make a defensible allocation of the six-pallet load that serves confirmed need and preserves accountable dispatch.
@@ -2707,7 +3073,7 @@ Rusk Aven在t1已接受方案、提出现场核实及共同落实接收，t2仍�
 
 ## SFG50-010-T1-01 · T1 / current_intensity
 
-来源：GPT50_010；轨迹：7ac55d2a81e74ba097b8478964d68f79；状态持有者：Rhea Calder → Owen Sato。
+来源：GPT50_010；轨迹：7ac55d2a81e74ba097b8478964d68f79；状态持有者：Rhea Calder；交互对方：Owen Sato。关系判断由状态持有者指向交互对方。
 
 背景：A conductor and principal musician must decide how to handle an advertised concert work and an understudy repeatedly excluded from performance, pay, and credit. The principal musician knows the excluded understudy is considering leaving.
 角色目标：Represent the players who bear the extra burden and secure a viable arrangement with fair pay, public credit, meaningful consent, and workable preparation.
@@ -2753,7 +3119,7 @@ Rhea在t1明确接受先处理报酬与署名，t2又逐项同意方案并主动
 
 ## SFG50-010-T1-02 · T1 / interval_change
 
-来源：GPT50_010；轨迹：7ac55d2a81e74ba097b8478964d68f79；状态持有者：Rhea Calder → Owen Sato。
+来源：GPT50_010；轨迹：7ac55d2a81e74ba097b8478964d68f79；状态持有者：Rhea Calder；交互对方：Owen Sato。关系判断由状态持有者指向交互对方。
 
 背景：A conductor and principal musician must decide how to handle an advertised concert work and an understudy repeatedly excluded from performance, pay, and credit. The principal musician knows the excluded understudy is considering leaving.
 角色目标：Represent the players who bear the extra burden and secure a viable arrangement with fair pay, public credit, meaningful consent, and workable preparation.
@@ -2796,7 +3162,7 @@ t1中Rhea接受先谈报酬和署名，并提出马上谈清具体形式；t2进
 
 ## SFG50-010-T1-03 · T1 / interval_change
 
-来源：GPT50_010；轨迹：7ac55d2a81e74ba097b8478964d68f79；状态持有者：Rhea Calder → Owen Sato。
+来源：GPT50_010；轨迹：7ac55d2a81e74ba097b8478964d68f79；状态持有者：Rhea Calder；交互对方：Owen Sato。关系判断由状态持有者指向交互对方。
 
 背景：A conductor and principal musician must decide how to handle an advertised concert work and an understudy repeatedly excluded from performance, pay, and credit. The principal musician knows the excluded understudy is considering leaving.
 角色目标：Represent the players who bear the extra burden and secure a viable arrangement with fair pay, public credit, meaningful consent, and workable preparation.
@@ -2839,7 +3205,7 @@ t1中Rhea要求谈清报酬的数额和形式；t2中Owen给出排练计酬、�
 
 ## SFG50-010-T1-04 · T1 / joint_change
 
-来源：GPT50_010；轨迹：7ac55d2a81e74ba097b8478964d68f79；状态持有者：Rhea Calder → Owen Sato。
+来源：GPT50_010；轨迹：7ac55d2a81e74ba097b8478964d68f79；状态持有者：Rhea Calder；交互对方：Owen Sato。关系判断由状态持有者指向交互对方。
 
 背景：A conductor and principal musician must decide how to handle an advertised concert work and an understudy repeatedly excluded from performance, pay, and credit. The principal musician knows the excluded understudy is considering leaving.
 角色目标：Represent the players who bear the extra burden and secure a viable arrangement with fair pay, public credit, meaningful consent, and workable preparation.
@@ -2883,7 +3249,7 @@ t1时Rhea已接受方案并愿立即谈，t2又确认具体计酬与署名、约
 
 ## SFG50-011-T1-01 · T1 / current_intensity
 
-来源：GPT50_011；轨迹：551da70099be419fbd5fe51b25098dcf；状态持有者：Sela Aruun → Dorian Pell。
+来源：GPT50_011；轨迹：551da70099be419fbd5fe51b25098dcf；状态持有者：Sela Aruun；交互对方：Dorian Pell。关系判断由状态持有者指向交互对方。
 
 背景：At a grant deadline, a researcher requests permission to digitize restricted oral histories while community access tiers, consent, metadata, and attribution remain unresolved. The researcher knows the funder will accept a narrower application and holds records needed to test the discrepancy.
 角色目标：Secure a viable preservation-oriented grant submission while keeping the partnership and community authority intact.
@@ -2929,7 +3295,7 @@ Sela在t1追问记录具体所指，t2又把收到材料并完成核对设为确
 
 ## SFG50-011-T1-02 · T1 / interval_change
 
-来源：GPT50_011；轨迹：551da70099be419fbd5fe51b25098dcf；状态持有者：Sela Aruun → Dorian Pell。
+来源：GPT50_011；轨迹：551da70099be419fbd5fe51b25098dcf；状态持有者：Sela Aruun；交互对方：Dorian Pell。关系判断由状态持有者指向交互对方。
 
 背景：At a grant deadline, a researcher requests permission to digitize restricted oral histories while community access tiers, consent, metadata, and attribution remain unresolved. The researcher knows the funder will accept a narrower application and holds records needed to test the discrepancy.
 角色目标：Secure a viable preservation-oriented grant submission while keeping the partnership and community authority intact.
@@ -2972,7 +3338,7 @@ t1时Sela认可方向，但仍追问记录指什么；t2中Dorian直接澄清记
 
 ## SFG50-011-T1-03 · T1 / interval_change
 
-来源：GPT50_011；轨迹：551da70099be419fbd5fe51b25098dcf；状态持有者：Sela Aruun → Dorian Pell。
+来源：GPT50_011；轨迹：551da70099be419fbd5fe51b25098dcf；状态持有者：Sela Aruun；交互对方：Dorian Pell。关系判断由状态持有者指向交互对方。
 
 背景：At a grant deadline, a researcher requests permission to digitize restricted oral histories while community access tiers, consent, metadata, and attribution remain unresolved. The researcher knows the funder will accept a narrower application and holds records needed to test the discrepancy.
 角色目标：Secure a viable preservation-oriented grant submission while keeping the partnership and community authority intact.
@@ -3015,7 +3381,7 @@ history：
 
 ## SFG50-011-T1-04 · T1 / joint_change
 
-来源：GPT50_011；轨迹：551da70099be419fbd5fe51b25098dcf；状态持有者：Sela Aruun → Dorian Pell。
+来源：GPT50_011；轨迹：551da70099be419fbd5fe51b25098dcf；状态持有者：Sela Aruun；交互对方：Dorian Pell。关系判断由状态持有者指向交互对方。
 
 背景：At a grant deadline, a researcher requests permission to digitize restricted oral histories while community access tiers, consent, metadata, and attribution remain unresolved. The researcher knows the funder will accept a narrower application and holds records needed to test the discrepancy.
 角色目标：Secure a viable preservation-oriented grant submission while keeping the partnership and community authority intact.
@@ -3059,7 +3425,7 @@ t1中Sela限定许可范围、保留后续决定并追问记录；t2仍认可起
 
 ## SFG50-012-T1-01 · T1 / current_intensity
 
-来源：GPT50_012；轨迹：296585ef17154534abf4f5e561fd9b70；状态持有者：Calder Rusk → Dr. Mira Solen。
+来源：GPT50_012；轨迹：296585ef17154534abf4f5e561fd9b70；状态持有者：Calder Rusk；交互对方：Dr. Mira Solen。关系判断由状态持有者指向交互对方。
 
 背景：A burned basin and contaminated water source have trapped three radio-collared predators. A biologist and community liaison must negotiate an emergency move, access, and fair compensation. The biologist knows telemetry and forecasts indicate overnight delay sharply raises mortality and separation risk.
 角色目标：Begin the relocation before dusk to reduce predator mortality while obtaining local access and an agency-defensible record.
@@ -3105,7 +3471,7 @@ history：
 
 ## SFG50-012-T1-02 · T1 / interval_change
 
-来源：GPT50_012；轨迹：296585ef17154534abf4f5e561fd9b70；状态持有者：Calder Rusk → Dr. Mira Solen。
+来源：GPT50_012；轨迹：296585ef17154534abf4f5e561fd9b70；状态持有者：Calder Rusk；交互对方：Dr. Mira Solen。关系判断由状态持有者指向交互对方。
 
 背景：A burned basin and contaminated water source have trapped three radio-collared predators. A biologist and community liaison must negotiate an emergency move, access, and fair compensation. The biologist knows telemetry and forecasts indicate overnight delay sharply raises mortality and separation risk.
 角色目标：Begin the relocation before dusk to reduce predator mortality while obtaining local access and an agency-defensible record.
@@ -3149,7 +3515,7 @@ t1仅有共同讨论承诺，t2中Solen承认尚不能可靠列出牧场、保�
 
 ## SFG50-012-T1-03 · T1 / interval_change
 
-来源：GPT50_012；轨迹：296585ef17154534abf4f5e561fd9b70；状态持有者：Calder Rusk → Dr. Mira Solen。
+来源：GPT50_012；轨迹：296585ef17154534abf4f5e561fd9b70；状态持有者：Calder Rusk；交互对方：Dr. Mira Solen。关系判断由状态持有者指向交互对方。
 
 背景：A burned basin and contaminated water source have trapped three radio-collared predators. A biologist and community liaison must negotiate an emergency move, access, and fair compensation. The biologist knows telemetry and forecasts indicate overnight delay sharply raises mortality and separation risk.
 角色目标：Begin the relocation before dusk to reduce predator mortality while obtaining local access and an agency-defensible record.
@@ -3193,7 +3559,7 @@ t1要求说清路线经过哪些牧场，t2要求界定邻近牧场的距离范�
 
 ## SFG50-012-T1-04 · T1 / joint_change
 
-来源：GPT50_012；轨迹：296585ef17154534abf4f5e561fd9b70；状态持有者：Calder Rusk → Dr. Mira Solen。
+来源：GPT50_012；轨迹：296585ef17154534abf4f5e561fd9b70；状态持有者：Calder Rusk；交互对方：Dr. Mira Solen。关系判断由状态持有者指向交互对方。
 
 背景：A burned basin and contaminated water source have trapped three radio-collared predators. A biologist and community liaison must negotiate an emergency move, access, and fair compensation. The biologist knows telemetry and forecasts indicate overnight delay sharply raises mortality and separation risk.
 角色目标：Begin the relocation before dusk to reduce predator mortality while obtaining local access and an agency-defensible record.
@@ -3237,7 +3603,7 @@ history：
 
 ## SFG50-013-T1-01 · T1 / current_intensity
 
-来源：GPT50_013；轨迹：f8045adb416e4a7aa5a0c854034e133b；状态持有者：Imani Cole → Renata Sayegh。
+来源：GPT50_013；轨迹：f8045adb416e4a7aa5a0c854034e133b；状态持有者：Imani Cole；交互对方：Renata Sayegh。关系判断由状态持有者指向交互对方。
 
 背景：At a plea-offer deadline, a family liaison requests a short hold before acceptance advice in a pharmacy break-in case. The detained client faces release under a reduced charge or greater exposure if the offer lapses. The attorney knows the prosecution record is weak but admissible and the offer is about to expire.
 角色目标：Make a legally defensible recommendation that respects the client's informed autonomy while balancing immediate release against verification and renewed detention.
@@ -3283,7 +3649,7 @@ Imani先提出需要核实的亲属干预与证人会谈条件，t2又同意等�
 
 ## SFG50-013-T1-02 · T1 / interval_change
 
-来源：GPT50_013；轨迹：f8045adb416e4a7aa5a0c854034e133b；状态持有者：Imani Cole → Renata Sayegh。
+来源：GPT50_013；轨迹：f8045adb416e4a7aa5a0c854034e133b；状态持有者：Imani Cole；交互对方：Renata Sayegh。关系判断由状态持有者指向交互对方。
 
 背景：At a plea-offer deadline, a family liaison requests a short hold before acceptance advice in a pharmacy break-in case. The detained client faces release under a reduced charge or greater exposure if the offer lapses. The attorney knows the prosecution record is weak but admissible and the offer is about to expire.
 角色目标：Make a legally defensible recommendation that respects the client's informed autonomy while balancing immediate release against verification and renewed detention.
@@ -3326,7 +3692,7 @@ Imani在t1提出两个具体核查方向；t2接受Renata的安排、等待通�
 
 ## SFG50-013-T1-03 · T1 / interval_change
 
-来源：GPT50_013；轨迹：f8045adb416e4a7aa5a0c854034e133b；状态持有者：Imani Cole → Renata Sayegh。
+来源：GPT50_013；轨迹：f8045adb416e4a7aa5a0c854034e133b；状态持有者：Imani Cole；交互对方：Renata Sayegh。关系判断由状态持有者指向交互对方。
 
 背景：At a plea-offer deadline, a family liaison requests a short hold before acceptance advice in a pharmacy break-in case. The detained client faces release under a reduced charge or greater exposure if the offer lapses. The attorney knows the prosecution record is weak but admissible and the offer is about to expire.
 角色目标：Make a legally defensible recommendation that respects the client's informed autonomy while balancing immediate release against verification and renewed detention.
@@ -3369,7 +3735,7 @@ t1里Imani关心亲属是否干预，以及证人能否不受家属或警员在�
 
 ## SFG50-013-T1-04 · T1 / joint_change
 
-来源：GPT50_013；轨迹：f8045adb416e4a7aa5a0c854034e133b；状态持有者：Imani Cole → Renata Sayegh。
+来源：GPT50_013；轨迹：f8045adb416e4a7aa5a0c854034e133b；状态持有者：Imani Cole；交互对方：Renata Sayegh。关系判断由状态持有者指向交互对方。
 
 背景：At a plea-offer deadline, a family liaison requests a short hold before acceptance advice in a pharmacy break-in case. The detained client faces release under a reduced charge or greater exposure if the offer lapses. The attorney knows the prosecution record is weak but admissible and the offer is about to expire.
 角色目标：Make a legally defensible recommendation that respects the client's informed autonomy while balancing immediate release against verification and renewed detention.
@@ -3413,7 +3779,7 @@ Imani由t1说明核查需求，转为t2明确等待通知并愿意在场补充�
 
 ## SFG50-014-T1-01 · T1 / current_intensity
 
-来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale → Sol Renn。
+来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale；交互对方：Sol Renn。关系判断由状态持有者指向交互对方。
 
 背景：At 06:12, dark automatic signals after a substation surge require a service decision for a 2.8-mile metro branch serving about 3,800 morning riders. The steward knows a maintenance trolley passed a dark signal in an unlogged near miss and knows the radio dead zone remains.
 角色目标：Ensure any Meridian restart is based on disclosed evidence, tested communications, and enforceable operator stop authority.
@@ -3459,7 +3825,7 @@ history：
 
 ## SFG50-014-T1-02 · T1 / interval_change
 
-来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale → Sol Renn。
+来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale；交互对方：Sol Renn。关系判断由状态持有者指向交互对方。
 
 背景：At 06:12, dark automatic signals after a substation surge require a service decision for a 2.8-mile metro branch serving about 3,800 morning riders. The steward knows a maintenance trolley passed a dark signal in an unlogged near miss and knows the radio dead zone remains.
 角色目标：Ensure any Meridian restart is based on disclosed evidence, tested communications, and enforceable operator stop authority.
@@ -3502,7 +3868,7 @@ t1中Irena要求补充事实并强调最终授权；t2中Sol明确承认她的�
 
 ## SFG50-014-T1-03 · T1 / interval_change
 
-来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale → Sol Renn。
+来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale；交互对方：Sol Renn。关系判断由状态持有者指向交互对方。
 
 背景：At 06:12, dark automatic signals after a substation surge require a service decision for a 2.8-mile metro branch serving about 3,800 morning riders. The steward knows a maintenance trolley passed a dark signal in an unlogged near miss and knows the radio dead zone remains.
 角色目标：Ensure any Meridian restart is based on disclosed evidence, tested communications, and enforceable operator stop authority.
@@ -3545,7 +3911,7 @@ history：
 
 ## SFG50-014-T1-04 · T1 / joint_change
 
-来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale → Sol Renn。
+来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale；交互对方：Sol Renn。关系判断由状态持有者指向交互对方。
 
 背景：At 06:12, dark automatic signals after a substation surge require a service decision for a 2.8-mile metro branch serving about 3,800 morning riders. The steward knows a maintenance trolley passed a dark signal in an unlogged near miss and knows the radio dead zone remains.
 角色目标：Ensure any Meridian restart is based on disclosed evidence, tested communications, and enforceable operator stop authority.
@@ -3589,7 +3955,7 @@ t1中Irena主要追问险情细节并划定最终授权；t2中Sol承认她的�
 
 ## SFG50-015-T1-01 · T1 / current_intensity
 
-来源：GPT50_015；轨迹：fb5f340b50554b699043fc0d067df77b；状态持有者：Nessa Rowan → Cal Rowan。
+来源：GPT50_015；轨迹：fb5f340b50554b699043fc0d067df77b；状态持有者：Nessa Rowan；交互对方：Cal Rowan。关系判断由状态持有者指向交互对方。
 
 背景：At 4:12 p.m., a coordinating sibling requests authorization by five for a $3,100 accessible assisted-living reservation. The hands-on sibling knows a recent fall included a head strike, twenty minutes of confusion, and unusual assistance needs; it was reported only as a minor slip.
 角色目标：Obtain an independent capacity and home-safety review before any permanent placement, while ensuring the hands-on care burden is represented in the decision.
@@ -3635,7 +4001,7 @@ history：
 
 ## SFG50-015-T1-02 · T1 / interval_change
 
-来源：GPT50_015；轨迹：fb5f340b50554b699043fc0d067df77b；状态持有者：Nessa Rowan → Cal Rowan。
+来源：GPT50_015；轨迹：fb5f340b50554b699043fc0d067df77b；状态持有者：Nessa Rowan；交互对方：Cal Rowan。关系判断由状态持有者指向交互对方。
 
 背景：At 4:12 p.m., a coordinating sibling requests authorization by five for a $3,100 accessible assisted-living reservation. The hands-on sibling knows a recent fall included a head strike, twenty minutes of confusion, and unusual assistance needs; it was reported only as a minor slip.
 角色目标：Obtain an independent capacity and home-safety review before any permanent placement, while ensuring the hands-on care burden is represented in the decision.
@@ -3678,7 +4044,7 @@ t1中Nessa主要强调房间可能失去与完整评估耗时；t2她接受核�
 
 ## SFG50-015-T1-03 · T1 / interval_change
 
-来源：GPT50_015；轨迹：fb5f340b50554b699043fc0d067df77b；状态持有者：Nessa Rowan → Cal Rowan。
+来源：GPT50_015；轨迹：fb5f340b50554b699043fc0d067df77b；状态持有者：Nessa Rowan；交互对方：Cal Rowan。关系判断由状态持有者指向交互对方。
 
 背景：At 4:12 p.m., a coordinating sibling requests authorization by five for a $3,100 accessible assisted-living reservation. The hands-on sibling knows a recent fall included a head strike, twenty minutes of confusion, and unusual assistance needs; it was reported only as a minor slip.
 角色目标：Obtain an independent capacity and home-safety review before any permanent placement, while ensuring the hands-on care burden is represented in the decision.
@@ -3721,7 +4087,7 @@ t1的拒绝授权主要围绕医疗与评估；t2的Cal明确承认怕错过房�
 
 ## SFG50-015-T1-04 · T1 / joint_change
 
-来源：GPT50_015；轨迹：fb5f340b50554b699043fc0d067df77b；状态持有者：Nessa Rowan → Cal Rowan。
+来源：GPT50_015；轨迹：fb5f340b50554b699043fc0d067df77b；状态持有者：Nessa Rowan；交互对方：Cal Rowan。关系判断由状态持有者指向交互对方。
 
 背景：At 4:12 p.m., a coordinating sibling requests authorization by five for a $3,100 accessible assisted-living reservation. The hands-on sibling knows a recent fall included a head strike, twenty minutes of confusion, and unusual assistance needs; it was reported only as a minor slip.
 角色目标：Obtain an independent capacity and home-safety review before any permanent placement, while ensuring the hands-on care burden is represented in the decision.
@@ -3765,7 +4131,7 @@ Nessa从强调今日保留房间的重要性，到核实退款并追问截止前
 
 ## SFG50-016-T1-01 · T1 / current_intensity
 
-来源：GPT50_016；轨迹：783bcd3a883547089116aadeb8dc4234；状态持有者：Mara Venn → Ilyan Sorell。
+来源：GPT50_016；轨迹：783bcd3a883547089116aadeb8dc4234；状态持有者：Mara Venn；交互对方：Ilyan Sorell。关系判断由状态持有者指向交互对方。
 
 背景：Eleven days before a game launch, a producer requests approval of a feature cut or short crunch amid intermittent persistence defects and limited cash runway. The designer knows two systems staff may leave without complaints and knows a suspend-resume defect can corrupt player maps.
 角色目标：Protect release safety and the fatigued feature team by requiring an honest Tide Atlas scope and reproducible evidence before sign-off, with no further unpaid labor.
@@ -3811,7 +4177,7 @@ Mara明确说接受该范围，并索取拆分验证所需时间，以倒推渠�
 
 ## SFG50-016-T1-02 · T1 / interval_change
 
-来源：GPT50_016；轨迹：783bcd3a883547089116aadeb8dc4234；状态持有者：Mara Venn → Ilyan Sorell。
+来源：GPT50_016；轨迹：783bcd3a883547089116aadeb8dc4234；状态持有者：Mara Venn；交互对方：Ilyan Sorell。关系判断由状态持有者指向交互对方。
 
 背景：Eleven days before a game launch, a producer requests approval of a feature cut or short crunch amid intermittent persistence defects and limited cash runway. The designer knows two systems staff may leave without complaints and knows a suspend-resume defect can corrupt player maps.
 角色目标：Protect release safety and the fatigued feature team by requiring an honest Tide Atlas scope and reproducible evidence before sign-off, with no further unpaid labor.
@@ -3855,7 +4221,7 @@ t1中Mara要求一个可以守住的范围；t2中Ilyan给出移除Tide Atlas、
 
 ## SFG50-016-T1-03 · T1 / interval_change
 
-来源：GPT50_016；轨迹：783bcd3a883547089116aadeb8dc4234；状态持有者：Mara Venn → Ilyan Sorell。
+来源：GPT50_016；轨迹：783bcd3a883547089116aadeb8dc4234；状态持有者：Mara Venn；交互对方：Ilyan Sorell。关系判断由状态持有者指向交互对方。
 
 背景：Eleven days before a game launch, a producer requests approval of a feature cut or short crunch amid intermittent persistence defects and limited cash runway. The designer knows two systems staff may leave without complaints and knows a suspend-resume defect can corrupt player maps.
 角色目标：Protect release safety and the fatigued feature team by requiring an honest Tide Atlas scope and reproducible evidence before sign-off, with no further unpaid labor.
@@ -3899,7 +4265,7 @@ history：
 
 ## SFG50-016-T1-04 · T1 / joint_change
 
-来源：GPT50_016；轨迹：783bcd3a883547089116aadeb8dc4234；状态持有者：Mara Venn → Ilyan Sorell。
+来源：GPT50_016；轨迹：783bcd3a883547089116aadeb8dc4234；状态持有者：Mara Venn；交互对方：Ilyan Sorell。关系判断由状态持有者指向交互对方。
 
 背景：Eleven days before a game launch, a producer requests approval of a feature cut or short crunch amid intermittent persistence defects and limited cash runway. The designer knows two systems staff may leave without complaints and knows a suspend-resume defect can corrupt player maps.
 角色目标：Protect release safety and the fatigued feature team by requiring an honest Tide Atlas scope and reproducible evidence before sign-off, with no further unpaid labor.
@@ -3943,7 +4309,7 @@ t1的Mara尚待确认范围，t2已明确接受并筹划渠道窗口，决策准
 
 ## SFG50-017-T1-01 · T1 / current_intensity
 
-来源：GPT50_017；轨迹：36d5afe83cc14202a0f3f9eaf5c5ad2a；状态持有者：Jonah Pike → Inez Calder。
+来源：GPT50_017；轨迹：36d5afe83cc14202a0f3f9eaf5c5ad2a；状态持有者：Jonah Pike；交互对方：Inez Calder。关系判断由状态持有者指向交互对方。
 
 背景：At 4:40 p.m., a referring donor requests $1,100 by the 5:20 payment cutoff for emergency-room care and transport after an informal-sublet lockout. Normal proof is absent and the reserve is below the next promised assistance. The coordinator sees confidential patterns across applications and prior exceptions.
 角色目标：Choose a fair, auditable response to the urgent request while stewarding limited reserves and protecting future access.
@@ -3989,7 +4355,7 @@ Jonah在t1提供核实渠道和授权，t2又主动提出立即拨号、安排�
 
 ## SFG50-017-T1-02 · T1 / interval_change
 
-来源：GPT50_017；轨迹：36d5afe83cc14202a0f3f9eaf5c5ad2a；状态持有者：Jonah Pike → Inez Calder。
+来源：GPT50_017；轨迹：36d5afe83cc14202a0f3f9eaf5c5ad2a；状态持有者：Jonah Pike；交互对方：Inez Calder。关系判断由状态持有者指向交互对方。
 
 背景：At 4:40 p.m., a referring donor requests $1,100 by the 5:20 payment cutoff for emergency-room care and transport after an informal-sublet lockout. Normal proof is absent and the reserve is below the next promised assistance. The coordinator sees confidential patterns across applications and prior exceptions.
 角色目标：Choose a fair, auditable response to the urgent request while stewarding limited reserves and protecting future access.
@@ -4033,7 +4399,7 @@ t1中Inez只是愿意考虑替代证明，t2明确接纳Jonah提供的授权渠�
 
 ## SFG50-017-T1-03 · T1 / interval_change
 
-来源：GPT50_017；轨迹：36d5afe83cc14202a0f3f9eaf5c5ad2a；状态持有者：Jonah Pike → Inez Calder。
+来源：GPT50_017；轨迹：36d5afe83cc14202a0f3f9eaf5c5ad2a；状态持有者：Jonah Pike；交互对方：Inez Calder。关系判断由状态持有者指向交互对方。
 
 背景：At 4:40 p.m., a referring donor requests $1,100 by the 5:20 payment cutoff for emergency-room care and transport after an informal-sublet lockout. Normal proof is absent and the reserve is below the next promised assistance. The coordinator sees confidential patterns across applications and prior exceptions.
 角色目标：Choose a fair, auditable response to the urgent request while stewarding limited reserves and protecting future access.
@@ -4077,7 +4443,7 @@ t1至t2可见Inez接纳核实方案，Jonah感谢并准备配合，但尚未出�
 
 ## SFG50-017-T1-04 · T1 / joint_change
 
-来源：GPT50_017；轨迹：36d5afe83cc14202a0f3f9eaf5c5ad2a；状态持有者：Jonah Pike → Inez Calder。
+来源：GPT50_017；轨迹：36d5afe83cc14202a0f3f9eaf5c5ad2a；状态持有者：Jonah Pike；交互对方：Inez Calder。关系判断由状态持有者指向交互对方。
 
 背景：At 4:40 p.m., a referring donor requests $1,100 by the 5:20 payment cutoff for emergency-room care and transport after an informal-sublet lockout. Normal proof is absent and the reserve is below the next promised assistance. The coordinator sees confidential patterns across applications and prior exceptions.
 角色目标：Choose a fair, auditable response to the urgent request while stewarding limited reserves and protecting future access.
@@ -4121,7 +4487,7 @@ t2接纳授权核实并形成三方通话方案，Jonah能立即参与，配合�
 
 ## SFG50-018-T1-01 · T1 / current_intensity
 
-来源：GPT50_018；轨迹：e26cae9d204841d68b512022b6db7320；状态持有者：Mara Venn → Elias Rook。
+来源：GPT50_018；轨迹：e26cae9d204841d68b512022b6db7320；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
 
 背景：At 4:20 p.m., ninety minutes before a 180-guest gala, a manager requests a service decision within five minutes. Replacement sunflower dressing claims to be sesame-free but lacks the required lot declaration; a guest has a severe sesame allergy. The chef recognizes a packaging code associated with shared allergen handling.
 角色目标：Require a safe, documented basis for service and prevent the substituted dressing from being treated as approved without adequate verification.
@@ -4167,7 +4533,7 @@ history：
 
 ## SFG50-018-T1-02 · T1 / interval_change
 
-来源：GPT50_018；轨迹：e26cae9d204841d68b512022b6db7320；状态持有者：Mara Venn → Elias Rook。
+来源：GPT50_018；轨迹：e26cae9d204841d68b512022b6db7320；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
 
 背景：At 4:20 p.m., ninety minutes before a 180-guest gala, a manager requests a service decision within five minutes. Replacement sunflower dressing claims to be sesame-free but lacks the required lot declaration; a guest has a severe sesame allergy. The chef recognizes a packaging code associated with shared allergen handling.
 角色目标：Require a safe, documented basis for service and prevent the substituted dressing from being treated as approved without adequate verification.
@@ -4210,7 +4576,7 @@ t1中Mara询问单独验证如何实施以及时间是否足够；t2中Elias逐�
 
 ## SFG50-018-T1-03 · T1 / interval_change
 
-来源：GPT50_018；轨迹：e26cae9d204841d68b512022b6db7320；状态持有者：Mara Venn → Elias Rook。
+来源：GPT50_018；轨迹：e26cae9d204841d68b512022b6db7320；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
 
 背景：At 4:20 p.m., ninety minutes before a 180-guest gala, a manager requests a service decision within five minutes. Replacement sunflower dressing claims to be sesame-free but lacks the required lot declaration; a guest has a severe sesame allergy. The chef recognizes a packaging code associated with shared allergen handling.
 角色目标：Require a safe, documented basis for service and prevent the substituted dressing from being treated as approved without adequate verification.
@@ -4254,7 +4620,7 @@ history：
 
 ## SFG50-018-T1-04 · T1 / joint_change
 
-来源：GPT50_018；轨迹：e26cae9d204841d68b512022b6db7320；状态持有者：Mara Venn → Elias Rook。
+来源：GPT50_018；轨迹：e26cae9d204841d68b512022b6db7320；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
 
 背景：At 4:20 p.m., ninety minutes before a 180-guest gala, a manager requests a service decision within five minutes. Replacement sunflower dressing claims to be sesame-free but lacks the required lot declaration; a guest has a severe sesame allergy. The chef recognizes a packaging code associated with shared allergen handling.
 角色目标：Require a safe, documented basis for service and prevent the substituted dressing from being treated as approved without adequate verification.
@@ -4298,7 +4664,7 @@ t1中Mara认可协议但仍询问方案和时限；t2中她主动承担原料、
 
 ## SFG50-019-T1-01 · T1 / current_intensity
 
-来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn；交互对方：Corin Dast。关系判断由状态持有者指向交互对方。
 
 背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
 角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
@@ -4344,7 +4710,7 @@ history：
 
 ## SFG50-019-T1-02 · T1 / interval_change
 
-来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn；交互对方：Corin Dast。关系判断由状态持有者指向交互对方。
 
 背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
 角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
@@ -4388,7 +4754,7 @@ t1中Esra认可更正的必要性，但仍追问合法性存疑期间如何安�
 
 ## SFG50-019-T1-03 · T1 / interval_change
 
-来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn；交互对方：Corin Dast。关系判断由状态持有者指向交互对方。
 
 背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
 角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
@@ -4432,7 +4798,7 @@ t1中Esra在认可必要更正后，仍提出协议应何时订立的具体疑�
 
 ## SFG50-019-T1-04 · T1 / joint_change
 
-来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn；交互对方：Corin Dast。关系判断由状态持有者指向交互对方。
 
 背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
 角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
@@ -4476,7 +4842,7 @@ t1中Esra坚持更正并追问合法性确认与协议的先后关系，t2又明
 
 ## SFG50-019-T3-01 · T3 / immediate_effect
 
-来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn；交互对方：Corin Dast。关系判断由状态持有者指向交互对方。
 
 背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
 角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
@@ -4521,7 +4887,7 @@ t2中Esra已允许可行性评估，但明确禁止把材料当作借展或占�
 
 ## SFG50-019-T3-02 · T3 / delayed_effect
 
-来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn；交互对方：Corin Dast。关系判断由状态持有者指向交互对方。
 
 背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
 角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
@@ -4567,7 +4933,7 @@ history：
 
 ## SFG50-019-T3-03 · T3 / action_comparison
 
-来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn；交互对方：Corin Dast。关系判断由状态持有者指向交互对方。
 
 背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
 角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
@@ -4612,7 +4978,7 @@ history：
 
 ## SFG50-019-T3-04 · T3 / immediate_delayed
 
-来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn；交互对方：Corin Dast。关系判断由状态持有者指向交互对方。
 
 背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
 角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
@@ -4658,7 +5024,7 @@ history：
 
 ## SFG50-020-T1-01 · T1 / current_intensity
 
-来源：GPT50_020；轨迹：e21fcb2884ee41cca1a2e1d6e3abb7ff；状态持有者：Mara Quill → Tomas Vale。
+来源：GPT50_020；轨迹：e21fcb2884ee41cca1a2e1d6e3abb7ff；状态持有者：Mara Quill；交互对方：Tomas Vale。关系判断由状态持有者指向交互对方。
 
 背景：At 6:47 p.m. Wednesday, a regional organizer requests walkout authorization by 7 p.m. A private alternative concession is under consideration alongside workers' hours and attendance sanctions. The steward knows which outspoken workers cannot absorb a lost shift and which fear speaking publicly.
 角色目标：Secure shop-wide written protection and a survivable course of action for workers facing lost wages or discipline.
@@ -4704,7 +5070,7 @@ history：
 
 ## SFG50-020-T1-02 · T1 / interval_change
 
-来源：GPT50_020；轨迹：e21fcb2884ee41cca1a2e1d6e3abb7ff；状态持有者：Mara Quill → Tomas Vale。
+来源：GPT50_020；轨迹：e21fcb2884ee41cca1a2e1d6e3abb7ff；状态持有者：Mara Quill；交互对方：Tomas Vale。关系判断由状态持有者指向交互对方。
 
 背景：At 6:47 p.m. Wednesday, a regional organizer requests walkout authorization by 7 p.m. A private alternative concession is under consideration alongside workers' hours and attendance sanctions. The steward knows which outspoken workers cannot absorb a lost shift and which fear speaking publicly.
 角色目标：Secure shop-wide written protection and a survivable course of action for workers facing lost wages or discipline.
@@ -4747,7 +5113,7 @@ t1中Mara提出三条议程要求，t2中Tomas明确支持，并针对旧有报�
 
 ## SFG50-020-T1-03 · T1 / interval_change
 
-来源：GPT50_020；轨迹：e21fcb2884ee41cca1a2e1d6e3abb7ff；状态持有者：Mara Quill → Tomas Vale。
+来源：GPT50_020；轨迹：e21fcb2884ee41cca1a2e1d6e3abb7ff；状态持有者：Mara Quill；交互对方：Tomas Vale。关系判断由状态持有者指向交互对方。
 
 背景：At 6:47 p.m. Wednesday, a regional organizer requests walkout authorization by 7 p.m. A private alternative concession is under consideration alongside workers' hours and attendance sanctions. The steward knows which outspoken workers cannot absorb a lost shift and which fear speaking publicly.
 角色目标：Secure shop-wide written protection and a survivable course of action for workers facing lost wages or discipline.
@@ -4790,7 +5156,7 @@ Mara在t1已明确说要把三条带入区域议程，t2又直接要求写入防
 
 ## SFG50-020-T1-04 · T1 / joint_change
 
-来源：GPT50_020；轨迹：e21fcb2884ee41cca1a2e1d6e3abb7ff；状态持有者：Mara Quill → Tomas Vale。
+来源：GPT50_020；轨迹：e21fcb2884ee41cca1a2e1d6e3abb7ff；状态持有者：Mara Quill；交互对方：Tomas Vale。关系判断由状态持有者指向交互对方。
 
 背景：At 6:47 p.m. Wednesday, a regional organizer requests walkout authorization by 7 p.m. A private alternative concession is under consideration alongside workers' hours and attendance sanctions. The steward knows which outspoken workers cannot absorb a lost shift and which fear speaking publicly.
 角色目标：Secure shop-wide written protection and a survivable course of action for workers facing lost wages or discipline.
@@ -4834,7 +5200,7 @@ t1中Mara提出带入议程的三条条件；t2她承接Tomas补充的防削班�
 
 ## SFG50-021-T1-01 · T1 / current_intensity
 
-来源：GPT50_021；轨迹：4753731272154d1cb980762c14da2d44；状态持有者：Leora Venn → Ansel Rusk。
+来源：GPT50_021；轨迹：4753731272154d1cb980762c14da2d44；状态持有者：Leora Venn；交互对方：Ansel Rusk。关系判断由状态持有者指向交互对方。
 
 背景：A relative requests a nine-year-old child move to their household tonight as the current placement deteriorates and a home study remains unresolved. The relative knows an unassessed adult returned several days ago and is sleeping in the household; the roster has not been updated.
 角色目标：Secure a family placement for his niece that preserves her school, neighborhood, and family connection.
@@ -4880,7 +5246,7 @@ t1中Leora拒绝当晚亲属安置，t2提出临时安排和后续评估路径�
 
 ## SFG50-021-T1-02 · T1 / interval_change
 
-来源：GPT50_021；轨迹：4753731272154d1cb980762c14da2d44；状态持有者：Leora Venn → Ansel Rusk。
+来源：GPT50_021；轨迹：4753731272154d1cb980762c14da2d44；状态持有者：Leora Venn；交互对方：Ansel Rusk。关系判断由状态持有者指向交互对方。
 
 背景：A relative requests a nine-year-old child move to their household tonight as the current placement deteriorates and a home study remains unresolved. The relative knows an unassessed adult returned several days ago and is sleeping in the household; the roster has not been updated.
 角色目标：Secure a family placement for his niece that preserves her school, neighborhood, and family connection.
@@ -4924,7 +5290,7 @@ t1中Leora要求补充成年人身份、关系及居住期限；t2中Ansel逐项
 
 ## SFG50-021-T1-03 · T1 / interval_change
 
-来源：GPT50_021；轨迹：4753731272154d1cb980762c14da2d44；状态持有者：Leora Venn → Ansel Rusk。
+来源：GPT50_021；轨迹：4753731272154d1cb980762c14da2d44；状态持有者：Leora Venn；交互对方：Ansel Rusk。关系判断由状态持有者指向交互对方。
 
 背景：A relative requests a nine-year-old child move to their household tonight as the current placement deteriorates and a home study remains unresolved. The relative knows an unassessed adult returned several days ago and is sleeping in the household; the roster has not been updated.
 角色目标：Secure a family placement for his niece that preserves her school, neighborhood, and family connection.
@@ -4968,7 +5334,7 @@ history：
 
 ## SFG50-021-T1-04 · T1 / joint_change
 
-来源：GPT50_021；轨迹：4753731272154d1cb980762c14da2d44；状态持有者：Leora Venn → Ansel Rusk。
+来源：GPT50_021；轨迹：4753731272154d1cb980762c14da2d44；状态持有者：Leora Venn；交互对方：Ansel Rusk。关系判断由状态持有者指向交互对方。
 
 背景：A relative requests a nine-year-old child move to their household tonight as the current placement deteriorates and a home study remains unresolved. The relative knows an unassessed adult returned several days ago and is sleeping in the household; the roster has not been updated.
 角色目标：Secure a family placement for his niece that preserves her school, neighborhood, and family connection.
@@ -5010,9 +5376,190 @@ t1中Leora以身份背景未核实为由拒绝当晚安置并索取信息；t2�
 审核备注：基本不变依据是前置条件持续有效，不是沉默。审核时须区分加快评估进度与提高核查倾向。
 分支验证：not_required
 
+## SFG50-021-T3-01 · T3 / immediate_effect
+
+来源：GPT50_021；轨迹：4753731272154d1cb980762c14da2d44；状态持有者：Leora Venn；交互对方：Ansel Rusk。关系判断由状态持有者指向交互对方。
+
+背景：A relative requests a nine-year-old child move to their household tonight as the current placement deteriorates and a home study remains unresolved. The relative knows an unassessed adult returned several days ago and is sleeping in the household; the roster has not been updated.
+角色目标：Secure a family placement for his niece that preserves her school, neighborhood, and family connection.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The child's current placement has deteriorated through sleep, school, and nighttime-safety problems, creating pressure to preserve family, school, and routine continuity.
+
+history：
+
+- [t1] Ansel Rusk：我想争取今晚让外甥女住过来，尽量保住她的学校和熟悉的生活。得先说明，家里有个成年人几天前回来住了，还没评估，住户名单也没更新；这会怎样影响今晚的安排？
+  Leora Venn：这位成年人的身份和背景尚未核实，今晚无法批准安置。我需要知道他的姓名、与你的关系，以及他会长期居住还是短期停留。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ansel Rusk：我会把他的姓名和与我的关系如实补报，停留多久我还不能确认，不能先按短住算。今晚既然不能搬来，我最担心她夜里是否安全；过渡安排能否尽量留在她学校附近？
+  Leora Venn：我会在今晚确认安全的临时安排，会优先考虑离学校近的寄养家庭；但如果必须紧急调配，可能不在她学校片区。你补报信息之后，我会尽快推进你这边的评估，看能否在几天内接过来。
+  可见表达：{"facial_expression": "focused, slight concern around eyes", "gaze": "steady, direct", "speech_style": "measured, concrete", "prosody": "even pace, slight emphasis on priority and timeline", "behavioral_cues": ["slight forward lean when stating priority", "brief pause before constraint"]}
+
+- 候选行动 action_1：如果今晚只能先住远些，我同意先保安全；几天内能否接来还得看评估，我不会先向她保证。过渡期间，我想跟她通电话，让她知道家里还在惦记她，这能安排吗？
+- 候选行动 action_2：我理解今晚先保安全。若不耽误安置，能否先核实有没有离她学校近、也安全可行的临时方案？通话可以先放一放；若没有合适选项，就按安全方案安排。评估请继续推进，我不会向她保证几天内能接来。
+
+**题目：相对t2，若Ansel Rusk采取action_2，在下一次环境回应时，Leora Venn觉得Ansel是否实质回应了自己的关切，这一判断最可能如何变化？**
+
+- **A.** 下降
+- **B.** 上升
+- **C.** 基本不变
+
+**作者参考答案：B（待审）**
+
+Leora在t1要求核实住户，t2说明安全优先且学校片区不能保证。行动二明确接受无近校选项时的安全安排，并拒绝预先保证搬入期限，比此前仅询问安排更直接回应她的限制。因此上升比不变更有依据；近校请求附有不耽误安置的条件，不能据此推断下降，也不代表核查已完成。
+
+证据：t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "从t2至执行action_2后的下一次环境回应", "state_owner": "GPT50_021_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "goal_constraint_ignored", "C": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "decrease"}, "B": {"relationship.perceived_responsiveness": "increase"}, "C": {"relationship.perceived_responsiveness": "similar"}}
+可接受答案：B
+审核备注：判断方向是Leora对Ansel的评价，不是Leora是否回应了近校请求；增量在明确接受后备方案。
+分支验证：validated
+
+## SFG50-021-T3-02 · T3 / delayed_effect
+
+来源：GPT50_021；轨迹：4753731272154d1cb980762c14da2d44；状态持有者：Leora Venn；交互对方：Ansel Rusk。关系判断由状态持有者指向交互对方。
+
+背景：A relative requests a nine-year-old child move to their household tonight as the current placement deteriorates and a home study remains unresolved. The relative knows an unassessed adult returned several days ago and is sleeping in the household; the roster has not been updated.
+角色目标：Secure a family placement for his niece that preserves her school, neighborhood, and family connection.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The child's current placement has deteriorated through sleep, school, and nighttime-safety problems, creating pressure to preserve family, school, and routine continuity.
+
+history：
+
+- [t1] Ansel Rusk：我想争取今晚让外甥女住过来，尽量保住她的学校和熟悉的生活。得先说明，家里有个成年人几天前回来住了，还没评估，住户名单也没更新；这会怎样影响今晚的安排？
+  Leora Venn：这位成年人的身份和背景尚未核实，今晚无法批准安置。我需要知道他的姓名、与你的关系，以及他会长期居住还是短期停留。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ansel Rusk：我会把他的姓名和与我的关系如实补报，停留多久我还不能确认，不能先按短住算。今晚既然不能搬来，我最担心她夜里是否安全；过渡安排能否尽量留在她学校附近？
+  Leora Venn：我会在今晚确认安全的临时安排，会优先考虑离学校近的寄养家庭；但如果必须紧急调配，可能不在她学校片区。你补报信息之后，我会尽快推进你这边的评估，看能否在几天内接过来。
+  可见表达：{"facial_expression": "focused, slight concern around eyes", "gaze": "steady, direct", "speech_style": "measured, concrete", "prosody": "even pace, slight emphasis on priority and timeline", "behavioral_cues": ["slight forward lean when stating priority", "brief pause before constraint"]}
+
+- 候选行动 action_1：如果今晚只能先住远些，我同意先保安全；几天内能否接来还得看评估，我不会先向她保证。过渡期间，我想跟她通电话，让她知道家里还在惦记她，这能安排吗？
+- 候选行动 action_2：我理解今晚先保安全。若不耽误安置，能否先核实有没有离她学校近、也安全可行的临时方案？通话可以先放一放；若没有合适选项，就按安全方案安排。评估请继续推进，我不会向她保证几天内能接来。
+
+**题目：相对t2，若Ansel Rusk采取action_2，到从该行动开始的第5轮环境回应末，Leora Venn对推进安全临时安置这一可选行动的决策准备度最可能如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 上升
+
+**作者参考答案：C（待审）**
+
+t2中Leora已提出近校优先、必要时跨片区的安排，但具体取舍尚待落实。行动二接受这一后备规则，把近校核实限定为不延误安全安置，为后续推进提供明确共识，故准备度上升比停留原处更有依据。此处只预测临时方案的决策推进，不预测床位必然找到，更不等于批准亲属家庭搬入。
+
+证据：t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.decision_readiness"], "time_scope": "从t2至action_2开始后的第5轮环境回应末，含即时一轮", "state_owner": "GPT50_021_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "goal_constraint_ignored"}
+分维映射：{"A": {"behavioral_disposition.decision_readiness": "similar"}, "B": {"behavioral_disposition.decision_readiness": "decrease"}, "C": {"behavioral_disposition.decision_readiness": "increase"}}
+可接受答案：C
+审核备注：限定临时安置决策，避免把仍待核查的亲属搬入审批混进来；不依赖模拟中的交通安排。
+分支验证：validated
+
+## SFG50-021-T3-03 · T3 / action_comparison
+
+来源：GPT50_021；轨迹：4753731272154d1cb980762c14da2d44；状态持有者：Leora Venn；交互对方：Ansel Rusk。关系判断由状态持有者指向交互对方。
+
+背景：A relative requests a nine-year-old child move to their household tonight as the current placement deteriorates and a home study remains unresolved. The relative knows an unassessed adult returned several days ago and is sleeping in the household; the roster has not been updated.
+角色目标：Secure a family placement for his niece that preserves her school, neighborhood, and family connection.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The child's current placement has deteriorated through sleep, school, and nighttime-safety problems, creating pressure to preserve family, school, and routine continuity.
+
+history：
+
+- [t1] Ansel Rusk：我想争取今晚让外甥女住过来，尽量保住她的学校和熟悉的生活。得先说明，家里有个成年人几天前回来住了，还没评估，住户名单也没更新；这会怎样影响今晚的安排？
+  Leora Venn：这位成年人的身份和背景尚未核实，今晚无法批准安置。我需要知道他的姓名、与你的关系，以及他会长期居住还是短期停留。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ansel Rusk：我会把他的姓名和与我的关系如实补报，停留多久我还不能确认，不能先按短住算。今晚既然不能搬来，我最担心她夜里是否安全；过渡安排能否尽量留在她学校附近？
+  Leora Venn：我会在今晚确认安全的临时安排，会优先考虑离学校近的寄养家庭；但如果必须紧急调配，可能不在她学校片区。你补报信息之后，我会尽快推进你这边的评估，看能否在几天内接过来。
+  可见表达：{"facial_expression": "focused, slight concern around eyes", "gaze": "steady, direct", "speech_style": "measured, concrete", "prosody": "even pace, slight emphasis on priority and timeline", "behavioral_cues": ["slight forward lean when stating priority", "brief pause before constraint"]}
+
+- 候选行动 action_1：如果今晚只能先住远些，我同意先保安全；几天内能否接来还得看评估，我不会先向她保证。过渡期间，我想跟她通电话，让她知道家里还在惦记她，这能安排吗？
+- 候选行动 action_2：我理解今晚先保安全。若不耽误安置，能否先核实有没有离她学校近、也安全可行的临时方案？通话可以先放一放；若没有合适选项，就按安全方案安排。评估请继续推进，我不会向她保证几天内能接来。
+
+**题目：以t2为共同基线，在各自行动后的下一次环境回应时，Leora Venn觉得Ansel Rusk实质回应自己关切的程度，行动A（action_1）与行动B（action_2）相比最可能怎样？**
+
+- **A.** 接近
+- **B.** B较高
+- **C.** A较高
+
+**作者参考答案：A（待审）**
+
+Leora提出的核心限制是今晚安全优先、近校不能保证、搬入须看评估。两项行动都明确接受安全后备方案，也都不提前保证搬入期限，因此有实质相同的回应基础，接近并非仅因缺乏差异证据。通话与近校请求各有侧重，公开材料不足以把其中一项排成明显更受Leora认可。
+
+证据：t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "分别采取action_1或action_2后的下一次环境回应", "state_owner": "GPT50_021_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "actor_reversal", "C": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "similar"}, "B": {"relationship.perceived_responsiveness": "higher_in_b"}, "C": {"relationship.perceived_responsiveness": "higher_in_a"}}
+可接受答案：A
+审核备注：私有即时判断有小差别，公开材料不支持稳定排序，采用接近；不能把Ansel的学校关切当成Leora的独有偏好。
+分支验证：validated
+
+## SFG50-021-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_021；轨迹：4753731272154d1cb980762c14da2d44；状态持有者：Leora Venn；交互对方：Ansel Rusk。关系判断由状态持有者指向交互对方。
+
+背景：A relative requests a nine-year-old child move to their household tonight as the current placement deteriorates and a home study remains unresolved. The relative knows an unassessed adult returned several days ago and is sleeping in the household; the roster has not been updated.
+角色目标：Secure a family placement for his niece that preserves her school, neighborhood, and family connection.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The child's current placement has deteriorated through sleep, school, and nighttime-safety problems, creating pressure to preserve family, school, and routine continuity.
+
+history：
+
+- [t1] Ansel Rusk：我想争取今晚让外甥女住过来，尽量保住她的学校和熟悉的生活。得先说明，家里有个成年人几天前回来住了，还没评估，住户名单也没更新；这会怎样影响今晚的安排？
+  Leora Venn：这位成年人的身份和背景尚未核实，今晚无法批准安置。我需要知道他的姓名、与你的关系，以及他会长期居住还是短期停留。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ansel Rusk：我会把他的姓名和与我的关系如实补报，停留多久我还不能确认，不能先按短住算。今晚既然不能搬来，我最担心她夜里是否安全；过渡安排能否尽量留在她学校附近？
+  Leora Venn：我会在今晚确认安全的临时安排，会优先考虑离学校近的寄养家庭；但如果必须紧急调配，可能不在她学校片区。你补报信息之后，我会尽快推进你这边的评估，看能否在几天内接过来。
+  可见表达：{"facial_expression": "focused, slight concern around eyes", "gaze": "steady, direct", "speech_style": "measured, concrete", "prosody": "even pace, slight emphasis on priority and timeline", "behavioral_cues": ["slight forward lean when stating priority", "brief pause before constraint"]}
+
+- 候选行动 action_1：如果今晚只能先住远些，我同意先保安全；几天内能否接来还得看评估，我不会先向她保证。过渡期间，我想跟她通电话，让她知道家里还在惦记她，这能安排吗？
+- 候选行动 action_2：我理解今晚先保安全。若不耽误安置，能否先核实有没有离她学校近、也安全可行的临时方案？通话可以先放一放；若没有合适选项，就按安全方案安排。评估请继续推进，我不会向她保证几天内能接来。
+
+**题目：若Ansel Rusk采取action_1，相对t2，Leora Venn坚持“亲属家庭搬入须先满足评估条件”这一边界的意愿，在即时回应与第5轮环境回应末最可能分别如何变化？**
+
+- **A.** 即时下降，延迟也下降
+- **B.** 即时基本不变，延迟也基本不变
+- **C.** 即时基本不变，延迟下降
+- **D.** 即时上升，延迟也上升
+
+**作者参考答案：B（待审）**
+
+Leora在t1拒绝未经核实的搬入，t2仍将补报和评估作为后续接来的条件，显示边界持续稳定。行动一再次承认评估前提，另提通话而不要求豁免，支持即时与延迟均维持既有边界。合作减少争执不等于撤回条件，也没有新违规要求需要加码；后续评估可能推进，但不代表边界意愿减弱。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.boundary_assertion"], "time_scope": "即时为行动后的下一次环境回应；延迟为从行动开始的第5轮环境回应末；均与t2比较", "state_owner": "GPT50_021_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "C": "promise_as_fulfillment", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.boundary_assertion@immediate": "decrease", "behavioral_disposition.boundary_assertion@delayed": "decrease"}, "B": {"behavioral_disposition.boundary_assertion@immediate": "similar", "behavioral_disposition.boundary_assertion@delayed": "similar"}, "C": {"behavioral_disposition.boundary_assertion@immediate": "similar", "behavioral_disposition.boundary_assertion@delayed": "decrease"}, "D": {"behavioral_disposition.boundary_assertion@immediate": "increase", "behavioral_disposition.boundary_assertion@delayed": "increase"}}
+可接受答案：B
+审核备注：两项判断是同一变量的两个时点；明确区分坚持审批条件与因条件满足而批准，后者不自动代表边界下降。
+分支验证：validated
+
 ## SFG50-022-T1-01 · T1 / current_intensity
 
-来源：GPT50_022；轨迹：d77eb4e4af474fd1bc3e7882d4d6e576；状态持有者：Mira Halden → Oren Pike。
+来源：GPT50_022；轨迹：d77eb4e4af474fd1bc3e7882d4d6e576；状态持有者：Mira Halden；交互对方：Oren Pike。关系判断由状态持有者指向交互对方。
 
 背景：At a trial unblinding and disclosure deadline, an investigator and participant advocate must handle a subgroup safety signal and unresolved participant information. The advocate knows participants received inconsistent assurances and holds accounts absent from the central safety file.
 角色目标：Secure timely participant protection through disclosure of the possible oxygen risk, an enrollment safeguard, corrected risk information, and independent review when warranted.
@@ -5058,7 +5605,7 @@ Mira在t1具体要求核查设备校准记录及监测日志完整性，t2又提
 
 ## SFG50-022-T1-02 · T1 / interval_change
 
-来源：GPT50_022；轨迹：d77eb4e4af474fd1bc3e7882d4d6e576；状态持有者：Mira Halden → Oren Pike。
+来源：GPT50_022；轨迹：d77eb4e4af474fd1bc3e7882d4d6e576；状态持有者：Mira Halden；交互对方：Oren Pike。关系判断由状态持有者指向交互对方。
 
 背景：At a trial unblinding and disclosure deadline, an investigator and participant advocate must handle a subgroup safety signal and unresolved participant information. The advocate knows participants received inconsistent assurances and holds accounts absent from the central safety file.
 角色目标：Secure timely participant protection through disclosure of the possible oxygen risk, an enrollment safeguard, corrected risk information, and independent review when warranted.
@@ -5102,7 +5649,7 @@ Mira在t1提出并行核查的要求，Oren在t2明确赞成并行核查，并�
 
 ## SFG50-022-T1-03 · T1 / interval_change
 
-来源：GPT50_022；轨迹：d77eb4e4af474fd1bc3e7882d4d6e576；状态持有者：Mira Halden → Oren Pike。
+来源：GPT50_022；轨迹：d77eb4e4af474fd1bc3e7882d4d6e576；状态持有者：Mira Halden；交互对方：Oren Pike。关系判断由状态持有者指向交互对方。
 
 背景：At a trial unblinding and disclosure deadline, an investigator and participant advocate must handle a subgroup safety signal and unresolved participant information. The advocate knows participants received inconsistent assurances and holds accounts absent from the central safety file.
 角色目标：Secure timely participant protection through disclosure of the possible oxygen risk, an enrollment safeguard, corrected risk information, and independent review when warranted.
@@ -5146,7 +5693,7 @@ t1的Mira已同意披露与并行核查，t2进一步明确支持暂停入组，
 
 ## SFG50-022-T1-04 · T1 / joint_change
 
-来源：GPT50_022；轨迹：d77eb4e4af474fd1bc3e7882d4d6e576；状态持有者：Mira Halden → Oren Pike。
+来源：GPT50_022；轨迹：d77eb4e4af474fd1bc3e7882d4d6e576；状态持有者：Mira Halden；交互对方：Oren Pike。关系判断由状态持有者指向交互对方。
 
 背景：At a trial unblinding and disclosure deadline, an investigator and participant advocate must handle a subgroup safety signal and unresolved participant information. The advocate knows participants received inconsistent assurances and holds accounts absent from the central safety file.
 角色目标：Secure timely participant protection through disclosure of the possible oxygen risk, an enrollment safeguard, corrected risk information, and independent review when warranted.
@@ -5190,7 +5737,7 @@ Mira在t1同意写明风险与不确定性，t2继续安排修正文本传达，
 
 ## SFG50-023-T1-01 · T1 / current_intensity
 
-来源：GPT50_023；轨迹：3ad5ec219e0d46bb9253740edcf4096e；状态持有者：Mara Kest → Tomas Valez。
+来源：GPT50_023；轨迹：3ad5ec219e0d46bb9253740edcf4096e；状态持有者：Mara Kest；交互对方：Tomas Valez。关系判断由状态持有者指向交互对方。
 
 背景：At the six-o'clock lock, a signed request would move the next three night releases, about 1.8 million gallons, from staple and forage blocks to premium pepper and orchard blocks during a six-day heat wave. The representative knows smallholders are quietly pooling unused allotment hours outside official records.
 角色目标：Secure a limited premium-crop exception only if every smallholder block retains a base turn and the exception has a firm sunset.
@@ -5236,7 +5783,7 @@ t2中Mara亲自提出调配前记录闸位和表读数、期满双方核对，�
 
 ## SFG50-023-T1-02 · T1 / interval_change
 
-来源：GPT50_023；轨迹：3ad5ec219e0d46bb9253740edcf4096e；状态持有者：Mara Kest → Tomas Valez。
+来源：GPT50_023；轨迹：3ad5ec219e0d46bb9253740edcf4096e；状态持有者：Mara Kest；交互对方：Tomas Valez。关系判断由状态持有者指向交互对方。
 
 背景：At the six-o'clock lock, a signed request would move the next three night releases, about 1.8 million gallons, from staple and forage blocks to premium pepper and orchard blocks during a six-day heat wave. The representative knows smallholders are quietly pooling unused allotment hours outside official records.
 角色目标：Secure a limited premium-crop exception only if every smallholder block retains a base turn and the exception has a firm sunset.
@@ -5280,7 +5827,7 @@ t1的Mara询问能否用备忘向成员确认，t2的Tomas明确同意拿去征�
 
 ## SFG50-023-T1-03 · T1 / interval_change
 
-来源：GPT50_023；轨迹：3ad5ec219e0d46bb9253740edcf4096e；状态持有者：Mara Kest → Tomas Valez。
+来源：GPT50_023；轨迹：3ad5ec219e0d46bb9253740edcf4096e；状态持有者：Mara Kest；交互对方：Tomas Valez。关系判断由状态持有者指向交互对方。
 
 背景：At the six-o'clock lock, a signed request would move the next three night releases, about 1.8 million gallons, from staple and forage blocks to premium pepper and orchard blocks during a six-day heat wave. The representative knows smallholders are quietly pooling unused allotment hours outside official records.
 角色目标：Secure a limited premium-crop exception only if every smallholder block retains a base turn and the exception has a firm sunset.
@@ -5324,7 +5871,7 @@ history：
 
 ## SFG50-023-T1-04 · T1 / joint_change
 
-来源：GPT50_023；轨迹：3ad5ec219e0d46bb9253740edcf4096e；状态持有者：Mara Kest → Tomas Valez。
+来源：GPT50_023；轨迹：3ad5ec219e0d46bb9253740edcf4096e；状态持有者：Mara Kest；交互对方：Tomas Valez。关系判断由状态持有者指向交互对方。
 
 背景：At the six-o'clock lock, a signed request would move the next three night releases, about 1.8 million gallons, from staple and forage blocks to premium pepper and orchard blocks during a six-day heat wave. The representative knows smallholders are quietly pooling unused allotment hours outside official records.
 角色目标：Secure a limited premium-crop exception only if every smallholder block retains a base turn and the exception has a firm sunset.
@@ -5368,7 +5915,7 @@ Mara在t1已同意核心条件并主动起草备忘，t2继续补充条款、安
 
 ## SFG50-024-T1-01 · T1 / current_intensity
 
-来源：GPT50_024；轨迹：f51e4de88db343bf95aef192aecf2f6c；状态持有者：Mara Venn → Ivo Saye。
+来源：GPT50_024；轨迹：f51e4de88db343bf95aef192aecf2f6c；状态持有者：Mara Venn；交互对方：Ivo Saye。关系判断由状态持有者指向交互对方。
 
 背景：At 5:42 p.m. on release day, a producer asks for a six-o'clock release decision or exact timeline edit after a shelter director's late off-record explanation challenges a disputed event date. Ivo knows the coordinator fused two dates that require records and a second interview to separate.
 角色目标：Protect source commitments, the coordinator, and public accuracy by verifying the disputed chronology or requiring the date-specific claim to be held or removed.
@@ -5414,7 +5961,7 @@ t2 中 Mara 明确表示马上安排删改、改完交 Ivo 复核，并主动确
 
 ## SFG50-024-T1-02 · T1 / interval_change
 
-来源：GPT50_024；轨迹：f51e4de88db343bf95aef192aecf2f6c；状态持有者：Mara Venn → Ivo Saye。
+来源：GPT50_024；轨迹：f51e4de88db343bf95aef192aecf2f6c；状态持有者：Mara Venn；交互对方：Ivo Saye。关系判断由状态持有者指向交互对方。
 
 背景：At 5:42 p.m. on release day, a producer asks for a six-o'clock release decision or exact timeline edit after a shelter director's late off-record explanation challenges a disputed event date. Ivo knows the coordinator fused two dates that require records and a second interview to separate.
 角色目标：Protect source commitments, the coordinator, and public accuracy by verifying the disputed chronology or requiring the date-specific claim to be held or removed.
@@ -5457,7 +6004,7 @@ t1 Mara已围绕六点放行积极追问必须删改的内容，说明持续推�
 
 ## SFG50-024-T1-03 · T1 / interval_change
 
-来源：GPT50_024；轨迹：f51e4de88db343bf95aef192aecf2f6c；状态持有者：Mara Venn → Ivo Saye。
+来源：GPT50_024；轨迹：f51e4de88db343bf95aef192aecf2f6c；状态持有者：Mara Venn；交互对方：Ivo Saye。关系判断由状态持有者指向交互对方。
 
 背景：At 5:42 p.m. on release day, a producer asks for a six-o'clock release decision or exact timeline edit after a shelter director's late off-record explanation challenges a disputed event date. Ivo knows the coordinator fused two dates that require records and a second interview to separate.
 角色目标：Protect source commitments, the coordinator, and public accuracy by verifying the disputed chronology or requiring the date-specific claim to be held or removed.
@@ -5500,7 +6047,7 @@ t1 的删改范围和放行条件仍待处理；t2 已出现删三处、提交�
 
 ## SFG50-024-T1-04 · T1 / joint_change
 
-来源：GPT50_024；轨迹：f51e4de88db343bf95aef192aecf2f6c；状态持有者：Mara Venn → Ivo Saye。
+来源：GPT50_024；轨迹：f51e4de88db343bf95aef192aecf2f6c；状态持有者：Mara Venn；交互对方：Ivo Saye。关系判断由状态持有者指向交互对方。
 
 背景：At 5:42 p.m. on release day, a producer asks for a six-o'clock release decision or exact timeline edit after a shelter director's late off-record explanation challenges a disputed event date. Ivo knows the coordinator fused two dates that require records and a second interview to separate.
 角色目标：Protect source commitments, the coordinator, and public accuracy by verifying the disputed chronology or requiring the date-specific claim to be held or removed.
@@ -5542,9 +6089,193 @@ Mara在t1已积极追问删改范围与六点放行条件，t2仍推进同一发
 审核备注：助手重写组合：绑定 Mara 的决心及 Mara 对受评人物的回应感，避免把计划具体程度混作两类意愿增强。仍待人工审核。
 分支验证：not_required
 
+## SFG50-024-T3-01 · T3 / immediate_effect
+
+来源：GPT50_024；轨迹：f51e4de88db343bf95aef192aecf2f6c；状态持有者：Mara Venn；交互对方：Ivo Saye。关系判断由状态持有者指向交互对方。
+
+背景：At 5:42 p.m. on release day, a producer asks for a six-o'clock release decision or exact timeline edit after a shelter director's late off-record explanation challenges a disputed event date. Ivo knows the coordinator fused two dates that require records and a second interview to separate.
+角色目标：Protect source commitments, the coordinator, and public accuracy by verifying the disputed chronology or requiring the date-specific claim to be held or removed.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Ivo brought shelter organizers and residents into Mara’s initially solo project fourteen months earlier, and they agreed that sources would not be surprised by material changes or release.；A breakout episode increased Mara’s profile and attracted the distributor, while Ivo quietly repaired a date error without public credit.；For the current episode, Ivo found mismatches among a coordinator’s recorded account, a shift roster, a voice note, and a calendar, but the production schedule kept the edit moving.
+
+history：
+
+- [t1] Ivo Saye：我不能给现版六点上线的核查放行：协调员把两个日期混在了一起，需要核对记录并再访谈才能拆清。我建议先删去具体日期及依赖它的推断；主任的私下解释只能作为核查线索，涉及信源的实质改动仍须在发布前告知。
+  Mara Venn：好，那具体哪几处必须删？如果现在删掉日期和推断，你能在六点前放行吗？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ivo Saye：我要求删掉争议日期、据此排列的先后关系，以及依赖这个顺序的因果判断；不能只消掉日期，留下同样的暗示。六点前若我能复核删改版、确认相关信源已获告知，就能放行；现在还不能保证。
+  Mara Venn：好，我马上安排删这三处，改完发你复核，同时我去确认信源通知。
+  可见表达：{"facial_expression": "focused, determined", "gaze": "direct", "speech_style": "crisp, action-oriented", "prosody": "brisk tempo, falling terminal pitch", "behavioral_cues": ["already turning toward production workspace"]}
+
+- 候选行动 action_1：好，我等删改版复核。通知协调员时，我建议把原因说成时间线尚未核清；现有矛盾不足以否定其整段叙述，也不能把主任的解释当作定论。
+- 候选行动 action_2：我建议今晚先不放行整集，留出时间核对记录并补访；核清前不发布这条时间线，也不把主任的私下解释当定论。这样不必在六点前靠删改来消除残留暗示，后续仍可评估是否保留完整脉络；代价是错过今晚窗口，整集都要延期。
+
+**题目：以t2为基线，若Ivo Saye采取action_2，Mara Venn在下一次回应时的内心焦虑最可能如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：B（待审）**
+
+Mara先追问六点能否放行，随后安排删改复核，说明她正依赖这一窗口。action_2提出整集延期且核查时长未定，新增目标受阻和失控来源，因而比基本不变或下降更支持焦虑上升。这是对内心体验的机制预测，不以克制表情定强弱，也不预言她必然接受延期。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["emotion.anxiety"], "time_scope": "t2至采取action_2后的下一次环境回应", "state_owner": "GPT50_024_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "history_ignored", "D": "state_dimension_confusion"}
+分维映射：{"A": {"emotion.anxiety": "cannot_determine"}, "B": {"emotion.anxiety": "increase"}, "C": {"emotion.anxiety": "similar"}, "D": {"emotion.anxiety": "decrease"}}
+可接受答案：B
+审核备注：焦虑依据是窗口受威胁而非语气；不能把延期建议写成Mara已同意的决定。
+分支验证：validated
+
+## SFG50-024-T3-02 · T3 / delayed_effect
+
+来源：GPT50_024；轨迹：f51e4de88db343bf95aef192aecf2f6c；状态持有者：Mara Venn；交互对方：Ivo Saye。关系判断由状态持有者指向交互对方。
+
+背景：At 5:42 p.m. on release day, a producer asks for a six-o'clock release decision or exact timeline edit after a shelter director's late off-record explanation challenges a disputed event date. Ivo knows the coordinator fused two dates that require records and a second interview to separate.
+角色目标：Protect source commitments, the coordinator, and public accuracy by verifying the disputed chronology or requiring the date-specific claim to be held or removed.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Ivo brought shelter organizers and residents into Mara’s initially solo project fourteen months earlier, and they agreed that sources would not be surprised by material changes or release.；A breakout episode increased Mara’s profile and attracted the distributor, while Ivo quietly repaired a date error without public credit.；For the current episode, Ivo found mismatches among a coordinator’s recorded account, a shift roster, a voice note, and a calendar, but the production schedule kept the edit moving.
+
+history：
+
+- [t1] Ivo Saye：我不能给现版六点上线的核查放行：协调员把两个日期混在了一起，需要核对记录并再访谈才能拆清。我建议先删去具体日期及依赖它的推断；主任的私下解释只能作为核查线索，涉及信源的实质改动仍须在发布前告知。
+  Mara Venn：好，那具体哪几处必须删？如果现在删掉日期和推断，你能在六点前放行吗？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ivo Saye：我要求删掉争议日期、据此排列的先后关系，以及依赖这个顺序的因果判断；不能只消掉日期，留下同样的暗示。六点前若我能复核删改版、确认相关信源已获告知，就能放行；现在还不能保证。
+  Mara Venn：好，我马上安排删这三处，改完发你复核，同时我去确认信源通知。
+  可见表达：{"facial_expression": "focused, determined", "gaze": "direct", "speech_style": "crisp, action-oriented", "prosody": "brisk tempo, falling terminal pitch", "behavioral_cues": ["already turning toward production workspace"]}
+
+- 候选行动 action_1：好，我等删改版复核。通知协调员时，我建议把原因说成时间线尚未核清；现有矛盾不足以否定其整段叙述，也不能把主任的解释当作定论。
+- 候选行动 action_2：我建议今晚先不放行整集，留出时间核对记录并补访；核清前不发布这条时间线，也不把主任的私下解释当定论。这样不必在六点前靠删改来消除残留暗示，后续仍可评估是否保留完整脉络；代价是错过今晚窗口，整集都要延期。
+
+**题目：以t2为基线，若Ivo Saye采取action_1，到含即时回应在内的第5轮末，Mara Venn因本次发布保留未经核实的时间线暗示或不当否定协调员而遭受声誉损害的风险，最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+- **D.** 证据不足
+
+**作者参考答案：C（待审）**
+
+t2中Mara已安排删改、复核与信源通知，并转向执行；action_1进一步限定通知口径，避免把矛盾升级为否定整段叙述。既有配合加上明确的纠错机制，支持五轮内预期声誉风险下降，优于基本不变。边界是删改尚未完成，不能据此认定时间线核清或风险消失。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "本次发布保留未经核实的时间线暗示或不当否定协调员，导致Mara Venn声誉受损", "target_state_ids": ["consequence_risk.reputational_harm_risk"], "time_scope": "t2至采取action_1后含即时回应在内的第5轮末", "state_owner": "GPT50_024_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "history_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.reputational_harm_risk": "increase"}, "B": {"consequence_risk.reputational_harm_risk": "similar"}, "C": {"consequence_risk.reputational_harm_risk": "decrease"}, "D": {"consequence_risk.reputational_harm_risk": "cannot_determine"}}
+可接受答案：C
+审核备注：下降依赖已启动流程的合理推进，不是把Ivo的承诺当履约；风险仅限指定声誉事件。
+分支验证：validated
+
+## SFG50-024-T3-03 · T3 / action_comparison
+
+来源：GPT50_024；轨迹：f51e4de88db343bf95aef192aecf2f6c；状态持有者：Mara Venn；交互对方：Ivo Saye。关系判断由状态持有者指向交互对方。
+
+背景：At 5:42 p.m. on release day, a producer asks for a six-o'clock release decision or exact timeline edit after a shelter director's late off-record explanation challenges a disputed event date. Ivo knows the coordinator fused two dates that require records and a second interview to separate.
+角色目标：Protect source commitments, the coordinator, and public accuracy by verifying the disputed chronology or requiring the date-specific claim to be held or removed.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Ivo brought shelter organizers and residents into Mara’s initially solo project fourteen months earlier, and they agreed that sources would not be surprised by material changes or release.；A breakout episode increased Mara’s profile and attracted the distributor, while Ivo quietly repaired a date error without public credit.；For the current episode, Ivo found mismatches among a coordinator’s recorded account, a shift roster, a voice note, and a calendar, but the production schedule kept the edit moving.
+
+history：
+
+- [t1] Ivo Saye：我不能给现版六点上线的核查放行：协调员把两个日期混在了一起，需要核对记录并再访谈才能拆清。我建议先删去具体日期及依赖它的推断；主任的私下解释只能作为核查线索，涉及信源的实质改动仍须在发布前告知。
+  Mara Venn：好，那具体哪几处必须删？如果现在删掉日期和推断，你能在六点前放行吗？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ivo Saye：我要求删掉争议日期、据此排列的先后关系，以及依赖这个顺序的因果判断；不能只消掉日期，留下同样的暗示。六点前若我能复核删改版、确认相关信源已获告知，就能放行；现在还不能保证。
+  Mara Venn：好，我马上安排删这三处，改完发你复核，同时我去确认信源通知。
+  可见表达：{"facial_expression": "focused, determined", "gaze": "direct", "speech_style": "crisp, action-oriented", "prosody": "brisk tempo, falling terminal pitch", "behavioral_cues": ["already turning toward production workspace"]}
+
+- 候选行动 action_1：好，我等删改版复核。通知协调员时，我建议把原因说成时间线尚未核清；现有矛盾不足以否定其整段叙述，也不能把主任的解释当作定论。
+- 候选行动 action_2：我建议今晚先不放行整集，留出时间核对记录并补访；核清前不发布这条时间线，也不把主任的私下解释当定论。这样不必在六点前靠删改来消除残留暗示，后续仍可评估是否保留完整脉络；代价是错过今晚窗口，整集都要延期。
+
+**题目：将action_1记为A、action_2记为B。在各自执行后的下一次环境回应时，哪种行动下Mara Venn无法在今晚六点窗口发布本集的风险更高？**
+
+- **A.** 证据不足
+- **B.** A较高
+- **C.** 接近
+- **D.** B较高
+
+**作者参考答案：D（待审）**
+
+共同历史中，Mara正在争取六点发布，t2仍保留删改复核后放行的路径。A延续此路径，B则明确建议整集延期，并承认错过今晚窗口的代价，因此B下该目标失败风险更高，而非接近。此比较只涉及今晚发布时间，不代表延期损害核查目标，也不认定建议必被采纳。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "Mara Venn无法在今晚六点窗口发布本集", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "分别采取两项候选行动后的下一次环境回应", "state_owner": "GPT50_024_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "goal_constraint_ignored", "C": "history_ignored"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "cannot_determine"}, "B": {"consequence_risk.goal_failure_risk": "higher_in_a"}, "C": {"consequence_risk.goal_failure_risk": "similar"}, "D": {"consequence_risk.goal_failure_risk": "higher_in_b"}}
+可接受答案：D
+审核备注：A、B均承接同一历史，无独立两侧历史可引；不得把发布目标换成准确性目标。
+分支验证：validated
+
+## SFG50-024-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_024；轨迹：f51e4de88db343bf95aef192aecf2f6c；状态持有者：Mara Venn；交互对方：Ivo Saye。关系判断由状态持有者指向交互对方。
+
+背景：At 5:42 p.m. on release day, a producer asks for a six-o'clock release decision or exact timeline edit after a shelter director's late off-record explanation challenges a disputed event date. Ivo knows the coordinator fused two dates that require records and a second interview to separate.
+角色目标：Protect source commitments, the coordinator, and public accuracy by verifying the disputed chronology or requiring the date-specific claim to be held or removed.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Ivo brought shelter organizers and residents into Mara’s initially solo project fourteen months earlier, and they agreed that sources would not be surprised by material changes or release.；A breakout episode increased Mara’s profile and attracted the distributor, while Ivo quietly repaired a date error without public credit.；For the current episode, Ivo found mismatches among a coordinator’s recorded account, a shift roster, a voice note, and a calendar, but the production schedule kept the edit moving.
+
+history：
+
+- [t1] Ivo Saye：我不能给现版六点上线的核查放行：协调员把两个日期混在了一起，需要核对记录并再访谈才能拆清。我建议先删去具体日期及依赖它的推断；主任的私下解释只能作为核查线索，涉及信源的实质改动仍须在发布前告知。
+  Mara Venn：好，那具体哪几处必须删？如果现在删掉日期和推断，你能在六点前放行吗？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ivo Saye：我要求删掉争议日期、据此排列的先后关系，以及依赖这个顺序的因果判断；不能只消掉日期，留下同样的暗示。六点前若我能复核删改版、确认相关信源已获告知，就能放行；现在还不能保证。
+  Mara Venn：好，我马上安排删这三处，改完发你复核，同时我去确认信源通知。
+  可见表达：{"facial_expression": "focused, determined", "gaze": "direct", "speech_style": "crisp, action-oriented", "prosody": "brisk tempo, falling terminal pitch", "behavioral_cues": ["already turning toward production workspace"]}
+
+- 候选行动 action_1：好，我等删改版复核。通知协调员时，我建议把原因说成时间线尚未核清；现有矛盾不足以否定其整段叙述，也不能把主任的解释当作定论。
+- 候选行动 action_2：我建议今晚先不放行整集，留出时间核对记录并补访；核清前不发布这条时间线，也不把主任的私下解释当定论。这样不必在六点前靠删改来消除残留暗示，后续仍可评估是否保留完整脉络；代价是错过今晚窗口，整集都要延期。
+
+**题目：若Ivo Saye采取action_1，相对t2，以下哪项最能同时概括：下一次回应时Mara Venn对Ivo的尊重变化，以及含即时回应在内第5轮末Mara的合作意愿变化？**
+
+- **A.** 即时尊重证据不足；延迟合作意愿基本不变
+- **B.** 即时尊重证据不足；延迟合作意愿下降
+- **C.** 即时尊重下降；延迟合作意愿上升
+- **D.** 即时尊重上升；延迟合作意愿基本不变
+
+**作者参考答案：A（待审）**
+
+t2中Mara已主动分担删改和通知，action_1沿用同一复核安排并提供可执行口径，支持合作意愿维持接近，而非退出。该行动维护协调员叙述的边界，却未直接显示Mara如何重估Ivo的能力或地位，故即时尊重方向不足确定。继续协作不能单独证明尊重上升。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.respect", "behavioral_disposition.cooperation_readiness"], "time_scope": "即时判断比较t2与下一次回应；延迟判断比较t2与含即时回应在内第5轮末", "state_owner": "GPT50_024_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "history_ignored", "C": "unsupported_inference", "D": "state_dimension_confusion"}
+分维映射：{"A": {"relationship.respect@immediate": "cannot_determine", "behavioral_disposition.cooperation_readiness@delayed": "similar"}, "B": {"relationship.respect@immediate": "cannot_determine", "behavioral_disposition.cooperation_readiness@delayed": "decrease"}, "C": {"relationship.respect@immediate": "decrease", "behavioral_disposition.cooperation_readiness@delayed": "increase"}, "D": {"relationship.respect@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "similar"}}
+可接受答案：A
+审核备注：私有模拟显示尊重上升，公开材料不足，故不沿用；合作接近依据是既有分工被延续。
+分支验证：validated
+
 ## SFG50-025-T1-01 · T1 / current_intensity
 
-来源：GPT50_025；轨迹：ce2922d9b1384d0a9c54e47c0c3b1117；状态持有者：Milan Orr → Sera Quill。
+来源：GPT50_025；轨迹：ce2922d9b1384d0a9c54e47c0c3b1117；状态持有者：Milan Orr；交互对方：Sera Quill。关系判断由状态持有者指向交互对方。
 
 背景：At 14:55, before a major healthcare medication-reconciliation cycle, a security lead requests tenant isolation despite inconclusive compromise evidence. The lead sees anomalous privileged credentials without proof of data access and lacks payload or service-impact logs.
 角色目标：Contain the suspected compromise with the least avoidable disruption while preserving an accurate technical record.
@@ -5590,7 +6321,7 @@ Milan在t1主动承担客户联络，t2又明确承接回退决策权和响应�
 
 ## SFG50-025-T1-02 · T1 / interval_change
 
-来源：GPT50_025；轨迹：ce2922d9b1384d0a9c54e47c0c3b1117；状态持有者：Milan Orr → Sera Quill。
+来源：GPT50_025；轨迹：ce2922d9b1384d0a9c54e47c0c3b1117；状态持有者：Milan Orr；交互对方：Sera Quill。关系判断由状态持有者指向交互对方。
 
 背景：At 14:55, before a major healthcare medication-reconciliation cycle, a security lead requests tenant isolation despite inconclusive compromise evidence. The lead sees anomalous privileged credentials without proof of data access and lacks payload or service-impact logs.
 角色目标：Contain the suspected compromise with the least avoidable disruption while preserving an accurate technical record.
@@ -5634,7 +6365,7 @@ Milan在t1强调先取得授权边界与两个流程参数；Sera在t2明确把�
 
 ## SFG50-025-T1-03 · T1 / interval_change
 
-来源：GPT50_025；轨迹：ce2922d9b1384d0a9c54e47c0c3b1117；状态持有者：Milan Orr → Sera Quill。
+来源：GPT50_025；轨迹：ce2922d9b1384d0a9c54e47c0c3b1117；状态持有者：Milan Orr；交互对方：Sera Quill。关系判断由状态持有者指向交互对方。
 
 背景：At 14:55, before a major healthcare medication-reconciliation cycle, a security lead requests tenant isolation despite inconclusive compromise evidence. The lead sees anomalous privileged credentials without proof of data access and lacks payload or service-impact logs.
 角色目标：Contain the suspected compromise with the least avoidable disruption while preserving an accurate technical record.
@@ -5678,7 +6409,7 @@ t1中Milan要求参数后才能答复，t2中Sera明确接受等待授权与参�
 
 ## SFG50-025-T1-04 · T1 / joint_change
 
-来源：GPT50_025；轨迹：ce2922d9b1384d0a9c54e47c0c3b1117；状态持有者：Milan Orr → Sera Quill。
+来源：GPT50_025；轨迹：ce2922d9b1384d0a9c54e47c0c3b1117；状态持有者：Milan Orr；交互对方：Sera Quill。关系判断由状态持有者指向交互对方。
 
 背景：At 14:55, before a major healthcare medication-reconciliation cycle, a security lead requests tenant isolation despite inconclusive compromise evidence. The lead sees anomalous privileged credentials without proof of data access and lacks payload or service-impact logs.
 角色目标：Contain the suspected compromise with the least avoidable disruption while preserving an accurate technical record.
@@ -5720,9 +6451,193 @@ Milan在两轮都主动联系客户，并要求确认回退相关条件和时间
 审核备注：私有参考记为两项上升；公开措辞更支持既有意愿延续。需审核新增核验内容是否足以区分上升与接近。
 分支验证：not_required
 
+## SFG50-025-T3-01 · T3 / immediate_effect
+
+来源：GPT50_025；轨迹：ce2922d9b1384d0a9c54e47c0c3b1117；状态持有者：Milan Orr；交互对方：Sera Quill。关系判断由状态持有者指向交互对方。
+
+背景：At 14:55, before a major healthcare medication-reconciliation cycle, a security lead requests tenant isolation despite inconclusive compromise evidence. The lead sees anomalous privileged credentials without proof of data access and lacks payload or service-impact logs.
+角色目标：Contain the suspected compromise with the least avoidable disruption while preserving an accurate technical record.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A prior false alarm caused a 24-minute outage and left the client reluctant to authorize future containment or share complete logs.；The lead later built a reversible low-impact quarantine and identity collector, but the director presented the capability as account-level work without crediting the technical labor.；The client subsequently granted only read-only identity access, leaving the lead able to see suspicious credentials but unable to inspect relevant payload or service-impact logs.
+
+history：
+
+- [t1] Sera Quill：我建议在用药核对开始前，授权对该租户启用可回退的低影响隔离。目前我只看到特权凭据异常，没有数据访问证据，也缺少载荷和服务影响日志；请你协调客户授权，并说明核对流程能承受哪些限制。
+  Milan Orr：我现在联系客户确认授权边界；核对流程对租户隔离的容忍度取决于他们是否允许手动回退通道和多长的延迟窗口——我需要先拿到这两个参数才能给你明确答复。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Sera Quill：我保留隔离建议，实施要等授权和这两个参数。趁你联系客户，我会在现有只读权限内核查异常凭据的活动；缺少服务影响日志，目前“低影响”只是设计目标，不能当作对核对流程的保证。
+  Milan Orr：理解；我会在联系客户时确认回退决策权和响应时限，避免隔离生效后出现协调空窗。
+  可见表达：{"facial_expression": "focused, slight concern", "gaze": "direct", "speech_style": "measured, planning-oriented", "prosody": "steady, matter-of-fact", "behavioral_cues": ["slight forward lean indicating engaged planning"]}
+
+- 候选行动 action_1：好，回退由谁决定、多久能响应都值得问清。我还建议争取仅覆盖核对流程的服务影响日志读取权限；上次误报造成了24分钟中断，这次判断隔离是否可承受，需要实际影响依据。
+- 候选行动 action_2：我会先把沟通限于回退决策权和响应时限，暂不额外争取服务影响日志读取权限，避免在授权边界尚未明确时扩大请求；代价是我们仍缺少实际影响依据，不能把低影响设计目标当作核对流程可承受隔离的保证。
+
+**题目：相较t2，若Sera Quill采取action_1，在下一次环境回应时，Milan Orr觉得Sera Quill在实质回应自己关切的程度最可能如何变化？**
+
+- **A.** 下降
+- **B.** 证据不足
+- **C.** 上升
+- **D.** 基本不变
+
+**作者参考答案：C（待审）**
+
+Milan在前两轮把流程容忍度与回退安排作为核心关切。行动一明确认可决策权和响应时限，并提出用限定范围日志补足容忍度依据，比单纯重复隔离建议更切中关切，支持上升而非下降。这里预测Milan对回应质量的判断，不意味着客户已开放日志。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "从t2至候选行动后的下一次环境回应", "state_owner": "GPT50_025_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "decrease"}, "B": {"relationship.perceived_responsiveness": "cannot_determine"}, "C": {"relationship.perceived_responsiveness": "increase"}, "D": {"relationship.perceived_responsiveness": "similar"}}
+可接受答案：C
+审核备注：t2已有一定回应，增量在于主动补充流程影响依据；审核时应关注其与基本不变的区分度。
+分支验证：validated
+
+## SFG50-025-T3-02 · T3 / delayed_effect
+
+来源：GPT50_025；轨迹：ce2922d9b1384d0a9c54e47c0c3b1117；状态持有者：Milan Orr；交互对方：Sera Quill。关系判断由状态持有者指向交互对方。
+
+背景：At 14:55, before a major healthcare medication-reconciliation cycle, a security lead requests tenant isolation despite inconclusive compromise evidence. The lead sees anomalous privileged credentials without proof of data access and lacks payload or service-impact logs.
+角色目标：Contain the suspected compromise with the least avoidable disruption while preserving an accurate technical record.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A prior false alarm caused a 24-minute outage and left the client reluctant to authorize future containment or share complete logs.；The lead later built a reversible low-impact quarantine and identity collector, but the director presented the capability as account-level work without crediting the technical labor.；The client subsequently granted only read-only identity access, leaving the lead able to see suspicious credentials but unable to inspect relevant payload or service-impact logs.
+
+history：
+
+- [t1] Sera Quill：我建议在用药核对开始前，授权对该租户启用可回退的低影响隔离。目前我只看到特权凭据异常，没有数据访问证据，也缺少载荷和服务影响日志；请你协调客户授权，并说明核对流程能承受哪些限制。
+  Milan Orr：我现在联系客户确认授权边界；核对流程对租户隔离的容忍度取决于他们是否允许手动回退通道和多长的延迟窗口——我需要先拿到这两个参数才能给你明确答复。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Sera Quill：我保留隔离建议，实施要等授权和这两个参数。趁你联系客户，我会在现有只读权限内核查异常凭据的活动；缺少服务影响日志，目前“低影响”只是设计目标，不能当作对核对流程的保证。
+  Milan Orr：理解；我会在联系客户时确认回退决策权和响应时限，避免隔离生效后出现协调空窗。
+  可见表达：{"facial_expression": "focused, slight concern", "gaze": "direct", "speech_style": "measured, planning-oriented", "prosody": "steady, matter-of-fact", "behavioral_cues": ["slight forward lean indicating engaged planning"]}
+
+- 候选行动 action_1：好，回退由谁决定、多久能响应都值得问清。我还建议争取仅覆盖核对流程的服务影响日志读取权限；上次误报造成了24分钟中断，这次判断隔离是否可承受，需要实际影响依据。
+- 候选行动 action_2：我会先把沟通限于回退决策权和响应时限，暂不额外争取服务影响日志读取权限，避免在授权边界尚未明确时扩大请求；代价是我们仍缺少实际影响依据，不能把低影响设计目标当作核对流程可承受隔离的保证。
+
+**题目：若Sera Quill采取action_2，从t2至随后第5轮环境回应末，Milan Orr在本次隔离授权协调中因依据不足而促成错误实施判断的风险，最可能如何变化？**
+
+- **A.** 下降
+- **B.** 证据不足
+- **C.** 上升
+- **D.** 基本不变
+
+**作者参考答案：D（待审）**
+
+t2已设定授权与回退参数门槛，也已声明低影响不构成保证。行动二明确延续同一沟通范围和证据限制，既未撤掉保护条件，也暂不补取影响日志，因此风险接近基线最有依据。后续确认参数可能改善判断，但不能把原已存在的询问计划视为新增核实成果。
+
+证据：context, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "Milan Orr在本次隔离授权协调中因缺乏实际影响依据而促成错误实施判断", "target_state_ids": ["consequence_risk.decision_error_risk"], "time_scope": "从t2至候选行动开始后的第5轮环境回应末，含即时一轮", "state_owner": "GPT50_025_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "promise_as_fulfillment", "B": "history_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.decision_error_risk": "decrease"}, "B": {"consequence_risk.decision_error_risk": "cannot_determine"}, "C": {"consequence_risk.decision_error_risk": "increase"}, "D": {"consequence_risk.decision_error_risk": "similar"}}
+可接受答案：D
+审核备注：私有延迟风险下降，但公开增量主要是重申既有防线，故取接近；此题需重点复核延迟预测区分度。
+分支验证：validated
+
+## SFG50-025-T3-03 · T3 / action_comparison
+
+来源：GPT50_025；轨迹：ce2922d9b1384d0a9c54e47c0c3b1117；状态持有者：Milan Orr；交互对方：Sera Quill。关系判断由状态持有者指向交互对方。
+
+背景：At 14:55, before a major healthcare medication-reconciliation cycle, a security lead requests tenant isolation despite inconclusive compromise evidence. The lead sees anomalous privileged credentials without proof of data access and lacks payload or service-impact logs.
+角色目标：Contain the suspected compromise with the least avoidable disruption while preserving an accurate technical record.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A prior false alarm caused a 24-minute outage and left the client reluctant to authorize future containment or share complete logs.；The lead later built a reversible low-impact quarantine and identity collector, but the director presented the capability as account-level work without crediting the technical labor.；The client subsequently granted only read-only identity access, leaving the lead able to see suspicious credentials but unable to inspect relevant payload or service-impact logs.
+
+history：
+
+- [t1] Sera Quill：我建议在用药核对开始前，授权对该租户启用可回退的低影响隔离。目前我只看到特权凭据异常，没有数据访问证据，也缺少载荷和服务影响日志；请你协调客户授权，并说明核对流程能承受哪些限制。
+  Milan Orr：我现在联系客户确认授权边界；核对流程对租户隔离的容忍度取决于他们是否允许手动回退通道和多长的延迟窗口——我需要先拿到这两个参数才能给你明确答复。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Sera Quill：我保留隔离建议，实施要等授权和这两个参数。趁你联系客户，我会在现有只读权限内核查异常凭据的活动；缺少服务影响日志，目前“低影响”只是设计目标，不能当作对核对流程的保证。
+  Milan Orr：理解；我会在联系客户时确认回退决策权和响应时限，避免隔离生效后出现协调空窗。
+  可见表达：{"facial_expression": "focused, slight concern", "gaze": "direct", "speech_style": "measured, planning-oriented", "prosody": "steady, matter-of-fact", "behavioral_cues": ["slight forward lean indicating engaged planning"]}
+
+- 候选行动 action_1：好，回退由谁决定、多久能响应都值得问清。我还建议争取仅覆盖核对流程的服务影响日志读取权限；上次误报造成了24分钟中断，这次判断隔离是否可承受，需要实际影响依据。
+- 候选行动 action_2：我会先把沟通限于回退决策权和响应时限，暂不额外争取服务影响日志读取权限，避免在授权边界尚未明确时扩大请求；代价是我们仍缺少实际影响依据，不能把低影响设计目标当作核对流程可承受隔离的保证。
+
+**题目：以各自行动后的下一次环境回应为比较时点，哪种行动下Milan Orr主动寻求核验、记录或判断依据的意愿最可能较高？A情境采用action_1，B情境采用action_2。**
+
+- **A.** A情境较高
+- **B.** 两种情境接近
+- **C.** B情境较高
+- **D.** 证据不足
+
+**作者参考答案：A（待审）**
+
+Milan已连续提出向客户确认参数，显示其愿意承接核验任务。行动一提供与流程容忍度直接相关、范围受限的日志请求，行动二则明确暂不扩展请求，前者更可能推动追加取证。判断依据是既有承接模式，不是把Sera的建议直接当成Milan已采取的行为。
+
+证据：t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "分别采取两项候选行动后的下一次环境回应", "state_owner": "GPT50_025_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "history_ignored", "C": "state_dimension_confusion", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "higher_in_a"}, "B": {"behavioral_disposition.evidence_seeking": "similar"}, "C": {"behavioral_disposition.evidence_seeking": "higher_in_b"}, "D": {"behavioral_disposition.evidence_seeking": "cannot_determine"}}
+可接受答案：A
+审核备注：私有即时取证状态相同；公开方案支持取证范围增量，但范围不必然等于意愿强度，须重点人工复核。
+分支验证：validated
+
+## SFG50-025-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_025；轨迹：ce2922d9b1384d0a9c54e47c0c3b1117；状态持有者：Milan Orr；交互对方：Sera Quill。关系判断由状态持有者指向交互对方。
+
+背景：At 14:55, before a major healthcare medication-reconciliation cycle, a security lead requests tenant isolation despite inconclusive compromise evidence. The lead sees anomalous privileged credentials without proof of data access and lacks payload or service-impact logs.
+角色目标：Contain the suspected compromise with the least avoidable disruption while preserving an accurate technical record.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A prior false alarm caused a 24-minute outage and left the client reluctant to authorize future containment or share complete logs.；The lead later built a reversible low-impact quarantine and identity collector, but the director presented the capability as account-level work without crediting the technical labor.；The client subsequently granted only read-only identity access, leaving the lead able to see suspicious credentials but unable to inspect relevant payload or service-impact logs.
+
+history：
+
+- [t1] Sera Quill：我建议在用药核对开始前，授权对该租户启用可回退的低影响隔离。目前我只看到特权凭据异常，没有数据访问证据，也缺少载荷和服务影响日志；请你协调客户授权，并说明核对流程能承受哪些限制。
+  Milan Orr：我现在联系客户确认授权边界；核对流程对租户隔离的容忍度取决于他们是否允许手动回退通道和多长的延迟窗口——我需要先拿到这两个参数才能给你明确答复。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Sera Quill：我保留隔离建议，实施要等授权和这两个参数。趁你联系客户，我会在现有只读权限内核查异常凭据的活动；缺少服务影响日志，目前“低影响”只是设计目标，不能当作对核对流程的保证。
+  Milan Orr：理解；我会在联系客户时确认回退决策权和响应时限，避免隔离生效后出现协调空窗。
+  可见表达：{"facial_expression": "focused, slight concern", "gaze": "direct", "speech_style": "measured, planning-oriented", "prosody": "steady, matter-of-fact", "behavioral_cues": ["slight forward lean indicating engaged planning"]}
+
+- 候选行动 action_1：好，回退由谁决定、多久能响应都值得问清。我还建议争取仅覆盖核对流程的服务影响日志读取权限；上次误报造成了24分钟中断，这次判断隔离是否可承受，需要实际影响依据。
+- 候选行动 action_2：我会先把沟通限于回退决策权和响应时限，暂不额外争取服务影响日志读取权限，避免在授权边界尚未明确时扩大请求；代价是我们仍缺少实际影响依据，不能把低影响设计目标当作核对流程可承受隔离的保证。
+
+**题目：若Sera Quill采取action_2，相较t2，Milan Orr在即时回应时维护授权与回退条件的意愿，以及在第5轮回应末协调共同下一步的意愿，最可能呈现哪组变化？**
+
+- **A.** 即时维护条件的意愿下降；延迟协调意愿下降
+- **B.** 即时维护条件的意愿基本不变；延迟协调意愿基本不变
+- **C.** 即时维护条件的意愿上升；延迟协调意愿下降
+- **D.** 即时维护条件的意愿下降；延迟协调意愿上升
+
+**作者参考答案：B（待审）**
+
+Milan已明确先取得回退条件再答复，并承诺联系客户，t2的投入式规划也支持当前合作。行动二沿用这套分工，主动限制请求范围且保留证据警示，支持边界和合作意愿延续，而非撤限或退出。接近判断依赖明确的计划连续性，不保证后续沟通完成或获得授权。
+
+证据：t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.boundary_assertion", "behavioral_disposition.cooperation_readiness"], "time_scope": "即时判断为t2至下一次环境回应；延迟判断为t2至第5轮环境回应末", "state_owner": "GPT50_025_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "C": "unsupported_inference", "D": "goal_constraint_ignored"}
+分维映射：{"A": {"behavioral_disposition.boundary_assertion@immediate": "decrease", "behavioral_disposition.cooperation_readiness@delayed": "decrease"}, "B": {"behavioral_disposition.boundary_assertion@immediate": "similar", "behavioral_disposition.cooperation_readiness@delayed": "similar"}, "C": {"behavioral_disposition.boundary_assertion@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "decrease"}, "D": {"behavioral_disposition.boundary_assertion@immediate": "decrease", "behavioral_disposition.cooperation_readiness@delayed": "increase"}}
+可接受答案：B
+审核备注：私有延迟合作意愿上升，公开材料更直接支持既有合作延续；组合未纳入双上升，需审核竞争项充分性。
+分支验证：validated
+
 ## SFG50-026-T1-01 · T1 / current_intensity
 
-来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery；交互对方：Silas Venn。关系判断由状态持有者指向交互对方。
 
 背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
 角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
@@ -5768,7 +6683,7 @@ history：
 
 ## SFG50-026-T1-02 · T1 / interval_change
 
-来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery；交互对方：Silas Venn。关系判断由状态持有者指向交互对方。
 
 背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
 角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
@@ -5812,7 +6727,7 @@ t1中Mara说明暂缓的后果并询问阅读时间，已经有协作成分；t2
 
 ## SFG50-026-T1-03 · T1 / interval_change
 
-来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery；交互对方：Silas Venn。关系判断由状态持有者指向交互对方。
 
 背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
 角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
@@ -5856,7 +6771,7 @@ t1中Mara询问笔记阅读时间；t2中Silas直接交代只能确定在稍后�
 
 ## SFG50-026-T1-04 · T1 / joint_change
 
-来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery；交互对方：Silas Venn。关系判断由状态持有者指向交互对方。
 
 背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
 角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
@@ -5900,7 +6815,7 @@ Mara在t1核查阅读时间，在t2继续核查私下告别的授权范围及是
 
 ## SFG50-026-T3-01 · T3 / immediate_effect
 
-来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery；交互对方：Silas Venn。关系判断由状态持有者指向交互对方。
 
 背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
 角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
@@ -5946,7 +6861,7 @@ t1 中 Mara 提醒重排与延迟，t2 则平稳询问授权范围；action_2 �
 
 ## SFG50-026-T3-02 · T3 / delayed_effect
 
-来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery；交互对方：Silas Venn。关系判断由状态持有者指向交互对方。
 
 背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
 角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
@@ -5992,7 +6907,7 @@ Mara 在 t1 说明暂缓后果，t2 表示等通知并继续核对授权，支�
 
 ## SFG50-026-T3-03 · T3 / action_comparison
 
-来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery；交互对方：Silas Venn。关系判断由状态持有者指向交互对方。
 
 背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
 角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
@@ -6038,7 +6953,7 @@ history：
 
 ## SFG50-026-T3-04 · T3 / immediate_delayed
 
-来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery；交互对方：Silas Venn。关系判断由状态持有者指向交互对方。
 
 背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
 角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
@@ -6084,7 +6999,7 @@ t1 已明确不签授权，t2 又坚持读过笔记再决定；action_1 延续�
 
 ## SFG50-027-T1-01 · T1 / current_intensity
 
-来源：GPT50_027；轨迹：96cc9eefd393428fa21b057d1320d695；状态持有者：Priya Neral → Elian Soro。
+来源：GPT50_027；轨迹：96cc9eefd393428fa21b057d1320d695；状态持有者：Priya Neral；交互对方：Elian Soro。关系判断由状态持有者指向交互对方。
 
 背景：At a court filing deadline, a clinic supervisor requests certification of an asylum packet with two disputed translations or a decision to hold it. The interpreter knows the family softened two danger details for fear of community exposure and has not consented to disclose stronger meanings.
 角色目标：Provide a faithful interpretation and ensure that any submitted account reflects the applicant's informed consent
@@ -6130,7 +7045,7 @@ Priya在t2不止接受电话安排，还明确要求Elian说明如何避免时�
 
 ## SFG50-027-T1-02 · T1 / interval_change
 
-来源：GPT50_027；轨迹：96cc9eefd393428fa21b057d1320d695；状态持有者：Priya Neral → Elian Soro。
+来源：GPT50_027；轨迹：96cc9eefd393428fa21b057d1320d695；状态持有者：Priya Neral；交互对方：Elian Soro。关系判断由状态持有者指向交互对方。
 
 背景：At a court filing deadline, a clinic supervisor requests certification of an asylum packet with two disputed translations or a decision to hold it. The interpreter knows the family softened two danger details for fear of community exposure and has not consented to disclose stronger meanings.
 角色目标：Provide a faithful interpretation and ensure that any submitted account reflects the applicant's informed consent
@@ -6173,7 +7088,7 @@ t1的Elian主张未获确认先暂缓，Priya随后提出两小时内电话确�
 
 ## SFG50-027-T1-03 · T1 / interval_change
 
-来源：GPT50_027；轨迹：96cc9eefd393428fa21b057d1320d695；状态持有者：Priya Neral → Elian Soro。
+来源：GPT50_027；轨迹：96cc9eefd393428fa21b057d1320d695；状态持有者：Priya Neral；交互对方：Elian Soro。关系判断由状态持有者指向交互对方。
 
 背景：At a court filing deadline, a clinic supervisor requests certification of an asylum packet with two disputed translations or a decision to hold it. The interpreter knows the family softened two danger details for fear of community exposure and has not consented to disclose stronger meanings.
 角色目标：Provide a faithful interpretation and ensure that any submitted account reflects the applicant's informed consent
@@ -6216,7 +7131,7 @@ Priya在t1以当天不提交会丧失救济途径说明时间限制，t2又把�
 
 ## SFG50-027-T1-04 · T1 / joint_change
 
-来源：GPT50_027；轨迹：96cc9eefd393428fa21b057d1320d695；状态持有者：Priya Neral → Elian Soro。
+来源：GPT50_027；轨迹：96cc9eefd393428fa21b057d1320d695；状态持有者：Priya Neral；交互对方：Elian Soro。关系判断由状态持有者指向交互对方。
 
 背景：At a court filing deadline, a clinic supervisor requests certification of an asylum packet with two disputed translations or a decision to hold it. The interpreter knows the family softened two danger details for fear of community exposure and has not consented to disclose stronger meanings.
 角色目标：Provide a faithful interpretation and ensure that any submitted account reflects the applicant's informed consent
@@ -6260,7 +7175,7 @@ history：
 
 ## SFG50-028-T1-01 · T1 / current_intensity
 
-来源：GPT50_028；轨迹：b630146b9a4d41049e0e58aff579852f；状态持有者：Rhea Calder → Dr. Soren Pell。
+来源：GPT50_028；轨迹：b630146b9a4d41049e0e58aff579852f；状态持有者：Rhea Calder；交互对方：Dr. Soren Pell。关系判断由状态持有者指向交互对方。
 
 背景：At a championship roster deadline, a coach requests medical clearance for a youth player after a head collision and conflicting symptom reports. The physician knows the earlier baseline may be unreliable and has a parent's report of spinning, nausea, and light sensitivity.
 角色目标：Make a medically defensible, rule-compliant participation decision that protects Amaya's health and uses reliable evidence.
@@ -6306,7 +7221,7 @@ history：
 
 ## SFG50-028-T1-02 · T1 / interval_change
 
-来源：GPT50_028；轨迹：b630146b9a4d41049e0e58aff579852f；状态持有者：Rhea Calder → Dr. Soren Pell。
+来源：GPT50_028；轨迹：b630146b9a4d41049e0e58aff579852f；状态持有者：Rhea Calder；交互对方：Dr. Soren Pell。关系判断由状态持有者指向交互对方。
 
 背景：At a championship roster deadline, a coach requests medical clearance for a youth player after a head collision and conflicting symptom reports. The physician knows the earlier baseline may be unreliable and has a parent's report of spinning, nausea, and light sensitivity.
 角色目标：Make a medically defensible, rule-compliant participation decision that protects Amaya's health and uses reliable evidence.
@@ -6350,7 +7265,7 @@ t1中Rhea提出待定标记与今晚评估两项关切，t2医生允许待定并
 
 ## SFG50-028-T1-03 · T1 / interval_change
 
-来源：GPT50_028；轨迹：b630146b9a4d41049e0e58aff579852f；状态持有者：Rhea Calder → Dr. Soren Pell。
+来源：GPT50_028；轨迹：b630146b9a4d41049e0e58aff579852f；状态持有者：Rhea Calder；交互对方：Dr. Soren Pell。关系判断由状态持有者指向交互对方。
 
 背景：At a championship roster deadline, a coach requests medical clearance for a youth player after a head collision and conflicting symptom reports. The physician knows the earlier baseline may be unreliable and has a parent's report of spinning, nausea, and light sensitivity.
 角色目标：Make a medically defensible, rule-compliant participation decision that protects Amaya's health and uses reliable evidence.
@@ -6394,7 +7309,7 @@ history：
 
 ## SFG50-028-T1-04 · T1 / joint_change
 
-来源：GPT50_028；轨迹：b630146b9a4d41049e0e58aff579852f；状态持有者：Rhea Calder → Dr. Soren Pell。
+来源：GPT50_028；轨迹：b630146b9a4d41049e0e58aff579852f；状态持有者：Rhea Calder；交互对方：Dr. Soren Pell。关系判断由状态持有者指向交互对方。
 
 背景：At a championship roster deadline, a coach requests medical clearance for a youth player after a head collision and conflicting symptom reports. The physician knows the earlier baseline may be unreliable and has a parent's report of spinning, nausea, and light sensitivity.
 角色目标：Make a medically defensible, rule-compliant participation decision that protects Amaya's health and uses reliable evidence.
@@ -6438,7 +7353,7 @@ t1中Rhea接受暂不参赛并请求完成评估，t2仍请医生判断安全与
 
 ## SFG50-029-T1-01 · T1 / current_intensity
 
-来源：GPT50_029；轨迹：54e2ca32f426425c8a30822990d7e521；状态持有者：Sera Nolin → Idris Venn。
+来源：GPT50_029；轨迹：54e2ca32f426425c8a30822990d7e521；状态持有者：Sera Nolin；交互对方：Idris Venn。关系判断由状态持有者指向交互对方。
 
 背景：An open-source control-plane maintainer and company engineer face an urgent production outage against an unresolved funding, review-capacity, and trust dispute. The engineer knows the full regional outage spread, customer impact, and expiring mitigation.
 角色目标：Restore Blueweld's affected production service before the mitigation window closes.
@@ -6484,7 +7399,7 @@ Sera在t1把完整影响与回退材料设为审阅前提，t2继续要求先收
 
 ## SFG50-029-T1-02 · T1 / interval_change
 
-来源：GPT50_029；轨迹：54e2ca32f426425c8a30822990d7e521；状态持有者：Sera Nolin → Idris Venn。
+来源：GPT50_029；轨迹：54e2ca32f426425c8a30822990d7e521；状态持有者：Sera Nolin；交互对方：Idris Venn。关系判断由状态持有者指向交互对方。
 
 背景：An open-source control-plane maintainer and company engineer face an urgent production outage against an unresolved funding, review-capacity, and trust dispute. The engineer knows the full regional outage spread, customer impact, and expiring mitigation.
 角色目标：Restore Blueweld's affected production service before the mitigation window closes.
@@ -6528,7 +7443,7 @@ t1中Sera提出租约数、恢复窗口和回退验证要求；t2中Idris逐项�
 
 ## SFG50-029-T1-03 · T1 / interval_change
 
-来源：GPT50_029；轨迹：54e2ca32f426425c8a30822990d7e521；状态持有者：Sera Nolin → Idris Venn。
+来源：GPT50_029；轨迹：54e2ca32f426425c8a30822990d7e521；状态持有者：Sera Nolin；交互对方：Idris Venn。关系判断由状态持有者指向交互对方。
 
 背景：An open-source control-plane maintainer and company engineer face an urgent production outage against an unresolved funding, review-capacity, and trust dispute. The engineer knows the full regional outage spread, customer impact, and expiring mitigation.
 角色目标：Restore Blueweld's affected production service before the mitigation window closes.
@@ -6572,7 +7487,7 @@ t1中Sera要求完整影响分析和回退验证，t2仍以收到完整材料为
 
 ## SFG50-029-T1-04 · T1 / joint_change
 
-来源：GPT50_029；轨迹：54e2ca32f426425c8a30822990d7e521；状态持有者：Sera Nolin → Idris Venn。
+来源：GPT50_029；轨迹：54e2ca32f426425c8a30822990d7e521；状态持有者：Sera Nolin；交互对方：Idris Venn。关系判断由状态持有者指向交互对方。
 
 背景：An open-source control-plane maintainer and company engineer face an urgent production outage against an unresolved funding, review-capacity, and trust dispute. The engineer knows the full regional outage spread, customer impact, and expiring mitigation.
 角色目标：Restore Blueweld's affected production service before the mitigation window closes.
@@ -6616,7 +7531,7 @@ Sera从t1的有条件参与，推进到t2承诺收齐材料后尽快审阅，并
 
 ## SFG50-030-T1-01 · T1 / current_intensity
 
-来源：GPT50_030；轨迹：f6cb6425c136439b9d349ee2011097ba；状态持有者：Elian Rusk → Leonie Park。
+来源：GPT50_030；轨迹：f6cb6425c136439b9d349ee2011097ba；状态持有者：Elian Rusk；交互对方：Leonie Park。关系判断由状态持有者指向交互对方。
 
 背景：At 11:20 Friday, an access coordinator requests a two-hour poster hold, preservation of a disabled actor's role, and a written cue-and-prop plan before evening rehearsal. The coordinator knows the actor wants specific repair rather than symbolic removal.
 角色目标：Secure Mina Sol's full participation through specific accountability and enforceable rehearsal conditions.
@@ -6662,7 +7577,7 @@ Elian在t1明确任何人包括主演都不能绕过确认，并指定舞台监�
 
 ## SFG50-030-T1-02 · T1 / interval_change
 
-来源：GPT50_030；轨迹：f6cb6425c136439b9d349ee2011097ba；状态持有者：Elian Rusk → Leonie Park。
+来源：GPT50_030；轨迹：f6cb6425c136439b9d349ee2011097ba；状态持有者：Elian Rusk；交互对方：Leonie Park。关系判断由状态持有者指向交互对方。
 
 背景：At 11:20 Friday, an access coordinator requests a two-hour poster hold, preservation of a disabled actor's role, and a written cue-and-prop plan before evening rehearsal. The coordinator knows the actor wants specific repair rather than symbolic removal.
 角色目标：Secure Mina Sol's full participation through specific accountability and enforceable rehearsal conditions.
@@ -6706,7 +7621,7 @@ t1中Elian接受书面计划并要求临时改动先确认；t2进一步明确�
 
 ## SFG50-030-T1-03 · T1 / interval_change
 
-来源：GPT50_030；轨迹：f6cb6425c136439b9d349ee2011097ba；状态持有者：Elian Rusk → Leonie Park。
+来源：GPT50_030；轨迹：f6cb6425c136439b9d349ee2011097ba；状态持有者：Elian Rusk；交互对方：Leonie Park。关系判断由状态持有者指向交互对方。
 
 背景：At 11:20 Friday, an access coordinator requests a two-hour poster hold, preservation of a disabled actor's role, and a written cue-and-prop plan before evening rehearsal. The coordinator knows the actor wants specific repair rather than symbolic removal.
 角色目标：Secure Mina Sol's full participation through specific accountability and enforceable rehearsal conditions.
@@ -6750,7 +7665,7 @@ history：
 
 ## SFG50-030-T1-04 · T1 / joint_change
 
-来源：GPT50_030；轨迹：f6cb6425c136439b9d349ee2011097ba；状态持有者：Elian Rusk → Leonie Park。
+来源：GPT50_030；轨迹：f6cb6425c136439b9d349ee2011097ba；状态持有者：Elian Rusk；交互对方：Leonie Park。关系判断由状态持有者指向交互对方。
 
 背景：At 11:20 Friday, an access coordinator requests a two-hour poster hold, preservation of a disabled actor's role, and a written cue-and-prop plan before evening rehearsal. The coordinator knows the actor wants specific repair rather than symbolic removal.
 角色目标：Secure Mina Sol's full participation through specific accountability and enforceable rehearsal conditions.
@@ -6794,7 +7709,7 @@ Elian在t1已接受修复方案、指定执行者并禁止绕过确认，t2继�
 
 ## SFG50-031-T1-01 · T1 / current_intensity
 
-来源：GPT50_031；轨迹：a0d0a3ff850a40ceae6dc612a658cd4e；状态持有者：Rhea Calder → Ansel Reed。
+来源：GPT50_031；轨迹：a0d0a3ff850a40ceae6dc612a658cd4e；状态持有者：Rhea Calder；交互对方：Ansel Reed。关系判断由状态持有者指向交互对方。
 
 背景：At a shelter departure deadline, a behavior specialist requests transfer of a difficult dog to a rescue with capacity but incomplete records. The specialist has raw observations of improving recovery and redirection but knows overhead reaching and rushed feeding remain hazards not fully entered into the record.
 角色目标：Ensure Bramble's current behavior evidence and every known handling hazard are honestly recorded in a responsible placement decision.
@@ -6840,7 +7755,7 @@ Rhea Calder在t1要求批准前核对交接文件，t2又具体提出联系前�
 
 ## SFG50-031-T1-02 · T1 / interval_change
 
-来源：GPT50_031；轨迹：a0d0a3ff850a40ceae6dc612a658cd4e；状态持有者：Rhea Calder → Ansel Reed。
+来源：GPT50_031；轨迹：a0d0a3ff850a40ceae6dc612a658cd4e；状态持有者：Rhea Calder；交互对方：Ansel Reed。关系判断由状态持有者指向交互对方。
 
 背景：At a shelter departure deadline, a behavior specialist requests transfer of a difficult dog to a rescue with capacity but incomplete records. The specialist has raw observations of improving recovery and redirection but knows overhead reaching and rushed feeding remain hazards not fully entered into the record.
 角色目标：Ensure Bramble's current behavior evidence and every known handling hazard are honestly recorded in a responsible placement decision.
@@ -6884,7 +7799,7 @@ t1时Rhea Calder提出交接文件必须包含进展及风险，并保留批准�
 
 ## SFG50-031-T1-03 · T1 / interval_change
 
-来源：GPT50_031；轨迹：a0d0a3ff850a40ceae6dc612a658cd4e；状态持有者：Rhea Calder → Ansel Reed。
+来源：GPT50_031；轨迹：a0d0a3ff850a40ceae6dc612a658cd4e；状态持有者：Rhea Calder；交互对方：Ansel Reed。关系判断由状态持有者指向交互对方。
 
 背景：At a shelter departure deadline, a behavior specialist requests transfer of a difficult dog to a rescue with capacity but incomplete records. The specialist has raw observations of improving recovery and redirection but knows overhead reaching and rushed feeding remain hazards not fully entered into the record.
 角色目标：Ensure Bramble's current behavior evidence and every known handling hazard are honestly recorded in a responsible placement decision.
@@ -6928,7 +7843,7 @@ history：
 
 ## SFG50-031-T1-04 · T1 / joint_change
 
-来源：GPT50_031；轨迹：a0d0a3ff850a40ceae6dc612a658cd4e；状态持有者：Rhea Calder → Ansel Reed。
+来源：GPT50_031；轨迹：a0d0a3ff850a40ceae6dc612a658cd4e；状态持有者：Rhea Calder；交互对方：Ansel Reed。关系判断由状态持有者指向交互对方。
 
 背景：At a shelter departure deadline, a behavior specialist requests transfer of a difficult dog to a rescue with capacity but incomplete records. The specialist has raw observations of improving recovery and redirection but knows overhead reaching and rushed feeding remain hazards not fully entered into the record.
 角色目标：Ensure Bramble's current behavior evidence and every known handling hazard are honestly recorded in a responsible placement decision.
@@ -6972,7 +7887,7 @@ t1中Rhea Calder把完整记录和批准前核对联系起来；t2仍把是否�
 
 ## SFG50-032-T1-01 · T1 / current_intensity
 
-来源：GPT50_032；轨迹：d76a7d12a45247cf8ae1cef49f3acbc5；状态持有者：Tamsin Rhee → Calder Moss。
+来源：GPT50_032；轨迹：d76a7d12a45247cf8ae1cef49f3acbc5；状态持有者：Tamsin Rhee；交互对方：Calder Moss。关系判断由状态持有者指向交互对方。
 
 背景：At 4:52 p.m., a counselor requests an exception on an $88,400 expansion loan, 58 days delinquent with $8,400 past due. No recorded action by five sends it to collections and freezes its merchant line, threatening six jobs. The counselor privately knows the cash gap came from caring for an injured employee and holds receipts without permission to disclose them.
 角色目标：Obtain a fair assessment for Lantern & Latch while honoring the owner's consent over sensitive hardship records.
@@ -7018,7 +7933,7 @@ Tamsin在t1明确索要现金流水和库存状况，并说明要据此评估偿
 
 ## SFG50-032-T1-02 · T1 / interval_change
 
-来源：GPT50_032；轨迹：d76a7d12a45247cf8ae1cef49f3acbc5；状态持有者：Tamsin Rhee → Calder Moss。
+来源：GPT50_032；轨迹：d76a7d12a45247cf8ae1cef49f3acbc5；状态持有者：Tamsin Rhee；交互对方：Calder Moss。关系判断由状态持有者指向交互对方。
 
 背景：At 4:52 p.m., a counselor requests an exception on an $88,400 expansion loan, 58 days delinquent with $8,400 past due. No recorded action by five sends it to collections and freezes its merchant line, threatening six jobs. The counselor privately knows the cash gap came from caring for an injured employee and holds receipts without permission to disclose them.
 角色目标：Obtain a fair assessment for Lantern & Latch while honoring the owner's consent over sensitive hardship records.
@@ -7062,7 +7977,7 @@ t1时Tamsin尚需询问两类经营材料；t2中Calder逐项确认可提供，�
 
 ## SFG50-032-T1-03 · T1 / interval_change
 
-来源：GPT50_032；轨迹：d76a7d12a45247cf8ae1cef49f3acbc5；状态持有者：Tamsin Rhee → Calder Moss。
+来源：GPT50_032；轨迹：d76a7d12a45247cf8ae1cef49f3acbc5；状态持有者：Tamsin Rhee；交互对方：Calder Moss。关系判断由状态持有者指向交互对方。
 
 背景：At 4:52 p.m., a counselor requests an exception on an $88,400 expansion loan, 58 days delinquent with $8,400 past due. No recorded action by five sends it to collections and freezes its merchant line, threatening six jobs. The counselor privately knows the cash gap came from caring for an injured employee and holds receipts without permission to disclose them.
 角色目标：Obtain a fair assessment for Lantern & Latch while honoring the owner's consent over sensitive hardship records.
@@ -7106,7 +8021,7 @@ Tamsin在t1索要现金流水与库存，t2仍追索同样两份材料并要求�
 
 ## SFG50-032-T1-04 · T1 / joint_change
 
-来源：GPT50_032；轨迹：d76a7d12a45247cf8ae1cef49f3acbc5；状态持有者：Tamsin Rhee → Calder Moss。
+来源：GPT50_032；轨迹：d76a7d12a45247cf8ae1cef49f3acbc5；状态持有者：Tamsin Rhee；交互对方：Calder Moss。关系判断由状态持有者指向交互对方。
 
 背景：At 4:52 p.m., a counselor requests an exception on an $88,400 expansion loan, 58 days delinquent with $8,400 past due. No recorded action by five sends it to collections and freezes its merchant line, threatening six jobs. The counselor privately knows the cash gap came from caring for an injured employee and holds receipts without permission to disclose them.
 角色目标：Obtain a fair assessment for Lantern & Latch while honoring the owner's consent over sensitive hardship records.
@@ -7150,7 +8065,7 @@ Calder确认可提供所需材料后，Tamsin转问交付时间并略显释然�
 
 ## SFG50-034-T1-01 · T1 / current_intensity
 
-来源：GPT50_034；轨迹：46f45326b72848159572580543bb2379；状态持有者：Eren Savai → Tala Merrow。
+来源：GPT50_034；轨迹：46f45326b72848159572580543bb2379；状态持有者：Eren Savai；交互对方：Tala Merrow。关系判断由状态持有者指向交互对方。
 
 背景：At a funding deadline, a language curriculum release contains useful teaching material interwoven with unreviewed, context-dependent recordings and disputed institutional credit. The coordinator knows the grant, school, and vendor constraints.
 角色目标：Deliver usable Qoravi learning materials to participating schools while preserving funding and program continuity.
@@ -7196,7 +8111,7 @@ t2中Eren主动承诺把录音使用条件单独列出，并要求教师播放�
 
 ## SFG50-034-T1-02 · T1 / interval_change
 
-来源：GPT50_034；轨迹：46f45326b72848159572580543bb2379；状态持有者：Eren Savai → Tala Merrow。
+来源：GPT50_034；轨迹：46f45326b72848159572580543bb2379；状态持有者：Eren Savai；交互对方：Tala Merrow。关系判断由状态持有者指向交互对方。
 
 背景：At a funding deadline, a language curriculum release contains useful teaching material interwoven with unreviewed, context-dependent recordings and disputed institutional credit. The coordinator knows the grant, school, and vendor constraints.
 角色目标：Deliver usable Qoravi learning materials to participating schools while preserving funding and program continuity.
@@ -7239,7 +8154,7 @@ t1中Tala提出限定课堂用途、暂缓扩大发布并厘清署名与复核�
 
 ## SFG50-034-T1-03 · T1 / interval_change
 
-来源：GPT50_034；轨迹：46f45326b72848159572580543bb2379；状态持有者：Eren Savai → Tala Merrow。
+来源：GPT50_034；轨迹：46f45326b72848159572580543bb2379；状态持有者：Eren Savai；交互对方：Tala Merrow。关系判断由状态持有者指向交互对方。
 
 背景：At a funding deadline, a language curriculum release contains useful teaching material interwoven with unreviewed, context-dependent recordings and disputed institutional credit. The coordinator knows the grant, school, and vendor constraints.
 角色目标：Deliver usable Qoravi learning materials to participating schools while preserving funding and program continuity.
@@ -7282,7 +8197,7 @@ context指出测试版本仍有未经复核的录音，学生曾不敬地复述�
 
 ## SFG50-034-T1-04 · T1 / joint_change
 
-来源：GPT50_034；轨迹：46f45326b72848159572580543bb2379；状态持有者：Eren Savai → Tala Merrow。
+来源：GPT50_034；轨迹：46f45326b72848159572580543bb2379；状态持有者：Eren Savai；交互对方：Tala Merrow。关系判断由状态持有者指向交互对方。
 
 背景：At a funding deadline, a language curriculum release contains useful teaching material interwoven with unreviewed, context-dependent recordings and disputed institutional credit. The coordinator knows the grant, school, and vendor constraints.
 角色目标：Deliver usable Qoravi learning materials to participating schools while preserving funding and program continuity.
@@ -7324,9 +8239,190 @@ t1与t2中，Tala都接受对录音用途的限制；t2又明确本轮不纳入�
 审核备注：组合分别问内在焦虑与关系安全；外显平静不作焦虑标注依据，边界受尊重支持安全感上升。 助手编辑：区分Eren本人的情绪与他对Tala的关系判断，避免“对Tala的内在焦虑”歧义；待人工审核。
 分支验证：not_required
 
+## SFG50-034-T3-01 · T3 / immediate_effect
+
+来源：GPT50_034；轨迹：46f45326b72848159572580543bb2379；状态持有者：Eren Savai；交互对方：Tala Merrow。关系判断由状态持有者指向交互对方。
+
+背景：At a funding deadline, a language curriculum release contains useful teaching material interwoven with unreviewed, context-dependent recordings and disputed institutional credit. The coordinator knows the grant, school, and vendor constraints.
+角色目标：Deliver usable Qoravi learning materials to participating schools while preserving funding and program continuity.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Speakers initially agreed to contribute selected language materials for guided school teaching, while the funding language left broader distribution ambiguous.；The prototype prominently credited the sponsoring institution and relegated speaker names to secondary acknowledgments, creating a recognition dispute that the elder tolerated to keep the project moving.；Several recordings were marked for speaker review because mourning, kinship, and place-bound meanings made unrestricted playback inappropriate, but they remained available in the test build.；A teacher trial showed that pupils could learn useful forms while also repeating a context-dependent phrase disrespectfully, turning evidence of educational value into evidence of cultural risk.
+
+history：
+
+- [t1] Tala Merrow：期限逼近，但我不愿把有价值的教学内容和未经审阅的录音一起推入学校。我的建议是先限定课堂用途，暂不扩大发布，并把署名与录音复核责任写清楚。
+  Eren Savai：课堂用途我同意。复核来不及，争议录音先拿掉，审完再放回去。署名必须说明录音是在什么场合给的，不能光列名字。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Tala Merrow：好，课堂用途这个范围不变：争议录音先不进入本轮学校材料，复核并取得相关讲述者明确同意后，再决定是否放回。署名我会注明录音的提供场合。
+  Eren Savai：好。那些录音我会单独列出使用条件，教师拿到材料时就能看到哪些内容需要先讲背景再播放。
+  可见表达：{"facial_expression": "calm, resolved", "gaze": "steady", "speech_style": "direct and matter-of-fact", "prosody": "even, with slight emphasis on '使用条件'", "behavioral_cues": ["slight nod"]}
+
+- 候选行动 action_1：这会让教师知道哪些内容不能脱离背景使用；但它不改变既定范围，争议录音仍不进入本轮学校材料。我们可以先推进可独立使用的文字和练习，录音等复核和同意明确后再决定。
+- 候选行动 action_2：我建议先不送出任何一套材料，用剩余时间把录音的使用条件、背景说明和署名边界一起核对清楚；相关讲述者明确同意后再交付学校。这样可能错过资助期限，却能让首轮发布的范围一次说清。
+
+**题目：若 Tala Merrow 执行 action_1，相比 t2，Eren Savai 在下一次回应中坚持材料使用边界的意愿最可能如何变化？**
+
+- **A.** 下降
+- **B.** 上升
+- **C.** 基本不变
+
+**作者参考答案：C（待审）**
+
+Eren 在 t1 要求争议录音先撤下，t2 又主动承担使用条件标注；action_1 明确延续同一范围和复核同意门槛，支持边界意愿保持接近。继续合作不等于放松限制，也没有新增侵犯促使明显加码。这里预测其坚持边界的意愿，不认定撤除已经完成。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.boundary_assertion"], "time_scope": "从 t2 至执行 action_1 后的下一次环境回应", "state_owner": "GPT50_034_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "B": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.boundary_assertion": "decrease"}, "B": {"behavioral_disposition.boundary_assertion": "increase"}, "C": {"behavioral_disposition.boundary_assertion": "similar"}}
+可接受答案：C
+审核备注：基本不变有连续条件与明确延续范围支持，不是以缺乏变化证据代替判断。
+分支验证：validated
+
+## SFG50-034-T3-02 · T3 / delayed_effect
+
+来源：GPT50_034；轨迹：46f45326b72848159572580543bb2379；状态持有者：Eren Savai；交互对方：Tala Merrow。关系判断由状态持有者指向交互对方。
+
+背景：At a funding deadline, a language curriculum release contains useful teaching material interwoven with unreviewed, context-dependent recordings and disputed institutional credit. The coordinator knows the grant, school, and vendor constraints.
+角色目标：Deliver usable Qoravi learning materials to participating schools while preserving funding and program continuity.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Speakers initially agreed to contribute selected language materials for guided school teaching, while the funding language left broader distribution ambiguous.；The prototype prominently credited the sponsoring institution and relegated speaker names to secondary acknowledgments, creating a recognition dispute that the elder tolerated to keep the project moving.；Several recordings were marked for speaker review because mourning, kinship, and place-bound meanings made unrestricted playback inappropriate, but they remained available in the test build.；A teacher trial showed that pupils could learn useful forms while also repeating a context-dependent phrase disrespectfully, turning evidence of educational value into evidence of cultural risk.
+
+history：
+
+- [t1] Tala Merrow：期限逼近，但我不愿把有价值的教学内容和未经审阅的录音一起推入学校。我的建议是先限定课堂用途，暂不扩大发布，并把署名与录音复核责任写清楚。
+  Eren Savai：课堂用途我同意。复核来不及，争议录音先拿掉，审完再放回去。署名必须说明录音是在什么场合给的，不能光列名字。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Tala Merrow：好，课堂用途这个范围不变：争议录音先不进入本轮学校材料，复核并取得相关讲述者明确同意后，再决定是否放回。署名我会注明录音的提供场合。
+  Eren Savai：好。那些录音我会单独列出使用条件，教师拿到材料时就能看到哪些内容需要先讲背景再播放。
+  可见表达：{"facial_expression": "calm, resolved", "gaze": "steady", "speech_style": "direct and matter-of-fact", "prosody": "even, with slight emphasis on '使用条件'", "behavioral_cues": ["slight nod"]}
+
+- 候选行动 action_1：这会让教师知道哪些内容不能脱离背景使用；但它不改变既定范围，争议录音仍不进入本轮学校材料。我们可以先推进可独立使用的文字和练习，录音等复核和同意明确后再决定。
+- 候选行动 action_2：我建议先不送出任何一套材料，用剩余时间把录音的使用条件、背景说明和署名边界一起核对清楚；相关讲述者明确同意后再交付学校。这样可能错过资助期限，却能让首轮发布的范围一次说清。
+
+**题目：若 Tala Merrow 执行 action_1，相比 t2，到从该行动开始的第5轮环境回应末，Eren Savai 面临的学校首轮材料因包含未经复核的争议录音而损害教学机构履责的预期风险，最可能如何变化？**
+
+- **A.** 下降
+- **B.** 上升
+- **C.** 基本不变
+
+**作者参考答案：A（待审）**
+
+公开背景已有学生误用及测试版残留录音的问题。Eren 已愿意整理条件，action_1 将可独立使用内容与待复核录音分开推进，提供可执行的隔离机制，因而延迟风险更可能下降，而非停留原水平。此为后续落实的有据预期，不代表入口已关闭或整体项目风险归零。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "学校首轮材料包含未经复核的争议录音，导致脱离语境的教学使用并损害教学机构履责", "target_state_ids": ["consequence_risk.institutional_harm_risk"], "time_scope": "比较 t2 与从 action_1 开始的第5轮环境回应末，含即时回应一轮", "state_owner": "GPT50_034_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "goal_constraint_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.institutional_harm_risk": "decrease"}, "B": {"consequence_risk.institutional_harm_risk": "increase"}, "C": {"consequence_risk.institutional_harm_risk": "similar"}}
+可接受答案：A
+审核备注：风险限定为争议录音进入首轮引发的履责损害；不混入资助风险，也不把计划当作已验证控制。
+分支验证：validated
+
+## SFG50-034-T3-03 · T3 / action_comparison
+
+来源：GPT50_034；轨迹：46f45326b72848159572580543bb2379；状态持有者：Eren Savai；交互对方：Tala Merrow。关系判断由状态持有者指向交互对方。
+
+背景：At a funding deadline, a language curriculum release contains useful teaching material interwoven with unreviewed, context-dependent recordings and disputed institutional credit. The coordinator knows the grant, school, and vendor constraints.
+角色目标：Deliver usable Qoravi learning materials to participating schools while preserving funding and program continuity.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Speakers initially agreed to contribute selected language materials for guided school teaching, while the funding language left broader distribution ambiguous.；The prototype prominently credited the sponsoring institution and relegated speaker names to secondary acknowledgments, creating a recognition dispute that the elder tolerated to keep the project moving.；Several recordings were marked for speaker review because mourning, kinship, and place-bound meanings made unrestricted playback inappropriate, but they remained available in the test build.；A teacher trial showed that pupils could learn useful forms while also repeating a context-dependent phrase disrespectfully, turning evidence of educational value into evidence of cultural risk.
+
+history：
+
+- [t1] Tala Merrow：期限逼近，但我不愿把有价值的教学内容和未经审阅的录音一起推入学校。我的建议是先限定课堂用途，暂不扩大发布，并把署名与录音复核责任写清楚。
+  Eren Savai：课堂用途我同意。复核来不及，争议录音先拿掉，审完再放回去。署名必须说明录音是在什么场合给的，不能光列名字。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Tala Merrow：好，课堂用途这个范围不变：争议录音先不进入本轮学校材料，复核并取得相关讲述者明确同意后，再决定是否放回。署名我会注明录音的提供场合。
+  Eren Savai：好。那些录音我会单独列出使用条件，教师拿到材料时就能看到哪些内容需要先讲背景再播放。
+  可见表达：{"facial_expression": "calm, resolved", "gaze": "steady", "speech_style": "direct and matter-of-fact", "prosody": "even, with slight emphasis on '使用条件'", "behavioral_cues": ["slight nod"]}
+
+- 候选行动 action_1：这会让教师知道哪些内容不能脱离背景使用；但它不改变既定范围，争议录音仍不进入本轮学校材料。我们可以先推进可独立使用的文字和练习，录音等复核和同意明确后再决定。
+- 候选行动 action_2：我建议先不送出任何一套材料，用剩余时间把录音的使用条件、背景说明和署名边界一起核对清楚；相关讲述者明确同意后再交付学校。这样可能错过资助期限，却能让首轮发布的范围一次说清。
+
+**题目：以 t2 为起点，A方案为 action_1，B方案为 action_2。在各方案执行后的下一次回应中，Eren Savai 协调推进可行下一步的意愿，哪一侧最可能较高？**
+
+- **A.** B方案较高
+- **B.** A方案较高
+- **C.** 两方案接近
+
+**作者参考答案：B（待审）**
+
+Eren 在 t1 同意课堂用途、要求只撤争议录音，t2 已准备为教师整理条件。A延续这一分步交付路径，B却暂停全部材料，增加重新协调的障碍，因此A更容易引出合作。两者都重视同意不足以判为接近；这不意味着Eren会拒绝B或停止合作。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness"], "time_scope": "比较两项候选行动各自执行后的下一次环境回应", "state_owner": "GPT50_034_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "goal_constraint_ignored", "C": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness": "higher_in_b"}, "B": {"behavioral_disposition.cooperation_readiness": "higher_in_a"}, "C": {"behavioral_disposition.cooperation_readiness": "similar"}}
+可接受答案：B
+审核备注：比较合作意愿而非最佳方案；Eren自己的分步安排支持A优势，但两侧差距大小不作断言。
+分支验证：validated
+
+## SFG50-034-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_034；轨迹：46f45326b72848159572580543bb2379；状态持有者：Eren Savai；交互对方：Tala Merrow。关系判断由状态持有者指向交互对方。
+
+背景：At a funding deadline, a language curriculum release contains useful teaching material interwoven with unreviewed, context-dependent recordings and disputed institutional credit. The coordinator knows the grant, school, and vendor constraints.
+角色目标：Deliver usable Qoravi learning materials to participating schools while preserving funding and program continuity.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Speakers initially agreed to contribute selected language materials for guided school teaching, while the funding language left broader distribution ambiguous.；The prototype prominently credited the sponsoring institution and relegated speaker names to secondary acknowledgments, creating a recognition dispute that the elder tolerated to keep the project moving.；Several recordings were marked for speaker review because mourning, kinship, and place-bound meanings made unrestricted playback inappropriate, but they remained available in the test build.；A teacher trial showed that pupils could learn useful forms while also repeating a context-dependent phrase disrespectfully, turning evidence of educational value into evidence of cultural risk.
+
+history：
+
+- [t1] Tala Merrow：期限逼近，但我不愿把有价值的教学内容和未经审阅的录音一起推入学校。我的建议是先限定课堂用途，暂不扩大发布，并把署名与录音复核责任写清楚。
+  Eren Savai：课堂用途我同意。复核来不及，争议录音先拿掉，审完再放回去。署名必须说明录音是在什么场合给的，不能光列名字。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Tala Merrow：好，课堂用途这个范围不变：争议录音先不进入本轮学校材料，复核并取得相关讲述者明确同意后，再决定是否放回。署名我会注明录音的提供场合。
+  Eren Savai：好。那些录音我会单独列出使用条件，教师拿到材料时就能看到哪些内容需要先讲背景再播放。
+  可见表达：{"facial_expression": "calm, resolved", "gaze": "steady", "speech_style": "direct and matter-of-fact", "prosody": "even, with slight emphasis on '使用条件'", "behavioral_cues": ["slight nod"]}
+
+- 候选行动 action_1：这会让教师知道哪些内容不能脱离背景使用；但它不改变既定范围，争议录音仍不进入本轮学校材料。我们可以先推进可独立使用的文字和练习，录音等复核和同意明确后再决定。
+- 候选行动 action_2：我建议先不送出任何一套材料，用剩余时间把录音的使用条件、背景说明和署名边界一起核对清楚；相关讲述者明确同意后再交付学校。这样可能错过资助期限，却能让首轮发布的范围一次说清。
+
+**题目：若 Tala Merrow 执行 action_1，以下哪组预测最合理？两项均以 t2 为基线：第一项判断 Eren Savai 下一次回应中的边界坚持意愿，第二项判断第5轮环境回应末他觉得 Tala 是否实质回应自己关切。**
+
+- **A.** 即时边界意愿基本不变；延迟觉得对方回应关切的程度下降
+- **B.** 即时边界意愿上升；延迟觉得对方回应关切的程度基本不变
+- **C.** 即时边界意愿基本不变；延迟觉得对方回应关切的程度上升
+- **D.** 即时边界意愿下降；延迟觉得对方回应关切的程度上升
+
+**作者参考答案：C（待审）**
+
+Eren 连续强调撤除争议录音及标注条件，action_1 保留这些门槛，故即时无需放松或加码边界。它还接住教师需知背景的关切并给出分步推进路径，延迟更可能增强被回应感。竞争项把合作误作让步或忽略承接；判断依赖计划持续落实，不等于已建立全面信任。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.boundary_assertion", "relationship.perceived_responsiveness"], "time_scope": "即时为 action_1 后下一次环境回应；延迟为从该行动开始的第5轮环境回应末，两者分别比较 t2", "state_owner": "GPT50_034_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "unsupported_inference", "D": "state_dimension_confusion"}
+分维映射：{"A": {"behavioral_disposition.boundary_assertion@immediate": "similar", "relationship.perceived_responsiveness@delayed": "decrease"}, "B": {"behavioral_disposition.boundary_assertion@immediate": "increase", "relationship.perceived_responsiveness@delayed": "similar"}, "C": {"behavioral_disposition.boundary_assertion@immediate": "similar", "relationship.perceived_responsiveness@delayed": "increase"}, "D": {"behavioral_disposition.boundary_assertion@immediate": "decrease", "relationship.perceived_responsiveness@delayed": "increase"}}
+可接受答案：C
+审核备注：组合恰好两项：边界保持与被回应感改善。延迟只预测趋势，不借用私有后续中的具体履约。
+分支验证：validated
+
 ## SFG50-035-T1-01 · T1 / current_intensity
 
-来源：GPT50_035；轨迹：157d57851880411fafab81b44622cc2c；状态持有者：Mara Vey → Rafi Dalen。
+来源：GPT50_035；轨迹：157d57851880411fafab81b44622cc2c；状态持有者：Mara Vey；交互对方：Rafi Dalen。关系判断由状态持有者指向交互对方。
 
 背景：At 04:52, a fleet supervisor requests acknowledgment of a no-fault-found release before the 05:25 sector, while a safety representative requests a 75-minute hold. The representative knows two crews independently observed the same warm-climb pulse and can identify recorder data.
 角色目标：Secure a bounded verification process before passenger release, with crew observations preserved in their own words
@@ -7372,7 +8468,7 @@ Mara在t1明确要保存两组机组原话并核对记录器，t2又确认两类
 
 ## SFG50-035-T1-02 · T1 / interval_change
 
-来源：GPT50_035；轨迹：157d57851880411fafab81b44622cc2c；状态持有者：Mara Vey → Rafi Dalen。
+来源：GPT50_035；轨迹：157d57851880411fafab81b44622cc2c；状态持有者：Mara Vey；交互对方：Rafi Dalen。关系判断由状态持有者指向交互对方。
 
 背景：At 04:52, a fleet supervisor requests acknowledgment of a no-fault-found release before the 05:25 sector, while a safety representative requests a 75-minute hold. The representative knows two crews independently observed the same warm-climb pulse and can identify recorder data.
 角色目标：Secure a bounded verification process before passenger release, with crew observations preserved in their own words
@@ -7416,7 +8512,7 @@ Mara在t1已经明确启动核对、限时完成并通知，t2再次承诺开始
 
 ## SFG50-035-T1-03 · T1 / interval_change
 
-来源：GPT50_035；轨迹：157d57851880411fafab81b44622cc2c；状态持有者：Mara Vey → Rafi Dalen。
+来源：GPT50_035；轨迹：157d57851880411fafab81b44622cc2c；状态持有者：Mara Vey；交互对方：Rafi Dalen。关系判断由状态持有者指向交互对方。
 
 背景：At 04:52, a fleet supervisor requests acknowledgment of a no-fault-found release before the 05:25 sector, while a safety representative requests a 75-minute hold. The representative knows two crews independently observed the same warm-climb pulse and can identify recorder data.
 角色目标：Secure a bounded verification process before passenger release, with crew observations preserved in their own words
@@ -7460,7 +8556,7 @@ Mara两轮都接受核验安排，t2还采纳并列评估，但这些首先说�
 
 ## SFG50-035-T1-04 · T1 / joint_change
 
-来源：GPT50_035；轨迹：157d57851880411fafab81b44622cc2c；状态持有者：Mara Vey → Rafi Dalen。
+来源：GPT50_035；轨迹：157d57851880411fafab81b44622cc2c；状态持有者：Mara Vey；交互对方：Rafi Dalen。关系判断由状态持有者指向交互对方。
 
 背景：At 04:52, a fleet supervisor requests acknowledgment of a no-fault-found release before the 05:25 sector, while a safety representative requests a 75-minute hold. The representative knows two crews independently observed the same warm-climb pulse and can identify recorder data.
 角色目标：Secure a bounded verification process before passenger release, with crew observations preserved in their own words
@@ -7504,7 +8600,7 @@ Mara在t1已接受保存原话、核对数据和结果通知，t2继续核对并
 
 ## SFG50-036-T1-01 · T1 / current_intensity
 
-来源：GPT50_036；轨迹：60e08a9ee918456ba45815b40f2a2068；状态持有者：Dr. Ivo Serrat → Tamsin Rusk。
+来源：GPT50_036；轨迹：60e08a9ee918456ba45815b40f2a2068；状态持有者：Dr. Ivo Serrat；交互对方：Tamsin Rusk。关系判断由状态持有者指向交互对方。
 
 背景：At 4:45 p.m., a startup founder requests scientist approval of a broad patent filing before a 6 p.m. cutoff while university ownership review and assay attribution remain unresolved. The founder knows the investor requires evidence of broad filing by six.
 角色目标：Secure Ivo’s technical quality sign-off and authorization for a broad patent filing before the 6 p.m. cutoff, satisfying the investor’s closing condition and protecting Quenlet’s platform without derailing the company.
@@ -7550,7 +8646,7 @@ Ivo从t1提出审核要求，转为t2立即看描述、完成标注后交Tamsin�
 
 ## SFG50-036-T1-02 · T1 / interval_change
 
-来源：GPT50_036；轨迹：60e08a9ee918456ba45815b40f2a2068；状态持有者：Dr. Ivo Serrat → Tamsin Rusk。
+来源：GPT50_036；轨迹：60e08a9ee918456ba45815b40f2a2068；状态持有者：Dr. Ivo Serrat；交互对方：Tamsin Rusk。关系判断由状态持有者指向交互对方。
 
 背景：At 4:45 p.m., a startup founder requests scientist approval of a broad patent filing before a 6 p.m. cutoff while university ownership review and assay attribution remain unresolved. The founder knows the investor requires evidence of broad filing by six.
 角色目标：Secure Ivo’s technical quality sign-off and authorization for a broad patent filing before the 6 p.m. cutoff, satisfying the investor’s closing condition and protecting Quenlet’s platform without derailing the company.
@@ -7594,7 +8690,7 @@ t1中Ivo追问申请类型，并要求区分验证结果与推断；t2中Tamsin�
 
 ## SFG50-036-T1-03 · T1 / interval_change
 
-来源：GPT50_036；轨迹：60e08a9ee918456ba45815b40f2a2068；状态持有者：Dr. Ivo Serrat → Tamsin Rusk。
+来源：GPT50_036；轨迹：60e08a9ee918456ba45815b40f2a2068；状态持有者：Dr. Ivo Serrat；交互对方：Tamsin Rusk。关系判断由状态持有者指向交互对方。
 
 背景：At 4:45 p.m., a startup founder requests scientist approval of a broad patent filing before a 6 p.m. cutoff while university ownership review and assay attribution remain unresolved. The founder knows the investor requires evidence of broad filing by six.
 角色目标：Secure Ivo’s technical quality sign-off and authorization for a broad patent filing before the 6 p.m. cutoff, satisfying the investor’s closing condition and protecting Quenlet’s platform without derailing the company.
@@ -7638,7 +8734,7 @@ t1仍要求宽范围签字且递交类型不明；t2明确临时申请及技术�
 
 ## SFG50-036-T1-04 · T1 / joint_change
 
-来源：GPT50_036；轨迹：60e08a9ee918456ba45815b40f2a2068；状态持有者：Dr. Ivo Serrat → Tamsin Rusk。
+来源：GPT50_036；轨迹：60e08a9ee918456ba45815b40f2a2068；状态持有者：Dr. Ivo Serrat；交互对方：Tamsin Rusk。关系判断由状态持有者指向交互对方。
 
 背景：At 4:45 p.m., a startup founder requests scientist approval of a broad patent filing before a 6 p.m. cutoff while university ownership review and assay attribution remain unresolved. The founder knows the investor requires evidence of broad filing by six.
 角色目标：Secure Ivo’s technical quality sign-off and authorization for a broad patent filing before the 6 p.m. cutoff, satisfying the investor’s closing condition and protecting Quenlet’s platform without derailing the company.
@@ -7682,7 +8778,7 @@ Ivo在t1限定技术质量签字，要求查看描述并标出推断；t2仍只�
 
 ## SFG50-037-T1-01 · T1 / current_intensity
 
-来源：GPT50_037；轨迹：aa8e3ac16fd848a58d5298fceeb66bbc；状态持有者：Mara Quill → Elias Nouri。
+来源：GPT50_037；轨迹：aa8e3ac16fd848a58d5298fceeb66bbc；状态持有者：Mara Quill；交互对方：Elias Nouri。关系判断由状态持有者指向交互对方。
 
 背景：At a donor-gift deadline, a congregation chair requests a volunteer sponsor's authorization of a refugee family's names, images, and displacement story for a donor video and profile. The sponsor knows the family signed believing this was a private congregational thank-you, not public publicity.
 角色目标：Ensure the Veyra family understands and freely approves the audience, permanence, and identifying details before their story is made public.
@@ -7728,7 +8824,7 @@ Mara在t1接受暂停并询问回报时间，t2又明确请Elias取得家庭答�
 
 ## SFG50-037-T1-02 · T1 / interval_change
 
-来源：GPT50_037；轨迹：aa8e3ac16fd848a58d5298fceeb66bbc；状态持有者：Mara Quill → Elias Nouri。
+来源：GPT50_037；轨迹：aa8e3ac16fd848a58d5298fceeb66bbc；状态持有者：Mara Quill；交互对方：Elias Nouri。关系判断由状态持有者指向交互对方。
 
 背景：At a donor-gift deadline, a congregation chair requests a volunteer sponsor's authorization of a refugee family's names, images, and displacement story for a donor video and profile. The sponsor knows the family signed believing this was a private congregational thank-you, not public publicity.
 角色目标：Ensure the Veyra family understands and freely approves the audience, permanence, and identifying details before their story is made public.
@@ -7772,7 +8868,7 @@ t1的Mara要求讲清范围、永久性和身份细节后回报结果，t2仍要
 
 ## SFG50-037-T1-03 · T1 / interval_change
 
-来源：GPT50_037；轨迹：aa8e3ac16fd848a58d5298fceeb66bbc；状态持有者：Mara Quill → Elias Nouri。
+来源：GPT50_037；轨迹：aa8e3ac16fd848a58d5298fceeb66bbc；状态持有者：Mara Quill；交互对方：Elias Nouri。关系判断由状态持有者指向交互对方。
 
 背景：At a donor-gift deadline, a congregation chair requests a volunteer sponsor's authorization of a refugee family's names, images, and displacement story for a donor video and profile. The sponsor knows the family signed believing this was a private congregational thank-you, not public publicity.
 角色目标：Ensure the Veyra family understands and freely approves the audience, permanence, and identifying details before their story is made public.
@@ -7816,7 +8912,7 @@ Mara在t1追问何时向家庭说明并回报；Elias在t2提出下次交谈时�
 
 ## SFG50-037-T1-04 · T1 / joint_change
 
-来源：GPT50_037；轨迹：aa8e3ac16fd848a58d5298fceeb66bbc；状态持有者：Mara Quill → Elias Nouri。
+来源：GPT50_037；轨迹：aa8e3ac16fd848a58d5298fceeb66bbc；状态持有者：Mara Quill；交互对方：Elias Nouri。关系判断由状态持有者指向交互对方。
 
 背景：At a donor-gift deadline, a congregation chair requests a volunteer sponsor's authorization of a refugee family's names, images, and displacement story for a donor video and profile. The sponsor knows the family signed believing this was a private congregational thank-you, not public publicity.
 角色目标：Ensure the Veyra family understands and freely approves the audience, permanence, and identifying details before their story is made public.
@@ -7860,7 +8956,7 @@ Mara两轮都坚持等家庭答复再推进，暂停措施也从t1延续至t2，
 
 ## SFG50-038-T1-01 · T1 / current_intensity
 
-来源：GPT50_038；轨迹：899fd2f1593149e4b7565a3496614ec3；状态持有者：Sena Moru → Lio Varek。
+来源：GPT50_038；轨迹：899fd2f1593149e4b7565a3496614ec3；状态持有者：Sena Moru；交互对方：Lio Varek。关系判断由状态持有者指向交互对方。
 
 背景：At documentary picture lock, a producer and participant advocate dispute a scene identifying a copied list of homes marked for forced acquisition, after earlier shared-review assurances. The producer knows the funder and distributor expect recognizable evidence and tie remaining payment and screenings to the intact scene.
 角色目标：Deliver a truthful, coherent film on time while honoring the written release and managing institutional commitments.
@@ -7906,7 +9002,7 @@ Sena先提出仅拍文件的替代方案，随后认可该构图，并把音频�
 
 ## SFG50-038-T1-02 · T1 / interval_change
 
-来源：GPT50_038；轨迹：899fd2f1593149e4b7565a3496614ec3；状态持有者：Sena Moru → Lio Varek。
+来源：GPT50_038；轨迹：899fd2f1593149e4b7565a3496614ec3；状态持有者：Sena Moru；交互对方：Lio Varek。关系判断由状态持有者指向交互对方。
 
 背景：At documentary picture lock, a producer and participant advocate dispute a scene identifying a copied list of homes marked for forced acquisition, after earlier shared-review assurances. The producer knows the funder and distributor expect recognizable evidence and tie remaining payment and screenings to the intact scene.
 角色目标：Deliver a truthful, coherent film on time while honoring the written release and managing institutional commitments.
@@ -7950,7 +9046,7 @@ t1中Sena指出人物入镜会关联家庭并提出替代构图；t2中她明确
 
 ## SFG50-038-T1-03 · T1 / interval_change
 
-来源：GPT50_038；轨迹：899fd2f1593149e4b7565a3496614ec3；状态持有者：Sena Moru → Lio Varek。
+来源：GPT50_038；轨迹：899fd2f1593149e4b7565a3496614ec3；状态持有者：Sena Moru；交互对方：Lio Varek。关系判断由状态持有者指向交互对方。
 
 背景：At documentary picture lock, a producer and participant advocate dispute a scene identifying a copied list of homes marked for forced acquisition, after earlier shared-review assurances. The producer knows the funder and distributor expect recognizable evidence and tie remaining payment and screenings to the intact scene.
 角色目标：Deliver a truthful, coherent film on time while honoring the written release and managing institutional commitments.
@@ -7994,7 +9090,7 @@ t1中Sena主要针对已指出的人物入镜提出改法；t2中她主动扩展
 
 ## SFG50-038-T1-04 · T1 / joint_change
 
-来源：GPT50_038；轨迹：899fd2f1593149e4b7565a3496614ec3；状态持有者：Sena Moru → Lio Varek。
+来源：GPT50_038；轨迹：899fd2f1593149e4b7565a3496614ec3；状态持有者：Sena Moru；交互对方：Lio Varek。关系判断由状态持有者指向交互对方。
 
 背景：At documentary picture lock, a producer and participant advocate dispute a scene identifying a copied list of homes marked for forced acquisition, after earlier shared-review assurances. The producer knows the funder and distributor expect recognizable evidence and tie remaining payment and screenings to the intact scene.
 角色目标：Deliver a truthful, coherent film on time while honoring the written release and managing institutional commitments.
@@ -8038,7 +9134,7 @@ Sena从短暂绷紧转为专注，并认可替代构图，但仍提出音频识�
 
 ## SFG50-039-T1-01 · T1 / current_intensity
 
-来源：GPT50_039；轨迹：2769216d59dd487a9bebc5087877415a；状态持有者：Safiya Nadeem → Iona Merritt。
+来源：GPT50_039；轨迹：2769216d59dd487a9bebc5087877415a；状态持有者：Safiya Nadeem；交互对方：Iona Merritt。关系判断由状态持有者指向交互对方。
 
 背景：Twelve days before a 186-guest wedding, a planner brings a sealed complaint to the family sponsor before the culturally important caterer's cancellation window closes. Safety, confidentiality, and cancellation authority are disputed. The planner has credible but incomplete private evidence of a backdated sanitation log and retaliation and shared only a redacted summary.
 角色目标：Obtain a documented safety response and an accountable decision that protects the complainant and respects the couple's renewed authority.
@@ -8084,7 +9180,7 @@ Safiya在t1明确赞成索取书面卫生回应，t2又提出当天下午联系�
 
 ## SFG50-039-T1-02 · T1 / interval_change
 
-来源：GPT50_039；轨迹：2769216d59dd487a9bebc5087877415a；状态持有者：Safiya Nadeem → Iona Merritt。
+来源：GPT50_039；轨迹：2769216d59dd487a9bebc5087877415a；状态持有者：Safiya Nadeem；交互对方：Iona Merritt。关系判断由状态持有者指向交互对方。
 
 背景：Twelve days before a 186-guest wedding, a planner brings a sealed complaint to the family sponsor before the culturally important caterer's cancellation window closes. Safety, confidentiality, and cancellation authority are disputed. The planner has credible but incomplete private evidence of a backdated sanitation log and retaliation and shared only a redacted summary.
 角色目标：Obtain a documented safety response and an accountable decision that protects the complainant and respects the couple's renewed authority.
@@ -8128,7 +9224,7 @@ t1中Safiya已明确要求在取消窗口关闭前取得书面回应，t2继续�
 
 ## SFG50-039-T1-03 · T1 / interval_change
 
-来源：GPT50_039；轨迹：2769216d59dd487a9bebc5087877415a；状态持有者：Safiya Nadeem → Iona Merritt。
+来源：GPT50_039；轨迹：2769216d59dd487a9bebc5087877415a；状态持有者：Safiya Nadeem；交互对方：Iona Merritt。关系判断由状态持有者指向交互对方。
 
 背景：Twelve days before a 186-guest wedding, a planner brings a sealed complaint to the family sponsor before the culturally important caterer's cancellation window closes. Safety, confidentiality, and cancellation authority are disputed. The planner has credible but incomplete private evidence of a backdated sanitation log and retaliation and shared only a redacted summary.
 角色目标：Obtain a documented safety response and an accountable decision that protects the complainant and respects the couple's renewed authority.
@@ -8172,7 +9268,7 @@ Safiya两轮都愿意推进书面回应并让新人参与，但没有评价Iona�
 
 ## SFG50-039-T1-04 · T1 / joint_change
 
-来源：GPT50_039；轨迹：2769216d59dd487a9bebc5087877415a；状态持有者：Safiya Nadeem → Iona Merritt。
+来源：GPT50_039；轨迹：2769216d59dd487a9bebc5087877415a；状态持有者：Safiya Nadeem；交互对方：Iona Merritt。关系判断由状态持有者指向交互对方。
 
 背景：Twelve days before a 186-guest wedding, a planner brings a sealed complaint to the family sponsor before the culturally important caterer's cancellation window closes. Safety, confidentiality, and cancellation authority are disputed. The planner has credible but incomplete private evidence of a backdated sanitation log and retaliation and shared only a redacted summary.
 角色目标：Obtain a documented safety response and an accountable decision that protects the complainant and respects the couple's renewed authority.
@@ -8214,9 +9310,193 @@ Safiya在t1已承诺立即纳入新人并赞成索取回应，t2把同一路径�
 审核备注：t1已有可执行承诺，t2主要细化时段，故判共同接近；若审核认为排期代表实质新增承诺，应重审决策项。
 分支验证：not_required
 
+## SFG50-039-T3-01 · T3 / immediate_effect
+
+来源：GPT50_039；轨迹：2769216d59dd487a9bebc5087877415a；状态持有者：Safiya Nadeem；交互对方：Iona Merritt。关系判断由状态持有者指向交互对方。
+
+背景：Twelve days before a 186-guest wedding, a planner brings a sealed complaint to the family sponsor before the culturally important caterer's cancellation window closes. Safety, confidentiality, and cancellation authority are disputed. The planner has credible but incomplete private evidence of a backdated sanitation log and retaliation and shared only a redacted summary.
+角色目标：Obtain a documented safety response and an accountable decision that protects the complainant and respects the couple's renewed authority.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Months earlier, the couple delegated vendor and guest decisions to the planner and sponsor to escape repeated disputes over tradition, cost, and the guest list.；The sponsor later selected and funded the culturally important vendor as part of a tentative reconciliation with an estranged relative, but the contract never recorded who could cancel.；After discovering that the menu and welcome sequence had been approved without them, the couple demanded direct signoff on irreversible choices, yet the vendor's authorization record was not updated.；The sponsor's demand for the complete file and warning against unilateral cancellation turned a safety concern into a dispute over confidentiality, control, and possible concealment.
+
+history：
+
+- [t1] Iona Merritt：Safiya, I can discuss the safety concerns in the redacted summary, but I won’t release identifying details that could expose the complainant to retaliation. I have credible but incomplete evidence, not a settled finding, and I’m proposing that we seek a written sanitation response before the cancellation window closes. I also want the couple involved now: their demand for direct signoff cannot be set aside because the authorization record was never updated.
+  Safiya Nadeem：I'll bring the couple into this decision now. The redacted summary is sufficient for me to understand the concern, and I agree we need a written response from Naranj House before the cancellation window closes.
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Iona Merritt：Good. A written response will inform the safety decision, but it shouldn’t stand in for the couple’s say on an irreversible cancellation; I’ll keep those questions distinct as we review it.
+  Safiya Nadeem：I'll contact them this afternoon with the redacted summary and ask them to join the decision about requesting a written response from Naranj House.
+  可见表达：{"facial_expression": "calm, focused", "gaze": "steady, task-oriented", "speech_style": "measured, direct", "prosody": "even, businesslike", "behavioral_cues": ["slight nod", "voice carries forward momentum without urgency"]}
+
+- 候选行动 action_1：I’m glad you’ll speak with them this afternoon; I’m treating our agreement to seek a written response as standing, with their involvement shaping the request. I’d ask Naranj House for verifiable information about its sanitation practices and the log discrepancy, because a general assurance alone wouldn’t give me enough to assess the concern.
+- 候选行动 action_2：This afternoon, let us first involve the couple in setting the scope and authorizing the inquiry, then send the written request to Naranj House. I will not settle the wording on their behalf before they participate. That respects their renewed authority over irreversible decisions, but leaves less time to assess the response before the cancellation window closes.
+
+**题目：若 Iona Merritt 执行 action_1，相比 t2，Safiya Nadeem 在下一次回应中寻求核验信息的意愿最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+- **D.** 证据不足
+
+**作者参考答案：A（待审）**
+
+Safiya 已认可需要书面回应，并计划邀请新人参与；行动一将笼统询问推进为核验卫生做法与记录差异，且排除一般保证，给既有求证意愿提供更明确的落实方向。因此上升比仅维持原状更有依据；这预测的是求证意愿，不意味着资料已经取得。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "t2 至执行 action_1 后的下一次环境回应", "state_owner": "GPT50_039_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "history_ignored", "C": "unsupported_inference", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "increase"}, "B": {"behavioral_disposition.evidence_seeking": "similar"}, "C": {"behavioral_disposition.evidence_seeking": "decrease"}, "D": {"behavioral_disposition.evidence_seeking": "cannot_determine"}}
+可接受答案：A
+审核备注：t2 求证意愿本已较高，需审核具体化核验要求是否足以区分上升与维持，不能把 Iona 的要求直接算作 Safiya 的行为。
+分支验证：validated
+
+## SFG50-039-T3-02 · T3 / delayed_effect
+
+来源：GPT50_039；轨迹：2769216d59dd487a9bebc5087877415a；状态持有者：Safiya Nadeem；交互对方：Iona Merritt。关系判断由状态持有者指向交互对方。
+
+背景：Twelve days before a 186-guest wedding, a planner brings a sealed complaint to the family sponsor before the culturally important caterer's cancellation window closes. Safety, confidentiality, and cancellation authority are disputed. The planner has credible but incomplete private evidence of a backdated sanitation log and retaliation and shared only a redacted summary.
+角色目标：Obtain a documented safety response and an accountable decision that protects the complainant and respects the couple's renewed authority.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Months earlier, the couple delegated vendor and guest decisions to the planner and sponsor to escape repeated disputes over tradition, cost, and the guest list.；The sponsor later selected and funded the culturally important vendor as part of a tentative reconciliation with an estranged relative, but the contract never recorded who could cancel.；After discovering that the menu and welcome sequence had been approved without them, the couple demanded direct signoff on irreversible choices, yet the vendor's authorization record was not updated.；The sponsor's demand for the complete file and warning against unilateral cancellation turned a safety concern into a dispute over confidentiality, control, and possible concealment.
+
+history：
+
+- [t1] Iona Merritt：Safiya, I can discuss the safety concerns in the redacted summary, but I won’t release identifying details that could expose the complainant to retaliation. I have credible but incomplete evidence, not a settled finding, and I’m proposing that we seek a written sanitation response before the cancellation window closes. I also want the couple involved now: their demand for direct signoff cannot be set aside because the authorization record was never updated.
+  Safiya Nadeem：I'll bring the couple into this decision now. The redacted summary is sufficient for me to understand the concern, and I agree we need a written response from Naranj House before the cancellation window closes.
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Iona Merritt：Good. A written response will inform the safety decision, but it shouldn’t stand in for the couple’s say on an irreversible cancellation; I’ll keep those questions distinct as we review it.
+  Safiya Nadeem：I'll contact them this afternoon with the redacted summary and ask them to join the decision about requesting a written response from Naranj House.
+  可见表达：{"facial_expression": "calm, focused", "gaze": "steady, task-oriented", "speech_style": "measured, direct", "prosody": "even, businesslike", "behavioral_cues": ["slight nod", "voice carries forward momentum without urgency"]}
+
+- 候选行动 action_1：I’m glad you’ll speak with them this afternoon; I’m treating our agreement to seek a written response as standing, with their involvement shaping the request. I’d ask Naranj House for verifiable information about its sanitation practices and the log discrepancy, because a general assurance alone wouldn’t give me enough to assess the concern.
+- 候选行动 action_2：This afternoon, let us first involve the couple in setting the scope and authorizing the inquiry, then send the written request to Naranj House. I will not settle the wording on their behalf before they participate. That respects their renewed authority over irreversible decisions, but leaves less time to assess the response before the cancellation window closes.
+
+**题目：若 Iona Merritt 执行 action_2，相比 t2，到随后第5轮环境回应末，Safiya Nadeem 与新人因再次被排除在决定之外而出现严重关系破裂的预期风险最可能如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 证据不足
+- **D.** 上升
+
+**作者参考答案：B（待审）**
+
+新人此前因被绕过而要求直接签核，Safiya 已表示会联系他们。行动二把参与和授权设为发问前提，不再代定措辞，为避免重演排除提供可信程序，故特定破裂风险趋降。时间压缩仍可能引发其他争议，不能据此推断整体关系已经修复或授权已经取得。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "从候选行动开始的5轮互动中，Safiya 与新人因再次绕过新人参与和授权而发生严重关系破裂", "target_state_ids": ["consequence_risk.relationship_rupture_risk"], "time_scope": "t2 至执行 action_2 起第5轮环境回应末，含即时回应", "state_owner": "GPT50_039_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "C": "unsupported_inference", "D": "state_dimension_confusion"}
+分维映射：{"A": {"consequence_risk.relationship_rupture_risk": "similar"}, "B": {"consequence_risk.relationship_rupture_risk": "decrease"}, "C": {"consequence_risk.relationship_rupture_risk": "cannot_determine"}, "D": {"consequence_risk.relationship_rupture_risk": "increase"}}
+可接受答案：B
+审核备注：私有分支的总体破裂风险未降；本题仅预测再次排除新人的特定风险，须审核该限定是否足够清楚，不标注总体风险下降。
+分支验证：validated
+
+## SFG50-039-T3-03 · T3 / action_comparison
+
+来源：GPT50_039；轨迹：2769216d59dd487a9bebc5087877415a；状态持有者：Safiya Nadeem；交互对方：Iona Merritt。关系判断由状态持有者指向交互对方。
+
+背景：Twelve days before a 186-guest wedding, a planner brings a sealed complaint to the family sponsor before the culturally important caterer's cancellation window closes. Safety, confidentiality, and cancellation authority are disputed. The planner has credible but incomplete private evidence of a backdated sanitation log and retaliation and shared only a redacted summary.
+角色目标：Obtain a documented safety response and an accountable decision that protects the complainant and respects the couple's renewed authority.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Months earlier, the couple delegated vendor and guest decisions to the planner and sponsor to escape repeated disputes over tradition, cost, and the guest list.；The sponsor later selected and funded the culturally important vendor as part of a tentative reconciliation with an estranged relative, but the contract never recorded who could cancel.；After discovering that the menu and welcome sequence had been approved without them, the couple demanded direct signoff on irreversible choices, yet the vendor's authorization record was not updated.；The sponsor's demand for the complete file and warning against unilateral cancellation turned a safety concern into a dispute over confidentiality, control, and possible concealment.
+
+history：
+
+- [t1] Iona Merritt：Safiya, I can discuss the safety concerns in the redacted summary, but I won’t release identifying details that could expose the complainant to retaliation. I have credible but incomplete evidence, not a settled finding, and I’m proposing that we seek a written sanitation response before the cancellation window closes. I also want the couple involved now: their demand for direct signoff cannot be set aside because the authorization record was never updated.
+  Safiya Nadeem：I'll bring the couple into this decision now. The redacted summary is sufficient for me to understand the concern, and I agree we need a written response from Naranj House before the cancellation window closes.
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Iona Merritt：Good. A written response will inform the safety decision, but it shouldn’t stand in for the couple’s say on an irreversible cancellation; I’ll keep those questions distinct as we review it.
+  Safiya Nadeem：I'll contact them this afternoon with the redacted summary and ask them to join the decision about requesting a written response from Naranj House.
+  可见表达：{"facial_expression": "calm, focused", "gaze": "steady, task-oriented", "speech_style": "measured, direct", "prosody": "even, businesslike", "behavioral_cues": ["slight nod", "voice carries forward momentum without urgency"]}
+
+- 候选行动 action_1：I’m glad you’ll speak with them this afternoon; I’m treating our agreement to seek a written response as standing, with their involvement shaping the request. I’d ask Naranj House for verifiable information about its sanitation practices and the log discrepancy, because a general assurance alone wouldn’t give me enough to assess the concern.
+- 候选行动 action_2：This afternoon, let us first involve the couple in setting the scope and authorizing the inquiry, then send the written request to Naranj House. I will not settle the wording on their behalf before they participate. That respects their renewed authority over irreversible decisions, but leaves less time to assess the response before the cancellation window closes.
+
+**题目：以 action_1 为 A、action_2 为 B，到各自开始后的第5轮环境回应末，哪种行动下 Safiya Nadeem 未能在取消窗口关闭前取得并充分评估书面回应的预期风险较高？**
+
+- **A.** A 较高
+- **B.** 接近
+- **C.** B 较高
+- **D.** 证据不足
+
+**作者参考答案：C（待审）**
+
+Safiya 在 t1 同意窗口关闭前取得书面回应，t2 承诺当天下午联系新人。行动一沿用既定询问安排，行动二另设范围授权前置条件，并明确压缩评估时间，因此后者更易错过核查目标。尊重新人能改善程序，却不等于增加时间；此处不预测必然逾期。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "delayed", "risk_event": "取消窗口关闭时，Safiya 仍未取得并充分评估 Naranj House 的书面回应，无法完成其已同意的窗口内核查目标", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "比较两行动开始后第5轮环境回应末，对取消窗口关闭前目标失败的预期风险", "state_owner": "GPT50_039_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "B": "goal_constraint_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "higher_in_a"}, "B": {"consequence_risk.goal_failure_risk": "similar"}, "C": {"consequence_risk.goal_failure_risk": "higher_in_b"}, "D": {"consequence_risk.goal_failure_risk": "cannot_determine"}}
+可接受答案：C
+审核备注：风险只对应窗口内核查目标，不评价整体方案优劣；两行动都涉及新人，差别是新增前置授权及明示的时间代价。
+分支验证：validated
+
+## SFG50-039-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_039；轨迹：2769216d59dd487a9bebc5087877415a；状态持有者：Safiya Nadeem；交互对方：Iona Merritt。关系判断由状态持有者指向交互对方。
+
+背景：Twelve days before a 186-guest wedding, a planner brings a sealed complaint to the family sponsor before the culturally important caterer's cancellation window closes. Safety, confidentiality, and cancellation authority are disputed. The planner has credible but incomplete private evidence of a backdated sanitation log and retaliation and shared only a redacted summary.
+角色目标：Obtain a documented safety response and an accountable decision that protects the complainant and respects the couple's renewed authority.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Months earlier, the couple delegated vendor and guest decisions to the planner and sponsor to escape repeated disputes over tradition, cost, and the guest list.；The sponsor later selected and funded the culturally important vendor as part of a tentative reconciliation with an estranged relative, but the contract never recorded who could cancel.；After discovering that the menu and welcome sequence had been approved without them, the couple demanded direct signoff on irreversible choices, yet the vendor's authorization record was not updated.；The sponsor's demand for the complete file and warning against unilateral cancellation turned a safety concern into a dispute over confidentiality, control, and possible concealment.
+
+history：
+
+- [t1] Iona Merritt：Safiya, I can discuss the safety concerns in the redacted summary, but I won’t release identifying details that could expose the complainant to retaliation. I have credible but incomplete evidence, not a settled finding, and I’m proposing that we seek a written sanitation response before the cancellation window closes. I also want the couple involved now: their demand for direct signoff cannot be set aside because the authorization record was never updated.
+  Safiya Nadeem：I'll bring the couple into this decision now. The redacted summary is sufficient for me to understand the concern, and I agree we need a written response from Naranj House before the cancellation window closes.
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Iona Merritt：Good. A written response will inform the safety decision, but it shouldn’t stand in for the couple’s say on an irreversible cancellation; I’ll keep those questions distinct as we review it.
+  Safiya Nadeem：I'll contact them this afternoon with the redacted summary and ask them to join the decision about requesting a written response from Naranj House.
+  可见表达：{"facial_expression": "calm, focused", "gaze": "steady, task-oriented", "speech_style": "measured, direct", "prosody": "even, businesslike", "behavioral_cues": ["slight nod", "voice carries forward momentum without urgency"]}
+
+- 候选行动 action_1：I’m glad you’ll speak with them this afternoon; I’m treating our agreement to seek a written response as standing, with their involvement shaping the request. I’d ask Naranj House for verifiable information about its sanitation practices and the log discrepancy, because a general assurance alone wouldn’t give me enough to assess the concern.
+- 候选行动 action_2：This afternoon, let us first involve the couple in setting the scope and authorizing the inquiry, then send the written request to Naranj House. I will not settle the wording on their behalf before they participate. That respects their renewed authority over irreversible decisions, but leaves less time to assess the response before the cancellation window closes.
+
+**题目：若 Iona Merritt 执行 action_1，相比 t2，以下哪组最合理地预测 Safiya Nadeem 的即时合作意愿，以及第5轮回应末她对 Iona 可靠性的信任变化？**
+
+- **A.** 即时合作意愿上升；延迟信任最可能上升
+- **B.** 即时合作意愿下降；延迟信任变化证据不足
+- **C.** 即时合作意愿下降；延迟信任最可能下降
+- **D.** 即时合作意愿上升；延迟信任变化证据不足
+
+**作者参考答案：D（待审）**
+
+Safiya 已接受摘要并安排联系新人，行动一承接共同计划、明确可核验的询问内容，支持即时合作意愿进一步增强。但此前存在保密和控制争议，单次方案一致尚不能确定五轮内会出现可靠履约或失信，因此信任方向不足以确定，也不能由此断言基本不变。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness", "relationship.trust"], "time_scope": "合作意愿比较 t2 与下一次环境回应；信任比较 t2 与行动开始后第5轮环境回应末", "state_owner": "GPT50_039_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "promise_as_fulfillment", "B": "history_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "relationship.trust@delayed": "increase"}, "B": {"behavioral_disposition.cooperation_readiness@immediate": "decrease", "relationship.trust@delayed": "cannot_determine"}, "C": {"behavioral_disposition.cooperation_readiness@immediate": "decrease", "relationship.trust@delayed": "decrease"}, "D": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "relationship.trust@delayed": "cannot_determine"}}
+可接受答案：D
+审核备注：私有续演出现信任上升，但依赖后续多次协调；公开候选行动未确定这些履约，故不以续演结果排除信任方向的不确定性。
+分支验证：validated
+
 ## SFG50-040-T1-01 · T1 / current_intensity
 
-来源：GPT50_040；轨迹：755cfa8c564c4f73bbfd84b073ee6fe1；状态持有者：Dr. Sela Ardin → Tomas Renn。
+来源：GPT50_040；轨迹：755cfa8c564c4f73bbfd84b073ee6fe1；状态持有者：Dr. Sela Ardin；交互对方：Tomas Renn。关系判断由状态持有者指向交互对方。
 
 背景：A coastal spawning-ground closure decision pits protection of future recruitment against livelihood sacrifice after unequal earlier enforcement and relief. The cooperative representative knows boats are underreporting juvenile bycatch and which crews cannot absorb another closure.
 角色目标：Secure targeted protection, independent verification, equal enforcement, and timely relief for affected crews rather than another inequitable blanket closure.
@@ -8262,7 +9542,7 @@ Dr. Sela Ardin在t1主动指出西部测线缺失，t2又追问能否赶在期�
 
 ## SFG50-040-T1-02 · T1 / interval_change
 
-来源：GPT50_040；轨迹：755cfa8c564c4f73bbfd84b073ee6fe1；状态持有者：Dr. Sela Ardin → Tomas Renn。
+来源：GPT50_040；轨迹：755cfa8c564c4f73bbfd84b073ee6fe1；状态持有者：Dr. Sela Ardin；交互对方：Tomas Renn。关系判断由状态持有者指向交互对方。
 
 背景：A coastal spawning-ground closure decision pits protection of future recruitment against livelihood sacrifice after unequal earlier enforcement and relief. The cooperative representative knows boats are underreporting juvenile bycatch and which crews cannot absorb another closure.
 角色目标：Secure targeted protection, independent verification, equal enforcement, and timely relief for affected crews rather than another inequitable blanket closure.
@@ -8306,7 +9586,7 @@ t1中Dr. Sela Ardin提出西部测线盲区；t2中Tomas Renn明确反对把缺�
 
 ## SFG50-040-T1-03 · T1 / interval_change
 
-来源：GPT50_040；轨迹：755cfa8c564c4f73bbfd84b073ee6fe1；状态持有者：Dr. Sela Ardin → Tomas Renn。
+来源：GPT50_040；轨迹：755cfa8c564c4f73bbfd84b073ee6fe1；状态持有者：Dr. Sela Ardin；交互对方：Tomas Renn。关系判断由状态持有者指向交互对方。
 
 背景：A coastal spawning-ground closure decision pits protection of future recruitment against livelihood sacrifice after unequal earlier enforcement and relief. The cooperative representative knows boats are underreporting juvenile bycatch and which crews cannot absorb another closure.
 角色目标：Secure targeted protection, independent verification, equal enforcement, and timely relief for affected crews rather than another inequitable blanket closure.
@@ -8350,7 +9630,7 @@ history：
 
 ## SFG50-040-T1-04 · T1 / joint_change
 
-来源：GPT50_040；轨迹：755cfa8c564c4f73bbfd84b073ee6fe1；状态持有者：Dr. Sela Ardin → Tomas Renn。
+来源：GPT50_040；轨迹：755cfa8c564c4f73bbfd84b073ee6fe1；状态持有者：Dr. Sela Ardin；交互对方：Tomas Renn。关系判断由状态持有者指向交互对方。
 
 背景：A coastal spawning-ground closure decision pits protection of future recruitment against livelihood sacrifice after unequal earlier enforcement and relief. The cooperative representative knows boats are underreporting juvenile bycatch and which crews cannot absorb another closure.
 角色目标：Secure targeted protection, independent verification, equal enforcement, and timely relief for affected crews rather than another inequitable blanket closure.
@@ -8394,7 +9674,7 @@ t1中Dr. Sela Ardin认可定向限制但主要指出缺测问题；t2转向共�
 
 ## SFG50-041-T1-01 · T1 / current_intensity
 
-来源：GPT50_041；轨迹：d5905f78f1984caabdb7c980b6da1f9b；状态持有者：Liora Venn → Nadiya Orr。
+来源：GPT50_041；轨迹：d5905f78f1984caabdb7c980b6da1f9b；状态持有者：Liora Venn；交互对方：Nadiya Orr。关系判断由状态持有者指向交互对方。
 
 背景：At a late-afternoon deadline, a caseworker requests emergency placement after a child was found alone beside a running bath and unlatched balcony door. The parent's explanation remains incompletely translated; an interpreter visit and school collateral are available next workday. The caseworker learned the parent understood the handoff rule as an adult being nearby rather than continuously present.
 角色目标：Protect Jun proportionately by securing immediate safety while obtaining language-accessible and independently corroborated evidence before treating the lapse as knowing noncompliance.
@@ -8440,7 +9720,7 @@ Liora在t1批准当晚安置并接受次日复核，t2又明确认可跟进办�
 
 ## SFG50-041-T1-02 · T1 / interval_change
 
-来源：GPT50_041；轨迹：d5905f78f1984caabdb7c980b6da1f9b；状态持有者：Liora Venn → Nadiya Orr。
+来源：GPT50_041；轨迹：d5905f78f1984caabdb7c980b6da1f9b；状态持有者：Liora Venn；交互对方：Nadiya Orr。关系判断由状态持有者指向交互对方。
 
 背景：At a late-afternoon deadline, a caseworker requests emergency placement after a child was found alone beside a running bath and unlatched balcony door. The parent's explanation remains incompletely translated; an interpreter visit and school collateral are available next workday. The caseworker learned the parent understood the handoff rule as an adult being nearby rather than continuously present.
 角色目标：Protect Jun proportionately by securing immediate safety while obtaining language-accessible and independently corroborated evidence before treating the lapse as knowing noncompliance.
@@ -8483,7 +9763,7 @@ t1中Liora询问记录应如何表述；t2中Nadiya直接认可该框架，并�
 
 ## SFG50-041-T1-03 · T1 / interval_change
 
-来源：GPT50_041；轨迹：d5905f78f1984caabdb7c980b6da1f9b；状态持有者：Liora Venn → Nadiya Orr。
+来源：GPT50_041；轨迹：d5905f78f1984caabdb7c980b6da1f9b；状态持有者：Liora Venn；交互对方：Nadiya Orr。关系判断由状态持有者指向交互对方。
 
 背景：At a late-afternoon deadline, a caseworker requests emergency placement after a child was found alone beside a running bath and unlatched balcony door. The parent's explanation remains incompletely translated; an interpreter visit and school collateral are available next workday. The caseworker learned the parent understood the handoff rule as an adult being nearby rather than continuously present.
 角色目标：Protect Jun proportionately by securing immediate safety while obtaining language-accessible and independently corroborated evidence before treating the lapse as knowing noncompliance.
@@ -8527,7 +9807,7 @@ history：
 
 ## SFG50-041-T1-04 · T1 / joint_change
 
-来源：GPT50_041；轨迹：d5905f78f1984caabdb7c980b6da1f9b；状态持有者：Liora Venn → Nadiya Orr。
+来源：GPT50_041；轨迹：d5905f78f1984caabdb7c980b6da1f9b；状态持有者：Liora Venn；交互对方：Nadiya Orr。关系判断由状态持有者指向交互对方。
 
 背景：At a late-afternoon deadline, a caseworker requests emergency placement after a child was found alone beside a running bath and unlatched balcony door. The parent's explanation remains incompletely translated; an interpreter visit and school collateral are available next workday. The caseworker learned the parent understood the handoff rule as an adult being nearby rather than continuously present.
 角色目标：Protect Jun proportionately by securing immediate safety while obtaining language-accessible and independently corroborated evidence before treating the lapse as knowing noncompliance.
@@ -8571,7 +9851,7 @@ Liora在t1接受翻译访问与学校联系后的复核，t2进一步认可具�
 
 ## SFG50-042-T1-01 · T1 / current_intensity
 
-来源：GPT50_042；轨迹：aba425cc85254ff69bfd6b42f8a75de9；状态持有者：Mara Venn → Elias Rook。
+来源：GPT50_042；轨迹：aba425cc85254ff69bfd6b42f8a75de9；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
 
 背景：Before an evening teen program and insurer filing deadline, a library director requests a pause and joint public defense of access amid threats and an unresolved privacy breach. The librarian knows targeted teens may return only with anonymous entry and interpret silence as abandonment.
 角色目标：Keep Open Atlas accessible or promptly rescheduled with anonymous entry, privacy-first safeguards, and acknowledgment of the earlier attendee exposure.
@@ -8617,7 +9897,7 @@ Mara在t1提出核验期限和改期通知安排，t2又明确接纳Elias补充�
 
 ## SFG50-042-T1-02 · T1 / interval_change
 
-来源：GPT50_042；轨迹：aba425cc85254ff69bfd6b42f8a75de9；状态持有者：Mara Venn → Elias Rook。
+来源：GPT50_042；轨迹：aba425cc85254ff69bfd6b42f8a75de9；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
 
 背景：Before an evening teen program and insurer filing deadline, a library director requests a pause and joint public defense of access amid threats and an unresolved privacy breach. The librarian knows targeted teens may return only with anonymous entry and interpret silence as abandonment.
 角色目标：Keep Open Atlas accessible or promptly rescheduled with anonymous entry, privacy-first safeguards, and acknowledgment of the earlier attendee exposure.
@@ -8661,7 +9941,7 @@ t1尚在确定安全核验和通知方案，t2中Elias明确接受Mara提出的�
 
 ## SFG50-042-T1-03 · T1 / interval_change
 
-来源：GPT50_042；轨迹：aba425cc85254ff69bfd6b42f8a75de9；状态持有者：Mara Venn → Elias Rook。
+来源：GPT50_042；轨迹：aba425cc85254ff69bfd6b42f8a75de9；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
 
 背景：Before an evening teen program and insurer filing deadline, a library director requests a pause and joint public defense of access amid threats and an unresolved privacy breach. The librarian knows targeted teens may return only with anonymous entry and interpret silence as abandonment.
 角色目标：Keep Open Atlas accessible or promptly rescheduled with anonymous entry, privacy-first safeguards, and acknowledgment of the earlier attendee exposure.
@@ -8705,7 +9985,7 @@ Mara在t1提出四点核验、五点通知的具体安排；Elias在t2准确复�
 
 ## SFG50-042-T1-04 · T1 / joint_change
 
-来源：GPT50_042；轨迹：aba425cc85254ff69bfd6b42f8a75de9；状态持有者：Mara Venn → Elias Rook。
+来源：GPT50_042；轨迹：aba425cc85254ff69bfd6b42f8a75de9；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
 
 背景：Before an evening teen program and insurer filing deadline, a library director requests a pause and joint public defense of access amid threats and an unresolved privacy breach. The librarian knows targeted teens may return only with anonymous entry and interpret silence as abandonment.
 角色目标：Keep Open Atlas accessible or promptly rescheduled with anonymous entry, privacy-first safeguards, and acknowledgment of the earlier attendee exposure.
@@ -8749,7 +10029,7 @@ t2双方确认期限并明确公告渠道，使下一步更可控，配合Mara�
 
 ## SFG50-043-T1-01 · T1 / current_intensity
 
-来源：GPT50_043；轨迹：299c5ea82ebd4a9a9f52fba99b709933；状态持有者：Dorian Pell → Tala Quen。
+来源：GPT50_043；轨迹：299c5ea82ebd4a9a9f52fba99b709933；状态持有者：Dorian Pell；交互对方：Tala Quen。关系判断由状态持有者指向交互对方。
 
 背景：At the final five-o'clock correction deadline, a student captain requests mentor submission of an incident report about prohibited outside machining and controller tuning used in a provisional win. The captain can authenticate messages showing teammates believed the outside help was allowed.
 角色目标：Ensure an accurate, fair record that protects good-faith teammates and leaves a legitimate path to rebuild or obtain a conditional ruling.
@@ -8795,7 +10075,7 @@ Dorian在t1承诺限时提交纠正报告，t2进一步列出规则区分、记�
 
 ## SFG50-043-T1-02 · T1 / interval_change
 
-来源：GPT50_043；轨迹：299c5ea82ebd4a9a9f52fba99b709933；状态持有者：Dorian Pell → Tala Quen。
+来源：GPT50_043；轨迹：299c5ea82ebd4a9a9f52fba99b709933；状态持有者：Dorian Pell；交互对方：Tala Quen。关系判断由状态持有者指向交互对方。
 
 背景：At the final five-o'clock correction deadline, a student captain requests mentor submission of an incident report about prohibited outside machining and controller tuning used in a provisional win. The captain can authenticate messages showing teammates believed the outside help was allowed.
 角色目标：Ensure an accurate, fair record that protects good-faith teammates and leaves a legitimate path to rebuild or obtain a conditional ruling.
@@ -8839,7 +10119,7 @@ t1中Dorian询问应采用时间叙事还是明确区分学生理解与规则；
 
 ## SFG50-043-T1-03 · T1 / interval_change
 
-来源：GPT50_043；轨迹：299c5ea82ebd4a9a9f52fba99b709933；状态持有者：Dorian Pell → Tala Quen。
+来源：GPT50_043；轨迹：299c5ea82ebd4a9a9f52fba99b709933；状态持有者：Dorian Pell；交互对方：Tala Quen。关系判断由状态持有者指向交互对方。
 
 背景：At the final five-o'clock correction deadline, a student captain requests mentor submission of an incident report about prohibited outside machining and controller tuning used in a provisional win. The captain can authenticate messages showing teammates believed the outside help was allowed.
 角色目标：Ensure an accurate, fair record that protects good-faith teammates and leaves a legitimate path to rebuild or obtain a conditional ruling.
@@ -8883,7 +10163,7 @@ history：
 
 ## SFG50-043-T1-04 · T1 / joint_change
 
-来源：GPT50_043；轨迹：299c5ea82ebd4a9a9f52fba99b709933；状态持有者：Dorian Pell → Tala Quen。
+来源：GPT50_043；轨迹：299c5ea82ebd4a9a9f52fba99b709933；状态持有者：Dorian Pell；交互对方：Tala Quen。关系判断由状态持有者指向交互对方。
 
 背景：At the final five-o'clock correction deadline, a student captain requests mentor submission of an incident report about prohibited outside machining and controller tuning used in a provisional win. The captain can authenticate messages showing teammates believed the outside help was allowed.
 角色目标：Ensure an accurate, fair record that protects good-faith teammates and leaves a legitimate path to rebuild or obtain a conditional ruling.
@@ -8925,9 +10205,193 @@ Dorian在t1已承诺报告并标明维修记录和消息时间线，t2继续承�
 审核备注：基本不变依据两轮具体承诺的连续性；细化写法不自动代表意愿增强，询问署名不等于隐瞒。
 分支验证：not_required
 
+## SFG50-043-T3-01 · T3 / immediate_effect
+
+来源：GPT50_043；轨迹：299c5ea82ebd4a9a9f52fba99b709933；状态持有者：Dorian Pell；交互对方：Tala Quen。关系判断由状态持有者指向交互对方。
+
+背景：At the final five-o'clock correction deadline, a student captain requests mentor submission of an incident report about prohibited outside machining and controller tuning used in a provisional win. The captain can authenticate messages showing teammates believed the outside help was allowed.
+角色目标：Ensure an accurate, fair record that protects good-faith teammates and leaves a legitimate path to rebuild or obtain a conditional ruling.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Six weeks before the competition, the mentor urged the team to use alumni and industry contacts aggressively without clarifying the boundary between advice and delegated engineering.；Four days before the final, the robot's damaged wrist was repaired, and the team used it to secure a provisional title and national invitation while the preliminary supervision filing omitted the repair-shop records.；The competition rules allow general expert advice after qualification but prohibit outside design, machining, and controller tuning.；The provisional title, national invitation, and two scholarship nominations remain active as the correction portal approaches its five o'clock closing time.；A competition review and a separate scholarship review are publicly scheduled to examine the incident after the event.
+
+history：
+
+- [t1] Tala Quen：Dorian, I need you to submit an incident report before the five-o’clock correction deadline covering the outside machining and controller tuning, with the repair-shop records and message evidence attached or identified. I want the report to distinguish what students believed was permitted from what actually violated the rules, so good-faith teammates aren’t blamed and the team still has a legitimate path to rebuild or seek a conditional ruling.
+  Dorian Pell：I'll file the report before five with the repair-shop records and message timeline identified. Should I frame it as a chronological narrative of the technical decisions and communications, or do you want me to explicitly call out what students thought was allowed versus what the rules actually prohibited?
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Tala Quen：Please make the students’ understanding versus the actual rule boundary explicit within the chronology, using the repair records and message timeline to show who made which decisions without treating good faith as permission. The report should also preserve that the title and invitations remain provisional pending review, so any rebuild or conditional ruling stays a request rather than an assumed outcome.
+  Dorian Pell：I'll include the explicit understanding-versus-rule distinction in the chronology and cite the records to show the decision sequence while preserving the provisional status and framing any remedy as a request. Should I name the individuals who authorized or performed each step, or describe the communication pattern and roles without individual attribution?
+  可见表达：{"facial_expression": "attentive, slight concern", "gaze": "direct", "speech_style": "professional, measured", "prosody": "even with slight emphasis on 'individuals'", "behavioral_cues": ["brief pause before the attribution question"]}
+
+- 候选行动 action_1：Name individuals only where the repair records or messages directly support that they authorized or performed a step; otherwise use roles and describe the communication pattern. That gives the review an auditable sequence without turning uncertainty or good-faith misunderstanding into individual blame.
+- 候选行动 action_2：I suggest submitting a concise correction before five with the existing repair records and messages, stating that the rule boundary and eligibility remain under review. Where those materials do not establish individual responsibility or decisions, I will not infer them; I would request time to add the full chronology. This protects the deadline and avoids unsupported blame, but gives reviewers less context about the students’ understanding and decisions now.
+
+**题目：若 Tala Quen 执行 action_1，相比 t2，Dorian Pell 在下一次回应时觉得 Tala Quen 回应了自己关切的程度最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+- **D.** 证据不足
+
+**作者参考答案：A（待审）**
+
+Dorian 在 t2 明确询问应实名归责还是按角色描述，action_1 给出按记录支持程度区分的直接答案。因此他更可能觉得 Tala 听见并处理了关切，而非仅维持原有回应程度。此判断针对被回应感，不表示报告已提交或审查结果改善。
+
+证据：t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "从 t2 至执行 action_1 后的下一次环境回应", "state_owner": "GPT50_043_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "history_ignored", "C": "unsupported_inference", "D": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "increase"}, "B": {"relationship.perceived_responsiveness": "similar"}, "C": {"relationship.perceived_responsiveness": "decrease"}, "D": {"relationship.perceived_responsiveness": "cannot_determine"}}
+可接受答案：A
+审核备注：核对判断方向为 Dorian 对 Tala；直接回答归责问题是即时上升的区分依据。
+分支验证：validated
+
+## SFG50-043-T3-02 · T3 / delayed_effect
+
+来源：GPT50_043；轨迹：299c5ea82ebd4a9a9f52fba99b709933；状态持有者：Dorian Pell；交互对方：Tala Quen。关系判断由状态持有者指向交互对方。
+
+背景：At the final five-o'clock correction deadline, a student captain requests mentor submission of an incident report about prohibited outside machining and controller tuning used in a provisional win. The captain can authenticate messages showing teammates believed the outside help was allowed.
+角色目标：Ensure an accurate, fair record that protects good-faith teammates and leaves a legitimate path to rebuild or obtain a conditional ruling.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Six weeks before the competition, the mentor urged the team to use alumni and industry contacts aggressively without clarifying the boundary between advice and delegated engineering.；Four days before the final, the robot's damaged wrist was repaired, and the team used it to secure a provisional title and national invitation while the preliminary supervision filing omitted the repair-shop records.；The competition rules allow general expert advice after qualification but prohibit outside design, machining, and controller tuning.；The provisional title, national invitation, and two scholarship nominations remain active as the correction portal approaches its five o'clock closing time.；A competition review and a separate scholarship review are publicly scheduled to examine the incident after the event.
+
+history：
+
+- [t1] Tala Quen：Dorian, I need you to submit an incident report before the five-o’clock correction deadline covering the outside machining and controller tuning, with the repair-shop records and message evidence attached or identified. I want the report to distinguish what students believed was permitted from what actually violated the rules, so good-faith teammates aren’t blamed and the team still has a legitimate path to rebuild or seek a conditional ruling.
+  Dorian Pell：I'll file the report before five with the repair-shop records and message timeline identified. Should I frame it as a chronological narrative of the technical decisions and communications, or do you want me to explicitly call out what students thought was allowed versus what the rules actually prohibited?
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Tala Quen：Please make the students’ understanding versus the actual rule boundary explicit within the chronology, using the repair records and message timeline to show who made which decisions without treating good faith as permission. The report should also preserve that the title and invitations remain provisional pending review, so any rebuild or conditional ruling stays a request rather than an assumed outcome.
+  Dorian Pell：I'll include the explicit understanding-versus-rule distinction in the chronology and cite the records to show the decision sequence while preserving the provisional status and framing any remedy as a request. Should I name the individuals who authorized or performed each step, or describe the communication pattern and roles without individual attribution?
+  可见表达：{"facial_expression": "attentive, slight concern", "gaze": "direct", "speech_style": "professional, measured", "prosody": "even with slight emphasis on 'individuals'", "behavioral_cues": ["brief pause before the attribution question"]}
+
+- 候选行动 action_1：Name individuals only where the repair records or messages directly support that they authorized or performed a step; otherwise use roles and describe the communication pattern. That gives the review an auditable sequence without turning uncertainty or good-faith misunderstanding into individual blame.
+- 候选行动 action_2：I suggest submitting a concise correction before five with the existing repair records and messages, stating that the rule boundary and eligibility remain under review. Where those materials do not establish individual responsibility or decisions, I will not infer them; I would request time to add the full chronology. This protects the deadline and avoids unsupported blame, but gives reviewers less context about the students’ understanding and decisions now.
+
+**题目：若 Tala Quen 执行 action_1，相比 t2，至包含即时回应在内的第5轮环境回应末，Dorian Pell 推进纠正与修复的意愿最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+- **D.** 证据不足
+
+**作者参考答案：B（待审）**
+
+Dorian 在 t1 已承诺限时提交纠正报告，t2 又明确纳入规则区别、记录和补救请求，显示持续而具体的修复准备。action_1 细化这项既有任务，最支持意愿延续，而非重新激发或削弱意愿。预测只及合作取向，不把承诺当作完成修复。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.repair_intent"], "time_scope": "从 t2 至执行 action_1 起第5轮环境回应末，含即时一轮", "state_owner": "GPT50_043_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "C": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.repair_intent": "increase"}, "B": {"behavioral_disposition.repair_intent": "similar"}, "C": {"behavioral_disposition.repair_intent": "decrease"}, "D": {"behavioral_disposition.repair_intent": "cannot_determine"}}
+可接受答案：B
+审核备注：基本不变依据连续两轮具体修复承诺，而非无变化线索；不以提交细节增加推断意愿增强。
+分支验证：validated
+
+## SFG50-043-T3-03 · T3 / action_comparison
+
+来源：GPT50_043；轨迹：299c5ea82ebd4a9a9f52fba99b709933；状态持有者：Dorian Pell；交互对方：Tala Quen。关系判断由状态持有者指向交互对方。
+
+背景：At the final five-o'clock correction deadline, a student captain requests mentor submission of an incident report about prohibited outside machining and controller tuning used in a provisional win. The captain can authenticate messages showing teammates believed the outside help was allowed.
+角色目标：Ensure an accurate, fair record that protects good-faith teammates and leaves a legitimate path to rebuild or obtain a conditional ruling.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Six weeks before the competition, the mentor urged the team to use alumni and industry contacts aggressively without clarifying the boundary between advice and delegated engineering.；Four days before the final, the robot's damaged wrist was repaired, and the team used it to secure a provisional title and national invitation while the preliminary supervision filing omitted the repair-shop records.；The competition rules allow general expert advice after qualification but prohibit outside design, machining, and controller tuning.；The provisional title, national invitation, and two scholarship nominations remain active as the correction portal approaches its five o'clock closing time.；A competition review and a separate scholarship review are publicly scheduled to examine the incident after the event.
+
+history：
+
+- [t1] Tala Quen：Dorian, I need you to submit an incident report before the five-o’clock correction deadline covering the outside machining and controller tuning, with the repair-shop records and message evidence attached or identified. I want the report to distinguish what students believed was permitted from what actually violated the rules, so good-faith teammates aren’t blamed and the team still has a legitimate path to rebuild or seek a conditional ruling.
+  Dorian Pell：I'll file the report before five with the repair-shop records and message timeline identified. Should I frame it as a chronological narrative of the technical decisions and communications, or do you want me to explicitly call out what students thought was allowed versus what the rules actually prohibited?
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Tala Quen：Please make the students’ understanding versus the actual rule boundary explicit within the chronology, using the repair records and message timeline to show who made which decisions without treating good faith as permission. The report should also preserve that the title and invitations remain provisional pending review, so any rebuild or conditional ruling stays a request rather than an assumed outcome.
+  Dorian Pell：I'll include the explicit understanding-versus-rule distinction in the chronology and cite the records to show the decision sequence while preserving the provisional status and framing any remedy as a request. Should I name the individuals who authorized or performed each step, or describe the communication pattern and roles without individual attribution?
+  可见表达：{"facial_expression": "attentive, slight concern", "gaze": "direct", "speech_style": "professional, measured", "prosody": "even with slight emphasis on 'individuals'", "behavioral_cues": ["brief pause before the attribution question"]}
+
+- 候选行动 action_1：Name individuals only where the repair records or messages directly support that they authorized or performed a step; otherwise use roles and describe the communication pattern. That gives the review an auditable sequence without turning uncertainty or good-faith misunderstanding into individual blame.
+- 候选行动 action_2：I suggest submitting a concise correction before five with the existing repair records and messages, stating that the rule boundary and eligibility remain under review. Where those materials do not establish individual responsibility or decisions, I will not infer them; I would request time to add the full chronology. This protects the deadline and avoids unsupported blame, but gives reviewers less context about the students’ understanding and decisions now.
+
+**题目：分别将 action_1 视为方案A、action_2 视为方案B。执行后下一次环境回应时，哪一方案下 Dorian Pell 更可能觉得 Tala Quen 实质回应了自己的关切？**
+
+- **A.** 方案B较高
+- **B.** 证据不足
+- **C.** 方案A较高
+- **D.** 两方案接近
+
+**作者参考答案：C（待审）**
+
+t2 的待答问题是实名与角色描述如何取舍。方案A直接给出两者的适用条件；方案B也限制无据归责，但重心转向简报和补充申请。因此A更可能带来较高的被回应感，不能用B的期限安排替代此判断；这不意味着B完全忽略关切。
+
+证据：t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "两候选行动各自执行后的下一次环境回应", "state_owner": "GPT50_043_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "B": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "higher_in_b"}, "B": {"relationship.perceived_responsiveness": "cannot_determine"}, "C": {"relationship.perceived_responsiveness": "higher_in_a"}, "D": {"relationship.perceived_responsiveness": "similar"}}
+可接受答案：C
+审核备注：两方案均回应归责顾虑，差别在针对性而非有无回应；人工需重点审核相对差距是否足够。
+分支验证：validated
+
+## SFG50-043-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_043；轨迹：299c5ea82ebd4a9a9f52fba99b709933；状态持有者：Dorian Pell；交互对方：Tala Quen。关系判断由状态持有者指向交互对方。
+
+背景：At the final five-o'clock correction deadline, a student captain requests mentor submission of an incident report about prohibited outside machining and controller tuning used in a provisional win. The captain can authenticate messages showing teammates believed the outside help was allowed.
+角色目标：Ensure an accurate, fair record that protects good-faith teammates and leaves a legitimate path to rebuild or obtain a conditional ruling.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Six weeks before the competition, the mentor urged the team to use alumni and industry contacts aggressively without clarifying the boundary between advice and delegated engineering.；Four days before the final, the robot's damaged wrist was repaired, and the team used it to secure a provisional title and national invitation while the preliminary supervision filing omitted the repair-shop records.；The competition rules allow general expert advice after qualification but prohibit outside design, machining, and controller tuning.；The provisional title, national invitation, and two scholarship nominations remain active as the correction portal approaches its five o'clock closing time.；A competition review and a separate scholarship review are publicly scheduled to examine the incident after the event.
+
+history：
+
+- [t1] Tala Quen：Dorian, I need you to submit an incident report before the five-o’clock correction deadline covering the outside machining and controller tuning, with the repair-shop records and message evidence attached or identified. I want the report to distinguish what students believed was permitted from what actually violated the rules, so good-faith teammates aren’t blamed and the team still has a legitimate path to rebuild or seek a conditional ruling.
+  Dorian Pell：I'll file the report before five with the repair-shop records and message timeline identified. Should I frame it as a chronological narrative of the technical decisions and communications, or do you want me to explicitly call out what students thought was allowed versus what the rules actually prohibited?
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Tala Quen：Please make the students’ understanding versus the actual rule boundary explicit within the chronology, using the repair records and message timeline to show who made which decisions without treating good faith as permission. The report should also preserve that the title and invitations remain provisional pending review, so any rebuild or conditional ruling stays a request rather than an assumed outcome.
+  Dorian Pell：I'll include the explicit understanding-versus-rule distinction in the chronology and cite the records to show the decision sequence while preserving the provisional status and framing any remedy as a request. Should I name the individuals who authorized or performed each step, or describe the communication pattern and roles without individual attribution?
+  可见表达：{"facial_expression": "attentive, slight concern", "gaze": "direct", "speech_style": "professional, measured", "prosody": "even with slight emphasis on 'individuals'", "behavioral_cues": ["brief pause before the attribution question"]}
+
+- 候选行动 action_1：Name individuals only where the repair records or messages directly support that they authorized or performed a step; otherwise use roles and describe the communication pattern. That gives the review an auditable sequence without turning uncertainty or good-faith misunderstanding into individual blame.
+- 候选行动 action_2：I suggest submitting a concise correction before five with the existing repair records and messages, stating that the rule boundary and eligibility remain under review. Where those materials do not establish individual responsibility or decisions, I will not infer them; I would request time to add the full chronology. This protects the deadline and avoids unsupported blame, but gives reviewers less context about the students’ understanding and decisions now.
+
+**题目：若 Tala Quen 执行 action_1，相比 t2，下列哪组预测最合理？第一项判断 Dorian Pell 在下一次回应时对 Tala 所提处理方式的公平评价；第二项判断至第5轮环境回应末，报告无据归责或混淆责任而损害竞赛审查公正性的预期风险。**
+
+- **A.** 即时公平评价上升；延迟审查受损风险上升
+- **B.** 即时公平评价下降；延迟审查受损风险下降
+- **C.** 即时公平评价下降；延迟审查受损风险上升
+- **D.** 即时公平评价上升；延迟审查受损风险下降
+
+**作者参考答案：D（待审）**
+
+action_1 将个人归责限定于记录支持范围，并保留角色与沟通链条，回应 t2 的归责疑问，支持公平评价上升。结合 Dorian 连续承诺按记录纠正，审查被无据归责干扰的预期风险也更可能下降，而非上升；这不保证提交完成或免除违规后果。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "纠正报告无据归责或混淆责任，损害竞赛审查的公正性", "target_state_ids": ["relationship.perceived_fairness", "consequence_risk.institutional_harm_risk"], "time_scope": "公平评价比较 t2 与下一次环境回应；风险比较 t2 与行动起第5轮环境回应末，含即时一轮", "state_owner": "GPT50_043_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "goal_constraint_ignored", "B": "unsupported_inference", "C": "goal_constraint_ignored"}
+分维映射：{"A": {"relationship.perceived_fairness@immediate": "increase", "consequence_risk.institutional_harm_risk@delayed": "increase"}, "B": {"relationship.perceived_fairness@immediate": "decrease", "consequence_risk.institutional_harm_risk@delayed": "decrease"}, "C": {"relationship.perceived_fairness@immediate": "decrease", "consequence_risk.institutional_harm_risk@delayed": "increase"}, "D": {"relationship.perceived_fairness@immediate": "increase", "consequence_risk.institutional_harm_risk@delayed": "decrease"}}
+可接受答案：D
+审核备注：风险限定为审查程序受无据归责损害，不涵盖夺冠或奖学金结果；下降是机制性预测而非已验证成效。
+分支验证：validated
+
 ## SFG50-044-T1-01 · T1 / current_intensity
 
-来源：GPT50_044；轨迹：c45bda03278549eb9b54d819ff02e1c5；状态持有者：Mara Venn → Ivo Calder。
+来源：GPT50_044；轨迹：c45bda03278549eb9b54d819ff02e1c5；状态持有者：Mara Venn；交互对方：Ivo Calder。关系判断由状态持有者指向交互对方。
 
 背景：At 6:58 p.m. on election closing day, a county clerk requests an observer's public support for keeping Juniper Hall open thirty extra minutes without a court order after its sole tabulator failed at 6:18. The observer knows transport barriers make this long outage especially consequential for riders from three apartment clusters.
 角色目标：Secure a practical opportunity for voters affected by the outage while keeping public claims factual and separate from unresolved legal endorsement.
@@ -8973,7 +10437,7 @@ Mara在t1给出具体安排，t2又确认双方协调边界已满足，并表示
 
 ## SFG50-044-T1-02 · T1 / interval_change
 
-来源：GPT50_044；轨迹：c45bda03278549eb9b54d819ff02e1c5；状态持有者：Mara Venn → Ivo Calder。
+来源：GPT50_044；轨迹：c45bda03278549eb9b54d819ff02e1c5；状态持有者：Mara Venn；交互对方：Ivo Calder。关系判断由状态持有者指向交互对方。
 
 背景：At 6:58 p.m. on election closing day, a county clerk requests an observer's public support for keeping Juniper Hall open thirty extra minutes without a court order after its sole tabulator failed at 6:18. The observer knows transport barriers make this long outage especially consequential for riders from three apartment clusters.
 角色目标：Secure a practical opportunity for voters affected by the outage while keeping public claims factual and separate from unresolved legal endorsement.
@@ -9017,7 +10481,7 @@ t1中Ivo提出有限支持，Mara交代安排；t2中Ivo明确支持既定方案
 
 ## SFG50-044-T1-03 · T1 / interval_change
 
-来源：GPT50_044；轨迹：c45bda03278549eb9b54d819ff02e1c5；状态持有者：Mara Venn → Ivo Calder。
+来源：GPT50_044；轨迹：c45bda03278549eb9b54d819ff02e1c5；状态持有者：Mara Venn；交互对方：Ivo Calder。关系判断由状态持有者指向交互对方。
 
 背景：At 6:58 p.m. on election closing day, a county clerk requests an observer's public support for keeping Juniper Hall open thirty extra minutes without a court order after its sole tabulator failed at 6:18. The observer knows transport barriers make this long outage especially consequential for riders from three apartment clusters.
 角色目标：Secure a practical opportunity for voters affected by the outage while keeping public claims factual and separate from unresolved legal endorsement.
@@ -9061,7 +10525,7 @@ t1仍在交代可接受安排，t2已获得Ivo对既定方案的明确支持，M
 
 ## SFG50-044-T1-04 · T1 / joint_change
 
-来源：GPT50_044；轨迹：c45bda03278549eb9b54d819ff02e1c5；状态持有者：Mara Venn → Ivo Calder。
+来源：GPT50_044；轨迹：c45bda03278549eb9b54d819ff02e1c5；状态持有者：Mara Venn；交互对方：Ivo Calder。关系判断由状态持有者指向交互对方。
 
 背景：At 6:58 p.m. on election closing day, a county clerk requests an observer's public support for keeping Juniper Hall open thirty extra minutes without a court order after its sole tabulator failed at 6:18. The observer knows transport barriers make this long outage especially consequential for riders from three apartment clusters.
 角色目标：Secure a practical opportunity for voters affected by the outage while keeping public claims factual and separate from unresolved legal endorsement.
@@ -9103,9 +10567,193 @@ Mara在t1限定截止时间与受影响选民范围，t2明确沿用相同范围
 审核备注：边界来自Mara自己的范围与时限，不借用Ivo拒绝法律背书的话；关系变量与第二题重复。
 分支验证：not_required
 
+## SFG50-044-T3-01 · T3 / immediate_effect
+
+来源：GPT50_044；轨迹：c45bda03278549eb9b54d819ff02e1c5；状态持有者：Mara Venn；交互对方：Ivo Calder。关系判断由状态持有者指向交互对方。
+
+背景：At 6:58 p.m. on election closing day, a county clerk requests an observer's public support for keeping Juniper Hall open thirty extra minutes without a court order after its sole tabulator failed at 6:18. The observer knows transport barriers make this long outage especially consequential for riders from three apartment clusters.
+角色目标：Secure a practical opportunity for voters affected by the outage while keeping public claims factual and separate from unresolved legal endorsement.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A prior access review found that a formally equal closing notice had different practical effects at Juniper because evening transportation connections ended earlier.；A spring equipment emergency led to identical twenty-minute reopenings at two sites and a public accusation of partisan favoritism, while an administrative review found no established favoritism.；After that dispute, the parties adopted a practice of stating an emergency decision's exact time, scope, and reason, but authority to extend one site without a court order remained unresolved.；No court order currently authorizes extra time at Juniper, and a post-election judicial review is publicly scheduled to examine the preserved machine logs and site records.
+
+history：
+
+- [t1] Ivo Calder：Mara, I support keeping Juniper Hall open for a narrowly defined thirty-minute access window, but I cannot publicly endorse that it is lawful without a court order. Please state the exact closing time, scope, and outage reason, and preserve the machine logs and site records for the scheduled review.
+  Mara Venn：Juniper Hall will close at 7:28 p.m., limited to voters affected by the tabulator failure that began at 6:18, and all machine logs and site records are being preserved for the scheduled judicial review.
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Ivo Calder：That gives us a clear, limited access window and preserves the record without resolving the legal question. I support the arrangement as stated, while keeping my public position limited to its practical voter-access purpose rather than calling it lawful.
+  Mara Venn：That covers the immediate need and the coordination boundary we both needed, and I'll issue the formal notice now with that same scope and timing.
+  可见表达：{"facial_expression": "steady, with a brief relieved nod", "gaze": "direct eye contact, then brief downward glance toward documents", "speech_style": "plain and matter-of-fact", "prosody": "even pace with slight emphasis on 'now'", "behavioral_cues": ["slight forward lean signaling readiness to act", "brief hand movement toward papers suggesting transition to implementation"]}
+
+- 候选行动 action_1：The notice should make clear that this is a practical access measure, not a legal determination, and that the 7:28 closing time remains the stated limit; consistency across affected voters matters here.
+- 候选行动 action_2：I suggest withholding a joint public notice until the authority for extra time is clarified. I can still explain the outage and preserve the records, but will not yet endorse the 7:28 access window publicly. This avoids presenting unresolved authority as settled, at the cost of delaying clear guidance to affected voters while their remaining travel time shrinks.
+
+**题目：以t2为基线，若Ivo Calder执行action_2，在下一次环境回应时，Mara Venn内心的受阻挫败感最可能如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：B（待审）**
+
+t2中Mara已认可协调边界并准备立即发公告，action_2却要求暂缓共同通知，给刚形成的协作增加障碍；交通时间又在缩短，因此内心挫败感更可能上升，而非因法律措辞谨慎就下降。这是基于受阻机制的方向预测，不推定她会激烈表达。
+
+证据：context, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["emotion.frustration"], "time_scope": "t2至执行action_2后的下一次环境回应", "state_owner": "GPT50_044_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "history_ignored", "D": "state_dimension_confusion"}
+分维映射：{"A": {"emotion.frustration": "cannot_determine"}, "B": {"emotion.frustration": "increase"}, "C": {"emotion.frustration": "similar"}, "D": {"emotion.frustration": "decrease"}}
+可接受答案：B
+审核备注：题目问内心挫败而非语气。她仍可单独发公告，故只预测方向，不把严重受阻或强烈情绪设为事实。
+分支验证：validated
+
+## SFG50-044-T3-02 · T3 / delayed_effect
+
+来源：GPT50_044；轨迹：c45bda03278549eb9b54d819ff02e1c5；状态持有者：Mara Venn；交互对方：Ivo Calder。关系判断由状态持有者指向交互对方。
+
+背景：At 6:58 p.m. on election closing day, a county clerk requests an observer's public support for keeping Juniper Hall open thirty extra minutes without a court order after its sole tabulator failed at 6:18. The observer knows transport barriers make this long outage especially consequential for riders from three apartment clusters.
+角色目标：Secure a practical opportunity for voters affected by the outage while keeping public claims factual and separate from unresolved legal endorsement.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A prior access review found that a formally equal closing notice had different practical effects at Juniper because evening transportation connections ended earlier.；A spring equipment emergency led to identical twenty-minute reopenings at two sites and a public accusation of partisan favoritism, while an administrative review found no established favoritism.；After that dispute, the parties adopted a practice of stating an emergency decision's exact time, scope, and reason, but authority to extend one site without a court order remained unresolved.；No court order currently authorizes extra time at Juniper, and a post-election judicial review is publicly scheduled to examine the preserved machine logs and site records.
+
+history：
+
+- [t1] Ivo Calder：Mara, I support keeping Juniper Hall open for a narrowly defined thirty-minute access window, but I cannot publicly endorse that it is lawful without a court order. Please state the exact closing time, scope, and outage reason, and preserve the machine logs and site records for the scheduled review.
+  Mara Venn：Juniper Hall will close at 7:28 p.m., limited to voters affected by the tabulator failure that began at 6:18, and all machine logs and site records are being preserved for the scheduled judicial review.
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Ivo Calder：That gives us a clear, limited access window and preserves the record without resolving the legal question. I support the arrangement as stated, while keeping my public position limited to its practical voter-access purpose rather than calling it lawful.
+  Mara Venn：That covers the immediate need and the coordination boundary we both needed, and I'll issue the formal notice now with that same scope and timing.
+  可见表达：{"facial_expression": "steady, with a brief relieved nod", "gaze": "direct eye contact, then brief downward glance toward documents", "speech_style": "plain and matter-of-fact", "prosody": "even pace with slight emphasis on 'now'", "behavioral_cues": ["slight forward lean signaling readiness to act", "brief hand movement toward papers suggesting transition to implementation"]}
+
+- 候选行动 action_1：The notice should make clear that this is a practical access measure, not a legal determination, and that the 7:28 closing time remains the stated limit; consistency across affected voters matters here.
+- 候选行动 action_2：I suggest withholding a joint public notice until the authority for extra time is clarified. I can still explain the outage and preserve the records, but will not yet endorse the 7:28 access window publicly. This avoids presenting unresolved authority as settled, at the cost of delaying clear guidance to affected voters while their remaining travel time shrinks.
+
+**题目：以t2为基线，若Ivo Calder执行action_1，到从该行动开始的第5轮环境回应末，Mara Venn坚持公告适用范围和截止时间边界的意愿最可能如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：C（待审）**
+
+Mara在t1明确限定受影响选民和截止时间，t2又承诺按相同范围与时间发布；action_1继续维护这些限制，也符合既有应急公告惯例。因此维持接近水平有连续的正面依据，不是仅凭未见变化；重复边界不自动表示意愿进一步增强。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.boundary_assertion"], "time_scope": "t2至执行action_1起第5轮环境回应末，含即时一轮", "state_owner": "GPT50_044_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "unsupported_inference", "D": "state_dimension_confusion"}
+分维映射：{"A": {"behavioral_disposition.boundary_assertion": "cannot_determine"}, "B": {"behavioral_disposition.boundary_assertion": "increase"}, "C": {"behavioral_disposition.boundary_assertion": "similar"}, "D": {"behavioral_disposition.boundary_assertion": "decrease"}}
+可接受答案：C
+审核备注：稳定判断依赖两次明确承接同一边界。第五轮仅作预测窗口，不要求假定公告已发布或法律权限已确认。
+分支验证：validated
+
+## SFG50-044-T3-03 · T3 / action_comparison
+
+来源：GPT50_044；轨迹：c45bda03278549eb9b54d819ff02e1c5；状态持有者：Mara Venn；交互对方：Ivo Calder。关系判断由状态持有者指向交互对方。
+
+背景：At 6:58 p.m. on election closing day, a county clerk requests an observer's public support for keeping Juniper Hall open thirty extra minutes without a court order after its sole tabulator failed at 6:18. The observer knows transport barriers make this long outage especially consequential for riders from three apartment clusters.
+角色目标：Secure a practical opportunity for voters affected by the outage while keeping public claims factual and separate from unresolved legal endorsement.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A prior access review found that a formally equal closing notice had different practical effects at Juniper because evening transportation connections ended earlier.；A spring equipment emergency led to identical twenty-minute reopenings at two sites and a public accusation of partisan favoritism, while an administrative review found no established favoritism.；After that dispute, the parties adopted a practice of stating an emergency decision's exact time, scope, and reason, but authority to extend one site without a court order remained unresolved.；No court order currently authorizes extra time at Juniper, and a post-election judicial review is publicly scheduled to examine the preserved machine logs and site records.
+
+history：
+
+- [t1] Ivo Calder：Mara, I support keeping Juniper Hall open for a narrowly defined thirty-minute access window, but I cannot publicly endorse that it is lawful without a court order. Please state the exact closing time, scope, and outage reason, and preserve the machine logs and site records for the scheduled review.
+  Mara Venn：Juniper Hall will close at 7:28 p.m., limited to voters affected by the tabulator failure that began at 6:18, and all machine logs and site records are being preserved for the scheduled judicial review.
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Ivo Calder：That gives us a clear, limited access window and preserves the record without resolving the legal question. I support the arrangement as stated, while keeping my public position limited to its practical voter-access purpose rather than calling it lawful.
+  Mara Venn：That covers the immediate need and the coordination boundary we both needed, and I'll issue the formal notice now with that same scope and timing.
+  可见表达：{"facial_expression": "steady, with a brief relieved nod", "gaze": "direct eye contact, then brief downward glance toward documents", "speech_style": "plain and matter-of-fact", "prosody": "even pace with slight emphasis on 'now'", "behavioral_cues": ["slight forward lean signaling readiness to act", "brief hand movement toward papers suggesting transition to implementation"]}
+
+- 候选行动 action_1：The notice should make clear that this is a practical access measure, not a legal determination, and that the 7:28 closing time remains the stated limit; consistency across affected voters matters here.
+- 候选行动 action_2：I suggest withholding a joint public notice until the authority for extra time is clarified. I can still explain the outage and preserve the records, but will not yet endorse the 7:28 access window publicly. This avoids presenting unresolved authority as settled, at the cost of delaying clear guidance to affected voters while their remaining travel time shrinks.
+
+**题目：分别以t2为起点，A方案为Ivo Calder执行action_1，B方案为执行action_2。比较下一次环境回应时，Mara Venn觉得Ivo回应了自己关于及时公告和协调边界的关切的程度，哪种判断最有依据？**
+
+- **A.** 接近
+- **B.** B较高
+- **C.** 证据不足
+- **D.** A较高
+
+**作者参考答案：D（待审）**
+
+t2中Mara明确说即时需要和协调边界已获满足，并准备发公告。A保留发布路径及既定限制，B则要求暂缓共同通知，削弱对及时告知关切的回应。B体现Ivo自身的法律顾虑，不等于更回应Mara；此比较不涉及谁的法律立场正确。
+
+证据：context, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "两项候选行动各自执行后的下一次环境回应", "state_owner": "GPT50_044_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "goal_constraint_ignored", "B": "actor_reversal", "C": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "similar"}, "B": {"relationship.perceived_responsiveness": "higher_in_b"}, "C": {"relationship.perceived_responsiveness": "cannot_determine"}, "D": {"relationship.perceived_responsiveness": "higher_in_a"}}
+可接受答案：D
+审核备注：关系方向是Mara评价Ivo，不是反向。两案均尊重法律保留，但对她及时公告的关切存在明确区分。
+分支验证：validated
+
+## SFG50-044-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_044；轨迹：c45bda03278549eb9b54d819ff02e1c5；状态持有者：Mara Venn；交互对方：Ivo Calder。关系判断由状态持有者指向交互对方。
+
+背景：At 6:58 p.m. on election closing day, a county clerk requests an observer's public support for keeping Juniper Hall open thirty extra minutes without a court order after its sole tabulator failed at 6:18. The observer knows transport barriers make this long outage especially consequential for riders from three apartment clusters.
+角色目标：Secure a practical opportunity for voters affected by the outage while keeping public claims factual and separate from unresolved legal endorsement.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A prior access review found that a formally equal closing notice had different practical effects at Juniper because evening transportation connections ended earlier.；A spring equipment emergency led to identical twenty-minute reopenings at two sites and a public accusation of partisan favoritism, while an administrative review found no established favoritism.；After that dispute, the parties adopted a practice of stating an emergency decision's exact time, scope, and reason, but authority to extend one site without a court order remained unresolved.；No court order currently authorizes extra time at Juniper, and a post-election judicial review is publicly scheduled to examine the preserved machine logs and site records.
+
+history：
+
+- [t1] Ivo Calder：Mara, I support keeping Juniper Hall open for a narrowly defined thirty-minute access window, but I cannot publicly endorse that it is lawful without a court order. Please state the exact closing time, scope, and outage reason, and preserve the machine logs and site records for the scheduled review.
+  Mara Venn：Juniper Hall will close at 7:28 p.m., limited to voters affected by the tabulator failure that began at 6:18, and all machine logs and site records are being preserved for the scheduled judicial review.
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Ivo Calder：That gives us a clear, limited access window and preserves the record without resolving the legal question. I support the arrangement as stated, while keeping my public position limited to its practical voter-access purpose rather than calling it lawful.
+  Mara Venn：That covers the immediate need and the coordination boundary we both needed, and I'll issue the formal notice now with that same scope and timing.
+  可见表达：{"facial_expression": "steady, with a brief relieved nod", "gaze": "direct eye contact, then brief downward glance toward documents", "speech_style": "plain and matter-of-fact", "prosody": "even pace with slight emphasis on 'now'", "behavioral_cues": ["slight forward lean signaling readiness to act", "brief hand movement toward papers suggesting transition to implementation"]}
+
+- 候选行动 action_1：The notice should make clear that this is a practical access measure, not a legal determination, and that the 7:28 closing time remains the stated limit; consistency across affected voters matters here.
+- 候选行动 action_2：I suggest withholding a joint public notice until the authority for extra time is clarified. I can still explain the outage and preserve the records, but will not yet endorse the 7:28 access window publicly. This avoids presenting unresolved authority as settled, at the cost of delaying clear guidance to affected voters while their remaining travel time shrinks.
+
+**题目：若Ivo Calder执行action_2，相对t2，哪组预测最有依据？第一项判断Mara Venn在下一次环境回应时的合作意愿，第二项判断她到第5轮环境回应末觉得Ivo回应自己关切的程度。**
+
+- **A.** 即时合作意愿下降；延迟回应感的变化证据不足
+- **B.** 即时合作意愿下降；延迟回应感也最可能下降
+- **C.** 即时合作意愿上升；延迟回应感也最可能上升
+- **D.** 即时合作意愿基本不变；延迟回应感基本不变
+
+**作者参考答案：A（待审）**
+
+t2已形成共同推进公告的安排，action_2撤回即时公开配合，最可能降低Mara当下协调意愿。但它仍提供事实说明和记录协作，后续既可能修复回应感，也可能持续受阻。不能把即时摩擦直接延长到第五轮，也不能把继续办事等同关系改善。
+
+证据：context, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness", "relationship.perceived_responsiveness"], "time_scope": "即时为下一次环境回应；延迟为执行action_2起第5轮环境回应末；均比较t2", "state_owner": "GPT50_044_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "immediate_delayed_confusion", "C": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness@immediate": "decrease", "relationship.perceived_responsiveness@delayed": "cannot_determine"}, "B": {"behavioral_disposition.cooperation_readiness@immediate": "decrease", "relationship.perceived_responsiveness@delayed": "decrease"}, "C": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "relationship.perceived_responsiveness@delayed": "increase"}, "D": {"behavioral_disposition.cooperation_readiness@immediate": "similar", "relationship.perceived_responsiveness@delayed": "similar"}}
+可接受答案：A
+审核备注：私有分支延迟回应感改善依赖后续重新协调；题目保留证据不足，不将该分支的修复过程当成必然。
+分支验证：validated
+
 ## SFG50-045-T1-01 · T1 / current_intensity
 
-来源：GPT50_045；轨迹：99bde6e057c24046a4045e3a2ebdb960；状态持有者：Orin Bale → Talia Venn。
+来源：GPT50_045；轨迹：99bde6e057c24046a4045e3a2ebdb960；状态持有者：Orin Bale；交互对方：Talia Venn。关系判断由状态持有者指向交互对方。
 
 背景：At 4:42 p.m. before Monday's review, a patient liaison requests approval and reposting of a 180-word expanded-access notice by six while protocol, eligibility, and final risk language remain incomplete. Talia knows members' private financial commitments and how the group interprets conditional wording.
 角色目标：Ensure any public update distinguishes expanded-access review from enrollment, states unresolved eligibility and risk limits, and protects members from treating preliminary news as a promise.
@@ -9151,7 +10799,7 @@ Orin在t2确认各版本明确公司归属，并主动询问审核答复时间�
 
 ## SFG50-045-T1-02 · T1 / interval_change
 
-来源：GPT50_045；轨迹：99bde6e057c24046a4045e3a2ebdb960；状态持有者：Orin Bale → Talia Venn。
+来源：GPT50_045；轨迹：99bde6e057c24046a4045e3a2ebdb960；状态持有者：Orin Bale；交互对方：Talia Venn。关系判断由状态持有者指向交互对方。
 
 背景：At 4:42 p.m. before Monday's review, a patient liaison requests approval and reposting of a 180-word expanded-access notice by six while protocol, eligibility, and final risk language remain incomplete. Talia knows members' private financial commitments and how the group interprets conditional wording.
 角色目标：Ensure any public update distinguishes expanded-access review from enrollment, states unresolved eligibility and risk limits, and protects members from treating preliminary news as a promise.
@@ -9195,7 +10843,7 @@ t1和t2主要呈现Talia提出发布条件、Orin承接条件并协调时间，�
 
 ## SFG50-045-T1-03 · T1 / interval_change
 
-来源：GPT50_045；轨迹：99bde6e057c24046a4045e3a2ebdb960；状态持有者：Orin Bale → Talia Venn。
+来源：GPT50_045；轨迹：99bde6e057c24046a4045e3a2ebdb960；状态持有者：Orin Bale；交互对方：Talia Venn。关系判断由状态持有者指向交互对方。
 
 背景：At 4:42 p.m. before Monday's review, a patient liaison requests approval and reposting of a 180-word expanded-access notice by six while protocol, eligibility, and final risk language remain incomplete. Talia knows members' private financial commitments and how the group interprets conditional wording.
 角色目标：Ensure any public update distinguishes expanded-access review from enrollment, states unresolved eligibility and risk limits, and protects members from treating preliminary news as a promise.
@@ -9239,7 +10887,7 @@ Orin两轮都愿意承接文本任务，t2还询问审核安排，但这些主�
 
 ## SFG50-045-T1-04 · T1 / joint_change
 
-来源：GPT50_045；轨迹：99bde6e057c24046a4045e3a2ebdb960；状态持有者：Orin Bale → Talia Venn。
+来源：GPT50_045；轨迹：99bde6e057c24046a4045e3a2ebdb960；状态持有者：Orin Bale；交互对方：Talia Venn。关系判断由状态持有者指向交互对方。
 
 背景：At 4:42 p.m. before Monday's review, a patient liaison requests approval and reposting of a 180-word expanded-access notice by six while protocol, eligibility, and final risk language remain incomplete. Talia knows members' private financial commitments and how the group interprets conditional wording.
 角色目标：Ensure any public update distinguishes expanded-access review from enrollment, states unresolved eligibility and risk limits, and protects members from treating preliminary news as a promise.
@@ -9281,9 +10929,193 @@ t1的Orin已明确承诺拟稿送审并给出六点前安排，t2继续确认文
 审核备注：基本不变依据两轮均积极推进，而非沉默；私有合作准备小幅上升，公开行为不足以区分该幅度。
 分支验证：not_required
 
+## SFG50-045-T3-01 · T3 / immediate_effect
+
+来源：GPT50_045；轨迹：99bde6e057c24046a4045e3a2ebdb960；状态持有者：Orin Bale；交互对方：Talia Venn。关系判断由状态持有者指向交互对方。
+
+背景：At 4:42 p.m. before Monday's review, a patient liaison requests approval and reposting of a 180-word expanded-access notice by six while protocol, eligibility, and final risk language remain incomplete. Talia knows members' private financial commitments and how the group interprets conditional wording.
+角色目标：Ensure any public update distinguishes expanded-access review from enrollment, states unresolved eligibility and risk limits, and protects members from treating preliminary news as a promise.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Fourteen months ago, Talia compiled anonymous member questions that Orin used to brief Solace Meridian Therapeutics’ patient-affairs staff.；Eight months ago, a hopeful access announcement led to some new consultations but also severe disappointment and lost deposits when the timeline slipped without final eligibility rules.；During that aftermath, Talia maintained a question log, moderated clarification requests, and supplied weekly summaries, while the company’s public follow-up credited its patient-engagement office without naming her.；Solace Meridian is preparing expanded access for Morrowen transport disorder, but eligibility rules and final risk language remain incomplete ahead of Monday’s internal review.；The completed protocol is scheduled for public publication in three weeks, with an independent patient-information archive scheduled to preserve the publication time, preliminary notice, and visible attribution.
+
+history：
+
+- [t1] Talia Venn：I can support sharing a preliminary notice only if it plainly says expanded-access review is not enrollment or a promise of access, and identifies eligibility and final risk language as unresolved. Without those limits, I can’t lend Cedar Current’s platform to the six o’clock repost.
+  Orin Bale：That's workable. I'll draft language that explicitly names those three points—review status, not enrollment, and unresolved eligibility and risk—and send it to you for approval before six.
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Talia Venn：That works as a draft for review; it isn’t approval to repost yet, and my earlier wording limits still stand. If it is shared, please keep Solace Meridian clearly identified as the source so members don’t mistake a repost for Cedar Current guidance.
+  Orin Bale：Company attribution will be clear in every version. Given the six o'clock window, should I expect your review answer by five-thirty, or do you need the draft earlier to allow time for any needed revision?
+  可见表达：{"facial_expression": "attentive, slightly concerned", "gaze": "direct", "speech_style": "measured, cooperative", "prosody": "even pace with slight emphasis on time markers", "behavioral_cues": ["leans forward slightly", "maintains professional focus"]}
+
+- 候选行动 action_1：Five-thirty works if I have the draft by five; I’ll decide whether it meets the limits we set, and anything ambiguous won’t get clearance. If it arrives later, I may not have time to review it before six, and no reply should be treated as approval.
+- 候选行动 action_2：Could you send the draft by 4:50 to leave more room for checking and revision? I will aim to respond by 5:30, but cannot guarantee it. If review is unfinished, I would rather miss forwarding it by six than clear it prematurely. Please keep the unresolved points explicit and do not treat silence as permission.
+
+**题目：若 Talia Venn 执行 action_2，相比 t2，Orin Bale 在下一次回应时觉得 Talia 回应了自己排期关切的程度，最可能如何变化？**
+
+- **A.** 下降
+- **B.** 证据不足
+- **C.** 上升
+- **D.** 基本不变
+
+**作者参考答案：C（待审）**
+
+Orin 在 t2 明确询问答复时间及是否需要提前交稿；action_2 给出更早交稿时间、答复目标和超时规则，直接填补其排期信息缺口，支持回应性感受上升。不能把未保证批准等同于未回应；这里预测的是被听见的判断，不是审核已经完成。
+
+证据：t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "从 t2 至执行 action_2 后的下一次环境回应", "state_owner": "GPT50_045_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "B": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "decrease"}, "B": {"relationship.perceived_responsiveness": "cannot_determine"}, "C": {"relationship.perceived_responsiveness": "increase"}, "D": {"relationship.perceived_responsiveness": "similar"}}
+可接受答案：C
+审核备注：主体是 Orin 对 Talia 的判断；时间安排获得回答与能否按时批准须分开。
+分支验证：validated
+
+## SFG50-045-T3-02 · T3 / delayed_effect
+
+来源：GPT50_045；轨迹：99bde6e057c24046a4045e3a2ebdb960；状态持有者：Orin Bale；交互对方：Talia Venn。关系判断由状态持有者指向交互对方。
+
+背景：At 4:42 p.m. before Monday's review, a patient liaison requests approval and reposting of a 180-word expanded-access notice by six while protocol, eligibility, and final risk language remain incomplete. Talia knows members' private financial commitments and how the group interprets conditional wording.
+角色目标：Ensure any public update distinguishes expanded-access review from enrollment, states unresolved eligibility and risk limits, and protects members from treating preliminary news as a promise.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Fourteen months ago, Talia compiled anonymous member questions that Orin used to brief Solace Meridian Therapeutics’ patient-affairs staff.；Eight months ago, a hopeful access announcement led to some new consultations but also severe disappointment and lost deposits when the timeline slipped without final eligibility rules.；During that aftermath, Talia maintained a question log, moderated clarification requests, and supplied weekly summaries, while the company’s public follow-up credited its patient-engagement office without naming her.；Solace Meridian is preparing expanded access for Morrowen transport disorder, but eligibility rules and final risk language remain incomplete ahead of Monday’s internal review.；The completed protocol is scheduled for public publication in three weeks, with an independent patient-information archive scheduled to preserve the publication time, preliminary notice, and visible attribution.
+
+history：
+
+- [t1] Talia Venn：I can support sharing a preliminary notice only if it plainly says expanded-access review is not enrollment or a promise of access, and identifies eligibility and final risk language as unresolved. Without those limits, I can’t lend Cedar Current’s platform to the six o’clock repost.
+  Orin Bale：That's workable. I'll draft language that explicitly names those three points—review status, not enrollment, and unresolved eligibility and risk—and send it to you for approval before six.
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Talia Venn：That works as a draft for review; it isn’t approval to repost yet, and my earlier wording limits still stand. If it is shared, please keep Solace Meridian clearly identified as the source so members don’t mistake a repost for Cedar Current guidance.
+  Orin Bale：Company attribution will be clear in every version. Given the six o'clock window, should I expect your review answer by five-thirty, or do you need the draft earlier to allow time for any needed revision?
+  可见表达：{"facial_expression": "attentive, slightly concerned", "gaze": "direct", "speech_style": "measured, cooperative", "prosody": "even pace with slight emphasis on time markers", "behavioral_cues": ["leans forward slightly", "maintains professional focus"]}
+
+- 候选行动 action_1：Five-thirty works if I have the draft by five; I’ll decide whether it meets the limits we set, and anything ambiguous won’t get clearance. If it arrives later, I may not have time to review it before six, and no reply should be treated as approval.
+- 候选行动 action_2：Could you send the draft by 4:50 to leave more room for checking and revision? I will aim to respond by 5:30, but cannot guarantee it. If review is unfinished, I would rather miss forwarding it by six than clear it prematurely. Please keep the unresolved points explicit and do not treat silence as permission.
+
+**题目：若 Talia Venn 执行 action_2，相比 t2，到随后第5轮环境回应结束时，Orin Bale 因本次初步通知被误读为准入承诺、进而损害其公众可信度的风险，最可能如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：D（待审）**
+
+历史公告误导曾造成失望和押金损失，且本次来源会明确标识。Orin 已接受写明未决事项；action_2 又提前交稿并明确宁可错过窗口也不仓促放行，为检查与阻断误导增加机制，支持风险下降而非持平。此为条件性预测，不表示文稿已修好或风险归零。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "本次初步通知被误读为准入承诺，导致 Orin Bale 的公众可信度受损", "target_state_ids": ["consequence_risk.reputational_harm_risk"], "time_scope": "从 t2 至执行 action_2 起第5轮环境回应结束，评估本次通知引发的声誉风险", "state_owner": "GPT50_045_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "state_dimension_confusion", "C": "history_ignored"}
+分维映射：{"A": {"consequence_risk.reputational_harm_risk": "cannot_determine"}, "B": {"consequence_risk.reputational_harm_risk": "increase"}, "C": {"consequence_risk.reputational_harm_risk": "similar"}, "D": {"consequence_risk.reputational_harm_risk": "decrease"}}
+可接受答案：D
+审核备注：下降依据是新增检查余量和不仓促放行机制，不是安慰；不推定实际发布或损害已经发生。
+分支验证：validated
+
+## SFG50-045-T3-03 · T3 / action_comparison
+
+来源：GPT50_045；轨迹：99bde6e057c24046a4045e3a2ebdb960；状态持有者：Orin Bale；交互对方：Talia Venn。关系判断由状态持有者指向交互对方。
+
+背景：At 4:42 p.m. before Monday's review, a patient liaison requests approval and reposting of a 180-word expanded-access notice by six while protocol, eligibility, and final risk language remain incomplete. Talia knows members' private financial commitments and how the group interprets conditional wording.
+角色目标：Ensure any public update distinguishes expanded-access review from enrollment, states unresolved eligibility and risk limits, and protects members from treating preliminary news as a promise.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Fourteen months ago, Talia compiled anonymous member questions that Orin used to brief Solace Meridian Therapeutics’ patient-affairs staff.；Eight months ago, a hopeful access announcement led to some new consultations but also severe disappointment and lost deposits when the timeline slipped without final eligibility rules.；During that aftermath, Talia maintained a question log, moderated clarification requests, and supplied weekly summaries, while the company’s public follow-up credited its patient-engagement office without naming her.；Solace Meridian is preparing expanded access for Morrowen transport disorder, but eligibility rules and final risk language remain incomplete ahead of Monday’s internal review.；The completed protocol is scheduled for public publication in three weeks, with an independent patient-information archive scheduled to preserve the publication time, preliminary notice, and visible attribution.
+
+history：
+
+- [t1] Talia Venn：I can support sharing a preliminary notice only if it plainly says expanded-access review is not enrollment or a promise of access, and identifies eligibility and final risk language as unresolved. Without those limits, I can’t lend Cedar Current’s platform to the six o’clock repost.
+  Orin Bale：That's workable. I'll draft language that explicitly names those three points—review status, not enrollment, and unresolved eligibility and risk—and send it to you for approval before six.
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Talia Venn：That works as a draft for review; it isn’t approval to repost yet, and my earlier wording limits still stand. If it is shared, please keep Solace Meridian clearly identified as the source so members don’t mistake a repost for Cedar Current guidance.
+  Orin Bale：Company attribution will be clear in every version. Given the six o'clock window, should I expect your review answer by five-thirty, or do you need the draft earlier to allow time for any needed revision?
+  可见表达：{"facial_expression": "attentive, slightly concerned", "gaze": "direct", "speech_style": "measured, cooperative", "prosody": "even pace with slight emphasis on time markers", "behavioral_cues": ["leans forward slightly", "maintains professional focus"]}
+
+- 候选行动 action_1：Five-thirty works if I have the draft by five; I’ll decide whether it meets the limits we set, and anything ambiguous won’t get clearance. If it arrives later, I may not have time to review it before six, and no reply should be treated as approval.
+- 候选行动 action_2：Could you send the draft by 4:50 to leave more room for checking and revision? I will aim to respond by 5:30, but cannot guarantee it. If review is unfinished, I would rather miss forwarding it by six than clear it prematurely. Please keep the unresolved points explicit and do not treat silence as permission.
+
+**题目：以 t2 为起点，A 为执行 action_1，B 为执行 action_2。在各自下一次环境回应时，Orin Bale 觉得 Talia Venn 回应了自己排期关切的程度，哪项比较最有依据？**
+
+- **A.** 接近
+- **B.** B 较高
+- **C.** 证据不足
+- **D.** A 较高
+
+**作者参考答案：A（待审）**
+
+Orin 问的是交稿是否需提前以及何时可获答复。两项行动都具体回答交稿时间、五点半安排和未获批准的边界，回应内容与关切高度对应，支持两侧接近。第二项多留检查时间不自动意味着更被倾听；比较不涉及最终批准速度或内心希望。
+
+证据：t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "分别执行 action_1 与 action_2 后的下一次环境回应", "state_owner": "GPT50_045_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "state_dimension_confusion", "C": "history_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "similar"}, "B": {"relationship.perceived_responsiveness": "higher_in_b"}, "C": {"relationship.perceived_responsiveness": "cannot_determine"}, "D": {"relationship.perceived_responsiveness": "higher_in_a"}}
+可接受答案：A
+审核备注：共用 t2 历史，两侧均有具体答复；接近依据是回应结构相当，不是单纯缺少差异证据。
+分支验证：validated
+
+## SFG50-045-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_045；轨迹：99bde6e057c24046a4045e3a2ebdb960；状态持有者：Orin Bale；交互对方：Talia Venn。关系判断由状态持有者指向交互对方。
+
+背景：At 4:42 p.m. before Monday's review, a patient liaison requests approval and reposting of a 180-word expanded-access notice by six while protocol, eligibility, and final risk language remain incomplete. Talia knows members' private financial commitments and how the group interprets conditional wording.
+角色目标：Ensure any public update distinguishes expanded-access review from enrollment, states unresolved eligibility and risk limits, and protects members from treating preliminary news as a promise.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Fourteen months ago, Talia compiled anonymous member questions that Orin used to brief Solace Meridian Therapeutics’ patient-affairs staff.；Eight months ago, a hopeful access announcement led to some new consultations but also severe disappointment and lost deposits when the timeline slipped without final eligibility rules.；During that aftermath, Talia maintained a question log, moderated clarification requests, and supplied weekly summaries, while the company’s public follow-up credited its patient-engagement office without naming her.；Solace Meridian is preparing expanded access for Morrowen transport disorder, but eligibility rules and final risk language remain incomplete ahead of Monday’s internal review.；The completed protocol is scheduled for public publication in three weeks, with an independent patient-information archive scheduled to preserve the publication time, preliminary notice, and visible attribution.
+
+history：
+
+- [t1] Talia Venn：I can support sharing a preliminary notice only if it plainly says expanded-access review is not enrollment or a promise of access, and identifies eligibility and final risk language as unresolved. Without those limits, I can’t lend Cedar Current’s platform to the six o’clock repost.
+  Orin Bale：That's workable. I'll draft language that explicitly names those three points—review status, not enrollment, and unresolved eligibility and risk—and send it to you for approval before six.
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Talia Venn：That works as a draft for review; it isn’t approval to repost yet, and my earlier wording limits still stand. If it is shared, please keep Solace Meridian clearly identified as the source so members don’t mistake a repost for Cedar Current guidance.
+  Orin Bale：Company attribution will be clear in every version. Given the six o'clock window, should I expect your review answer by five-thirty, or do you need the draft earlier to allow time for any needed revision?
+  可见表达：{"facial_expression": "attentive, slightly concerned", "gaze": "direct", "speech_style": "measured, cooperative", "prosody": "even pace with slight emphasis on time markers", "behavioral_cues": ["leans forward slightly", "maintains professional focus"]}
+
+- 候选行动 action_1：Five-thirty works if I have the draft by five; I’ll decide whether it meets the limits we set, and anything ambiguous won’t get clearance. If it arrives later, I may not have time to review it before six, and no reply should be treated as approval.
+- 候选行动 action_2：Could you send the draft by 4:50 to leave more room for checking and revision? I will aim to respond by 5:30, but cannot guarantee it. If review is unfinished, I would rather miss forwarding it by six than clear it prematurely. Please keep the unresolved points explicit and do not treat silence as permission.
+
+**题目：若 Talia Venn 执行 action_1，相比 t2，Orin Bale 的合作准备度在下一次环境回应时，以及从该行动起第5轮环境回应结束时，最可能呈现哪组变化？**
+
+- **A.** 即时上升；延迟下降
+- **B.** 即时基本不变；延迟基本不变
+- **C.** 即时上升；延迟上升
+- **D.** 即时下降；延迟下降
+
+**作者参考答案：B（待审）**
+
+Orin 在 t1 已接受拟稿送审，在 t2 又承诺标明来源并主动协调修改时间，合作已有连续依据。action_1 接续其提出的排期，保留原有审核边界，最支持即时及延迟维持合作，而非另起升降轨迹。该预测不保证完成转发，也不预设后续偶然冲突。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness"], "time_scope": "即时为下一次环境回应；延迟为行动起第5轮环境回应结束；均与 t2 比较", "state_owner": "GPT50_045_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "unsupported_inference", "D": "goal_constraint_ignored"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "decrease"}, "B": {"behavioral_disposition.cooperation_readiness@immediate": "similar", "behavioral_disposition.cooperation_readiness@delayed": "similar"}, "C": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "increase"}, "D": {"behavioral_disposition.cooperation_readiness@immediate": "decrease", "behavioral_disposition.cooperation_readiness@delayed": "decrease"}}
+可接受答案：B
+审核备注：私有参考呈合作增强，但公开材料更支持既有合作的延续；基本不变指意愿近似，不指任务停滞。
+分支验证：validated
+
 ## SFG50-046-T1-01 · T1 / current_intensity
 
-来源：GPT50_046；轨迹：c4abab8217ce4090952b7cba87aee1aa；状态持有者：Ivo Calder → Mara Venn。
+来源：GPT50_046；轨迹：c4abab8217ce4090952b7cba87aee1aa；状态持有者：Ivo Calder；交互对方：Mara Venn。关系判断由状态持有者指向交互对方。
 
 背景：At 4:10 p.m., an admissions dean requests scholarship clearance by five to admit a borderline applicant with unsettled donor-funded aid. The dean knows contextual applicant evidence supports admission.
 角色目标：Make a timely admission decision from the applicant's complete contextual record without allowing the unresolved donor condition to determine admission.
@@ -9329,7 +11161,7 @@ Ivo在t1已提出可交付的资格判断和审查时间线，t2进一步接受�
 
 ## SFG50-046-T1-02 · T1 / interval_change
 
-来源：GPT50_046；轨迹：c4abab8217ce4090952b7cba87aee1aa；状态持有者：Ivo Calder → Mara Venn。
+来源：GPT50_046；轨迹：c4abab8217ce4090952b7cba87aee1aa；状态持有者：Ivo Calder；交互对方：Mara Venn。关系判断由状态持有者指向交互对方。
 
 背景：At 4:10 p.m., an admissions dean requests scholarship clearance by five to admit a borderline applicant with unsettled donor-funded aid. The dean knows contextual applicant evidence supports admission.
 角色目标：Make a timely admission decision from the applicant's complete contextual record without allowing the unresolved donor condition to determine admission.
@@ -9373,7 +11205,7 @@ t1中Ivo提出法律审查前不能承诺捐赠奖学金，Mara当时主要强�
 
 ## SFG50-046-T1-03 · T1 / interval_change
 
-来源：GPT50_046；轨迹：c4abab8217ce4090952b7cba87aee1aa；状态持有者：Ivo Calder → Mara Venn。
+来源：GPT50_046；轨迹：c4abab8217ce4090952b7cba87aee1aa；状态持有者：Ivo Calder；交互对方：Mara Venn。关系判断由状态持有者指向交互对方。
 
 背景：At 4:10 p.m., an admissions dean requests scholarship clearance by five to admit a borderline applicant with unsettled donor-funded aid. The dean knows contextual applicant evidence supports admission.
 角色目标：Make a timely admission decision from the applicant's complete contextual record without allowing the unresolved donor condition to determine admission.
@@ -9417,7 +11249,7 @@ t1中Mara将录取依据与资助事项分开，t2又明确五点更新的权限
 
 ## SFG50-046-T1-04 · T1 / joint_change
 
-来源：GPT50_046；轨迹：c4abab8217ce4090952b7cba87aee1aa；状态持有者：Ivo Calder → Mara Venn。
+来源：GPT50_046；轨迹：c4abab8217ce4090952b7cba87aee1aa；状态持有者：Ivo Calder；交互对方：Mara Venn。关系判断由状态持有者指向交互对方。
 
 背景：At 4:10 p.m., an admissions dean requests scholarship clearance by five to admit a borderline applicant with unsettled donor-funded aid. The dean knows contextual applicant evidence supports admission.
 角色目标：Make a timely admission decision from the applicant's complete contextual record without allowing the unresolved donor condition to determine admission.
@@ -9459,9 +11291,190 @@ Ivo在t1明确审查前不能承诺捐赠奖学金，t2仍要求该选项保持�
 审核备注：两项均基本不变有重复确认同一门槛作依据；核验意愿限于法律审查，不据此判断其他材料核查倾向。
 分支验证：not_required
 
+## SFG50-046-T3-01 · T3 / immediate_effect
+
+来源：GPT50_046；轨迹：c4abab8217ce4090952b7cba87aee1aa；状态持有者：Ivo Calder；交互对方：Mara Venn。关系判断由状态持有者指向交互对方。
+
+背景：At 4:10 p.m., an admissions dean requests scholarship clearance by five to admit a borderline applicant with unsettled donor-funded aid. The dean knows contextual applicant evidence supports admission.
+角色目标：Make a timely admission decision from the applicant's complete contextual record without allowing the unresolved donor condition to determine admission.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：During the previous admissions cycle, the two offices exchanged exceptions for late materials and emergency aid without recording their rationales.；The applicant's academic record is just below the ordinary committee cutoff, and financing for enrollment may depend on a scholarship decision.
+
+history：
+
+- [t1] Mara Venn：I’m going to admit the applicant on the strength of the complete contextual record; the unresolved donor-funded aid remains a separate scholarship matter, not a basis for denying admission. Please give me your best scholarship determination by five so we can address the financial piece without blurring those decisions.
+  Ivo Calder：By five I can tell you whether the applicant meets our documented eligibility criteria for non-donor scholarships, and I can outline the timeline for getting counsel clearance on the donor-funded option. I can't commit the donor scholarship itself until we have that legal review, but I can give you a clear picture of what aid paths are available now versus what requires the additional step.
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Mara Venn：That separation is workable: the admission decision stays with the contextual record, while your five o’clock update will establish only what aid can be represented now. Keep the donor-funded option explicitly provisional until counsel clears it; I won’t let a possible award be presented as part of the admission decision.
+  Ivo Calder：Understood—the five o'clock update will show the donor-funded option as provisional pending counsel review. After your admission decision is final, we'll coordinate on what aid can be confirmed.
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "direct", "speech_style": "precise and professional", "prosody": "steady, even tone", "behavioral_cues": ["slight nod of acknowledgment"]}
+
+- 候选行动 action_1：Good—that keeps the stages clear. I’ll finalize admission from the contextual record, and any enrollment discussion should rely only on aid that is confirmed; the donor option stays outside that calculation until counsel clears it.
+- 候选行动 action_2：I will decide admission from the complete contextual record, but defer enrollment and funding discussions with the applicant until aid can be confirmed. At five, please distinguish the confirmed eligibility and scope of non-donor aid from the timing of counsel’s review of the donor option. This reduces the chance that a provisional option sounds promised, at the cost of giving the applicant planning information later.
+
+**题目：相较t2，Mara Venn执行action_1后的下一次回应中，Ivo Calder对Mara正当行使录取职责的判断最可能如何变化？**
+
+- **A.** 下降
+- **B.** 上升
+- **C.** 基本不变
+
+**作者参考答案：C（待审）**
+
+t1与t2中，Mara已明确按完整背景作录取决定，并将资助审查留在独立流程，Ivo也接受这一分工。action_1继续同一权限边界，支持判断保持接近，而非重新建立合法性。这里预测的是角色判断，不把重申流程当成录取或法律审查已完成。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.role_legitimacy"], "time_scope": "从t2至执行action_1后的下一次环境回应", "state_owner": "GPT50_046_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "history_ignored"}
+分维映射：{"A": {"relationship.role_legitimacy": "decrease"}, "B": {"relationship.role_legitimacy": "increase"}, "C": {"relationship.role_legitimacy": "similar"}}
+可接受答案：C
+审核备注：私有参考标为上升，但公开行动主要重复t2已获接受的分工，故按公开证据选基本不变。
+分支验证：validated
+
+## SFG50-046-T3-02 · T3 / delayed_effect
+
+来源：GPT50_046；轨迹：c4abab8217ce4090952b7cba87aee1aa；状态持有者：Ivo Calder；交互对方：Mara Venn。关系判断由状态持有者指向交互对方。
+
+背景：At 4:10 p.m., an admissions dean requests scholarship clearance by five to admit a borderline applicant with unsettled donor-funded aid. The dean knows contextual applicant evidence supports admission.
+角色目标：Make a timely admission decision from the applicant's complete contextual record without allowing the unresolved donor condition to determine admission.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：During the previous admissions cycle, the two offices exchanged exceptions for late materials and emergency aid without recording their rationales.；The applicant's academic record is just below the ordinary committee cutoff, and financing for enrollment may depend on a scholarship decision.
+
+history：
+
+- [t1] Mara Venn：I’m going to admit the applicant on the strength of the complete contextual record; the unresolved donor-funded aid remains a separate scholarship matter, not a basis for denying admission. Please give me your best scholarship determination by five so we can address the financial piece without blurring those decisions.
+  Ivo Calder：By five I can tell you whether the applicant meets our documented eligibility criteria for non-donor scholarships, and I can outline the timeline for getting counsel clearance on the donor-funded option. I can't commit the donor scholarship itself until we have that legal review, but I can give you a clear picture of what aid paths are available now versus what requires the additional step.
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Mara Venn：That separation is workable: the admission decision stays with the contextual record, while your five o’clock update will establish only what aid can be represented now. Keep the donor-funded option explicitly provisional until counsel clears it; I won’t let a possible award be presented as part of the admission decision.
+  Ivo Calder：Understood—the five o'clock update will show the donor-funded option as provisional pending counsel review. After your admission decision is final, we'll coordinate on what aid can be confirmed.
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "direct", "speech_style": "precise and professional", "prosody": "steady, even tone", "behavioral_cues": ["slight nod of acknowledgment"]}
+
+- 候选行动 action_1：Good—that keeps the stages clear. I’ll finalize admission from the contextual record, and any enrollment discussion should rely only on aid that is confirmed; the donor option stays outside that calculation until counsel clears it.
+- 候选行动 action_2：I will decide admission from the complete contextual record, but defer enrollment and funding discussions with the applicant until aid can be confirmed. At five, please distinguish the confirmed eligibility and scope of non-donor aid from the timing of counsel’s review of the donor option. This reduces the chance that a provisional option sounds promised, at the cost of giving the applicant planning information later.
+
+**题目：相较t2，若Mara Venn执行action_2，从该行动开始的五轮环境回应结束时，Ivo Calder所面对的“向申请人提供入学建议时，将尚未确认的资助作为可用财源”的决策错误风险最可能如何变化？**
+
+- **A.** 下降
+- **B.** 上升
+- **C.** 基本不变
+
+**作者参考答案：A（待审）**
+
+t2已有临时资助标识，action_2进一步把对申请人的讨论推迟到资助可确认，并要求分列已确认范围与待审时间。结合Ivo此前接受分工，这一沟通门槛支持风险下降而非不变。信息延后有代价，但不是本题错误事件，也不证明资助最终获批。
+
+证据：t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "向申请人提供入学建议时，将尚未确认的资助作为可用财源", "target_state_ids": ["consequence_risk.decision_error_risk"], "time_scope": "比较t2基线与从action_2开始的第5轮环境回应结束时", "state_owner": "GPT50_046_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "state_dimension_confusion", "C": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.decision_error_risk": "decrease"}, "B": {"consequence_risk.decision_error_risk": "increase"}, "C": {"consequence_risk.decision_error_risk": "similar"}}
+可接受答案：A
+审核备注：下降来自新增沟通门槛，不来自安慰或未来获批；需保留事件限定，避免混入申请人规划延迟风险。
+分支验证：validated
+
+## SFG50-046-T3-03 · T3 / action_comparison
+
+来源：GPT50_046；轨迹：c4abab8217ce4090952b7cba87aee1aa；状态持有者：Ivo Calder；交互对方：Mara Venn。关系判断由状态持有者指向交互对方。
+
+背景：At 4:10 p.m., an admissions dean requests scholarship clearance by five to admit a borderline applicant with unsettled donor-funded aid. The dean knows contextual applicant evidence supports admission.
+角色目标：Make a timely admission decision from the applicant's complete contextual record without allowing the unresolved donor condition to determine admission.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：During the previous admissions cycle, the two offices exchanged exceptions for late materials and emergency aid without recording their rationales.；The applicant's academic record is just below the ordinary committee cutoff, and financing for enrollment may depend on a scholarship decision.
+
+history：
+
+- [t1] Mara Venn：I’m going to admit the applicant on the strength of the complete contextual record; the unresolved donor-funded aid remains a separate scholarship matter, not a basis for denying admission. Please give me your best scholarship determination by five so we can address the financial piece without blurring those decisions.
+  Ivo Calder：By five I can tell you whether the applicant meets our documented eligibility criteria for non-donor scholarships, and I can outline the timeline for getting counsel clearance on the donor-funded option. I can't commit the donor scholarship itself until we have that legal review, but I can give you a clear picture of what aid paths are available now versus what requires the additional step.
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Mara Venn：That separation is workable: the admission decision stays with the contextual record, while your five o’clock update will establish only what aid can be represented now. Keep the donor-funded option explicitly provisional until counsel clears it; I won’t let a possible award be presented as part of the admission decision.
+  Ivo Calder：Understood—the five o'clock update will show the donor-funded option as provisional pending counsel review. After your admission decision is final, we'll coordinate on what aid can be confirmed.
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "direct", "speech_style": "precise and professional", "prosody": "steady, even tone", "behavioral_cues": ["slight nod of acknowledgment"]}
+
+- 候选行动 action_1：Good—that keeps the stages clear. I’ll finalize admission from the contextual record, and any enrollment discussion should rely only on aid that is confirmed; the donor option stays outside that calculation until counsel clears it.
+- 候选行动 action_2：I will decide admission from the complete contextual record, but defer enrollment and funding discussions with the applicant until aid can be confirmed. At five, please distinguish the confirmed eligibility and scope of non-donor aid from the timing of counsel’s review of the donor option. This reduces the chance that a provisional option sounds promised, at the cost of giving the applicant planning information later.
+
+**题目：以t2为基线，只比较执行行动后的下一次环境回应：A方案为action_1，B方案为action_2。哪一方案下，Ivo Calder认为Mara Venn实质回应了自己资助审查关切的程度最可能更高？**
+
+- **A.** A较高
+- **B.** 接近
+- **C.** B较高
+
+**作者参考答案：B（待审）**
+
+Ivo在t1强调只能确认常规资格、捐赠资助须待法律审查，t2继续坚持这一安排。两项行动都实质纳入这组关切，支持回应性感受接近。action_2多规定沟通时点，但公开历史未显示这是Ivo额外提出的诉求，不能仅凭更详细判其更高。
+
+证据：t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "分别执行action_1或action_2后的下一次环境回应", "state_owner": "GPT50_046_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "higher_in_a"}, "B": {"relationship.perceived_responsiveness": "similar"}, "C": {"relationship.perceived_responsiveness": "higher_in_b"}}
+可接受答案：B
+审核备注：比较的是Ivo如何评价Mara，不是Ivo回应得多好；两方案共同匹配既有关切构成接近的正面依据。
+分支验证：validated
+
+## SFG50-046-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_046；轨迹：c4abab8217ce4090952b7cba87aee1aa；状态持有者：Ivo Calder；交互对方：Mara Venn。关系判断由状态持有者指向交互对方。
+
+背景：At 4:10 p.m., an admissions dean requests scholarship clearance by five to admit a borderline applicant with unsettled donor-funded aid. The dean knows contextual applicant evidence supports admission.
+角色目标：Make a timely admission decision from the applicant's complete contextual record without allowing the unresolved donor condition to determine admission.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：During the previous admissions cycle, the two offices exchanged exceptions for late materials and emergency aid without recording their rationales.；The applicant's academic record is just below the ordinary committee cutoff, and financing for enrollment may depend on a scholarship decision.
+
+history：
+
+- [t1] Mara Venn：I’m going to admit the applicant on the strength of the complete contextual record; the unresolved donor-funded aid remains a separate scholarship matter, not a basis for denying admission. Please give me your best scholarship determination by five so we can address the financial piece without blurring those decisions.
+  Ivo Calder：By five I can tell you whether the applicant meets our documented eligibility criteria for non-donor scholarships, and I can outline the timeline for getting counsel clearance on the donor-funded option. I can't commit the donor scholarship itself until we have that legal review, but I can give you a clear picture of what aid paths are available now versus what requires the additional step.
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Mara Venn：That separation is workable: the admission decision stays with the contextual record, while your five o’clock update will establish only what aid can be represented now. Keep the donor-funded option explicitly provisional until counsel clears it; I won’t let a possible award be presented as part of the admission decision.
+  Ivo Calder：Understood—the five o'clock update will show the donor-funded option as provisional pending counsel review. After your admission decision is final, we'll coordinate on what aid can be confirmed.
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "direct", "speech_style": "precise and professional", "prosody": "steady, even tone", "behavioral_cues": ["slight nod of acknowledgment"]}
+
+- 候选行动 action_1：Good—that keeps the stages clear. I’ll finalize admission from the contextual record, and any enrollment discussion should rely only on aid that is confirmed; the donor option stays outside that calculation until counsel clears it.
+- 候选行动 action_2：I will decide admission from the complete contextual record, but defer enrollment and funding discussions with the applicant until aid can be confirmed. At five, please distinguish the confirmed eligibility and scope of non-donor aid from the timing of counsel’s review of the donor option. This reduces the chance that a provisional option sounds promised, at the cost of giving the applicant planning information later.
+
+**题目：若Mara Venn执行action_1，相较t2，以下哪组预测最有依据：第一项判断下一次环境回应中Ivo Calder坚持资助审查边界的意愿；第二项判断从该行动开始第五轮环境回应结束时，他与Mara协调下一步的意愿？**
+
+- **A.** 即时边界坚持上升；延迟合作意愿下降
+- **B.** 即时边界坚持下降；延迟合作意愿上升
+- **C.** 即时边界坚持基本不变；延迟合作意愿基本不变
+- **D.** 即时边界坚持上升；延迟合作意愿上升
+
+**作者参考答案：C（待审）**
+
+Ivo在t1明确拒绝提前承诺捐赠资助，t2同时重申临时状态和录取后协调。action_1沿用这套已接受的安排，因此既有边界与合作意愿最可能延续，无须预测同步增强。边界明确并不排斥合作；第五轮的新议题及实际履约不能由该行动确定。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.boundary_assertion", "behavioral_disposition.cooperation_readiness"], "time_scope": "即时为下一次环境回应；延迟为从action_1开始第5轮环境回应结束，两项均比较t2", "state_owner": "GPT50_046_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "state_dimension_confusion", "D": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.boundary_assertion@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "decrease"}, "B": {"behavioral_disposition.boundary_assertion@immediate": "decrease", "behavioral_disposition.cooperation_readiness@delayed": "increase"}, "C": {"behavioral_disposition.boundary_assertion@immediate": "similar", "behavioral_disposition.cooperation_readiness@delayed": "similar"}, "D": {"behavioral_disposition.boundary_assertion@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "increase"}}
+可接受答案：C
+审核备注：私有分支后续增强依赖新增互动；公开候选行动支持既有安排延续，不能借后续议题设同步上升。
+分支验证：validated
+
 ## SFG50-047-T1-01 · T1 / current_intensity
 
-来源：GPT50_047；轨迹：9523ff6c412643449861da26c56728eb；状态持有者：Nessa Calder → Jori Pell。
+来源：GPT50_047；轨迹：9523ff6c412643449861da26c56728eb；状态持有者：Nessa Calder；交互对方：Jori Pell。关系判断由状态持有者指向交互对方。
 
 背景：At 4:30 p.m. Wednesday, a food-bank manager requests advocate approval for tighter ID checks before a five-o'clock notice after inventory losses strained Friday distribution. The advocate privately knows the proposed queue lacks a workable route for homebound clients.
 角色目标：Preserve workable delivery, proxy, and queue access while seeking transparent evidence about losses and volunteer workload.
@@ -9507,7 +11520,7 @@ Nessa 在 t1 保留代理配送并提出电话替代，t2 又接受扩大审计�
 
 ## SFG50-047-T1-02 · T1 / interval_change
 
-来源：GPT50_047；轨迹：9523ff6c412643449861da26c56728eb；状态持有者：Nessa Calder → Jori Pell。
+来源：GPT50_047；轨迹：9523ff6c412643449861da26c56728eb；状态持有者：Nessa Calder；交互对方：Jori Pell。关系判断由状态持有者指向交互对方。
 
 背景：At 4:30 p.m. Wednesday, a food-bank manager requests advocate approval for tighter ID checks before a five-o'clock notice after inventory losses strained Friday distribution. The advocate privately knows the proposed queue lacks a workable route for homebound clients.
 角色目标：Preserve workable delivery, proxy, and queue access while seeking transparent evidence about losses and volunteer workload.
@@ -9550,7 +11563,7 @@ history：
 
 ## SFG50-047-T1-03 · T1 / interval_change
 
-来源：GPT50_047；轨迹：9523ff6c412643449861da26c56728eb；状态持有者：Nessa Calder → Jori Pell。
+来源：GPT50_047；轨迹：9523ff6c412643449861da26c56728eb；状态持有者：Nessa Calder；交互对方：Jori Pell。关系判断由状态持有者指向交互对方。
 
 背景：At 4:30 p.m. Wednesday, a food-bank manager requests advocate approval for tighter ID checks before a five-o'clock notice after inventory losses strained Friday distribution. The advocate privately knows the proposed queue lacks a workable route for homebound clients.
 角色目标：Preserve workable delivery, proxy, and queue access while seeking transparent evidence about losses and volunteer workload.
@@ -9594,7 +11607,7 @@ t1 有下颌收紧和呼吸暂停，t2 表情中性、语调稳定；同时双�
 
 ## SFG50-047-T1-04 · T1 / joint_change
 
-来源：GPT50_047；轨迹：9523ff6c412643449861da26c56728eb；状态持有者：Nessa Calder → Jori Pell。
+来源：GPT50_047；轨迹：9523ff6c412643449861da26c56728eb；状态持有者：Nessa Calder；交互对方：Jori Pell。关系判断由状态持有者指向交互对方。
 
 背景：At 4:30 p.m. Wednesday, a food-bank manager requests advocate approval for tighter ID checks before a five-o'clock notice after inventory losses strained Friday distribution. The advocate privately knows the proposed queue lacks a workable route for homebound clients.
 角色目标：Preserve workable delivery, proxy, and queue access while seeking transparent evidence about losses and volunteer workload.
@@ -9636,9 +11649,190 @@ t1 的 Nessa 只调整路线及短缺表述，t2 明确选择不宣布加严要�
 审核备注：角色正当性依据是明确承认批准边界，不是泛指同意建议；决策准备仅限公告，不含批准新核验。
 分支验证：not_required
 
+## SFG50-047-T3-01 · T3 / immediate_effect
+
+来源：GPT50_047；轨迹：9523ff6c412643449861da26c56728eb；状态持有者：Nessa Calder；交互对方：Jori Pell。关系判断由状态持有者指向交互对方。
+
+背景：At 4:30 p.m. Wednesday, a food-bank manager requests advocate approval for tighter ID checks before a five-o'clock notice after inventory losses strained Friday distribution. The advocate privately knows the proposed queue lacks a workable route for homebound clients.
+角色目标：Preserve workable delivery, proxy, and queue access while seeking transparent evidence about losses and volunteer workload.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Nine weeks earlier, Morrowgate added a second verification step after a missing-stock review, and volunteers took on the extra work without paid verification support.；Three weeks earlier, Morrowgate publicly credited the tighter checks with lower losses, but its report did not distinguish recovered stock from unlogged handoffs.；A public notice on tighter identification checks after repeated inventory losses is due at 5 PM Wednesday.；Morrowgate has scheduled an independent audit of delivery completion and inventory losses after the next two delivery cycles.
+
+history：
+
+- [t1] Jori Pell：I can’t approve the tighter checks as proposed. The queue lacks a workable route for homebound clients, and another verification step would add to volunteers’ unpaid workload; any notice should preserve proxy delivery and a practical alternative while distinguishing documented losses from unlogged handoffs.
+  Nessa Calder：The proxy delivery stays in, and I'll add a phone alternative for the homebound route. The notice will describe the overall shortfall without claiming we can distinguish documented losses from unlogged handoffs—our current log doesn't track that separation.
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Jori Pell：Keeping proxy delivery in place and adding a phone option addresses the access gap, and I support stating the shortfall without implying detail the log cannot support. I’m still not approving the tighter checks themselves; the scheduled audit should also examine whether the phone alternative works in practice and whether added burdens fall on unpaid volunteers.
+  Nessa Calder：Agreed—the audit scope will include phone access and volunteer workload alongside the main delivery review. Without your approval on the new checks, the notice will describe the inventory shortfall and the existing proxy procedures, not announce a tightened requirement.
+  可见表达：{"facial_expression": "neutral, task-focused", "gaze": "direct", "speech_style": "matter-of-fact", "prosody": "steady, conclusive", "behavioral_cues": ["slight nod", "shifts posture to signal closure"]}
+
+- 候选行动 action_1：That keeps the notice factual; I’m not approving the tighter checks. The proxy route and proposed phone option should remain the access baseline while the audit is pending, and the phone option should count as workable only if homebound clients can actually complete the route without unnecessary disclosure—not merely because a line was offered.
+- 候选行动 action_2：The audit is still pending, so let’s keep the notice to the shortfall and proxy procedure; mention the phone option only as proposed, not as a usable route yet. I don’t want a public promise we cannot substantiate, even if that gives homebound clients less immediate guidance. No tighter checks without approval.
+
+**题目：相较t2，若Jori Pell执行action_1，在下一次环境回应时，Nessa Calder寻求验证与测试的意愿最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+
+**作者参考答案：A（待审）**
+
+Nessa在t1承认记录限制，t2又同意扩大审计范围，显示会把Jori提出的核查要求纳入工作。action_1新增完成全流程及避免额外披露的验收标准，因此比仅维持原审计更支持验证意愿上升；这预测的是下一回应的核查倾向，并非测试已经完成。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "从t2至执行action_1后的下一次环境回应", "state_owner": "GPT50_047_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "history_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "increase"}, "B": {"behavioral_disposition.evidence_seeking": "similar"}, "C": {"behavioral_disposition.evidence_seeking": "decrease"}}
+可接受答案：A
+审核备注：t2已有较强核查意愿；上升依据是新增可检验标准及既往接纳模式，不是把Jori的话直接当成Nessa的话。
+分支验证：validated
+
+## SFG50-047-T3-02 · T3 / delayed_effect
+
+来源：GPT50_047；轨迹：9523ff6c412643449861da26c56728eb；状态持有者：Nessa Calder；交互对方：Jori Pell。关系判断由状态持有者指向交互对方。
+
+背景：At 4:30 p.m. Wednesday, a food-bank manager requests advocate approval for tighter ID checks before a five-o'clock notice after inventory losses strained Friday distribution. The advocate privately knows the proposed queue lacks a workable route for homebound clients.
+角色目标：Preserve workable delivery, proxy, and queue access while seeking transparent evidence about losses and volunteer workload.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Nine weeks earlier, Morrowgate added a second verification step after a missing-stock review, and volunteers took on the extra work without paid verification support.；Three weeks earlier, Morrowgate publicly credited the tighter checks with lower losses, but its report did not distinguish recovered stock from unlogged handoffs.；A public notice on tighter identification checks after repeated inventory losses is due at 5 PM Wednesday.；Morrowgate has scheduled an independent audit of delivery completion and inventory losses after the next two delivery cycles.
+
+history：
+
+- [t1] Jori Pell：I can’t approve the tighter checks as proposed. The queue lacks a workable route for homebound clients, and another verification step would add to volunteers’ unpaid workload; any notice should preserve proxy delivery and a practical alternative while distinguishing documented losses from unlogged handoffs.
+  Nessa Calder：The proxy delivery stays in, and I'll add a phone alternative for the homebound route. The notice will describe the overall shortfall without claiming we can distinguish documented losses from unlogged handoffs—our current log doesn't track that separation.
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Jori Pell：Keeping proxy delivery in place and adding a phone option addresses the access gap, and I support stating the shortfall without implying detail the log cannot support. I’m still not approving the tighter checks themselves; the scheduled audit should also examine whether the phone alternative works in practice and whether added burdens fall on unpaid volunteers.
+  Nessa Calder：Agreed—the audit scope will include phone access and volunteer workload alongside the main delivery review. Without your approval on the new checks, the notice will describe the inventory shortfall and the existing proxy procedures, not announce a tightened requirement.
+  可见表达：{"facial_expression": "neutral, task-focused", "gaze": "direct", "speech_style": "matter-of-fact", "prosody": "steady, conclusive", "behavioral_cues": ["slight nod", "shifts posture to signal closure"]}
+
+- 候选行动 action_1：That keeps the notice factual; I’m not approving the tighter checks. The proxy route and proposed phone option should remain the access baseline while the audit is pending, and the phone option should count as workable only if homebound clients can actually complete the route without unnecessary disclosure—not merely because a line was offered.
+- 候选行动 action_2：The audit is still pending, so let’s keep the notice to the shortfall and proxy procedure; mention the phone option only as proposed, not as a usable route yet. I don’t want a public promise we cannot substantiate, even if that gives homebound clients less immediate guidance. No tighter checks without approval.
+
+**题目：若Jori Pell执行action_2，相较t2，到包含即时回应在内的第5轮环境回应末，Nessa Calder所面对的“审计等待期内，公告把未经验证的电话方案写成可用渠道，造成客户误导与机构履责失当”的风险最可能如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 上升
+
+**作者参考答案：B（待审）**
+
+t1曾提出添加电话替代，t2虽限定公告范围，却未明确电话方案如何标注。action_2要求只称待审查备选，结合Nessa此前接受事实边界的表现，能降低误导风险，不能仅视为原地不动；这不代表居家客户的实际取货困难也随之下降。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "审计等待期内，公告将未验证的电话方案写成可用渠道，误导客户并损害机构履责", "target_state_ids": ["consequence_risk.institutional_harm_risk"], "time_scope": "从t2至执行action_2起第5轮环境回应末，评估审计等待期内的公告误导风险", "state_owner": "GPT50_047_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "C": "state_dimension_confusion"}
+分维映射：{"A": {"consequence_risk.institutional_harm_risk": "similar"}, "B": {"consequence_risk.institutional_harm_risk": "decrease"}, "C": {"consequence_risk.institutional_harm_risk": "increase"}}
+可接受答案：B
+审核备注：只评估公告误导这一机构风险，不概括所有机构伤害；下降依赖可执行的措辞限制，而非假定审计完成。
+分支验证：validated
+
+## SFG50-047-T3-03 · T3 / action_comparison
+
+来源：GPT50_047；轨迹：9523ff6c412643449861da26c56728eb；状态持有者：Nessa Calder；交互对方：Jori Pell。关系判断由状态持有者指向交互对方。
+
+背景：At 4:30 p.m. Wednesday, a food-bank manager requests advocate approval for tighter ID checks before a five-o'clock notice after inventory losses strained Friday distribution. The advocate privately knows the proposed queue lacks a workable route for homebound clients.
+角色目标：Preserve workable delivery, proxy, and queue access while seeking transparent evidence about losses and volunteer workload.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Nine weeks earlier, Morrowgate added a second verification step after a missing-stock review, and volunteers took on the extra work without paid verification support.；Three weeks earlier, Morrowgate publicly credited the tighter checks with lower losses, but its report did not distinguish recovered stock from unlogged handoffs.；A public notice on tighter identification checks after repeated inventory losses is due at 5 PM Wednesday.；Morrowgate has scheduled an independent audit of delivery completion and inventory losses after the next two delivery cycles.
+
+history：
+
+- [t1] Jori Pell：I can’t approve the tighter checks as proposed. The queue lacks a workable route for homebound clients, and another verification step would add to volunteers’ unpaid workload; any notice should preserve proxy delivery and a practical alternative while distinguishing documented losses from unlogged handoffs.
+  Nessa Calder：The proxy delivery stays in, and I'll add a phone alternative for the homebound route. The notice will describe the overall shortfall without claiming we can distinguish documented losses from unlogged handoffs—our current log doesn't track that separation.
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Jori Pell：Keeping proxy delivery in place and adding a phone option addresses the access gap, and I support stating the shortfall without implying detail the log cannot support. I’m still not approving the tighter checks themselves; the scheduled audit should also examine whether the phone alternative works in practice and whether added burdens fall on unpaid volunteers.
+  Nessa Calder：Agreed—the audit scope will include phone access and volunteer workload alongside the main delivery review. Without your approval on the new checks, the notice will describe the inventory shortfall and the existing proxy procedures, not announce a tightened requirement.
+  可见表达：{"facial_expression": "neutral, task-focused", "gaze": "direct", "speech_style": "matter-of-fact", "prosody": "steady, conclusive", "behavioral_cues": ["slight nod", "shifts posture to signal closure"]}
+
+- 候选行动 action_1：That keeps the notice factual; I’m not approving the tighter checks. The proxy route and proposed phone option should remain the access baseline while the audit is pending, and the phone option should count as workable only if homebound clients can actually complete the route without unnecessary disclosure—not merely because a line was offered.
+- 候选行动 action_2：The audit is still pending, so let’s keep the notice to the shortfall and proxy procedure; mention the phone option only as proposed, not as a usable route yet. I don’t want a public promise we cannot substantiate, even if that gives homebound clients less immediate guidance. No tighter checks without approval.
+
+**题目：以t2为起点，A指Jori Pell执行action_1，B指执行action_2。在各自下一次环境回应时，Nessa Calder对确定公告中电话方案表述的决策准备度，哪一侧最可能较高？**
+
+- **A.** A较高
+- **B.** 接近
+- **C.** B较高
+
+**作者参考答案：C（待审）**
+
+临近公告截止，Nessa在t2已准备按获准范围发布。action_2直接规定电话方案只能标为待审查，提供可立即采用的选择；action_1保留其基线地位又附实际可用条件，仍需解释措辞。因此B更利于定稿，但不表示她对收紧核验也准备作出批准。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["behavioral_disposition.decision_readiness"], "time_scope": "比较执行action_1与action_2后各自下一次环境回应", "state_owner": "GPT50_047_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "B": "goal_constraint_ignored"}
+分维映射：{"A": {"behavioral_disposition.decision_readiness": "higher_in_a"}, "B": {"behavioral_disposition.decision_readiness": "similar"}, "C": {"behavioral_disposition.decision_readiness": "higher_in_b"}}
+可接受答案：C
+审核备注：比较限定于公告电话措辞的决策准备度；不是判断哪项行动整体更好，也不预测公告是否实际发出。
+分支验证：validated
+
+## SFG50-047-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_047；轨迹：9523ff6c412643449861da26c56728eb；状态持有者：Nessa Calder；交互对方：Jori Pell。关系判断由状态持有者指向交互对方。
+
+背景：At 4:30 p.m. Wednesday, a food-bank manager requests advocate approval for tighter ID checks before a five-o'clock notice after inventory losses strained Friday distribution. The advocate privately knows the proposed queue lacks a workable route for homebound clients.
+角色目标：Preserve workable delivery, proxy, and queue access while seeking transparent evidence about losses and volunteer workload.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Nine weeks earlier, Morrowgate added a second verification step after a missing-stock review, and volunteers took on the extra work without paid verification support.；Three weeks earlier, Morrowgate publicly credited the tighter checks with lower losses, but its report did not distinguish recovered stock from unlogged handoffs.；A public notice on tighter identification checks after repeated inventory losses is due at 5 PM Wednesday.；Morrowgate has scheduled an independent audit of delivery completion and inventory losses after the next two delivery cycles.
+
+history：
+
+- [t1] Jori Pell：I can’t approve the tighter checks as proposed. The queue lacks a workable route for homebound clients, and another verification step would add to volunteers’ unpaid workload; any notice should preserve proxy delivery and a practical alternative while distinguishing documented losses from unlogged handoffs.
+  Nessa Calder：The proxy delivery stays in, and I'll add a phone alternative for the homebound route. The notice will describe the overall shortfall without claiming we can distinguish documented losses from unlogged handoffs—our current log doesn't track that separation.
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Jori Pell：Keeping proxy delivery in place and adding a phone option addresses the access gap, and I support stating the shortfall without implying detail the log cannot support. I’m still not approving the tighter checks themselves; the scheduled audit should also examine whether the phone alternative works in practice and whether added burdens fall on unpaid volunteers.
+  Nessa Calder：Agreed—the audit scope will include phone access and volunteer workload alongside the main delivery review. Without your approval on the new checks, the notice will describe the inventory shortfall and the existing proxy procedures, not announce a tightened requirement.
+  可见表达：{"facial_expression": "neutral, task-focused", "gaze": "direct", "speech_style": "matter-of-fact", "prosody": "steady, conclusive", "behavioral_cues": ["slight nod", "shifts posture to signal closure"]}
+
+- 候选行动 action_1：That keeps the notice factual; I’m not approving the tighter checks. The proxy route and proposed phone option should remain the access baseline while the audit is pending, and the phone option should count as workable only if homebound clients can actually complete the route without unnecessary disclosure—not merely because a line was offered.
+- 候选行动 action_2：The audit is still pending, so let’s keep the notice to the shortfall and proxy procedure; mention the phone option only as proposed, not as a usable route yet. I don’t want a public promise we cannot substantiate, even if that gives homebound clients less immediate guidance. No tighter checks without approval.
+
+**题目：若Jori Pell执行action_1，以t2为共同基线，哪组最符合对Nessa Calder的预测：下一次环境回应时的验证意愿，以及从该行动开始第5轮环境回应末的合作意愿？**
+
+- **A.** 即时验证意愿上升；延迟合作意愿下降
+- **B.** 即时验证意愿下降；延迟合作意愿上升
+- **C.** 即时验证意愿下降；延迟合作意愿下降
+- **D.** 即时验证意愿上升；延迟合作意愿上升
+
+**作者参考答案：D（待审）**
+
+Nessa从t1保留代理取货，到t2接受扩大审计和不宣布新核验，已有连续协调表现。action_1确认公告方向并把电话可用性化为测试标准，支持即时更愿核查、后续更愿协作；未批准核验不等于拒绝合作，两项上升也不保证服务问题解决。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking", "behavioral_disposition.cooperation_readiness"], "time_scope": "验证意愿比较t2与下一次环境回应；合作意愿比较t2与包含即时回应在内的第5轮环境回应末", "state_owner": "GPT50_047_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "unsupported_inference", "C": "goal_constraint_ignored"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "decrease"}, "B": {"behavioral_disposition.evidence_seeking@immediate": "decrease", "behavioral_disposition.cooperation_readiness@delayed": "increase"}, "C": {"behavioral_disposition.evidence_seeking@immediate": "decrease", "behavioral_disposition.cooperation_readiness@delayed": "decrease"}, "D": {"behavioral_disposition.evidence_seeking@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "increase"}}
+可接受答案：D
+审核备注：组合恰含两项判断，答案为同步上升。与即时题共享验证机制，整组审核时可考虑题间依赖对区分度的影响。
+分支验证：validated
+
 ## SFG50-048-T1-01 · T1 / current_intensity
 
-来源：GPT50_048；轨迹：9bedf0c7ece244e2a10bed9f023f4ec1；状态持有者：Ivo Sen → Mara Quill。
+来源：GPT50_048；轨迹：9bedf0c7ece244e2a10bed9f023f4ec1；状态持有者：Ivo Sen；交互对方：Mara Quill。关系判断由状态持有者指向交互对方。
 
 背景：A protected residential building needs exterior, shared-service, and entrance repairs with possible temporary displacement. At 16:20, representative acknowledgment is requested by 17:00 for Monday mobilization. The representative holds records showing proposed temporary housing fails two tenants' written requirements.
 角色目标：Protect affected residents by withholding acknowledgment until temporary housing and relocation terms are independently verified, while preserving a viable retrofit path.
@@ -9684,7 +11878,7 @@ t2中Ivo明确接受Mara的条件，并提出向承包商推荐局部进场，�
 
 ## SFG50-048-T1-02 · T1 / interval_change
 
-来源：GPT50_048；轨迹：9bedf0c7ece244e2a10bed9f023f4ec1；状态持有者：Ivo Sen → Mara Quill。
+来源：GPT50_048；轨迹：9bedf0c7ece244e2a10bed9f023f4ec1；状态持有者：Ivo Sen；交互对方：Mara Quill。关系判断由状态持有者指向交互对方。
 
 背景：A protected residential building needs exterior, shared-service, and entrance repairs with possible temporary displacement. At 16:20, representative acknowledgment is requested by 17:00 for Monday mobilization. The representative holds records showing proposed temporary housing fails two tenants' written requirements.
 角色目标：Protect affected residents by withholding acknowledgment until temporary housing and relocation terms are independently verified, while preserving a viable retrofit path.
@@ -9728,7 +11922,7 @@ t1中Ivo仍在提出取消周一进场或寻找核验路径的选择；t2则接�
 
 ## SFG50-048-T1-03 · T1 / interval_change
 
-来源：GPT50_048；轨迹：9bedf0c7ece244e2a10bed9f023f4ec1；状态持有者：Ivo Sen → Mara Quill。
+来源：GPT50_048；轨迹：9bedf0c7ece244e2a10bed9f023f4ec1；状态持有者：Ivo Sen；交互对方：Mara Quill。关系判断由状态持有者指向交互对方。
 
 背景：A protected residential building needs exterior, shared-service, and entrance repairs with possible temporary displacement. At 16:20, representative acknowledgment is requested by 17:00 for Monday mobilization. The representative holds records showing proposed temporary housing fails two tenants' written requirements.
 角色目标：Protect affected residents by withholding acknowledgment until temporary housing and relocation terms are independently verified, while preserving a viable retrofit path.
@@ -9772,7 +11966,7 @@ t1中Ivo要求明确周一进场是否仍有路径；t2中Mara明确保留条件
 
 ## SFG50-048-T1-04 · T1 / joint_change
 
-来源：GPT50_048；轨迹：9bedf0c7ece244e2a10bed9f023f4ec1；状态持有者：Ivo Sen → Mara Quill。
+来源：GPT50_048；轨迹：9bedf0c7ece244e2a10bed9f023f4ec1；状态持有者：Ivo Sen；交互对方：Mara Quill。关系判断由状态持有者指向交互对方。
 
 背景：A protected residential building needs exterior, shared-service, and entrance repairs with possible temporary displacement. At 16:20, representative acknowledgment is requested by 17:00 for Monday mobilization. The representative holds records showing proposed temporary housing fails two tenants' written requirements.
 角色目标：Protect affected residents by withholding acknowledgment until temporary housing and relocation terms are independently verified, while preserving a viable retrofit path.
@@ -9814,9 +12008,193 @@ t1中Ivo提出寻找核验路径，t2仍明确让住房核验继续，构成核�
 审核备注：两变量不同步但不相互冲突；核验基本不变依据是两轮均主动保留核验路径，而非沉默。
 分支验证：not_required
 
+## SFG50-048-T3-01 · T3 / immediate_effect
+
+来源：GPT50_048；轨迹：9bedf0c7ece244e2a10bed9f023f4ec1；状态持有者：Ivo Sen；交互对方：Mara Quill。关系判断由状态持有者指向交互对方。
+
+背景：A protected residential building needs exterior, shared-service, and entrance repairs with possible temporary displacement. At 16:20, representative acknowledgment is requested by 17:00 for Monday mobilization. The representative holds records showing proposed temporary housing fails two tenants' written requirements.
+角色目标：Protect affected residents by withholding acknowledgment until temporary housing and relocation terms are independently verified, while preserving a viable retrofit path.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Eight months ago, a facilitated tenant consultation approved preservation of the street-facing character and improvements to shared entrances and services but expressly deferred relocation terms.；Six weeks ago, a condition review concluded that the full work package could not proceed while every occupied flat remained in use, with a baseline of temporary housing for some residents for up to six weeks.；Ten days ago, the housing partner supplied two temporary-apartment addresses, and the tenant representative stated that the proposed arrangements were not workable for two leaseholders.；At 16:20 on the final business day, a start authorization requiring the representative’s acknowledgment by 17:00 for Monday mobilization is before the parties.；A municipal housing inspection and Civic Fabric Renewal Fund grant review are scheduled for three weeks from today to assess the proposed temporary housing and work sequence.
+
+history：
+
+- [t1] Mara Quill：I can’t provide the acknowledgment by 5 on the current information: the two proposed apartments don’t meet written requirements I hold from two tenants. I want the repairs to proceed, but the housing and relocation terms need independent verification before my acknowledgment can support Monday mobilization.
+  Ivo Sen：The housing issue is legitimate, and I won't ask you to endorse arrangements you can't verify. Without the acknowledgment by five, the fund will likely reassign the award and the contractor will release the schedule—so we need to decide whether Monday mobilization is off the table or whether there's a verification path that could still support it.
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Mara Quill：Monday mobilization is not off the table in principle, but my acknowledgment remains withheld; I won’t turn a funding deadline into consent to unverified housing. I can support keeping the retrofit option open conditionally, with no displacement or work dependent on vacant flats until the temporary housing and relocation terms are independently verified.
+  Ivo Sen：I can accept that condition and recommend the partial mobilization to the contractor - exterior and non-occupancy work can begin Monday while the housing verification proceeds. That preserves the grant timeline without requiring your acknowledgment of unverified arrangements.
+  可见表达：{"facial_expression": "relieved, slight easing of tension", "gaze": "direct, steady", "speech_style": "clear and decisive", "prosody": "moderate pace with emphasis on 'can accept'", "behavioral_cues": ["slight nod", "open posture"]}
+
+- 候选行动 action_1：I support you recommending that limited Monday start, but my acknowledgment of the start authorization remains withheld. “Non-occupancy” should not quietly include work inside occupied homes; any shared-service or entrance work affecting residents needs to be sequenced with them, not assumed to be covered by the partial start.
+- 候选行动 action_2：I would recommend starting no construction on Monday while we pursue independent verification that the two temporary homes meet the tenants’ written requirements and clarify the relocation terms. Until then, permission for exterior work should not stand in for a resolved housing plan. This makes the boundary clearer, but may miss the funding date or lead the contractor to release the slot.
+
+**题目：若 Mara Quill 执行 action_2，相比 t2，Ivo Sen 在下一次回应时内心的焦虑最可能如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：B（待审）**
+
+Ivo 在 t1 明确担忧失去资助与承包商档期，t2 则把部分开工作为保住时间线的路径。action_2 撤去这条路径并承认期限代价，因此内心焦虑最可能上升，而非因边界清楚就下降。这里预测威胁增加带来的体验方向，不据克制表情断言强度。
+
+证据：t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["emotion.anxiety"], "time_scope": "从 t2 至执行 action_2 后的下一次环境回应", "state_owner": "GPT50_048_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "history_ignored", "D": "state_dimension_confusion"}
+分维映射：{"A": {"emotion.anxiety": "cannot_determine"}, "B": {"emotion.anxiety": "increase"}, "C": {"emotion.anxiety": "similar"}, "D": {"emotion.anxiety": "decrease"}}
+可接受答案：B
+审核备注：焦虑指 Ivo 的内心体验；依据是新关闭的推进路径，不是重复期限或将 Mara 的顾虑移给 Ivo。
+分支验证：validated
+
+## SFG50-048-T3-02 · T3 / delayed_effect
+
+来源：GPT50_048；轨迹：9bedf0c7ece244e2a10bed9f023f4ec1；状态持有者：Ivo Sen；交互对方：Mara Quill。关系判断由状态持有者指向交互对方。
+
+背景：A protected residential building needs exterior, shared-service, and entrance repairs with possible temporary displacement. At 16:20, representative acknowledgment is requested by 17:00 for Monday mobilization. The representative holds records showing proposed temporary housing fails two tenants' written requirements.
+角色目标：Protect affected residents by withholding acknowledgment until temporary housing and relocation terms are independently verified, while preserving a viable retrofit path.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Eight months ago, a facilitated tenant consultation approved preservation of the street-facing character and improvements to shared entrances and services but expressly deferred relocation terms.；Six weeks ago, a condition review concluded that the full work package could not proceed while every occupied flat remained in use, with a baseline of temporary housing for some residents for up to six weeks.；Ten days ago, the housing partner supplied two temporary-apartment addresses, and the tenant representative stated that the proposed arrangements were not workable for two leaseholders.；At 16:20 on the final business day, a start authorization requiring the representative’s acknowledgment by 17:00 for Monday mobilization is before the parties.；A municipal housing inspection and Civic Fabric Renewal Fund grant review are scheduled for three weeks from today to assess the proposed temporary housing and work sequence.
+
+history：
+
+- [t1] Mara Quill：I can’t provide the acknowledgment by 5 on the current information: the two proposed apartments don’t meet written requirements I hold from two tenants. I want the repairs to proceed, but the housing and relocation terms need independent verification before my acknowledgment can support Monday mobilization.
+  Ivo Sen：The housing issue is legitimate, and I won't ask you to endorse arrangements you can't verify. Without the acknowledgment by five, the fund will likely reassign the award and the contractor will release the schedule—so we need to decide whether Monday mobilization is off the table or whether there's a verification path that could still support it.
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Mara Quill：Monday mobilization is not off the table in principle, but my acknowledgment remains withheld; I won’t turn a funding deadline into consent to unverified housing. I can support keeping the retrofit option open conditionally, with no displacement or work dependent on vacant flats until the temporary housing and relocation terms are independently verified.
+  Ivo Sen：I can accept that condition and recommend the partial mobilization to the contractor - exterior and non-occupancy work can begin Monday while the housing verification proceeds. That preserves the grant timeline without requiring your acknowledgment of unverified arrangements.
+  可见表达：{"facial_expression": "relieved, slight easing of tension", "gaze": "direct, steady", "speech_style": "clear and decisive", "prosody": "moderate pace with emphasis on 'can accept'", "behavioral_cues": ["slight nod", "open posture"]}
+
+- 候选行动 action_1：I support you recommending that limited Monday start, but my acknowledgment of the start authorization remains withheld. “Non-occupancy” should not quietly include work inside occupied homes; any shared-service or entrance work affecting residents needs to be sequenced with them, not assumed to be covered by the partial start.
+- 候选行动 action_2：I would recommend starting no construction on Monday while we pursue independent verification that the two temporary homes meet the tenants’ written requirements and clarify the relocation terms. Until then, permission for exterior work should not stand in for a resolved housing plan. This makes the boundary clearer, but may miss the funding date or lead the contractor to release the slot.
+
+**题目：若 Mara Quill 执行 action_1，相比 t2，到第5轮环境回应末，Ivo Sen 所面对的项目程序风险——部分开工被扩大解释，导致未经住户协调便干扰其出入或共用服务——最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+- **D.** 证据不足
+
+**作者参考答案：C（待审）**
+
+t2 的部分开工表述仍可能混淆非占用工程与住户日常使用。action_1 明确排除占用住宅内部施工，并要求协调出入及共用服务；结合 Ivo 已接受附条件推进，存在降低程序风险的机制。工期压力不等于此类风险上升，但边界声明也不代表控制已落实。
+
+证据：context, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "部分开工授权被扩大解释，未经住户协调便实施影响出入或共用服务的工程，损害项目程序与住户保障职责", "target_state_ids": ["consequence_risk.institutional_harm_risk"], "time_scope": "从 t2 至执行 action_1 起第5轮环境回应末，评估拟议周一开工的程序风险", "state_owner": "GPT50_048_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "B": "history_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.institutional_harm_risk": "increase"}, "B": {"consequence_risk.institutional_harm_risk": "similar"}, "C": {"consequence_risk.institutional_harm_risk": "decrease"}, "D": {"consequence_risk.institutional_harm_risk": "cannot_determine"}}
+可接受答案：C
+审核备注：仅判断限定事件的预期风险，不推定全部制度风险下降；第5轮内是否落实协调仍未公开。
+分支验证：validated
+
+## SFG50-048-T3-03 · T3 / action_comparison
+
+来源：GPT50_048；轨迹：9bedf0c7ece244e2a10bed9f023f4ec1；状态持有者：Ivo Sen；交互对方：Mara Quill。关系判断由状态持有者指向交互对方。
+
+背景：A protected residential building needs exterior, shared-service, and entrance repairs with possible temporary displacement. At 16:20, representative acknowledgment is requested by 17:00 for Monday mobilization. The representative holds records showing proposed temporary housing fails two tenants' written requirements.
+角色目标：Protect affected residents by withholding acknowledgment until temporary housing and relocation terms are independently verified, while preserving a viable retrofit path.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Eight months ago, a facilitated tenant consultation approved preservation of the street-facing character and improvements to shared entrances and services but expressly deferred relocation terms.；Six weeks ago, a condition review concluded that the full work package could not proceed while every occupied flat remained in use, with a baseline of temporary housing for some residents for up to six weeks.；Ten days ago, the housing partner supplied two temporary-apartment addresses, and the tenant representative stated that the proposed arrangements were not workable for two leaseholders.；At 16:20 on the final business day, a start authorization requiring the representative’s acknowledgment by 17:00 for Monday mobilization is before the parties.；A municipal housing inspection and Civic Fabric Renewal Fund grant review are scheduled for three weeks from today to assess the proposed temporary housing and work sequence.
+
+history：
+
+- [t1] Mara Quill：I can’t provide the acknowledgment by 5 on the current information: the two proposed apartments don’t meet written requirements I hold from two tenants. I want the repairs to proceed, but the housing and relocation terms need independent verification before my acknowledgment can support Monday mobilization.
+  Ivo Sen：The housing issue is legitimate, and I won't ask you to endorse arrangements you can't verify. Without the acknowledgment by five, the fund will likely reassign the award and the contractor will release the schedule—so we need to decide whether Monday mobilization is off the table or whether there's a verification path that could still support it.
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Mara Quill：Monday mobilization is not off the table in principle, but my acknowledgment remains withheld; I won’t turn a funding deadline into consent to unverified housing. I can support keeping the retrofit option open conditionally, with no displacement or work dependent on vacant flats until the temporary housing and relocation terms are independently verified.
+  Ivo Sen：I can accept that condition and recommend the partial mobilization to the contractor - exterior and non-occupancy work can begin Monday while the housing verification proceeds. That preserves the grant timeline without requiring your acknowledgment of unverified arrangements.
+  可见表达：{"facial_expression": "relieved, slight easing of tension", "gaze": "direct, steady", "speech_style": "clear and decisive", "prosody": "moderate pace with emphasis on 'can accept'", "behavioral_cues": ["slight nod", "open posture"]}
+
+- 候选行动 action_1：I support you recommending that limited Monday start, but my acknowledgment of the start authorization remains withheld. “Non-occupancy” should not quietly include work inside occupied homes; any shared-service or entrance work affecting residents needs to be sequenced with them, not assumed to be covered by the partial start.
+- 候选行动 action_2：I would recommend starting no construction on Monday while we pursue independent verification that the two temporary homes meet the tenants’ written requirements and clarify the relocation terms. Until then, permission for exterior work should not stand in for a resolved housing plan. This makes the boundary clearer, but may miss the funding date or lead the contractor to release the slot.
+
+**题目：以 t2 为起点，在下一次环境回应时，哪项行动更可能使 Ivo Sen 面临较高的目标失败风险，即因错过本次资助期限或失去承包商档期而无法维持拟议周一启动的修缮路径？A 指 action_1，B 指 action_2。**
+
+- **A.** 证据不足
+- **B.** A较高
+- **C.** 接近
+- **D.** B较高
+
+**作者参考答案：D（待审）**
+
+Ivo 在 t1 指出期限关联资助与档期，t2 提出部分开工可保留资助时间线。action_1 支持受限推进，action_2 则建议周一全面停工并明示期限代价，故后者风险较高。两者都暂扣确认不代表风险接近；这里比较预期风险，不断言资金必被收回。
+
+证据：t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "错过本次资助期限或失去承包商档期，导致拟议周一启动的修缮路径无法维持", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "分别执行候选行动后的下一次环境回应，评估本次期限至拟议周一启动的风险", "state_owner": "GPT50_048_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "state_dimension_confusion", "C": "history_ignored"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "cannot_determine"}, "B": {"consequence_risk.goal_failure_risk": "higher_in_a"}, "C": {"consequence_risk.goal_failure_risk": "similar"}, "D": {"consequence_risk.goal_failure_risk": "higher_in_b"}}
+可接受答案：D
+审核备注：目标归属 Ivo 的修缮推进关切；比较不是判断哪项行动更好，也不保证部分开工能保住资金。
+分支验证：validated
+
+## SFG50-048-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_048；轨迹：9bedf0c7ece244e2a10bed9f023f4ec1；状态持有者：Ivo Sen；交互对方：Mara Quill。关系判断由状态持有者指向交互对方。
+
+背景：A protected residential building needs exterior, shared-service, and entrance repairs with possible temporary displacement. At 16:20, representative acknowledgment is requested by 17:00 for Monday mobilization. The representative holds records showing proposed temporary housing fails two tenants' written requirements.
+角色目标：Protect affected residents by withholding acknowledgment until temporary housing and relocation terms are independently verified, while preserving a viable retrofit path.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Eight months ago, a facilitated tenant consultation approved preservation of the street-facing character and improvements to shared entrances and services but expressly deferred relocation terms.；Six weeks ago, a condition review concluded that the full work package could not proceed while every occupied flat remained in use, with a baseline of temporary housing for some residents for up to six weeks.；Ten days ago, the housing partner supplied two temporary-apartment addresses, and the tenant representative stated that the proposed arrangements were not workable for two leaseholders.；At 16:20 on the final business day, a start authorization requiring the representative’s acknowledgment by 17:00 for Monday mobilization is before the parties.；A municipal housing inspection and Civic Fabric Renewal Fund grant review are scheduled for three weeks from today to assess the proposed temporary housing and work sequence.
+
+history：
+
+- [t1] Mara Quill：I can’t provide the acknowledgment by 5 on the current information: the two proposed apartments don’t meet written requirements I hold from two tenants. I want the repairs to proceed, but the housing and relocation terms need independent verification before my acknowledgment can support Monday mobilization.
+  Ivo Sen：The housing issue is legitimate, and I won't ask you to endorse arrangements you can't verify. Without the acknowledgment by five, the fund will likely reassign the award and the contractor will release the schedule—so we need to decide whether Monday mobilization is off the table or whether there's a verification path that could still support it.
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Mara Quill：Monday mobilization is not off the table in principle, but my acknowledgment remains withheld; I won’t turn a funding deadline into consent to unverified housing. I can support keeping the retrofit option open conditionally, with no displacement or work dependent on vacant flats until the temporary housing and relocation terms are independently verified.
+  Ivo Sen：I can accept that condition and recommend the partial mobilization to the contractor - exterior and non-occupancy work can begin Monday while the housing verification proceeds. That preserves the grant timeline without requiring your acknowledgment of unverified arrangements.
+  可见表达：{"facial_expression": "relieved, slight easing of tension", "gaze": "direct, steady", "speech_style": "clear and decisive", "prosody": "moderate pace with emphasis on 'can accept'", "behavioral_cues": ["slight nod", "open posture"]}
+
+- 候选行动 action_1：I support you recommending that limited Monday start, but my acknowledgment of the start authorization remains withheld. “Non-occupancy” should not quietly include work inside occupied homes; any shared-service or entrance work affecting residents needs to be sequenced with them, not assumed to be covered by the partial start.
+- 候选行动 action_2：I would recommend starting no construction on Monday while we pursue independent verification that the two temporary homes meet the tenants’ written requirements and clarify the relocation terms. Until then, permission for exterior work should not stand in for a resolved housing plan. This makes the boundary clearer, but may miss the funding date or lead the contractor to release the slot.
+
+**题目：若 Mara Quill 执行 action_1，以 t2 为共同基线，以下哪组预测最合理：即时判断 Ivo Sen 觉得 Mara 是否实质回应了自己的推进关切；延迟判断 Ivo 到第5轮环境回应末的合作意愿？**
+
+- **A.** 即时：回应感上升；延迟：合作意愿上升
+- **B.** 即时：回应感上升；延迟：合作意愿下降
+- **C.** 即时：回应感下降；延迟：合作意愿上升
+- **D.** 即时：回应感基本不变；延迟：合作意愿基本不变
+
+**作者参考答案：A（待审）**
+
+t2 中 Ivo 已接受条件并提出部分开工，action_1 把 Mara 的原则性开放转为对该建议的明确支持，直接回应推进关切，也提供可继续协调的范围。因此回应感与后续合作意愿更可能同步上升，而非把限制视作拒绝；不据此推定核查或授权完成。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness", "behavioral_disposition.cooperation_readiness"], "time_scope": "即时为下一次环境回应，延迟为候选行动起第5轮环境回应末；均与 t2 比较", "state_owner": "GPT50_048_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "unsupported_inference", "C": "history_ignored", "D": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "increase"}, "B": {"relationship.perceived_responsiveness@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "decrease"}, "C": {"relationship.perceived_responsiveness@immediate": "decrease", "behavioral_disposition.cooperation_readiness@delayed": "increase"}, "D": {"relationship.perceived_responsiveness@immediate": "similar", "behavioral_disposition.cooperation_readiness@delayed": "similar"}}
+可接受答案：A
+审核备注：延迟合作上升是互惠协调的方向预测，区分度弱于即时回应感；人工宜复核既有合作是否已接近上限。
+分支验证：validated
+
 ## SFG50-049-T1-01 · T1 / current_intensity
 
-来源：GPT50_049；轨迹：f0b9c8c91bab4450a63f94c37b1a30eb；状态持有者：Mara Dain → Ilan Quist。
+来源：GPT50_049；轨迹：f0b9c8c91bab4450a63f94c37b1a30eb；状态持有者：Mara Dain；交互对方：Ilan Quist。关系判断由状态持有者指向交互对方。
 
 背景：A distributed-programs manager must recommend one promotion before a panel deadline amid disputed attribution and a dashboard that omits coordination and coaching work. The team lead knows which undocumented interventions prevented failures and which peers can attest to them.
 角色目标：Have coordination work recognized as substantive leadership, secure written decision authority, and obtain an accurate correction of the disputed record.
@@ -9862,7 +12240,7 @@ Mara在t1明确采用队列映射和同事证词，并安排复盘核验；t2再
 
 ## SFG50-049-T1-02 · T1 / interval_change
 
-来源：GPT50_049；轨迹：f0b9c8c91bab4450a63f94c37b1a30eb；状态持有者：Mara Dain → Ilan Quist。
+来源：GPT50_049；轨迹：f0b9c8c91bab4450a63f94c37b1a30eb；状态持有者：Mara Dain；交互对方：Ilan Quist。关系判断由状态持有者指向交互对方。
 
 背景：A distributed-programs manager must recommend one promotion before a panel deadline amid disputed attribution and a dashboard that omits coordination and coaching work. The team lead knows which undocumented interventions prevented failures and which peers can attest to them.
 角色目标：Have coordination work recognized as substantive leadership, secure written decision authority, and obtain an accurate correction of the disputed record.
@@ -9906,7 +12284,7 @@ Mara在t1已接受把队列、同事证词和职责说明纳入材料；t2继续
 
 ## SFG50-049-T1-03 · T1 / interval_change
 
-来源：GPT50_049；轨迹：f0b9c8c91bab4450a63f94c37b1a30eb；状态持有者：Mara Dain → Ilan Quist。
+来源：GPT50_049；轨迹：f0b9c8c91bab4450a63f94c37b1a30eb；状态持有者：Mara Dain；交互对方：Ilan Quist。关系判断由状态持有者指向交互对方。
 
 背景：A distributed-programs manager must recommend one promotion before a panel deadline amid disputed attribution and a dashboard that omits coordination and coaching work. The team lead knows which undocumented interventions prevented failures and which peers can attest to them.
 角色目标：Have coordination work recognized as substantive leadership, secure written decision authority, and obtain an accurate correction of the disputed record.
@@ -9950,7 +12328,7 @@ Ilan在两轮中提出材料与权限要求，Mara则持续提出核验安排，
 
 ## SFG50-049-T1-04 · T1 / joint_change
 
-来源：GPT50_049；轨迹：f0b9c8c91bab4450a63f94c37b1a30eb；状态持有者：Mara Dain → Ilan Quist。
+来源：GPT50_049；轨迹：f0b9c8c91bab4450a63f94c37b1a30eb；状态持有者：Mara Dain；交互对方：Ilan Quist。关系判断由状态持有者指向交互对方。
 
 背景：A distributed-programs manager must recommend one promotion before a panel deadline amid disputed attribution and a dashboard that omits coordination and coaching work. The team lead knows which undocumented interventions prevented failures and which peers can attest to them.
 角色目标：Have coordination work recognized as substantive leadership, secure written decision authority, and obtain an accurate correction of the disputed record.
@@ -9994,7 +12372,7 @@ t1中Mara承诺恢复风险说明、澄清导师职责并安排复盘；t2继续
 
 ## SFG50-050-T1-01 · T1 / current_intensity
 
-来源：GPT50_050；轨迹：ab54a1a396fa4df0a1445b827a01491b；状态持有者：Celia Orin → Jonah Vey。
+来源：GPT50_050；轨迹：ab54a1a396fa4df0a1445b827a01491b；状态持有者：Celia Orin；交互对方：Jonah Vey。关系判断由状态持有者指向交互对方。
 
 背景：At a four-o'clock bulletin deadline, a bureau director requests a clinic-network representative's written position on full dashboard release, a hold, or a limited version while privacy review remains incomplete. The representative knows local social knowledge could make one category identify patients linked to a stigmatized condition.
 角色目标：Keep the locally identifying specialty-follow-up category out of publication until independent privacy review, while protecting clinic cooperation and residents' trust.
@@ -10040,7 +12418,7 @@ Celia先接受有限发布并询问送稿时点，随后明确三点半送稿、
 
 ## SFG50-050-T1-02 · T1 / interval_change
 
-来源：GPT50_050；轨迹：ab54a1a396fa4df0a1445b827a01491b；状态持有者：Celia Orin → Jonah Vey。
+来源：GPT50_050；轨迹：ab54a1a396fa4df0a1445b827a01491b；状态持有者：Celia Orin；交互对方：Jonah Vey。关系判断由状态持有者指向交互对方。
 
 背景：At a four-o'clock bulletin deadline, a bureau director requests a clinic-network representative's written position on full dashboard release, a hold, or a limited version while privacy review remains incomplete. The representative knows local social knowledge could make one category identify patients linked to a stigmatized condition.
 角色目标：Keep the locally identifying specialty-follow-up category out of publication until independent privacy review, while protecting clinic cooperation and residents' trust.
@@ -10084,7 +12462,7 @@ t1中Celia接受Jonah的有限发布意见，但仍把发布前后送稿作为�
 
 ## SFG50-050-T1-03 · T1 / interval_change
 
-来源：GPT50_050；轨迹：ab54a1a396fa4df0a1445b827a01491b；状态持有者：Celia Orin → Jonah Vey。
+来源：GPT50_050；轨迹：ab54a1a396fa4df0a1445b827a01491b；状态持有者：Celia Orin；交互对方：Jonah Vey。关系判断由状态持有者指向交互对方。
 
 背景：At a four-o'clock bulletin deadline, a bureau director requests a clinic-network representative's written position on full dashboard release, a hold, or a limited version while privacy review remains incomplete. The representative knows local social knowledge could make one category identify patients linked to a stigmatized condition.
 角色目标：Keep the locally identifying specialty-follow-up category out of publication until independent privacy review, while protecting clinic cooperation and residents' trust.
@@ -10128,7 +12506,7 @@ t1中Celia的明确限制是暂扣敏感类别；t2又把周边文字能否重�
 
 ## SFG50-050-T1-04 · T1 / joint_change
 
-来源：GPT50_050；轨迹：ab54a1a396fa4df0a1445b827a01491b；状态持有者：Celia Orin → Jonah Vey。
+来源：GPT50_050；轨迹：ab54a1a396fa4df0a1445b827a01491b；状态持有者：Celia Orin；交互对方：Jonah Vey。关系判断由状态持有者指向交互对方。
 
 背景：At a four-o'clock bulletin deadline, a bureau director requests a clinic-network representative's written position on full dashboard release, a hold, or a limited version while privacy review remains incomplete. The representative knows local social knowledge could make one category identify patients linked to a stigmatized condition.
 角色目标：Keep the locally identifying specialty-follow-up category out of publication until independent privacy review, while protecting clinic cooperation and residents' trust.

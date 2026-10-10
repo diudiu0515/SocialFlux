@@ -43,6 +43,8 @@ def source_for(config, number):
         origin='new_offline_source_prefix_original_failure_preserved'
         path=directory/'source_prefix.json'
         if not path.exists():
+            if (directory/'source_intervention.json').exists():
+                raise ValueError('recorded prefix intervention is pending; complete its isolated canonical replay before normal authoring')
             attempt=directory/'source_attempts'/run_id()
             factory,policy_factory=runtime(config,scenario,number-1)
             policy=policy_factory()
@@ -77,6 +79,8 @@ def source_for(config, number):
             'source_review_status':review.get('model_semantic_review',{}).get('decision') if origin.startswith('existing') else 'not_reviewed',
             'source_review_record':{'path':str(review_path),'sha256':sha(review_path)},
             'original_failed_sources_preserved':True}
+    if trajectory.get('offline_prefix_intervention'):
+        source['prefix_intervention']=deepcopy(trajectory['offline_prefix_intervention'])
     saved=directory/'source.json'
     if saved.exists() and load(saved)!=source:
         raise ValueError('frozen source binding changed; do not overwrite prior question evidence')
@@ -238,7 +242,8 @@ def generate_with_recovery(config, number, tasks, *, replay, run, retries=0):
             transient = (OpenAICompatibleProvider._is_transient(exc)
                          or AnthropicProvider._is_transient(exc)
                          or isinstance(exc, (ConnectionError, IncompleteRead, IncompleteModelOutputError))
-                         or (type(exc) is ValueError and str(exc)=='provider returned empty content')
+                         or (type(exc) is ValueError and str(exc) in {
+                             'provider returned empty content', 'provider response lacks a text content block'})
                          or (type(exc) is RuntimeError and str(exc)=='all failover provider candidates are temporarily circuit-open'))
             if not transient or attempt == retries:
                 raise

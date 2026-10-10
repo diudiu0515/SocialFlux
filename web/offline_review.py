@@ -176,6 +176,11 @@ def author_reference(item, bank_sha):
             variable: STATE_VARIABLE_ONTOLOGY[variable] for variable in variables},
         "source_turns": [], "replays": [],
     }
+    if source.get('prefix_intervention'):
+        binding=source['prefix_intervention']
+        record=checked_source(binding['path'],binding.get('sha256'))
+        checks['prefix_intervention']=record is not None
+        reference['prefix_intervention']=record
     # The source history shown in review matches the question's own cutoff.
     if trajectory:
         visible = visible_evidence(item)

@@ -313,6 +313,7 @@ function renderReference() {
       body.append(el("h3", "", `待审参考：${author.answer}${author.acceptable_answers ? " · 可接受 " + author.acceptable_answers.join("、") : ""}`),
         human(author.rationale), el("p", "muted", "作者证据：" + author.evidence_ids.join("、")));
       if (author.review_notes) body.append(human({"作者备注（保留原记录）": author.review_notes}));
+      if (ref.prefix_intervention) body.append(el("h3", "", "开发前史的构造记录（待人工审核）"), human(ref.prefix_intervention));
       const table = el("table"); const head = el("tr");
       ["选项", "主要错误类型", "各变量判断"].forEach(t => head.append(el("th", "", t))); table.append(head);
       Object.keys(detail.public.options).forEach(letter => {

@@ -1,6 +1,6 @@
 {
   "status": "not_human_ground_truth",
-  "items_sha256": "f9508bfa1047b4e2fbcc1bb7b6250c5448117f67f6eabaa356535f6ca8e72c3c",
+  "items_sha256": "29457903b92105becbf7074d3170aa19fbf0ec34b2f32509e562e55c9760e9e1",
   "rows": [
     {
       "instance_id": "SFG50-001-T1-01",
@@ -74,6 +74,85 @@
           "machine_values": [
             7,
             7
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-001-T3-01",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "relationship.perceived_responsiveness",
+          "author_judgment": "increase",
+          "machine_values": [
+            5,
+            7
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-001-T3-02",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "consequence_risk.decision_error_risk",
+          "author_judgment": "decrease",
+          "machine_values": [
+            9,
+            4
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-001-T3-03",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "consequence_risk.goal_failure_risk",
+          "author_judgment": "higher_in_b",
+          "machine_values": [
+            8,
+            10
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-001-T3-04",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.cooperation_readiness@immediate",
+          "author_judgment": "increase",
+          "machine_values": [
+            7,
+            8
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        },
+        {
+          "coordinate": "behavioral_disposition.cooperation_readiness@delayed",
+          "author_judgment": "increase",
+          "machine_values": [
+            7,
+            10
           ],
           "opposite_direction": false,
           "machine_changed_despite_similar": false,
@@ -1101,6 +1180,85 @@
           "machine_values": [
             7,
             7
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-008-T3-01",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "relationship.perceived_responsiveness",
+          "author_judgment": "increase",
+          "machine_values": [
+            8,
+            9
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-008-T3-02",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.resolve",
+          "author_judgment": "increase",
+          "machine_values": [
+            7,
+            10
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-008-T3-03",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "relationship.perceived_fairness",
+          "author_judgment": "cannot_determine",
+          "machine_values": [
+            7,
+            6
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-008-T3-04",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "emotion.frustration@immediate",
+          "author_judgment": "decrease",
+          "machine_values": [
+            4,
+            3
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        },
+        {
+          "coordinate": "relationship.perceived_responsiveness@delayed",
+          "author_judgment": "increase",
+          "machine_values": [
+            8,
+            10
           ],
           "opposite_direction": false,
           "machine_changed_despite_similar": false,
@@ -2215,6 +2373,85 @@
       ]
     },
     {
+      "instance_id": "SFG50-021-T3-01",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "relationship.perceived_responsiveness",
+          "author_judgment": "increase",
+          "machine_values": [
+            6,
+            7
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-021-T3-02",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.decision_readiness",
+          "author_judgment": "increase",
+          "machine_values": [
+            2,
+            7
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-021-T3-03",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "relationship.perceived_responsiveness",
+          "author_judgment": "similar",
+          "machine_values": [
+            8,
+            7
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": true,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-021-T3-04",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.boundary_assertion@immediate",
+          "author_judgment": "similar",
+          "machine_values": [
+            7,
+            7
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        },
+        {
+          "coordinate": "behavioral_disposition.boundary_assertion@delayed",
+          "author_judgment": "similar",
+          "machine_values": [
+            7,
+            7
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
       "instance_id": "SFG50-022-T1-01",
       "status": "machine_reference_only",
       "comparisons": [
@@ -2452,6 +2689,85 @@
       ]
     },
     {
+      "instance_id": "SFG50-024-T3-01",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "emotion.anxiety",
+          "author_judgment": "increase",
+          "machine_values": [
+            7,
+            8
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-024-T3-02",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "consequence_risk.reputational_harm_risk",
+          "author_judgment": "decrease",
+          "machine_values": [
+            4,
+            1
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-024-T3-03",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "consequence_risk.goal_failure_risk",
+          "author_judgment": "higher_in_b",
+          "machine_values": [
+            7,
+            8
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-024-T3-04",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "relationship.respect@immediate",
+          "author_judgment": "cannot_determine",
+          "machine_values": [
+            8,
+            9
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        },
+        {
+          "coordinate": "behavioral_disposition.cooperation_readiness@delayed",
+          "author_judgment": "similar",
+          "machine_values": [
+            6,
+            7
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": true,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
       "instance_id": "SFG50-025-T1-01",
       "status": "machine_reference_only",
       "comparisons": [
@@ -2523,6 +2839,85 @@
           "machine_values": [
             7,
             8
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": true,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-025-T3-01",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "relationship.perceived_responsiveness",
+          "author_judgment": "increase",
+          "machine_values": [
+            5,
+            6
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-025-T3-02",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "consequence_risk.decision_error_risk",
+          "author_judgment": "similar",
+          "machine_values": [
+            5,
+            3
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": true,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-025-T3-03",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.evidence_seeking",
+          "author_judgment": "higher_in_a",
+          "machine_values": [
+            10,
+            10
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": true
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-025-T3-04",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.boundary_assertion@immediate",
+          "author_judgment": "similar",
+          "machine_values": [
+            6,
+            6
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        },
+        {
+          "coordinate": "behavioral_disposition.cooperation_readiness@delayed",
+          "author_judgment": "similar",
+          "machine_values": [
+            8,
+            10
           ],
           "opposite_direction": false,
           "machine_changed_despite_similar": true,
@@ -3242,6 +3637,85 @@
       ]
     },
     {
+      "instance_id": "SFG50-034-T3-01",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.boundary_assertion",
+          "author_judgment": "similar",
+          "machine_values": [
+            8,
+            8
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-034-T3-02",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "consequence_risk.institutional_harm_risk",
+          "author_judgment": "decrease",
+          "machine_values": [
+            5,
+            1
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-034-T3-03",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.cooperation_readiness",
+          "author_judgment": "higher_in_a",
+          "machine_values": [
+            8,
+            7
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-034-T3-04",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.boundary_assertion@immediate",
+          "author_judgment": "similar",
+          "machine_values": [
+            8,
+            8
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        },
+        {
+          "coordinate": "relationship.perceived_responsiveness@delayed",
+          "author_judgment": "increase",
+          "machine_values": [
+            7,
+            10
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
       "instance_id": "SFG50-035-T1-01",
       "status": "machine_reference_only",
       "comparisons": [
@@ -3637,6 +4111,85 @@
       ]
     },
     {
+      "instance_id": "SFG50-039-T3-01",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.evidence_seeking",
+          "author_judgment": "increase",
+          "machine_values": [
+            9,
+            10
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-039-T3-02",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "consequence_risk.relationship_rupture_risk",
+          "author_judgment": "decrease",
+          "machine_values": [
+            7,
+            7
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": true
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-039-T3-03",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "consequence_risk.goal_failure_risk",
+          "author_judgment": "higher_in_b",
+          "machine_values": [
+            4,
+            6
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-039-T3-04",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.cooperation_readiness@immediate",
+          "author_judgment": "increase",
+          "machine_values": [
+            6,
+            7
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        },
+        {
+          "coordinate": "relationship.trust@delayed",
+          "author_judgment": "cannot_determine",
+          "machine_values": [
+            5,
+            9
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
       "instance_id": "SFG50-040-T1-01",
       "status": "machine_reference_only",
       "comparisons": [
@@ -3953,6 +4506,85 @@
       ]
     },
     {
+      "instance_id": "SFG50-043-T3-01",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "relationship.perceived_responsiveness",
+          "author_judgment": "increase",
+          "machine_values": [
+            6,
+            8
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-043-T3-02",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.repair_intent",
+          "author_judgment": "similar",
+          "machine_values": [
+            6,
+            6
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-043-T3-03",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "relationship.perceived_responsiveness",
+          "author_judgment": "higher_in_a",
+          "machine_values": [
+            8,
+            7
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-043-T3-04",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "relationship.perceived_fairness@immediate",
+          "author_judgment": "increase",
+          "machine_values": [
+            7,
+            9
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        },
+        {
+          "coordinate": "consequence_risk.institutional_harm_risk@delayed",
+          "author_judgment": "decrease",
+          "machine_values": [
+            4,
+            0
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
       "instance_id": "SFG50-044-T1-01",
       "status": "machine_reference_only",
       "comparisons": [
@@ -4024,6 +4656,85 @@
           "machine_values": [
             7,
             8
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-044-T3-01",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "emotion.frustration",
+          "author_judgment": "increase",
+          "machine_values": [
+            3,
+            4
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-044-T3-02",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.boundary_assertion",
+          "author_judgment": "similar",
+          "machine_values": [
+            8,
+            8
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-044-T3-03",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "relationship.perceived_responsiveness",
+          "author_judgment": "higher_in_a",
+          "machine_values": [
+            9,
+            7
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-044-T3-04",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.cooperation_readiness@immediate",
+          "author_judgment": "decrease",
+          "machine_values": [
+            6,
+            5
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        },
+        {
+          "coordinate": "relationship.perceived_responsiveness@delayed",
+          "author_judgment": "cannot_determine",
+          "machine_values": [
+            8,
+            10
           ],
           "opposite_direction": false,
           "machine_changed_despite_similar": false,
@@ -4111,6 +4822,85 @@
       ]
     },
     {
+      "instance_id": "SFG50-045-T3-01",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "relationship.perceived_responsiveness",
+          "author_judgment": "increase",
+          "machine_values": [
+            6,
+            8
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-045-T3-02",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "consequence_risk.reputational_harm_risk",
+          "author_judgment": "decrease",
+          "machine_values": [
+            5,
+            0
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-045-T3-03",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "relationship.perceived_responsiveness",
+          "author_judgment": "similar",
+          "machine_values": [
+            8,
+            8
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-045-T3-04",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.cooperation_readiness@immediate",
+          "author_judgment": "similar",
+          "machine_values": [
+            8,
+            9
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": true,
+          "machine_unchanged_despite_direction": false
+        },
+        {
+          "coordinate": "behavioral_disposition.cooperation_readiness@delayed",
+          "author_judgment": "similar",
+          "machine_values": [
+            8,
+            10
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": true,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
       "instance_id": "SFG50-046-T1-01",
       "status": "machine_reference_only",
       "comparisons": [
@@ -4185,6 +4975,85 @@
           ],
           "opposite_direction": false,
           "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-046-T3-01",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "relationship.role_legitimacy",
+          "author_judgment": "similar",
+          "machine_values": [
+            8,
+            10
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": true,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-046-T3-02",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "consequence_risk.decision_error_risk",
+          "author_judgment": "decrease",
+          "machine_values": [
+            5,
+            1
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-046-T3-03",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "relationship.perceived_responsiveness",
+          "author_judgment": "similar",
+          "machine_values": [
+            8,
+            8
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-046-T3-04",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.boundary_assertion@immediate",
+          "author_judgment": "similar",
+          "machine_values": [
+            7,
+            7
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        },
+        {
+          "coordinate": "behavioral_disposition.cooperation_readiness@delayed",
+          "author_judgment": "similar",
+          "machine_values": [
+            8,
+            10
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": true,
           "machine_unchanged_despite_direction": false
         }
       ]
@@ -4269,6 +5138,85 @@
       ]
     },
     {
+      "instance_id": "SFG50-047-T3-01",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.evidence_seeking",
+          "author_judgment": "increase",
+          "machine_values": [
+            9,
+            10
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-047-T3-02",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "consequence_risk.institutional_harm_risk",
+          "author_judgment": "decrease",
+          "machine_values": [
+            6,
+            2
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-047-T3-03",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.decision_readiness",
+          "author_judgment": "higher_in_b",
+          "machine_values": [
+            5,
+            6
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-047-T3-04",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "behavioral_disposition.evidence_seeking@immediate",
+          "author_judgment": "increase",
+          "machine_values": [
+            9,
+            10
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        },
+        {
+          "coordinate": "behavioral_disposition.cooperation_readiness@delayed",
+          "author_judgment": "increase",
+          "machine_values": [
+            8,
+            10
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
       "instance_id": "SFG50-048-T1-01",
       "status": "machine_reference_only",
       "comparisons": [
@@ -4340,6 +5288,85 @@
           "machine_values": [
             9,
             9
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-048-T3-01",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "emotion.anxiety",
+          "author_judgment": "increase",
+          "machine_values": [
+            8,
+            9
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-048-T3-02",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "consequence_risk.institutional_harm_risk",
+          "author_judgment": "decrease",
+          "machine_values": [
+            5,
+            2
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-048-T3-03",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "consequence_risk.goal_failure_risk",
+          "author_judgment": "higher_in_b",
+          "machine_values": [
+            8,
+            10
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        }
+      ]
+    },
+    {
+      "instance_id": "SFG50-048-T3-04",
+      "status": "machine_reference_only",
+      "comparisons": [
+        {
+          "coordinate": "relationship.perceived_responsiveness@immediate",
+          "author_judgment": "increase",
+          "machine_values": [
+            6,
+            7
+          ],
+          "opposite_direction": false,
+          "machine_changed_despite_similar": false,
+          "machine_unchanged_despite_direction": false
+        },
+        {
+          "coordinate": "behavioral_disposition.cooperation_readiness@delayed",
+          "author_judgment": "increase",
+          "machine_values": [
+            7,
+            10
           ],
           "opposite_direction": false,
           "machine_changed_despite_similar": false,

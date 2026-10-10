@@ -71,6 +71,15 @@ class OfflineBatchTest(unittest.TestCase):
         source.assert_not_called()
         provider.assert_not_called()
 
+    def test_pending_recorded_intervention_cannot_fall_back_to_unmodified_policy(self):
+        save(self.path,{**self.trajectory,'turns':[]})
+        save(Path(self.config['output'])/'sources/GPT50_001/source_intervention.json',
+             {'review_status':'pending_human_review'})
+        with patch('offline.choice_batch.runtime') as runtime:
+            with self.assertRaisesRegex(ValueError,'prefix intervention is pending'):
+                source_for(self.config,1)
+        runtime.assert_not_called()
+
     def test_transport_recovery_preserves_failure_and_never_retries_semantics(self):
         with patch('offline.choice_batch.generate_case',side_effect=[TimeoutError('read timeout'),{'completed_tasks':['T3']}]) as generate, \
              patch('offline.choice_batch.sleep'):

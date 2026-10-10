@@ -152,7 +152,7 @@ def write_bundle(items, output):
              '主评测只答 `{"answer":"B"}`。证据诊断另加 `evidence_ids`，分别计分。', '']
     for x in items:
         a=x['authoring']; lines += [f"## {x['instance_id']} · {x['task']} / {x['subtype']}", '',
-            f"来源：{x['story_id']}；轨迹：{x['metadata']['source_trajectory_id']}；状态持有者：{x['input']['target_character']['name']} → {x['input']['role']['name']}。", '']
+            f"来源：{x['story_id']}；轨迹：{x['metadata']['source_trajectory_id']}；状态持有者：{x['input']['target_character']['name']}；交互对方：{x['input']['role']['name']}。关系判断由状态持有者指向交互对方。", '']
         inp=x['input']; lines += ['背景：'+inp['context']['background'], '角色目标：'+inp['role'].get('explicit_goal',''), '']
         situation=inp['context'].get('public_situation', {})
         for key,value in situation.items():
