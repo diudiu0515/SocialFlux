@@ -2,28 +2,28 @@
   "format": "socialflux_offline_gpt50_validation_v1",
   "complete": false,
   "status": "generation_in_progress_authorized",
-  "captured_at_utc": "2026-10-10T19:22:03.327529+00:00",
+  "captured_at_utc": "2026-10-10T19:49:43.092420+00:00",
   "requested_scenarios": 50,
   "expected_items": 400,
-  "actual_items": 332,
+  "actual_items": 356,
   "scenarios_with_items": 50,
   "tasks": {
     "T1": 200,
-    "T3": 132
+    "T3": 156
   },
   "task_state_coverage": {
     "T1/Behavioral Disposition": 109,
     "T1/Emotion": 27,
     "T1/Interaction Risk": 22,
     "T1/Relationship": 64,
-    "T3/Behavioral Disposition": 48,
-    "T3/Emotion": 14,
-    "T3/Interaction Risk": 36,
-    "T3/Relationship": 49
+    "T3/Behavioral Disposition": 58,
+    "T3/Emotion": 15,
+    "T3/Interaction Risk": 44,
+    "T3/Relationship": 56
   },
-  "combinations": 83,
+  "combinations": 89,
   "machine_structure_check": {
-    "validated": 332,
+    "validated": 356,
     "provider_calls": 0
   },
   "formal_check": {
@@ -40,7 +40,12 @@
   "focused_python_tests": {
     "run": 40,
     "passed": 40,
-    "log": "build/offline_gpt50_t1_t3/focused_resume_tests_v5.log"
+    "log": "build/offline_gpt50_t1_t3/focused_resume_tests_v6.log"
+  },
+  "provider_refusal_tests": {
+    "run": 36,
+    "passed": 36,
+    "log": "build/offline_gpt50_t1_t3/refusal_tests.log"
   },
   "prior_broader_test_limit": "89 checks: 88 passed; one pre-existing missing/stale historical scenario manifest, documented in 2026-10-10_git_checkpoint_validation.json",
   "evidence_smoke": {
@@ -87,15 +92,15 @@
     "label_changes": false
   },
   "pairing": {
-    "logical_pairs": 292,
-    "variants": 584,
+    "logical_pairs": 316,
+    "variants": 632,
     "unique_videos": 45
   },
   "case_failure_records": {
     "TimeoutError": 75,
     "RemoteDisconnected": 1,
-    "ValueError": 26,
-    "StructuredOutputError": 6,
+    "ValueError": 33,
+    "StructuredOutputError": 8,
     "ProviderHTTPError": 2,
     "IncompleteModelOutputError": 2
   },
@@ -126,12 +131,6 @@
       ]
     },
     {
-      "scenario_id": "GPT50_013",
-      "tasks": [
-        "T3"
-      ]
-    },
-    {
       "scenario_id": "GPT50_014",
       "tasks": [
         "T3"
@@ -151,18 +150,6 @@
     },
     {
       "scenario_id": "GPT50_017",
-      "tasks": [
-        "T3"
-      ]
-    },
-    {
-      "scenario_id": "GPT50_028",
-      "tasks": [
-        "T3"
-      ]
-    },
-    {
-      "scenario_id": "GPT50_029",
       "tasks": [
         "T3"
       ]
@@ -193,24 +180,6 @@
     },
     {
       "scenario_id": "GPT50_040",
-      "tasks": [
-        "T3"
-      ]
-    },
-    {
-      "scenario_id": "GPT50_041",
-      "tasks": [
-        "T3"
-      ]
-    },
-    {
-      "scenario_id": "GPT50_042",
-      "tasks": [
-        "T3"
-      ]
-    },
-    {
-      "scenario_id": "GPT50_050",
       "tasks": [
         "T3"
       ]

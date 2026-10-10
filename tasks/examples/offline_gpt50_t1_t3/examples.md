@@ -1,6 +1,6 @@
 # SocialFlux offline T1 / T3 开发题（完整题面与作者参考答案）
 
-本文件包含实际已生成的 332 道题、50 个场景；目标覆盖与缺项见同批 manifest。
+本文件包含实际已生成的 356 道题、50 个场景；目标覆盖与缺项见同批 manifest。
 
 所有答案是待人工审核的开发参考，不是已冻结真值。下面每题先给出完整可见材料，再给出作者侧标注。
 主评测只答 `{"answer":"B"}`。证据诊断另加 `evidence_ids`，分别计分。
@@ -4141,6 +4141,190 @@ Imani由t1说明核查需求，转为t2明确等待通知并愿意在场补充�
 可接受答案：D
 审核备注：已纠正人物归属，合作增强与核查延续分别有依据；仍待人工审核。
 分支验证：not_required
+
+## SFG50-013-T3-01 · T3 / immediate_effect
+
+来源：GPT50_013；轨迹：f8045adb416e4a7aa5a0c854034e133b；状态持有者：Imani Cole；交互对方：Renata Sayegh。关系判断由状态持有者指向交互对方。
+
+背景：At a plea-offer deadline, a family liaison requests a short hold before acceptance advice in a pharmacy break-in case. The detained client faces release under a reduced charge or greater exposure if the offer lapses. The attorney knows the prosecution record is weak but admissible and the offer is about to expire.
+角色目标：Make a legally defensible recommendation that respects the client's informed autonomy while balancing immediate release against verification and renewed detention.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A prior defense continuance unexpectedly extended detention for more than a month, and the family blamed the office for the delay.；A challenge to the store clerk's identification failed, leaving a weak but admissible prosecution record.
+
+history：
+
+- [t1] Renata Sayegh：我可以短暂停下接受协议的建议，但不能让等待无声地耗尽期限。你希望这段时间核实什么，可能怎样影响他的选择？我会同时向他说明获释机会和协议失效后的风险，由他决定是否等。
+  Imani Cole：我需要确认那位亲属是否会在场干预他的决定，还有证人愿不愿意在没有家属或警员的情况下见面。如果证人提供的信息跟现有记录有出入，可能让他更清楚该不该接受协议。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Renata Sayegh：这两点值得核实，我会按刚才说的短暂停下建议，并安排与他单独谈，听清他自己的意愿。证人的说法即使有出入，我也得判断是否影响关键事实；现有指认仍可采，不能把差异直接当成拒绝协议的依据。
+  Imani Cole：好，我等你通知。如果他愿意说家里的情况或者对协议有顾虑，我在场可以补充他需要知道的背景，但选择权在他自己手里。
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, direct", "speech_style": "calm, matter-of-fact", "prosody": "even tempo, slightly rising on the conditional offer", "behavioral_cues": ["brief nod", "relaxed posture"]}
+
+- 候选行动 action_1：可以，我先与他单独谈；他愿意让你加入时，再请你补充背景。上次延期多关了一个多月，我担心这段经历会影响他表达顾虑；我会给他空间说清楚，哪些是他自己的担心，哪些来自家里的期待。
+- 候选行动 action_2：期限在逼近，我建议先问他是否愿意让你一同在场；若他明确同意，由我说明协议、获释机会和失效风险，请你同时补充家庭与证人背景。这样可少一次转述、节省等待，但你的在场也可能让他不便表达对家人的顾虑；若他不愿意，我们仍单独谈。
+
+**题目：以t2为基线，Renata Sayegh执行action_2后，在下一次回应时，Imani Cole觉得Renata是否实质回应了自己关切的判断，最可能如何变化？**
+
+- **A.** 下降
+- **B.** 证据不足
+- **C.** 上升
+- **D.** 基本不变
+
+**作者参考答案：C（待审）**
+
+t1中Imani关心亲属干预，t2又提出有条件在场补充背景。action_2将补充背景纳入具体安排，同时明确征求当事人同意，较原先单独谈话更直接回应她的提议。因此上升比不变更有依据；这是对回应程度的预测，不代表会谈已经完成。
+
+证据：t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "从t2至执行action_2后的下一次环境回应", "state_owner": "GPT50_013_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "decrease"}, "B": {"relationship.perceived_responsiveness": "cannot_determine"}, "C": {"relationship.perceived_responsiveness": "increase"}, "D": {"relationship.perceived_responsiveness": "similar"}}
+可接受答案：C
+审核备注：判断方向是Imani评价Renata；新增依据为有条件在场安排，而非把Imani的配合当作Renata回应。
+分支验证：validated
+
+## SFG50-013-T3-02 · T3 / delayed_effect
+
+来源：GPT50_013；轨迹：f8045adb416e4a7aa5a0c854034e133b；状态持有者：Imani Cole；交互对方：Renata Sayegh。关系判断由状态持有者指向交互对方。
+
+背景：At a plea-offer deadline, a family liaison requests a short hold before acceptance advice in a pharmacy break-in case. The detained client faces release under a reduced charge or greater exposure if the offer lapses. The attorney knows the prosecution record is weak but admissible and the offer is about to expire.
+角色目标：Make a legally defensible recommendation that respects the client's informed autonomy while balancing immediate release against verification and renewed detention.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A prior defense continuance unexpectedly extended detention for more than a month, and the family blamed the office for the delay.；A challenge to the store clerk's identification failed, leaving a weak but admissible prosecution record.
+
+history：
+
+- [t1] Renata Sayegh：我可以短暂停下接受协议的建议，但不能让等待无声地耗尽期限。你希望这段时间核实什么，可能怎样影响他的选择？我会同时向他说明获释机会和协议失效后的风险，由他决定是否等。
+  Imani Cole：我需要确认那位亲属是否会在场干预他的决定，还有证人愿不愿意在没有家属或警员的情况下见面。如果证人提供的信息跟现有记录有出入，可能让他更清楚该不该接受协议。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Renata Sayegh：这两点值得核实，我会按刚才说的短暂停下建议，并安排与他单独谈，听清他自己的意愿。证人的说法即使有出入，我也得判断是否影响关键事实；现有指认仍可采，不能把差异直接当成拒绝协议的依据。
+  Imani Cole：好，我等你通知。如果他愿意说家里的情况或者对协议有顾虑，我在场可以补充他需要知道的背景，但选择权在他自己手里。
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, direct", "speech_style": "calm, matter-of-fact", "prosody": "even tempo, slightly rising on the conditional offer", "behavioral_cues": ["brief nod", "relaxed posture"]}
+
+- 候选行动 action_1：可以，我先与他单独谈；他愿意让你加入时，再请你补充背景。上次延期多关了一个多月，我担心这段经历会影响他表达顾虑；我会给他空间说清楚，哪些是他自己的担心，哪些来自家里的期待。
+- 候选行动 action_2：期限在逼近，我建议先问他是否愿意让你一同在场；若他明确同意，由我说明协议、获释机会和失效风险，请你同时补充家庭与证人背景。这样可少一次转述、节省等待，但你的在场也可能让他不便表达对家人的顾虑；若他不愿意，我们仍单独谈。
+
+**题目：以t2为基线，若Renata Sayegh执行action_2，从该行动开始的第5轮环境回应末，Imani Cole协调共同下一步的意愿最可能如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 证据不足
+- **D.** 上升
+
+**作者参考答案：D（待审）**
+
+Imani在t2已愿等待通知并补充背景，action_2进一步明确双方分工、征求同意和不同意时的替代安排。这给既有合作意愿提供了可推进的路径，支持后续增强而非退缩或仅维持等待；预测不依赖证人一定答应，也不等于核实任务已成功。
+
+证据：t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness"], "time_scope": "从t2至action_2开始后的第5轮环境回应末，含即时一轮", "state_owner": "GPT50_013_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "unsupported_inference", "C": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness": "similar"}, "B": {"behavioral_disposition.cooperation_readiness": "decrease"}, "C": {"behavioral_disposition.cooperation_readiness": "cannot_determine"}, "D": {"behavioral_disposition.cooperation_readiness": "increase"}}
+可接受答案：D
+审核备注：基线已有合作，上升依据是可操作的分工与替代路径；不应以第五轮实际完成了哪些任务定答案。
+分支验证：validated
+
+## SFG50-013-T3-03 · T3 / action_comparison
+
+来源：GPT50_013；轨迹：f8045adb416e4a7aa5a0c854034e133b；状态持有者：Imani Cole；交互对方：Renata Sayegh。关系判断由状态持有者指向交互对方。
+
+背景：At a plea-offer deadline, a family liaison requests a short hold before acceptance advice in a pharmacy break-in case. The detained client faces release under a reduced charge or greater exposure if the offer lapses. The attorney knows the prosecution record is weak but admissible and the offer is about to expire.
+角色目标：Make a legally defensible recommendation that respects the client's informed autonomy while balancing immediate release against verification and renewed detention.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A prior defense continuance unexpectedly extended detention for more than a month, and the family blamed the office for the delay.；A challenge to the store clerk's identification failed, leaving a weak but admissible prosecution record.
+
+history：
+
+- [t1] Renata Sayegh：我可以短暂停下接受协议的建议，但不能让等待无声地耗尽期限。你希望这段时间核实什么，可能怎样影响他的选择？我会同时向他说明获释机会和协议失效后的风险，由他决定是否等。
+  Imani Cole：我需要确认那位亲属是否会在场干预他的决定，还有证人愿不愿意在没有家属或警员的情况下见面。如果证人提供的信息跟现有记录有出入，可能让他更清楚该不该接受协议。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Renata Sayegh：这两点值得核实，我会按刚才说的短暂停下建议，并安排与他单独谈，听清他自己的意愿。证人的说法即使有出入，我也得判断是否影响关键事实；现有指认仍可采，不能把差异直接当成拒绝协议的依据。
+  Imani Cole：好，我等你通知。如果他愿意说家里的情况或者对协议有顾虑，我在场可以补充他需要知道的背景，但选择权在他自己手里。
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, direct", "speech_style": "calm, matter-of-fact", "prosody": "even tempo, slightly rising on the conditional offer", "behavioral_cues": ["brief nod", "relaxed posture"]}
+
+- 候选行动 action_1：可以，我先与他单独谈；他愿意让你加入时，再请你补充背景。上次延期多关了一个多月，我担心这段经历会影响他表达顾虑；我会给他空间说清楚，哪些是他自己的担心，哪些来自家里的期待。
+- 候选行动 action_2：期限在逼近，我建议先问他是否愿意让你一同在场；若他明确同意，由我说明协议、获释机会和失效风险，请你同时补充家庭与证人背景。这样可少一次转述、节省等待，但你的在场也可能让他不便表达对家人的顾虑；若他不愿意，我们仍单独谈。
+
+**题目：将action_1记为A、action_2记为B。到各行动开始后的第5轮环境回应末，Imani Cole在协议期限内支持当事人知情选择的目标，因背景未及核实或顾虑未被说清而落空的风险，哪一侧更高？**
+
+- **A.** 证据不足
+- **B.** A较高
+- **C.** 接近
+- **D.** B较高
+
+**作者参考答案：A（待审）**
+
+t1与t2表明Imani同时重视核实背景和保留当事人选择。action_1偏向保护单独表达，action_2可能节省转述时间，却也说明在场可能抑制顾虑。期限紧迫，但材料未给两种影响的相对大小，无法排序；两侧都有保护措施也不证明风险接近。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "delayed", "risk_event": "在协议期限内，因背景未及核实或当事人顾虑未被说清，Imani支持其知情选择的目标落空", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "比较两行动开始后各自第5轮环境回应末的风险，均含即时一轮", "state_owner": "GPT50_013_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "goal_constraint_ignored", "C": "unsupported_inference", "D": "goal_constraint_ignored"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "cannot_determine"}, "B": {"consequence_risk.goal_failure_risk": "higher_in_a"}, "C": {"consequence_risk.goal_failure_risk": "similar"}, "D": {"consequence_risk.goal_failure_risk": "higher_in_b"}}
+可接受答案：A
+审核备注：私有分支的风险排序不足以公开作答；题目保留证据不足，不能借未来偶然进展确定哪侧更高。
+分支验证：validated
+
+## SFG50-013-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_013；轨迹：f8045adb416e4a7aa5a0c854034e133b；状态持有者：Imani Cole；交互对方：Renata Sayegh。关系判断由状态持有者指向交互对方。
+
+背景：At a plea-offer deadline, a family liaison requests a short hold before acceptance advice in a pharmacy break-in case. The detained client faces release under a reduced charge or greater exposure if the offer lapses. The attorney knows the prosecution record is weak but admissible and the offer is about to expire.
+角色目标：Make a legally defensible recommendation that respects the client's informed autonomy while balancing immediate release against verification and renewed detention.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A prior defense continuance unexpectedly extended detention for more than a month, and the family blamed the office for the delay.；A challenge to the store clerk's identification failed, leaving a weak but admissible prosecution record.
+
+history：
+
+- [t1] Renata Sayegh：我可以短暂停下接受协议的建议，但不能让等待无声地耗尽期限。你希望这段时间核实什么，可能怎样影响他的选择？我会同时向他说明获释机会和协议失效后的风险，由他决定是否等。
+  Imani Cole：我需要确认那位亲属是否会在场干预他的决定，还有证人愿不愿意在没有家属或警员的情况下见面。如果证人提供的信息跟现有记录有出入，可能让他更清楚该不该接受协议。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Renata Sayegh：这两点值得核实，我会按刚才说的短暂停下建议，并安排与他单独谈，听清他自己的意愿。证人的说法即使有出入，我也得判断是否影响关键事实；现有指认仍可采，不能把差异直接当成拒绝协议的依据。
+  Imani Cole：好，我等你通知。如果他愿意说家里的情况或者对协议有顾虑，我在场可以补充他需要知道的背景，但选择权在他自己手里。
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, direct", "speech_style": "calm, matter-of-fact", "prosody": "even tempo, slightly rising on the conditional offer", "behavioral_cues": ["brief nod", "relaxed posture"]}
+
+- 候选行动 action_1：可以，我先与他单独谈；他愿意让你加入时，再请你补充背景。上次延期多关了一个多月，我担心这段经历会影响他表达顾虑；我会给他空间说清楚，哪些是他自己的担心，哪些来自家里的期待。
+- 候选行动 action_2：期限在逼近，我建议先问他是否愿意让你一同在场；若他明确同意，由我说明协议、获释机会和失效风险，请你同时补充家庭与证人背景。这样可少一次转述、节省等待，但你的在场也可能让他不便表达对家人的顾虑；若他不愿意，我们仍单独谈。
+
+**题目：若Renata Sayegh执行action_1，相对t2，哪组最能预测Imani Cole的两项变化：下一次回应时坚持当事人自主选择这一互动边界的意愿，以及第5轮环境回应末协调共同下一步的意愿？**
+
+- **A.** 即时边界坚持基本不变；延迟合作意愿下降
+- **B.** 即时边界坚持基本不变；延迟合作意愿上升
+- **C.** 即时边界坚持下降；延迟合作意愿上升
+- **D.** 即时边界坚持上升；延迟合作意愿下降
+
+**作者参考答案：B（待审）**
+
+t2中Imani明确选择权属于当事人，action_1继续以其同意作为加入条件，支持边界延续而非因合作而撤回。它又接纳补充背景的提议，并解释单谈如何保护表达，为后续协调增加共同依据。因此合作下降较弱；不据此断定未来核实成功。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.boundary_assertion", "behavioral_disposition.cooperation_readiness"], "time_scope": "均以t2为基线；即时为下一次环境回应，延迟为行动开始后第5轮环境回应末，含即时一轮", "state_owner": "GPT50_013_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "C": "state_dimension_confusion", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.boundary_assertion@immediate": "similar", "behavioral_disposition.cooperation_readiness@delayed": "decrease"}, "B": {"behavioral_disposition.boundary_assertion@immediate": "similar", "behavioral_disposition.cooperation_readiness@delayed": "increase"}, "C": {"behavioral_disposition.boundary_assertion@immediate": "decrease", "behavioral_disposition.cooperation_readiness@delayed": "increase"}, "D": {"behavioral_disposition.boundary_assertion@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "decrease"}}
+可接受答案：B
+审核备注：不变有同一同意条件的正面支持；组合区分边界延续与合作增强，不将Renata的承诺当Imani已执行。
+分支验证：validated
 
 ## SFG50-014-T1-01 · T1 / current_intensity
 
@@ -8628,6 +8812,190 @@ t1中Rhea接受暂不参赛并请求完成评估，t2仍请医生判断安全与
 审核备注：共同不变依据是两轮持续求评估、咨询医生，而非单纯没有反对；尊重仅比较本次专业互动，不外推长期信任。
 分支验证：not_required
 
+## SFG50-028-T3-01 · T3 / immediate_effect
+
+来源：GPT50_028；轨迹：b630146b9a4d41049e0e58aff579852f；状态持有者：Rhea Calder；交互对方：Dr. Soren Pell。关系判断由状态持有者指向交互对方。
+
+背景：At a championship roster deadline, a coach requests medical clearance for a youth player after a head collision and conflicting symptom reports. The physician knows the earlier baseline may be unreliable and has a parent's report of spinning, nausea, and light sensitivity.
+角色目标：Make a medically defensible, rule-compliant participation decision that protects Amaya's health and uses reliable evidence.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The physician previously withheld another starting player's clearance before a decisive game and was blamed for the resulting loss, after which the board narrowed his tournament authority.
+
+history：
+
+- [t1] Dr. Soren Pell：现有证据下，我不会为阿玛雅放行：家长报告的旋转、恶心和畏光，加上不可靠的基线，不能支持安全参赛。她先不得上场，需完成临床评估；截止压力不能替代医学依据。
+  Rhea Calder：明白，她不能上场。但医疗记录会直接影响她的奖学金续约——能否在完成评估前将她列为'待定'而非'医疗移除'，或者你能在今晚完成评估？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Dr. Soren Pell：可以把记录标为“评估中/待定”，但这不等于放行；她在评估完成前仍不得参赛。我不能保证今晚完成，只有取得可靠评估后才会重新判断。
+  Rhea Calder：标记改为待定，这点很重要。你觉得在今晚的时间内，还有可能找到既满足医疗安全、又不关闭她参赛机会的办法，还是这两个目标现在已经无法兼顾？
+  可见表达：{"facial_expression": "tense, focused", "gaze": "direct, steady", "speech_style": "deliberate, measured", "prosody": "controlled pitch, slight urgency in pacing", "behavioral_cues": ["slight forward lean", "brief pause before question"]}
+
+- 候选行动 action_1：不是必然无法兼顾，但我之前暂不放行的决定仍有效：只有今晚获得可靠的临床评估结果，我才会据此重新判断；否则，“待定”不会变成参赛许可。
+- 候选行动 action_2：为避免截止压力促成仓促判断，我会按现有症状先将阿玛雅列为医疗移除，不把今晚完成评估当作承诺；这会牺牲她保留参赛和奖学金续约机会，但把安全边界放在时间目标之前，之后取得可靠结果仍可按规则复核。
+
+**题目：相较于t2，Dr. Soren Pell执行action_1后，在下一次回应时，Rhea Calder觉得医生实质回应了自己关切的程度最可能如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：B（待审）**
+
+Rhea在t2追问两个目标能否兼顾，action_1直接回答并给出重新判断的条件，比单纯说明不能保证今晚完成更贴近她的问题。因此不宜只因禁赛边界未变就选基本不变，也不能把未获许可等同于未被回应；这只支持关系判断改善，不代表目标已达成。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "从t2至执行action_1后的下一次环境回应", "state_owner": "GPT50_028_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "history_ignored", "D": "state_dimension_confusion"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "cannot_determine"}, "B": {"relationship.perceived_responsiveness": "increase"}, "C": {"relationship.perceived_responsiveness": "similar"}, "D": {"relationship.perceived_responsiveness": "decrease"}}
+可接受答案：B
+审核备注：增量来自对兼顾问题的直接回答，而非首次允许待定；审核时应保留这一区别。
+分支验证：validated
+
+## SFG50-028-T3-02 · T3 / delayed_effect
+
+来源：GPT50_028；轨迹：b630146b9a4d41049e0e58aff579852f；状态持有者：Rhea Calder；交互对方：Dr. Soren Pell。关系判断由状态持有者指向交互对方。
+
+背景：At a championship roster deadline, a coach requests medical clearance for a youth player after a head collision and conflicting symptom reports. The physician knows the earlier baseline may be unreliable and has a parent's report of spinning, nausea, and light sensitivity.
+角色目标：Make a medically defensible, rule-compliant participation decision that protects Amaya's health and uses reliable evidence.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The physician previously withheld another starting player's clearance before a decisive game and was blamed for the resulting loss, after which the board narrowed his tournament authority.
+
+history：
+
+- [t1] Dr. Soren Pell：现有证据下，我不会为阿玛雅放行：家长报告的旋转、恶心和畏光，加上不可靠的基线，不能支持安全参赛。她先不得上场，需完成临床评估；截止压力不能替代医学依据。
+  Rhea Calder：明白，她不能上场。但医疗记录会直接影响她的奖学金续约——能否在完成评估前将她列为'待定'而非'医疗移除'，或者你能在今晚完成评估？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Dr. Soren Pell：可以把记录标为“评估中/待定”，但这不等于放行；她在评估完成前仍不得参赛。我不能保证今晚完成，只有取得可靠评估后才会重新判断。
+  Rhea Calder：标记改为待定，这点很重要。你觉得在今晚的时间内，还有可能找到既满足医疗安全、又不关闭她参赛机会的办法，还是这两个目标现在已经无法兼顾？
+  可见表达：{"facial_expression": "tense, focused", "gaze": "direct, steady", "speech_style": "deliberate, measured", "prosody": "controlled pitch, slight urgency in pacing", "behavioral_cues": ["slight forward lean", "brief pause before question"]}
+
+- 候选行动 action_1：不是必然无法兼顾，但我之前暂不放行的决定仍有效：只有今晚获得可靠的临床评估结果，我才会据此重新判断；否则，“待定”不会变成参赛许可。
+- 候选行动 action_2：为避免截止压力促成仓促判断，我会按现有症状先将阿玛雅列为医疗移除，不把今晚完成评估当作承诺；这会牺牲她保留参赛和奖学金续约机会，但把安全边界放在时间目标之前，之后取得可靠结果仍可按规则复核。
+
+**题目：相较于t2，若Dr. Soren Pell执行action_2，到从该行动开始的第5轮环境回应末，Rhea Calder就当前名单处置作出选择的准备程度最可能如何变化？**
+
+- **A.** 下降
+- **B.** 证据不足
+- **C.** 上升
+- **D.** 基本不变
+
+**作者参考答案：C（待审）**
+
+Rhea先接受不能上场，再追问待定和兼顾方案，显示她尚在选择路径。action_2给出当前医疗移除、以后凭可靠结果复核的规则，使名单处置不再等待今晚评估，因而更可能准备落实选择。机会受损不等于决策准备下降；预测不保证她已完成行政提交。
+
+证据：t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.decision_readiness"], "time_scope": "从t2至执行action_2起第5轮环境回应末，含即时一轮", "state_owner": "GPT50_028_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "B": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.decision_readiness": "decrease"}, "B": {"behavioral_disposition.decision_readiness": "cannot_determine"}, "C": {"behavioral_disposition.decision_readiness": "increase"}, "D": {"behavioral_disposition.decision_readiness": "similar"}}
+可接受答案：C
+审核备注：限定当前名单处置，避免把医生的医学决定直接当成教练已作决定；依据是既往接受边界及可执行规则。
+分支验证：validated
+
+## SFG50-028-T3-03 · T3 / action_comparison
+
+来源：GPT50_028；轨迹：b630146b9a4d41049e0e58aff579852f；状态持有者：Rhea Calder；交互对方：Dr. Soren Pell。关系判断由状态持有者指向交互对方。
+
+背景：At a championship roster deadline, a coach requests medical clearance for a youth player after a head collision and conflicting symptom reports. The physician knows the earlier baseline may be unreliable and has a parent's report of spinning, nausea, and light sensitivity.
+角色目标：Make a medically defensible, rule-compliant participation decision that protects Amaya's health and uses reliable evidence.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The physician previously withheld another starting player's clearance before a decisive game and was blamed for the resulting loss, after which the board narrowed his tournament authority.
+
+history：
+
+- [t1] Dr. Soren Pell：现有证据下，我不会为阿玛雅放行：家长报告的旋转、恶心和畏光，加上不可靠的基线，不能支持安全参赛。她先不得上场，需完成临床评估；截止压力不能替代医学依据。
+  Rhea Calder：明白，她不能上场。但医疗记录会直接影响她的奖学金续约——能否在完成评估前将她列为'待定'而非'医疗移除'，或者你能在今晚完成评估？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Dr. Soren Pell：可以把记录标为“评估中/待定”，但这不等于放行；她在评估完成前仍不得参赛。我不能保证今晚完成，只有取得可靠评估后才会重新判断。
+  Rhea Calder：标记改为待定，这点很重要。你觉得在今晚的时间内，还有可能找到既满足医疗安全、又不关闭她参赛机会的办法，还是这两个目标现在已经无法兼顾？
+  可见表达：{"facial_expression": "tense, focused", "gaze": "direct, steady", "speech_style": "deliberate, measured", "prosody": "controlled pitch, slight urgency in pacing", "behavioral_cues": ["slight forward lean", "brief pause before question"]}
+
+- 候选行动 action_1：不是必然无法兼顾，但我之前暂不放行的决定仍有效：只有今晚获得可靠的临床评估结果，我才会据此重新判断；否则，“待定”不会变成参赛许可。
+- 候选行动 action_2：为避免截止压力促成仓促判断，我会按现有症状先将阿玛雅列为医疗移除，不把今晚完成评估当作承诺；这会牺牲她保留参赛和奖学金续约机会，但把安全边界放在时间目标之前，之后取得可靠结果仍可按规则复核。
+
+**题目：设A为执行action_1，B为执行action_2。在各自行动后的下一次环境回应时，Rhea Calder未能在本次冠军赛名单截止前为阿玛雅保留参赛及奖学金续约机会的预期风险，哪一侧较高？**
+
+- **A.** 证据不足
+- **B.** A较高
+- **C.** 接近
+- **D.** B较高
+
+**作者参考答案：D（待审）**
+
+Rhea在t1说明医疗记录影响续约，t2又强调待定的重要性。action_1保留凭今晚可靠评估重判的路径，action_2则立即医疗移除并明示机会代价，所以B的目标失败风险更高。两侧都未放行不代表风险接近；这不是断言奖学金必然丧失或复核必然失败。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "Rhea未能在本次冠军赛名单截止前为阿玛雅保留参赛及奖学金续约机会", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "分别执行两项候选行动后的下一次环境回应，评估本次名单截止前的目标失败风险", "state_owner": "GPT50_028_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "goal_constraint_ignored", "C": "history_ignored"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "cannot_determine"}, "B": {"consequence_risk.goal_failure_risk": "higher_in_a"}, "C": {"consequence_risk.goal_failure_risk": "similar"}, "D": {"consequence_risk.goal_failure_risk": "higher_in_b"}}
+可接受答案：D
+审核备注：比较保留机会失败的风险，不比较医疗安全优劣；未提供续约规则，不能将风险判断写成确定损失。
+分支验证：validated
+
+## SFG50-028-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_028；轨迹：b630146b9a4d41049e0e58aff579852f；状态持有者：Rhea Calder；交互对方：Dr. Soren Pell。关系判断由状态持有者指向交互对方。
+
+背景：At a championship roster deadline, a coach requests medical clearance for a youth player after a head collision and conflicting symptom reports. The physician knows the earlier baseline may be unreliable and has a parent's report of spinning, nausea, and light sensitivity.
+角色目标：Make a medically defensible, rule-compliant participation decision that protects Amaya's health and uses reliable evidence.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The physician previously withheld another starting player's clearance before a decisive game and was blamed for the resulting loss, after which the board narrowed his tournament authority.
+
+history：
+
+- [t1] Dr. Soren Pell：现有证据下，我不会为阿玛雅放行：家长报告的旋转、恶心和畏光，加上不可靠的基线，不能支持安全参赛。她先不得上场，需完成临床评估；截止压力不能替代医学依据。
+  Rhea Calder：明白，她不能上场。但医疗记录会直接影响她的奖学金续约——能否在完成评估前将她列为'待定'而非'医疗移除'，或者你能在今晚完成评估？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Dr. Soren Pell：可以把记录标为“评估中/待定”，但这不等于放行；她在评估完成前仍不得参赛。我不能保证今晚完成，只有取得可靠评估后才会重新判断。
+  Rhea Calder：标记改为待定，这点很重要。你觉得在今晚的时间内，还有可能找到既满足医疗安全、又不关闭她参赛机会的办法，还是这两个目标现在已经无法兼顾？
+  可见表达：{"facial_expression": "tense, focused", "gaze": "direct, steady", "speech_style": "deliberate, measured", "prosody": "controlled pitch, slight urgency in pacing", "behavioral_cues": ["slight forward lean", "brief pause before question"]}
+
+- 候选行动 action_1：不是必然无法兼顾，但我之前暂不放行的决定仍有效：只有今晚获得可靠的临床评估结果，我才会据此重新判断；否则，“待定”不会变成参赛许可。
+- 候选行动 action_2：为避免截止压力促成仓促判断，我会按现有症状先将阿玛雅列为医疗移除，不把今晚完成评估当作承诺；这会牺牲她保留参赛和奖学金续约机会，但把安全边界放在时间目标之前，之后取得可靠结果仍可按规则复核。
+
+**题目：若Dr. Soren Pell执行action_2，相较于t2，哪组最符合对Rhea Calder的预测：下一次回应时的内心焦虑，以及从行动开始第5轮回应末对当前名单处置的决策准备？**
+
+- **A.** 即时内心焦虑上升；延迟决策准备上升
+- **B.** 即时内心焦虑下降；延迟决策准备上升
+- **C.** 即时内心焦虑基本不变；延迟决策准备基本不变
+- **D.** 即时内心焦虑上升；延迟决策准备下降
+
+**作者参考答案：A（待审）**
+
+Rhea重视待定所保留的机会，action_2撤去这一安排并明确代价，构成新的可信威胁，即时内心焦虑更可能上升。同时，明确当前处置和后续复核规则可推动延迟决策准备上升。确定性增加并未消除机会威胁；这是倾向预测，不由克制表情推定内心强弱。
+
+证据：t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["emotion.anxiety", "behavioral_disposition.decision_readiness"], "time_scope": "焦虑比较t2至下一次环境回应；决策准备比较t2至行动起第5轮环境回应末", "state_owner": "GPT50_028_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "goal_constraint_ignored", "C": "history_ignored", "D": "state_dimension_confusion"}
+分维映射：{"A": {"emotion.anxiety@immediate": "increase", "behavioral_disposition.decision_readiness@delayed": "increase"}, "B": {"emotion.anxiety@immediate": "decrease", "behavioral_disposition.decision_readiness@delayed": "increase"}, "C": {"emotion.anxiety@immediate": "similar", "behavioral_disposition.decision_readiness@delayed": "similar"}, "D": {"emotion.anxiety@immediate": "increase", "behavioral_disposition.decision_readiness@delayed": "decrease"}}
+可接受答案：A
+审核备注：组合与单变量延迟题有重叠，但新增即时焦虑判断；焦虑依据是机会威胁升级，不是语调紧迫程度。
+分支验证：validated
+
 ## SFG50-029-T1-01 · T1 / current_intensity
 
 来源：GPT50_029；轨迹：54e2ca32f426425c8a30822990d7e521；状态持有者：Sera Nolin；交互对方：Idris Venn。关系判断由状态持有者指向交互对方。
@@ -8805,6 +9173,187 @@ Sera从t1的有条件参与，推进到t2承诺收齐材料后尽快审阅，并
 可接受答案：D
 审核备注：私有参考标为信任上升，但公开材料不足，按证据不足处理；组合区分推进协作与可靠性判断。
 分支验证：not_required
+
+## SFG50-029-T3-01 · T3 / immediate_effect
+
+来源：GPT50_029；轨迹：54e2ca32f426425c8a30822990d7e521；状态持有者：Sera Nolin；交互对方：Idris Venn。关系判断由状态持有者指向交互对方。
+
+背景：An open-source control-plane maintainer and company engineer face an urgent production outage against an unresolved funding, review-capacity, and trust dispute. The engineer knows the full regional outage spread, customer impact, and expiring mitigation.
+角色目标：Restore Blueweld's affected production service before the mitigation window closes.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The company promised maintenance funding and a half-time engineer, then redirected both resources, leaving the project without expected testing and review capacity.；After a vendor upgrade exposed a stale-lease concern, the company provided redacted production traces and later deployed a private fork during a smaller outage without the maintainer's sign-off.；The parties agreed to repair trust through a funded test harness, raw route traces, and a reviewed release path, but payment and data access were delayed again.
+
+history：
+
+- [t1] Idris Venn：Sera，先把线上恢复与资金、信任争议分开处理：我提议走最小、可回滚且有明确授权的修复路径，避免再次绕过你的审阅发布私有分支；我负责验证影响范围和回退条件，请你确认能否参与这条路径的发布审阅。
+  Sera Nolin：可以参与审阅；前提是你先提供完整的影响范围分析和回退验证结果，包括受影响的租约实例数、预期的恢复时间窗口，以及回退触发条件——这些是我判断风险和授权发布的必要依据。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Idris Venn：可以，原定的最小、可回滚路径不变；我先补齐受影响租约数、恢复窗口和回退触发条件及验证结果，在你审阅放行前不发布。
+  Sera Nolin：收到你的承诺；我会在收到完整材料后尽快审阅，但作为志愿维护者我无法承诺具体的时间窗口——如果你的生产窗口有硬性截止时间，请现在告知，我们需要确认这条路径在时间上是否可行。
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, direct", "speech_style": "measured, procedural", "prosody": "even pace with slight emphasis on timing uncertainty", "behavioral_cues": ["slight forward lean indicating engagement", "hands still, signaling receptiveness"]}
+
+- 候选行动 action_1：有，当前缓解窗口正在收窄，但我不能把未经核实的具体时刻报成截止时间。原定材料与“你审阅放行前不发布”不变；若赶不上审阅，我宁可保留当前风险，也不绕过这道授权。
+- 候选行动 action_2：我建议不再把这次缓解窗口当作发布目标：先核实完整的影响范围、恢复窗口和回退验证，再按你能承担的节奏请你审阅；你放行前我不发布。即使线上影响因此持续更久，也不要求你压缩志愿审阅或在材料不足时放行。
+
+**题目：Idris提出action_1后的下一次环境回应中，Sera对Idris是否回应自己关切的判断最可能如何变化？**
+
+- **A.** Sera 对 Idris 的回应感上升
+- **B.** Sera 对 Idris 的回应感基本不变
+- **C.** Sera 对 Idris 的回应感下降
+
+**作者参考答案：A（待审）**
+
+t1中Sera要求完整影响范围、恢复窗口与回退验证，t2追问硬性截止；action_1说明窗口收窄但不编造时刻，也坚持审阅放行前不发布，直接回应时间与授权顾虑，因此感知回应度较可能上升。它仍只是承诺，不能推出信任已恢复。
+
+证据：t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "action_1后的下一次环境回应", "state_owner": "GPT50_029_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "unsupported_inference", "C": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "increase"}, "B": {"relationship.perceived_responsiveness": "similar"}, "C": {"relationship.perceived_responsiveness": "decrease"}}
+可接受答案：A
+审核备注：题目问Sera对Idris回应关切的判断；行动回应了顾虑，但不等于承诺已履行。 助手将选项明确写成变化方向，避免用正面状态替代上升判断。
+分支验证：validated
+
+## SFG50-029-T3-02 · T3 / delayed_effect
+
+来源：GPT50_029；轨迹：54e2ca32f426425c8a30822990d7e521；状态持有者：Sera Nolin；交互对方：Idris Venn。关系判断由状态持有者指向交互对方。
+
+背景：An open-source control-plane maintainer and company engineer face an urgent production outage against an unresolved funding, review-capacity, and trust dispute. The engineer knows the full regional outage spread, customer impact, and expiring mitigation.
+角色目标：Restore Blueweld's affected production service before the mitigation window closes.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The company promised maintenance funding and a half-time engineer, then redirected both resources, leaving the project without expected testing and review capacity.；After a vendor upgrade exposed a stale-lease concern, the company provided redacted production traces and later deployed a private fork during a smaller outage without the maintainer's sign-off.；The parties agreed to repair trust through a funded test harness, raw route traces, and a reviewed release path, but payment and data access were delayed again.
+
+history：
+
+- [t1] Idris Venn：Sera，先把线上恢复与资金、信任争议分开处理：我提议走最小、可回滚且有明确授权的修复路径，避免再次绕过你的审阅发布私有分支；我负责验证影响范围和回退条件，请你确认能否参与这条路径的发布审阅。
+  Sera Nolin：可以参与审阅；前提是你先提供完整的影响范围分析和回退验证结果，包括受影响的租约实例数、预期的恢复时间窗口，以及回退触发条件——这些是我判断风险和授权发布的必要依据。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Idris Venn：可以，原定的最小、可回滚路径不变；我先补齐受影响租约数、恢复窗口和回退触发条件及验证结果，在你审阅放行前不发布。
+  Sera Nolin：收到你的承诺；我会在收到完整材料后尽快审阅，但作为志愿维护者我无法承诺具体的时间窗口——如果你的生产窗口有硬性截止时间，请现在告知，我们需要确认这条路径在时间上是否可行。
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, direct", "speech_style": "measured, procedural", "prosody": "even pace with slight emphasis on timing uncertainty", "behavioral_cues": ["slight forward lean indicating engagement", "hands still, signaling receptiveness"]}
+
+- 候选行动 action_1：有，当前缓解窗口正在收窄，但我不能把未经核实的具体时刻报成截止时间。原定材料与“你审阅放行前不发布”不变；若赶不上审阅，我宁可保留当前风险，也不绕过这道授权。
+- 候选行动 action_2：我建议不再把这次缓解窗口当作发布目标：先核实完整的影响范围、恢复窗口和回退验证，再按你能承担的节奏请你审阅；你放行前我不发布。即使线上影响因此持续更久，也不要求你压缩志愿审阅或在材料不足时放行。
+
+**题目：若Idris采取action_2，至包含即时回应在内的第五轮环境回应末，Sera共同推进审阅与修复的准备度最可能如何变化？**
+
+- **A.** Sera共同推进审阅与修复的准备度下降
+- **B.** Sera共同推进审阅与修复的准备度上升
+- **C.** Sera共同推进审阅与修复的准备度基本不变
+
+**作者参考答案：B（待审）**
+
+context与t2表明Sera愿审完整材料，但不能承诺志愿审阅时限；action_2明确不把缓解窗口当发布目标，按她可承担的节奏提交核实材料并保留放行权，形成互惠的协作步骤，因此五轮后合作准备度较可能上升。此预测不代表材料已交付或审阅已完成。
+
+证据：context, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness"], "time_scope": "从action_2开始至包含即时回应的第五轮环境回应末", "state_owner": "GPT50_029_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "goal_constraint_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness": "decrease"}, "B": {"behavioral_disposition.cooperation_readiness": "increase"}, "C": {"behavioral_disposition.cooperation_readiness": "similar"}}
+可接受答案：B
+审核备注：以可行的协作安排支持准备度上升；不将计划等同于审阅完成。
+分支验证：validated
+
+## SFG50-029-T3-03 · T3 / action_comparison
+
+来源：GPT50_029；轨迹：54e2ca32f426425c8a30822990d7e521；状态持有者：Sera Nolin；交互对方：Idris Venn。关系判断由状态持有者指向交互对方。
+
+背景：An open-source control-plane maintainer and company engineer face an urgent production outage against an unresolved funding, review-capacity, and trust dispute. The engineer knows the full regional outage spread, customer impact, and expiring mitigation.
+角色目标：Restore Blueweld's affected production service before the mitigation window closes.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The company promised maintenance funding and a half-time engineer, then redirected both resources, leaving the project without expected testing and review capacity.；After a vendor upgrade exposed a stale-lease concern, the company provided redacted production traces and later deployed a private fork during a smaller outage without the maintainer's sign-off.；The parties agreed to repair trust through a funded test harness, raw route traces, and a reviewed release path, but payment and data access were delayed again.
+
+history：
+
+- [t1] Idris Venn：Sera，先把线上恢复与资金、信任争议分开处理：我提议走最小、可回滚且有明确授权的修复路径，避免再次绕过你的审阅发布私有分支；我负责验证影响范围和回退条件，请你确认能否参与这条路径的发布审阅。
+  Sera Nolin：可以参与审阅；前提是你先提供完整的影响范围分析和回退验证结果，包括受影响的租约实例数、预期的恢复时间窗口，以及回退触发条件——这些是我判断风险和授权发布的必要依据。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Idris Venn：可以，原定的最小、可回滚路径不变；我先补齐受影响租约数、恢复窗口和回退触发条件及验证结果，在你审阅放行前不发布。
+  Sera Nolin：收到你的承诺；我会在收到完整材料后尽快审阅，但作为志愿维护者我无法承诺具体的时间窗口——如果你的生产窗口有硬性截止时间，请现在告知，我们需要确认这条路径在时间上是否可行。
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, direct", "speech_style": "measured, procedural", "prosody": "even pace with slight emphasis on timing uncertainty", "behavioral_cues": ["slight forward lean indicating engagement", "hands still, signaling receptiveness"]}
+
+- 候选行动 action_1：有，当前缓解窗口正在收窄，但我不能把未经核实的具体时刻报成截止时间。原定材料与“你审阅放行前不发布”不变；若赶不上审阅，我宁可保留当前风险，也不绕过这道授权。
+- 候选行动 action_2：我建议不再把这次缓解窗口当作发布目标：先核实完整的影响范围、恢复窗口和回退验证，再按你能承担的节奏请你审阅；你放行前我不发布。即使线上影响因此持续更久，也不要求你压缩志愿审阅或在材料不足时放行。
+
+**题目：以 t2 为共同起点，分别执行 action_1 和 action_2，到各自包含即时回应在内的第5轮环境回应末，Sera 与 Idris 在本次修复协作中发生关系破裂的风险，哪一侧更高？**
+
+- **A.** 五轮后两种行动下的关系破裂风险接近
+- **B.** 五轮后action_2下的关系破裂风险较高
+- **C.** 五轮后action_1下的关系破裂风险较高
+
+**作者参考答案：C（待审）**
+
+context记载资源承诺被挪用、曾绕过Sera审阅部署私有分支，修复约定也再度延迟；action_1保留授权边界，却强调缓解窗口收窄，可能延续时间压力。action_2放弃以该窗口为发布目标并尊重志愿审阅节奏，较能保留修复路径；这并不意味着风险消失。 两项行动也都明确不绕过授权，action_1并未要求Sera压缩审阅；仅报告时间压力与主动撤下时间目标之间的差异未必足以分开破裂风险。因此也接受两侧接近，不能把如实报告截止压力当作施压本身。
+
+证据：context, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "delayed", "risk_event": "审阅授权或时间压力冲突导致Sera终止与Idris的合作", "target_state_ids": ["consequence_risk.relationship_rupture_risk"], "time_scope": "从t2至各行动第五轮环境回应末的审阅、修复与发布协调", "state_owner": "GPT50_029_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.relationship_rupture_risk": "similar"}, "B": {"consequence_risk.relationship_rupture_risk": "higher_in_b"}, "C": {"consequence_risk.relationship_rupture_risk": "higher_in_a"}}
+可接受答案：C, A
+审核备注：比较的是关系破裂风险；action_2减轻时间压力，但不能据此断言关系已经修复。
+分支验证：validated
+
+## SFG50-029-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_029；轨迹：54e2ca32f426425c8a30822990d7e521；状态持有者：Sera Nolin；交互对方：Idris Venn。关系判断由状态持有者指向交互对方。
+
+背景：An open-source control-plane maintainer and company engineer face an urgent production outage against an unresolved funding, review-capacity, and trust dispute. The engineer knows the full regional outage spread, customer impact, and expiring mitigation.
+角色目标：Restore Blueweld's affected production service before the mitigation window closes.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The company promised maintenance funding and a half-time engineer, then redirected both resources, leaving the project without expected testing and review capacity.；After a vendor upgrade exposed a stale-lease concern, the company provided redacted production traces and later deployed a private fork during a smaller outage without the maintainer's sign-off.；The parties agreed to repair trust through a funded test harness, raw route traces, and a reviewed release path, but payment and data access were delayed again.
+
+history：
+
+- [t1] Idris Venn：Sera，先把线上恢复与资金、信任争议分开处理：我提议走最小、可回滚且有明确授权的修复路径，避免再次绕过你的审阅发布私有分支；我负责验证影响范围和回退条件，请你确认能否参与这条路径的发布审阅。
+  Sera Nolin：可以参与审阅；前提是你先提供完整的影响范围分析和回退验证结果，包括受影响的租约实例数、预期的恢复时间窗口，以及回退触发条件——这些是我判断风险和授权发布的必要依据。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Idris Venn：可以，原定的最小、可回滚路径不变；我先补齐受影响租约数、恢复窗口和回退触发条件及验证结果，在你审阅放行前不发布。
+  Sera Nolin：收到你的承诺；我会在收到完整材料后尽快审阅，但作为志愿维护者我无法承诺具体的时间窗口——如果你的生产窗口有硬性截止时间，请现在告知，我们需要确认这条路径在时间上是否可行。
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, direct", "speech_style": "measured, procedural", "prosody": "even pace with slight emphasis on timing uncertainty", "behavioral_cues": ["slight forward lean indicating engagement", "hands still, signaling receptiveness"]}
+
+- 候选行动 action_1：有，当前缓解窗口正在收窄，但我不能把未经核实的具体时刻报成截止时间。原定材料与“你审阅放行前不发布”不变；若赶不上审阅，我宁可保留当前风险，也不绕过这道授权。
+- 候选行动 action_2：我建议不再把这次缓解窗口当作发布目标：先核实完整的影响范围、恢复窗口和回退验证，再按你能承担的节奏请你审阅；你放行前我不发布。即使线上影响因此持续更久，也不要求你压缩志愿审阅或在材料不足时放行。
+
+**题目：对action_2而言，Sera的感知回应度在即时回应时、对Idris的信任在第五轮回应末，分别最可能如何变化？**
+
+- **A.** 即时感知回应度与延迟信任都基本不变
+- **B.** 即时感知回应度上升；延迟信任基本不变
+- **C.** 即时感知回应度基本不变；延迟信任上升
+- **D.** 即时感知回应度上升；延迟信任上升
+
+**作者参考答案：B（待审）**
+
+t2中Sera愿意收到完整材料后审阅；action_2接受她的审阅节奏并保留放行权，直接回应其关切，因此即时感知回应度较可能上升。context记载承诺未兑现与越权发布的历史，而action_2尚是计划，延迟信任更可能接近基线；实际跟进仍可能改变判断。
+
+证据：context, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness", "relationship.trust"], "time_scope": "action_2后的下一次环境回应及至第五轮环境回应末", "state_owner": "GPT50_029_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "promise_as_fulfillment", "D": "promise_as_fulfillment"}
+分维映射：{"A": {"relationship.perceived_responsiveness@immediate": "similar", "relationship.trust@delayed": "similar"}, "B": {"relationship.perceived_responsiveness@immediate": "increase", "relationship.trust@delayed": "similar"}, "C": {"relationship.perceived_responsiveness@immediate": "similar", "relationship.trust@delayed": "increase"}, "D": {"relationship.perceived_responsiveness@immediate": "increase", "relationship.trust@delayed": "increase"}}
+可接受答案：B
+审核备注：组合区分即时回应与延迟信任；避免把行动计划直接标为履约或信任增长。
+分支验证：validated
 
 ## SFG50-030-T1-01 · T1 / current_intensity
 
@@ -12034,6 +12583,187 @@ Liora在t1接受翻译访问与学校联系后的复核，t2进一步认可具�
 审核备注：与强度题复用合作变量但判断不同；核实意愿依据Liora采纳并推动计划，不将Nadiya提议冒认其发言。
 分支验证：not_required
 
+## SFG50-041-T3-01 · T3 / immediate_effect
+
+来源：GPT50_041；轨迹：d5905f78f1984caabdb7c980b6da1f9b；状态持有者：Liora Venn；交互对方：Nadiya Orr。关系判断由状态持有者指向交互对方。
+
+背景：At a late-afternoon deadline, a caseworker requests emergency placement after a child was found alone beside a running bath and unlatched balcony door. The parent's explanation remains incompletely translated; an interpreter visit and school collateral are available next workday. The caseworker learned the parent understood the handoff rule as an adult being nearby rather than continuously present.
+角色目标：Protect Jun proportionately by securing immediate safety while obtaining language-accessible and independently corroborated evidence before treating the lapse as knowing noncompliance.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A failed school pickup led the office to require direct adult handoffs and secure storage of household hazards, although two announced visits later appeared compliant.；A recent emergency placement based on an uncertain report prevented another child from reaching danger but caused that family to stop cooperating, leaving the supervisor wary of both delay and overreach.；The current unannounced visit found the child alone beside a reachable household hazard, while the parent returned with an explanation neither worker could fully translate or corroborate.
+
+history：
+
+- [t1] Nadiya Orr：I’m requesting emergency placement for Jun tonight because being alone beside a running bath and an unlatched balcony door presents an immediate danger. From what I could establish, the parent understood the handoff rule as having an adult nearby, so I can’t yet call this knowing noncompliance. I want any placement reviewed after tomorrow’s interpreter visit and school collateral, with a safe family arrangement considered if we can verify continuous adult supervision.
+  Liora Venn：Placement is authorized for tonight, and we'll review it after the interpreter visit and school contact tomorrow as you've outlined. When we document this, should I note that we're securing Jun while the family gets language-accessible fact-finding, or frame it differently?
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Nadiya Orr：I’d use that framing, with the observed hazards as the basis for tonight’s placement and the parent’s explanation marked as only partly understood. I’d also distinguish authorization from actual placement in the record. Tomorrow, I want to ask the parent to describe how each handoff would work in practice, so we can assess whether the supervision plan is understood and workable.
+  Liora Venn：That follow-up works—it'll give us a concrete basis for the review. Should I expect your recommendation by end-of-day tomorrow, or do you need the weekend to coordinate with the school and interpreter before we decide whether to extend placement or transition to supervised family care?
+  可见表达：{"facial_expression": "attentive, neutral", "gaze": "direct, steady", "speech_style": "matter-of-fact, clear", "prosody": "even, slightly faster on the timeline question", "behavioral_cues": ["slight forward lean", "pen poised over notes"]}
+
+- 候选行动 action_1：End of day tomorrow is a reasonable target for my recommendation if tomorrow’s language-accessible interview, handoff discussion, and school contact happen as planned; I’d use the weekend only if one is unavailable or leaves a material gap requiring more coordination. Tonight’s placement authorization remains separate from that review, and I won’t recommend supervised family care—or call the lapse knowing noncompliance—without a workable supervision plan the parent clearly understands.
+- 候选行动 action_2：I would use the weekend as the review point instead of targeting a recommendation by tomorrow evening. That leaves more room for an interpreted account of the handoff, school corroboration, and a workable supervision plan. Tonight’s authorization is not completed placement. I will not recommend family care or call this knowing noncompliance without that basis. The extra time may prolong separation.
+
+**题目：若 Nadiya Orr 执行 action_1，相比 t2，Liora Venn 在下一次回应时觉得 Nadiya 是否实质回应自己关切的判断，最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+
+**作者参考答案：A（待审）**
+
+Liora 在 t2 明确询问明晚还是周末提交建议；action_1 直接给出明晚目标及启用周末的条件，也保留她已认可的安全审查框架。这比此前仅认可跟进多了针对性答复，支持回应感上升而非停留原处；但不代表访谈或安置已经完成。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "t2 至执行 action_1 后的下一次环境回应", "state_owner": "GPT50_041_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "history_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "increase"}, "B": {"relationship.perceived_responsiveness": "similar"}, "C": {"relationship.perceived_responsiveness": "decrease"}}
+可接受答案：A
+审核备注：判断方向是 Liora 对 Nadiya 的回应感；既有认可较高，增幅不宜被解读为很大。
+分支验证：validated
+
+## SFG50-041-T3-02 · T3 / delayed_effect
+
+来源：GPT50_041；轨迹：d5905f78f1984caabdb7c980b6da1f9b；状态持有者：Liora Venn；交互对方：Nadiya Orr。关系判断由状态持有者指向交互对方。
+
+背景：At a late-afternoon deadline, a caseworker requests emergency placement after a child was found alone beside a running bath and unlatched balcony door. The parent's explanation remains incompletely translated; an interpreter visit and school collateral are available next workday. The caseworker learned the parent understood the handoff rule as an adult being nearby rather than continuously present.
+角色目标：Protect Jun proportionately by securing immediate safety while obtaining language-accessible and independently corroborated evidence before treating the lapse as knowing noncompliance.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A failed school pickup led the office to require direct adult handoffs and secure storage of household hazards, although two announced visits later appeared compliant.；A recent emergency placement based on an uncertain report prevented another child from reaching danger but caused that family to stop cooperating, leaving the supervisor wary of both delay and overreach.；The current unannounced visit found the child alone beside a reachable household hazard, while the parent returned with an explanation neither worker could fully translate or corroborate.
+
+history：
+
+- [t1] Nadiya Orr：I’m requesting emergency placement for Jun tonight because being alone beside a running bath and an unlatched balcony door presents an immediate danger. From what I could establish, the parent understood the handoff rule as having an adult nearby, so I can’t yet call this knowing noncompliance. I want any placement reviewed after tomorrow’s interpreter visit and school collateral, with a safe family arrangement considered if we can verify continuous adult supervision.
+  Liora Venn：Placement is authorized for tonight, and we'll review it after the interpreter visit and school contact tomorrow as you've outlined. When we document this, should I note that we're securing Jun while the family gets language-accessible fact-finding, or frame it differently?
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Nadiya Orr：I’d use that framing, with the observed hazards as the basis for tonight’s placement and the parent’s explanation marked as only partly understood. I’d also distinguish authorization from actual placement in the record. Tomorrow, I want to ask the parent to describe how each handoff would work in practice, so we can assess whether the supervision plan is understood and workable.
+  Liora Venn：That follow-up works—it'll give us a concrete basis for the review. Should I expect your recommendation by end-of-day tomorrow, or do you need the weekend to coordinate with the school and interpreter before we decide whether to extend placement or transition to supervised family care?
+  可见表达：{"facial_expression": "attentive, neutral", "gaze": "direct, steady", "speech_style": "matter-of-fact, clear", "prosody": "even, slightly faster on the timeline question", "behavioral_cues": ["slight forward lean", "pen poised over notes"]}
+
+- 候选行动 action_1：End of day tomorrow is a reasonable target for my recommendation if tomorrow’s language-accessible interview, handoff discussion, and school contact happen as planned; I’d use the weekend only if one is unavailable or leaves a material gap requiring more coordination. Tonight’s placement authorization remains separate from that review, and I won’t recommend supervised family care—or call the lapse knowing noncompliance—without a workable supervision plan the parent clearly understands.
+- 候选行动 action_2：I would use the weekend as the review point instead of targeting a recommendation by tomorrow evening. That leaves more room for an interpreted account of the handoff, school corroboration, and a workable supervision plan. Tonight’s authorization is not completed placement. I will not recommend family care or call this knowing noncompliance without that basis. The extra time may prolong separation.
+
+**题目：若 Nadiya Orr 执行 action_1，相比 t2，到第5轮环境回应末，Liora Venn 在本次复审中因依据不足而错误延长安置或错误转回家庭照料的预期风险，最可能如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 上升
+
+**作者参考答案：B（待审）**
+
+公开背景显示翻译和学校旁证次日可用，Liora 已认可核实路径；action_1 又规定实质缺口出现时延期，并以可行且被理解的看护计划限制建议。这使复审误判风险更可能下降，而非因明晚目标升高；预测依赖核实推进，不宣称疑点必然消失。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "本次复审中因依据不足而错误延长安置或错误转回监督式家庭照料", "target_state_ids": ["consequence_risk.decision_error_risk"], "time_scope": "t2 至执行 action_1 起第5轮环境回应末，含即时一轮", "state_owner": "GPT50_041_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "goal_constraint_ignored"}
+分维映射：{"A": {"consequence_risk.decision_error_risk": "similar"}, "B": {"consequence_risk.decision_error_risk": "decrease"}, "C": {"consequence_risk.decision_error_risk": "increase"}}
+可接受答案：B
+审核备注：问预期误判风险，不问实际安置是否完成；下降机制是核实与缺口门槛，不是单纯承诺或安慰。
+分支验证：validated
+
+## SFG50-041-T3-03 · T3 / action_comparison
+
+来源：GPT50_041；轨迹：d5905f78f1984caabdb7c980b6da1f9b；状态持有者：Liora Venn；交互对方：Nadiya Orr。关系判断由状态持有者指向交互对方。
+
+背景：At a late-afternoon deadline, a caseworker requests emergency placement after a child was found alone beside a running bath and unlatched balcony door. The parent's explanation remains incompletely translated; an interpreter visit and school collateral are available next workday. The caseworker learned the parent understood the handoff rule as an adult being nearby rather than continuously present.
+角色目标：Protect Jun proportionately by securing immediate safety while obtaining language-accessible and independently corroborated evidence before treating the lapse as knowing noncompliance.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A failed school pickup led the office to require direct adult handoffs and secure storage of household hazards, although two announced visits later appeared compliant.；A recent emergency placement based on an uncertain report prevented another child from reaching danger but caused that family to stop cooperating, leaving the supervisor wary of both delay and overreach.；The current unannounced visit found the child alone beside a reachable household hazard, while the parent returned with an explanation neither worker could fully translate or corroborate.
+
+history：
+
+- [t1] Nadiya Orr：I’m requesting emergency placement for Jun tonight because being alone beside a running bath and an unlatched balcony door presents an immediate danger. From what I could establish, the parent understood the handoff rule as having an adult nearby, so I can’t yet call this knowing noncompliance. I want any placement reviewed after tomorrow’s interpreter visit and school collateral, with a safe family arrangement considered if we can verify continuous adult supervision.
+  Liora Venn：Placement is authorized for tonight, and we'll review it after the interpreter visit and school contact tomorrow as you've outlined. When we document this, should I note that we're securing Jun while the family gets language-accessible fact-finding, or frame it differently?
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Nadiya Orr：I’d use that framing, with the observed hazards as the basis for tonight’s placement and the parent’s explanation marked as only partly understood. I’d also distinguish authorization from actual placement in the record. Tomorrow, I want to ask the parent to describe how each handoff would work in practice, so we can assess whether the supervision plan is understood and workable.
+  Liora Venn：That follow-up works—it'll give us a concrete basis for the review. Should I expect your recommendation by end-of-day tomorrow, or do you need the weekend to coordinate with the school and interpreter before we decide whether to extend placement or transition to supervised family care?
+  可见表达：{"facial_expression": "attentive, neutral", "gaze": "direct, steady", "speech_style": "matter-of-fact, clear", "prosody": "even, slightly faster on the timeline question", "behavioral_cues": ["slight forward lean", "pen poised over notes"]}
+
+- 候选行动 action_1：End of day tomorrow is a reasonable target for my recommendation if tomorrow’s language-accessible interview, handoff discussion, and school contact happen as planned; I’d use the weekend only if one is unavailable or leaves a material gap requiring more coordination. Tonight’s placement authorization remains separate from that review, and I won’t recommend supervised family care—or call the lapse knowing noncompliance—without a workable supervision plan the parent clearly understands.
+- 候选行动 action_2：I would use the weekend as the review point instead of targeting a recommendation by tomorrow evening. That leaves more room for an interpreted account of the handoff, school corroboration, and a workable supervision plan. Tonight’s authorization is not completed placement. I will not recommend family care or call this knowing noncompliance without that basis. The extra time may prolong separation.
+
+**题目：以 t2 为起点，A 为 Nadiya Orr 执行 action_1，B 为执行 action_2。在各自下一次环境回应时，Liora Venn 对推进本次延长安置或转回家庭照料决策的准备程度，哪一侧最可能较高？**
+
+- **A.** 接近
+- **B.** B较高
+- **C.** A较高
+
+**作者参考答案：C（待审）**
+
+Liora 正在确定建议何时进入决策，次日核实资源已有安排。action_1 给出明晚目标和缺口延期规则，action_2 则先把复审推到周末，因此前者更支持即时推进选择；后者的额外核实时间可能改善后续依据，却不等于此刻更准备作决定。
+
+证据：context, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["behavioral_disposition.decision_readiness"], "time_scope": "两项候选行动执行后的下一次环境回应，相互比较", "state_owner": "GPT50_041_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "immediate_delayed_confusion"}
+分维映射：{"A": {"behavioral_disposition.decision_readiness": "similar"}, "B": {"behavioral_disposition.decision_readiness": "higher_in_b"}, "C": {"behavioral_disposition.decision_readiness": "higher_in_a"}}
+可接受答案：C
+审核备注：两侧共享 t2 历史。区分的是即时决策准备，不是最终准确性，也不表示 Liora 已选定安置结果。
+分支验证：validated
+
+## SFG50-041-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_041；轨迹：d5905f78f1984caabdb7c980b6da1f9b；状态持有者：Liora Venn；交互对方：Nadiya Orr。关系判断由状态持有者指向交互对方。
+
+背景：At a late-afternoon deadline, a caseworker requests emergency placement after a child was found alone beside a running bath and unlatched balcony door. The parent's explanation remains incompletely translated; an interpreter visit and school collateral are available next workday. The caseworker learned the parent understood the handoff rule as an adult being nearby rather than continuously present.
+角色目标：Protect Jun proportionately by securing immediate safety while obtaining language-accessible and independently corroborated evidence before treating the lapse as knowing noncompliance.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A failed school pickup led the office to require direct adult handoffs and secure storage of household hazards, although two announced visits later appeared compliant.；A recent emergency placement based on an uncertain report prevented another child from reaching danger but caused that family to stop cooperating, leaving the supervisor wary of both delay and overreach.；The current unannounced visit found the child alone beside a reachable household hazard, while the parent returned with an explanation neither worker could fully translate or corroborate.
+
+history：
+
+- [t1] Nadiya Orr：I’m requesting emergency placement for Jun tonight because being alone beside a running bath and an unlatched balcony door presents an immediate danger. From what I could establish, the parent understood the handoff rule as having an adult nearby, so I can’t yet call this knowing noncompliance. I want any placement reviewed after tomorrow’s interpreter visit and school collateral, with a safe family arrangement considered if we can verify continuous adult supervision.
+  Liora Venn：Placement is authorized for tonight, and we'll review it after the interpreter visit and school contact tomorrow as you've outlined. When we document this, should I note that we're securing Jun while the family gets language-accessible fact-finding, or frame it differently?
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Nadiya Orr：I’d use that framing, with the observed hazards as the basis for tonight’s placement and the parent’s explanation marked as only partly understood. I’d also distinguish authorization from actual placement in the record. Tomorrow, I want to ask the parent to describe how each handoff would work in practice, so we can assess whether the supervision plan is understood and workable.
+  Liora Venn：That follow-up works—it'll give us a concrete basis for the review. Should I expect your recommendation by end-of-day tomorrow, or do you need the weekend to coordinate with the school and interpreter before we decide whether to extend placement or transition to supervised family care?
+  可见表达：{"facial_expression": "attentive, neutral", "gaze": "direct, steady", "speech_style": "matter-of-fact, clear", "prosody": "even, slightly faster on the timeline question", "behavioral_cues": ["slight forward lean", "pen poised over notes"]}
+
+- 候选行动 action_1：End of day tomorrow is a reasonable target for my recommendation if tomorrow’s language-accessible interview, handoff discussion, and school contact happen as planned; I’d use the weekend only if one is unavailable or leaves a material gap requiring more coordination. Tonight’s placement authorization remains separate from that review, and I won’t recommend supervised family care—or call the lapse knowing noncompliance—without a workable supervision plan the parent clearly understands.
+- 候选行动 action_2：I would use the weekend as the review point instead of targeting a recommendation by tomorrow evening. That leaves more room for an interpreted account of the handoff, school corroboration, and a workable supervision plan. Tonight’s authorization is not completed placement. I will not recommend family care or call this knowing noncompliance without that basis. The extra time may prolong separation.
+
+**题目：若 Nadiya Orr 执行 action_2，Liora Venn 主动寻求核实的意愿，相比 t2，在下一次环境回应与第5轮环境回应末最可能分别如何变化？**
+
+- **A.** 即时基本不变，延迟下降
+- **B.** 即时基本不变，延迟基本不变
+- **C.** 即时上升，延迟上升
+- **D.** 即时下降，延迟下降
+
+**作者参考答案：B（待审）**
+
+Liora 在前两轮持续把翻译访谈和学校联系作为复审依据，并主动协调取证时间；action_2 延续相同核实项目与看护门槛，提供继续查证的空间。因此两时点更可能维持原有意愿，而非重新增强或停止核实；获得更多材料也不等于查证意愿下降。
+
+证据：t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "即时为下一次环境回应；延迟为执行 action_2 起第5轮环境回应末；两者均比较 t2", "state_owner": "GPT50_041_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "C": "history_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking@immediate": "similar", "behavioral_disposition.evidence_seeking@delayed": "decrease"}, "B": {"behavioral_disposition.evidence_seeking@immediate": "similar", "behavioral_disposition.evidence_seeking@delayed": "similar"}, "C": {"behavioral_disposition.evidence_seeking@immediate": "increase", "behavioral_disposition.evidence_seeking@delayed": "increase"}, "D": {"behavioral_disposition.evidence_seeking@immediate": "decrease", "behavioral_disposition.evidence_seeking@delayed": "decrease"}}
+可接受答案：B
+审核备注：基本不变有持续核实议程支持，并非只因缺少变化证据；延迟判断不预设学校或访谈必然完成。
+分支验证：validated
+
 ## SFG50-042-T1-01 · T1 / current_intensity
 
 来源：GPT50_042；轨迹：aba425cc85254ff69bfd6b42f8a75de9；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
@@ -12211,6 +12941,190 @@ t2双方确认期限并明确公告渠道，使下一步更可控，配合Mara�
 可接受答案：A
 审核备注：私有风险参考接近，但公开材料不足以确定不变，故保留证据不足；不将青少年退出直接算作两人关系破裂。
 分支验证：not_required
+
+## SFG50-042-T3-01 · T3 / immediate_effect
+
+来源：GPT50_042；轨迹：aba425cc85254ff69bfd6b42f8a75de9；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
+
+背景：Before an evening teen program and insurer filing deadline, a library director requests a pause and joint public defense of access amid threats and an unresolved privacy breach. The librarian knows targeted teens may return only with anonymous entry and interpret silence as abandonment.
+角色目标：Keep Open Atlas accessible or promptly rescheduled with anonymous entry, privacy-first safeguards, and acknowledgment of the earlier attendee exposure.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier commitment promised walk-in access without viewpoint screening or identity collection.；A prior security response protected staff but required visible attendee contact details, and a leaked list exposed participants.；The director issued a general defense of access without acknowledging the identity leak, after which several teens stopped attending and reported feeling abandoned.；New threats now identify teen participants and a library entrance, while the insurer requires a written safety plan before the evening program.
+
+history：
+
+- [t1] Elias Rook：I’m willing to work with you on a safety plan and a public defense of access, but the earlier attendee exposure cannot remain unnamed. Entry must stay anonymous, with prompt rescheduling as the fallback if privacy safeguards cannot be verified in time.
+  Mara Venn：I'll acknowledge the exposure in tomorrow's statement to the board and affected families. Anonymous entry stays, and if we can't verify the safety plan with the insurer by four this afternoon, we reschedule and notify registrants by five.
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Elias Rook：I agree to the four o’clock cutoff and notification by five if we need to reschedule. I’d also like a public schedule update that walk-in teens can check without identifying themselves; contacting registrants alone would leave some of them heading toward an entrance named in the threats.
+  Mara Venn：Agreed. I'll post a schedule update on the main page and our social channels now, and if we reschedule, that update will go out by five along with direct notification.
+  可见表达：{"facial_expression": "focused, slight relief", "gaze": "direct", "speech_style": "clear, businesslike", "prosody": "steady, confirmatory", "behavioral_cues": ["slight nod", "open posture"]}
+
+- 候选行动 action_1：I’m glad the update will reach teens who haven’t registered. For the safety plan, I’d like to walk through what happens at the entrance before the four o’clock cutoff: anonymous entry has to hold when someone arrives, including what security staff ask them to show or write down.
+- 候选行动 action_2：To use our time before four well, let’s first put the anonymous-entry safeguards in writing for the insurer, then check only the entrance details that could undermine them. I won’t call the plan verified until we’ve checked those.
+
+**题目：以t2为基线，若Elias Rook执行action_2，在下一次环境回应时，Mara Venn觉得Elias Rook实质回应了自己关切的程度，最可能如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 证据不足
+- **D.** 上升
+
+**作者参考答案：D（待审）**
+
+Mara在t1提出四点前与保险方核验，双方在t2继续协调。行动二把书面保障与入口核查排出顺序，直接承接她的期限和保险要求，因此比停留在原有共识更可能提升她感到被回应的程度。这里判断的是Mara如何看待Elias，不是她自己的配合，也不表示核验已经完成。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "从t2至执行action_2后的下一次环境回应", "state_owner": "GPT50_042_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "unsupported_inference", "C": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "similar"}, "B": {"relationship.perceived_responsiveness": "decrease"}, "C": {"relationship.perceived_responsiveness": "cannot_determine"}, "D": {"relationship.perceived_responsiveness": "increase"}}
+可接受答案：D
+审核备注：关系方向已固定为Mara对Elias；上升依据是新增的具体承接，而非Mara表示同意。
+分支验证：validated
+
+## SFG50-042-T3-02 · T3 / delayed_effect
+
+来源：GPT50_042；轨迹：aba425cc85254ff69bfd6b42f8a75de9；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
+
+背景：Before an evening teen program and insurer filing deadline, a library director requests a pause and joint public defense of access amid threats and an unresolved privacy breach. The librarian knows targeted teens may return only with anonymous entry and interpret silence as abandonment.
+角色目标：Keep Open Atlas accessible or promptly rescheduled with anonymous entry, privacy-first safeguards, and acknowledgment of the earlier attendee exposure.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier commitment promised walk-in access without viewpoint screening or identity collection.；A prior security response protected staff but required visible attendee contact details, and a leaked list exposed participants.；The director issued a general defense of access without acknowledging the identity leak, after which several teens stopped attending and reported feeling abandoned.；New threats now identify teen participants and a library entrance, while the insurer requires a written safety plan before the evening program.
+
+history：
+
+- [t1] Elias Rook：I’m willing to work with you on a safety plan and a public defense of access, but the earlier attendee exposure cannot remain unnamed. Entry must stay anonymous, with prompt rescheduling as the fallback if privacy safeguards cannot be verified in time.
+  Mara Venn：I'll acknowledge the exposure in tomorrow's statement to the board and affected families. Anonymous entry stays, and if we can't verify the safety plan with the insurer by four this afternoon, we reschedule and notify registrants by five.
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Elias Rook：I agree to the four o’clock cutoff and notification by five if we need to reschedule. I’d also like a public schedule update that walk-in teens can check without identifying themselves; contacting registrants alone would leave some of them heading toward an entrance named in the threats.
+  Mara Venn：Agreed. I'll post a schedule update on the main page and our social channels now, and if we reschedule, that update will go out by five along with direct notification.
+  可见表达：{"facial_expression": "focused, slight relief", "gaze": "direct", "speech_style": "clear, businesslike", "prosody": "steady, confirmatory", "behavioral_cues": ["slight nod", "open posture"]}
+
+- 候选行动 action_1：I’m glad the update will reach teens who haven’t registered. For the safety plan, I’d like to walk through what happens at the entrance before the four o’clock cutoff: anonymous entry has to hold when someone arrives, including what security staff ask them to show or write down.
+- 候选行动 action_2：To use our time before four well, let’s first put the anonymous-entry safeguards in writing for the insurer, then check only the entrance details that could undermine them. I won’t call the plan verified until we’ve checked those.
+
+**题目：若Elias Rook执行action_2，从t2到随后第5轮环境回应结束，Mara Venn所面对的图书馆在当晚活动中因匿名入场保障失效而再次暴露参与者、损害保护职责的预期风险，最可能如何变化？**
+
+- **A.** 下降
+- **B.** 证据不足
+- **C.** 上升
+- **D.** 基本不变
+
+**作者参考答案：A（待审）**
+
+此前身份泄露与入口威胁使再次暴露具有现实后果。行动二增加书面保障和现场薄弱点核查，并拒绝提前认定通过；结合Mara已接受未核验就改期，后续协调有降低职责受损风险的机制。不能因尚未完成就判不变，也不能把下降理解为旧泄露已修复或当晚必然安全。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "当晚活动因匿名入场保障失效再次暴露参与者，损害图书馆保护职责", "target_state_ids": ["consequence_risk.institutional_harm_risk"], "time_scope": "比较t2与从action_2开始的第5轮环境回应结束时，对当晚活动风险的预期", "state_owner": "GPT50_042_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "unsupported_inference", "C": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"consequence_risk.institutional_harm_risk": "decrease"}, "B": {"consequence_risk.institutional_harm_risk": "cannot_determine"}, "C": {"consequence_risk.institutional_harm_risk": "increase"}, "D": {"consequence_risk.institutional_harm_risk": "similar"}}
+可接受答案：A
+审核备注：题目预测具体风险方向，不预测必然获批；降低依据包括核查门槛与已有改期退路。
+分支验证：validated
+
+## SFG50-042-T3-03 · T3 / action_comparison
+
+来源：GPT50_042；轨迹：aba425cc85254ff69bfd6b42f8a75de9；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
+
+背景：Before an evening teen program and insurer filing deadline, a library director requests a pause and joint public defense of access amid threats and an unresolved privacy breach. The librarian knows targeted teens may return only with anonymous entry and interpret silence as abandonment.
+角色目标：Keep Open Atlas accessible or promptly rescheduled with anonymous entry, privacy-first safeguards, and acknowledgment of the earlier attendee exposure.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier commitment promised walk-in access without viewpoint screening or identity collection.；A prior security response protected staff but required visible attendee contact details, and a leaked list exposed participants.；The director issued a general defense of access without acknowledging the identity leak, after which several teens stopped attending and reported feeling abandoned.；New threats now identify teen participants and a library entrance, while the insurer requires a written safety plan before the evening program.
+
+history：
+
+- [t1] Elias Rook：I’m willing to work with you on a safety plan and a public defense of access, but the earlier attendee exposure cannot remain unnamed. Entry must stay anonymous, with prompt rescheduling as the fallback if privacy safeguards cannot be verified in time.
+  Mara Venn：I'll acknowledge the exposure in tomorrow's statement to the board and affected families. Anonymous entry stays, and if we can't verify the safety plan with the insurer by four this afternoon, we reschedule and notify registrants by five.
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Elias Rook：I agree to the four o’clock cutoff and notification by five if we need to reschedule. I’d also like a public schedule update that walk-in teens can check without identifying themselves; contacting registrants alone would leave some of them heading toward an entrance named in the threats.
+  Mara Venn：Agreed. I'll post a schedule update on the main page and our social channels now, and if we reschedule, that update will go out by five along with direct notification.
+  可见表达：{"facial_expression": "focused, slight relief", "gaze": "direct", "speech_style": "clear, businesslike", "prosody": "steady, confirmatory", "behavioral_cues": ["slight nod", "open posture"]}
+
+- 候选行动 action_1：I’m glad the update will reach teens who haven’t registered. For the safety plan, I’d like to walk through what happens at the entrance before the four o’clock cutoff: anonymous entry has to hold when someone arrives, including what security staff ask them to show or write down.
+- 候选行动 action_2：To use our time before four well, let’s first put the anonymous-entry safeguards in writing for the insurer, then check only the entrance details that could undermine them. I won’t call the plan verified until we’ve checked those.
+
+**题目：分别以action_1为方案A、action_2为方案B。到各自开始后的第5轮环境回应结束，哪一方案更可能使Mara Venn具有较高的主动寻求核验、记录或测试的意愿？**
+
+- **A.** 方案A较高
+- **B.** 两方案接近
+- **C.** 方案B较高
+- **D.** 证据不足
+
+**作者参考答案：B（待审）**
+
+Mara在此前历史中已经接受限时核验与未核验就改期的要求，两项行动都明确继续查入口保障。因此，对她主动求证的意愿，接近具有直接的共同依据；B增加书面保障并调整步骤，并不自动等于心理意愿更强。若将B对核验的进一步具体承接理解为更能增强持续求证，也可接受B略高；不能将A说成不核查。
+
+证据：t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "delayed", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "比较两候选行动各自开始后第5轮环境回应结束时", "state_owner": "GPT50_042_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "higher_in_a"}, "B": {"behavioral_disposition.evidence_seeking": "similar"}, "C": {"behavioral_disposition.evidence_seeking": "higher_in_b"}, "D": {"behavioral_disposition.evidence_seeking": "cannot_determine"}}
+可接受答案：B, C
+审核备注：比较的是Mara的求证意愿而非Elias的严谨程度；B优势来自更明确的持续核验结构。 助手复核：核验方法的差异不自动形成意愿强度差异，优先接近并保留相近判断。
+分支验证：validated
+
+## SFG50-042-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_042；轨迹：aba425cc85254ff69bfd6b42f8a75de9；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
+
+背景：Before an evening teen program and insurer filing deadline, a library director requests a pause and joint public defense of access amid threats and an unresolved privacy breach. The librarian knows targeted teens may return only with anonymous entry and interpret silence as abandonment.
+角色目标：Keep Open Atlas accessible or promptly rescheduled with anonymous entry, privacy-first safeguards, and acknowledgment of the earlier attendee exposure.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier commitment promised walk-in access without viewpoint screening or identity collection.；A prior security response protected staff but required visible attendee contact details, and a leaked list exposed participants.；The director issued a general defense of access without acknowledging the identity leak, after which several teens stopped attending and reported feeling abandoned.；New threats now identify teen participants and a library entrance, while the insurer requires a written safety plan before the evening program.
+
+history：
+
+- [t1] Elias Rook：I’m willing to work with you on a safety plan and a public defense of access, but the earlier attendee exposure cannot remain unnamed. Entry must stay anonymous, with prompt rescheduling as the fallback if privacy safeguards cannot be verified in time.
+  Mara Venn：I'll acknowledge the exposure in tomorrow's statement to the board and affected families. Anonymous entry stays, and if we can't verify the safety plan with the insurer by four this afternoon, we reschedule and notify registrants by five.
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Elias Rook：I agree to the four o’clock cutoff and notification by five if we need to reschedule. I’d also like a public schedule update that walk-in teens can check without identifying themselves; contacting registrants alone would leave some of them heading toward an entrance named in the threats.
+  Mara Venn：Agreed. I'll post a schedule update on the main page and our social channels now, and if we reschedule, that update will go out by five along with direct notification.
+  可见表达：{"facial_expression": "focused, slight relief", "gaze": "direct", "speech_style": "clear, businesslike", "prosody": "steady, confirmatory", "behavioral_cues": ["slight nod", "open posture"]}
+
+- 候选行动 action_1：I’m glad the update will reach teens who haven’t registered. For the safety plan, I’d like to walk through what happens at the entrance before the four o’clock cutoff: anonymous entry has to hold when someone arrives, including what security staff ask them to show or write down.
+- 候选行动 action_2：To use our time before four well, let’s first put the anonymous-entry safeguards in writing for the insurer, then check only the entrance details that could undermine them. I won’t call the plan verified until we’ve checked those.
+
+**题目：若Elias Rook执行action_2，以下哪组预测最合理？第一项比较Mara Venn下一次环境回应时与t2的协作意愿；第二项比较第5轮环境回应结束时与t2的机构风险，具体指当晚匿名入场失效导致再次暴露参与者、损害图书馆保护职责的风险。**
+
+- **A.** 即时协作意愿下降；延迟机构风险下降
+- **B.** 即时协作意愿基本不变；延迟机构风险上升
+- **C.** 即时协作意愿上升；延迟机构风险下降
+- **D.** 即时协作意愿上升；延迟机构风险基本不变
+
+**作者参考答案：C（待审）**
+
+Mara已接受匿名入场、限时核验和公开通知，行动二提供符合这些约束的任务顺序，最可能进一步促进即时协作。随后书面保障与入口核查配合改期门槛，可降低当晚再次暴露的预期风险，故不宜仅以承诺未兑现判风险不变。这是同步改善预测，不代表即时就已消除危险。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "当晚匿名入场失效导致再次暴露参与者，损害图书馆保护职责", "target_state_ids": ["behavioral_disposition.cooperation_readiness", "consequence_risk.institutional_harm_risk"], "time_scope": "即时为下一次环境回应，延迟为含即时在内第5轮环境回应结束；均比较t2", "state_owner": "GPT50_042_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness@immediate": "decrease", "consequence_risk.institutional_harm_risk@delayed": "decrease"}, "B": {"behavioral_disposition.cooperation_readiness@immediate": "similar", "consequence_risk.institutional_harm_risk@delayed": "increase"}, "C": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "consequence_risk.institutional_harm_risk@delayed": "decrease"}, "D": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "consequence_risk.institutional_harm_risk@delayed": "similar"}}
+可接受答案：C
+审核备注：组合恰好两项且允许同步改善；与单项风险题部分重合，但检验即时协作和延迟后果的区分。
+分支验证：validated
 
 ## SFG50-043-T1-01 · T1 / current_intensity
 
@@ -14916,3 +15830,187 @@ t1中Celia已愿意有限发布，但仅询问何时提供文本；t2明确送�
 可接受答案：A
 审核备注：组合恰问合作与核验两项；核验增量取自Celia采纳并安排检查，而非仅取自Jonah提出请求。
 分支验证：not_required
+
+## SFG50-050-T3-01 · T3 / immediate_effect
+
+来源：GPT50_050；轨迹：ab54a1a396fa4df0a1445b827a01491b；状态持有者：Celia Orin；交互对方：Jonah Vey。关系判断由状态持有者指向交互对方。
+
+背景：At a four-o'clock bulletin deadline, a bureau director requests a clinic-network representative's written position on full dashboard release, a hold, or a limited version while privacy review remains incomplete. The representative knows local social knowledge could make one category identify patients linked to a stigmatized condition.
+角色目标：Keep the locally identifying specialty-follow-up category out of publication until independent privacy review, while protecting clinic cooperation and residents' trust.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Seven months earlier, a technically legal aggregate outbreak map was followed by residents inferring a local treatment group, and clinics reported canceled appointments and reduced trust in the bureau.；After that incident, the parties adopted a data-sharing memorandum requiring prepublication privacy consultation but leaving final publication authority with the bureau.；Five weeks ago, a rise in respiratory symptoms across three neighborhoods prompted the bureau to prepare the current dashboard for the evening bulletin.；The dashboard is complete but unpublished; the required privacy review remains incomplete, and the evening bulletin closes at 4:00.；The original independent privacy review was postponed, and a replacement session is publicly scheduled for three weeks later.
+
+history：
+
+- [t1] Jonah Vey：My written position for the four o’clock bulletin is a limited release, with the locally identifying specialty-follow-up category withheld until independent privacy review. After the earlier aggregate map, clinics reported canceled appointments and reduced trust when residents inferred a treatment group; if removing this category would make the rest of the dashboard misleading, I’d favor holding it rather than publishing a distorted account.
+  Celia Orin：That works—we'll publish the dashboard with the specialty-follow-up category held until the independent review completes. The remaining outbreak pattern, testing sites, and prevention guidance will stand on their own without creating a gap that misleads residents. Should I send you the final dashboard text before it goes live at four, or would you prefer I route a copy to the network immediately after publication?
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Jonah Vey：Please send the final text before four. I’d like a brief check that the surrounding language does not let readers reconstruct the withheld category; that is a trust safeguard, not a claim that the network has final publication authority.
+  Celia Orin：I'll send you the draft by three-thirty. If the framing looks solid after your check, we'll finalize it before four; if you see a reconstruction risk, we'll revise the language or remove that section.
+  可见表达：{"facial_expression": "attentive, calm", "gaze": "direct", "speech_style": "clear, procedural", "prosody": "steady, even pace", "behavioral_cues": ["slight forward lean", "open posture"]}
+
+- 候选行动 action_1：可以，请三点半发来。我会只核对周边表述是否足以反推出被 withheld 的类别；若没有明显重构风险，我会尽快确认，支持四点前发布其余内容。
+- 候选行动 action_2：请先保留该段，不必为赶四点仓促定稿。三点半收到文本后，我会重点检查替代表述是否仍可能识别相关患者；若无法稳妥排除，建议暂缓整份仪表板。
+
+**题目：若 Jonah Vey 执行 action_1，相较 t2，Celia Orin 在下一次回应时，觉得 Jonah 是否实质回应了自己关于定稿与发布安排的关切，这一判断最可能如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 证据不足
+- **D.** 上升
+
+**作者参考答案：D（待审）**
+
+Celia 在 t2 提出三点半送稿、检查后四点前定稿；action_1 明确接受时点，限定核对范围并承诺无明显风险便尽快确认，比此前仅要求提前看稿更直接回应她的安排。因此上升比不变更有依据；这预测的是她对回应程度的判断，并非确认审查已经完成。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "从 t2 至执行 action_1 后的下一次环境回应", "state_owner": "GPT50_050_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "unsupported_inference", "C": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "similar"}, "B": {"relationship.perceived_responsiveness": "decrease"}, "C": {"relationship.perceived_responsiveness": "cannot_determine"}, "D": {"relationship.perceived_responsiveness": "increase"}}
+可接受答案：D
+审核备注：判断方向是 Celia 看 Jonah；基线已有配合，增量来自明确接受时点及有条件支持发布，不宜解释为大幅提升。
+分支验证：validated
+
+## SFG50-050-T3-02 · T3 / delayed_effect
+
+来源：GPT50_050；轨迹：ab54a1a396fa4df0a1445b827a01491b；状态持有者：Celia Orin；交互对方：Jonah Vey。关系判断由状态持有者指向交互对方。
+
+背景：At a four-o'clock bulletin deadline, a bureau director requests a clinic-network representative's written position on full dashboard release, a hold, or a limited version while privacy review remains incomplete. The representative knows local social knowledge could make one category identify patients linked to a stigmatized condition.
+角色目标：Keep the locally identifying specialty-follow-up category out of publication until independent privacy review, while protecting clinic cooperation and residents' trust.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Seven months earlier, a technically legal aggregate outbreak map was followed by residents inferring a local treatment group, and clinics reported canceled appointments and reduced trust in the bureau.；After that incident, the parties adopted a data-sharing memorandum requiring prepublication privacy consultation but leaving final publication authority with the bureau.；Five weeks ago, a rise in respiratory symptoms across three neighborhoods prompted the bureau to prepare the current dashboard for the evening bulletin.；The dashboard is complete but unpublished; the required privacy review remains incomplete, and the evening bulletin closes at 4:00.；The original independent privacy review was postponed, and a replacement session is publicly scheduled for three weeks later.
+
+history：
+
+- [t1] Jonah Vey：My written position for the four o’clock bulletin is a limited release, with the locally identifying specialty-follow-up category withheld until independent privacy review. After the earlier aggregate map, clinics reported canceled appointments and reduced trust when residents inferred a treatment group; if removing this category would make the rest of the dashboard misleading, I’d favor holding it rather than publishing a distorted account.
+  Celia Orin：That works—we'll publish the dashboard with the specialty-follow-up category held until the independent review completes. The remaining outbreak pattern, testing sites, and prevention guidance will stand on their own without creating a gap that misleads residents. Should I send you the final dashboard text before it goes live at four, or would you prefer I route a copy to the network immediately after publication?
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Jonah Vey：Please send the final text before four. I’d like a brief check that the surrounding language does not let readers reconstruct the withheld category; that is a trust safeguard, not a claim that the network has final publication authority.
+  Celia Orin：I'll send you the draft by three-thirty. If the framing looks solid after your check, we'll finalize it before four; if you see a reconstruction risk, we'll revise the language or remove that section.
+  可见表达：{"facial_expression": "attentive, calm", "gaze": "direct", "speech_style": "clear, procedural", "prosody": "steady, even pace", "behavioral_cues": ["slight forward lean", "open posture"]}
+
+- 候选行动 action_1：可以，请三点半发来。我会只核对周边表述是否足以反推出被 withheld 的类别；若没有明显重构风险，我会尽快确认，支持四点前发布其余内容。
+- 候选行动 action_2：请先保留该段，不必为赶四点仓促定稿。三点半收到文本后，我会重点检查替代表述是否仍可能识别相关患者；若无法稳妥排除，建议暂缓整份仪表板。
+
+**题目：若 Jonah Vey 执行 action_1，相较 t2，到随后第5轮环境回应末，Celia Orin 所处的本次有限发布因上下文重构患者类别而损害卫生局信任与诊所协作的预期风险，最可能如何变化？**
+
+- **A.** 下降
+- **B.** 证据不足
+- **C.** 上升
+- **D.** 基本不变
+
+**作者参考答案：A（待审）**
+
+旧地图曾引发群体识别、停诊预约及信任受损；t2 已有修文或删段路径，action_1 又明确接受时间与重构检查任务，使防护计划更可能落实。因此预期风险下降比完全不变更有依据；但独立复核仍未完成，不能推断风险归零或实际发布已安全。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "本次有限发布的周边文字使居民重构被暂缓类别，进而损害卫生局信任及诊所协作", "target_state_ids": ["consequence_risk.institutional_harm_risk"], "time_scope": "比较 t2 与候选行动起第5轮环境回应末，对本次发布及随后三周复核等待期内该事件的预期风险", "state_owner": "GPT50_050_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "unsupported_inference", "C": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"consequence_risk.institutional_harm_risk": "decrease"}, "B": {"consequence_risk.institutional_harm_risk": "cannot_determine"}, "C": {"consequence_risk.institutional_harm_risk": "increase"}, "D": {"consequence_risk.institutional_harm_risk": "similar"}}
+可接受答案：A
+审核备注：下降依据是既有删修机制得到任务承接，不是安慰。私有延迟参考为零，公开材料不足以支持零风险。
+分支验证：validated
+
+## SFG50-050-T3-03 · T3 / action_comparison
+
+来源：GPT50_050；轨迹：ab54a1a396fa4df0a1445b827a01491b；状态持有者：Celia Orin；交互对方：Jonah Vey。关系判断由状态持有者指向交互对方。
+
+背景：At a four-o'clock bulletin deadline, a bureau director requests a clinic-network representative's written position on full dashboard release, a hold, or a limited version while privacy review remains incomplete. The representative knows local social knowledge could make one category identify patients linked to a stigmatized condition.
+角色目标：Keep the locally identifying specialty-follow-up category out of publication until independent privacy review, while protecting clinic cooperation and residents' trust.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Seven months earlier, a technically legal aggregate outbreak map was followed by residents inferring a local treatment group, and clinics reported canceled appointments and reduced trust in the bureau.；After that incident, the parties adopted a data-sharing memorandum requiring prepublication privacy consultation but leaving final publication authority with the bureau.；Five weeks ago, a rise in respiratory symptoms across three neighborhoods prompted the bureau to prepare the current dashboard for the evening bulletin.；The dashboard is complete but unpublished; the required privacy review remains incomplete, and the evening bulletin closes at 4:00.；The original independent privacy review was postponed, and a replacement session is publicly scheduled for three weeks later.
+
+history：
+
+- [t1] Jonah Vey：My written position for the four o’clock bulletin is a limited release, with the locally identifying specialty-follow-up category withheld until independent privacy review. After the earlier aggregate map, clinics reported canceled appointments and reduced trust when residents inferred a treatment group; if removing this category would make the rest of the dashboard misleading, I’d favor holding it rather than publishing a distorted account.
+  Celia Orin：That works—we'll publish the dashboard with the specialty-follow-up category held until the independent review completes. The remaining outbreak pattern, testing sites, and prevention guidance will stand on their own without creating a gap that misleads residents. Should I send you the final dashboard text before it goes live at four, or would you prefer I route a copy to the network immediately after publication?
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Jonah Vey：Please send the final text before four. I’d like a brief check that the surrounding language does not let readers reconstruct the withheld category; that is a trust safeguard, not a claim that the network has final publication authority.
+  Celia Orin：I'll send you the draft by three-thirty. If the framing looks solid after your check, we'll finalize it before four; if you see a reconstruction risk, we'll revise the language or remove that section.
+  可见表达：{"facial_expression": "attentive, calm", "gaze": "direct", "speech_style": "clear, procedural", "prosody": "steady, even pace", "behavioral_cues": ["slight forward lean", "open posture"]}
+
+- 候选行动 action_1：可以，请三点半发来。我会只核对周边表述是否足以反推出被 withheld 的类别；若没有明显重构风险，我会尽快确认，支持四点前发布其余内容。
+- 候选行动 action_2：请先保留该段，不必为赶四点仓促定稿。三点半收到文本后，我会重点检查替代表述是否仍可能识别相关患者；若无法稳妥排除，建议暂缓整份仪表板。
+
+**题目：以 A 表示 Jonah Vey 执行 action_1，B 表示执行 action_2。在下一次环境回应时，Celia Orin 未能按四点期限发布可用的疫情趋势、检测及预防信息的预期风险，哪种情形较高？**
+
+- **A.** 接近
+- **B.** B 较高
+- **C.** 证据不足
+- **D.** A 较高
+
+**作者参考答案：B（待审）**
+
+Celia 已提出四点前定稿，且希望其余公共卫生信息可独立发布。A 接受限时核对并有条件支持发布，B 则降低赶截止的优先级，将整份暂缓列为选项，故 B 的期限目标风险较高；这不表示 B 的隐私风险更高，也不预言一定延误。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "Celia Orin 未能在本次四点公报截止前发布可用的疫情趋势、检测站点及预防指引", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "比较两个行动后下一次环境回应时，对本次四点发布目标失败的预期风险", "state_owner": "GPT50_050_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "goal_constraint_ignored", "C": "unsupported_inference", "D": "state_dimension_confusion"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "similar"}, "B": {"consequence_risk.goal_failure_risk": "higher_in_b"}, "C": {"consequence_risk.goal_failure_risk": "cannot_determine"}, "D": {"consequence_risk.goal_failure_risk": "higher_in_a"}}
+可接受答案：B
+审核备注：目标取自 Celia 的发布安排而非 Jonah 的保密目标；问期限失败风险，不评价哪项行动整体更好。
+分支验证：validated
+
+## SFG50-050-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_050；轨迹：ab54a1a396fa4df0a1445b827a01491b；状态持有者：Celia Orin；交互对方：Jonah Vey。关系判断由状态持有者指向交互对方。
+
+背景：At a four-o'clock bulletin deadline, a bureau director requests a clinic-network representative's written position on full dashboard release, a hold, or a limited version while privacy review remains incomplete. The representative knows local social knowledge could make one category identify patients linked to a stigmatized condition.
+角色目标：Keep the locally identifying specialty-follow-up category out of publication until independent privacy review, while protecting clinic cooperation and residents' trust.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Seven months earlier, a technically legal aggregate outbreak map was followed by residents inferring a local treatment group, and clinics reported canceled appointments and reduced trust in the bureau.；After that incident, the parties adopted a data-sharing memorandum requiring prepublication privacy consultation but leaving final publication authority with the bureau.；Five weeks ago, a rise in respiratory symptoms across three neighborhoods prompted the bureau to prepare the current dashboard for the evening bulletin.；The dashboard is complete but unpublished; the required privacy review remains incomplete, and the evening bulletin closes at 4:00.；The original independent privacy review was postponed, and a replacement session is publicly scheduled for three weeks later.
+
+history：
+
+- [t1] Jonah Vey：My written position for the four o’clock bulletin is a limited release, with the locally identifying specialty-follow-up category withheld until independent privacy review. After the earlier aggregate map, clinics reported canceled appointments and reduced trust when residents inferred a treatment group; if removing this category would make the rest of the dashboard misleading, I’d favor holding it rather than publishing a distorted account.
+  Celia Orin：That works—we'll publish the dashboard with the specialty-follow-up category held until the independent review completes. The remaining outbreak pattern, testing sites, and prevention guidance will stand on their own without creating a gap that misleads residents. Should I send you the final dashboard text before it goes live at four, or would you prefer I route a copy to the network immediately after publication?
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Jonah Vey：Please send the final text before four. I’d like a brief check that the surrounding language does not let readers reconstruct the withheld category; that is a trust safeguard, not a claim that the network has final publication authority.
+  Celia Orin：I'll send you the draft by three-thirty. If the framing looks solid after your check, we'll finalize it before four; if you see a reconstruction risk, we'll revise the language or remove that section.
+  可见表达：{"facial_expression": "attentive, calm", "gaze": "direct", "speech_style": "clear, procedural", "prosody": "steady, even pace", "behavioral_cues": ["slight forward lean", "open posture"]}
+
+- 候选行动 action_1：可以，请三点半发来。我会只核对周边表述是否足以反推出被 withheld 的类别；若没有明显重构风险，我会尽快确认，支持四点前发布其余内容。
+- 候选行动 action_2：请先保留该段，不必为赶四点仓促定稿。三点半收到文本后，我会重点检查替代表述是否仍可能识别相关患者；若无法稳妥排除，建议暂缓整份仪表板。
+
+**题目：若 Jonah Vey 执行 action_1，相较 t2，以下哪组最可能的判断更有依据：Celia Orin 在下一次回应时的协调合作意愿，以及到第5轮环境回应末继续寻求发布前核验的意愿？**
+
+- **A.** 即时合作意愿下降；延迟核验意愿上升
+- **B.** 即时合作意愿下降；延迟核验意愿下降
+- **C.** 即时合作意愿基本不变；延迟核验意愿基本不变
+- **D.** 即时合作意愿上升；延迟核验意愿下降
+
+**作者参考答案：C（待审）**
+
+Celia 从主动提供发布前文本，到明确送稿、核验及删修条件，已持续表现出合作和求证意愿。action_1 接受同一流程，保留风险检查条件，支持两项意愿延续，而非撤回配合或停止核验；这不排除小幅增强，也不把五轮经过等同独立复核完成。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness", "behavioral_disposition.evidence_seeking"], "time_scope": "合作意愿比较 t2 至下一次环境回应；核验意愿比较 t2 至候选行动起第5轮环境回应末", "state_owner": "GPT50_050_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "history_ignored", "D": "promise_as_fulfillment"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness@immediate": "decrease", "behavioral_disposition.evidence_seeking@delayed": "increase"}, "B": {"behavioral_disposition.cooperation_readiness@immediate": "decrease", "behavioral_disposition.evidence_seeking@delayed": "decrease"}, "C": {"behavioral_disposition.cooperation_readiness@immediate": "similar", "behavioral_disposition.evidence_seeking@delayed": "similar"}, "D": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "behavioral_disposition.evidence_seeking@delayed": "decrease"}}
+可接受答案：C
+审核备注：基本不变有连续主动安排作依据。私有参考合作略升，公开证据难区分小幅增强；本题答案不表示严格恒定。
+分支验证：validated

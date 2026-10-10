@@ -1,8 +1,8 @@
 {
-  "items": 332,
+  "items": 356,
   "tasks": {
     "T1": 200,
-    "T3": 132
+    "T3": 156
   },
   "state_coverage": {
     "T1": [
@@ -19,20 +19,20 @@
       "Relationship"
     ]
   },
-  "combination_count": 83,
+  "combination_count": 89,
   "insufficient_answer_components_by_task": {
     "T1": 42,
-    "T3": 19
+    "T3": 20
   },
   "option_error_types_in_bank": {
-    "unsupported_inference": 404,
-    "history_ignored": 375,
-    "state_dimension_confusion": 103,
-    "goal_constraint_ignored": 41,
+    "unsupported_inference": 435,
+    "history_ignored": 391,
+    "state_dimension_confusion": 109,
+    "goal_constraint_ignored": 48,
     "expression_as_state": 35,
     "actor_reversal": 12,
-    "promise_as_fulfillment": 33,
-    "immediate_delayed_confusion": 5
+    "promise_as_fulfillment": 36,
+    "immediate_delayed_confusion": 6
   },
   "accepted_neighbor_items": [
     "SFG50-003-T1-01",
@@ -48,6 +48,7 @@
     "SFG50-019-T1-01",
     "SFG50-023-T1-01",
     "SFG50-028-T1-01",
+    "SFG50-029-T3-03",
     "SFG50-030-T1-01",
     "SFG50-030-T1-02",
     "SFG50-032-T1-01",
@@ -57,6 +58,7 @@
     "SFG50-038-T1-01",
     "SFG50-039-T1-01",
     "SFG50-040-T1-01",
+    "SFG50-042-T3-03",
     "SFG50-043-T1-01",
     "SFG50-044-T1-01",
     "SFG50-048-T1-01",
@@ -1119,6 +1121,52 @@
       "option_length_ratio": 1.31,
       "assistant_editorial_revision": true,
       "replay_status": "not_required"
+    },
+    {
+      "instance_id": "SFG50-013-T3-01",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 2.0,
+      "assistant_editorial_revision": false,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-013-T3-02",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 2.0,
+      "assistant_editorial_revision": false,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-013-T3-03",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [
+        "consequence_risk.goal_failure_risk"
+      ],
+      "option_length_ratio": 2.0,
+      "assistant_editorial_revision": false,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-013-T3-04",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 1.12,
+      "assistant_editorial_revision": false,
+      "replay_status": "validated"
     },
     {
       "instance_id": "SFG50-014-T1-01",
@@ -2263,6 +2311,50 @@
       "replay_status": "not_required"
     },
     {
+      "instance_id": "SFG50-028-T3-01",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 2.0,
+      "assistant_editorial_revision": false,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-028-T3-02",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 2.0,
+      "assistant_editorial_revision": false,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-028-T3-03",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 2.0,
+      "assistant_editorial_revision": false,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-028-T3-04",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 1.24,
+      "assistant_editorial_revision": false,
+      "replay_status": "validated"
+    },
+    {
       "instance_id": "SFG50-029-T1-01",
       "clear_actor_and_time": "present_structurally",
       "visible_evidence": "IDs_valid_semantic_review_pending",
@@ -2307,6 +2399,50 @@
       "option_length_ratio": 1.14,
       "assistant_editorial_revision": false,
       "replay_status": "not_required"
+    },
+    {
+      "instance_id": "SFG50-029-T3-01",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 1.11,
+      "assistant_editorial_revision": true,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-029-T3-02",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 1.11,
+      "assistant_editorial_revision": true,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-029-T3-03",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "adjacent_answers_accepted",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 1.24,
+      "assistant_editorial_revision": true,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-029-T3-04",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 1.12,
+      "assistant_editorial_revision": true,
+      "replay_status": "validated"
     },
     {
       "instance_id": "SFG50-030-T1-01",
@@ -3124,6 +3260,50 @@
       "replay_status": "not_required"
     },
     {
+      "instance_id": "SFG50-041-T3-01",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 2.0,
+      "assistant_editorial_revision": false,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-041-T3-02",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 2.0,
+      "assistant_editorial_revision": false,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-041-T3-03",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 1.5,
+      "assistant_editorial_revision": false,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-041-T3-04",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 1.44,
+      "assistant_editorial_revision": false,
+      "replay_status": "validated"
+    },
+    {
       "instance_id": "SFG50-042-T1-01",
       "clear_actor_and_time": "present_structurally",
       "visible_evidence": "IDs_valid_semantic_review_pending",
@@ -3168,6 +3348,50 @@
       "option_length_ratio": 1.31,
       "assistant_editorial_revision": false,
       "replay_status": "not_required"
+    },
+    {
+      "instance_id": "SFG50-042-T3-01",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 2.0,
+      "assistant_editorial_revision": true,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-042-T3-02",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 2.0,
+      "assistant_editorial_revision": true,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-042-T3-03",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "adjacent_answers_accepted",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 1.25,
+      "assistant_editorial_revision": true,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-042-T3-04",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 1.12,
+      "assistant_editorial_revision": true,
+      "replay_status": "validated"
     },
     {
       "instance_id": "SFG50-043-T1-01",
@@ -3842,6 +4066,50 @@
       "option_length_ratio": 1.38,
       "assistant_editorial_revision": true,
       "replay_status": "not_required"
+    },
+    {
+      "instance_id": "SFG50-050-T3-01",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 2.0,
+      "assistant_editorial_revision": false,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-050-T3-02",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 2.0,
+      "assistant_editorial_revision": false,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-050-T3-03",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 2.0,
+      "assistant_editorial_revision": false,
+      "replay_status": "validated"
+    },
+    {
+      "instance_id": "SFG50-050-T3-04",
+      "clear_actor_and_time": "present_structurally",
+      "visible_evidence": "IDs_valid_semantic_review_pending",
+      "answer_separability": "author_proposal_pending_human_review",
+      "analysis_fields": "complete",
+      "insufficient_evidence_components": [],
+      "option_length_ratio": 1.24,
+      "assistant_editorial_revision": false,
+      "replay_status": "validated"
     }
   ]
 }
