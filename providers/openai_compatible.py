@@ -8,7 +8,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import ProxyHandler, Request, build_opener, urlopen
 
-from .base import IncompleteModelOutputError, ModelProvider
+from .base import IncompleteModelOutputError, ModelProvider, ProviderRefusalError
 
 
 _KEY_POOL_LOCK = Lock()
@@ -140,6 +140,8 @@ class OpenAICompatibleProvider(ModelProvider):
                 content = provider._complete_single(messages, **options)
             except Exception as exc:
                 self._merge_provider_metrics(provider)
+                if isinstance(exc, ProviderRefusalError):
+                    raise
                 last_error = exc
                 continue
             self._merge_provider_metrics(provider)
@@ -218,6 +220,9 @@ class OpenAICompatibleProvider(ModelProvider):
             choice = data["choices"][0]
             finish_reason = choice.get("finish_reason")
             self._record_finish_reason(finish_reason)
+            if finish_reason in {"refusal", "content_filter"} or (choice.get("message") or {}).get("refusal"):
+                self._failed_request_count += 1
+                raise ProviderRefusalError("provider explicitly refused the request")
             raw_output = choice["message"]["content"]
         except (KeyError, IndexError, TypeError) as exc:
             raise ValueError(
@@ -256,6 +261,9 @@ class OpenAICompatibleProvider(ModelProvider):
             for choice in data.get("choices", []):
                 self._record_finish_reason(choice.get("finish_reason"))
                 delta = choice.get("delta") or {}
+                if (choice.get("finish_reason") in {"refusal", "content_filter"}
+                        or delta.get("refusal") or (choice.get("message") or {}).get("refusal")):
+                    raise ProviderRefusalError("provider explicitly refused the request")
                 content = delta.get("content")
                 if isinstance(content, str):
                     parts.append(content)

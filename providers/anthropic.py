@@ -8,7 +8,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import ProxyHandler, Request, build_opener, urlopen
 
-from .base import IncompleteModelOutputError, ModelProvider
+from .base import IncompleteModelOutputError, ModelProvider, ProviderRefusalError
 
 
 class ProviderHTTPError(RuntimeError):
@@ -187,6 +187,9 @@ class AnthropicProvider(ModelProvider):
             self._stop_reasons[stop_reason] = (
                 self._stop_reasons.get(stop_reason, 0) + 1
             )
+        if stop_reason == "refusal":
+            self._failed_request_count += 1
+            raise ProviderRefusalError("provider explicitly refused the request")
         parts = [
             block["text"]
             for block in data.get("content", [])

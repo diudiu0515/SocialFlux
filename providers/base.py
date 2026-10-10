@@ -4,6 +4,10 @@ from abc import ABC, abstractmethod
 
 
 
+class ProviderRefusalError(RuntimeError):
+    """An explicit refusal is not a transport failure or empty model output."""
+
+
 class IncompleteModelOutputError(RuntimeError):
     """A provider ended before producing a complete assistant response."""
 

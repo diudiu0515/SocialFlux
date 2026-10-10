@@ -7,7 +7,7 @@ from random import uniform
 from threading import Lock
 from time import monotonic, sleep
 
-from .base import ModelProvider
+from .base import ModelProvider, ProviderRefusalError
 
 
 _FAILOVER_LOCK = Lock()
@@ -266,6 +266,9 @@ class FailoverProvider(ModelProvider):
                     raise ValueError("provider returned empty content")
             except Exception as exc:
                 self._failed_request_count += 1
+                if isinstance(exc, ProviderRefusalError):
+                    self._record_candidate_success(slot)
+                    raise
                 if _is_circuit_failure(exc):
                     self._record_candidate_failure(slot)
                 else:

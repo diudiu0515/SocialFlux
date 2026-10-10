@@ -8,7 +8,7 @@ from urllib.error import HTTPError
 from urllib.parse import urlparse
 from urllib.request import ProxyHandler, Request, build_opener, urlopen
 
-from .base import IncompleteModelOutputError, ModelProvider
+from .base import IncompleteModelOutputError, ModelProvider, ProviderRefusalError
 
 
 class OpenAIResponsesProvider(ModelProvider):
@@ -72,9 +72,7 @@ class OpenAIResponsesProvider(ModelProvider):
                 ):
                     parts.append(block["text"])
                 elif block.get("type") == "refusal":
-                    refusal = block.get("refusal")
-                    if isinstance(refusal, str) and refusal:
-                        raise ValueError(f"provider refused request: {refusal}")
+                    raise ProviderRefusalError("provider explicitly refused the request")
         if parts:
             return "".join(parts)
         choices = data.get("choices")
