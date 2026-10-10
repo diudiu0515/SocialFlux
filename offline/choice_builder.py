@@ -180,5 +180,5 @@ def write_bundle(items, output):
                   '分维映射：'+json.dumps(a['option_variable_map'],ensure_ascii=False),
                   '可接受答案：'+', '.join(a.get('acceptable_answers',[a['answer']])),
                   '审核备注：'+str(a['review_notes']), '分支验证：'+a['replay_status'], '']
-    save_text(output/'examples.md','\n'.join(lines)+'\n')
+    save_text(output/'examples.md','\n'.join(lines).rstrip()+'\n')
     return manifest

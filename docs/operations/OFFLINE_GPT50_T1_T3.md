@@ -32,6 +32,10 @@ GPT50_001、009、023、033 没有足够对话，另建三轮开发前史；
 契约一致时才允许复用。候选二单独执行环境分支，参考面板区分两种来源。
 未来分支保留在作者侧；题目公开投影不含未来、私有 state 或参考答案。
 调用失败、原始出题失败和中途回放逐次保存；重复运行不会抹去失败记录。
+补建前史的 checkpoint 保存完整 `resume_snapshot` 并绑定 scenario SHA；下次运行
+可保留已完成轮次，继续调用相同环境和 policy。没有完整快照的旧记录不推算恢复。
+恢复保持完整环境状态及采样配置；新 provider 实例的请求计数重新开始，不声称与不中断运行逐 token 一致。
+原始请求及每次恢复的来源快照保留，可区分实际续演与假定重现。
 已完成的出题文件直接复用；改变题面应写独立 `*.curated.json`，并注明是
 助手编辑而非人工审核。不得删除失败记录以改变实验结果。
 
@@ -49,7 +53,7 @@ python -m pipeline offline-build --config configs/offline_gpt50_t1_t3.json \
 python -m pipeline offline-build --config configs/offline_gpt50_t1_t3.json \
   --tasks T1 --scenarios 2 5 --request-timeout 600 --workers 2
 
-# T3 只对传输错误自动恢复，完整分支和真实 after-snapshot 保留
+# T3 对传输、空响应或明确截断自动恢复；不重试来源／内容校验错误
 python -m pipeline offline-build --config configs/offline_gpt50_t1_t3.json \
   --tasks T3 --request-timeout 600 --transport-attempts 2 --workers 3 \
   --recovery-attempts 3 --reuse-factual-continuation
@@ -80,7 +84,7 @@ python -m pipeline offline-eval --items data/offline_gpt50_t1_t3/replay_ready.it
 不把机器一致性当作可见证据充分或人工通过。
 `pairing_report.json` 如实列出缺少既有媒体的题目，不挪用其他轨迹视频。
 
-网站新批次入口 `/offline-review?bank=gpt50-t1-t3`，旧 60 题仍可在
+网站默认 `/offline-review` 打开新批次，也可明确使用 `?bank=gpt50-t1-t3`；旧 60 题仍可在
 `/offline-review?bank=dev60` 标注。页面展示生成进度、来源审核状态、
 题面、分支参考和四项质量判断。新批次追加题目时保留未改变题目的本地草稿；
 题目 SHA 改变时旧稿归档到导出备份，不能自动套用为新版标签。

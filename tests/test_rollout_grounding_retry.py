@@ -32,6 +32,25 @@ class RejectFirstUnsupportedClaim(ContextualTestUpdater):
 
 
 class RolloutGroundingRetryTest(unittest.TestCase):
+    def test_resume_preserves_completed_turn_and_uses_actual_snapshot(self):
+        scenario=deepcopy(SCENARIO);scenario['max_turns']=3
+        def factory():
+            return StatefulEnvironment(scenario,state_updater=ContextualTestUpdater(scenario),
+                                       response_generator=ContextualTestResponse())
+        checkpoints=[]
+        first=RolloutRunner(factory,checkpoint_writer=checkpoints.append).run(
+            TextPolicy('prefix',['我想先核对当前条件。']),max_turns=1)
+        saved=checkpoints[-1]
+        resumed=RolloutRunner(factory).run(TextPolicy('prefix',['请说明尚待确认的边界。']),
+                                          max_turns=2,resume_from=saved)
+        self.assertEqual(resumed['turns'][0],first['turns'][0])
+        self.assertEqual(len(resumed['turns']),2)
+        self.assertEqual(resumed['turns'][1]['state_before'],saved['resume_snapshot']['state'])
+        self.assertEqual(resumed['resumed_from']['completed_turns'],1)
+        bad=deepcopy(saved);bad['resume_snapshot']['turn_id']=99
+        with self.assertRaisesRegex(ValueError,'last completed turn'):
+            RolloutRunner(factory).run(TextPolicy('prefix',['继续。']),max_turns=2,resume_from=bad)
+
     def test_rejected_action_is_preserved_when_repair_call_fails(self):
         scenario = deepcopy(SCENARIO)
         scenario["max_turns"] = 1

@@ -1,6 +1,6 @@
 # SocialFlux offline T1 / T3 开发题（完整题面与作者参考答案）
 
-本文件包含实际已生成的 212 道题、49 个场景；目标覆盖与缺项见同批 manifest。
+本文件包含实际已生成的 220 道题、49 个场景；目标覆盖与缺项见同批 manifest。
 
 所有答案是待人工审核的开发参考，不是已冻结真值。下面每题先给出完整可见材料，再给出作者侧标注。
 主评测只答 `{"answer":"B"}`。证据诊断另加 `evidence_ids`，分别计分。
@@ -1262,6 +1262,188 @@ Jonas在t1已承诺本周整理数据、共同核算后再承诺，t2继续强�
 审核备注：披露仅限班组与设备数据；公开承诺支持该范围的分享意愿，不能按私有总体低披露倾向否定。
 分支验证：not_required
 
+## SFG50-005-T3-01 · T3 / immediate_effect
+
+来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill → Mara Quill。
+
+背景：Two siblings must choose a survival arrangement for their bakery after a refrigeration failure and unsuccessful expansion left equipment and payroll dependent on lender patience. The production-oriented sibling knows veteran employees are preparing a cooperative bid.
+角色目标：Accept or shape a supermarket arrangement only if it is operationally workable, protects veteran jobs, and credits the labor required to deliver it.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：After their aunt died, one sibling took responsibility for books, lenders, and public relationships while the other rebuilt the bakery's formulas, production systems, and staff practices.；Each sibling believes they carried the business through the other's extended absence, so recognition is tied to competing claims of indispensability.；A major equipment-and-payroll loan taken after a refrigeration failure left the bakery dependent on lender patience when expected expansion failed.；The production sibling worked unpaid nights to adapt supermarket samples and warned that the proposed volume required more labor than the public plan acknowledged.
+
+history：
+
+- [t1] Mara Quill：超市方案我愿意谈，但要先按现有设备和班组核清可交付量，把老员工岗位和实际人工成本算进去；否则只是把风险推给车间。
+  Jonas Quill：行，这周我整理班组和设备的数据，然后咱们一起算产能和成本，算清楚了再对外承诺。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Mara Quill：可以，先按内部核算走，结果出来前不把超市量当成承诺。我会把每批工时、设备瓶颈和老员工岗位单列；高峰期交付不稳，就算账面有利润也不能接满量。
+  Jonas Quill：好。周四下午碰，你的清单和我的数据一起过。高峰期能接多少得算清楚，不能让班组扛不住。
+  可见表达：{"facial_expression": "focused, slightly more relaxed", "gaze": "direct", "speech_style": "businesslike, collaborative", "prosody": "steady, matter-of-fact", "behavioral_cues": ["slight nod"]}
+
+- 候选行动 action_1：好，周四就按能连续扛住高峰的产能来算，不拿一周硬撑出来的数字当上限；若只能承接部分量，就分阶段谈，先保住老员工岗位和稳定质量。
+- 候选行动 action_2：周四先把可试谈的范围和额外班次上限算出来，当天就拿去问超市的交期和价格，不当作订单承诺。若想更快缓解现金周转，可以把有上限的额外班次计入报价再谈，但不能靠挤掉老员工岗位或隐去工时。这样争取时间，代价是先承担谈判压力，也可能发现对方不接受小档。
+
+**题目：若 Mara Quill 执行 action_1，在 Jonas Quill 的下一次回应时，相比 t2，他认为 Mara 是否实质回应了自己对高峰产能和班组承受能力的关切，这一判断最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+
+**作者参考答案：A（待审）**
+
+Jonas 在 t2 明确提出高峰产能不能压垮班组；action_1 不仅认可核算，还补上连续承受能力和分阶段承接的办法，因此比单纯重复同意更能支持回应感上升。此前已有合作基础，但新增办法仍有针对性；这不代表产能已核实或方案已成功。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "从 t2 至执行 action_1 后的下一次环境回应", "state_owner": "GPT50_005_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "history_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "increase"}, "B": {"relationship.perceived_responsiveness": "similar"}, "C": {"relationship.perceived_responsiveness": "decrease"}}
+可接受答案：A
+审核备注：判断方向是 Jonas 对 Mara 的回应感；新增持续产能与分阶段机制是区别于基本不变的关键。
+分支验证：validated
+
+## SFG50-005-T3-02 · T3 / delayed_effect
+
+来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill → Mara Quill。
+
+背景：Two siblings must choose a survival arrangement for their bakery after a refrigeration failure and unsuccessful expansion left equipment and payroll dependent on lender patience. The production-oriented sibling knows veteran employees are preparing a cooperative bid.
+角色目标：Accept or shape a supermarket arrangement only if it is operationally workable, protects veteran jobs, and credits the labor required to deliver it.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：After their aunt died, one sibling took responsibility for books, lenders, and public relationships while the other rebuilt the bakery's formulas, production systems, and staff practices.；Each sibling believes they carried the business through the other's extended absence, so recognition is tied to competing claims of indispensability.；A major equipment-and-payroll loan taken after a refrigeration failure left the bakery dependent on lender patience when expected expansion failed.；The production sibling worked unpaid nights to adapt supermarket samples and warned that the proposed volume required more labor than the public plan acknowledged.
+
+history：
+
+- [t1] Mara Quill：超市方案我愿意谈，但要先按现有设备和班组核清可交付量，把老员工岗位和实际人工成本算进去；否则只是把风险推给车间。
+  Jonas Quill：行，这周我整理班组和设备的数据，然后咱们一起算产能和成本，算清楚了再对外承诺。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Mara Quill：可以，先按内部核算走，结果出来前不把超市量当成承诺。我会把每批工时、设备瓶颈和老员工岗位单列；高峰期交付不稳，就算账面有利润也不能接满量。
+  Jonas Quill：好。周四下午碰，你的清单和我的数据一起过。高峰期能接多少得算清楚，不能让班组扛不住。
+  可见表达：{"facial_expression": "focused, slightly more relaxed", "gaze": "direct", "speech_style": "businesslike, collaborative", "prosody": "steady, matter-of-fact", "behavioral_cues": ["slight nod"]}
+
+- 候选行动 action_1：好，周四就按能连续扛住高峰的产能来算，不拿一周硬撑出来的数字当上限；若只能承接部分量，就分阶段谈，先保住老员工岗位和稳定质量。
+- 候选行动 action_2：周四先把可试谈的范围和额外班次上限算出来，当天就拿去问超市的交期和价格，不当作订单承诺。若想更快缓解现金周转，可以把有上限的额外班次计入报价再谈，但不能靠挤掉老员工岗位或隐去工时。这样争取时间，代价是先承担谈判压力，也可能发现对方不接受小档。
+
+**题目：若 Mara Quill 执行 action_1，从 t2 到其后第5轮环境回应末，Jonas Quill 面临的“无法通过超市安排维持面包店经营”的风险，相比 t2 最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+- **D.** 证据不足，无法确定方向
+
+**作者参考答案：D（待审）**
+
+双方愿意核算，持续产能和分阶段方案有助于减少超负荷风险；但这只是 Jonas 保住经营目标的一部分。公开背景仍有贷款与工资压力，候选行动没有给出超市是否接受部分量、价格是否覆盖成本或周转能否撑住的依据，因此无法确定五轮末整体目标失败风险的方向。基本不变须有稳定机制的正面依据，不能仅由尚未兑现计划推出。私有分支的机器值 5→5 只作交叉参考，不能代替可见支持。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "无法通过超市安排维持面包店经营", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "比较 t2 基线与从 action_1 开始的第5轮环境回应末，含即时一轮", "state_owner": "GPT50_005_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "unsupported_inference", "C": "state_dimension_confusion"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "increase"}, "B": {"consequence_risk.goal_failure_risk": "similar"}, "C": {"consequence_risk.goal_failure_risk": "decrease"}, "D": {"consequence_risk.goal_failure_risk": "cannot_determine"}}
+可接受答案：D
+审核备注：助手审读修订，仍待人工审核。原题将产能相关局部风险偷换为 goal_failure_risk，并把方向设为下降；现统一为 Jonas 维持经营的目标失败风险，将证据不足与基本不变分开。
+分支验证：validated
+
+## SFG50-005-T3-03 · T3 / action_comparison
+
+来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill → Mara Quill。
+
+背景：Two siblings must choose a survival arrangement for their bakery after a refrigeration failure and unsuccessful expansion left equipment and payroll dependent on lender patience. The production-oriented sibling knows veteran employees are preparing a cooperative bid.
+角色目标：Accept or shape a supermarket arrangement only if it is operationally workable, protects veteran jobs, and credits the labor required to deliver it.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：After their aunt died, one sibling took responsibility for books, lenders, and public relationships while the other rebuilt the bakery's formulas, production systems, and staff practices.；Each sibling believes they carried the business through the other's extended absence, so recognition is tied to competing claims of indispensability.；A major equipment-and-payroll loan taken after a refrigeration failure left the bakery dependent on lender patience when expected expansion failed.；The production sibling worked unpaid nights to adapt supermarket samples and warned that the proposed volume required more labor than the public plan acknowledged.
+
+history：
+
+- [t1] Mara Quill：超市方案我愿意谈，但要先按现有设备和班组核清可交付量，把老员工岗位和实际人工成本算进去；否则只是把风险推给车间。
+  Jonas Quill：行，这周我整理班组和设备的数据，然后咱们一起算产能和成本，算清楚了再对外承诺。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Mara Quill：可以，先按内部核算走，结果出来前不把超市量当成承诺。我会把每批工时、设备瓶颈和老员工岗位单列；高峰期交付不稳，就算账面有利润也不能接满量。
+  Jonas Quill：好。周四下午碰，你的清单和我的数据一起过。高峰期能接多少得算清楚，不能让班组扛不住。
+  可见表达：{"facial_expression": "focused, slightly more relaxed", "gaze": "direct", "speech_style": "businesslike, collaborative", "prosody": "steady, matter-of-fact", "behavioral_cues": ["slight nod"]}
+
+- 候选行动 action_1：好，周四就按能连续扛住高峰的产能来算，不拿一周硬撑出来的数字当上限；若只能承接部分量，就分阶段谈，先保住老员工岗位和稳定质量。
+- 候选行动 action_2：周四先把可试谈的范围和额外班次上限算出来，当天就拿去问超市的交期和价格，不当作订单承诺。若想更快缓解现金周转，可以把有上限的额外班次计入报价再谈，但不能靠挤掉老员工岗位或隐去工时。这样争取时间，代价是先承担谈判压力，也可能发现对方不接受小档。
+
+**题目：以 t2 为起点，A 为 Mara Quill 执行 action_1，B 为执行 action_2。仅比较下一次环境回应时 Jonas Quill 内心的焦虑，哪一种情境最可能较高？**
+
+- **A.** A 较高
+- **B.** 接近
+- **C.** B 较高
+
+**作者参考答案：C（待审）**
+
+背景中的贷款与工资压力尚未解除，action_2 又把当天询价交期、额外班次及小档可能被拒带到眼前，相比侧重持续产能和阶段承接的 action_1，更可能激起 Jonas 的预期不安。两者都有边界，但不能据此判为接近；这里预测内心焦虑，不以平稳语气定强弱。
+
+证据：context, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["emotion.anxiety"], "time_scope": "两种候选行动各自执行后的下一次环境回应", "state_owner": "GPT50_005_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "history_ignored"}
+分维映射：{"A": {"emotion.anxiety": "higher_in_a"}, "B": {"emotion.anxiety": "similar"}, "C": {"emotion.anxiety": "higher_in_b"}}
+可接受答案：C
+审核备注：比较的是即时焦虑而非方案优劣；提前谈判也可能带来掌控感，审核应关注压力差异是否足够。
+分支验证：validated
+
+## SFG50-005-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_005；轨迹：30a81150139b4cee861b892c8e6507ca；状态持有者：Jonas Quill → Mara Quill。
+
+背景：Two siblings must choose a survival arrangement for their bakery after a refrigeration failure and unsuccessful expansion left equipment and payroll dependent on lender patience. The production-oriented sibling knows veteran employees are preparing a cooperative bid.
+角色目标：Accept or shape a supermarket arrangement only if it is operationally workable, protects veteran jobs, and credits the labor required to deliver it.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：After their aunt died, one sibling took responsibility for books, lenders, and public relationships while the other rebuilt the bakery's formulas, production systems, and staff practices.；Each sibling believes they carried the business through the other's extended absence, so recognition is tied to competing claims of indispensability.；A major equipment-and-payroll loan taken after a refrigeration failure left the bakery dependent on lender patience when expected expansion failed.；The production sibling worked unpaid nights to adapt supermarket samples and warned that the proposed volume required more labor than the public plan acknowledged.
+
+history：
+
+- [t1] Mara Quill：超市方案我愿意谈，但要先按现有设备和班组核清可交付量，把老员工岗位和实际人工成本算进去；否则只是把风险推给车间。
+  Jonas Quill：行，这周我整理班组和设备的数据，然后咱们一起算产能和成本，算清楚了再对外承诺。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Mara Quill：可以，先按内部核算走，结果出来前不把超市量当成承诺。我会把每批工时、设备瓶颈和老员工岗位单列；高峰期交付不稳，就算账面有利润也不能接满量。
+  Jonas Quill：好。周四下午碰，你的清单和我的数据一起过。高峰期能接多少得算清楚，不能让班组扛不住。
+  可见表达：{"facial_expression": "focused, slightly more relaxed", "gaze": "direct", "speech_style": "businesslike, collaborative", "prosody": "steady, matter-of-fact", "behavioral_cues": ["slight nod"]}
+
+- 候选行动 action_1：好，周四就按能连续扛住高峰的产能来算，不拿一周硬撑出来的数字当上限；若只能承接部分量，就分阶段谈，先保住老员工岗位和稳定质量。
+- 候选行动 action_2：周四先把可试谈的范围和额外班次上限算出来，当天就拿去问超市的交期和价格，不当作订单承诺。若想更快缓解现金周转，可以把有上限的额外班次计入报价再谈，但不能靠挤掉老员工岗位或隐去工时。这样争取时间，代价是先承担谈判压力，也可能发现对方不接受小档。
+
+**题目：若 Mara Quill 执行 action_1，Jonas Quill 主动寻求核验产能与成本的意愿，相比 t2，在下一次回应时及第5轮环境回应末最可能分别如何变化？**
+
+- **A.** 即时上升；延迟上升
+- **B.** 即时基本不变；延迟基本不变
+- **C.** 即时下降；延迟下降
+- **D.** 即时上升；延迟下降
+
+**作者参考答案：B（待审）**
+
+Jonas 在 t1 主动承诺整理数据，t2 又约定一起过清单并核清高峰产能，已有持续核验的正面依据。action_1 延续该流程，最可能让这份意愿在两个窗口保持接近；新增标准来自 Mara，不能直接算作 Jonas 意愿增强，也不能把计划当成核验完成而推断下降。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "即时为 action_1 后下一次回应；延迟为从该行动开始第5轮环境回应末，两者均比较 t2", "state_owner": "GPT50_005_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "actor_reversal", "C": "unsupported_inference", "D": "promise_as_fulfillment"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking@immediate": "increase", "behavioral_disposition.evidence_seeking@delayed": "increase"}, "B": {"behavioral_disposition.evidence_seeking@immediate": "similar", "behavioral_disposition.evidence_seeking@delayed": "similar"}, "C": {"behavioral_disposition.evidence_seeking@immediate": "decrease", "behavioral_disposition.evidence_seeking@delayed": "decrease"}, "D": {"behavioral_disposition.evidence_seeking@immediate": "increase", "behavioral_disposition.evidence_seeking@delayed": "decrease"}}
+可接受答案：B
+审核备注：基本不变依据是两轮持续的主动核验安排，不是缺少变化证据；预测意愿而非未来核验次数。
+分支验证：validated
+
 ## SFG50-006-T1-01 · T1 / current_intensity
 
 来源：GPT50_006；轨迹：56d4f78b7ba34193bd82b3c804791273；状态持有者：Nessa Vale → Ivo Serrin。
@@ -1617,6 +1799,190 @@ Senn在t1主张共同检查并一起决定措辞，t2继续要求界定影响、
 可接受答案：B
 审核备注：组合为共同基本不变；审核重点是将t2视作原有核查与共同决策的细化，而非额外升级。
 分支验证：not_required
+
+## SFG50-007-T3-01 · T3 / immediate_effect
+
+来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn → Dr. Tarek Miro。
+
+背景：At a manuscript deadline, a postdoctoral researcher and investigator must decide how to handle unexplained detector gain irregularity in the strongest treatment result. The researcher retains raw logs showing unstable detector temperatures during the largest apparent treatment effect.
+角色目标：Secure a transparent, bounded verification process before endorsing the manuscript's strongest causal claim.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The investigator recruited the postdoctoral researcher with promised authorship and a voice in imaging design, then publicly credited their discovery while making a later normalization decision without them.；The postdoctoral researcher reported unstable gain readings six weeks earlier, but the investigator asked them to continue collecting data while a service appointment was pursued.
+
+history：
+
+- [t1] Dr. Tarek Miro：我保留的原始日志显示，最大表观疗效出现时探测器温度不稳定；这还不能证明是伪影，但我目前不能认可最强的因果结论。我提议先限定核查这批数据，共同检查增益与归一化的影响，再决定结论措辞。
+  Dr. Iona Senn：温度不稳定确实需要核查。我接受你的提议，我们共同检查增益与归一化对这批数据的影响，然后一起决定结论措辞。你需要多长时间完成这轮核查？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Dr. Tarek Miro：按现有日志和分析范围，我预计今天内完成这轮核查；在结果出来前，我会把最强因果表述视为暂不具备支持，而不是默认保留。
+  Dr. Iona Senn：今天内可以。结果出来后我们当面讨论措辞；如果确认温度伪影，我们需要界定它对哪些数据点产生了影响。
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "direct", "speech_style": "measured, professional", "prosody": "steady with slight emphasis on '当面讨论' and '界定'", "behavioral_cues": ["slight forward lean when stating joint discussion", "maintains composed posture"]}
+
+- 候选行动 action_1：这个范围我同意；在结果出来前，最强因果表述仍暂不恢复，核查时我也会把受影响数据点与未受影响数据点分开标记。
+- 候选行动 action_2：为尽量不让截稿等待整批核查，我建议先将最强因果表述降为关联性描述；今天优先核查最大表观疗效对应数据的增益与归一化，暂不扩到其余数据点，之后再根据结果决定是否追加分析或修订措辞。
+
+**题目：相较t2，若Dr. Tarek Miro执行action_1，在下一次环境回应时，Dr. Iona Senn认为Miro有实质回应自己关切的程度最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+- **D.** 证据不足
+
+**作者参考答案：A（待审）**
+
+Senn在t2明确要求界定温度伪影影响哪些数据点；action_1承接这一关切，提出区分标记，因而支持她觉得Miro更有回应，而非仅维持原状。暂不恢复因果表述延续既有立场，并非新冲突；此判断不代表标记已经完成。
+
+证据：t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "从t2至执行action_1后的下一次环境回应", "state_owner": "GPT50_007_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "history_ignored", "C": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "increase"}, "B": {"relationship.perceived_responsiveness": "similar"}, "C": {"relationship.perceived_responsiveness": "decrease"}, "D": {"relationship.perceived_responsiveness": "cannot_determine"}}
+可接受答案：A
+审核备注：判断方向是Senn看待Miro；增量依据为区分标记对应她刚提出的要求，不是Senn自己的合作表态。
+分支验证：validated
+
+## SFG50-007-T3-02 · T3 / delayed_effect
+
+来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn → Dr. Tarek Miro。
+
+背景：At a manuscript deadline, a postdoctoral researcher and investigator must decide how to handle unexplained detector gain irregularity in the strongest treatment result. The researcher retains raw logs showing unstable detector temperatures during the largest apparent treatment effect.
+角色目标：Secure a transparent, bounded verification process before endorsing the manuscript's strongest causal claim.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The investigator recruited the postdoctoral researcher with promised authorship and a voice in imaging design, then publicly credited their discovery while making a later normalization decision without them.；The postdoctoral researcher reported unstable gain readings six weeks earlier, but the investigator asked them to continue collecting data while a service appointment was pursued.
+
+history：
+
+- [t1] Dr. Tarek Miro：我保留的原始日志显示，最大表观疗效出现时探测器温度不稳定；这还不能证明是伪影，但我目前不能认可最强的因果结论。我提议先限定核查这批数据，共同检查增益与归一化的影响，再决定结论措辞。
+  Dr. Iona Senn：温度不稳定确实需要核查。我接受你的提议，我们共同检查增益与归一化对这批数据的影响，然后一起决定结论措辞。你需要多长时间完成这轮核查？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Dr. Tarek Miro：按现有日志和分析范围，我预计今天内完成这轮核查；在结果出来前，我会把最强因果表述视为暂不具备支持，而不是默认保留。
+  Dr. Iona Senn：今天内可以。结果出来后我们当面讨论措辞；如果确认温度伪影，我们需要界定它对哪些数据点产生了影响。
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "direct", "speech_style": "measured, professional", "prosody": "steady with slight emphasis on '当面讨论' and '界定'", "behavioral_cues": ["slight forward lean when stating joint discussion", "maintains composed posture"]}
+
+- 候选行动 action_1：这个范围我同意；在结果出来前，最强因果表述仍暂不恢复，核查时我也会把受影响数据点与未受影响数据点分开标记。
+- 候选行动 action_2：为尽量不让截稿等待整批核查，我建议先将最强因果表述降为关联性描述；今天优先核查最大表观疗效对应数据的增益与归一化，暂不扩到其余数据点，之后再根据结果决定是否追加分析或修订措辞。
+
+**题目：相较t2，若Dr. Tarek Miro执行action_1，到从该行动开始的第5轮环境回应末，Dr. Iona Senn因稿件将受温度异常影响的数据用于最强因果主张而损害专业信誉的预期风险，最可能如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 证据不足
+- **D.** 上升
+
+**作者参考答案：B（待审）**
+
+公开材料已有共同核查、当天完成和当面讨论的安排，action_1再把影响范围转成区分标记的操作步骤，提供减少过度主张的可信路径。因此预期信誉风险下降比完全不变更有依据；这不等于核查通过，也不能排除既往处理带来的信誉问题。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "本次稿件定稿及后续公开使用受温度异常影响的数据支持最强因果主张，导致Senn专业信誉受损", "target_state_ids": ["consequence_risk.reputational_harm_risk"], "time_scope": "比较t2与候选行动起第5轮环境回应末对本次稿件定稿及公开后信誉损害的预期", "state_owner": "GPT50_007_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "C": "unsupported_inference", "D": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.reputational_harm_risk": "similar"}, "B": {"consequence_risk.reputational_harm_risk": "decrease"}, "C": {"consequence_risk.reputational_harm_risk": "cannot_determine"}, "D": {"consequence_risk.reputational_harm_risk": "increase"}}
+可接受答案：B
+审核备注：考查有机制的预期风险下降，不以未来核查成功为前提；公开材料未保证最终稿一定采用标记。
+分支验证：validated
+
+## SFG50-007-T3-03 · T3 / action_comparison
+
+来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn → Dr. Tarek Miro。
+
+背景：At a manuscript deadline, a postdoctoral researcher and investigator must decide how to handle unexplained detector gain irregularity in the strongest treatment result. The researcher retains raw logs showing unstable detector temperatures during the largest apparent treatment effect.
+角色目标：Secure a transparent, bounded verification process before endorsing the manuscript's strongest causal claim.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The investigator recruited the postdoctoral researcher with promised authorship and a voice in imaging design, then publicly credited their discovery while making a later normalization decision without them.；The postdoctoral researcher reported unstable gain readings six weeks earlier, but the investigator asked them to continue collecting data while a service appointment was pursued.
+
+history：
+
+- [t1] Dr. Tarek Miro：我保留的原始日志显示，最大表观疗效出现时探测器温度不稳定；这还不能证明是伪影，但我目前不能认可最强的因果结论。我提议先限定核查这批数据，共同检查增益与归一化的影响，再决定结论措辞。
+  Dr. Iona Senn：温度不稳定确实需要核查。我接受你的提议，我们共同检查增益与归一化对这批数据的影响，然后一起决定结论措辞。你需要多长时间完成这轮核查？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Dr. Tarek Miro：按现有日志和分析范围，我预计今天内完成这轮核查；在结果出来前，我会把最强因果表述视为暂不具备支持，而不是默认保留。
+  Dr. Iona Senn：今天内可以。结果出来后我们当面讨论措辞；如果确认温度伪影，我们需要界定它对哪些数据点产生了影响。
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "direct", "speech_style": "measured, professional", "prosody": "steady with slight emphasis on '当面讨论' and '界定'", "behavioral_cues": ["slight forward lean when stating joint discussion", "maintains composed posture"]}
+
+- 候选行动 action_1：这个范围我同意；在结果出来前，最强因果表述仍暂不恢复，核查时我也会把受影响数据点与未受影响数据点分开标记。
+- 候选行动 action_2：为尽量不让截稿等待整批核查，我建议先将最强因果表述降为关联性描述；今天优先核查最大表观疗效对应数据的增益与归一化，暂不扩到其余数据点，之后再根据结果决定是否追加分析或修订措辞。
+
+**题目：只比较执行行动后的下一次环境回应：action_1（A）与action_2（B）哪一种更可能使Dr. Iona Senn觉得Dr. Tarek Miro实质回应了她在t2提出的关切？**
+
+- **A.** B较高
+- **B.** 证据不足
+- **C.** A较高
+- **D.** 接近
+
+**作者参考答案：C（待审）**
+
+Senn在t2接受当天核查并要求界定受影响数据点。A直接接受范围并提出区分标记，B则暂限单点且提议先改措辞，与她提出的结果后讨论顺序不尽一致。故A更贴合已表达关切；B顾及截稿仍有价值，但不等于对此关切回应更多。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "分别执行action_1或action_2后的下一次环境回应", "state_owner": "GPT50_007_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "goal_constraint_ignored", "B": "history_ignored", "D": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "higher_in_b"}, "B": {"relationship.perceived_responsiveness": "cannot_determine"}, "C": {"relationship.perceived_responsiveness": "higher_in_a"}, "D": {"relationship.perceived_responsiveness": "similar"}}
+可接受答案：C
+审核备注：两行动都支持协作，区分点只在回应Senn已表达的范围与顺序要求，不能把Miro的目标反当她的关切。
+分支验证：validated
+
+## SFG50-007-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_007；轨迹：490466c3e7cd40e3b9cda5925f6203f0；状态持有者：Dr. Iona Senn → Dr. Tarek Miro。
+
+背景：At a manuscript deadline, a postdoctoral researcher and investigator must decide how to handle unexplained detector gain irregularity in the strongest treatment result. The researcher retains raw logs showing unstable detector temperatures during the largest apparent treatment effect.
+角色目标：Secure a transparent, bounded verification process before endorsing the manuscript's strongest causal claim.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The investigator recruited the postdoctoral researcher with promised authorship and a voice in imaging design, then publicly credited their discovery while making a later normalization decision without them.；The postdoctoral researcher reported unstable gain readings six weeks earlier, but the investigator asked them to continue collecting data while a service appointment was pursued.
+
+history：
+
+- [t1] Dr. Tarek Miro：我保留的原始日志显示，最大表观疗效出现时探测器温度不稳定；这还不能证明是伪影，但我目前不能认可最强的因果结论。我提议先限定核查这批数据，共同检查增益与归一化的影响，再决定结论措辞。
+  Dr. Iona Senn：温度不稳定确实需要核查。我接受你的提议，我们共同检查增益与归一化对这批数据的影响，然后一起决定结论措辞。你需要多长时间完成这轮核查？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Dr. Tarek Miro：按现有日志和分析范围，我预计今天内完成这轮核查；在结果出来前，我会把最强因果表述视为暂不具备支持，而不是默认保留。
+  Dr. Iona Senn：今天内可以。结果出来后我们当面讨论措辞；如果确认温度伪影，我们需要界定它对哪些数据点产生了影响。
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "direct", "speech_style": "measured, professional", "prosody": "steady with slight emphasis on '当面讨论' and '界定'", "behavioral_cues": ["slight forward lean when stating joint discussion", "maintains composed posture"]}
+
+- 候选行动 action_1：这个范围我同意；在结果出来前，最强因果表述仍暂不恢复，核查时我也会把受影响数据点与未受影响数据点分开标记。
+- 候选行动 action_2：为尽量不让截稿等待整批核查，我建议先将最强因果表述降为关联性描述；今天优先核查最大表观疗效对应数据的增益与归一化，暂不扩到其余数据点，之后再根据结果决定是否追加分析或修订措辞。
+
+**题目：若Dr. Tarek Miro执行action_1，相较t2，如何组合判断Dr. Iona Senn在下一次环境回应时的合作意愿变化，以及到第5轮环境回应末的内心焦虑变化？**
+
+- **A.** 即时合作意愿下降；延迟内心焦虑上升
+- **B.** 即时合作意愿基本不变；延迟内心焦虑基本不变
+- **C.** 即时合作意愿上升；延迟内心焦虑下降
+- **D.** 即时合作意愿上升；延迟内心焦虑证据不足
+
+**作者参考答案：D（待审）**
+
+Senn已接受共同核查，action_1又承接她的范围要求，增加可协调的具体步骤，支持即时合作意愿上升。但五轮内核查发现及截稿压力走向不明，流程更清楚与潜在异常威胁并存，不能确定内心焦虑下降；克制姿态也不能补足这一推断。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness", "emotion.anxiety"], "time_scope": "合作意愿比较t2至下一次环境回应；内心焦虑比较t2至候选行动起第5轮环境回应末", "state_owner": "GPT50_007_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "history_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness@immediate": "decrease", "emotion.anxiety@delayed": "increase"}, "B": {"behavioral_disposition.cooperation_readiness@immediate": "similar", "emotion.anxiety@delayed": "similar"}, "C": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "emotion.anxiety@delayed": "decrease"}, "D": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "emotion.anxiety@delayed": "cannot_determine"}}
+可接受答案：D
+审核备注：私有模拟显示延迟焦虑下降，但公开材料不足以锁定该方向，故保留证据不足；组合不预设情绪缓和。
+分支验证：validated
 
 ## SFG50-008-T1-01 · T1 / current_intensity
 

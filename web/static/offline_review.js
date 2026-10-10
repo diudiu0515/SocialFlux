@@ -1,7 +1,8 @@
 /* Review existing artifacts only. No model calls and no ground-truth mutation. */
 "use strict";
 const $ = id => document.getElementById(id);
-const bankSelection = new URLSearchParams(location.search).get('bank') || 'dev60';
+const bankSelection = new URLSearchParams(location.search).get('bank') ||
+  (location.hash.startsWith('#SFO-') ? 'dev60' : 'gpt50-t1-t3');
 function bankAPI(path) {return path + '?bank=' + encodeURIComponent(bankSelection);}
 const LABELS = {
   background: "场景背景", public_situation: "关系、约束与前史", relationship_structure: "关系结构",
@@ -398,7 +399,7 @@ async function init() {
     bank = await fetchJSON(bankAPI("/api/offline-review"));
     const summary = bank.summary;
     $("bankMeta").textContent = `${summary.item_count} 题 · ${summary.scenario_count} 个场景 · ${["T1", "T2", "T3"].map(task => `${task} ${summary.tasks[task] || 0}`).join(" / ")} · ${summary.combinations} 道组合题 · ${summary.replay_pending} 题回放待完成`;
-    if (!summary.generation_complete) $("bankMeta").textContent += ` · 尚待补齐：已产出 ${summary.item_count}/${summary.expected_items} 题，目标 ${summary.requested_scenarios} 个场景`;
+    if (!summary.generation_complete) $("bankMeta").textContent += ` · ${summary.active_generation_jobs ? "正在生成" : "尚待补齐"}：已产出 ${summary.item_count}/${summary.expected_items} 题，目标 ${summary.requested_scenarios} 个场景`;
     if (summary.paused_tasks?.length) $("bankMeta").textContent += ` · ${summary.paused_tasks.join('、')} 暂停新增`;
     if (!bank.items.length) {$("workspace").replaceChildren(el("p", "empty", "当前没有可标注的题目。")); return;}
     try {const saved = JSON.parse(localStorage.getItem(storageKey()) || "null"); if (saved?.annotations) draft = saved;}

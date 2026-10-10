@@ -112,8 +112,6 @@ def runtime(config, scenario, index):
     env['response_provider']['max_tokens']=6000
     env['response_sampling']['max_tokens']=6000
     policy=deepcopy(cfg['policies'][0]);policy.update(minimum_natural_turns=10)
-    if policy['provider'].get('provider')=='failover':
-        policy['provider']['max_candidates_per_request']=1
     if config.get('request_timeout'):
         def transport(value):
             value.update(timeout=config['request_timeout'],max_transport_attempts=config.get('transport_attempts',1),retry_backoff_seconds=5)
@@ -268,7 +266,7 @@ def main(argv=None):
     parser.add_argument('--request-timeout',type=int,help='Batch transport timeout override, recorded per run')
     parser.add_argument('--workers',type=int,help='Batch scenario concurrency override, recorded per run')
     parser.add_argument('--transport-attempts',type=int,help='Bounded transport attempts per request, recorded per run')
-    parser.add_argument('--recovery-attempts',type=int,help='Additional per-scenario resumes after transport failures only')
+    parser.add_argument('--recovery-attempts',type=int,help='Additional resumes after transport, empty or truncated provider responses; never content/source validation')
     parser.add_argument('--reuse-factual-continuation',action='store_true',help='Use a verified observed five-turn branch plus a newly authored alternative')
     parser.add_argument('--author-only',action='store_true',help='Explicit draft mode without counterfactual execution')
     parser.add_argument('--export-only',action='store_true')

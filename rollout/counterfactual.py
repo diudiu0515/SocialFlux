@@ -129,6 +129,11 @@ def branch_counterfactuals(
                     record_step(branch_attempt, 1 + continuation_steps, continuation_log)
                 break
             except ValueError as exc:
+                # Let the caller resume the latest persisted step after an
+                # upstream empty response; restarting the whole branch would
+                # discard paid, successful environment transitions.
+                if type(exc) is ValueError and str(exc) == 'provider returned empty content':
+                    raise
                 last_error = exc
         else:
             raise RuntimeError(

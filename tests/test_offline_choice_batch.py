@@ -82,6 +82,21 @@ class OfflineBatchTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'source hash'):
                 generate_with_recovery(self.config,1,['T3'],replay=True,run='invalid-fixture',retries=2)
         self.assertEqual(generate.call_count,1)
+        with patch('offline.choice_batch.generate_case',side_effect=[ValueError('provider returned empty content'),{'completed_tasks':['T3']}]) as generate, \
+             patch('offline.choice_batch.sleep'):
+            result=generate_with_recovery(self.config,1,['T3'],replay=True,run='empty-fixture',retries=1)
+        self.assertEqual(generate.call_count,2)
+        self.assertEqual(result['recovered_failures'][0]['type'],'ValueError')
+
+    def test_local_export_does_not_replace_active_run_status(self):
+        output=Path(self.config['output']);save(output/'run_status_T3.json',{'status':'running','pid':123})
+        args=SimpleNamespace(tasks=['T3'],scenarios=None,export_only=True,pair_media=None)
+        manifest={'complete':False,'expected_items':8}
+        with patch('offline.choice_batch.export_batch',return_value=([],manifest)):
+            run_batch(self.config,args)
+        from offline.choice_builder import load
+        self.assertEqual(load(output/'run_status_T3.json'),{'status':'running','pid':123})
+        self.assertEqual(load(output/'export_status.json')['status'],'incomplete')
 
     def test_stable_identity_and_independent_raw_author_cache(self):
         sample=item();raw={k:sample[k] for k in ['question','subtype','options','target_spec']}
@@ -113,6 +128,33 @@ class OfflineBatchTest(unittest.TestCase):
 
 
 class FactualReferenceTest(unittest.TestCase):
+    def test_empty_provider_response_preserves_steps_for_outer_recovery(self):
+        from rollout.counterfactual import branch_counterfactuals
+        calls=[]
+        class Environment:
+            def restore(self,snapshot,episode_id):
+                self.session=deepcopy(snapshot);self.session['turns']=[]
+            def snapshot(self):
+                return {k:deepcopy(v) for k,v in self.session.items() if k!='turns'}
+            def observe(self):return {}
+            def step(self,action):
+                calls.append(action['text'])
+                if len(calls)>1:raise ValueError('provider returned empty content')
+                log={'state_after':{},'dynamics_after':{}}
+                self.session['turns'].append(log)
+                return {},log
+        class Policy:
+            def generate(self,observation):return {'text':'continue'}
+        checkpoint={'turn_id':'t3','environment_snapshot_before':{
+            'state':{},'dynamics':{},'status':'active','event_plan':{'plan_hash':'fixed'}}}
+        saved=[]
+        with self.assertRaisesRegex(ValueError,'provider returned empty content'):
+            branch_counterfactuals(Environment,checkpoint,[{'text':'one'},{'text':'two'}],Policy,
+                                   audit_callback=lambda *row:saved.append(row))
+        self.assertEqual(calls,['one','continue'])
+        self.assertEqual(len(saved),1)
+        self.assertIn('environment_snapshot_after',saved[0][-1])
+
     def test_actual_after_snapshot_resumes_without_repeating_paid_step(self):
         from rollout.counterfactual import branch_counterfactuals
         class Environment:

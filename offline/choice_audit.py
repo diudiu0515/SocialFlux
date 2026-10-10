@@ -39,7 +39,7 @@ def audit_bundle(items, output):
     save(Path(output)/'development_audit.json',report)
     files=['tasks/offline_choice.py','evaluation/offline_choice.py','offline/choice_builder.py','offline/choice_media.py',
            'offline/choice_audit.py','offline/choice_pipeline.py','offline/choice_batch.py','offline/factual_reference.py','offline/provider_compat.py','scripts/build_offline_choice_dev.py','scripts/evaluate_offline_choice.py',
-           'rollout/counterfactual.py','pipeline/cli.py','prompts/offline_choice_author_v1.md','prompts/offline_choice_answer_v1.md']
+           'rollout/counterfactual.py','rollout/runner.py','pipeline/cli.py','prompts/offline_choice_author_v1.md','prompts/offline_choice_answer_v1.md']
     save(Path(output)/'implementation_manifest.json',{'files':{f:sha(f) for f in files}})
     state_reference_crosscheck(items,output)
     return report
@@ -81,7 +81,8 @@ def state_reference_crosscheck(items, output):
             delta=right-left
             opposite=(judgment=='increase' and direction=='time' and delta<0) or (judgment=='decrease' and direction=='time' and delta>0) or (judgment=='higher_in_a' and direction=='history' and delta>0) or (judgment=='higher_in_b' and direction=='history' and delta<0)
             comparisons.append({'coordinate':coordinate,'author_judgment':judgment,'machine_values':[left,right],
-                                'opposite_direction':opposite,'machine_changed_despite_similar':judgment=='similar' and delta!=0})
+                                'opposite_direction':opposite,'machine_changed_despite_similar':judgment=='similar' and delta!=0,
+                                'machine_unchanged_despite_direction':delta==0 and judgment in {'increase','decrease','higher_in_a','higher_in_b'}})
         rows.append({'instance_id':item['instance_id'],'status':'machine_reference_only','comparisons':comparisons})
     result={'status':'not_human_ground_truth','items_sha256':sha(Path(output)/'items.jsonl'),'rows':rows}
     save(Path(output)/'state_reference_crosscheck.json',result)

@@ -23,7 +23,7 @@
 
 T2 从同一背景与共享前史出发，保留原有事实，只改写记录在 `authoring.construction_source.edits` 的区间。共同 ending 仅存一份，避免两侧副本漂移。A/B 独立 restore 同一分叉 snapshot，经现有 state appraisal、确定性更新与 response 路径重放。受控 ending 的兼容性仍须语义审核，机器重放不等于人类认可其自然性。
 
-T3 提供 2–4 个有真实取舍的候选行动。本批复用默认五轮窗口，定义为候选动作产生的即时回应加四轮自由续演；必要时配置不超过十轮。这个计数与现有 `branch_counterfactuals` 一致。记录实际观测轮数，不以自然提前结束补足窗口。候选分支可以并行执行。中断后仅从真实记录中的完整 before-snapshot 重放最后一步，再续演剩余轮次；不推算缺失 state，旧运行日志保留在独立目录。所有分支使用同一 snapshot、外生 event plan、continuation policy 和时间控制，回应与内生结果可以不同。基线为执行候选动作之前的 checkpoint。预测题不会把未来分支、数字 state 或作者答案送给被测模型。若以后问“更合适”，必须显式给出目标、约束、时间范围。
+T3 提供 2–4 个有真实取舍的候选行动。本批复用默认五轮窗口，定义为候选动作产生的即时回应加四轮自由续演；必要时配置不超过十轮。这个计数与现有 `branch_counterfactuals` 一致。记录实际观测轮数，不以自然提前结束补足窗口。候选分支可以并行执行。中断后优先从真实保存的完整 after-snapshot 续演；旧记录只有 before-snapshot 时重放最后一步再继续。不推算缺失 state，旧运行日志保留在独立目录。所有分支使用同一 snapshot、外生 event plan、continuation policy 和时间控制，回应与内生结果可以不同。基线为执行候选动作之前的 checkpoint。预测题不会把未来分支、数字 state 或作者答案送给被测模型。若以后问“更合适”，必须显式给出目标、约束、时间范围。
 
 ## 作答与评分
 

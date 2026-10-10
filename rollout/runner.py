@@ -119,6 +119,7 @@ class RolloutRunner:
             return
         snapshot = self._trajectory_snapshot(environment, policy)
         snapshot["checkpoint_status"] = status
+        snapshot["resume_snapshot"] = environment.snapshot()
         self.checkpoint_writer(snapshot)
 
     def _run_turn(self, environment, policy):
@@ -163,7 +164,7 @@ class RolloutRunner:
             return result
         raise AssertionError("unreachable action grounding retry state")
 
-    def run(self, policy, max_turns=None):
+    def run(self, policy, max_turns=None, resume_from=None):
         environment = self.environment_factory()
         if hasattr(policy, "reset"):
             policy.reset()
@@ -173,17 +174,38 @@ class RolloutRunner:
             "model": getattr(policy, "provenance", {}).get("model"),
             "sampling": getattr(policy, "provenance", {}).get("sampling", {}),
         }, ensure_ascii=False, sort_keys=True)
-        environment.reset(event_selection_key=event_selection_key)
+        if resume_from is None:
+            environment.reset(event_selection_key=event_selection_key)
+        else:
+            saved = resume_from.get('resume_snapshot')
+            turns = resume_from.get('turns', [])
+            if not saved or not turns or resume_from['scenario_id'] != environment.scenario['scenario_id']:
+                raise ValueError('resume requires a real checkpoint for the same scenario')
+            last = turns[-1]
+            if (saved['state'] != last.get('state_after_public_events',last['state_after'])
+                    or saved['dynamics'] != last.get('dynamics_after_public_events',last['dynamics_after'])
+                    or saved['turn_id'] != int(str(last['turn_id']).removeprefix('t'))
+                    or saved['status'] != 'active'):
+                raise ValueError('resume snapshot does not match the last completed turn')
+            previous_policy=resume_from.get('policy_provenance',{})
+            current_policy=getattr(policy,'provenance',{})
+            if any(previous_policy.get(k)!=current_policy.get(k) for k in ('model','prompt_id','sampling')):
+                raise ValueError('resume policy contract differs')
+            environment.restore(saved)
+            environment.session['turns']=deepcopy(turns)
         limit = max_turns or environment.scenario.get("max_turns", 20)
+        last_completed_snapshot=environment.snapshot()
         try:
             while (
                 environment.session["turn_id"] < limit
                 and environment.session["status"] == "active"
             ):
                 self._run_turn(environment, policy)
+                last_completed_snapshot=environment.snapshot()
                 self._write_checkpoint(environment, policy, "turn_completed")
         except Exception as exc:
             partial = self._trajectory_snapshot(environment, policy)
+            partial['resume_snapshot']=last_completed_snapshot
             partial["generation_error"] = {
                 "error_type": type(exc).__name__,
                 "error": str(exc),
@@ -200,10 +222,15 @@ class RolloutRunner:
             exc.partial_trajectory = partial
             raise
         trajectory = self._trajectory_snapshot(environment, policy)
+        if resume_from is not None:
+            trajectory['resumed_from']={'trajectory_id':resume_from['trajectory_id'],
+                                        'completed_turns':len(resume_from['turns']),
+                                        'provider_metrics_scope':'current_attempt_only; prefix calls remain in the earlier checkpoint'}
         validate_trajectory(trajectory)
         if self.checkpoint_writer is not None:
             completed = deepcopy(trajectory)
             completed["checkpoint_status"] = "trajectory_completed"
+            completed['resume_snapshot']=environment.snapshot()
             self.checkpoint_writer(completed)
         if self.logger:
             self.logger.write(trajectory)

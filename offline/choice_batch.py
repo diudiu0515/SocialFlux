@@ -47,9 +47,15 @@ def source_for(config, number):
             factory,policy_factory=runtime(config,scenario,number-1)
             policy=policy_factory()
             policy.policy_id += f'_offline_prefix_{number:03d}'
-            runner=RolloutRunner(factory,checkpoint_writer=lambda t:save(attempt/'checkpoint.json',t))
+            scenario_digest=sha(scenario_path)
+            runner=RolloutRunner(factory,checkpoint_writer=lambda t:save(attempt/'checkpoint.json',
+                {**t,'offline_source_scenario_sha256':scenario_digest}))
+            checkpoints=[(p,load(p)) for p in (directory/'source_attempts').glob('*/checkpoint.json')]
+            checkpoints=[(p,t) for p,t in checkpoints if t.get('resume_snapshot') and t.get('turns')
+                         and t.get('offline_source_scenario_sha256')==scenario_digest]
+            previous=max(checkpoints,key=lambda pair:(len(pair[1]['turns']),pair[0].stat().st_mtime),default=None)
             try:
-                trajectory=runner.run(policy,max_turns=3)
+                trajectory=runner.run(policy,max_turns=3,**({'resume_from':previous[1]} if previous else {}))
             except Exception as exc:
                 save(attempt/'failure.json',{'type':type(exc).__name__,'message':str(exc)})
                 raise
@@ -57,6 +63,8 @@ def source_for(config, number):
                 raise ValueError('new offline source prefix has fewer than three observed turns')
             trajectory['offline_source_status']='three_turn_development_prefix_not_formal_rollout'
             trajectory['original_failed_sources']=[str(p) for p in candidates if p.exists()]
+            if previous:
+                trajectory['source_resume_checkpoint']={'path':str(previous[0]),'sha256':sha(previous[0])}
             save(path,trajectory)
     trajectory=load(path)
     if origin.startswith('existing') and review.get('latest_attempt',{}).get('artifact_sha256') != sha(path):
@@ -124,7 +132,7 @@ def candidates_for(config,directory,source,public,old):
             'public_input':public,'output_schema':{'candidate_actions':[{'action_id':'action_1','text':'受评人物直接台词'},{'action_id':'action_2','text':'另一合理行动'}],'edit_rationale':'两行动的目标、成本与取舍'}}
         if factual:
             payload['fixed_action_1']=factual['candidate_action']['text']
-            payload['request']+=' action_1必须逐字保留fixed_action_1（不受180字限制）；只新写action_2，使其与原行动在目标、资源、边界或短长期后果上有真实取舍。不要只换措辞，不要把原行动写成明显错误的选择。'
+            payload['request']+=' action_1必须逐字保留fixed_action_1（不受180字限制）；action_2使用与action_1相同的语言，只改变行动选择而不改变表达语言。只新写action_2，使其与原行动在目标、资源、边界或短长期后果上有真实取舍。不要只换措辞，不要把原行动写成明显错误的选择。'
         plan=author_call(author_provider(config),payload,validate)
     if factual:
         plan['construction_strategy']='factual_plus_counterfactual'
@@ -193,11 +201,14 @@ def branch_reference(config,directory,scenario,trajectory,actions,number,old):
             save(run/f'{branch}_0_{step}.json',log)
     prior={b:logs for b,logs in prior.items() if b not in completed}
     print(source_name(number),f'T3 replay: {len(completed)} saved branches, {len(actions)-len(completed)} to run; five responses each',flush=True)
+    def record_step(branch,attempt,step,log):
+        save(run/f'{branch}_{attempt}_{step}.json',log)
+        print(source_name(number),f'T3 action_{branch+1}: response {step}/{horizon} saved',flush=True)
     branches=branch_counterfactuals(factory,trajectory['turns'][2],
         [{'text':a['text']} for a in actions],policy_factory,horizon,
         branch_workers=config.get('branch_workers',2),resume_logs=prior,completed_branches=completed,
         branch_callback=lambda b,row:save(progress/'complete'/f'{b}.json',row),
-        audit_callback=lambda b,a,s,log:save(run/f'{b}_{a}_{s}.json',log))
+        audit_callback=record_step)
     validate_branches(branches,trajectory,actions,horizon)
     save(path,branches)
     return path,branches
@@ -208,9 +219,10 @@ def source_name(number):
 
 
 def generate_with_recovery(config, number, tasks, *, replay, run, retries=0):
-    """Bounded retries for transport failures only, retaining every attempt."""
+    """Retry provider failures only; never bypass source or content validation."""
     from providers.openai_compatible import OpenAICompatibleProvider
     from providers.anthropic import AnthropicProvider
+    from providers.base import IncompleteModelOutputError
     directory = Path(config['output'])/'sources'/source_name(number)
     attempts = []
     for attempt in range(retries+1):
@@ -225,11 +237,13 @@ def generate_with_recovery(config, number, tasks, *, replay, run, retries=0):
             save(directory/'failures'/f'{run}_attempt_{attempt+1}.json',failure)
             transient = (OpenAICompatibleProvider._is_transient(exc)
                          or AnthropicProvider._is_transient(exc)
-                         or isinstance(exc, (ConnectionError, IncompleteRead)))
+                         or isinstance(exc, (ConnectionError, IncompleteRead, IncompleteModelOutputError))
+                         or (type(exc) is ValueError and str(exc)=='provider returned empty content')
+                         or (type(exc) is RuntimeError and str(exc)=='all failover provider candidates are temporarily circuit-open'))
             if not transient or attempt == retries:
                 raise
             attempts.append({k:v for k,v in failure.items() if not k.startswith('last_')})
-            print(source_name(number),f'transport failed; resume {attempt+1}/{retries}',flush=True)
+            print(source_name(number),f'provider failed ({type(exc).__name__}); resume {attempt+1}/{retries}',flush=True)
             sleep(min(30*(attempt+1),120))
 
 

@@ -29,7 +29,7 @@ const {chromium} = require('playwright');
       }
       await route.fulfill({json:payload});
     });
-    await page.goto(base+'/offline-review?bank=gpt50-t1-t3#'+id);
+    await page.goto(base+'/offline-review#'+id);
     await page.waitForSelector('input[name=answer]');
     assert.equal(await page.locator('#bankSelect').inputValue(),'gpt50-t1-t3');
     await page.locator('input[name=answer][value=B]').check();
@@ -49,6 +49,6 @@ const {chromium} = require('playwright');
     await page.waitForSelector('#itemNav button');
     assert.equal(await page.locator('#itemNav button').count(),60);
     assert.deepEqual(errors,[]);
-    console.log(JSON.stringify({passed:true,checks:['T1/T3 bank selection','unchanged draft survives append','changed draft archived','old60 retained']}));
+    console.log(JSON.stringify({passed:true,checks:['GPT50 default and bank selection','unchanged draft survives append','changed draft archived','old60 retained']}));
   } finally {await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

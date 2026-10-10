@@ -51,6 +51,23 @@ def read_json(path, fallback=None):
     return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else fallback
 
 
+def active_generation_jobs():
+    """A stale 'running' file alone is not evidence of a live worker."""
+    pids=set()
+    for path in (bank_path()/'runs').glob('*.json'):
+        row=read_json(path,{})
+        pid=row.get('pid')
+        if row.get('status')!='running' or not isinstance(pid,int) or pid<1:
+            continue
+        try:
+            command=Path(f'/proc/{pid}/cmdline').read_bytes().replace(b'\0',b' ')
+        except OSError:
+            continue
+        if b'pipeline offline-build' in command and bank_path().name.encode() in command:
+            pids.add(pid)
+    return len(pids)
+
+
 def metadata(item):
     author = item["authoring"]
     return {
@@ -221,6 +238,7 @@ def _load_review(instance_id=None, reference=False):
                 "requested_scenarios":manifest.get('requested_scenarios',len({i['story_id'] for i in items})),
                 "generation_complete":manifest.get('complete',True),
                 "paused_tasks":manifest.get('paused_tasks',[]),
+                "active_generation_jobs":active_generation_jobs(),
             }, "items": rows,
         }
     item = next((item for item in items if item["instance_id"] == instance_id), None)
