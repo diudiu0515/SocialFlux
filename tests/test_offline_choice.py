@@ -155,6 +155,16 @@ class OfflineChoiceTest(unittest.TestCase):
         invalid=deepcopy(original[0]['future_turns'][:3]);invalid[0]['policy_action']={'text':'different'}
         with self.assertRaisesRegex(ValueError,'snapshot/action'):
             branch_counterfactuals(Environment,checkpoint,actions,Policy,resume_logs={0:invalid})
+        Environment.calls=0;completed=[]
+        selected=branch_counterfactuals(Environment,checkpoint,actions,Policy,
+            branch_indices=[1],branch_workers=2,branch_callback=lambda i,row:completed.append(i))
+        self.assertEqual(Environment.calls,5)
+        self.assertEqual(completed,[1])
+        self.assertEqual(len(selected),1)
+        self.assertEqual(selected[0]['candidate_action'],actions[1])
+        for bad in [[],[0,0],[2],[True]]:
+            with self.assertRaisesRegex(ValueError,'selected branch'):
+                branch_counterfactuals(Environment,checkpoint,actions,Policy,branch_indices=bad)
 
 
 class OfflineMediaBoundaryTest(unittest.TestCase):

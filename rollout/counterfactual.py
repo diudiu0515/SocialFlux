@@ -17,7 +17,14 @@ def branch_counterfactuals(
     resume_logs=None,
     completed_branches=None,
     branch_callback=None,
+    branch_indices=None,
 ):
+    """Run all candidates, or selected indices for isolated recovery.
+
+    A selected result is a partial branch collection, never a complete question
+    reference. Callers must assemble and validate all candidates before use.
+    Callbacks retain indices from the full candidate list.
+    """
     if not 5 <= delayed_horizon <= 10:
         raise ValueError("delayed_horizon must be between 5 and 10")
     if not 2 <= len(candidate_actions) <= 4:
@@ -27,6 +34,10 @@ def branch_counterfactuals(
         raise ValueError("checkpoint lacks a private environment snapshot")
     if branch_workers < 1:
         raise ValueError("branch_workers must be positive")
+    indices = list(range(len(candidate_actions))) if branch_indices is None else list(branch_indices)
+    if (not indices or len(indices) != len(set(indices))
+            or any(type(i) is not int or i not in range(len(candidate_actions)) for i in indices)):
+        raise ValueError("invalid selected branch indices")
     resume_logs = resume_logs or {}
     completed_branches = completed_branches or {}
     snapshot_hash = hashlib.sha256(json.dumps(snapshot,sort_keys=True,ensure_ascii=False).encode()).hexdigest()
@@ -181,10 +192,10 @@ def branch_counterfactuals(
             branch_callback(branch_index,deepcopy(result))
         return result
     if branch_workers == 1:
-        branches = [run_branch(pair) for pair in enumerate(candidate_actions)]
+        branches = [run_branch((i,candidate_actions[i])) for i in indices]
     else:
-        with ThreadPoolExecutor(max_workers=min(branch_workers,len(candidate_actions))) as pool:
-            branches = list(pool.map(run_branch,enumerate(candidate_actions)))
+        with ThreadPoolExecutor(max_workers=min(branch_workers,len(indices))) as pool:
+            branches = list(pool.map(run_branch,[(i,candidate_actions[i]) for i in indices]))
     if any(
         branch["external_event_plan_hash"] != frozen_event_plan_hash
         for branch in branches
