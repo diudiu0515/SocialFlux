@@ -140,6 +140,26 @@ class OfflineBatchTest(unittest.TestCase):
         self.assertEqual(raw,original)
         self.assertEqual(first['instance_id'],'SFG50-001-T1-01')
 
+    def test_chinese_action_names_bind_to_candidates_without_hiding_conflicts(self):
+        sample=item();raw={k:sample[k] for k in ['question','subtype','options','target_spec']}
+        raw.update({k:sample['authoring'][k] for k in ['answer','evidence_ids','rationale','option_errors','option_variable_map']})
+        raw.update(subtype='immediate_effect',review_notes='pending')
+        public=deepcopy(sample['input'])
+        public['candidate_actions']=[{'action_id':'action_1','text':'核对交接记录'},
+                                     {'action_id':'action_2','text':'直接交接'}]
+        kwargs=dict(task='T3',source={'scenario_id':'GPT50_001','trajectory_id':'one'},
+                    public_input=public,ordinal=0,index=0,instance_id='test-action')
+        for name in ['行动一','行动 1','action_1']:
+            raw['question']=f'采取{name}后，甲对乙的信任在下一次回应中如何变化？'
+            raw['target_spec']['action_id']='action_1'
+            self.assertEqual(assemble(raw,**kwargs)['target_spec']['action_id'],'action_1')
+        raw['target_spec']['action_id']='action_2'
+        with self.assertRaisesRegex(ValueError,'conflicts'):
+            assemble(raw,**kwargs)
+        raw['question']='采取行动一或行动二后，甲的信任如何变化？'
+        with self.assertRaisesRegex(ValueError,'one candidate'):
+            assemble(raw,**kwargs)
+
     def test_delayed_reference_rejects_source_action_and_window_drift(self):
         import hashlib,json
         snapshot={'state':{},'event_plan':{'plan_hash':'fixed'}}

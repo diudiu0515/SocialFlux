@@ -77,8 +77,15 @@ def assemble(raw, *, task, source, public_input, ordinal, index, replay_status='
             target['comparison_actions']=[a['action_id'] for a in public_input['candidate_actions'][:2]]
         else:
             mentioned=set(re.findall(r'action_[1-4]',raw['question']))
+            # The evaluated question may name candidates naturally in Chinese.
+            # Still require a unique visible action and reject metadata conflicts.
+            digits = {'一':'1','二':'2','三':'3','四':'4'}
+            mentioned.update('action_'+digits.get(n,n) for n in
+                             re.findall(r'行动\s*([一二三四1-4])(?!\d)',raw['question']))
             if len(mentioned)!=1:
                 raise ValueError('T3 single-action question must identify one candidate action')
+            if target.get('action_id') not in {None, next(iter(mentioned))}:
+                raise ValueError('T3 action metadata conflicts with the visible question')
             target['action_id']=next(iter(mentioned))
         target['prediction_window']={'baseline':'t2:after_environment_response','immediate':'next_environment_response',
                                      'delayed':{'environment_responses':horizon,'includes_immediate':True}}
