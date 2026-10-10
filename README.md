@@ -2,12 +2,9 @@
 
 SocialFlux 使用同一套社会状态环境生成 rollout、构建 T1–T3 离线题目，并执行 T4 在线评测。四类 state 为 Emotion、Behavioral Disposition、Relationship、Interaction Risk；内部风险路径沿用 `consequence_risk`。
 
-当前开发入口包括 GPT50 场景与轨迹、多模态资产，以及基于其中 5 个场景的 60 道 T1–T3 选择题。开发题已有 56 道完成所需回放，4 道 T3 待补；全部答案仍待人工审核。数量与状态以对应批次 manifest 为准，详见 [项目进度](PROJECT_PROGRESS.md) 和 [开发题报告](reports/experiments/2026-10-10_offline_t1_t3_dev60.md)。
+当前主要开发题库为固定 50 场景的 [T1/T3 扩展批次](docs/operations/OFFLINE_GPT50_T1_T3.md)，每场景 4 道 T1、4 道 T3，目标 400 题；T2 暂停新增。实际完成数见[交付报告](reports/experiments/2026-10-10_offline_gpt50_t1_t3.md)和[版本快照](tasks/examples/offline_gpt50_t1_t3/snapshot.json)。全部参考答案仍待人工审核。
 
-另已接入固定 50 场景的 [T1/T3 扩展批次](docs/operations/OFFLINE_GPT50_T1_T3.md)，
-T2 暂停新增。目标为每场景 4 道 T1、4 道 T3，共 400 题；
-已获授权继续使用现有 provider，实际产出和缺项见批次 manifest。网页新入口为
-`/offline-review?bank=gpt50-t1-t3`，旧 60 题继续独立保留。
+网页入口为 `/offline-review?bank=gpt50-t1-t3`。此前基于 5 个场景的 60 道 T1–T3 题目保持独立，可在 `?bank=dev60` 查看；该旧批次有 56 道完成所需回放、4 道 T3 待补，不与扩展批次混算。详见[项目进度](PROJECT_PROGRESS.md)。
 
 ## 从哪里开始
 
@@ -33,7 +30,7 @@ python -m pipeline offline-eval --help
 对已有开发题进行零模型调用检查：
 
 ```bash
-python -m pipeline offline-eval --items data/offline_t1_t3_dev60/replay_ready.items.jsonl --output build/offline-check --check-only
+python -m pipeline offline-eval --items data/offline_gpt50_t1_t3/items.jsonl --output build/offline-check --check-only
 ```
 
 新协议作答只需 `{"answer":"B"}`。`tasks --protocol choice` 与 `offline-build` 走同一构建路径；不带协议参数的 `tasks` 保留旧概率题流程。重新生成、回放或试答可能调用 provider，参数见协议。CLI 的通用正式默认配置仍为 Fable；当前 GPT/offline 批次显式选择自己的配置，不要把默认值视为当前实验的模型配置。

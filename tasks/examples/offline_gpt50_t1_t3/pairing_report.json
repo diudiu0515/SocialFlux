@@ -1,9 +1,9 @@
 {
-  "input_item_count": 280,
-  "items_sha256": "29457903b92105becbf7074d3170aa19fbf0ec34b2f32509e562e55c9760e9e1",
-  "logical_pairs": 248,
-  "variants": 496,
-  "unique_videos": 44,
+  "input_item_count": 332,
+  "items_sha256": "ab10d3d58ff0b18c2c6663903b68ee3657dd3d52ebdf33f715a9153648313ea5",
+  "logical_pairs": 292,
+  "variants": 584,
+  "unique_videos": 45,
   "gaps": [
     {
       "instance_id": "SFG50-005-T1-01",
@@ -114,6 +114,42 @@
       "reason": "no_matched_source_video"
     },
     {
+      "instance_id": "SFG50-020-T3-01",
+      "asset_id": "GPT50_020:online_nonverbal_v1:open_engagement",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-020-T3-01",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-020-T3-02",
+      "asset_id": "GPT50_020:online_nonverbal_v1:open_engagement",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-020-T3-02",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-020-T3-03",
+      "asset_id": "GPT50_020:online_nonverbal_v1:open_engagement",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-020-T3-03",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-020-T3-04",
+      "asset_id": "GPT50_020:online_nonverbal_v1:open_engagement",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-020-T3-04",
+      "reason": "no_matched_source_video"
+    },
+    {
       "instance_id": "SFG50-034-T1-01",
       "asset_id": "GPT50_034:online_nonverbal_v1:easing_tension",
       "reason": "exact_source_asset_missing"
@@ -219,6 +255,42 @@
     },
     {
       "instance_id": "SFG50-036-T1-04",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-036-T3-01",
+      "asset_id": "GPT50_036:online_nonverbal_v1:easing_tension",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-036-T3-01",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-036-T3-02",
+      "asset_id": "GPT50_036:online_nonverbal_v1:easing_tension",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-036-T3-02",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-036-T3-03",
+      "asset_id": "GPT50_036:online_nonverbal_v1:easing_tension",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-036-T3-03",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-036-T3-04",
+      "asset_id": "GPT50_036:online_nonverbal_v1:easing_tension",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-036-T3-04",
       "reason": "no_matched_source_video"
     },
     {

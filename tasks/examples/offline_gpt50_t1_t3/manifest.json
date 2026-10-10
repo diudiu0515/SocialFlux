@@ -1,48 +1,48 @@
 {
   "format": "socialflux_offline_choice_v1",
-  "item_count": 280,
+  "item_count": 332,
   "tasks": {
-    "T1": 196,
-    "T3": 84
+    "T1": 200,
+    "T3": 132
   },
   "subtypes": {
-    "T1/current_intensity": 49,
-    "T1/interval_change": 98,
-    "T1/joint_change": 49,
-    "T3/immediate_effect": 21,
-    "T3/delayed_effect": 21,
-    "T3/action_comparison": 21,
-    "T3/immediate_delayed": 21
+    "T1/current_intensity": 50,
+    "T1/interval_change": 100,
+    "T1/joint_change": 50,
+    "T3/immediate_effect": 33,
+    "T3/delayed_effect": 33,
+    "T3/action_comparison": 33,
+    "T3/immediate_delayed": 33
   },
   "task_state_coverage": {
-    "T1/Behavioral Disposition": 107,
+    "T1/Behavioral Disposition": 109,
     "T1/Emotion": 27,
     "T1/Interaction Risk": 22,
-    "T1/Relationship": 62,
-    "T3/Behavioral Disposition": 30,
-    "T3/Emotion": 11,
-    "T3/Interaction Risk": 23,
-    "T3/Relationship": 29
+    "T1/Relationship": 64,
+    "T3/Behavioral Disposition": 48,
+    "T3/Emotion": 14,
+    "T3/Interaction Risk": 36,
+    "T3/Relationship": 49
   },
   "answer_positions": {
-    "A": 69,
-    "B": 69,
-    "C": 71,
-    "D": 55,
+    "A": 80,
+    "B": 82,
+    "C": 88,
+    "D": 66,
     "E": 8,
     "F": 8
   },
-  "scenario_count": 49,
+  "scenario_count": 50,
   "formal_admission": false,
   "human_review": "pending",
-  "replay_ready_count": 280,
+  "replay_ready_count": 332,
   "replay_ready_tasks": {
-    "T1": 196,
-    "T3": 84
+    "T1": 200,
+    "T3": 132
   },
   "replay_pending_ids": [],
-  "items_sha256": "29457903b92105becbf7074d3170aa19fbf0ec34b2f32509e562e55c9760e9e1",
-  "public_sha256": "0ad217f0e062ead7041b7e99ede350169437de28e8483481f3a63165b87046d4",
+  "items_sha256": "ab10d3d58ff0b18c2c6663903b68ee3657dd3d52ebdf33f715a9153648313ea5",
+  "public_sha256": "21f4e297d105c528bc257b565f2223dbec5a339266ac9e8daf67426bc36fa058",
   "bank_id": "SFG50",
   "requested_scenarios": 50,
   "expected_items": 400,
@@ -193,8 +193,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -208,8 +208,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -313,8 +313,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -343,8 +343,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -373,8 +373,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -388,8 +388,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "new_offline_source_prefix_original_failure_preserved",
@@ -448,8 +448,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -534,14 +534,16 @@
       "scenario_id": "GPT50_033",
       "tasks": {
         "T1": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         },
         "T3": {
           "items": 0,
           "complete": false
         }
-      }
+      },
+      "source_origin": "new_offline_source_prefix_original_failure_preserved",
+      "source_review_status": "not_reviewed"
     },
     {
       "scenario_id": "GPT50_034",
@@ -566,8 +568,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_partial_rollout",
@@ -581,8 +583,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -596,8 +598,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -611,8 +613,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -776,8 +778,8 @@
           "complete": true
         },
         "T3": {
-          "items": 0,
-          "complete": false
+          "items": 4,
+          "complete": true
         }
       },
       "source_origin": "existing_complete_rollout",
@@ -801,11 +803,11 @@
   ],
   "complete": false,
   "pairing": {
-    "input_item_count": 280,
-    "items_sha256": "29457903b92105becbf7074d3170aa19fbf0ec34b2f32509e562e55c9760e9e1",
-    "logical_pairs": 248,
-    "variants": 496,
-    "unique_videos": 44,
+    "input_item_count": 332,
+    "items_sha256": "ab10d3d58ff0b18c2c6663903b68ee3657dd3d52ebdf33f715a9153648313ea5",
+    "logical_pairs": 292,
+    "variants": 584,
+    "unique_videos": 45,
     "gaps": [
       {
         "instance_id": "SFG50-005-T1-01",
@@ -916,6 +918,42 @@
         "reason": "no_matched_source_video"
       },
       {
+        "instance_id": "SFG50-020-T3-01",
+        "asset_id": "GPT50_020:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-020-T3-01",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-020-T3-02",
+        "asset_id": "GPT50_020:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-020-T3-02",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-020-T3-03",
+        "asset_id": "GPT50_020:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-020-T3-03",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-020-T3-04",
+        "asset_id": "GPT50_020:online_nonverbal_v1:open_engagement",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-020-T3-04",
+        "reason": "no_matched_source_video"
+      },
+      {
         "instance_id": "SFG50-034-T1-01",
         "asset_id": "GPT50_034:online_nonverbal_v1:easing_tension",
         "reason": "exact_source_asset_missing"
@@ -1021,6 +1059,42 @@
       },
       {
         "instance_id": "SFG50-036-T1-04",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-036-T3-01",
+        "asset_id": "GPT50_036:online_nonverbal_v1:easing_tension",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-036-T3-01",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-036-T3-02",
+        "asset_id": "GPT50_036:online_nonverbal_v1:easing_tension",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-036-T3-02",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-036-T3-03",
+        "asset_id": "GPT50_036:online_nonverbal_v1:easing_tension",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-036-T3-03",
+        "reason": "no_matched_source_video"
+      },
+      {
+        "instance_id": "SFG50-036-T3-04",
+        "asset_id": "GPT50_036:online_nonverbal_v1:easing_tension",
+        "reason": "exact_source_asset_missing"
+      },
+      {
+        "instance_id": "SFG50-036-T3-04",
         "reason": "no_matched_source_video"
       },
       {

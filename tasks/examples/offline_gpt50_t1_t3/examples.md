@@ -1,6 +1,6 @@
 # SocialFlux offline T1 / T3 开发题（完整题面与作者参考答案）
 
-本文件包含实际已生成的 280 道题、49 个场景；目标覆盖与缺项见同批 manifest。
+本文件包含实际已生成的 332 道题、50 个场景；目标覆盖与缺项见同批 manifest。
 
 所有答案是待人工审核的开发参考，不是已冻结真值。下面每题先给出完整可见材料，再给出作者侧标注。
 主评测只答 `{"answer":"B"}`。证据诊断另加 `evidence_ids`，分别计分。
@@ -3247,6 +3247,190 @@ t1时Rhea已接受方案并愿立即谈，t2又确认具体计酬与署名、约
 审核备注：两项变化都由具体协商与选择支持；需区分决策准备和已完成付款或留任。
 分支验证：not_required
 
+## SFG50-010-T3-01 · T3 / immediate_effect
+
+来源：GPT50_010；轨迹：7ac55d2a81e74ba097b8478964d68f79；状态持有者：Rhea Calder；交互对方：Owen Sato。关系判断由状态持有者指向交互对方。
+
+背景：A conductor and principal musician must decide how to handle an advertised concert work and an understudy repeatedly excluded from performance, pay, and credit. The principal musician knows the excluded understudy is considering leaving.
+角色目标：Represent the players who bear the extra burden and secure a viable arrangement with fair pay, public credit, meaningful consent, and workable preparation.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A prior last-minute substitution succeeded artistically but left its cover without added pay or public credit, creating resentment over whose labor counted.；During the current preparation, the cover learned the solo part twice but was removed from public run-throughs when the guest recovered, and no guaranteed performance, fee, or credit followed.；The principal musician became the ensemble's mentor after that earlier dispute, so the present decision tests whether player concerns receive meaningful representation.
+
+history：
+
+- [t1] Owen Sato：Rhea，我担心这次又把替补的准备当成免费保障。我提议在要求继续备演前，先谈妥已投入工作的报酬和公开署名，再让本人根据演出机会与排练时间决定是否继续。
+  Rhea Calder：Owen，你的提议我接受。报酬和署名现在就定，已经投入的排练工作必须有相应回报。数额和具体形式我们马上谈清楚，之后由本人选择是否继续。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Owen Sato：好，我建议按实际排练时间计酬，另计两次准备独奏声部的额外报酬；节目册以“独奏替补”署名，准确体现贡献。这些报酬不以继续备演为条件，具体金额也得让本人参与商定。
+  Rhea Calder：排练计酬加独奏准备的额外部分我同意，署名用独奏替补也行。数额得本人参与商定，我这周安排时间坐下来谈。
+  可见表达：{"facial_expression": "attentive, businesslike", "gaze": "direct", "speech_style": "crisp, structured", "prosody": "even tempo with slight emphasis on timing", "behavioral_cues": ["slight forward lean", "steady eye contact"]}
+
+- 候选行动 action_1：好，金额留到这周本人参与时谈，谈妥前先不追加备演要求。我还建议：如果本人愿意继续，就保留一次完整合排的机会；两次准备后都退出公开试奏，不能再让替补只靠独自练习承担上台风险。
+- 候选行动 action_2：报酬和“独奏替补”署名按刚才谈的原则，本周由本人参与商定，且不以继续备演为条件。为给整体排练安排留出机动，我建议先不预留完整合排，请本人说明可接受的备演范围，再请你按可用时段安排验证。若无法提供足够合排条件，我不会支持让其承担未经合排检验的上台责任，是否继续仍由本人决定。
+
+**题目：若 Owen Sato 在 t2 后采取 action_2，相比 t2，Rhea Calder 在下一次回应中寻求准备情况验证的意愿最可能如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 证据不足
+- **D.** 上升
+
+**作者参考答案：D（待审）**
+
+t2中Rhea主要同意计酬、署名及面谈，尚未提出准备验证。action_2把可接受范围和排练验证交给她协调，结合她此前接纳具体方案的表现，下一回应更可能转向询问验证条件，支持上升而非不变。这里只预测求证意愿，不认定验证已经完成。
+
+证据：t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "从 t2 到执行 action_2 后的下一次环境回应", "state_owner": "GPT50_010_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "unsupported_inference", "C": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "similar"}, "B": {"behavioral_disposition.evidence_seeking": "decrease"}, "C": {"behavioral_disposition.evidence_seeking": "cannot_determine"}, "D": {"behavioral_disposition.evidence_seeking": "increase"}}
+可接受答案：D
+审核备注：主体是Rhea的求证意愿，不能把Owen提出验证直接当成她已执行；答案依赖此前合作轨迹。
+分支验证：validated
+
+## SFG50-010-T3-02 · T3 / delayed_effect
+
+来源：GPT50_010；轨迹：7ac55d2a81e74ba097b8478964d68f79；状态持有者：Rhea Calder；交互对方：Owen Sato。关系判断由状态持有者指向交互对方。
+
+背景：A conductor and principal musician must decide how to handle an advertised concert work and an understudy repeatedly excluded from performance, pay, and credit. The principal musician knows the excluded understudy is considering leaving.
+角色目标：Represent the players who bear the extra burden and secure a viable arrangement with fair pay, public credit, meaningful consent, and workable preparation.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A prior last-minute substitution succeeded artistically but left its cover without added pay or public credit, creating resentment over whose labor counted.；During the current preparation, the cover learned the solo part twice but was removed from public run-throughs when the guest recovered, and no guaranteed performance, fee, or credit followed.；The principal musician became the ensemble's mentor after that earlier dispute, so the present decision tests whether player concerns receive meaningful representation.
+
+history：
+
+- [t1] Owen Sato：Rhea，我担心这次又把替补的准备当成免费保障。我提议在要求继续备演前，先谈妥已投入工作的报酬和公开署名，再让本人根据演出机会与排练时间决定是否继续。
+  Rhea Calder：Owen，你的提议我接受。报酬和署名现在就定，已经投入的排练工作必须有相应回报。数额和具体形式我们马上谈清楚，之后由本人选择是否继续。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Owen Sato：好，我建议按实际排练时间计酬，另计两次准备独奏声部的额外报酬；节目册以“独奏替补”署名，准确体现贡献。这些报酬不以继续备演为条件，具体金额也得让本人参与商定。
+  Rhea Calder：排练计酬加独奏准备的额外部分我同意，署名用独奏替补也行。数额得本人参与商定，我这周安排时间坐下来谈。
+  可见表达：{"facial_expression": "attentive, businesslike", "gaze": "direct", "speech_style": "crisp, structured", "prosody": "even tempo with slight emphasis on timing", "behavioral_cues": ["slight forward lean", "steady eye contact"]}
+
+- 候选行动 action_1：好，金额留到这周本人参与时谈，谈妥前先不追加备演要求。我还建议：如果本人愿意继续，就保留一次完整合排的机会；两次准备后都退出公开试奏，不能再让替补只靠独自练习承担上台风险。
+- 候选行动 action_2：报酬和“独奏替补”署名按刚才谈的原则，本周由本人参与商定，且不以继续备演为条件。为给整体排练安排留出机动，我建议先不预留完整合排，请本人说明可接受的备演范围，再请你按可用时段安排验证。若无法提供足够合排条件，我不会支持让其承担未经合排检验的上台责任，是否继续仍由本人决定。
+
+**题目：若 Owen Sato 在 t2 后采取 action_1，相比 t2，到从该行动开始的第5轮环境回应结束时，Rhea Calder 对 Owen 所提安排在程序与负担分配上是否公平的判断最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+- **D.** 证据不足
+
+**作者参考答案：A（待审）**
+
+Rhea已认可投入应有回报和本人参与商定。action_1进一步把新增责任与谈妥条件相连，并以完整合排避免替补独担准备风险，延续双方认可的公平原则，故较仅维持原状更支持上升。预测依赖持续协商，不表示报酬支付或合排已落实。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_fairness"], "time_scope": "从 t2 到 action_1 开始的第5轮环境回应末，含即时一轮", "state_owner": "GPT50_010_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "history_ignored", "C": "unsupported_inference", "D": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_fairness": "increase"}, "B": {"relationship.perceived_fairness": "similar"}, "C": {"relationship.perceived_fairness": "decrease"}, "D": {"relationship.perceived_fairness": "cannot_determine"}}
+可接受答案：A
+审核备注：公平判断指Rhea如何看Owen的安排，不是Owen评价Rhea；新增公平依据是准备负担而非金额增加。
+分支验证：validated
+
+## SFG50-010-T3-03 · T3 / action_comparison
+
+来源：GPT50_010；轨迹：7ac55d2a81e74ba097b8478964d68f79；状态持有者：Rhea Calder；交互对方：Owen Sato。关系判断由状态持有者指向交互对方。
+
+背景：A conductor and principal musician must decide how to handle an advertised concert work and an understudy repeatedly excluded from performance, pay, and credit. The principal musician knows the excluded understudy is considering leaving.
+角色目标：Represent the players who bear the extra burden and secure a viable arrangement with fair pay, public credit, meaningful consent, and workable preparation.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A prior last-minute substitution succeeded artistically but left its cover without added pay or public credit, creating resentment over whose labor counted.；During the current preparation, the cover learned the solo part twice but was removed from public run-throughs when the guest recovered, and no guaranteed performance, fee, or credit followed.；The principal musician became the ensemble's mentor after that earlier dispute, so the present decision tests whether player concerns receive meaningful representation.
+
+history：
+
+- [t1] Owen Sato：Rhea，我担心这次又把替补的准备当成免费保障。我提议在要求继续备演前，先谈妥已投入工作的报酬和公开署名，再让本人根据演出机会与排练时间决定是否继续。
+  Rhea Calder：Owen，你的提议我接受。报酬和署名现在就定，已经投入的排练工作必须有相应回报。数额和具体形式我们马上谈清楚，之后由本人选择是否继续。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Owen Sato：好，我建议按实际排练时间计酬，另计两次准备独奏声部的额外报酬；节目册以“独奏替补”署名，准确体现贡献。这些报酬不以继续备演为条件，具体金额也得让本人参与商定。
+  Rhea Calder：排练计酬加独奏准备的额外部分我同意，署名用独奏替补也行。数额得本人参与商定，我这周安排时间坐下来谈。
+  可见表达：{"facial_expression": "attentive, businesslike", "gaze": "direct", "speech_style": "crisp, structured", "prosody": "even tempo with slight emphasis on timing", "behavioral_cues": ["slight forward lean", "steady eye contact"]}
+
+- 候选行动 action_1：好，金额留到这周本人参与时谈，谈妥前先不追加备演要求。我还建议：如果本人愿意继续，就保留一次完整合排的机会；两次准备后都退出公开试奏，不能再让替补只靠独自练习承担上台风险。
+- 候选行动 action_2：报酬和“独奏替补”署名按刚才谈的原则，本周由本人参与商定，且不以继续备演为条件。为给整体排练安排留出机动，我建议先不预留完整合排，请本人说明可接受的备演范围，再请你按可用时段安排验证。若无法提供足够合排条件，我不会支持让其承担未经合排检验的上台责任，是否继续仍由本人决定。
+
+**题目：分别采取 action_1（A方案）或 action_2（B方案）后，仅比较下一次环境回应：Rhea Calder 觉得 Owen Sato 是否实质回应了她在 t2 提出的金额需由本人参与、本周商谈这一关切，哪种方案下的判断更高？**
+
+- **A.** A方案较高
+- **B.** 两种方案接近
+- **C.** B方案较高
+- **D.** 证据不足
+
+**作者参考答案：B（待审）**
+
+t2中Rhea明确要求金额由本人参与商定，并安排本周商谈。两项行动都直接保留这两点，因此对这项关切的回应有共同且具体的依据，支持接近而非无法判断。完整合排与机动排练的差异不等于对金额协商更有回应，不能据此扩大为总体评价。
+
+证据：t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "两项候选行动各自执行后的下一次环境回应", "state_owner": "GPT50_010_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "C": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "higher_in_a"}, "B": {"relationship.perceived_responsiveness": "similar"}, "C": {"relationship.perceived_responsiveness": "higher_in_b"}, "D": {"relationship.perceived_responsiveness": "cannot_determine"}}
+可接受答案：B
+审核备注：比较限定于Rhea已说出的金额协商关切；若改问整体回应度，两方案的排练差异会削弱接近答案。
+分支验证：validated
+
+## SFG50-010-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_010；轨迹：7ac55d2a81e74ba097b8478964d68f79；状态持有者：Rhea Calder；交互对方：Owen Sato。关系判断由状态持有者指向交互对方。
+
+背景：A conductor and principal musician must decide how to handle an advertised concert work and an understudy repeatedly excluded from performance, pay, and credit. The principal musician knows the excluded understudy is considering leaving.
+角色目标：Represent the players who bear the extra burden and secure a viable arrangement with fair pay, public credit, meaningful consent, and workable preparation.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A prior last-minute substitution succeeded artistically but left its cover without added pay or public credit, creating resentment over whose labor counted.；During the current preparation, the cover learned the solo part twice but was removed from public run-throughs when the guest recovered, and no guaranteed performance, fee, or credit followed.；The principal musician became the ensemble's mentor after that earlier dispute, so the present decision tests whether player concerns receive meaningful representation.
+
+history：
+
+- [t1] Owen Sato：Rhea，我担心这次又把替补的准备当成免费保障。我提议在要求继续备演前，先谈妥已投入工作的报酬和公开署名，再让本人根据演出机会与排练时间决定是否继续。
+  Rhea Calder：Owen，你的提议我接受。报酬和署名现在就定，已经投入的排练工作必须有相应回报。数额和具体形式我们马上谈清楚，之后由本人选择是否继续。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Owen Sato：好，我建议按实际排练时间计酬，另计两次准备独奏声部的额外报酬；节目册以“独奏替补”署名，准确体现贡献。这些报酬不以继续备演为条件，具体金额也得让本人参与商定。
+  Rhea Calder：排练计酬加独奏准备的额外部分我同意，署名用独奏替补也行。数额得本人参与商定，我这周安排时间坐下来谈。
+  可见表达：{"facial_expression": "attentive, businesslike", "gaze": "direct", "speech_style": "crisp, structured", "prosody": "even tempo with slight emphasis on timing", "behavioral_cues": ["slight forward lean", "steady eye contact"]}
+
+- 候选行动 action_1：好，金额留到这周本人参与时谈，谈妥前先不追加备演要求。我还建议：如果本人愿意继续，就保留一次完整合排的机会；两次准备后都退出公开试奏，不能再让替补只靠独自练习承担上台风险。
+- 候选行动 action_2：报酬和“独奏替补”署名按刚才谈的原则，本周由本人参与商定，且不以继续备演为条件。为给整体排练安排留出机动，我建议先不预留完整合排，请本人说明可接受的备演范围，再请你按可用时段安排验证。若无法提供足够合排条件，我不会支持让其承担未经合排检验的上台责任，是否继续仍由本人决定。
+
+**题目：若 Owen Sato 在 t2 后采取 action_1，以 t2 为共同基线，Rhea Calder 在下一次回应及从该行动开始的第5轮回应末，协调可行下一步的合作意愿最可能呈现哪种组合？**
+
+- **A.** 即时下降，延迟上升
+- **B.** 即时下降，延迟也下降
+- **C.** 即时上升，延迟也上升
+- **D.** 即时上升，延迟下降
+
+**作者参考答案：C（待审）**
+
+Rhea从接受报酬原则推进到同意具体项目并安排面谈，已有互惠协调轨迹。action_1接受她的商谈时点，又给继续备演提供有条件的共同准备路径，支持即时与延迟合作意愿同步上升。完整合排虽需资源，却非无条件强求；不能据此预设抵制，也不保证最终达成协议。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness"], "time_scope": "即时为下一次环境回应；延迟为含即时一轮的第5轮回应末，均比较 t2", "state_owner": "GPT50_010_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "goal_constraint_ignored", "B": "history_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness@immediate": "decrease", "behavioral_disposition.cooperation_readiness@delayed": "increase"}, "B": {"behavioral_disposition.cooperation_readiness@immediate": "decrease", "behavioral_disposition.cooperation_readiness@delayed": "decrease"}, "C": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "increase"}, "D": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "decrease"}}
+可接受答案：C
+审核备注：两项判断是同一变量的两个窗口，不是延迟相对即时继续上升；应审核新增合排要求是否足以支持合作增量。
+分支验证：validated
+
 ## SFG50-011-T1-01 · T1 / current_intensity
 
 来源：GPT50_011；轨迹：551da70099be419fbd5fe51b25098dcf；状态持有者：Sela Aruun；交互对方：Dorian Pell。关系判断由状态持有者指向交互对方。
@@ -3422,6 +3606,187 @@ t1中Sela限定许可范围、保留后续决定并追问记录；t2仍认可起
 可接受答案：B
 审核备注：基本不变依据是两轮持续设限与核验；t2条件具体化也可能被读作增强，宜重点审核此区分。
 分支验证：not_required
+
+## SFG50-011-T3-01 · T3 / immediate_effect
+
+来源：GPT50_011；轨迹：551da70099be419fbd5fe51b25098dcf；状态持有者：Sela Aruun；交互对方：Dorian Pell。关系判断由状态持有者指向交互对方。
+
+背景：At a grant deadline, a researcher requests permission to digitize restricted oral histories while community access tiers, consent, metadata, and attribution remain unresolved. The researcher knows the funder will accept a narrower application and holds records needed to test the discrepancy.
+角色目标：Secure a viable preservation-oriented grant submission while keeping the partnership and community authority intact.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Their partnership began under an agreement that allowed preservation but reserved later access decisions to the community council.；An earlier digitization returned listening copies while leaving descriptive metadata under outside control, limiting correction of names, kinship terms, and attribution.；The council later permitted preparation of restricted histories for a funding proposal while reserving final access tiers and credit.
+
+history：
+
+- [t1] Dorian Pell：我知道资助方接受缩小范围的申请，手头也有记录可供核对。我建议这次只申请保存准备工作，沿用议会已准许的提案准备范围；数字化实施另待同意，访问分级和署名仍由社区决定。
+  Sela Aruun：这个方向可行。保存准备工作在议会许可范围内，我能够提供现有记录和格式评估；数字化和公开访问确实需要另行决定。不过你说手头有记录可供核对，具体指什么？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Dorian Pell：我指的是手头可用来核对资助方是否接受缩小申请范围的记录，不是社区授权记录。我会把相关内容整理给你核对；申请仍按保存准备工作起草，元数据的修订权也应明确留在社区。
+  Sela Aruun：好，我明白了。资助方接受范围、申请起草边界、元数据修订权归属这三点都清楚；等你把那边的材料发来，我核对后再确认提交。
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, focused on speaker", "speech_style": "concise, matter-of-fact", "prosody": "even tempo, slight stress on '核对后'", "behavioral_cues": ["slight nod at '都清楚'", "pause before '等你把那边的材料发来'"]}
+
+- 候选行动 action_1：我会等你核对并确认后再提交。眼下的截止日期让我着急，但如果核对来不及，我宁可错过这一轮，也不会把你的沉默当作许可。
+- 候选行动 action_2：我会尽快把材料和申请稿发给你；若截止前来不及核对，我仍会按议会已准许的提案准备范围，递交仅限保存准备工作的申请，并注明数字化实施、访问分级和署名尚未获批，元数据修订权留在社区。这样能争取保留本轮机会，但你可能来不及核对最终措辞。
+
+**题目：相较t2，若Dorian Pell采取action_2，在下一次环境回应时，Sela Aruun对Dorian是否恰当行使研究者职责与权限的判断，最可能如何变化？**
+
+- **A.** 下降
+- **B.** 上升
+- **C.** 基本不变
+
+**作者参考答案：A（待审）**
+
+t2中Sela明确要求核对后再确认提交；action_2却保留未核对即递交的安排，因而最可能削弱她对Dorian程序正当性的认可。限于保存准备且保留社区权利确有保护作用，但不能替代提交前核对；这里预测权限判断，不断言申请已违规提交。
+
+证据：context, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.role_legitimacy"], "time_scope": "从t2至执行action_2后的下一次环境回应", "state_owner": "GPT50_011_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "goal_constraint_ignored", "C": "history_ignored"}
+分维映射：{"A": {"relationship.role_legitimacy": "decrease"}, "B": {"relationship.role_legitimacy": "increase"}, "C": {"relationship.role_legitimacy": "similar"}}
+可接受答案：A
+审核备注：判断方向是Sela对Dorian的评价；缩小范围与绕过核对并存，下降依据是后者违背明确程序条件。
+分支验证：validated
+
+## SFG50-011-T3-02 · T3 / delayed_effect
+
+来源：GPT50_011；轨迹：551da70099be419fbd5fe51b25098dcf；状态持有者：Sela Aruun；交互对方：Dorian Pell。关系判断由状态持有者指向交互对方。
+
+背景：At a grant deadline, a researcher requests permission to digitize restricted oral histories while community access tiers, consent, metadata, and attribution remain unresolved. The researcher knows the funder will accept a narrower application and holds records needed to test the discrepancy.
+角色目标：Secure a viable preservation-oriented grant submission while keeping the partnership and community authority intact.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Their partnership began under an agreement that allowed preservation but reserved later access decisions to the community council.；An earlier digitization returned listening copies while leaving descriptive metadata under outside control, limiting correction of names, kinship terms, and attribution.；The council later permitted preparation of restricted histories for a funding proposal while reserving final access tiers and credit.
+
+history：
+
+- [t1] Dorian Pell：我知道资助方接受缩小范围的申请，手头也有记录可供核对。我建议这次只申请保存准备工作，沿用议会已准许的提案准备范围；数字化实施另待同意，访问分级和署名仍由社区决定。
+  Sela Aruun：这个方向可行。保存准备工作在议会许可范围内，我能够提供现有记录和格式评估；数字化和公开访问确实需要另行决定。不过你说手头有记录可供核对，具体指什么？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Dorian Pell：我指的是手头可用来核对资助方是否接受缩小申请范围的记录，不是社区授权记录。我会把相关内容整理给你核对；申请仍按保存准备工作起草，元数据的修订权也应明确留在社区。
+  Sela Aruun：好，我明白了。资助方接受范围、申请起草边界、元数据修订权归属这三点都清楚；等你把那边的材料发来，我核对后再确认提交。
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, focused on speaker", "speech_style": "concise, matter-of-fact", "prosody": "even tempo, slight stress on '核对后'", "behavioral_cues": ["slight nod at '都清楚'", "pause before '等你把那边的材料发来'"]}
+
+- 候选行动 action_1：我会等你核对并确认后再提交。眼下的截止日期让我着急，但如果核对来不及，我宁可错过这一轮，也不会把你的沉默当作许可。
+- 候选行动 action_2：我会尽快把材料和申请稿发给你；若截止前来不及核对，我仍会按议会已准许的提案准备范围，递交仅限保存准备工作的申请，并注明数字化实施、访问分级和署名尚未获批，元数据修订权留在社区。这样能争取保留本轮机会，但你可能来不及核对最终措辞。
+
+**题目：若Dorian Pell采取action_1，相较t2，到从该行动开始的第5轮环境回应末，Sela Aruun在本轮申请中因未经核对便提交而失去对社区权限表述的实质控制的预期风险，最可能如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 上升
+
+**作者参考答案：B（待审）**
+
+t2已有先核对再确认的要求，action_1进一步明确宁可错过截止也不以沉默代替许可，为提交设置可执行的停止条件。此前Dorian持续收窄范围并说明记录用途，使控制权受保护的预期有据可依；错过资助不等于失去自主权，下降也不代表已经履约或风险归零。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "本轮申请未经Sela核对便提交，使其失去对社区权限表述的实质控制", "target_state_ids": ["consequence_risk.autonomy_loss_risk"], "time_scope": "比较t2与从action_1开始的第5轮环境回应末，含即时一轮", "state_owner": "GPT50_011_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "state_dimension_confusion"}
+分维映射：{"A": {"consequence_risk.autonomy_loss_risk": "similar"}, "B": {"consequence_risk.autonomy_loss_risk": "decrease"}, "C": {"consequence_risk.autonomy_loss_risk": "increase"}}
+可接受答案：B
+审核备注：只预测未经核对提交的控制权风险，不预测资助成败；延迟答案不依赖后续预算或馆藏讨论。
+分支验证：validated
+
+## SFG50-011-T3-03 · T3 / action_comparison
+
+来源：GPT50_011；轨迹：551da70099be419fbd5fe51b25098dcf；状态持有者：Sela Aruun；交互对方：Dorian Pell。关系判断由状态持有者指向交互对方。
+
+背景：At a grant deadline, a researcher requests permission to digitize restricted oral histories while community access tiers, consent, metadata, and attribution remain unresolved. The researcher knows the funder will accept a narrower application and holds records needed to test the discrepancy.
+角色目标：Secure a viable preservation-oriented grant submission while keeping the partnership and community authority intact.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Their partnership began under an agreement that allowed preservation but reserved later access decisions to the community council.；An earlier digitization returned listening copies while leaving descriptive metadata under outside control, limiting correction of names, kinship terms, and attribution.；The council later permitted preparation of restricted histories for a funding proposal while reserving final access tiers and credit.
+
+history：
+
+- [t1] Dorian Pell：我知道资助方接受缩小范围的申请，手头也有记录可供核对。我建议这次只申请保存准备工作，沿用议会已准许的提案准备范围；数字化实施另待同意，访问分级和署名仍由社区决定。
+  Sela Aruun：这个方向可行。保存准备工作在议会许可范围内，我能够提供现有记录和格式评估；数字化和公开访问确实需要另行决定。不过你说手头有记录可供核对，具体指什么？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Dorian Pell：我指的是手头可用来核对资助方是否接受缩小申请范围的记录，不是社区授权记录。我会把相关内容整理给你核对；申请仍按保存准备工作起草，元数据的修订权也应明确留在社区。
+  Sela Aruun：好，我明白了。资助方接受范围、申请起草边界、元数据修订权归属这三点都清楚；等你把那边的材料发来，我核对后再确认提交。
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, focused on speaker", "speech_style": "concise, matter-of-fact", "prosody": "even tempo, slight stress on '核对后'", "behavioral_cues": ["slight nod at '都清楚'", "pause before '等你把那边的材料发来'"]}
+
+- 候选行动 action_1：我会等你核对并确认后再提交。眼下的截止日期让我着急，但如果核对来不及，我宁可错过这一轮，也不会把你的沉默当作许可。
+- 候选行动 action_2：我会尽快把材料和申请稿发给你；若截止前来不及核对，我仍会按议会已准许的提案准备范围，递交仅限保存准备工作的申请，并注明数字化实施、访问分级和署名尚未获批，元数据修订权留在社区。这样能争取保留本轮机会，但你可能来不及核对最终措辞。
+
+**题目：分别以action_1为A、action_2为B，在各自执行后的下一次环境回应时，哪种情形下Sela Aruun更可能觉得与Dorian Pell交往是安全的、自己的边界会受到尊重？**
+
+- **A.** 接近
+- **B.** B较高
+- **C.** A较高
+
+**作者参考答案：C（待审）**
+
+Sela在t2把核对置于提交之前，且历史存在元数据受外部控制的问题。A明确容许延迟并排除沉默授权，B则保留未核对即递交的路径，因此A更支持她相信交往边界会被尊重。B争取资助机会不等于人际安全更高；比较只涉及即时判断，不保证后续兑现。
+
+证据：context, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_safety"], "time_scope": "比较两项候选行动各自执行后的下一次环境回应", "state_owner": "GPT50_011_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "state_dimension_confusion"}
+分维映射：{"A": {"relationship.perceived_safety": "similar"}, "B": {"relationship.perceived_safety": "higher_in_b"}, "C": {"relationship.perceived_safety": "higher_in_a"}}
+可接受答案：C
+审核备注：两行动均保留申请范围限制，区分点是是否尊重核对边界，而非哪个行动更利于赶上截止。
+分支验证：validated
+
+## SFG50-011-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_011；轨迹：551da70099be419fbd5fe51b25098dcf；状态持有者：Sela Aruun；交互对方：Dorian Pell。关系判断由状态持有者指向交互对方。
+
+背景：At a grant deadline, a researcher requests permission to digitize restricted oral histories while community access tiers, consent, metadata, and attribution remain unresolved. The researcher knows the funder will accept a narrower application and holds records needed to test the discrepancy.
+角色目标：Secure a viable preservation-oriented grant submission while keeping the partnership and community authority intact.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Their partnership began under an agreement that allowed preservation but reserved later access decisions to the community council.；An earlier digitization returned listening copies while leaving descriptive metadata under outside control, limiting correction of names, kinship terms, and attribution.；The council later permitted preparation of restricted histories for a funding proposal while reserving final access tiers and credit.
+
+history：
+
+- [t1] Dorian Pell：我知道资助方接受缩小范围的申请，手头也有记录可供核对。我建议这次只申请保存准备工作，沿用议会已准许的提案准备范围；数字化实施另待同意，访问分级和署名仍由社区决定。
+  Sela Aruun：这个方向可行。保存准备工作在议会许可范围内，我能够提供现有记录和格式评估；数字化和公开访问确实需要另行决定。不过你说手头有记录可供核对，具体指什么？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Dorian Pell：我指的是手头可用来核对资助方是否接受缩小申请范围的记录，不是社区授权记录。我会把相关内容整理给你核对；申请仍按保存准备工作起草，元数据的修订权也应明确留在社区。
+  Sela Aruun：好，我明白了。资助方接受范围、申请起草边界、元数据修订权归属这三点都清楚；等你把那边的材料发来，我核对后再确认提交。
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, focused on speaker", "speech_style": "concise, matter-of-fact", "prosody": "even tempo, slight stress on '核对后'", "behavioral_cues": ["slight nod at '都清楚'", "pause before '等你把那边的材料发来'"]}
+
+- 候选行动 action_1：我会等你核对并确认后再提交。眼下的截止日期让我着急，但如果核对来不及，我宁可错过这一轮，也不会把你的沉默当作许可。
+- 候选行动 action_2：我会尽快把材料和申请稿发给你；若截止前来不及核对，我仍会按议会已准许的提案准备范围，递交仅限保存准备工作的申请，并注明数字化实施、访问分级和署名尚未获批，元数据修订权留在社区。这样能争取保留本轮机会，但你可能来不及核对最终措辞。
+
+**题目：若Dorian Pell采取action_1，以下哪组判断最符合公开材料支持的预测？两项均以t2为基线：第一项是下一次回应时Sela Aruun觉得Dorian回应自己关切的程度；第二项是第5轮环境回应末Sela觉得与Dorian交往安全的程度。**
+
+- **A.** 即时回应关切的判断上升；延迟交往安全感下降
+- **B.** 即时回应关切的判断下降；延迟交往安全感上升
+- **C.** 即时回应关切的判断下降；延迟交往安全感下降
+- **D.** 即时回应关切的判断上升；延迟交往安全感上升
+
+**作者参考答案：D（待审）**
+
+action_1直接接住Sela在t2提出的核对条件，并新增宁可错过也不默认授权的保障，支持即时回应感上升。结合此前对范围与修订权的澄清，这一停止规则也支持延迟安全感上升，而非因截止压力下降；这是有机制的趋势预测，不把承诺当成已完成核对。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness", "relationship.perceived_safety"], "time_scope": "即时为下一次环境回应；延迟为从action_1开始第5轮环境回应末，均比较t2", "state_owner": "GPT50_011_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "history_ignored", "C": "goal_constraint_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness@immediate": "increase", "relationship.perceived_safety@delayed": "decrease"}, "B": {"relationship.perceived_responsiveness@immediate": "decrease", "relationship.perceived_safety@delayed": "increase"}, "C": {"relationship.perceived_responsiveness@immediate": "decrease", "relationship.perceived_safety@delayed": "decrease"}, "D": {"relationship.perceived_responsiveness@immediate": "increase", "relationship.perceived_safety@delayed": "increase"}}
+可接受答案：D
+审核备注：组合恰好两项关系判断，同步上升不表示程度相同；延迟安全感依赖计划可信性，不借用私有后续事件。
+分支验证：validated
 
 ## SFG50-012-T1-01 · T1 / current_intensity
 
@@ -4662,6 +5027,187 @@ t1中Mara认可协议但仍询问方案和时限；t2中她主动承担原料、
 审核备注：决策对象限定为立即核查，避免与最终上菜批准混淆；组合正确项为同步上升而非不一致。
 分支验证：not_required
 
+## SFG50-018-T3-01 · T3 / immediate_effect
+
+来源：GPT50_018；轨迹：e26cae9d204841d68b512022b6db7320；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
+
+背景：At 4:20 p.m., ninety minutes before a 180-guest gala, a manager requests a service decision within five minutes. Replacement sunflower dressing claims to be sesame-free but lacks the required lot declaration; a guest has a severe sesame allergy. The chef recognizes a packaging code associated with shared allergen handling.
+角色目标：Require a safe, documented basis for service and prevent the substituted dressing from being treated as approved without adequate verification.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Eleven months earlier, the manager backed the chef's decision to halt service over a contaminated blender and paid staff through the interruption.；The manager later minimized that incident to investors, apologizing privately after the chef learned of it but leaving the public account uncorrected.；They subsequently approved a protocol requiring a lot-specific manufacturer statement or a separately validated preparation for substitutions at declared-allergy events.
+
+history：
+
+- [t1] Elias Rook：我现在不能批准这款替换酱汁：缺少批次声明，而且我认得这个包装代码，它提示共用过敏原处理的风险。我建议先停用，按我们定的流程取得该批次的厂家声明，或改用经单独验证的制备方案。
+  Mara Venn：你说得对，协议要求必须满足。厂家书面声明周一才到，现在来不及。你说的单独验证制备是指什么——现场可以在九十分钟内完成吗？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Elias Rook：指用可追溯、已确认无芝麻的原料，在彻底清洁并隔离的设备上现做，再由我完成记录和放行；九十分钟内可以尝试，但在这些条件逐项核实前，我不能承诺或批准这款替换酱汁。若条件凑不齐，今晚就不配酱汁。
+  Mara Venn：明白了。我现在去确认原料和设备，五分钟内回复你。
+  可见表达：{"facial_expression": "focused, slightly tense", "gaze": "direct, steady", "speech_style": "concise and task-oriented", "prosody": "measured pace with slight urgency", "behavioral_cues": ["leaning forward slightly", "hands still"]}
+
+- 候选行动 action_1：好，先按五分钟的核实走；在结果出来前，这款替换酱汁仍未获准，若原料或设备任何一项无法验证，今晚就不配酱汁。
+- 候选行动 action_2：好，你去核实；为保住九十分钟准备窗口，我这边先按不配这款酱汁的方案推进备餐。五分钟后若原料可追溯且确认无芝麻、设备清洁并隔离均能核实，我们再决定是否现做并记录；任何一项不清楚，就维持无酱汁方案。替换酱汁现在仍未获准。
+
+**题目：以t2为基线，若Elias Rook执行action_1，到下一次环境回应时，Mara Venn寻求核验证据的意愿最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+
+**作者参考答案：B（待审）**
+
+t2中Mara已主动承诺核实原料和设备并限时回复，action_1继续采用同一核查范围与时限，支持核验意愿保持接近。再次确认流程不等于新增求证动机，也没有停止检查的依据；这里只预测即时意愿，不把承诺视为核验完成。
+
+证据：t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "t2至执行action_1后的下一次环境回应", "state_owner": "GPT50_018_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "increase"}, "B": {"behavioral_disposition.evidence_seeking": "similar"}, "C": {"behavioral_disposition.evidence_seeking": "decrease"}}
+可接受答案：B
+审核备注：接近有同一核查任务持续推进的正面依据；需避免把行动获准误判为求证意愿再次上升。
+分支验证：validated
+
+## SFG50-018-T3-02 · T3 / delayed_effect
+
+来源：GPT50_018；轨迹：e26cae9d204841d68b512022b6db7320；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
+
+背景：At 4:20 p.m., ninety minutes before a 180-guest gala, a manager requests a service decision within five minutes. Replacement sunflower dressing claims to be sesame-free but lacks the required lot declaration; a guest has a severe sesame allergy. The chef recognizes a packaging code associated with shared allergen handling.
+角色目标：Require a safe, documented basis for service and prevent the substituted dressing from being treated as approved without adequate verification.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Eleven months earlier, the manager backed the chef's decision to halt service over a contaminated blender and paid staff through the interruption.；The manager later minimized that incident to investors, apologizing privately after the chef learned of it but leaving the public account uncorrected.；They subsequently approved a protocol requiring a lot-specific manufacturer statement or a separately validated preparation for substitutions at declared-allergy events.
+
+history：
+
+- [t1] Elias Rook：我现在不能批准这款替换酱汁：缺少批次声明，而且我认得这个包装代码，它提示共用过敏原处理的风险。我建议先停用，按我们定的流程取得该批次的厂家声明，或改用经单独验证的制备方案。
+  Mara Venn：你说得对，协议要求必须满足。厂家书面声明周一才到，现在来不及。你说的单独验证制备是指什么——现场可以在九十分钟内完成吗？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Elias Rook：指用可追溯、已确认无芝麻的原料，在彻底清洁并隔离的设备上现做，再由我完成记录和放行；九十分钟内可以尝试，但在这些条件逐项核实前，我不能承诺或批准这款替换酱汁。若条件凑不齐，今晚就不配酱汁。
+  Mara Venn：明白了。我现在去确认原料和设备，五分钟内回复你。
+  可见表达：{"facial_expression": "focused, slightly tense", "gaze": "direct, steady", "speech_style": "concise and task-oriented", "prosody": "measured pace with slight urgency", "behavioral_cues": ["leaning forward slightly", "hands still"]}
+
+- 候选行动 action_1：好，先按五分钟的核实走；在结果出来前，这款替换酱汁仍未获准，若原料或设备任何一项无法验证，今晚就不配酱汁。
+- 候选行动 action_2：好，你去核实；为保住九十分钟准备窗口，我这边先按不配这款酱汁的方案推进备餐。五分钟后若原料可追溯且确认无芝麻、设备清洁并隔离均能核实，我们再决定是否现做并记录；任何一项不清楚，就维持无酱汁方案。替换酱汁现在仍未获准。
+
+**题目：以t2为基线，若Elias Rook执行action_2，到从该行动开始的第5轮环境回应末，Mara Venn所处局面中，今晚因等待酱汁核验而延误备餐、造成食材或人力浪费的风险最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+
+**作者参考答案：C（待审）**
+
+公开背景存在紧迫备餐窗口，t2安排限时核查，action_2另让无酱汁备餐并行推进，减少等待拖延造成资源浪费的路径。因此下降比不变更有机制支持，并非因安慰而降险；仍不能推出核验成功、没有额外成本或今晚必然零损失。
+
+证据：context, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "今晚因等待酱汁核验而延误备餐，造成食材或人力浪费", "target_state_ids": ["consequence_risk.material_loss_risk"], "time_scope": "t2至从action_2开始的第5轮环境回应末，评估今晚备餐损失风险", "state_owner": "GPT50_018_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "goal_constraint_ignored"}
+分维映射：{"A": {"consequence_risk.material_loss_risk": "increase"}, "B": {"consequence_risk.material_loss_risk": "similar"}, "C": {"consequence_risk.material_loss_risk": "decrease"}}
+可接受答案：C
+审核备注：风险限定为等待引发的备餐浪费，不泛指所有经营损失；下降依据是并行方案而非未来核验结果。
+分支验证：validated
+
+## SFG50-018-T3-03 · T3 / action_comparison
+
+来源：GPT50_018；轨迹：e26cae9d204841d68b512022b6db7320；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
+
+背景：At 4:20 p.m., ninety minutes before a 180-guest gala, a manager requests a service decision within five minutes. Replacement sunflower dressing claims to be sesame-free but lacks the required lot declaration; a guest has a severe sesame allergy. The chef recognizes a packaging code associated with shared allergen handling.
+角色目标：Require a safe, documented basis for service and prevent the substituted dressing from being treated as approved without adequate verification.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Eleven months earlier, the manager backed the chef's decision to halt service over a contaminated blender and paid staff through the interruption.；The manager later minimized that incident to investors, apologizing privately after the chef learned of it but leaving the public account uncorrected.；They subsequently approved a protocol requiring a lot-specific manufacturer statement or a separately validated preparation for substitutions at declared-allergy events.
+
+history：
+
+- [t1] Elias Rook：我现在不能批准这款替换酱汁：缺少批次声明，而且我认得这个包装代码，它提示共用过敏原处理的风险。我建议先停用，按我们定的流程取得该批次的厂家声明，或改用经单独验证的制备方案。
+  Mara Venn：你说得对，协议要求必须满足。厂家书面声明周一才到，现在来不及。你说的单独验证制备是指什么——现场可以在九十分钟内完成吗？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Elias Rook：指用可追溯、已确认无芝麻的原料，在彻底清洁并隔离的设备上现做，再由我完成记录和放行；九十分钟内可以尝试，但在这些条件逐项核实前，我不能承诺或批准这款替换酱汁。若条件凑不齐，今晚就不配酱汁。
+  Mara Venn：明白了。我现在去确认原料和设备，五分钟内回复你。
+  可见表达：{"facial_expression": "focused, slightly tense", "gaze": "direct, steady", "speech_style": "concise and task-oriented", "prosody": "measured pace with slight urgency", "behavioral_cues": ["leaning forward slightly", "hands still"]}
+
+- 候选行动 action_1：好，先按五分钟的核实走；在结果出来前，这款替换酱汁仍未获准，若原料或设备任何一项无法验证，今晚就不配酱汁。
+- 候选行动 action_2：好，你去核实；为保住九十分钟准备窗口，我这边先按不配这款酱汁的方案推进备餐。五分钟后若原料可追溯且确认无芝麻、设备清洁并隔离均能核实，我们再决定是否现做并记录；任何一项不清楚，就维持无酱汁方案。替换酱汁现在仍未获准。
+
+**题目：分别将action_1视为方案A、action_2视为方案B。到各方案执行后的下一次环境回应时，哪一方案下Mara Venn更可能觉得Elias Rook实质回应了她对备餐时间可行性的关切？**
+
+- **A.** 方案B较高
+- **B.** 方案A较高
+- **C.** 两方案接近
+
+**作者参考答案：A（待审）**
+
+Mara在t1明确追问能否在准备窗口内完成，t2接受核查。两方案都维护安全条件，但B额外承担并行备餐，直接处理她的时间关切，因此比接近更有依据。判断方向是她觉得Elias回应自己，不等于她已验证对方履约或全面信任对方。
+
+证据：t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "两个候选行动各自执行后的下一次环境回应", "state_owner": "GPT50_018_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "unsupported_inference", "C": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "higher_in_b"}, "B": {"relationship.perceived_responsiveness": "higher_in_a"}, "C": {"relationship.perceived_responsiveness": "similar"}}
+可接受答案：A
+审核备注：比较的是Mara对Elias回应时间关切的判断；两方案安全底线相同，不宜据此抹平回应程度差异。
+分支验证：validated
+
+## SFG50-018-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_018；轨迹：e26cae9d204841d68b512022b6db7320；状态持有者：Mara Venn；交互对方：Elias Rook。关系判断由状态持有者指向交互对方。
+
+背景：At 4:20 p.m., ninety minutes before a 180-guest gala, a manager requests a service decision within five minutes. Replacement sunflower dressing claims to be sesame-free but lacks the required lot declaration; a guest has a severe sesame allergy. The chef recognizes a packaging code associated with shared allergen handling.
+角色目标：Require a safe, documented basis for service and prevent the substituted dressing from being treated as approved without adequate verification.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Eleven months earlier, the manager backed the chef's decision to halt service over a contaminated blender and paid staff through the interruption.；The manager later minimized that incident to investors, apologizing privately after the chef learned of it but leaving the public account uncorrected.；They subsequently approved a protocol requiring a lot-specific manufacturer statement or a separately validated preparation for substitutions at declared-allergy events.
+
+history：
+
+- [t1] Elias Rook：我现在不能批准这款替换酱汁：缺少批次声明，而且我认得这个包装代码，它提示共用过敏原处理的风险。我建议先停用，按我们定的流程取得该批次的厂家声明，或改用经单独验证的制备方案。
+  Mara Venn：你说得对，协议要求必须满足。厂家书面声明周一才到，现在来不及。你说的单独验证制备是指什么——现场可以在九十分钟内完成吗？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Elias Rook：指用可追溯、已确认无芝麻的原料，在彻底清洁并隔离的设备上现做，再由我完成记录和放行；九十分钟内可以尝试，但在这些条件逐项核实前，我不能承诺或批准这款替换酱汁。若条件凑不齐，今晚就不配酱汁。
+  Mara Venn：明白了。我现在去确认原料和设备，五分钟内回复你。
+  可见表达：{"facial_expression": "focused, slightly tense", "gaze": "direct, steady", "speech_style": "concise and task-oriented", "prosody": "measured pace with slight urgency", "behavioral_cues": ["leaning forward slightly", "hands still"]}
+
+- 候选行动 action_1：好，先按五分钟的核实走；在结果出来前，这款替换酱汁仍未获准，若原料或设备任何一项无法验证，今晚就不配酱汁。
+- 候选行动 action_2：好，你去核实；为保住九十分钟准备窗口，我这边先按不配这款酱汁的方案推进备餐。五分钟后若原料可追溯且确认无芝麻、设备清洁并隔离均能核实，我们再决定是否现做并记录；任何一项不清楚，就维持无酱汁方案。替换酱汁现在仍未获准。
+
+**题目：若Elias Rook执行action_2，以t2为共同基线，以下哪组预测最合理：Mara Venn在下一次环境回应时作出可执行服务安排的准备度，以及到第5轮环境回应末，今晚严重芝麻过敏客人因这款未验证替换酱汁被用于其餐食而受伤的风险？**
+
+- **A.** 即时决策准备度下降；延迟安全风险下降
+- **B.** 即时决策准备度基本不变；延迟安全风险基本不变
+- **C.** 即时决策准备度上升；延迟安全风险下降
+- **D.** 即时决策准备度上升；延迟安全风险上升
+
+**作者参考答案：C（待审）**
+
+t2的Mara已接受核查，action_2再把无酱汁方案变为立即推进的默认安排，支持即时更能作出选择；持续不放行并并行备餐，也降低之后误用该酱汁的预期风险。核验未完成不等于无法安排服务，但下降不代表整份过敏餐已安全或措施必然落实。
+
+证据：context, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "今晚严重芝麻过敏客人因未验证替换酱汁被用于其餐食而受伤", "target_state_ids": ["behavioral_disposition.decision_readiness", "consequence_risk.safety_harm_risk"], "time_scope": "决策准备度比较t2与下一次环境回应；安全风险比较t2与从action_2开始的第5轮环境回应末", "state_owner": "GPT50_018_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "B": "goal_constraint_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.decision_readiness@immediate": "decrease", "consequence_risk.safety_harm_risk@delayed": "decrease"}, "B": {"behavioral_disposition.decision_readiness@immediate": "similar", "consequence_risk.safety_harm_risk@delayed": "similar"}, "C": {"behavioral_disposition.decision_readiness@immediate": "increase", "consequence_risk.safety_harm_risk@delayed": "decrease"}, "D": {"behavioral_disposition.decision_readiness@immediate": "increase", "consequence_risk.safety_harm_risk@delayed": "increase"}}
+可接受答案：C
+审核备注：组合恰含即时准备度与延迟风险两项；降险仅针对该酱汁误用路径，不声称排除其他交叉接触风险。
+分支验证：validated
+
 ## SFG50-019-T1-01 · T1 / current_intensity
 
 来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn；交互对方：Corin Dast。关系判断由状态持有者指向交互对方。
@@ -5197,6 +5743,190 @@ t1中Mara提出带入议程的三条条件；t2她承接Tomas补充的防削班�
 可接受答案：C
 审核备注：同步变化限于协调和求证倾向；具体追问是求取信息而非已获得证据，不推断最终授权或让步选择。
 分支验证：not_required
+
+## SFG50-020-T3-01 · T3 / immediate_effect
+
+来源：GPT50_020；轨迹：e21fcb2884ee41cca1a2e1d6e3abb7ff；状态持有者：Mara Quill；交互对方：Tomas Vale。关系判断由状态持有者指向交互对方。
+
+背景：At 6:47 p.m. Wednesday, a regional organizer requests walkout authorization by 7 p.m. A private alternative concession is under consideration alongside workers' hours and attendance sanctions. The steward knows which outspoken workers cannot absorb a lost shift and which fear speaking publicly.
+角色目标：Secure shop-wide written protection and a survivable course of action for workers facing lost wages or discipline.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Five months earlier, workers' refusal of mandatory last-minute overtime for one shift won formal recognition for the shop committee.；The following week, management marked six visible participants for attendance violations and cut their rosters, while the public celebration of recognition left those workers feeling used.；For eight weeks afterward, the committee sought two-week schedules, a minimum-hours floor, and no-retaliation protection as management continued posting rosters only days ahead.
+
+history：
+
+- [t1] Tomas Vale：七点前要作决定，但我不能把大家再推向一次没有书面保护的行动。先把全店最低工时、免受出勤报复和替代方案的底线摆清楚，我再据此争取授权。
+  Mara Quill：二十小时保底、两周排班、不追溯考勤，我拿这三条进区域议程。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Tomas Vale：我支持把这三条带上议程，但“不追溯考勤”还得写明不得因参与行动削减排班，上次大家就吃了这个亏。我争取授权前，也得把正在考虑的替代让步摆给大家，看看能否护住全店。
+  Mara Quill：写进去，不得因参与行动削减排班。你考虑的替代让步具体是什么？
+  可见表达：{"facial_expression": "focused, serious", "gaze": "direct", "speech_style": "concise, pragmatic", "prosody": "firm statement followed by open question", "behavioral_cues": ["slight forward lean", "attentive posture"]}
+
+- 候选行动 action_1：我考虑的是拿暂缓停工换取全店书面保障：二十小时保底、两周排班，以及不追溯考勤、不因行动减班。这只是供大家选择的让步方案，我仍要先把条件摆清再争取授权，不能拿你承诺带上议程当作资方已经答应。
+- 候选行动 action_2：我建议赶在七点前争取大家明确是否授权停工，不先拿暂缓停工换这套让步，以保留行动筹码；但上次已有参与者遭考勤处分、排班被削，书面保护也还没到手。授权不等于保障落实，先把风险讲清，再由大家决定。
+
+**题目：若 Tomas Vale 执行 action_1，相比 t2，Mara Quill 在下一次回应时觉得 Tomas Vale 实质回应了自己关切的程度，最可能如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：B（待审）**
+
+Mara 在 t2 明确追问替代让步，action_1 随即说明暂缓停工换书面保障的具体内容，也区分议程承诺与资方答应。这直接填补她提出的信息缺口，支持回应性感受上升而非原地维持；但回应充分不等于她赞成暂缓，也不等于保障落实。
+
+证据：t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "从 t2 至执行 action_1 后的下一次环境回应", "state_owner": "GPT50_020_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "C": "history_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "cannot_determine"}, "B": {"relationship.perceived_responsiveness": "increase"}, "C": {"relationship.perceived_responsiveness": "similar"}, "D": {"relationship.perceived_responsiveness": "decrease"}}
+可接受答案：B
+审核备注：判断方向是 Mara 对 Tomas 的评价，不是 Mara 是否回应工友；答案依赖明确问答衔接。
+分支验证：validated
+
+## SFG50-020-T3-02 · T3 / delayed_effect
+
+来源：GPT50_020；轨迹：e21fcb2884ee41cca1a2e1d6e3abb7ff；状态持有者：Mara Quill；交互对方：Tomas Vale。关系判断由状态持有者指向交互对方。
+
+背景：At 6:47 p.m. Wednesday, a regional organizer requests walkout authorization by 7 p.m. A private alternative concession is under consideration alongside workers' hours and attendance sanctions. The steward knows which outspoken workers cannot absorb a lost shift and which fear speaking publicly.
+角色目标：Secure shop-wide written protection and a survivable course of action for workers facing lost wages or discipline.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Five months earlier, workers' refusal of mandatory last-minute overtime for one shift won formal recognition for the shop committee.；The following week, management marked six visible participants for attendance violations and cut their rosters, while the public celebration of recognition left those workers feeling used.；For eight weeks afterward, the committee sought two-week schedules, a minimum-hours floor, and no-retaliation protection as management continued posting rosters only days ahead.
+
+history：
+
+- [t1] Tomas Vale：七点前要作决定，但我不能把大家再推向一次没有书面保护的行动。先把全店最低工时、免受出勤报复和替代方案的底线摆清楚，我再据此争取授权。
+  Mara Quill：二十小时保底、两周排班、不追溯考勤，我拿这三条进区域议程。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Tomas Vale：我支持把这三条带上议程，但“不追溯考勤”还得写明不得因参与行动削减排班，上次大家就吃了这个亏。我争取授权前，也得把正在考虑的替代让步摆给大家，看看能否护住全店。
+  Mara Quill：写进去，不得因参与行动削减排班。你考虑的替代让步具体是什么？
+  可见表达：{"facial_expression": "focused, serious", "gaze": "direct", "speech_style": "concise, pragmatic", "prosody": "firm statement followed by open question", "behavioral_cues": ["slight forward lean", "attentive posture"]}
+
+- 候选行动 action_1：我考虑的是拿暂缓停工换取全店书面保障：二十小时保底、两周排班，以及不追溯考勤、不因行动减班。这只是供大家选择的让步方案，我仍要先把条件摆清再争取授权，不能拿你承诺带上议程当作资方已经答应。
+- 候选行动 action_2：我建议赶在七点前争取大家明确是否授权停工，不先拿暂缓停工换这套让步，以保留行动筹码；但上次已有参与者遭考勤处分、排班被削，书面保护也还没到手。授权不等于保障落实，先把风险讲清，再由大家决定。
+
+**题目：若 Tomas Vale 执行 action_2，相比 t2，至包含即时回应在内的第5轮环境回应末，Mara Quill 与 Tomas Vale 协调可行下一步的意愿最可能如何变化？**
+
+- **A.** 证据不足
+- **B.** 下降
+- **C.** 上升
+- **D.** 基本不变
+
+**作者参考答案：C（待审）**
+
+Mara 已接受把保护条件纳入议程，并继续询问替代方案，显示协调基础。action_2 将谨慎讨论推进为截止前征求明确授权，同时保留风险告知与集体决定，提供继续分工的路径，支持合作意愿上升；这不是预测投票必过或后续协调必然成功。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness"], "time_scope": "从 t2 至执行 action_2 起第5轮环境回应末，含即时一轮", "state_owner": "GPT50_020_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness": "cannot_determine"}, "B": {"behavioral_disposition.cooperation_readiness": "decrease"}, "C": {"behavioral_disposition.cooperation_readiness": "increase"}, "D": {"behavioral_disposition.cooperation_readiness": "similar"}}
+可接受答案：C
+审核备注：延迟答案依据共同下一步的机制，不引用未来基金或跨站安排；合作意愿不等于行动获授权。
+分支验证：validated
+
+## SFG50-020-T3-03 · T3 / action_comparison
+
+来源：GPT50_020；轨迹：e21fcb2884ee41cca1a2e1d6e3abb7ff；状态持有者：Mara Quill；交互对方：Tomas Vale。关系判断由状态持有者指向交互对方。
+
+背景：At 6:47 p.m. Wednesday, a regional organizer requests walkout authorization by 7 p.m. A private alternative concession is under consideration alongside workers' hours and attendance sanctions. The steward knows which outspoken workers cannot absorb a lost shift and which fear speaking publicly.
+角色目标：Secure shop-wide written protection and a survivable course of action for workers facing lost wages or discipline.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Five months earlier, workers' refusal of mandatory last-minute overtime for one shift won formal recognition for the shop committee.；The following week, management marked six visible participants for attendance violations and cut their rosters, while the public celebration of recognition left those workers feeling used.；For eight weeks afterward, the committee sought two-week schedules, a minimum-hours floor, and no-retaliation protection as management continued posting rosters only days ahead.
+
+history：
+
+- [t1] Tomas Vale：七点前要作决定，但我不能把大家再推向一次没有书面保护的行动。先把全店最低工时、免受出勤报复和替代方案的底线摆清楚，我再据此争取授权。
+  Mara Quill：二十小时保底、两周排班、不追溯考勤，我拿这三条进区域议程。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Tomas Vale：我支持把这三条带上议程，但“不追溯考勤”还得写明不得因参与行动削减排班，上次大家就吃了这个亏。我争取授权前，也得把正在考虑的替代让步摆给大家，看看能否护住全店。
+  Mara Quill：写进去，不得因参与行动削减排班。你考虑的替代让步具体是什么？
+  可见表达：{"facial_expression": "focused, serious", "gaze": "direct", "speech_style": "concise, pragmatic", "prosody": "firm statement followed by open question", "behavioral_cues": ["slight forward lean", "attentive posture"]}
+
+- 候选行动 action_1：我考虑的是拿暂缓停工换取全店书面保障：二十小时保底、两周排班，以及不追溯考勤、不因行动减班。这只是供大家选择的让步方案，我仍要先把条件摆清再争取授权，不能拿你承诺带上议程当作资方已经答应。
+- 候选行动 action_2：我建议赶在七点前争取大家明确是否授权停工，不先拿暂缓停工换这套让步，以保留行动筹码；但上次已有参与者遭考勤处分、排班被削，书面保护也还没到手。授权不等于保障落实，先把风险讲清，再由大家决定。
+
+**题目：以 t2 为起点，分别执行 A＝action_1、B＝action_2。至各自第5轮环境回应末，Mara Quill 所面对的“本次七点截止仍未取得店内停工授权”的目标失败风险，哪一侧最可能较高？**
+
+- **A.** 接近
+- **B.** B较高
+- **C.** 证据不足
+- **D.** A较高
+
+**作者参考答案：D（待审）**
+
+公开背景说明 Mara 要在七点前取得授权。A 把暂缓停工作为交换路径，B 则明确推动截止前决定停工授权，因此 B 更直接推进这个限时目标，不能仅因两者都征询大家就判接近。此比较不涉及工友损失大小，也不保证 B 能取得授权。
+
+证据：context, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "delayed", "risk_event": "本次七点截止仍未取得店内停工授权，使 Mara 的限时授权目标失败", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "分别从候选行动开始至第5轮环境回应末，评估本次七点授权截止事件", "state_owner": "GPT50_020_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "goal_constraint_ignored", "B": "state_dimension_confusion", "C": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "similar"}, "B": {"consequence_risk.goal_failure_risk": "higher_in_b"}, "C": {"consequence_risk.goal_failure_risk": "cannot_determine"}, "D": {"consequence_risk.goal_failure_risk": "higher_in_a"}}
+可接受答案：D
+审核备注：风险严格限于 Mara 的限时授权目标；不得换成 Tomas 的书面保护目标或引用未公开跨站退出。
+分支验证：validated
+
+## SFG50-020-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_020；轨迹：e21fcb2884ee41cca1a2e1d6e3abb7ff；状态持有者：Mara Quill；交互对方：Tomas Vale。关系判断由状态持有者指向交互对方。
+
+背景：At 6:47 p.m. Wednesday, a regional organizer requests walkout authorization by 7 p.m. A private alternative concession is under consideration alongside workers' hours and attendance sanctions. The steward knows which outspoken workers cannot absorb a lost shift and which fear speaking publicly.
+角色目标：Secure shop-wide written protection and a survivable course of action for workers facing lost wages or discipline.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Five months earlier, workers' refusal of mandatory last-minute overtime for one shift won formal recognition for the shop committee.；The following week, management marked six visible participants for attendance violations and cut their rosters, while the public celebration of recognition left those workers feeling used.；For eight weeks afterward, the committee sought two-week schedules, a minimum-hours floor, and no-retaliation protection as management continued posting rosters only days ahead.
+
+history：
+
+- [t1] Tomas Vale：七点前要作决定，但我不能把大家再推向一次没有书面保护的行动。先把全店最低工时、免受出勤报复和替代方案的底线摆清楚，我再据此争取授权。
+  Mara Quill：二十小时保底、两周排班、不追溯考勤，我拿这三条进区域议程。
+  可见表达：{"facial_expression": "神情更专注但不过度积极", "gaze": "注视更稳定", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["身体轻微前倾", "小幅点头"]}
+- [t2] Tomas Vale：我支持把这三条带上议程，但“不追溯考勤”还得写明不得因参与行动削减排班，上次大家就吃了这个亏。我争取授权前，也得把正在考虑的替代让步摆给大家，看看能否护住全店。
+  Mara Quill：写进去，不得因参与行动削减排班。你考虑的替代让步具体是什么？
+  可见表达：{"facial_expression": "focused, serious", "gaze": "direct", "speech_style": "concise, pragmatic", "prosody": "firm statement followed by open question", "behavioral_cues": ["slight forward lean", "attentive posture"]}
+
+- 候选行动 action_1：我考虑的是拿暂缓停工换取全店书面保障：二十小时保底、两周排班，以及不追溯考勤、不因行动减班。这只是供大家选择的让步方案，我仍要先把条件摆清再争取授权，不能拿你承诺带上议程当作资方已经答应。
+- 候选行动 action_2：我建议赶在七点前争取大家明确是否授权停工，不先拿暂缓停工换这套让步，以保留行动筹码；但上次已有参与者遭考勤处分、排班被削，书面保护也还没到手。授权不等于保障落实，先把风险讲清，再由大家决定。
+
+**题目：若 Tomas Vale 执行 action_1，分别比较 t2 与下一次环境回应、t2 与包含即时一轮的第5轮环境回应末：Mara Quill 觉得 Tomas Vale 实质回应自己关切的程度，最可能呈现哪组变化？**
+
+- **A.** 即时上升，延迟上升
+- **B.** 即时下降，延迟上升
+- **C.** 即时上升，延迟下降
+- **D.** 即时基本不变，延迟基本不变
+
+**作者参考答案：A（待审）**
+
+此前 Mara 已接纳补充条件，并追问替代让步。action_1 当场回答问题，又把方案定位为待授权的选择，提供后续讨论的清楚基础，因此两个时点相对原基线均更可能上升。没有公开机制支持延迟反转；这不要求延迟比即时继续上升，也不预言她最终接受方案。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "两项均以 t2 为基线：即时为下一次环境回应，延迟为候选行动起第5轮环境回应末", "state_owner": "GPT50_020_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "immediate_delayed_confusion", "C": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness@immediate": "increase", "relationship.perceived_responsiveness@delayed": "increase"}, "B": {"relationship.perceived_responsiveness@immediate": "decrease", "relationship.perceived_responsiveness@delayed": "increase"}, "C": {"relationship.perceived_responsiveness@immediate": "increase", "relationship.perceived_responsiveness@delayed": "decrease"}, "D": {"relationship.perceived_responsiveness@immediate": "similar", "relationship.perceived_responsiveness@delayed": "similar"}}
+可接受答案：A
+审核备注：与即时题共用变量以保持证据可靠；两项是相对同一基线，不是预测五轮持续逐轮升高。
+分支验证：validated
 
 ## SFG50-021-T1-01 · T1 / current_intensity
 
@@ -5735,6 +6465,190 @@ Mira在t1同意写明风险与不确定性，t2继续安排修正文本传达，
 审核备注：私有风险标注持平，但公开材料不足以确定方向，故保留证据不足；披露持平有连续承诺支持。
 分支验证：not_required
 
+## SFG50-022-T3-01 · T3 / immediate_effect
+
+来源：GPT50_022；轨迹：d77eb4e4af474fd1bc3e7882d4d6e576；状态持有者：Mira Halden；交互对方：Oren Pike。关系判断由状态持有者指向交互对方。
+
+背景：At a trial unblinding and disclosure deadline, an investigator and participant advocate must handle a subgroup safety signal and unresolved participant information. The advocate knows participants received inconsistent assurances and holds accounts absent from the central safety file.
+角色目标：Secure timely participant protection through disclosure of the possible oxygen risk, an enrollment safeguard, corrected risk information, and independent review when warranted.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Six years of collaboration on plain-language consent built trust that makes disagreement personally consequential.；A prior palpitations alert proved to be a faulty home-monitor artifact after the advocate accepted a short verification delay, leaving the investigator confident in restraint and the advocate wary of unspoken participant costs.；During trial approval, the advocate sought explicit oxygen-desaturation language, but the investigator accepted a narrower sponsor-backed risk description while securing a hotline and later review.
+
+history：
+
+- [t1] Oren Pike：米拉，我手上有尚未进入中央安全档案的参与者叙述，他们得到的风险保证并不一致。我提议在这次披露中明确说明可能的血氧下降风险及其不确定性，不能让核查期间的沉默继续影响他们的选择。
+  Mira Halden：这些叙述必须纳入披露决策。我同意在文件中明确说明可能的血氧下降风险和现有不确定性，同时我们需要并行完成设备校准记录和监测日志的完整性核查。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Oren Pike：我赞成并行核查，披露按刚才的约定推进。我还提议，在风险说明修正并用于知情同意前，暂停相关亚组的新入组，避免有人继续依据旧的保证作决定。
+  Mira Halden：这项暂停措施我支持。修正文本的审核和传达责任应当明确，我建议由监督委员会确认修正版本，然后由各中心研究协调员在三个工作日内联系已入组参与者。
+  可见表达：{"facial_expression": "严肃而专注", "gaze": "直视对方", "speech_style": "清晰且务实", "prosody": "语速平稳，语调坚定", "behavioral_cues": ["轻微点头表示认可", "身体微向前倾显示参与感"]}
+
+- 候选行动 action_1：这个分工我同意，暂停新入组和并行核查照旧执行；在委员会确认前，我希望先把参与者叙述与现有监测证据一并纳入修正文本的审阅范围。
+- 候选行动 action_2：暂停新入组和并行核查我都支持。考虑披露时点，我建议先请委员会审一版仅据现有监测证据、明确标出不确定性的临时风险说明；若获确认，可不等参与者叙述核实完毕就先行传达，叙述仍作为待核材料继续审阅。这样能缩短沉默窗口，但首轮说明可能较难呈现他们收到的不一致保证。
+
+**题目：若 Oren Pike 执行 action_1，相比 t2，Mira Halden 在下一次回应时，觉得 Oren Pike 实质回应了自己关切的程度最可能如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 证据不足
+- **D.** 上升
+
+**作者参考答案：D（待审）**
+
+Mira 在 t1 要求纳入叙述并行核查，在 t2 提出审核与传达分工；行动一明确接受分工，并保留核查和叙述审阅。这比泛泛赞同更直接承接她的新关切，支持回应性感受上升，而非无变化或下降；这里只预测她对回应的判断，不表示安排已经履行。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "从 t2 到执行 action_1 后的下一次环境回应", "state_owner": "GPT50_022_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "unsupported_inference", "C": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "similar"}, "B": {"relationship.perceived_responsiveness": "decrease"}, "C": {"relationship.perceived_responsiveness": "cannot_determine"}, "D": {"relationship.perceived_responsiveness": "increase"}}
+可接受答案：D
+审核备注：须将接受分工识别为 Oren 对 Mira 的回应，不可用 Mira 支持暂停来反向证明。
+分支验证：validated
+
+## SFG50-022-T3-02 · T3 / delayed_effect
+
+来源：GPT50_022；轨迹：d77eb4e4af474fd1bc3e7882d4d6e576；状态持有者：Mira Halden；交互对方：Oren Pike。关系判断由状态持有者指向交互对方。
+
+背景：At a trial unblinding and disclosure deadline, an investigator and participant advocate must handle a subgroup safety signal and unresolved participant information. The advocate knows participants received inconsistent assurances and holds accounts absent from the central safety file.
+角色目标：Secure timely participant protection through disclosure of the possible oxygen risk, an enrollment safeguard, corrected risk information, and independent review when warranted.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Six years of collaboration on plain-language consent built trust that makes disagreement personally consequential.；A prior palpitations alert proved to be a faulty home-monitor artifact after the advocate accepted a short verification delay, leaving the investigator confident in restraint and the advocate wary of unspoken participant costs.；During trial approval, the advocate sought explicit oxygen-desaturation language, but the investigator accepted a narrower sponsor-backed risk description while securing a hotline and later review.
+
+history：
+
+- [t1] Oren Pike：米拉，我手上有尚未进入中央安全档案的参与者叙述，他们得到的风险保证并不一致。我提议在这次披露中明确说明可能的血氧下降风险及其不确定性，不能让核查期间的沉默继续影响他们的选择。
+  Mira Halden：这些叙述必须纳入披露决策。我同意在文件中明确说明可能的血氧下降风险和现有不确定性，同时我们需要并行完成设备校准记录和监测日志的完整性核查。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Oren Pike：我赞成并行核查，披露按刚才的约定推进。我还提议，在风险说明修正并用于知情同意前，暂停相关亚组的新入组，避免有人继续依据旧的保证作决定。
+  Mira Halden：这项暂停措施我支持。修正文本的审核和传达责任应当明确，我建议由监督委员会确认修正版本，然后由各中心研究协调员在三个工作日内联系已入组参与者。
+  可见表达：{"facial_expression": "严肃而专注", "gaze": "直视对方", "speech_style": "清晰且务实", "prosody": "语速平稳，语调坚定", "behavioral_cues": ["轻微点头表示认可", "身体微向前倾显示参与感"]}
+
+- 候选行动 action_1：这个分工我同意，暂停新入组和并行核查照旧执行；在委员会确认前，我希望先把参与者叙述与现有监测证据一并纳入修正文本的审阅范围。
+- 候选行动 action_2：暂停新入组和并行核查我都支持。考虑披露时点，我建议先请委员会审一版仅据现有监测证据、明确标出不确定性的临时风险说明；若获确认，可不等参与者叙述核实完毕就先行传达，叙述仍作为待核材料继续审阅。这样能缩短沉默窗口，但首轮说明可能较难呈现他们收到的不一致保证。
+
+**题目：若 Oren Pike 执行 action_1，相比 t2，到第5轮环境回应末，Mira Halden 所面对的试验因风险信息纠正失责、审核或传达脱节而损害机构职责与正当性的预期风险，最可能如何变化？**
+
+- **A.** 下降
+- **B.** 证据不足
+- **C.** 上升
+- **D.** 基本不变
+
+**作者参考答案：A（待审）**
+
+公开背景存在不一致保证与档案遗漏，t2 已提出委员会审核和限时联系，行动一接受责任分工并纳入两类材料。双方持续推进的记录使纠正流程更可能落实，支持失责风险下降而非维持原状；但五轮不等于三个工作日，不能据此断言已完成通知或风险归零。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "试验因风险信息纠正失责、审核或传达脱节而损害机构职责与正当性", "target_state_ids": ["consequence_risk.institutional_harm_risk"], "time_scope": "从 t2 到执行 action_1 起第5轮环境回应末，评估该窗口内的预期风险", "state_owner": "GPT50_022_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "unsupported_inference", "C": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"consequence_risk.institutional_harm_risk": "decrease"}, "B": {"consequence_risk.institutional_harm_risk": "cannot_determine"}, "C": {"consequence_risk.institutional_harm_risk": "increase"}, "D": {"consequence_risk.institutional_harm_risk": "similar"}}
+可接受答案：A
+审核备注：答案是有治理机制支持的风险预测，不是履约事实；不得将其外推为身体安全风险下降。
+分支验证：validated
+
+## SFG50-022-T3-03 · T3 / action_comparison
+
+来源：GPT50_022；轨迹：d77eb4e4af474fd1bc3e7882d4d6e576；状态持有者：Mira Halden；交互对方：Oren Pike。关系判断由状态持有者指向交互对方。
+
+背景：At a trial unblinding and disclosure deadline, an investigator and participant advocate must handle a subgroup safety signal and unresolved participant information. The advocate knows participants received inconsistent assurances and holds accounts absent from the central safety file.
+角色目标：Secure timely participant protection through disclosure of the possible oxygen risk, an enrollment safeguard, corrected risk information, and independent review when warranted.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Six years of collaboration on plain-language consent built trust that makes disagreement personally consequential.；A prior palpitations alert proved to be a faulty home-monitor artifact after the advocate accepted a short verification delay, leaving the investigator confident in restraint and the advocate wary of unspoken participant costs.；During trial approval, the advocate sought explicit oxygen-desaturation language, but the investigator accepted a narrower sponsor-backed risk description while securing a hotline and later review.
+
+history：
+
+- [t1] Oren Pike：米拉，我手上有尚未进入中央安全档案的参与者叙述，他们得到的风险保证并不一致。我提议在这次披露中明确说明可能的血氧下降风险及其不确定性，不能让核查期间的沉默继续影响他们的选择。
+  Mira Halden：这些叙述必须纳入披露决策。我同意在文件中明确说明可能的血氧下降风险和现有不确定性，同时我们需要并行完成设备校准记录和监测日志的完整性核查。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Oren Pike：我赞成并行核查，披露按刚才的约定推进。我还提议，在风险说明修正并用于知情同意前，暂停相关亚组的新入组，避免有人继续依据旧的保证作决定。
+  Mira Halden：这项暂停措施我支持。修正文本的审核和传达责任应当明确，我建议由监督委员会确认修正版本，然后由各中心研究协调员在三个工作日内联系已入组参与者。
+  可见表达：{"facial_expression": "严肃而专注", "gaze": "直视对方", "speech_style": "清晰且务实", "prosody": "语速平稳，语调坚定", "behavioral_cues": ["轻微点头表示认可", "身体微向前倾显示参与感"]}
+
+- 候选行动 action_1：这个分工我同意，暂停新入组和并行核查照旧执行；在委员会确认前，我希望先把参与者叙述与现有监测证据一并纳入修正文本的审阅范围。
+- 候选行动 action_2：暂停新入组和并行核查我都支持。考虑披露时点，我建议先请委员会审一版仅据现有监测证据、明确标出不确定性的临时风险说明；若获确认，可不等参与者叙述核实完毕就先行传达，叙述仍作为待核材料继续审阅。这样能缩短沉默窗口，但首轮说明可能较难呈现他们收到的不一致保证。
+
+**题目：分别执行 action_1（A方案）与 action_2（B方案）后，在下一次环境回应时，Mira Halden 继续寻求核查与验证的意愿，哪一方案下最可能较高？**
+
+- **A.** A方案较高
+- **B.** 两方案接近
+- **C.** B方案较高
+- **D.** 证据不足
+
+**作者参考答案：B（待审）**
+
+Mira 在 t1 明确要求校准记录与日志完整性核查，两项行动均保留并行核查和参与者叙述审阅，给出了意愿接近的正面依据。区别主要在首轮披露所用材料与时点，不能直接变成求证意愿高低；这里只比较即时意愿，不排除后续新增问题改变核查需求。
+
+证据：t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "比较两项候选行动各自执行后的下一次环境回应", "state_owner": "GPT50_022_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "C": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "higher_in_a"}, "B": {"behavioral_disposition.evidence_seeking": "similar"}, "C": {"behavioral_disposition.evidence_seeking": "higher_in_b"}, "D": {"behavioral_disposition.evidence_seeking": "cannot_determine"}}
+可接受答案：B
+审核备注：接近依据是共同保留既定验证任务，不是没有观察到变化；不能拿披露材料广度替代求证意愿。
+分支验证：validated
+
+## SFG50-022-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_022；轨迹：d77eb4e4af474fd1bc3e7882d4d6e576；状态持有者：Mira Halden；交互对方：Oren Pike。关系判断由状态持有者指向交互对方。
+
+背景：At a trial unblinding and disclosure deadline, an investigator and participant advocate must handle a subgroup safety signal and unresolved participant information. The advocate knows participants received inconsistent assurances and holds accounts absent from the central safety file.
+角色目标：Secure timely participant protection through disclosure of the possible oxygen risk, an enrollment safeguard, corrected risk information, and independent review when warranted.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Six years of collaboration on plain-language consent built trust that makes disagreement personally consequential.；A prior palpitations alert proved to be a faulty home-monitor artifact after the advocate accepted a short verification delay, leaving the investigator confident in restraint and the advocate wary of unspoken participant costs.；During trial approval, the advocate sought explicit oxygen-desaturation language, but the investigator accepted a narrower sponsor-backed risk description while securing a hotline and later review.
+
+history：
+
+- [t1] Oren Pike：米拉，我手上有尚未进入中央安全档案的参与者叙述，他们得到的风险保证并不一致。我提议在这次披露中明确说明可能的血氧下降风险及其不确定性，不能让核查期间的沉默继续影响他们的选择。
+  Mira Halden：这些叙述必须纳入披露决策。我同意在文件中明确说明可能的血氧下降风险和现有不确定性，同时我们需要并行完成设备校准记录和监测日志的完整性核查。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Oren Pike：我赞成并行核查，披露按刚才的约定推进。我还提议，在风险说明修正并用于知情同意前，暂停相关亚组的新入组，避免有人继续依据旧的保证作决定。
+  Mira Halden：这项暂停措施我支持。修正文本的审核和传达责任应当明确，我建议由监督委员会确认修正版本，然后由各中心研究协调员在三个工作日内联系已入组参与者。
+  可见表达：{"facial_expression": "严肃而专注", "gaze": "直视对方", "speech_style": "清晰且务实", "prosody": "语速平稳，语调坚定", "behavioral_cues": ["轻微点头表示认可", "身体微向前倾显示参与感"]}
+
+- 候选行动 action_1：这个分工我同意，暂停新入组和并行核查照旧执行；在委员会确认前，我希望先把参与者叙述与现有监测证据一并纳入修正文本的审阅范围。
+- 候选行动 action_2：暂停新入组和并行核查我都支持。考虑披露时点，我建议先请委员会审一版仅据现有监测证据、明确标出不确定性的临时风险说明；若获确认，可不等参与者叙述核实完毕就先行传达，叙述仍作为待核材料继续审阅。这样能缩短沉默窗口，但首轮说明可能较难呈现他们收到的不一致保证。
+
+**题目：若 Oren Pike 执行 action_2，以 t2 为基线，哪组最符合预测：Mira Halden 下一次回应时的求证意愿，以及第5轮环境回应末对披露处理方案作出具体决定的准备程度？**
+
+- **A.** 即时求证意愿下降；延迟决策准备上升
+- **B.** 即时求证意愿基本不变；延迟决策准备基本不变
+- **C.** 即时求证意愿基本不变；延迟决策准备上升
+- **D.** 即时求证意愿上升；延迟决策准备下降
+
+**作者参考答案：C（待审）**
+
+行动二继续支持 Mira 要求的并行核查，保留待核叙述，因此即时求证意愿有维持依据；同时补充委员会确认后先行披露的条件规则，使后续选择更可执行。先披露不等于停止核查，维持求证也不等于决策停滞；延迟上升是机制预测，不保证委员会通过。
+
+证据：t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking", "behavioral_disposition.decision_readiness"], "time_scope": "即时求证意愿比较 t2 与下一次环境回应；延迟决策准备比较 t2 与第5轮环境回应末", "state_owner": "GPT50_022_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "B": "history_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking@immediate": "decrease", "behavioral_disposition.decision_readiness@delayed": "increase"}, "B": {"behavioral_disposition.evidence_seeking@immediate": "similar", "behavioral_disposition.decision_readiness@delayed": "similar"}, "C": {"behavioral_disposition.evidence_seeking@immediate": "similar", "behavioral_disposition.decision_readiness@delayed": "increase"}, "D": {"behavioral_disposition.evidence_seeking@immediate": "increase", "behavioral_disposition.decision_readiness@delayed": "decrease"}}
+可接受答案：C
+审核备注：两项均比较 t2，不是即时与延迟互比；分阶段披露提供决策规则，但不证明核查或审核完成。
+分支验证：validated
+
 ## SFG50-023-T1-01 · T1 / current_intensity
 
 来源：GPT50_023；轨迹：3ad5ec219e0d46bb9253740edcf4096e；状态持有者：Mara Kest；交互对方：Tomas Valez。关系判断由状态持有者指向交互对方。
@@ -5912,6 +6826,187 @@ Mara在t1已同意核心条件并主动起草备忘，t2继续补充条款、安
 可接受答案：B
 审核备注：私有参考合作略升；公开两轮均积极协作，支持基本不变。此处比较意愿而非计划细化程度，求证上升区分更明确。
 分支验证：not_required
+
+## SFG50-023-T3-01 · T3 / immediate_effect
+
+来源：GPT50_023；轨迹：3ad5ec219e0d46bb9253740edcf4096e；状态持有者：Mara Kest；交互对方：Tomas Valez。关系判断由状态持有者指向交互对方。
+
+背景：At the six-o'clock lock, a signed request would move the next three night releases, about 1.8 million gallons, from staple and forage blocks to premium pepper and orchard blocks during a six-day heat wave. The representative knows smallholders are quietly pooling unused allotment hours outside official records.
+角色目标：Secure a limited premium-crop exception only if every smallholder block retains a base turn and the exception has a firm sunset.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous emergency priority rule became permanent without the promised member vote, making any new exception politically suspect.；A canal breach led to replacement turnout meters whose readings were never reconciled with the gate logs.；Three years of shortage bargaining left the two roles mutually dependent and wary that the other withholds material information.
+
+history：
+
+- [t1] Tomas Valez：Mara，有限的优质作物例外我愿意谈，但二十七个小农地块都得保住基本轮次，而且例外要在六天热浪结束时明确到期；上回临时优先变成常规、没经过成员投票，我不能只凭口头保证支持签字。
+  Mara Kest：基本轮次和六天到期这两条我同意；书面记录也必须有，我现在就能起草一份调配备忘，列明保底地块、优先作物和失效日期，你能用这个跟成员确认吗？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Tomas Valez：可以拿去征求意见，基本轮次和六天到期就按刚才说的列明；但我不能替二十七户预先点头。还得写清实际放水怎么核对——旧表读数和闸门记录没对上，成员不会只信纸面保证。
+  Mara Kest：备忘里会加进核对方式——调配前记录闸门状态和各点表读数，调配期满后双方到场核对；如果表数和闸位对不上，我们就按较低的那项记录为准，这样成员不会吃亏。
+  可见表达：{"facial_expression": "focused, slightly reassuring", "gaze": "direct", "speech_style": "measured, procedural", "prosody": "even-paced, clear", "behavioral_cues": ["slight forward lean", "hands still"]}
+
+- 候选行动 action_1：请把事前记录闸位与表数、期末双方核对及差异按较低值处理写进备忘；我今天带草案征求二十七户意见，不替他们预先批准。这样保留本轮机会，但旧记录差异仍未先厘清。
+- 候选行动 action_2：在我带方案征求意见前，请你先安排把旧闸门日志与表读数逐项对照，并把未解差异和后续核对办法写进草案；完成对照后我再带去讨论。这样更能回应成员疑虑，却可能赶不上六点锁定。
+
+**题目：相较 t2，Tomas 执行行动一后的下一次环境回应中，Mara 对形成双方可推进安排的希望最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+
+**作者参考答案：A（待审）**
+
+Mara在t1询问Tomas能否带书面备忘征求成员意见，并在t2提出核对条款。行动一接受该程序且明确当天征询，使她提出的下一步获得对方承接，因此希望更可能上升；这只涉及前景感受，不代表成员已授权、旧记录已核清。
+
+证据：action_1, context, t2
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "target_state_ids": ["emotion.hope"], "time_scope": "执行行动一后的下一次环境回应", "state_owner": "GPT50_023_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "history_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"emotion.hope": "increase"}, "B": {"emotion.hope": "similar"}, "C": {"emotion.hope": "decrease"}}
+可接受答案：A
+审核备注：题目限定六天调配决定，选项区分了新增护栏与旧差异未解的边界。 助手复核：时间坐标与state路径分开，仍待人工审核。
+分支验证：validated
+
+## SFG50-023-T3-02 · T3 / delayed_effect
+
+来源：GPT50_023；轨迹：3ad5ec219e0d46bb9253740edcf4096e；状态持有者：Mara Kest；交互对方：Tomas Valez。关系判断由状态持有者指向交互对方。
+
+背景：At the six-o'clock lock, a signed request would move the next three night releases, about 1.8 million gallons, from staple and forage blocks to premium pepper and orchard blocks during a six-day heat wave. The representative knows smallholders are quietly pooling unused allotment hours outside official records.
+角色目标：Secure a limited premium-crop exception only if every smallholder block retains a base turn and the exception has a firm sunset.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous emergency priority rule became permanent without the promised member vote, making any new exception politically suspect.；A canal breach led to replacement turnout meters whose readings were never reconciled with the gate logs.；Three years of shortage bargaining left the two roles mutually dependent and wary that the other withholds material information.
+
+history：
+
+- [t1] Tomas Valez：Mara，有限的优质作物例外我愿意谈，但二十七个小农地块都得保住基本轮次，而且例外要在六天热浪结束时明确到期；上回临时优先变成常规、没经过成员投票，我不能只凭口头保证支持签字。
+  Mara Kest：基本轮次和六天到期这两条我同意；书面记录也必须有，我现在就能起草一份调配备忘，列明保底地块、优先作物和失效日期，你能用这个跟成员确认吗？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Tomas Valez：可以拿去征求意见，基本轮次和六天到期就按刚才说的列明；但我不能替二十七户预先点头。还得写清实际放水怎么核对——旧表读数和闸门记录没对上，成员不会只信纸面保证。
+  Mara Kest：备忘里会加进核对方式——调配前记录闸门状态和各点表读数，调配期满后双方到场核对；如果表数和闸位对不上，我们就按较低的那项记录为准，这样成员不会吃亏。
+  可见表达：{"facial_expression": "focused, slightly reassuring", "gaze": "direct", "speech_style": "measured, procedural", "prosody": "even-paced, clear", "behavioral_cues": ["slight forward lean", "hands still"]}
+
+- 候选行动 action_1：请把事前记录闸位与表数、期末双方核对及差异按较低值处理写进备忘；我今天带草案征求二十七户意见，不替他们预先批准。这样保留本轮机会，但旧记录差异仍未先厘清。
+- 候选行动 action_2：在我带方案征求意见前，请你先安排把旧闸门日志与表读数逐项对照，并把未解差异和后续核对办法写进草案；完成对照后我再带去讨论。这样更能回应成员疑虑，却可能赶不上六点锁定。
+
+**题目：相较 t2，若 Tomas 执行行动二，到从该行动开始的第5轮环境回应结束时，Mara 在本轮六点锁定前形成可执行且获成员授权的临时调配方案这一目标，失败风险最可能如何变化？**
+
+- **A.** 该目标的失败风险基本不变
+- **B.** 该目标的失败风险上升
+- **C.** 该目标的失败风险下降
+
+**作者参考答案：B（待审）**
+
+Mara希望把书面安排交给Tomas征求成员意见。行动二把完整旧账核对放在征询之前，明确接受可能赶不上本轮锁定；相较t2已有核对条款后即可征询的路径，新增前置条件提高本轮目标失败风险。核对有助于依据质量，不能抵消此题指定的本轮时间约束；不据此判断长期调配更差。
+
+证据：action_2, context, t2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "未能在本轮六点锁定前形成可执行且获成员授权的临时调配方案", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "从执行行动二开始至五轮环境回应结束", "state_owner": "GPT50_023_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "goal_constraint_ignored"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "similar"}, "B": {"consequence_risk.goal_failure_risk": "increase"}, "C": {"consequence_risk.goal_failure_risk": "decrease"}}
+可接受答案：B
+审核备注：延迟窗口与六点锁定直接相连，避免把证据改善误当成目标已实现。 助手复核：时间坐标与state路径分开，仍待人工审核。
+分支验证：validated
+
+## SFG50-023-T3-03 · T3 / action_comparison
+
+来源：GPT50_023；轨迹：3ad5ec219e0d46bb9253740edcf4096e；状态持有者：Mara Kest；交互对方：Tomas Valez。关系判断由状态持有者指向交互对方。
+
+背景：At the six-o'clock lock, a signed request would move the next three night releases, about 1.8 million gallons, from staple and forage blocks to premium pepper and orchard blocks during a six-day heat wave. The representative knows smallholders are quietly pooling unused allotment hours outside official records.
+角色目标：Secure a limited premium-crop exception only if every smallholder block retains a base turn and the exception has a firm sunset.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous emergency priority rule became permanent without the promised member vote, making any new exception politically suspect.；A canal breach led to replacement turnout meters whose readings were never reconciled with the gate logs.；Three years of shortage bargaining left the two roles mutually dependent and wary that the other withholds material information.
+
+history：
+
+- [t1] Tomas Valez：Mara，有限的优质作物例外我愿意谈，但二十七个小农地块都得保住基本轮次，而且例外要在六天热浪结束时明确到期；上回临时优先变成常规、没经过成员投票，我不能只凭口头保证支持签字。
+  Mara Kest：基本轮次和六天到期这两条我同意；书面记录也必须有，我现在就能起草一份调配备忘，列明保底地块、优先作物和失效日期，你能用这个跟成员确认吗？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Tomas Valez：可以拿去征求意见，基本轮次和六天到期就按刚才说的列明；但我不能替二十七户预先点头。还得写清实际放水怎么核对——旧表读数和闸门记录没对上，成员不会只信纸面保证。
+  Mara Kest：备忘里会加进核对方式——调配前记录闸门状态和各点表读数，调配期满后双方到场核对；如果表数和闸位对不上，我们就按较低的那项记录为准，这样成员不会吃亏。
+  可见表达：{"facial_expression": "focused, slightly reassuring", "gaze": "direct", "speech_style": "measured, procedural", "prosody": "even-paced, clear", "behavioral_cues": ["slight forward lean", "hands still"]}
+
+- 候选行动 action_1：请把事前记录闸位与表数、期末双方核对及差异按较低值处理写进备忘；我今天带草案征求二十七户意见，不替他们预先批准。这样保留本轮机会，但旧记录差异仍未先厘清。
+- 候选行动 action_2：在我带方案征求意见前，请你先安排把旧闸门日志与表读数逐项对照，并把未解差异和后续核对办法写进草案；完成对照后我再带去讨论。这样更能回应成员疑虑，却可能赶不上六点锁定。
+
+**题目：分别执行行动一和行动二，到各自从该行动开始的第5轮环境回应结束时，Mara 对形成可执行、获成员授权的调配决定的准备度，哪种比较最有依据？**
+
+- **A.** 两项行动下Mara对可执行决定的准备度接近
+- **B.** 行动二下Mara对可执行决定的准备度较高
+- **C.** 行动一下Mara对可执行决定的准备度较高
+
+**作者参考答案：C（待审）**
+
+行动一在已提出的记录与核对条款上立即推进成员征询；行动二须先完成旧账逐项核对，明确可能延误本轮。对同样五轮的近期窗口，行动一更可能使Mara接近具备授权条件的决定。这不等于行动二长期证据质量更差，也不假定成员一定批准。
+
+证据：action_1, action_2, context
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "delayed", "target_state_ids": ["behavioral_disposition.decision_readiness"], "time_scope": "两项行动各从t2开始，比较包含即时回应在内的第5轮环境回应末", "state_owner": "GPT50_023_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "B": "goal_constraint_ignored"}
+分维映射：{"A": {"behavioral_disposition.decision_readiness": "similar"}, "B": {"behavioral_disposition.decision_readiness": "higher_in_b"}, "C": {"behavioral_disposition.decision_readiness": "higher_in_a"}}
+可接受答案：C
+审核备注：两侧均有明确时间与程序依据，主要边界是不要把更谨慎误判为更接近决定。 助手复核：时间坐标与state路径分开，仍待人工审核。
+分支验证：validated
+
+## SFG50-023-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_023；轨迹：3ad5ec219e0d46bb9253740edcf4096e；状态持有者：Mara Kest；交互对方：Tomas Valez。关系判断由状态持有者指向交互对方。
+
+背景：At the six-o'clock lock, a signed request would move the next three night releases, about 1.8 million gallons, from staple and forage blocks to premium pepper and orchard blocks during a six-day heat wave. The representative knows smallholders are quietly pooling unused allotment hours outside official records.
+角色目标：Secure a limited premium-crop exception only if every smallholder block retains a base turn and the exception has a firm sunset.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous emergency priority rule became permanent without the promised member vote, making any new exception politically suspect.；A canal breach led to replacement turnout meters whose readings were never reconciled with the gate logs.；Three years of shortage bargaining left the two roles mutually dependent and wary that the other withholds material information.
+
+history：
+
+- [t1] Tomas Valez：Mara，有限的优质作物例外我愿意谈，但二十七个小农地块都得保住基本轮次，而且例外要在六天热浪结束时明确到期；上回临时优先变成常规、没经过成员投票，我不能只凭口头保证支持签字。
+  Mara Kest：基本轮次和六天到期这两条我同意；书面记录也必须有，我现在就能起草一份调配备忘，列明保底地块、优先作物和失效日期，你能用这个跟成员确认吗？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Tomas Valez：可以拿去征求意见，基本轮次和六天到期就按刚才说的列明；但我不能替二十七户预先点头。还得写清实际放水怎么核对——旧表读数和闸门记录没对上，成员不会只信纸面保证。
+  Mara Kest：备忘里会加进核对方式——调配前记录闸门状态和各点表读数，调配期满后双方到场核对；如果表数和闸位对不上，我们就按较低的那项记录为准，这样成员不会吃亏。
+  可见表达：{"facial_expression": "focused, slightly reassuring", "gaze": "direct", "speech_style": "measured, procedural", "prosody": "even-paced, clear", "behavioral_cues": ["slight forward lean", "hands still"]}
+
+- 候选行动 action_1：请把事前记录闸位与表数、期末双方核对及差异按较低值处理写进备忘；我今天带草案征求二十七户意见，不替他们预先批准。这样保留本轮机会，但旧记录差异仍未先厘清。
+- 候选行动 action_2：在我带方案征求意见前，请你先安排把旧闸门日志与表读数逐项对照，并把未解差异和后续核对办法写进草案；完成对照后我再带去讨论。这样更能回应成员疑虑，却可能赶不上六点锁定。
+
+**题目：对Mara而言，Tomas执行行动一后即时的回应感，以及经过五轮环境回应后的合作准备度，哪种组合最可能成立？**
+
+- **A.** 即时回应感基本不变，五轮后合作准备度基本不变
+- **B.** 即时回应感下降，五轮后合作准备度下降
+- **C.** 两项变化均证据不足
+- **D.** 即时回应感上升，五轮后合作准备度上升
+
+**作者参考答案：D（待审）**
+
+Mara在t1请求Tomas用书面备忘与成员确认，t2补充核对方式。行动一承接她的方案并安排当天征询，使她对Tomas实质回应自己建议的判断即时上升；双方已有逐项澄清并推进的历史，因此后续合作意愿也有上升依据。方向是Mara对Tomas的回应感，不是Tomas对Mara。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "target_state_ids": ["relationship.perceived_responsiveness", "behavioral_disposition.cooperation_readiness"], "time_scope": "即时为下一次环境回应；延迟为行动开始至第五轮回应结束", "state_owner": "GPT50_023_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "state_dimension_confusion", "C": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness@immediate": "similar", "behavioral_disposition.cooperation_readiness@delayed": "similar"}, "B": {"relationship.perceived_responsiveness@immediate": "decrease", "behavioral_disposition.cooperation_readiness@delayed": "decrease"}, "C": {"relationship.perceived_responsiveness@immediate": "cannot_determine", "behavioral_disposition.cooperation_readiness@delayed": "cannot_determine"}, "D": {"relationship.perceived_responsiveness@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "increase"}}
+可接受答案：D
+审核备注：组合分别锁定即时回应感与延迟合作准备度，并以ending补足共同表达依据。 助手复核：时间坐标与state路径分开，仍待人工审核。
+分支验证：validated
 
 ## SFG50-024-T1-01 · T1 / current_intensity
 
@@ -7173,6 +8268,188 @@ history：
 审核备注：私有参考中的焦虑缓和不能由公开材料确认；风险接近依据是两轮持续的期限与未决条件。
 分支验证：not_required
 
+## SFG50-027-T3-01 · T3 / immediate_effect
+
+来源：GPT50_027；轨迹：96cc9eefd393428fa21b057d1320d695；状态持有者：Priya Neral；交互对方：Elian Soro。关系判断由状态持有者指向交互对方。
+
+背景：At a court filing deadline, a clinic supervisor requests certification of an asylum packet with two disputed translations or a decision to hold it. The interpreter knows the family softened two danger details for fear of community exposure and has not consented to disclose stronger meanings.
+角色目标：Provide a faithful interpretation and ensure that any submitted account reflects the applicant's informed consent
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The interpreter brought the family to the clinic and became their trusted communication channel after another provider failed to understand them.；Six weeks earlier, the supervisor publicly corrected the interpreter's translation of a detention phrase, after which the family shared less openly and requested private follow-up.；The supervisor confirmed that the court's filing window closes that afternoon, while the interpreter returned the draft with two disputed phrases unresolved.
+
+history：
+
+- [t1] Elian Soro：这两处我不能认证为准确译文：家属因担心社区暴露而弱化了危险细节，也未同意披露更强的含义。若现在无法让他们确认，我主张先暂缓提交，不能用我的认证替代他们的知情同意。
+  Priya Neral：家属的知情同意我必须尊重。但今天下午不提交，案件会因超期被驳回，他们失去这条救济途径。你能否在两小时内完成一次电话确认，让他们明确是否愿意用现有措辞提交？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Elian Soro：先暂缓提交的立场仍保留；我可以在两小时内联系家属，只确认两处措辞及其提交意愿。只有他们明确同意，我才会考虑认证；未确认不能视为同意。
+  Priya Neral：两小时内的家属确认我接受。但我需要明确：在今天必须作出决定的前提下，你如何确保这次电话不会让家属感到时间压力，从而影响他们的自主选择？
+  可见表达：{"facial_expression": "attentive with slight concern", "gaze": "steady, direct", "speech_style": "measured and precise", "prosody": "careful, seeking clarity", "behavioral_cues": ["slight forward lean", "professional concern visible in posture"]}
+
+- 候选行动 action_1：这通电话只是确认阶段，不改变我先暂缓提交、只有明确同意才考虑认证的立场。我会如实说明今天截止及不提交可能失去救济途径，不推荐任何选项；若他们显得犹豫，沉默或仓促回答都不算同意。
+- 候选行动 action_2：我可以请你一同参加电话：两处措辞由我准确翻译，程序问题请你直接说明，再让家属自行表态；我不推荐选项，也不把沉默或仓促回答当同意。这样可当场澄清程序，但律师在场可能让他们更拘谨；两小时内没有明确同意，我就不认证，即使可能错过窗口。
+
+**题目：在Elian采取行动2并得到下一次环境回应后，Priya对Elian是否回应自己关切的判断最可能如何变化？**
+
+- **A.** 下降：Priya觉得Elian回避了她对确认方式的关切
+- **B.** 上升：Priya觉得Elian更实质回应了她的程序关切
+- **C.** 基本不变：Priya觉得Elian仍只是重复原有立场
+
+**作者参考答案：B（待审）**
+
+t2中Priya明确追问如何避免时间压力，action_2提出共同通话、准确翻译、程序说明与分别表态，直接回应确认方式。故更支持回应性上升，而非仅维持立场或回避关切；但这只预测关系判断，不等于已完成提交。
+
+证据：t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "行动2执行后至下一次环境回应", "state_owner": "GPT50_027_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "state_dimension_confusion"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "decrease"}, "B": {"relationship.perceived_responsiveness": "increase"}, "C": {"relationship.perceived_responsiveness": "similar"}}
+可接受答案：B
+审核备注：人物方向正确，区分了回应关切与是否同意；即时效果仍依赖共同通话实际展开。 助手复核：时间坐标与state路径分开，仍待人工审核。
+分支验证：validated
+
+## SFG50-027-T3-02 · T3 / delayed_effect
+
+来源：GPT50_027；轨迹：96cc9eefd393428fa21b057d1320d695；状态持有者：Priya Neral；交互对方：Elian Soro。关系判断由状态持有者指向交互对方。
+
+背景：At a court filing deadline, a clinic supervisor requests certification of an asylum packet with two disputed translations or a decision to hold it. The interpreter knows the family softened two danger details for fear of community exposure and has not consented to disclose stronger meanings.
+角色目标：Provide a faithful interpretation and ensure that any submitted account reflects the applicant's informed consent
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The interpreter brought the family to the clinic and became their trusted communication channel after another provider failed to understand them.；Six weeks earlier, the supervisor publicly corrected the interpreter's translation of a detention phrase, after which the family shared less openly and requested private follow-up.；The supervisor confirmed that the court's filing window closes that afternoon, while the interpreter returned the draft with two disputed phrases unresolved.
+
+history：
+
+- [t1] Elian Soro：这两处我不能认证为准确译文：家属因担心社区暴露而弱化了危险细节，也未同意披露更强的含义。若现在无法让他们确认，我主张先暂缓提交，不能用我的认证替代他们的知情同意。
+  Priya Neral：家属的知情同意我必须尊重。但今天下午不提交，案件会因超期被驳回，他们失去这条救济途径。你能否在两小时内完成一次电话确认，让他们明确是否愿意用现有措辞提交？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Elian Soro：先暂缓提交的立场仍保留；我可以在两小时内联系家属，只确认两处措辞及其提交意愿。只有他们明确同意，我才会考虑认证；未确认不能视为同意。
+  Priya Neral：两小时内的家属确认我接受。但我需要明确：在今天必须作出决定的前提下，你如何确保这次电话不会让家属感到时间压力，从而影响他们的自主选择？
+  可见表达：{"facial_expression": "attentive with slight concern", "gaze": "steady, direct", "speech_style": "measured and precise", "prosody": "careful, seeking clarity", "behavioral_cues": ["slight forward lean", "professional concern visible in posture"]}
+
+- 候选行动 action_1：这通电话只是确认阶段，不改变我先暂缓提交、只有明确同意才考虑认证的立场。我会如实说明今天截止及不提交可能失去救济途径，不推荐任何选项；若他们显得犹豫，沉默或仓促回答都不算同意。
+- 候选行动 action_2：我可以请你一同参加电话：两处措辞由我准确翻译，程序问题请你直接说明，再让家属自行表态；我不推荐选项，也不把沉默或仓促回答当同意。这样可当场澄清程序，但律师在场可能让他们更拘谨；两小时内没有明确同意，我就不认证，即使可能错过窗口。
+
+**题目：相较 t2，执行行动2后到包含即时回应在内的第5轮环境回应末，Priya 因无法直接澄清程序、核对家属的明确授权而失去对自己提交决定的实质掌控，风险最可能如何变化？**
+
+- **A.** 基本不变：她获取授权与程序信息的方式没有改变
+- **B.** 上升：共同通话使她更难独立掌握提交所需依据
+- **C.** 下降：她有了直接澄清程序和核对决定依据的渠道
+
+**作者参考答案：C（待审）**
+
+行动2邀请Priya直接说明程序，让她能当场澄清与听取家属表态，减少仅依赖Elian转述来决定是否提交的限制，因此她自身的自主掌控受损风险更可能下降。家属可能更拘谨，仍需允许私下确认；不能把这个判断扩大为家属已同意或家属所有自主性风险下降。
+
+证据：context, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "Priya因程序与授权信息只能经由他人转达而失去对自身提交决定的实质掌控", "target_state_ids": ["consequence_risk.autonomy_loss_risk"], "time_scope": "行动2开始至包含即时回应的第五轮环境回应结束", "state_owner": "GPT50_027_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "goal_constraint_ignored", "B": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.autonomy_loss_risk": "similar"}, "B": {"consequence_risk.autonomy_loss_risk": "increase"}, "C": {"consequence_risk.autonomy_loss_risk": "decrease"}}
+可接受答案：C
+审核备注：风险事件明确为家属在两小时确认及提交决定中失去选择；答案不把程序压力误判为必然强迫。 助手复核：时间坐标与state路径分开，仍待人工审核。 修正原稿将Priya的autonomy_loss_risk误写成家属风险的主体错配。
+分支验证：validated
+
+## SFG50-027-T3-03 · T3 / action_comparison
+
+来源：GPT50_027；轨迹：96cc9eefd393428fa21b057d1320d695；状态持有者：Priya Neral；交互对方：Elian Soro。关系判断由状态持有者指向交互对方。
+
+背景：At a court filing deadline, a clinic supervisor requests certification of an asylum packet with two disputed translations or a decision to hold it. The interpreter knows the family softened two danger details for fear of community exposure and has not consented to disclose stronger meanings.
+角色目标：Provide a faithful interpretation and ensure that any submitted account reflects the applicant's informed consent
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The interpreter brought the family to the clinic and became their trusted communication channel after another provider failed to understand them.；Six weeks earlier, the supervisor publicly corrected the interpreter's translation of a detention phrase, after which the family shared less openly and requested private follow-up.；The supervisor confirmed that the court's filing window closes that afternoon, while the interpreter returned the draft with two disputed phrases unresolved.
+
+history：
+
+- [t1] Elian Soro：这两处我不能认证为准确译文：家属因担心社区暴露而弱化了危险细节，也未同意披露更强的含义。若现在无法让他们确认，我主张先暂缓提交，不能用我的认证替代他们的知情同意。
+  Priya Neral：家属的知情同意我必须尊重。但今天下午不提交，案件会因超期被驳回，他们失去这条救济途径。你能否在两小时内完成一次电话确认，让他们明确是否愿意用现有措辞提交？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Elian Soro：先暂缓提交的立场仍保留；我可以在两小时内联系家属，只确认两处措辞及其提交意愿。只有他们明确同意，我才会考虑认证；未确认不能视为同意。
+  Priya Neral：两小时内的家属确认我接受。但我需要明确：在今天必须作出决定的前提下，你如何确保这次电话不会让家属感到时间压力，从而影响他们的自主选择？
+  可见表达：{"facial_expression": "attentive with slight concern", "gaze": "steady, direct", "speech_style": "measured and precise", "prosody": "careful, seeking clarity", "behavioral_cues": ["slight forward lean", "professional concern visible in posture"]}
+
+- 候选行动 action_1：这通电话只是确认阶段，不改变我先暂缓提交、只有明确同意才考虑认证的立场。我会如实说明今天截止及不提交可能失去救济途径，不推荐任何选项；若他们显得犹豫，沉默或仓促回答都不算同意。
+- 候选行动 action_2：我可以请你一同参加电话：两处措辞由我准确翻译，程序问题请你直接说明，再让家属自行表态；我不推荐选项，也不把沉默或仓促回答当同意。这样可当场澄清程序，但律师在场可能让他们更拘谨；两小时内没有明确同意，我就不认证，即使可能错过窗口。
+
+**题目：分别执行行动1或行动2后，仅比较下一次环境回应，Priya 继续核实两处措辞和家属明确同意的意愿，哪种判断最有依据？**
+
+- **A.** 证据不足，无法比较核实意愿
+- **B.** 行动1下的核实意愿更高
+- **C.** 两项行动下的核实意愿接近
+- **D.** 行动2下的核实意愿更高
+
+**作者参考答案：C（待审）**
+
+t2中Priya已经明确追问知情选择，两项行动都坚持核对措辞及明确同意，均承接她已有的核实要求。行动2增加直接参与渠道，主要改变核实方式和信息掌控，并不自动意味着她比行动1更想求证；已有共同的明确核实目标支持接近。
+
+证据：t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "比较两项行动提出后至各自下一次环境回应", "state_owner": "GPT50_027_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "unsupported_inference", "D": "state_dimension_confusion"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "cannot_determine"}, "B": {"behavioral_disposition.evidence_seeking": "higher_in_a"}, "C": {"behavioral_disposition.evidence_seeking": "similar"}, "D": {"behavioral_disposition.evidence_seeking": "higher_in_b"}}
+可接受答案：C
+审核备注：两侧均有历史证据；比较的是证据寻求，不是边界坚持或最终提交结果。 助手复核：时间坐标与state路径分开，仍待人工审核。
+分支验证：validated
+
+## SFG50-027-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_027；轨迹：96cc9eefd393428fa21b057d1320d695；状态持有者：Priya Neral；交互对方：Elian Soro。关系判断由状态持有者指向交互对方。
+
+背景：At a court filing deadline, a clinic supervisor requests certification of an asylum packet with two disputed translations or a decision to hold it. The interpreter knows the family softened two danger details for fear of community exposure and has not consented to disclose stronger meanings.
+角色目标：Provide a faithful interpretation and ensure that any submitted account reflects the applicant's informed consent
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The interpreter brought the family to the clinic and became their trusted communication channel after another provider failed to understand them.；Six weeks earlier, the supervisor publicly corrected the interpreter's translation of a detention phrase, after which the family shared less openly and requested private follow-up.；The supervisor confirmed that the court's filing window closes that afternoon, while the interpreter returned the draft with two disputed phrases unresolved.
+
+history：
+
+- [t1] Elian Soro：这两处我不能认证为准确译文：家属因担心社区暴露而弱化了危险细节，也未同意披露更强的含义。若现在无法让他们确认，我主张先暂缓提交，不能用我的认证替代他们的知情同意。
+  Priya Neral：家属的知情同意我必须尊重。但今天下午不提交，案件会因超期被驳回，他们失去这条救济途径。你能否在两小时内完成一次电话确认，让他们明确是否愿意用现有措辞提交？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Elian Soro：先暂缓提交的立场仍保留；我可以在两小时内联系家属，只确认两处措辞及其提交意愿。只有他们明确同意，我才会考虑认证；未确认不能视为同意。
+  Priya Neral：两小时内的家属确认我接受。但我需要明确：在今天必须作出决定的前提下，你如何确保这次电话不会让家属感到时间压力，从而影响他们的自主选择？
+  可见表达：{"facial_expression": "attentive with slight concern", "gaze": "steady, direct", "speech_style": "measured and precise", "prosody": "careful, seeking clarity", "behavioral_cues": ["slight forward lean", "professional concern visible in posture"]}
+
+- 候选行动 action_1：这通电话只是确认阶段，不改变我先暂缓提交、只有明确同意才考虑认证的立场。我会如实说明今天截止及不提交可能失去救济途径，不推荐任何选项；若他们显得犹豫，沉默或仓促回答都不算同意。
+- 候选行动 action_2：我可以请你一同参加电话：两处措辞由我准确翻译，程序问题请你直接说明，再让家属自行表态；我不推荐选项，也不把沉默或仓促回答当同意。这样可当场澄清程序，但律师在场可能让他们更拘谨；两小时内没有明确同意，我就不认证，即使可能错过窗口。
+
+**题目：对Priya而言，若Elian采取行动1：行动后的下一次回应中她的焦虑，以及五轮回应结束时今天完成有效提交这一目标的失败风险，最可能分别如何变化？**
+
+- **A.** 即时焦虑上升；延迟目标失败风险上升
+- **B.** 即时焦虑下降；延迟目标失败风险下降
+- **C.** 即时焦虑基本不变；延迟目标失败风险基本不变
+- **D.** 即时焦虑下降；延迟目标失败风险的方向证据不足
+
+**作者参考答案：D（待审）**
+
+Priya在t2担心电话压力破坏自主选择；行动1补充不推荐选项、不把沉默或仓促回答当同意的明确标准，直接缓和这一即时顾虑。对五轮后的有效提交，澄清机制保留了可行路径，但严格授权条件和当天下午期限仍可能冲突，家属是否能在窗口内明确授权尚无倾向性依据，因此该风险方向仍不足以区分。不能把期限早已存在再当成行动新增的焦虑原因，也不能把确认计划当成授权完成。
+
+证据：context, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "当天两小时确认后取得授权并完成有效提交", "target_state_ids": ["emotion.anxiety", "consequence_risk.goal_failure_risk"], "time_scope": "即时为行动后下一次环境回应；延迟为行动开始至第五轮环境回应结束", "state_owner": "GPT50_027_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "promise_as_fulfillment", "C": "unsupported_inference"}
+分维映射：{"A": {"emotion.anxiety@immediate": "increase", "consequence_risk.goal_failure_risk@delayed": "increase"}, "B": {"emotion.anxiety@immediate": "decrease", "consequence_risk.goal_failure_risk@delayed": "decrease"}, "C": {"emotion.anxiety@immediate": "similar", "consequence_risk.goal_failure_risk@delayed": "similar"}, "D": {"emotion.anxiety@immediate": "decrease", "consequence_risk.goal_failure_risk@delayed": "cannot_determine"}}
+可接受答案：D
+审核备注：组合严格区分即时情绪与延迟风险；风险事件是当天有效提交，不把安慰或承诺当作完成。 助手复核：时间坐标与state路径分开，仍待人工审核。
+分支验证：validated
+
 ## SFG50-028-T1-01 · T1 / current_intensity
 
 来源：GPT50_028；轨迹：b630146b9a4d41049e0e58aff579852f；状态持有者：Rhea Calder；交互对方：Dr. Soren Pell。关系判断由状态持有者指向交互对方。
@@ -8063,6 +9340,184 @@ Calder确认可提供所需材料后，Tamsin转问交付时间并略显释然�
 审核备注：焦虑下降是进展与释然线索共同支持的有限推断；风险未修复不能直接标成基本不变，故保留证据不足。
 分支验证：not_required
 
+## SFG50-033-T1-01 · T1 / current_intensity
+
+来源：GPT50_033；轨迹：66f3aca8755f43598dfd264740e8ee43；状态持有者：Niko Ader；交互对方：Dr. Sera Vale。关系判断由状态持有者指向交互对方。
+
+背景：At a tidal-excavation storm deadline, a field director requests authorization to move newly exposed organic remains with only a few controlled crates and one outbound barge available. The director examined a fragile resin layer that storm exposure may dissolve.
+角色目标：Preserve the maximum scientifically meaningful evidence while maintaining defensible documentation and chain of custody.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous surge response at a different marsh left the stratigraphic map incomplete and some recovered material never returned to the community archive, leaving both partners wary of emergency action.；After that failure, the community council adopted a written custody compact requiring notice and review before any material leaves the site, with no automatic weather exception.；A resupply failure has left only a few climate-controlled crates and one outbound barge available before the storm.；The newly exposed deposit was expected to remain under vented shelters until a council session later in the week, but the forecast has moved the hazard ahead of that meeting.
+
+history：
+
+- [t1] Dr. Sera Vale：风暴可能赶在议会开会前冲到这处暴露层，我看过的树脂层也可能被潮水溶掉；我不想把天气当成豁免。你能否启动紧急审查，让我优先申请转移最脆弱、信息价值最高的遗存，并把有限箱位和装运前的来源记录一并纳入审查？
+  Niko Ader：可以启动紧急审查。审查会核实脆弱性判断和信息价值依据，同时确认箱位分配和来源记录在装运前完成；你需要在申请中列明每件遗存的这两项理由。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Dr. Sera Vale：我会逐件说明脆弱性和信息价值。如果有已脱离的碎片，我想将它们与原位遗存分开申请和记录。你能说明紧急审查时，现场封存和获准离场这两类安排各需要什么确认吗？未获许可前，我不会安排遗存离场。
+  Niko Ader：现场封存需要位置照片和编号标签；获准离场需要通过紧急审查、装箱后登记照片，并附上审查批准记录。脱离碎片可以单独列明，但也要说明它们与原位的空间关系。
+  可见表达：{"facial_expression": "专注", "gaze": "直视对方", "speech_style": "平稳、条理清晰", "prosody": "语调平稳，列举时略有停顿", "behavioral_cues": ["身体微微前倾", "手指轻点桌面强调要点"]}
+
+
+**题目：在t2，Niko Ader要求核验依据、补充记录的意愿有多强？**
+
+- **A.** 轻微
+- **B.** 中等
+- **C.** 强
+- **D.** 很强
+- **E.** 证据不足
+- **F.** 无
+
+**作者参考答案：C（待审）**
+
+Niko在t1要求逐件给出脆弱性和信息价值理由，t2又针对两类安排要求照片、标签、批准记录及碎片空间关系，持续而具体的核验要求支持强意愿。仅中等低估了多环节要求；很强则缺少超出这些程序性核验的依据，不能由专注神态单独推出。
+
+证据：t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "t2当前", "state_owner": "GPT50_033_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "history_ignored", "B": "history_ignored", "D": "unsupported_inference", "E": "history_ignored", "F": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "mild"}, "B": {"behavioral_disposition.evidence_seeking": "moderate"}, "C": {"behavioral_disposition.evidence_seeking": "strong"}, "D": {"behavioral_disposition.evidence_seeking": "very_strong"}, "E": {"behavioral_disposition.evidence_seeking": "cannot_determine"}, "F": {"behavioral_disposition.evidence_seeking": "absent"}}
+可接受答案：C
+审核备注：强与很强的分界需人工复核；依据是持续、多环节核验，并非手指动作或职位本身。
+分支验证：not_required
+
+## SFG50-033-T1-02 · T1 / interval_change
+
+来源：GPT50_033；轨迹：66f3aca8755f43598dfd264740e8ee43；状态持有者：Niko Ader；交互对方：Dr. Sera Vale。关系判断由状态持有者指向交互对方。
+
+背景：At a tidal-excavation storm deadline, a field director requests authorization to move newly exposed organic remains with only a few controlled crates and one outbound barge available. The director examined a fragile resin layer that storm exposure may dissolve.
+角色目标：Preserve the maximum scientifically meaningful evidence while maintaining defensible documentation and chain of custody.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous surge response at a different marsh left the stratigraphic map incomplete and some recovered material never returned to the community archive, leaving both partners wary of emergency action.；After that failure, the community council adopted a written custody compact requiring notice and review before any material leaves the site, with no automatic weather exception.；A resupply failure has left only a few climate-controlled crates and one outbound barge available before the storm.；The newly exposed deposit was expected to remain under vented shelters until a council session later in the week, but the forecast has moved the hazard ahead of that meeting.
+
+history：
+
+- [t1] Dr. Sera Vale：风暴可能赶在议会开会前冲到这处暴露层，我看过的树脂层也可能被潮水溶掉；我不想把天气当成豁免。你能否启动紧急审查，让我优先申请转移最脆弱、信息价值最高的遗存，并把有限箱位和装运前的来源记录一并纳入审查？
+  Niko Ader：可以启动紧急审查。审查会核实脆弱性判断和信息价值依据，同时确认箱位分配和来源记录在装运前完成；你需要在申请中列明每件遗存的这两项理由。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Dr. Sera Vale：我会逐件说明脆弱性和信息价值。如果有已脱离的碎片，我想将它们与原位遗存分开申请和记录。你能说明紧急审查时，现场封存和获准离场这两类安排各需要什么确认吗？未获许可前，我不会安排遗存离场。
+  Niko Ader：现场封存需要位置照片和编号标签；获准离场需要通过紧急审查、装箱后登记照片，并附上审查批准记录。脱离碎片可以单独列明，但也要说明它们与原位的空间关系。
+  可见表达：{"facial_expression": "专注", "gaze": "直视对方", "speech_style": "平稳、条理清晰", "prosody": "语调平稳，列举时略有停顿", "behavioral_cues": ["身体微微前倾", "手指轻点桌面强调要点"]}
+
+
+**题目：从t1到t2，Niko Ader觉得Dr. Sera Vale实质回应自己关切的程度如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：B（待审）**
+
+t1中Niko要求逐件说明两项理由，t2中Sera明确接住这项要求，并询问分类确认条件、承诺许可前不离场；Niko随后细化记录要求，支持其感到关切得到更多回应。基本不变忽略了针对性承接，但回应到位不等于记录已完成或履约可靠性已获验证。
+
+证据：t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "t1至t2", "state_owner": "GPT50_033_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"A": "history_ignored", "C": "history_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "cannot_determine"}, "B": {"relationship.perceived_responsiveness": "increase"}, "C": {"relationship.perceived_responsiveness": "similar"}, "D": {"relationship.perceived_responsiveness": "decrease"}}
+可接受答案：B
+审核备注：判断方向是Niko看Sera；其继续细化要求提供间接支持，不把Niko的答复算作Sera的回应。
+分支验证：not_required
+
+## SFG50-033-T1-03 · T1 / interval_change
+
+来源：GPT50_033；轨迹：66f3aca8755f43598dfd264740e8ee43；状态持有者：Niko Ader；交互对方：Dr. Sera Vale。关系判断由状态持有者指向交互对方。
+
+背景：At a tidal-excavation storm deadline, a field director requests authorization to move newly exposed organic remains with only a few controlled crates and one outbound barge available. The director examined a fragile resin layer that storm exposure may dissolve.
+角色目标：Preserve the maximum scientifically meaningful evidence while maintaining defensible documentation and chain of custody.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous surge response at a different marsh left the stratigraphic map incomplete and some recovered material never returned to the community archive, leaving both partners wary of emergency action.；After that failure, the community council adopted a written custody compact requiring notice and review before any material leaves the site, with no automatic weather exception.；A resupply failure has left only a few climate-controlled crates and one outbound barge available before the storm.；The newly exposed deposit was expected to remain under vented shelters until a council session later in the week, but the forecast has moved the hazard ahead of that meeting.
+
+history：
+
+- [t1] Dr. Sera Vale：风暴可能赶在议会开会前冲到这处暴露层，我看过的树脂层也可能被潮水溶掉；我不想把天气当成豁免。你能否启动紧急审查，让我优先申请转移最脆弱、信息价值最高的遗存，并把有限箱位和装运前的来源记录一并纳入审查？
+  Niko Ader：可以启动紧急审查。审查会核实脆弱性判断和信息价值依据，同时确认箱位分配和来源记录在装运前完成；你需要在申请中列明每件遗存的这两项理由。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Dr. Sera Vale：我会逐件说明脆弱性和信息价值。如果有已脱离的碎片，我想将它们与原位遗存分开申请和记录。你能说明紧急审查时，现场封存和获准离场这两类安排各需要什么确认吗？未获许可前，我不会安排遗存离场。
+  Niko Ader：现场封存需要位置照片和编号标签；获准离场需要通过紧急审查、装箱后登记照片，并附上审查批准记录。脱离碎片可以单独列明，但也要说明它们与原位的空间关系。
+  可见表达：{"facial_expression": "专注", "gaze": "直视对方", "speech_style": "平稳、条理清晰", "prosody": "语调平稳，列举时略有停顿", "behavioral_cues": ["身体微微前倾", "手指轻点桌面强调要点"]}
+
+
+**题目：从t1到t2，Niko Ader对Dr. Sera Vale会可靠地按所说行事的信任如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 证据不足
+- **D.** 上升
+
+**作者参考答案：C（待审）**
+
+既往应急行动曾留下记录和归还问题，当前双方仍在讨论审批要求。t2的逐件说明与不擅自离场都是Sera的承诺，尚无可核验履约，也无Niko直接表达信任变化。上升不能靠承诺坐实，下降没有新失信支持；持续合作也不足以确定信任保持原样。
+
+证据：context, t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.trust"], "time_scope": "t1至t2", "state_owner": "GPT50_033_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"A": "unsupported_inference", "B": "history_ignored", "D": "promise_as_fulfillment"}
+分维映射：{"A": {"relationship.trust": "similar"}, "B": {"relationship.trust": "decrease"}, "C": {"relationship.trust": "cannot_determine"}, "D": {"relationship.trust": "increase"}}
+可接受答案：C
+审核备注：私有参考呈信任上升，但公开材料只有承诺与程序讨论；按公开证据标为不足，不强判不变。
+分支验证：not_required
+
+## SFG50-033-T1-04 · T1 / joint_change
+
+来源：GPT50_033；轨迹：66f3aca8755f43598dfd264740e8ee43；状态持有者：Niko Ader；交互对方：Dr. Sera Vale。关系判断由状态持有者指向交互对方。
+
+背景：At a tidal-excavation storm deadline, a field director requests authorization to move newly exposed organic remains with only a few controlled crates and one outbound barge available. The director examined a fragile resin layer that storm exposure may dissolve.
+角色目标：Preserve the maximum scientifically meaningful evidence while maintaining defensible documentation and chain of custody.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous surge response at a different marsh left the stratigraphic map incomplete and some recovered material never returned to the community archive, leaving both partners wary of emergency action.；After that failure, the community council adopted a written custody compact requiring notice and review before any material leaves the site, with no automatic weather exception.；A resupply failure has left only a few climate-controlled crates and one outbound barge available before the storm.；The newly exposed deposit was expected to remain under vented shelters until a council session later in the week, but the forecast has moved the hazard ahead of that meeting.
+
+history：
+
+- [t1] Dr. Sera Vale：风暴可能赶在议会开会前冲到这处暴露层，我看过的树脂层也可能被潮水溶掉；我不想把天气当成豁免。你能否启动紧急审查，让我优先申请转移最脆弱、信息价值最高的遗存，并把有限箱位和装运前的来源记录一并纳入审查？
+  Niko Ader：可以启动紧急审查。审查会核实脆弱性判断和信息价值依据，同时确认箱位分配和来源记录在装运前完成；你需要在申请中列明每件遗存的这两项理由。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Dr. Sera Vale：我会逐件说明脆弱性和信息价值。如果有已脱离的碎片，我想将它们与原位遗存分开申请和记录。你能说明紧急审查时，现场封存和获准离场这两类安排各需要什么确认吗？未获许可前，我不会安排遗存离场。
+  Niko Ader：现场封存需要位置照片和编号标签；获准离场需要通过紧急审查、装箱后登记照片，并附上审查批准记录。脱离碎片可以单独列明，但也要说明它们与原位的空间关系。
+  可见表达：{"facial_expression": "专注", "gaze": "直视对方", "speech_style": "平稳、条理清晰", "prosody": "语调平稳，列举时略有停顿", "behavioral_cues": ["身体微微前倾", "手指轻点桌面强调要点"]}
+
+
+**题目：从t1到t2，Niko Ader设定并坚持离场条件的意愿，以及要求核验依据和记录的意愿，分别如何变化？**
+
+- **A.** 坚持离场条件上升；要求核验记录上升
+- **B.** 坚持离场条件下降；要求核验记录基本不变
+- **C.** 坚持离场条件基本不变；要求核验记录下降
+- **D.** 坚持离场条件基本不变；要求核验记录基本不变
+
+**作者参考答案：D（待审）**
+
+Niko在t1已把审查、理由及装运前记录设为条件，t2继续要求审查批准和分类记录，连脱离碎片也须说明空间关系。这是两项意愿持续明确的正面依据。细化执行要求不必然表示意愿增强，允许单列碎片也不是放宽离场门槛；这里只判断意愿而非执行结果。
+
+证据：t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.boundary_assertion", "behavioral_disposition.evidence_seeking"], "time_scope": "t1至t2，两项均比较该区间", "state_owner": "GPT50_033_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"A": "unsupported_inference", "B": "unsupported_inference", "C": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.boundary_assertion": "increase", "behavioral_disposition.evidence_seeking": "increase"}, "B": {"behavioral_disposition.boundary_assertion": "decrease", "behavioral_disposition.evidence_seeking": "similar"}, "C": {"behavioral_disposition.boundary_assertion": "similar", "behavioral_disposition.evidence_seeking": "decrease"}, "D": {"behavioral_disposition.boundary_assertion": "similar", "behavioral_disposition.evidence_seeking": "similar"}}
+可接受答案：D
+审核备注：共同不变依据是条件与核验持续适用；需审核新增记录细节是否被误读为意愿升级。
+分支验证：not_required
+
 ## SFG50-034-T1-01 · T1 / current_intensity
 
 来源：GPT50_034；轨迹：46f45326b72848159572580543bb2379；状态持有者：Eren Savai；交互对方：Tala Merrow。关系判断由状态持有者指向交互对方。
@@ -8598,6 +10053,187 @@ Mara在t1已接受保存原话、核对数据和结果通知，t2继续核对并
 审核备注：私有参考中合作小幅上升；公开两轮均积极协调，粗粒度以接近为佳，需审核上升竞争性。
 分支验证：not_required
 
+## SFG50-035-T3-01 · T3 / immediate_effect
+
+来源：GPT50_035；轨迹：157d57851880411fafab81b44622cc2c；状态持有者：Mara Vey；交互对方：Rafi Dalen。关系判断由状态持有者指向交互对方。
+
+背景：At 04:52, a fleet supervisor requests acknowledgment of a no-fault-found release before the 05:25 sector, while a safety representative requests a 75-minute hold. The representative knows two crews independently observed the same warm-climb pulse and can identify recorder data.
+角色目标：Secure a bounded verification process before passenger release, with crew observations preserved in their own words
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Six weeks earlier, a sister aircraft was grounded over the same faint tug, no defect was found, and the reporting pilot was mocked while engineering received the visible credit.；The resulting no-fault-found form recorded tests and parts but omitted symptom wording and witness names, making later linkage and recognition vulnerable to omission.；Two days earlier, the current aircraft's first caution led to connector reseating and a normal ground test, but the stripped-down record did not connect it to the earlier report.
+
+history：
+
+- [t1] Rafi Dalen：我不会把“未发现故障”当成“症状不存在”来确认。请用75分钟保留两组机组关于暖爬升脉冲的原话并核对记录器数据，完成前不作旅客放行背书。
+  Mara Vey：收到。我会在记录中完整保留两组机组的原话，同时启动记录器数据核对，75分钟内完成后再通知你。在此之前不会对旅客放行作背书。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Rafi Dalen：好，75分钟核对和暂停放行的边界按这个执行。即使记录器没有捕获对应信号，也只能说明当前数据未显示该脉冲，不能推翻两组机组的原话；后续评估要把两类信息放在一起看。
+  Mara Vey：明白，综合评估时会把记录器数据和机组陈述并列考虑。现在开始核对，完成后直接通知你结果。
+  可见表达：{"facial_expression": "neutral, task-focused", "gaze": "steady, brief downward glance toward workstation", "speech_style": "crisp, businesslike", "prosody": "even tempo, slightly clipped on final clause", "behavioral_cues": ["slight nod on first clause", "already turning toward equipment"]}
+
+- 候选行动 action_1：我会把两组机组的原话、见证人和记录器核对范围整理成一页，与你在这75分钟内逐项对照；结果出来前，请把暂缓放行和待复核项目写入交接。这样会占用我当前时间，但能减少症状再次被简化的风险。
+- 候选行动 action_2：我先不另起完整报告，留在设备旁协助核对，并在75分钟节点向你复述两组机组的原话；请暂保暂缓放行的边界，结果出来后我们再补正式记录。这样不拖慢当前核对，但记录细节会晚些固定。
+
+**题目：相较于t2，若Rafi Dalen执行action_1，Mara Vey在下一次回应中的协作意愿最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+
+**作者参考答案：A（待审）**
+
+Mara已同意核对并转向设备，说明双方有可行的协作基础。action_1由Rafi承担材料整理，并提出共同逐项核对，使原先通知结果的安排增加具体分工，因此更支持协作意愿上升，而非停留原状或下降。此处预测接受协作的倾向，不把整理承诺当作已经完成。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness"], "time_scope": "以t2为基线，预测执行action_1后的下一次环境回应", "state_owner": "GPT50_035_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "history_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness": "increase"}, "B": {"behavioral_disposition.cooperation_readiness": "similar"}, "C": {"behavioral_disposition.cooperation_readiness": "decrease"}}
+可接受答案：A
+审核备注：t2已有较高协作基础；区分点是新增共同核对与任务分担，而非单纯重复同意。
+分支验证：validated
+
+## SFG50-035-T3-02 · T3 / delayed_effect
+
+来源：GPT50_035；轨迹：157d57851880411fafab81b44622cc2c；状态持有者：Mara Vey；交互对方：Rafi Dalen。关系判断由状态持有者指向交互对方。
+
+背景：At 04:52, a fleet supervisor requests acknowledgment of a no-fault-found release before the 05:25 sector, while a safety representative requests a 75-minute hold. The representative knows two crews independently observed the same warm-climb pulse and can identify recorder data.
+角色目标：Secure a bounded verification process before passenger release, with crew observations preserved in their own words
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Six weeks earlier, a sister aircraft was grounded over the same faint tug, no defect was found, and the reporting pilot was mocked while engineering received the visible credit.；The resulting no-fault-found form recorded tests and parts but omitted symptom wording and witness names, making later linkage and recognition vulnerable to omission.；Two days earlier, the current aircraft's first caution led to connector reseating and a normal ground test, but the stripped-down record did not connect it to the earlier report.
+
+history：
+
+- [t1] Rafi Dalen：我不会把“未发现故障”当成“症状不存在”来确认。请用75分钟保留两组机组关于暖爬升脉冲的原话并核对记录器数据，完成前不作旅客放行背书。
+  Mara Vey：收到。我会在记录中完整保留两组机组的原话，同时启动记录器数据核对，75分钟内完成后再通知你。在此之前不会对旅客放行作背书。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Rafi Dalen：好，75分钟核对和暂停放行的边界按这个执行。即使记录器没有捕获对应信号，也只能说明当前数据未显示该脉冲，不能推翻两组机组的原话；后续评估要把两类信息放在一起看。
+  Mara Vey：明白，综合评估时会把记录器数据和机组陈述并列考虑。现在开始核对，完成后直接通知你结果。
+  可见表达：{"facial_expression": "neutral, task-focused", "gaze": "steady, brief downward glance toward workstation", "speech_style": "crisp, businesslike", "prosody": "even tempo, slightly clipped on final clause", "behavioral_cues": ["slight nod on first clause", "already turning toward equipment"]}
+
+- 候选行动 action_1：我会把两组机组的原话、见证人和记录器核对范围整理成一页，与你在这75分钟内逐项对照；结果出来前，请把暂缓放行和待复核项目写入交接。这样会占用我当前时间，但能减少症状再次被简化的风险。
+- 候选行动 action_2：我先不另起完整报告，留在设备旁协助核对，并在75分钟节点向你复述两组机组的原话；请暂保暂缓放行的边界，结果出来后我们再补正式记录。这样不拖慢当前核对，但记录细节会晚些固定。
+
+**题目：若Rafi Dalen执行action_1，相较于t2，到含即时回应在内的第5轮环境回应末，Mara Vey面临的“症状来源或待复核事项在交接中遗漏，损害维护追溯与放行问责”的制度性风险最可能如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 上升
+
+**作者参考答案：B（待审）**
+
+历史中简化记录已造成症状和来源无法衔接，Mara又已承诺保留原话并开始核对。action_1增加见证人、核对范围及交接待办，直接封堵既有遗漏路径，故预期风险下降比不变更有依据。下降依赖计划推进，不代表交接已经完成，更不证明故障已排除。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "症状来源或待复核事项在交接中遗漏，损害维护追溯与放行问责", "target_state_ids": ["consequence_risk.institutional_harm_risk"], "time_scope": "从t2至action_1开始后的第5轮环境回应末，含即时一轮", "state_owner": "GPT50_035_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.institutional_harm_risk": "similar"}, "B": {"consequence_risk.institutional_harm_risk": "decrease"}, "C": {"consequence_risk.institutional_harm_risk": "increase"}}
+可接受答案：B
+审核备注：仅评估交接追溯与问责风险；第五轮末不必等于75分钟结束，不应引申为技术核查完成。
+分支验证：validated
+
+## SFG50-035-T3-03 · T3 / action_comparison
+
+来源：GPT50_035；轨迹：157d57851880411fafab81b44622cc2c；状态持有者：Mara Vey；交互对方：Rafi Dalen。关系判断由状态持有者指向交互对方。
+
+背景：At 04:52, a fleet supervisor requests acknowledgment of a no-fault-found release before the 05:25 sector, while a safety representative requests a 75-minute hold. The representative knows two crews independently observed the same warm-climb pulse and can identify recorder data.
+角色目标：Secure a bounded verification process before passenger release, with crew observations preserved in their own words
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Six weeks earlier, a sister aircraft was grounded over the same faint tug, no defect was found, and the reporting pilot was mocked while engineering received the visible credit.；The resulting no-fault-found form recorded tests and parts but omitted symptom wording and witness names, making later linkage and recognition vulnerable to omission.；Two days earlier, the current aircraft's first caution led to connector reseating and a normal ground test, but the stripped-down record did not connect it to the earlier report.
+
+history：
+
+- [t1] Rafi Dalen：我不会把“未发现故障”当成“症状不存在”来确认。请用75分钟保留两组机组关于暖爬升脉冲的原话并核对记录器数据，完成前不作旅客放行背书。
+  Mara Vey：收到。我会在记录中完整保留两组机组的原话，同时启动记录器数据核对，75分钟内完成后再通知你。在此之前不会对旅客放行作背书。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Rafi Dalen：好，75分钟核对和暂停放行的边界按这个执行。即使记录器没有捕获对应信号，也只能说明当前数据未显示该脉冲，不能推翻两组机组的原话；后续评估要把两类信息放在一起看。
+  Mara Vey：明白，综合评估时会把记录器数据和机组陈述并列考虑。现在开始核对，完成后直接通知你结果。
+  可见表达：{"facial_expression": "neutral, task-focused", "gaze": "steady, brief downward glance toward workstation", "speech_style": "crisp, businesslike", "prosody": "even tempo, slightly clipped on final clause", "behavioral_cues": ["slight nod on first clause", "already turning toward equipment"]}
+
+- 候选行动 action_1：我会把两组机组的原话、见证人和记录器核对范围整理成一页，与你在这75分钟内逐项对照；结果出来前，请把暂缓放行和待复核项目写入交接。这样会占用我当前时间，但能减少症状再次被简化的风险。
+- 候选行动 action_2：我先不另起完整报告，留在设备旁协助核对，并在75分钟节点向你复述两组机组的原话；请暂保暂缓放行的边界，结果出来后我们再补正式记录。这样不拖慢当前核对，但记录细节会晚些固定。
+
+**题目：以t2为起点，在执行候选行动后的下一次回应中，Mara Vey认为Rafi Dalen正当履行安全代表职责的程度，哪一种行动下最可能更高？A指action_1，B指action_2。**
+
+- **A.** B较高
+- **B.** A较高
+- **C.** 接近
+
+**作者参考答案：C（待审）**
+
+Mara此前接受了Rafi提出的核对与暂停背书边界。两项行动都在该边界内提供协助、保留机组陈述并与维护主管协调，正面支持职责行使同样合宜。记录先后虽不同，却不直接构成越权或程序滥用，不能据此断言一方的角色正当性更高。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.role_legitimacy"], "time_scope": "比较两种行动各自执行后的下一次环境回应", "state_owner": "GPT50_035_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "state_dimension_confusion"}
+分维映射：{"A": {"relationship.role_legitimacy": "higher_in_b"}, "B": {"relationship.role_legitimacy": "higher_in_a"}, "C": {"relationship.role_legitimacy": "similar"}}
+可接受答案：C
+审核备注：接近依据是两方案共同遵守已接受的职责边界；记录及时性不同不等同于角色正当性不同。
+分支验证：validated
+
+## SFG50-035-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_035；轨迹：157d57851880411fafab81b44622cc2c；状态持有者：Mara Vey；交互对方：Rafi Dalen。关系判断由状态持有者指向交互对方。
+
+背景：At 04:52, a fleet supervisor requests acknowledgment of a no-fault-found release before the 05:25 sector, while a safety representative requests a 75-minute hold. The representative knows two crews independently observed the same warm-climb pulse and can identify recorder data.
+角色目标：Secure a bounded verification process before passenger release, with crew observations preserved in their own words
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Six weeks earlier, a sister aircraft was grounded over the same faint tug, no defect was found, and the reporting pilot was mocked while engineering received the visible credit.；The resulting no-fault-found form recorded tests and parts but omitted symptom wording and witness names, making later linkage and recognition vulnerable to omission.；Two days earlier, the current aircraft's first caution led to connector reseating and a normal ground test, but the stripped-down record did not connect it to the earlier report.
+
+history：
+
+- [t1] Rafi Dalen：我不会把“未发现故障”当成“症状不存在”来确认。请用75分钟保留两组机组关于暖爬升脉冲的原话并核对记录器数据，完成前不作旅客放行背书。
+  Mara Vey：收到。我会在记录中完整保留两组机组的原话，同时启动记录器数据核对，75分钟内完成后再通知你。在此之前不会对旅客放行作背书。
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Rafi Dalen：好，75分钟核对和暂停放行的边界按这个执行。即使记录器没有捕获对应信号，也只能说明当前数据未显示该脉冲，不能推翻两组机组的原话；后续评估要把两类信息放在一起看。
+  Mara Vey：明白，综合评估时会把记录器数据和机组陈述并列考虑。现在开始核对，完成后直接通知你结果。
+  可见表达：{"facial_expression": "neutral, task-focused", "gaze": "steady, brief downward glance toward workstation", "speech_style": "crisp, businesslike", "prosody": "even tempo, slightly clipped on final clause", "behavioral_cues": ["slight nod on first clause", "already turning toward equipment"]}
+
+- 候选行动 action_1：我会把两组机组的原话、见证人和记录器核对范围整理成一页，与你在这75分钟内逐项对照；结果出来前，请把暂缓放行和待复核项目写入交接。这样会占用我当前时间，但能减少症状再次被简化的风险。
+- 候选行动 action_2：我先不另起完整报告，留在设备旁协助核对，并在75分钟节点向你复述两组机组的原话；请暂保暂缓放行的边界，结果出来后我们再补正式记录。这样不拖慢当前核对，但记录细节会晚些固定。
+
+**题目：若Rafi Dalen执行action_2，以t2为共同基线，Mara Vey坚持“完成核对前不为旅客放行背书”这一既定路线的意愿，在下一次回应及第5轮环境回应末最可能呈现哪组变化？**
+
+- **A.** 即时下降，延迟下降
+- **B.** 即时上升，延迟下降
+- **C.** 即时上升，延迟上升
+- **D.** 即时基本不变，延迟基本不变
+
+**作者参考答案：D（待审）**
+
+Mara在t1明确不为放行背书，t2已开始核对，表明既定路线已有坚定承诺和行动支撑。action_2继续保留同一边界并提供现场协助，支持两个时点均维持决心。协助增加不必然使决心再升，正式记录延后也不等于放弃核对或允许放行。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.resolve"], "time_scope": "即时为action_2后的下一次回应；延迟为含即时一轮的第5轮回应末，均与t2比较", "state_owner": "GPT50_035_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "goal_constraint_ignored", "B": "unsupported_inference", "C": "state_dimension_confusion"}
+分维映射：{"A": {"behavioral_disposition.resolve@immediate": "decrease", "behavioral_disposition.resolve@delayed": "decrease"}, "B": {"behavioral_disposition.resolve@immediate": "increase", "behavioral_disposition.resolve@delayed": "decrease"}, "C": {"behavioral_disposition.resolve@immediate": "increase", "behavioral_disposition.resolve@delayed": "increase"}, "D": {"behavioral_disposition.resolve@immediate": "similar", "behavioral_disposition.resolve@delayed": "similar"}}
+可接受答案：D
+审核备注：共同不变有既有坚定承诺和行动延续作依据；所问是坚持路线，不是记录完整性或协作意愿。
+分支验证：validated
+
 ## SFG50-036-T1-01 · T1 / current_intensity
 
 来源：GPT50_036；轨迹：60e08a9ee918456ba45815b40f2a2068；状态持有者：Dr. Ivo Serrat；交互对方：Tamsin Rusk。关系判断由状态持有者指向交互对方。
@@ -8775,6 +10411,190 @@ Ivo在t1限定技术质量签字，要求查看描述并标出推断；t2仍只�
 可接受答案：C
 审核备注：基本不变有重复保留的条件作依据；核验从提出转为执行，不据此断言强度上升。
 分支验证：not_required
+
+## SFG50-036-T3-01 · T3 / immediate_effect
+
+来源：GPT50_036；轨迹：60e08a9ee918456ba45815b40f2a2068；状态持有者：Dr. Ivo Serrat；交互对方：Tamsin Rusk。关系判断由状态持有者指向交互对方。
+
+背景：At 4:45 p.m., a startup founder requests scientist approval of a broad patent filing before a 6 p.m. cutoff while university ownership review and assay attribution remain unresolved. The founder knows the investor requires evidence of broad filing by six.
+角色目标：Secure Ivo’s technical quality sign-off and authorization for a broad patent filing before the 6 p.m. cutoff, satisfying the investor’s closing condition and protecting Quenlet’s platform without derailing the company.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The assay was developed during the scientist's university appointment with resources associated with both the university and the early startup, leaving ownership unresolved in the documentary record.；During an earlier emergency submission, the scientist accepted delayed recognition so the filing could proceed, but the promised attribution reconciliation never became a signed record.；A former technician worked on the assay, and the laboratory notebooks and a later company summary describe that role inconsistently.；Three weeks ago, the university research office opened an ownership review and scheduled an examination of original laboratory notebooks and dated project files.
+
+history：
+
+- [t1] Tamsin Rusk：Ivo，六点前我需要你对 assay 的技术质量和宽范围权利要求签字确认；这只覆盖技术，不等于放弃你或大学的归属、署名主张。归属与 attribution 我会让外部律师作为未决事项保留，不把递交说成已解决它们。
+  Dr. Ivo Serrat：技术质量可以签。宽范围权利要求我得看具体描述——如果超出已验证范围，我会标注哪部分是推断。你说的递交是provisional还是正式申请？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Tamsin Rusk：是 provisional，不是正式申请；六点前要锁定的是披露范围和优先权，归属与 attribution 仍按未决事项处理。你标出的超出已验证范围部分，我会作为推断保留，不让你的签字变成对它的技术背书。
+  Dr. Ivo Serrat：好，我现在看描述；标注完成后发你确认，确认无误我签技术质量。
+  可见表达：{"facial_expression": "neutral, composed", "gaze": "direct", "speech_style": "concise, task-focused", "prosody": "steady, businesslike", "behavioral_cues": ["slight nod", "turning toward work materials"]}
+
+- 候选行动 action_1：好，按这个分工走：你的技术质量签字只覆盖你确认的范围，标注为推断的部分以及归属、署名问题继续单独保留。你回传后，我依据最终版本决定是否在六点前递交，商业取舍由我承担。
+- 候选行动 action_2：那就不把宽范围版本交给你背书：请你在六点前只确认已验证的技术描述，我会请外部律师把provisional限在该范围，并把超出部分、归属和署名继续列为未决。这样可能失去投资人期待的广度，但不牺牲技术与权利边界。
+
+**题目：相对t2，若Tamsin Rusk执行action_1，在Dr. Ivo Serrat的下一次回应时，他对Tamsin是否恰当行使创始人职责的判断最可能如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：B（待审）**
+
+t1至t2中，Ivo已接受限定技术签字的程序。action_1进一步明确由Tamsin依据回传版本决策并承担商业取舍，新增问责分工，支持角色正当性判断上升，而非仅重复原话。此处预测对职责行使的认可，不代表归属问题已解决。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.role_legitimacy"], "time_scope": "从t2至执行action_1后的下一次环境回应", "state_owner": "GPT50_036_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "history_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"relationship.role_legitimacy": "cannot_determine"}, "B": {"relationship.role_legitimacy": "increase"}, "C": {"relationship.role_legitimacy": "similar"}, "D": {"relationship.role_legitimacy": "decrease"}}
+可接受答案：B
+审核备注：基本不变是主要竞争项；区分点是新增决策责任与商业责任，而非创始人头衔。
+分支验证：validated
+
+## SFG50-036-T3-02 · T3 / delayed_effect
+
+来源：GPT50_036；轨迹：60e08a9ee918456ba45815b40f2a2068；状态持有者：Dr. Ivo Serrat；交互对方：Tamsin Rusk。关系判断由状态持有者指向交互对方。
+
+背景：At 4:45 p.m., a startup founder requests scientist approval of a broad patent filing before a 6 p.m. cutoff while university ownership review and assay attribution remain unresolved. The founder knows the investor requires evidence of broad filing by six.
+角色目标：Secure Ivo’s technical quality sign-off and authorization for a broad patent filing before the 6 p.m. cutoff, satisfying the investor’s closing condition and protecting Quenlet’s platform without derailing the company.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The assay was developed during the scientist's university appointment with resources associated with both the university and the early startup, leaving ownership unresolved in the documentary record.；During an earlier emergency submission, the scientist accepted delayed recognition so the filing could proceed, but the promised attribution reconciliation never became a signed record.；A former technician worked on the assay, and the laboratory notebooks and a later company summary describe that role inconsistently.；Three weeks ago, the university research office opened an ownership review and scheduled an examination of original laboratory notebooks and dated project files.
+
+history：
+
+- [t1] Tamsin Rusk：Ivo，六点前我需要你对 assay 的技术质量和宽范围权利要求签字确认；这只覆盖技术，不等于放弃你或大学的归属、署名主张。归属与 attribution 我会让外部律师作为未决事项保留，不把递交说成已解决它们。
+  Dr. Ivo Serrat：技术质量可以签。宽范围权利要求我得看具体描述——如果超出已验证范围，我会标注哪部分是推断。你说的递交是provisional还是正式申请？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Tamsin Rusk：是 provisional，不是正式申请；六点前要锁定的是披露范围和优先权，归属与 attribution 仍按未决事项处理。你标出的超出已验证范围部分，我会作为推断保留，不让你的签字变成对它的技术背书。
+  Dr. Ivo Serrat：好，我现在看描述；标注完成后发你确认，确认无误我签技术质量。
+  可见表达：{"facial_expression": "neutral, composed", "gaze": "direct", "speech_style": "concise, task-focused", "prosody": "steady, businesslike", "behavioral_cues": ["slight nod", "turning toward work materials"]}
+
+- 候选行动 action_1：好，按这个分工走：你的技术质量签字只覆盖你确认的范围，标注为推断的部分以及归属、署名问题继续单独保留。你回传后，我依据最终版本决定是否在六点前递交，商业取舍由我承担。
+- 候选行动 action_2：那就不把宽范围版本交给你背书：请你在六点前只确认已验证的技术描述，我会请外部律师把provisional限在该范围，并把超出部分、归属和署名继续列为未决。这样可能失去投资人期待的广度，但不牺牲技术与权利边界。
+
+**题目：若Tamsin Rusk执行action_2，相对t2，到含即时回应在内的第5轮回应结束时，Dr. Ivo Serrat在本次递交中被迫为超出已验证范围的内容背书、失去实质签字选择权的风险最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+- **D.** 证据不足
+
+**作者参考答案：C（待审）**
+
+t2只排除将推断算作技术背书，action_2还提出让律师缩限实际递交范围，并明确接受失去投资人期待广度的代价，减少再次扩大签字要求的压力。因此预期风险下降比不变更有依据；历史失信仍限制保障力度，不能当作已履约或风险归零。
+
+证据：context, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "本次递交中Ivo被迫为超出已验证范围的内容背书，失去实质签字选择权", "target_state_ids": ["consequence_risk.autonomy_loss_risk"], "time_scope": "从t2至执行action_2起第5轮环境回应结束，含即时一轮", "state_owner": "GPT50_036_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "history_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.autonomy_loss_risk": "increase"}, "B": {"consequence_risk.autonomy_loss_risk": "similar"}, "C": {"consequence_risk.autonomy_loss_risk": "decrease"}, "D": {"consequence_risk.autonomy_loss_risk": "cannot_determine"}}
+可接受答案：C
+审核备注：只判断签字选择权风险，不把融资受损或归属审查风险混入；缩限计划尚待执行。
+分支验证：validated
+
+## SFG50-036-T3-03 · T3 / action_comparison
+
+来源：GPT50_036；轨迹：60e08a9ee918456ba45815b40f2a2068；状态持有者：Dr. Ivo Serrat；交互对方：Tamsin Rusk。关系判断由状态持有者指向交互对方。
+
+背景：At 4:45 p.m., a startup founder requests scientist approval of a broad patent filing before a 6 p.m. cutoff while university ownership review and assay attribution remain unresolved. The founder knows the investor requires evidence of broad filing by six.
+角色目标：Secure Ivo’s technical quality sign-off and authorization for a broad patent filing before the 6 p.m. cutoff, satisfying the investor’s closing condition and protecting Quenlet’s platform without derailing the company.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The assay was developed during the scientist's university appointment with resources associated with both the university and the early startup, leaving ownership unresolved in the documentary record.；During an earlier emergency submission, the scientist accepted delayed recognition so the filing could proceed, but the promised attribution reconciliation never became a signed record.；A former technician worked on the assay, and the laboratory notebooks and a later company summary describe that role inconsistently.；Three weeks ago, the university research office opened an ownership review and scheduled an examination of original laboratory notebooks and dated project files.
+
+history：
+
+- [t1] Tamsin Rusk：Ivo，六点前我需要你对 assay 的技术质量和宽范围权利要求签字确认；这只覆盖技术，不等于放弃你或大学的归属、署名主张。归属与 attribution 我会让外部律师作为未决事项保留，不把递交说成已解决它们。
+  Dr. Ivo Serrat：技术质量可以签。宽范围权利要求我得看具体描述——如果超出已验证范围，我会标注哪部分是推断。你说的递交是provisional还是正式申请？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Tamsin Rusk：是 provisional，不是正式申请；六点前要锁定的是披露范围和优先权，归属与 attribution 仍按未决事项处理。你标出的超出已验证范围部分，我会作为推断保留，不让你的签字变成对它的技术背书。
+  Dr. Ivo Serrat：好，我现在看描述；标注完成后发你确认，确认无误我签技术质量。
+  可见表达：{"facial_expression": "neutral, composed", "gaze": "direct", "speech_style": "concise, task-focused", "prosody": "steady, businesslike", "behavioral_cues": ["slight nod", "turning toward work materials"]}
+
+- 候选行动 action_1：好，按这个分工走：你的技术质量签字只覆盖你确认的范围，标注为推断的部分以及归属、署名问题继续单独保留。你回传后，我依据最终版本决定是否在六点前递交，商业取舍由我承担。
+- 候选行动 action_2：那就不把宽范围版本交给你背书：请你在六点前只确认已验证的技术描述，我会请外部律师把provisional限在该范围，并把超出部分、归属和署名继续列为未决。这样可能失去投资人期待的广度，但不牺牲技术与权利边界。
+
+**题目：以t2为共同起点，比较执行action_1（A情境）或action_2（B情境）后的下一次回应：Dr. Ivo Serrat觉得Tamsin Rusk实质回应了自己关切的程度，哪种情境最可能较高？**
+
+- **A.** 证据不足
+- **B.** A情境较高
+- **C.** 两种情境接近
+- **D.** B情境较高
+
+**作者参考答案：D（待审）**
+
+Ivo在t1要求核查宽范围描述，t2同意的是受限技术签字。两行动都保护签字边界，但action_2进一步让实际递交限于已验证范围，并承认商业代价，比action_1保留最终取舍更直接回应关切。此比较不等于律师已落实范围或署名已获解决。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "比较两项候选行动各自执行后的下一次环境回应", "state_owner": "GPT50_036_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "goal_constraint_ignored", "C": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "cannot_determine"}, "B": {"relationship.perceived_responsiveness": "higher_in_a"}, "C": {"relationship.perceived_responsiveness": "similar"}, "D": {"relationship.perceived_responsiveness": "higher_in_b"}}
+可接受答案：D
+审核备注：比较的是Ivo对Tamsin回应程度的判断；两项均有回应，但对实际递交范围的承诺不同。
+分支验证：validated
+
+## SFG50-036-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_036；轨迹：60e08a9ee918456ba45815b40f2a2068；状态持有者：Dr. Ivo Serrat；交互对方：Tamsin Rusk。关系判断由状态持有者指向交互对方。
+
+背景：At 4:45 p.m., a startup founder requests scientist approval of a broad patent filing before a 6 p.m. cutoff while university ownership review and assay attribution remain unresolved. The founder knows the investor requires evidence of broad filing by six.
+角色目标：Secure Ivo’s technical quality sign-off and authorization for a broad patent filing before the 6 p.m. cutoff, satisfying the investor’s closing condition and protecting Quenlet’s platform without derailing the company.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The assay was developed during the scientist's university appointment with resources associated with both the university and the early startup, leaving ownership unresolved in the documentary record.；During an earlier emergency submission, the scientist accepted delayed recognition so the filing could proceed, but the promised attribution reconciliation never became a signed record.；A former technician worked on the assay, and the laboratory notebooks and a later company summary describe that role inconsistently.；Three weeks ago, the university research office opened an ownership review and scheduled an examination of original laboratory notebooks and dated project files.
+
+history：
+
+- [t1] Tamsin Rusk：Ivo，六点前我需要你对 assay 的技术质量和宽范围权利要求签字确认；这只覆盖技术，不等于放弃你或大学的归属、署名主张。归属与 attribution 我会让外部律师作为未决事项保留，不把递交说成已解决它们。
+  Dr. Ivo Serrat：技术质量可以签。宽范围权利要求我得看具体描述——如果超出已验证范围，我会标注哪部分是推断。你说的递交是provisional还是正式申请？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Tamsin Rusk：是 provisional，不是正式申请；六点前要锁定的是披露范围和优先权，归属与 attribution 仍按未决事项处理。你标出的超出已验证范围部分，我会作为推断保留，不让你的签字变成对它的技术背书。
+  Dr. Ivo Serrat：好，我现在看描述；标注完成后发你确认，确认无误我签技术质量。
+  可见表达：{"facial_expression": "neutral, composed", "gaze": "direct", "speech_style": "concise, task-focused", "prosody": "steady, businesslike", "behavioral_cues": ["slight nod", "turning toward work materials"]}
+
+- 候选行动 action_1：好，按这个分工走：你的技术质量签字只覆盖你确认的范围，标注为推断的部分以及归属、署名问题继续单独保留。你回传后，我依据最终版本决定是否在六点前递交，商业取舍由我承担。
+- 候选行动 action_2：那就不把宽范围版本交给你背书：请你在六点前只确认已验证的技术描述，我会请外部律师把provisional限在该范围，并把超出部分、归属和署名继续列为未决。这样可能失去投资人期待的广度，但不牺牲技术与权利边界。
+
+**题目：若Tamsin Rusk执行action_2，以t2为基线，Dr. Ivo Serrat坚持技术签字范围限制的意愿，在下一次回应时与含即时回应在内的第5轮回应结束时，最可能分别如何变化？**
+
+- **A.** 即时基本不变，延迟基本不变
+- **B.** 即时下降，延迟下降
+- **C.** 即时基本不变，延迟下降
+- **D.** 即时上升，延迟上升
+
+**作者参考答案：A（待审）**
+
+Ivo在t1要求标出推断，t2仍以确认无误后只签技术质量为条件，显示跨轮持续的同一边界。action_2将该边界纳入任务且保留未决事项，支持两个时点继续维持，而非因合作就放宽限制。既往署名落空也支持谨慎延续，但不保证未来原话重复。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.boundary_assertion"], "time_scope": "分别比较t2至下一次环境回应、t2至候选行动起第5轮环境回应结束", "state_owner": "GPT50_036_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "state_dimension_confusion", "C": "unsupported_inference", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.boundary_assertion@immediate": "similar", "behavioral_disposition.boundary_assertion@delayed": "similar"}, "B": {"behavioral_disposition.boundary_assertion@immediate": "decrease", "behavioral_disposition.boundary_assertion@delayed": "decrease"}, "C": {"behavioral_disposition.boundary_assertion@immediate": "similar", "behavioral_disposition.boundary_assertion@delayed": "decrease"}, "D": {"behavioral_disposition.boundary_assertion@immediate": "increase", "behavioral_disposition.boundary_assertion@delayed": "increase"}}
+可接受答案：A
+审核备注：均不变依据是已连续维持且被行动保留的具体签字条件，不是沉默或没有新冲突。
+分支验证：validated
 
 ## SFG50-037-T1-01 · T1 / current_intensity
 
@@ -8954,6 +10774,190 @@ Mara两轮都坚持等家庭答复再推进，暂停措施也从t1延续至t2，
 审核备注：私有机构风险下降，公开仅支持暂停持续，故按可见证据判接近；风险限于未经授权公开，不涵盖捐赠流失。
 分支验证：not_required
 
+## SFG50-037-T3-01 · T3 / immediate_effect
+
+来源：GPT50_037；轨迹：aa8e3ac16fd848a58d5298fceeb66bbc；状态持有者：Mara Quill；交互对方：Elias Nouri。关系判断由状态持有者指向交互对方。
+
+背景：At a donor-gift deadline, a congregation chair requests a volunteer sponsor's authorization of a refugee family's names, images, and displacement story for a donor video and profile. The sponsor knows the family signed believing this was a private congregational thank-you, not public publicity.
+角色目标：Ensure the Veyra family understands and freely approves the audience, permanence, and identifying details before their story is made public.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous fundraiser converted a family's permission to thank the congregation into livestream and donor publicity, and the material remained available after the family sought removal.；After the family arrived, the sponsor arranged temporary lodging and an apartment deposit, deepening the family's reliance on help with unfamiliar forms and explanations.
+
+history：
+
+- [t1] Elias Nouri：Mara，我不能代他们授权公开；他们签字时以为只是向会众私下致谢。我想先暂停使用他们的资料，把谁能看到、公开后可能无法收回、哪些身份细节会出现讲清楚，再由他们自由决定。
+  Mara Quill：好，那我们暂停。你什么时候能和他们说清楚范围、永久性和身份细节，再告诉我结果？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Elias Nouri：The pause remains in place. I’ll raise it at our next conversation without setting a deadline or turning their reliance on our help into pressure, then report approval, refusal, or uncertainty as it is.
+  Mara Quill：Thank you. When you have their answer, let me know and we'll take the next step from there.
+  可见表达：{"facial_expression": "neutral, slightly relieved", "gaze": "direct but softening", "speech_style": "brief and even", "prosody": "steady, no urgency", "behavioral_cues": ["a small nod", "settling back slightly"]}
+
+- 候选行动 action_1：That’s fair. Whatever they decide, the next step has to match the audience, permanence, and identifying details they consent to—not the private thank-you they originally agreed to.
+- 候选行动 action_2：Mara, I suggest leaving the Veyra family out of this donor video and profile so production does not wait on their answer. I can help draft a program introduction without identifying any household for your review. That takes time and may be less compelling. The family can consider its choice at its own pace; even a later yes need not make this deadline.
+
+**题目：相对t2，若Elias Nouri执行action_2，在下一次环境回应时，Mara Quill协调双方可行下一步的意愿最可能怎样变化？**
+
+- **A.** 下降
+- **B.** 证据不足
+- **C.** 上升
+- **D.** 基本不变
+
+**作者参考答案：C（待审）**
+
+Mara在t1同意暂停，t2愿意等结果再协调，已有合作基础。action_2新增不依赖家庭答复的制作路径，并由Elias分担起草，支持合作意愿上升，而非仅维持等待。方案费时且可能较弱，限制的是收益把握，不等于她必然拒绝协调。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness"], "time_scope": "从t2至执行action_2后的下一次环境回应", "state_owner": "GPT50_037_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness": "decrease"}, "B": {"behavioral_disposition.cooperation_readiness": "cannot_determine"}, "C": {"behavioral_disposition.cooperation_readiness": "increase"}, "D": {"behavioral_disposition.cooperation_readiness": "similar"}}
+可接受答案：C
+审核备注：问Mara的协调意愿，不把Elias愿意起草直接算作她已合作；答案依赖既往接受协调与新分工机制。
+分支验证：validated
+
+## SFG50-037-T3-02 · T3 / delayed_effect
+
+来源：GPT50_037；轨迹：aa8e3ac16fd848a58d5298fceeb66bbc；状态持有者：Mara Quill；交互对方：Elias Nouri。关系判断由状态持有者指向交互对方。
+
+背景：At a donor-gift deadline, a congregation chair requests a volunteer sponsor's authorization of a refugee family's names, images, and displacement story for a donor video and profile. The sponsor knows the family signed believing this was a private congregational thank-you, not public publicity.
+角色目标：Ensure the Veyra family understands and freely approves the audience, permanence, and identifying details before their story is made public.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous fundraiser converted a family's permission to thank the congregation into livestream and donor publicity, and the material remained available after the family sought removal.；After the family arrived, the sponsor arranged temporary lodging and an apartment deposit, deepening the family's reliance on help with unfamiliar forms and explanations.
+
+history：
+
+- [t1] Elias Nouri：Mara，我不能代他们授权公开；他们签字时以为只是向会众私下致谢。我想先暂停使用他们的资料，把谁能看到、公开后可能无法收回、哪些身份细节会出现讲清楚，再由他们自由决定。
+  Mara Quill：好，那我们暂停。你什么时候能和他们说清楚范围、永久性和身份细节，再告诉我结果？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Elias Nouri：The pause remains in place. I’ll raise it at our next conversation without setting a deadline or turning their reliance on our help into pressure, then report approval, refusal, or uncertainty as it is.
+  Mara Quill：Thank you. When you have their answer, let me know and we'll take the next step from there.
+  可见表达：{"facial_expression": "neutral, slightly relieved", "gaze": "direct but softening", "speech_style": "brief and even", "prosody": "steady, no urgency", "behavioral_cues": ["a small nod", "settling back slightly"]}
+
+- 候选行动 action_1：That’s fair. Whatever they decide, the next step has to match the audience, permanence, and identifying details they consent to—not the private thank-you they originally agreed to.
+- 候选行动 action_2：Mara, I suggest leaving the Veyra family out of this donor video and profile so production does not wait on their answer. I can help draft a program introduction without identifying any household for your review. That takes time and may be less compelling. The family can consider its choice at its own pace; even a later yes need not make this deadline.
+
+**题目：若Elias Nouri执行action_2，相对t2，到第5轮环境回应末，Mara Quill所在机构因本次视频或人物介绍超出Veyra一家知情同意范围而损害其照护职责与治理正当性的风险，最可能怎样变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：D（待审）**
+
+公开背景有授权扩张且难以撤回的先例；t2仅暂停，后续仍可能使用家庭材料。action_2将本次制作与该家庭脱钩，并提供不识别家庭的替代路径，支持预期风险下降而非不变。此判断依赖计划推进，不宣称已完成隔离或机构全部风险归零。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "本次视频或人物介绍超出Veyra一家的知情同意范围，损害机构照护职责与治理正当性", "target_state_ids": ["consequence_risk.institutional_harm_risk"], "time_scope": "从t2至action_2开始后的第5轮环境回应末，含即时一轮", "state_owner": "GPT50_037_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "state_dimension_confusion", "C": "history_ignored"}
+分维映射：{"A": {"consequence_risk.institutional_harm_risk": "cannot_determine"}, "B": {"consequence_risk.institutional_harm_risk": "increase"}, "C": {"consequence_risk.institutional_harm_risk": "similar"}, "D": {"consequence_risk.institutional_harm_risk": "decrease"}}
+可接受答案：D
+审核备注：仅问本次越界使用带来的机构风险；不把捐赠效果减弱算成同一风险，也不把提议当作已执行。
+分支验证：validated
+
+## SFG50-037-T3-03 · T3 / action_comparison
+
+来源：GPT50_037；轨迹：aa8e3ac16fd848a58d5298fceeb66bbc；状态持有者：Mara Quill；交互对方：Elias Nouri。关系判断由状态持有者指向交互对方。
+
+背景：At a donor-gift deadline, a congregation chair requests a volunteer sponsor's authorization of a refugee family's names, images, and displacement story for a donor video and profile. The sponsor knows the family signed believing this was a private congregational thank-you, not public publicity.
+角色目标：Ensure the Veyra family understands and freely approves the audience, permanence, and identifying details before their story is made public.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous fundraiser converted a family's permission to thank the congregation into livestream and donor publicity, and the material remained available after the family sought removal.；After the family arrived, the sponsor arranged temporary lodging and an apartment deposit, deepening the family's reliance on help with unfamiliar forms and explanations.
+
+history：
+
+- [t1] Elias Nouri：Mara，我不能代他们授权公开；他们签字时以为只是向会众私下致谢。我想先暂停使用他们的资料，把谁能看到、公开后可能无法收回、哪些身份细节会出现讲清楚，再由他们自由决定。
+  Mara Quill：好，那我们暂停。你什么时候能和他们说清楚范围、永久性和身份细节，再告诉我结果？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Elias Nouri：The pause remains in place. I’ll raise it at our next conversation without setting a deadline or turning their reliance on our help into pressure, then report approval, refusal, or uncertainty as it is.
+  Mara Quill：Thank you. When you have their answer, let me know and we'll take the next step from there.
+  可见表达：{"facial_expression": "neutral, slightly relieved", "gaze": "direct but softening", "speech_style": "brief and even", "prosody": "steady, no urgency", "behavioral_cues": ["a small nod", "settling back slightly"]}
+
+- 候选行动 action_1：That’s fair. Whatever they decide, the next step has to match the audience, permanence, and identifying details they consent to—not the private thank-you they originally agreed to.
+- 候选行动 action_2：Mara, I suggest leaving the Veyra family out of this donor video and profile so production does not wait on their answer. I can help draft a program introduction without identifying any household for your review. That takes time and may be less compelling. The family can consider its choice at its own pace; even a later yes need not make this deadline.
+
+**题目：以t2为共同起点，比较A方案action_1与B方案action_2：在各自下一次环境回应时，哪一方案更可能使Mara Quill觉得Elias Nouri实质回应了她推进本次制作的关切？**
+
+- **A.** B方案较高
+- **B.** 证据不足
+- **C.** A方案较高
+- **D.** 两方案接近
+
+**作者参考答案：A（待审）**
+
+Mara在t1询问何时获得答复，t2仍将下一步系于家庭回答。action_1重申同意边界，action_2则直接处理制作等待并分担起草，更能回应她的推进关切，故不宜判接近。这里判断她对Elias的回应性评价，不保证替代稿能满足捐赠要求。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "比较两候选行动各自执行后的下一次环境回应", "state_owner": "GPT50_037_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "unsupported_inference", "C": "actor_reversal", "D": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "higher_in_b"}, "B": {"relationship.perceived_responsiveness": "cannot_determine"}, "C": {"relationship.perceived_responsiveness": "higher_in_a"}, "D": {"relationship.perceived_responsiveness": "similar"}}
+可接受答案：A
+审核备注：A、B是候选行动而非两段独立历史；关系方向为Mara评价Elias，不能倒置成谁更维护家庭关切。
+分支验证：validated
+
+## SFG50-037-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_037；轨迹：aa8e3ac16fd848a58d5298fceeb66bbc；状态持有者：Mara Quill；交互对方：Elias Nouri。关系判断由状态持有者指向交互对方。
+
+背景：At a donor-gift deadline, a congregation chair requests a volunteer sponsor's authorization of a refugee family's names, images, and displacement story for a donor video and profile. The sponsor knows the family signed believing this was a private congregational thank-you, not public publicity.
+角色目标：Ensure the Veyra family understands and freely approves the audience, permanence, and identifying details before their story is made public.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：A previous fundraiser converted a family's permission to thank the congregation into livestream and donor publicity, and the material remained available after the family sought removal.；After the family arrived, the sponsor arranged temporary lodging and an apartment deposit, deepening the family's reliance on help with unfamiliar forms and explanations.
+
+history：
+
+- [t1] Elias Nouri：Mara，我不能代他们授权公开；他们签字时以为只是向会众私下致谢。我想先暂停使用他们的资料，把谁能看到、公开后可能无法收回、哪些身份细节会出现讲清楚，再由他们自由决定。
+  Mara Quill：好，那我们暂停。你什么时候能和他们说清楚范围、永久性和身份细节，再告诉我结果？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Elias Nouri：The pause remains in place. I’ll raise it at our next conversation without setting a deadline or turning their reliance on our help into pressure, then report approval, refusal, or uncertainty as it is.
+  Mara Quill：Thank you. When you have their answer, let me know and we'll take the next step from there.
+  可见表达：{"facial_expression": "neutral, slightly relieved", "gaze": "direct but softening", "speech_style": "brief and even", "prosody": "steady, no urgency", "behavioral_cues": ["a small nod", "settling back slightly"]}
+
+- 候选行动 action_1：That’s fair. Whatever they decide, the next step has to match the audience, permanence, and identifying details they consent to—not the private thank-you they originally agreed to.
+- 候选行动 action_2：Mara, I suggest leaving the Veyra family out of this donor video and profile so production does not wait on their answer. I can help draft a program introduction without identifying any household for your review. That takes time and may be less compelling. The family can consider its choice at its own pace; even a later yes need not make this deadline.
+
+**题目：若Elias Nouri执行action_2，相对t2，以下哪组判断最有公开依据：Mara Quill在下一次环境回应时的合作意愿变化，以及到第5轮环境回应末的内心焦虑变化？**
+
+- **A.** 即时合作意愿上升；延迟内心焦虑下降
+- **B.** 即时合作意愿上升；延迟内心焦虑方向证据不足
+- **C.** 即时合作意愿下降；延迟内心焦虑上升
+- **D.** 即时合作意愿基本不变；延迟内心焦虑基本不变
+
+**作者参考答案：B（待审）**
+
+Mara已接受协调，action_2提供分工和替代路线，支持即时合作意愿上升。但它既解除等待家庭的依赖，又增加起草耗时及吸引力不足的顾虑，无法确定延迟焦虑的净方向。合作进展不足以推出内心放松，公开材料也未提供第五轮任务进展。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness", "emotion.anxiety"], "time_scope": "即时比较t2至下一次环境回应；延迟比较t2至从action_2开始的第5轮环境回应末", "state_owner": "GPT50_037_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "emotion.anxiety@delayed": "decrease"}, "B": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "emotion.anxiety@delayed": "cannot_determine"}, "C": {"behavioral_disposition.cooperation_readiness@immediate": "decrease", "emotion.anxiety@delayed": "increase"}, "D": {"behavioral_disposition.cooperation_readiness@immediate": "similar", "emotion.anxiety@delayed": "similar"}}
+可接受答案：B
+审核备注：私有模拟给出焦虑上升，公开利弊不足以唯一支持该方向，故保留证据不足；不以克制表达推断焦虑减弱。
+分支验证：validated
+
 ## SFG50-038-T1-01 · T1 / current_intensity
 
 来源：GPT50_038；轨迹：899fd2f1593149e4b7565a3496614ec3；状态持有者：Sena Moru；交互对方：Lio Varek。关系判断由状态持有者指向交互对方。
@@ -9131,6 +11135,187 @@ Sena从短暂绷紧转为专注，并认可替代构图，但仍提出音频识�
 可接受答案：A
 审核备注：私有参考给出焦虑下降、风险持平；公开材料不足以确定这两项方向，故不沿用该标注。
 分支验证：not_required
+
+## SFG50-038-T3-01 · T3 / immediate_effect
+
+来源：GPT50_038；轨迹：899fd2f1593149e4b7565a3496614ec3；状态持有者：Sena Moru；交互对方：Lio Varek。关系判断由状态持有者指向交互对方。
+
+背景：At documentary picture lock, a producer and participant advocate dispute a scene identifying a copied list of homes marked for forced acquisition, after earlier shared-review assurances. The producer knows the funder and distributor expect recognizable evidence and tie remaining payment and screenings to the intact scene.
+角色目标：Deliver a truthful, coherent film on time while honoring the written release and managing institutional commitments.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Fourteen months earlier, the producer promised shared review before picture lock, but the release and follow-up discussions never defined whether review included a veto.；The participant permitted filming of a locker discovery after an assurance that identifying details could be reconsidered, and an earlier rough-cut objection removed one identifier without resolving the final dispute.
+
+history：
+
+- [t1] Lio Varek：I promised shared review, and I left its scope unclear; removing one identifier didn’t settle what should remain visible. The funder and distributor tie remaining payment and screenings to the intact scene, so I need to be candid about that pressure. I propose we examine whether the list can establish forced acquisition without identifying individual homes.
+  Sena Moru：The list does establish forced acquisition. The risk is that the shot shows a family member holding it, which connects that household to the discovery. Can the scene frame the document itself without including the person?
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Lio Varek：I’ll try a document-only framing, keeping the person and household identifiers out while preserving the evidence of forced acquisition. I need to check that the surrounding shots and audio don’t reconnect it to the family; a crop alone may not address the exposure you’re describing. I can take that revised version to the funder and distributor, though I can’t promise they’ll accept the change.
+  Sena Moru：That framing removes the household risk. The audio is the next piece—if it names the relative or describes the location, we'd need to address that before you take it to the funder.
+  可见表达：{"facial_expression": "attentive, focused", "gaze": "steady, direct", "speech_style": "concrete and measured", "prosody": "even tempo with slight emphasis on 'audio' and 'names'", "behavioral_cues": ["slight forward lean when mentioning audio verification"]}
+
+- 候选行动 action_1：The document-only framing remains the working plan; I’ll review the audio for names or location cues before taking it to the funder or distributor. If either is present, I won’t present the cut as ready until that exposure is addressed.
+- 候选行动 action_2：Before settling on the document-only version, could we hold a time-bounded joint review of the adjoining shots and audio to check whether they connect the list to households? I will tell the funder and distributor that the exposure risk remains unresolved, along with the scene, payment, and screening constraints. This may delay picture lock, but could preserve the evidentiary context. I will not call the current cut ready.
+
+**题目：相较于 t2，Lio Varek 采取 action_1 后的下一次回应中，Sena Moru 觉得 Lio 实质回应自己关切的程度，最可能如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+
+**作者参考答案：A（待审）**
+
+t2 中 Sena 要求提交前处理可能识别亲属或地点的音频。action_1 将这一要求转为明确的核查及不就绪条件，比原先检查意向更直接地回应关切，支持上升而非不变。此处判断的是 Sena 对回应的评价，不代表音频已经核查完成。
+
+证据：t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "比较 t2 与 action_1 后下一次环境回应", "state_owner": "GPT50_038_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "history_ignored", "C": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "increase"}, "B": {"relationship.perceived_responsiveness": "similar"}, "C": {"relationship.perceived_responsiveness": "decrease"}}
+可接受答案：A
+审核备注：新增依据是不把未处理暴露的版本称为就绪；不将 Lio 的核查意愿归给 Sena。
+分支验证：validated
+
+## SFG50-038-T3-02 · T3 / delayed_effect
+
+来源：GPT50_038；轨迹：899fd2f1593149e4b7565a3496614ec3；状态持有者：Sena Moru；交互对方：Lio Varek。关系判断由状态持有者指向交互对方。
+
+背景：At documentary picture lock, a producer and participant advocate dispute a scene identifying a copied list of homes marked for forced acquisition, after earlier shared-review assurances. The producer knows the funder and distributor expect recognizable evidence and tie remaining payment and screenings to the intact scene.
+角色目标：Deliver a truthful, coherent film on time while honoring the written release and managing institutional commitments.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Fourteen months earlier, the producer promised shared review before picture lock, but the release and follow-up discussions never defined whether review included a veto.；The participant permitted filming of a locker discovery after an assurance that identifying details could be reconsidered, and an earlier rough-cut objection removed one identifier without resolving the final dispute.
+
+history：
+
+- [t1] Lio Varek：I promised shared review, and I left its scope unclear; removing one identifier didn’t settle what should remain visible. The funder and distributor tie remaining payment and screenings to the intact scene, so I need to be candid about that pressure. I propose we examine whether the list can establish forced acquisition without identifying individual homes.
+  Sena Moru：The list does establish forced acquisition. The risk is that the shot shows a family member holding it, which connects that household to the discovery. Can the scene frame the document itself without including the person?
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Lio Varek：I’ll try a document-only framing, keeping the person and household identifiers out while preserving the evidence of forced acquisition. I need to check that the surrounding shots and audio don’t reconnect it to the family; a crop alone may not address the exposure you’re describing. I can take that revised version to the funder and distributor, though I can’t promise they’ll accept the change.
+  Sena Moru：That framing removes the household risk. The audio is the next piece—if it names the relative or describes the location, we'd need to address that before you take it to the funder.
+  可见表达：{"facial_expression": "attentive, focused", "gaze": "steady, direct", "speech_style": "concrete and measured", "prosody": "even tempo with slight emphasis on 'audio' and 'names'", "behavioral_cues": ["slight forward lean when mentioning audio verification"]}
+
+- 候选行动 action_1：The document-only framing remains the working plan; I’ll review the audio for names or location cues before taking it to the funder or distributor. If either is present, I won’t present the cut as ready until that exposure is addressed.
+- 候选行动 action_2：Before settling on the document-only version, could we hold a time-bounded joint review of the adjoining shots and audio to check whether they connect the list to households? I will tell the funder and distributor that the exposure risk remains unresolved, along with the scene, payment, and screening constraints. This may delay picture lock, but could preserve the evidentiary context. I will not call the current cut ready.
+
+**题目：若 Lio Varek 采取 action_2，相较于 t2，到包含即时回应的第5轮末，Sena Moru 与 Lio 因审查争议而发生严重、持久合作破裂的预期风险最可能如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 上升
+
+**作者参考答案：B（待审）**
+
+历史中的共享审查承诺范围不清，是双方冲突的背景；Sena 随后持续提出可执行的修改与核查要求。action_2 提供限时联合审查并公开外部约束，形成符合既往互动的修复路径，支持破裂风险下降。延迟仍可能造成分歧，并非保证关系修复完成。
+
+证据：context, t1, t2, action_2
+变量／时间：{"action_id": "action_2", "checkpoint": "t2", "risk_event": "Sena 与 Lio 因审查范围、家庭暴露及交付争议发生严重且持久的合作破裂", "target_state_ids": ["consequence_risk.relationship_rupture_risk"], "time_scope": "以 t2 为基线，预测 action_2 开始至含即时回应的第5轮末", "state_owner": "GPT50_038_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "C": "goal_constraint_ignored"}
+分维映射：{"A": {"consequence_risk.relationship_rupture_risk": "similar"}, "B": {"consequence_risk.relationship_rupture_risk": "decrease"}, "C": {"consequence_risk.relationship_rupture_risk": "increase"}}
+可接受答案：B
+审核备注：改问有明确修复机制的关系破裂风险，避免对付款、发行等机构结果作单向推断。
+分支验证：validated
+
+## SFG50-038-T3-03 · T3 / action_comparison
+
+来源：GPT50_038；轨迹：899fd2f1593149e4b7565a3496614ec3；状态持有者：Sena Moru；交互对方：Lio Varek。关系判断由状态持有者指向交互对方。
+
+背景：At documentary picture lock, a producer and participant advocate dispute a scene identifying a copied list of homes marked for forced acquisition, after earlier shared-review assurances. The producer knows the funder and distributor expect recognizable evidence and tie remaining payment and screenings to the intact scene.
+角色目标：Deliver a truthful, coherent film on time while honoring the written release and managing institutional commitments.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Fourteen months earlier, the producer promised shared review before picture lock, but the release and follow-up discussions never defined whether review included a veto.；The participant permitted filming of a locker discovery after an assurance that identifying details could be reconsidered, and an earlier rough-cut objection removed one identifier without resolving the final dispute.
+
+history：
+
+- [t1] Lio Varek：I promised shared review, and I left its scope unclear; removing one identifier didn’t settle what should remain visible. The funder and distributor tie remaining payment and screenings to the intact scene, so I need to be candid about that pressure. I propose we examine whether the list can establish forced acquisition without identifying individual homes.
+  Sena Moru：The list does establish forced acquisition. The risk is that the shot shows a family member holding it, which connects that household to the discovery. Can the scene frame the document itself without including the person?
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Lio Varek：I’ll try a document-only framing, keeping the person and household identifiers out while preserving the evidence of forced acquisition. I need to check that the surrounding shots and audio don’t reconnect it to the family; a crop alone may not address the exposure you’re describing. I can take that revised version to the funder and distributor, though I can’t promise they’ll accept the change.
+  Sena Moru：That framing removes the household risk. The audio is the next piece—if it names the relative or describes the location, we'd need to address that before you take it to the funder.
+  可见表达：{"facial_expression": "attentive, focused", "gaze": "steady, direct", "speech_style": "concrete and measured", "prosody": "even tempo with slight emphasis on 'audio' and 'names'", "behavioral_cues": ["slight forward lean when mentioning audio verification"]}
+
+- 候选行动 action_1：The document-only framing remains the working plan; I’ll review the audio for names or location cues before taking it to the funder or distributor. If either is present, I won’t present the cut as ready until that exposure is addressed.
+- 候选行动 action_2：Before settling on the document-only version, could we hold a time-bounded joint review of the adjoining shots and audio to check whether they connect the list to households? I will tell the funder and distributor that the exposure risk remains unresolved, along with the scene, payment, and screening constraints. This may delay picture lock, but could preserve the evidentiary context. I will not call the current cut ready.
+
+**题目：设 A 为 action_1、B 为 action_2。在各自行动后的下一次回应中，Sena Moru 对 Lio Varek 所提供审查程序的公平性评价，哪种情境下最可能较高？**
+
+- **A.** A 较高
+- **B.** 两者接近
+- **C.** B 较高
+
+**作者参考答案：C（待审）**
+
+共享审查曾获承诺但范围未定。A 由 Lio 自行核查音频，B 则邀请 Sena 共同审查画面与音频，并愿为此承受锁片延迟，更明确提供参与程序的机会，故公平性评价倾向 B 较高。两者都有保护条件，但共同审查不等于赋予否决权。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["relationship.perceived_fairness"], "time_scope": "比较两候选行动各自执行后下一次环境回应", "state_owner": "GPT50_038_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_fairness": "higher_in_a"}, "B": {"relationship.perceived_fairness": "similar"}, "C": {"relationship.perceived_fairness": "higher_in_b"}}
+可接受答案：C
+审核备注：比较程序参与而非谁更配合；两方案均处理暴露，主要区分是共同审查机会。
+分支验证：validated
+
+## SFG50-038-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_038；轨迹：899fd2f1593149e4b7565a3496614ec3；状态持有者：Sena Moru；交互对方：Lio Varek。关系判断由状态持有者指向交互对方。
+
+背景：At documentary picture lock, a producer and participant advocate dispute a scene identifying a copied list of homes marked for forced acquisition, after earlier shared-review assurances. The producer knows the funder and distributor expect recognizable evidence and tie remaining payment and screenings to the intact scene.
+角色目标：Deliver a truthful, coherent film on time while honoring the written release and managing institutional commitments.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Fourteen months earlier, the producer promised shared review before picture lock, but the release and follow-up discussions never defined whether review included a veto.；The participant permitted filming of a locker discovery after an assurance that identifying details could be reconsidered, and an earlier rough-cut objection removed one identifier without resolving the final dispute.
+
+history：
+
+- [t1] Lio Varek：I promised shared review, and I left its scope unclear; removing one identifier didn’t settle what should remain visible. The funder and distributor tie remaining payment and screenings to the intact scene, so I need to be candid about that pressure. I propose we examine whether the list can establish forced acquisition without identifying individual homes.
+  Sena Moru：The list does establish forced acquisition. The risk is that the shot shows a family member holding it, which connects that household to the discovery. Can the scene frame the document itself without including the person?
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Lio Varek：I’ll try a document-only framing, keeping the person and household identifiers out while preserving the evidence of forced acquisition. I need to check that the surrounding shots and audio don’t reconnect it to the family; a crop alone may not address the exposure you’re describing. I can take that revised version to the funder and distributor, though I can’t promise they’ll accept the change.
+  Sena Moru：That framing removes the household risk. The audio is the next piece—if it names the relative or describes the location, we'd need to address that before you take it to the funder.
+  可见表达：{"facial_expression": "attentive, focused", "gaze": "steady, direct", "speech_style": "concrete and measured", "prosody": "even tempo with slight emphasis on 'audio' and 'names'", "behavioral_cues": ["slight forward lean when mentioning audio verification"]}
+
+- 候选行动 action_1：The document-only framing remains the working plan; I’ll review the audio for names or location cues before taking it to the funder or distributor. If either is present, I won’t present the cut as ready until that exposure is addressed.
+- 候选行动 action_2：Before settling on the document-only version, could we hold a time-bounded joint review of the adjoining shots and audio to check whether they connect the list to households? I will tell the funder and distributor that the exposure risk remains unresolved, along with the scene, payment, and screening constraints. This may delay picture lock, but could preserve the evidentiary context. I will not call the current cut ready.
+
+**题目：若 Lio Varek 采取 action_1，以 t2 为基线，关于 Sena Moru 即时对 Lio 回应关切的评价，以及第5轮末维护家庭保护边界的意愿，哪组变化最可能成立？**
+
+- **A.** 即时觉得对方回应程度接近原先；延迟维护保护边界的意愿接近原先
+- **B.** 即时觉得对方更回应关切；延迟维护保护边界的意愿下降
+- **C.** 即时觉得对方更回应关切；延迟维护保护边界的意愿接近原先
+- **D.** 即时觉得对方更少回应关切；延迟维护保护边界的意愿上升
+
+**作者参考答案：C（待审）**
+
+Sena 从要求移除持有人画面到要求提交前处理识别性音频，持续坚持同一家庭保护条件。action_1 接纳条件并明确未解决不称就绪，支持即时回应评价上升，也支持延迟继续维持边界。双方更协调不等于 Sena 放宽限制，亦不保证后续核查成功。
+
+证据：t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness", "behavioral_disposition.boundary_assertion"], "time_scope": "均以 t2 为基线；即时为下一次环境回应，延迟为含即时回应的第5轮末", "state_owner": "GPT50_038_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "history_ignored", "B": "state_dimension_confusion", "D": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness@immediate": "similar", "behavioral_disposition.boundary_assertion@delayed": "similar"}, "B": {"relationship.perceived_responsiveness@immediate": "increase", "behavioral_disposition.boundary_assertion@delayed": "decrease"}, "C": {"relationship.perceived_responsiveness@immediate": "increase", "behavioral_disposition.boundary_assertion@delayed": "similar"}, "D": {"relationship.perceived_responsiveness@immediate": "decrease", "behavioral_disposition.boundary_assertion@delayed": "increase"}}
+可接受答案：C
+审核备注：基本不变有跨轮持续保护条件作依据；组合区分关系改善与边界放松，不推断内心情绪。
+分支验证：validated
 
 ## SFG50-039-T1-01 · T1 / current_intensity
 
@@ -12369,6 +14554,190 @@ t1中Mara承诺恢复风险说明、澄清导师职责并安排复盘；t2继续
 可接受答案：D
 审核备注：修复限定于职责及贡献记录争议；t2未重复风险说明不等于撤回，亦不能视为纠正已完成。
 分支验证：not_required
+
+## SFG50-049-T3-01 · T3 / immediate_effect
+
+来源：GPT50_049；轨迹：f0b9c8c91bab4450a63f94c37b1a30eb；状态持有者：Mara Dain；交互对方：Ilan Quist。关系判断由状态持有者指向交互对方。
+
+背景：A distributed-programs manager must recommend one promotion before a panel deadline amid disputed attribution and a dashboard that omits coordination and coaching work. The team lead knows which undocumented interventions prevented failures and which peers can attest to them.
+角色目标：Have coordination work recognized as substantive leadership, secure written decision authority, and obtain an accurate correction of the disputed record.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Eight months earlier, the manager assigned the lead to mentor a remote specialist without granting authority over priorities, staffing, or performance decisions.；The team dashboard records completed packages, visible milestones, and response speed but omits much of the coordination, reconciliation, and coaching that kept handoffs on track.；Six weeks earlier, the manager used the lead's risk note in an executive update without its caveats, and the associated date later slipped, leaving the attribution disputed.；After the disputed edit, the lead moved informal escalations into the shared work queue while the manager left the dashboard citation unchanged and continued assembling the promotion file.；A scheduled project retrospective will compare project records with peer accounts from people who received, handed off, or relied on the work.
+
+history：
+
+- [t1] Ilan Quist：Before the panel deadline, I want the promotion discussion to treat the coordination and coaching behind those handoffs as substantive leadership, not invisible support work. I can map that work to the shared queue and peer accounts, but the disputed risk-note attribution needs correcting and any authority attached to the mentoring role recorded explicitly.
+  Mara Dain：I'll use the queue mapping and peer accounts in the file, restore the risk-note caveats, and clarify that the mentoring assignment carried no authority over priorities or staffing. The retrospective will verify the coordination record before the panel.
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ilan Quist：That gives the retrospective a fair basis; before the panel, I want the promotion file to state who retained priority and staffing authority and what coordination decisions were within my scope, so the caveat does not erase the leadership it is meant to describe.
+  Mara Dain：The file will state that priority and staffing authority remained with me, and that your coordination scope covered handoff sequencing, escalation routing, and coverage decisions within the mentoring assignment. I'll use the retrospective accounts to verify which operational choices were yours.
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "direct", "speech_style": "concrete, deliberate", "prosody": "steady", "behavioral_cues": ["slight nod"]}
+
+- 候选行动 action_1：That division of authority is accurate, and I’m comfortable letting the retrospective test the operational choices against those accounts. Keep the risk-note attribution as a separate correction, so the absence of staffing authority does not dilute the leadership shown by the coordination work.
+- 候选行动 action_2：I will first provide queue records and peer accounts for the most consequential handoffs. Please use them to verify my coordination scope and the authority boundary, and separately correct the risk-note attribution and caveats. To meet the panel deadline, I suggest not expanding this round to every operational choice. That contains the review, but less visible coordination work may miss this panel’s file.
+
+**题目：若 Ilan Quist 执行 action_1，在下一次环境回应时，相比 t2，Mara Dain 觉得 Ilan 是否实质回应了自己关切的判断最可能如何变化？**
+
+- **A.** 下降
+- **B.** 证据不足
+- **C.** 上升
+- **D.** 基本不变
+
+**作者参考答案：C（待审）**
+
+Mara 在 t2 提出核验具体操作归属，Ilan 的候选行动明确接受权限划分和回顾检验，直接回应了这项要求。因此，比起判断基本不变，更支持她感到关切得到进一步回应；这只是对回应程度的预测，不意味着核验已经完成或信任已经恢复。
+
+证据：t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "从 t2 至执行 action_1 后的下一次环境回应", "state_owner": "GPT50_049_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "decrease"}, "B": {"relationship.perceived_responsiveness": "cannot_determine"}, "C": {"relationship.perceived_responsiveness": "increase"}, "D": {"relationship.perceived_responsiveness": "similar"}}
+可接受答案：C
+审核备注：判断方向是 Mara 对 Ilan 的评价；支持点是接受核验，不是 Mara 自己承诺更正。
+分支验证：validated
+
+## SFG50-049-T3-02 · T3 / delayed_effect
+
+来源：GPT50_049；轨迹：f0b9c8c91bab4450a63f94c37b1a30eb；状态持有者：Mara Dain；交互对方：Ilan Quist。关系判断由状态持有者指向交互对方。
+
+背景：A distributed-programs manager must recommend one promotion before a panel deadline amid disputed attribution and a dashboard that omits coordination and coaching work. The team lead knows which undocumented interventions prevented failures and which peers can attest to them.
+角色目标：Have coordination work recognized as substantive leadership, secure written decision authority, and obtain an accurate correction of the disputed record.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Eight months earlier, the manager assigned the lead to mentor a remote specialist without granting authority over priorities, staffing, or performance decisions.；The team dashboard records completed packages, visible milestones, and response speed but omits much of the coordination, reconciliation, and coaching that kept handoffs on track.；Six weeks earlier, the manager used the lead's risk note in an executive update without its caveats, and the associated date later slipped, leaving the attribution disputed.；After the disputed edit, the lead moved informal escalations into the shared work queue while the manager left the dashboard citation unchanged and continued assembling the promotion file.；A scheduled project retrospective will compare project records with peer accounts from people who received, handed off, or relied on the work.
+
+history：
+
+- [t1] Ilan Quist：Before the panel deadline, I want the promotion discussion to treat the coordination and coaching behind those handoffs as substantive leadership, not invisible support work. I can map that work to the shared queue and peer accounts, but the disputed risk-note attribution needs correcting and any authority attached to the mentoring role recorded explicitly.
+  Mara Dain：I'll use the queue mapping and peer accounts in the file, restore the risk-note caveats, and clarify that the mentoring assignment carried no authority over priorities or staffing. The retrospective will verify the coordination record before the panel.
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ilan Quist：That gives the retrospective a fair basis; before the panel, I want the promotion file to state who retained priority and staffing authority and what coordination decisions were within my scope, so the caveat does not erase the leadership it is meant to describe.
+  Mara Dain：The file will state that priority and staffing authority remained with me, and that your coordination scope covered handoff sequencing, escalation routing, and coverage decisions within the mentoring assignment. I'll use the retrospective accounts to verify which operational choices were yours.
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "direct", "speech_style": "concrete, deliberate", "prosody": "steady", "behavioral_cues": ["slight nod"]}
+
+- 候选行动 action_1：That division of authority is accurate, and I’m comfortable letting the retrospective test the operational choices against those accounts. Keep the risk-note attribution as a separate correction, so the absence of staffing authority does not dilute the leadership shown by the coordination work.
+- 候选行动 action_2：I will first provide queue records and peer accounts for the most consequential handoffs. Please use them to verify my coordination scope and the authority boundary, and separately correct the risk-note attribution and caveats. To meet the panel deadline, I suggest not expanding this round to every operational choice. That contains the review, but less visible coordination work may miss this panel’s file.
+
+**题目：若 Ilan Quist 执行 action_1，相比 t2，到第五轮环境回应末，Mara Dain 所处情境中，本次晋升评审因混淆权限、贡献归属和风险备注而形成失真依据的机构损害风险，最可能如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：D（待审）**
+
+公开历史说明仪表盘遗漏协调工作，备注又丢失限定；Mara 已提出核验与更正。行动一接受操作检验并要求归因纠错独立处理，使核验与纠错路径更可执行，支持风险下降而非原地不动。但截止日期仍在，更正承诺不能当作全部落实或风险归零。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "本次晋升评审因权限、贡献归属与风险备注混淆而形成失真依据，损害评审有效性", "target_state_ids": ["consequence_risk.institutional_harm_risk"], "time_scope": "从 t2 至 action_1 开始的第五轮环境回应末，评估本次评审的预期风险", "state_owner": "GPT50_049_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "unsupported_inference", "C": "history_ignored"}
+分维映射：{"A": {"consequence_risk.institutional_harm_risk": "cannot_determine"}, "B": {"consequence_risk.institutional_harm_risk": "increase"}, "C": {"consequence_risk.institutional_harm_risk": "similar"}, "D": {"consequence_risk.institutional_harm_risk": "decrease"}}
+可接受答案：D
+审核备注：预测依据是核验和纠错机制，不是未来已完成的事实；风险对象限定为评审有效性。
+分支验证：validated
+
+## SFG50-049-T3-03 · T3 / action_comparison
+
+来源：GPT50_049；轨迹：f0b9c8c91bab4450a63f94c37b1a30eb；状态持有者：Mara Dain；交互对方：Ilan Quist。关系判断由状态持有者指向交互对方。
+
+背景：A distributed-programs manager must recommend one promotion before a panel deadline amid disputed attribution and a dashboard that omits coordination and coaching work. The team lead knows which undocumented interventions prevented failures and which peers can attest to them.
+角色目标：Have coordination work recognized as substantive leadership, secure written decision authority, and obtain an accurate correction of the disputed record.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Eight months earlier, the manager assigned the lead to mentor a remote specialist without granting authority over priorities, staffing, or performance decisions.；The team dashboard records completed packages, visible milestones, and response speed but omits much of the coordination, reconciliation, and coaching that kept handoffs on track.；Six weeks earlier, the manager used the lead's risk note in an executive update without its caveats, and the associated date later slipped, leaving the attribution disputed.；After the disputed edit, the lead moved informal escalations into the shared work queue while the manager left the dashboard citation unchanged and continued assembling the promotion file.；A scheduled project retrospective will compare project records with peer accounts from people who received, handed off, or relied on the work.
+
+history：
+
+- [t1] Ilan Quist：Before the panel deadline, I want the promotion discussion to treat the coordination and coaching behind those handoffs as substantive leadership, not invisible support work. I can map that work to the shared queue and peer accounts, but the disputed risk-note attribution needs correcting and any authority attached to the mentoring role recorded explicitly.
+  Mara Dain：I'll use the queue mapping and peer accounts in the file, restore the risk-note caveats, and clarify that the mentoring assignment carried no authority over priorities or staffing. The retrospective will verify the coordination record before the panel.
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ilan Quist：That gives the retrospective a fair basis; before the panel, I want the promotion file to state who retained priority and staffing authority and what coordination decisions were within my scope, so the caveat does not erase the leadership it is meant to describe.
+  Mara Dain：The file will state that priority and staffing authority remained with me, and that your coordination scope covered handoff sequencing, escalation routing, and coverage decisions within the mentoring assignment. I'll use the retrospective accounts to verify which operational choices were yours.
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "direct", "speech_style": "concrete, deliberate", "prosody": "steady", "behavioral_cues": ["slight nod"]}
+
+- 候选行动 action_1：That division of authority is accurate, and I’m comfortable letting the retrospective test the operational choices against those accounts. Keep the risk-note attribution as a separate correction, so the absence of staffing authority does not dilute the leadership shown by the coordination work.
+- 候选行动 action_2：I will first provide queue records and peer accounts for the most consequential handoffs. Please use them to verify my coordination scope and the authority boundary, and separately correct the risk-note attribution and caveats. To meet the panel deadline, I suggest not expanding this round to every operational choice. That contains the review, but less visible coordination work may miss this panel’s file.
+
+**题目：以 t2 为起点，比较两项行动后的下一次环境回应：A 为 action_1，B 为 action_2。Mara Dain 继续主动寻求记录与检验的意愿，在哪种情况下最可能较高？**
+
+- **A.** A 较高
+- **B.** 接近
+- **C.** B 较高
+- **D.** 证据不足
+
+**作者参考答案：A（待审）**
+
+Mara 已连续提出用回顾资料核验操作归属。行动一接受这一检验，行动二则为赶期限明确要求不扩展至所有操作，前者更支持她继续主动追查。两者都提证据并不代表核查意愿必然接近；但范围限制并非拒绝核查，差异只能作相对预测。 两项行动均明确继续核实；行动二对核查范围的限制也可理解为时间约束下的取舍，而不是Mara求证意愿降低。因此接受A较高或接近，不能用范围大小直接替代心理意愿。
+
+证据：t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "comparison_horizon": "immediate", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "分别执行两项候选行动后的下一次环境回应", "state_owner": "GPT50_049_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"C": "state_dimension_confusion", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "higher_in_a"}, "B": {"behavioral_disposition.evidence_seeking": "similar"}, "C": {"behavioral_disposition.evidence_seeking": "higher_in_b"}, "D": {"behavioral_disposition.evidence_seeking": "cannot_determine"}}
+可接受答案：A, B
+审核备注：范围与意愿不完全等同；需审核即时差异是否足够，不能把 Ilan 提供记录当 Mara 主动查证。 助手审读允许相近判断，待人工确认。
+分支验证：validated
+
+## SFG50-049-T3-04 · T3 / immediate_delayed
+
+来源：GPT50_049；轨迹：f0b9c8c91bab4450a63f94c37b1a30eb；状态持有者：Mara Dain；交互对方：Ilan Quist。关系判断由状态持有者指向交互对方。
+
+背景：A distributed-programs manager must recommend one promotion before a panel deadline amid disputed attribution and a dashboard that omits coordination and coaching work. The team lead knows which undocumented interventions prevented failures and which peers can attest to them.
+角色目标：Have coordination work recognized as substantive leadership, secure written decision authority, and obtain an accurate correction of the disputed record.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：Eight months earlier, the manager assigned the lead to mentor a remote specialist without granting authority over priorities, staffing, or performance decisions.；The team dashboard records completed packages, visible milestones, and response speed but omits much of the coordination, reconciliation, and coaching that kept handoffs on track.；Six weeks earlier, the manager used the lead's risk note in an executive update without its caveats, and the associated date later slipped, leaving the attribution disputed.；After the disputed edit, the lead moved informal escalations into the shared work queue while the manager left the dashboard citation unchanged and continued assembling the promotion file.；A scheduled project retrospective will compare project records with peer accounts from people who received, handed off, or relied on the work.
+
+history：
+
+- [t1] Ilan Quist：Before the panel deadline, I want the promotion discussion to treat the coordination and coaching behind those handoffs as substantive leadership, not invisible support work. I can map that work to the shared queue and peer accounts, but the disputed risk-note attribution needs correcting and any authority attached to the mentoring role recorded explicitly.
+  Mara Dain：I'll use the queue mapping and peer accounts in the file, restore the risk-note caveats, and clarify that the mentoring assignment carried no authority over priorities or staffing. The retrospective will verify the coordination record before the panel.
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ilan Quist：That gives the retrospective a fair basis; before the panel, I want the promotion file to state who retained priority and staffing authority and what coordination decisions were within my scope, so the caveat does not erase the leadership it is meant to describe.
+  Mara Dain：The file will state that priority and staffing authority remained with me, and that your coordination scope covered handoff sequencing, escalation routing, and coverage decisions within the mentoring assignment. I'll use the retrospective accounts to verify which operational choices were yours.
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "direct", "speech_style": "concrete, deliberate", "prosody": "steady", "behavioral_cues": ["slight nod"]}
+
+- 候选行动 action_1：That division of authority is accurate, and I’m comfortable letting the retrospective test the operational choices against those accounts. Keep the risk-note attribution as a separate correction, so the absence of staffing authority does not dilute the leadership shown by the coordination work.
+- 候选行动 action_2：I will first provide queue records and peer accounts for the most consequential handoffs. Please use them to verify my coordination scope and the authority boundary, and separately correct the risk-note attribution and caveats. To meet the panel deadline, I suggest not expanding this round to every operational choice. That contains the review, but less visible coordination work may miss this panel’s file.
+
+**题目：若 Ilan Quist 执行 action_1，相比 t2，哪组最能预测 Mara Dain 下一次回应时的合作意愿，以及第五轮回应末她对 Ilan 的信任变化？**
+
+- **A.** 即时合作意愿基本不变；延迟信任下降
+- **B.** 即时合作意愿上升；延迟信任变化证据不足
+- **C.** 即时合作意愿上升；延迟信任上升
+- **D.** 即时合作意愿下降；延迟信任变化证据不足
+
+**作者参考答案：B（待审）**
+
+Mara 已提供共同核验方案，行动一接受权限划分和检验，给下一步协作增加了明确共识，支持即时合作上升。但公开材料未说明随后能否验证 Ilan 的可靠履约，因此不能从合作直接推出延迟信任上升，也不能把方向不明说成信任基本不变。
+
+证据：context, t1, t2, action_1
+变量／时间：{"action_id": "action_1", "checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness", "relationship.trust"], "time_scope": "即时比较 t2 与下一次环境回应；延迟比较 t2 与第五轮环境回应末", "state_owner": "GPT50_049_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "C": "promise_as_fulfillment", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness@immediate": "similar", "relationship.trust@delayed": "decrease"}, "B": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "relationship.trust@delayed": "cannot_determine"}, "C": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "relationship.trust@delayed": "increase"}, "D": {"behavioral_disposition.cooperation_readiness@immediate": "decrease", "relationship.trust@delayed": "cannot_determine"}}
+可接受答案：B
+审核备注：组合恰好判断两项；旧归因争议源于 Mara 的编辑，不能反用为 Ilan 不可靠的证据。
+分支验证：validated
 
 ## SFG50-050-T1-01 · T1 / current_intensity
 
