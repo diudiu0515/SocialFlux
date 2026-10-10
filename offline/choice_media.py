@@ -2,7 +2,7 @@
 from copy import deepcopy
 import json
 from pathlib import Path
-from offline.choice_builder import load, save, sha
+from offline.choice_builder import load, save, save_text, sha
 from evaluation.t4_media import extract_frames
 from tasks.offline_choice import public_instance, validate_item
 
@@ -50,7 +50,7 @@ def pair_assets(items, manifest_path, output, *, frames=True):
         validate_item(text);validate_item(video)
         paired.extend([text,video]);media[video['instance_id']]=wanted
     for name,values in [('paired.items.jsonl',paired),('paired.public.jsonl',[public_instance(x) for x in paired])]:
-        (output/name).write_text(''.join(json.dumps(x,ensure_ascii=False)+'\n' for x in values),encoding='utf-8')
+        save_text(output/name,''.join(json.dumps(x,ensure_ascii=False)+'\n' for x in values))
     save(output/'media.json',media)
     report={'logical_pairs':len(paired)//2,'variants':len(paired),'unique_videos':len(cache),
             'gaps':gaps,'human_media_review':'pending','frame_transport_limit':'sampled visual frames; no audio/prosody evaluation',

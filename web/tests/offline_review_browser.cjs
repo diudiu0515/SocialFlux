@@ -13,10 +13,10 @@ const {chromium} = require('playwright');
   const output = process.env.REVIEW_TEST_OUTPUT || path.join(os.tmpdir(), 'socialflux-offline-review-browser');
   const errors = [], referenceRequests = [];
   page.on('pageerror', e => errors.push(e.message));
-  page.on('request', r => {if (r.url().endsWith('/reference')) referenceRequests.push(r.url());});
+  page.on('request', r => {if (new URL(r.url()).pathname.endsWith('/reference')) referenceRequests.push(r.url());});
   try {
     await fs.mkdir(output, {recursive: true});
-    await page.goto(base + '/offline-review#SFO-005');
+    await page.goto(base + '/offline-review?bank=dev60#SFO-005');
     await page.waitForSelector('#sharedEnding');
     assert.equal(await page.locator('#itemNav button').count(), 60);
     assert.equal(await page.locator('[data-history]').count(), 2);

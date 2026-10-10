@@ -1,6 +1,8 @@
 /* Review existing artifacts only. No model calls and no ground-truth mutation. */
 "use strict";
 const $ = id => document.getElementById(id);
+const bankSelection = new URLSearchParams(location.search).get('bank') || 'dev60';
+function bankAPI(path) {return path + '?bank=' + encodeURIComponent(bankSelection);}
 const LABELS = {
   background: "场景背景", public_situation: "关系、约束与前史", relationship_structure: "关系结构",
   power_structure: "权力与资源", goal_conflict: "目标冲突", relevant_history: "相关前史",
@@ -50,7 +52,10 @@ function jsonDetails(title, value) {
 }
 function card(title) {const node = el("section", "card"); node.append(el("h2", "", title)); return node;}
 function message(text) {$("message").textContent = text;}
-function storageKey() {return "socialflux-offline-choice-review:" + bank.bank_sha256;}
+function storageKey() {
+  // The growing GPT50 cohort keeps unchanged item drafts across appends.
+  return "socialflux-offline-choice-review:" + (bank.bank_id === 'offline_gpt50_t1_t3' ? bank.bank_id : bank.bank_sha256);
+}
 function annotation(id = activeId) {
   if (!draft.annotations[id]) {
     const meta = bank.items.find(item => item.instance_id === id);
@@ -113,7 +118,7 @@ async function selectItem(id) {
   $("workspace").replaceChildren(el("p", "muted", "正在加载题目…"));
   renderNav();
   try {
-    const value = detailCache.get(id) || await fetchJSON("/api/offline-review/" + encodeURIComponent(id));
+    const value = detailCache.get(id) || await fetchJSON(bankAPI("/api/offline-review/" + encodeURIComponent(id)));
     if (version !== requestVersion) return;
     if (value.bank_sha256 !== bank.bank_sha256) throw new Error("题库版本已更新，请导出草稿后刷新页面");
     detailCache.set(id, value); detail = value;
@@ -280,7 +285,7 @@ function renderReference() {
   button.onclick = async () => {
     button.disabled = true;
     try {
-      const ref = await fetchJSON(`/api/offline-review/${encodeURIComponent(id)}/reference`);
+      const ref = await fetchJSON(bankAPI(`/api/offline-review/${encodeURIComponent(id)}/reference`));
       if (activeId !== id || !section.isConnected) return;
       if (ref.bank_sha256 !== bank.bank_sha256) throw new Error("题库已更新，请先导出草稿并刷新");
       const ann = annotation();
@@ -318,7 +323,10 @@ function renderReference() {
         }); body.append(container);
       }
       referenceTurns("原轨迹对应历史与 state", ref.source_turns);
-      ref.replays.forEach(replay => referenceTurns(`${replay.label} · ${replay.delayed_horizon ? `后续 ${replay.delayed_horizon} 次回应 · ${replay.window_complete ? "窗口完整" : "窗口未完成"}` : "受控回放"}`, replay.turns));
+      ref.replays.forEach(replay => {
+        const source = replay.construction === "existing_factual_continuation" ? "原轨迹后续复用" : "候选行动环境回放";
+        referenceTurns(`${replay.label} · ${replay.delayed_horizon ? `后续 ${replay.delayed_horizon} 次回应 · ${replay.window_complete ? "窗口完整" : "窗口未完成"} · ${source}` : "受控回放"}`, replay.turns);
+      });
       if (detail.metadata.task !== "T1" && !ref.replays.length) body.append(el("p", "warning", "没有可核查的完整回放，不能据此批准分支标注。"));
     } catch (error) {if (activeId === id) {message(`参考加载失败：${error.message}`); button.disabled = false;}}
   };
@@ -336,6 +344,9 @@ function renderItem() {
   title.append(el("p", "question", detail.public.question));
   title.append(el("p", "muted", "本批标签待人工审核。题目版本 " + meta.item_sha256.slice(0, 12)));
   if (meta.task !== "T1" && meta.replay_status !== "validated") title.append(el("p", "warning", "此题完整分支回放尚未完成，当前仅为开发候选。"));
+  if (meta.source_review_status === 'reject') title.append(el('p', 'warning', '原轨迹未通过模型语义审核，请结合来源记录重点核查题目依据。'));
+  if (meta.source_origin === 'existing_partial_rollout') title.append(el('p', 'muted', '本题复用原轨迹已完成的历史片段。'));
+  if (meta.source_origin === 'new_offline_source_prefix_original_failure_preserved') title.append(el('p', 'muted', '原轨迹缺少可用历史，本题使用另行生成的开发前史；原失败记录保留。'));
   workspace.append(title, renderMaterial(detail.public.input), renderMedia(), renderAnnotation(), renderReference());
   updateStatus(); document.title = `${meta.instance_id} · SocialFlux 题目标注`;
 }
@@ -344,7 +355,8 @@ function exportDraft() {
   if (!draft.reviewer) {message("导出前请填写标注人姓名或 ID。"); $("reviewer").focus(); return;}
   const output = {format: "socialflux_offline_choice_annotations_v1", bank_id: bank.bank_id,
     bank_sha256: bank.bank_sha256, reviewer: draft.reviewer, exported_at_utc: new Date().toISOString(),
-    status: "human_review_draft_not_formal_ground_truth", annotations: draft.annotations};
+    status: "human_review_draft_not_formal_ground_truth", annotations: draft.annotations,
+    stale_annotations: draft.stale_annotations || {}};
   const url = URL.createObjectURL(new Blob([JSON.stringify(output, null, 2) + "\n"], {type: "application/json"}));
   const link = el("a"); link.href = url; link.download = `offline_review_${bank.bank_sha256.slice(0, 12)}.json`;
   link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); message("标注已导出，可在其他浏览器导入同一版本题库继续。");
@@ -352,13 +364,14 @@ function exportDraft() {
 async function importDraft(file) {
   if (!file) return;
   const value = JSON.parse(await file.text());
-  if (value.format !== "socialflux_offline_choice_annotations_v1" || value.bank_sha256 !== bank.bank_sha256) throw new Error("导入文件与当前题库版本不匹配");
+  const growingCohort = bank.bank_id === 'offline_gpt50_t1_t3' && value.bank_id === bank.bank_id;
+  if (value.format !== "socialflux_offline_choice_annotations_v1" || (!growingCohort && value.bank_sha256 !== bank.bank_sha256)) throw new Error("导入文件与当前题库版本不匹配");
   if (!value.annotations || typeof value.annotations !== "object" || Array.isArray(value.annotations)) throw new Error("标注结构无效");
   // Validate every record before mutating local progress. Merging keeps unrelated work.
   for (const [id, ann] of Object.entries(value.annotations)) {
     const meta = bank.items.find(i => i.instance_id === id);
     if (!meta || ann.instance_id !== id || ann.item_sha256 !== meta.item_sha256) throw new Error(`题目版本不匹配：${id}`);
-    const item = detailCache.get(id) || await fetchJSON("/api/offline-review/" + encodeURIComponent(id));
+    const item = detailCache.get(id) || await fetchJSON(bankAPI("/api/offline-review/" + encodeURIComponent(id)));
     if (item.bank_sha256 !== bank.bank_sha256) throw new Error("题库已更新，请刷新后再导入");
     detailCache.set(id, item);
     const errors = validateAnnotation(ann, item.public.options, item.evidence_ids, ann.status === "complete");
@@ -380,12 +393,26 @@ async function importDraft(file) {
 }
 async function init() {
   try {
-    bank = await fetchJSON("/api/offline-review");
+    $('bankSelect').value=bankSelection;
+    $('bankSelect').onchange=()=>{location.href='/offline-review?bank='+encodeURIComponent($('bankSelect').value);};
+    bank = await fetchJSON(bankAPI("/api/offline-review"));
     const summary = bank.summary;
     $("bankMeta").textContent = `${summary.item_count} 题 · ${summary.scenario_count} 个场景 · ${["T1", "T2", "T3"].map(task => `${task} ${summary.tasks[task] || 0}`).join(" / ")} · ${summary.combinations} 道组合题 · ${summary.replay_pending} 题回放待完成`;
+    if (!summary.generation_complete) $("bankMeta").textContent += ` · 尚待补齐：已产出 ${summary.item_count}/${summary.expected_items} 题，目标 ${summary.requested_scenarios} 个场景`;
+    if (summary.paused_tasks?.length) $("bankMeta").textContent += ` · ${summary.paused_tasks.join('、')} 暂停新增`;
     if (!bank.items.length) {$("workspace").replaceChildren(el("p", "empty", "当前没有可标注的题目。")); return;}
     try {const saved = JSON.parse(localStorage.getItem(storageKey()) || "null"); if (saved?.annotations) draft = saved;}
     catch {message("未能读取浏览器草稿，可以导入已导出的备份。");}
+    let staleCount = 0;
+    for (const [id, ann] of Object.entries(draft.annotations)) {
+      const meta = bank.items.find(i => i.instance_id === id);
+      if (!meta || meta.item_sha256 !== ann.item_sha256) {
+        draft.stale_annotations ||= {};
+        draft.stale_annotations[id + ':' + ann.item_sha256] = ann;
+        delete draft.annotations[id]; staleCount++;
+      }
+    }
+    if (staleCount) message(`${staleCount} 份题目旧版草稿已保留到导出备份，变化后的题目需重新标注。`);
     $("reviewer").value = draft.reviewer || ""; $("reviewer").oninput = save;
     for (const id of ["taskFilter", "familyFilter", "shapeFilter", "statusFilter", "search"]) $(id).addEventListener("input", renderNav);
     $("exportButton").onclick = exportDraft;

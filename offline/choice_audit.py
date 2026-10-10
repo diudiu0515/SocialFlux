@@ -38,7 +38,7 @@ def audit_bundle(items, output):
             'formal_admitted':0,'human_approval':False,'rows':rows}
     save(Path(output)/'development_audit.json',report)
     files=['tasks/offline_choice.py','evaluation/offline_choice.py','offline/choice_builder.py','offline/choice_media.py',
-           'offline/choice_audit.py','offline/provider_compat.py','scripts/build_offline_choice_dev.py','scripts/evaluate_offline_choice.py',
+           'offline/choice_audit.py','offline/choice_pipeline.py','offline/choice_batch.py','offline/factual_reference.py','offline/provider_compat.py','scripts/build_offline_choice_dev.py','scripts/evaluate_offline_choice.py',
            'rollout/counterfactual.py','pipeline/cli.py','prompts/offline_choice_author_v1.md','prompts/offline_choice_answer_v1.md']
     save(Path(output)/'implementation_manifest.json',{'files':{f:sha(f) for f in files}})
     state_reference_crosscheck(items,output)

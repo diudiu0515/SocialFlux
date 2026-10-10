@@ -7,6 +7,7 @@
 | 用途 | 配置或入口 | 说明 |
 |---|---|---|
 | Offline T1–T3 开发题 | [`offline_choice_dev60.json`](offline_choice_dev60.json) | 固定 5 个场景、源轨迹、路由、输出目录和延迟窗口 |
+| GPT50 T1/T3 扩展 | [`offline_gpt50_t1_t3.json`](offline_gpt50_t1_t3.json) | 固定 50 场景、目标 400 题；T2 暂停，完成数以 manifest 为准 |
 | GPT50 开发与当前轨迹 | [`gpt50_experiment/README.md`](gpt50_experiment/README.md)、[批次手册](../docs/operations/ACTIVE_BATCH_PIPELINE.md) | 当前来源由批次 manifest 绑定，不将所有 rollout.* 候选合并 |
 | Claude150 批次 | [`claude150_v1/README.md`](claude150_v1/README.md) | 独立的场景、路由、产物与恢复记录 |
 | 网站进程 | [`web.supervisord.conf`](web.supervisord.conf) | 监听 127.0.0.1:8000，服务环境与日志在 build/web-service |

@@ -9,7 +9,7 @@ import math
 from pathlib import Path
 import shutil
 import sys
-from urllib.parse import unquote, urlparse
+from urllib.parse import unquote, urlparse, parse_qs
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -2314,14 +2314,14 @@ def scenario_detail(scenario_id):
         ],
     }
 
-def api_payload(path):
+def api_payload(path, *, offline_bank=None):
     parts = [unquote(part) for part in path.strip("/").split("/") if part]
     if parts == ["api", "offline-review"]:
-        return load_offline_review()
+        return load_offline_review(bank_id=offline_bank)
     if len(parts) == 3 and parts[:2] == ["api", "offline-review"]:
-        return load_offline_review(parts[2])
+        return load_offline_review(parts[2],bank_id=offline_bank)
     if len(parts) == 4 and parts[:2] == ["api", "offline-review"] and parts[3] == "reference":
-        return load_offline_review(parts[2], reference=True)
+        return load_offline_review(parts[2], reference=True,bank_id=offline_bank)
     if parts == ["api", "gpt50-live"]:
         return load_live()
     if len(parts) == 3 and parts[:2] == ["api", "gpt50-live"]:
@@ -2589,7 +2589,7 @@ class App(SimpleHTTPRequestHandler):
                 shutil.copyfileobj(stream, self.wfile)
             return
         if parsed.path.startswith("/api/"):
-            payload = api_payload(parsed.path)
+            payload = api_payload(parsed.path,offline_bank=parse_qs(parsed.query).get('bank',[None])[0])
             self.send_json(payload if payload is not None else {"error": "not found"},
                            200 if payload is not None else 404)
             return

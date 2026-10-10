@@ -1,8 +1,13 @@
 # SocialFlux Project Progress
 
-更新时间：2026-10-10。这里记录已完成的工程能力；实时批次状态以 manifest 和运行记录为准。
+更新时间：2026-10-11。这里记录已完成的工程能力；实时批次状态以 manifest 和运行记录为准。
 
 ## 当前交付
+
+- GPT50 T1/T3 扩展固定 50 个场景、目标 400 题；T2 暂停新增。完成数和缺项以新批次 manifest 为准。
+- 扩展批次复用同源视频形成文字／视频版本，答案保持一致；缺少匹配资产的题目单列。全部待人工审核。
+- 用户已明确授权现有 `autodl.art` 的场景／对话／state 调用；正从已保存断点补齐。旧批次与失败记录保留。
+- 网站支持新旧题库切换及增量题库的草稿保留；生成与数据状态见[扩展说明](docs/operations/OFFLINE_GPT50_T1_T3.md)。
 
 - 公共命令入口为 `python -m pipeline`，T1–T3 新协议使用 `offline-build` / `offline-eval`；旧概率题路径保留用于复现。
 - Offline 开发包来自 5 个现有 scenario 和对应 rollout，共 60 题，每个 task 20 题，覆盖四类 state，含 15 道组合题。

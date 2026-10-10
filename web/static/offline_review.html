@@ -10,6 +10,7 @@
   <header>
     <div><a href="/gpt50-live">← 场景与对话</a><h1>T1–T3 题目标注</h1><p id="bankMeta">正在读取题库…</p></div>
     <div class="tools">
+      <label>题库<select id="bankSelect"><option value="dev60">首批 60 题（含 T2）</option><option value="gpt50-t1-t3">GPT50 全场景 T1 / T3</option></select></label>
       <label>标注人 <input id="reviewer" autocomplete="name" placeholder="姓名或 ID"></label>
       <button id="exportButton" type="button">导出标注</button>
       <label class="import-button">导入标注<input id="importFile" type="file" accept=".json,application/json"></label>
@@ -29,6 +30,6 @@
     </aside>
     <main id="workspace" aria-busy="true"><p>正在加载…</p></main>
   </div>
-  <script src="/offline_review.js?v=1"></script>
+  <script src="/offline_review.js?v=2"></script>
 </body>
 </html>

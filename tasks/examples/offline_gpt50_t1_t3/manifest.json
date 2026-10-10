@@ -1,0 +1,803 @@
+{
+  "format": "socialflux_offline_choice_v1",
+  "item_count": 212,
+  "tasks": {
+    "T1": 196,
+    "T3": 16
+  },
+  "subtypes": {
+    "T1/current_intensity": 49,
+    "T1/interval_change": 98,
+    "T1/joint_change": 49,
+    "T3/immediate_effect": 4,
+    "T3/delayed_effect": 4,
+    "T3/action_comparison": 4,
+    "T3/immediate_delayed": 4
+  },
+  "task_state_coverage": {
+    "T1/Behavioral Disposition": 107,
+    "T1/Emotion": 27,
+    "T1/Interaction Risk": 22,
+    "T1/Relationship": 61,
+    "T3/Behavioral Disposition": 5,
+    "T3/Emotion": 4,
+    "T3/Interaction Risk": 4,
+    "T3/Relationship": 4
+  },
+  "answer_positions": {
+    "A": 51,
+    "B": 51,
+    "C": 52,
+    "D": 42,
+    "E": 8,
+    "F": 8
+  },
+  "scenario_count": 49,
+  "formal_admission": false,
+  "human_review": "pending",
+  "replay_ready_count": 212,
+  "replay_ready_tasks": {
+    "T1": 196,
+    "T3": 16
+  },
+  "replay_pending_ids": [],
+  "items_sha256": "6aee406a71993a068332c500eb8a5cd4e895a4845e828cba87ba9400c8ae4687",
+  "public_sha256": "fd91f313cc456faef6beaffb97a0afe135bcdc40243af5ccd4374b83b50a34f1",
+  "bank_id": "SFG50",
+  "requested_scenarios": 50,
+  "expected_items": 400,
+  "paused_tasks": [
+    "T2"
+  ],
+  "scenario_coverage": [
+    {
+      "scenario_id": "GPT50_001",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "new_offline_source_prefix_original_failure_preserved",
+      "source_review_status": "not_reviewed"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_003",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 4,
+          "complete": true
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_004",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 4,
+          "complete": true
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_005",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "reject"
+    },
+    {
+      "scenario_id": "GPT50_006",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_007",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_008",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_009",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "new_offline_source_prefix_original_failure_preserved",
+      "source_review_status": "not_reviewed"
+    },
+    {
+      "scenario_id": "GPT50_010",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_011",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_012",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_013",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_014",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_015",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_016",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_017",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "reject"
+    },
+    {
+      "scenario_id": "GPT50_018",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "reject"
+    },
+    {
+      "scenario_id": "GPT50_019",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 4,
+          "complete": true
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_020",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_021",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_022",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_023",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "new_offline_source_prefix_original_failure_preserved",
+      "source_review_status": "not_reviewed"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_025",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_026",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 4,
+          "complete": true
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_027",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "reject"
+    },
+    {
+      "scenario_id": "GPT50_028",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_029",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_030",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "reject"
+    },
+    {
+      "scenario_id": "GPT50_031",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_032",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_033",
+      "tasks": {
+        "T1": {
+          "items": 0,
+          "complete": false
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      }
+    },
+    {
+      "scenario_id": "GPT50_034",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_035",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_partial_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_036",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_037",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_038",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_039",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_040",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_partial_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_041",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_042",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "reject"
+    },
+    {
+      "scenario_id": "GPT50_043",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_044",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "reject"
+    },
+    {
+      "scenario_id": "GPT50_045",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_046",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "reject"
+    },
+    {
+      "scenario_id": "GPT50_047",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "reject"
+    },
+    {
+      "scenario_id": "GPT50_048",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_049",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_complete_rollout",
+      "source_review_status": "approve"
+    },
+    {
+      "scenario_id": "GPT50_050",
+      "tasks": {
+        "T1": {
+          "items": 4,
+          "complete": true
+        },
+        "T3": {
+          "items": 0,
+          "complete": false
+        }
+      },
+      "source_origin": "existing_partial_rollout",
+      "source_review_status": "approve"
+    }
+  ],
+  "complete": false
+}

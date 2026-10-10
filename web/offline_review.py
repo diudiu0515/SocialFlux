@@ -7,6 +7,7 @@ never promote proposals to ground truth or change source admission.
 from collections import Counter
 from copy import deepcopy
 from functools import lru_cache
+from contextvars import ContextVar
 import hashlib
 import json
 from pathlib import Path
@@ -17,6 +18,12 @@ from tasks.offline_choice import FAMILIES, public_instance, visible_evidence
 
 ROOT = Path(__file__).resolve().parents[1]
 BANK = ROOT / "data/offline_t1_t3_dev60"
+_bank_override = ContextVar('offline_review_bank',default=None)
+BANK_PATHS = {'dev60':'data/offline_t1_t3_dev60','gpt50-t1-t3':'data/offline_gpt50_t1_t3'}
+
+
+def bank_path():
+    return _bank_override.get() or BANK
 VIDEO_ROOT = ROOT / "data/gpt50/experiment/multimodal_delivery_v1/online_multimodal/assets"
 
 
@@ -30,7 +37,7 @@ def item_digest(item):
 
 
 def load_bank():
-    path = BANK / "items.jsonl"
+    path = bank_path() / "items.jsonl"
     if not path.is_file():
         return [], None
     raw = path.read_bytes()
@@ -57,6 +64,8 @@ def metadata(item):
         "combination": len(next(iter(author["option_variable_map"].values()))) > 1,
         "replay_status": author.get("replay_status", "pending"),
         "label_status": item["label_status"],
+        "source_review_status": author.get('construction_source',{}).get('source_review_status'),
+        "source_origin": author.get('construction_source',{}).get('origin'),
     }
 
 
@@ -79,7 +88,7 @@ def _paired_items(raw):
 
 
 def pair_matches(item):
-    path = BANK / "paired.items.jsonl"
+    path = bank_path() / "paired.items.jsonl"
     if not path.is_file():
         return False
     pairs = _paired_items(path.read_bytes())
@@ -100,7 +109,7 @@ def pair_matches(item):
 def media_records(item):
     if not pair_matches(item):
         return []
-    records = read_json(BANK / "media.json", {}).get(item["instance_id"] + "-video", [])
+    records = read_json(bank_path() / "media.json", {}).get(item["instance_id"] + "-video", [])
     result = []
     for record in records:
         path = (ROOT / record["path"]).resolve()
@@ -173,21 +182,34 @@ def author_reference(item, bank_sha):
                     "label": action["action_id"],
                     "window_complete": branch.get("window_complete", False),
                     "delayed_horizon": branch["delayed_horizon"],
+                    "construction": branch.get("experiment"),
+                    "external_conditions": branch.get("counterfactual_timeline_control"),
                     "turns": [_review_turn(t, variables) for t in branch["future_turns"]],
                 } for action, branch in zip(actions, replay)]
-    crosscheck = read_json(BANK / "state_reference_crosscheck.json", {})
+    crosscheck = read_json(bank_path() / "state_reference_crosscheck.json", {})
     if crosscheck.get("items_sha256") == bank_sha:
         reference["state_crosscheck"] = next((row for row in crosscheck["rows"]
                                               if row["instance_id"] == item["instance_id"]), None)
     return reference
 
 
-def load_review(instance_id=None, reference=False):
+def load_review(instance_id=None, reference=False,bank_id=None):
+    if bank_id is not None and bank_id not in BANK_PATHS:
+        return None
+    token=_bank_override.set(ROOT/BANK_PATHS[bank_id] if bank_id else None)
+    try:
+        return _load_review(instance_id,reference)
+    finally:
+        _bank_override.reset(token)
+
+
+def _load_review(instance_id=None, reference=False):
     items, bank_sha = load_bank()
     if instance_id is None:
         rows = [metadata(item) for item in items]
+        manifest=read_json(bank_path()/'manifest.json',{})
         return {
-            "format": "socialflux_offline_choice_review_v1", "bank_id": BANK.name,
+            "format": "socialflux_offline_choice_review_v1", "bank_id": bank_path().name,
             "bank_sha256": bank_sha, "status": "available" if items else "not_generated",
             "summary": {
                 "item_count": len(items), "scenario_count": len({i["story_id"] for i in items}),
@@ -195,6 +217,10 @@ def load_review(instance_id=None, reference=False):
                 "combinations": sum(row["combination"] for row in rows),
                 "replay_pending": sum(row["task"] in {"T2", "T3"} and
                                       row["replay_status"] != "validated" for row in rows),
+                "expected_items":manifest.get('expected_items',len(items)),
+                "requested_scenarios":manifest.get('requested_scenarios',len({i['story_id'] for i in items})),
+                "generation_complete":manifest.get('complete',True),
+                "paused_tasks":manifest.get('paused_tasks',[]),
             }, "items": rows,
         }
     item = next((item for item in items if item["instance_id"] == instance_id), None)

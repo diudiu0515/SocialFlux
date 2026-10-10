@@ -75,7 +75,7 @@ T2 制作阶段可以调用 provider 进行状态与互动回放；offline 指�
 
 ## 配置与数据分层
 
-- **入口配置**：`configs/offline_choice_dev60.json` 明确指定当前题库来源与输出；GPT50、Claude150 和 T4 各有批次配置，见[配置索引](../../configs/README.md)。
+- **入口配置**：`configs/offline_choice_dev60.json` 保留旧 60 题；`configs/offline_gpt50_t1_t3.json` 固定 50 场景的 T1/T3 扩展，T2 暂停新增。共享出题在 `offline/choice_pipeline.py`，固定批次编排在 `offline/choice_batch.py`，脚本只做入口转发。GPT50、Claude150 和 T4 各有批次配置，见[配置索引](../../configs/README.md)。
 - **通用正式默认值**：`pipeline/constants.py` 仍保留 Fable 基线默认值。不能用该默认值推断 GPT 开发批次的实际模型；本轮未切换配置。
 - **固定指令**：`prompts/manifest.json` 注册 50 份可调用模板并校验哈希。已删除 39 份中间实验稿，`retired.json` 只记录其 ID 与原 SHA；[运行时目录](../prompts/RUNTIME_PROMPT_CATALOG.md)区分当前链路和仍有调用方的兼容入口。
 - **结构与语义合同**：`schemas/`、`environment/state_ontology.py`、`shared/STATE_ONTOLOGY_v2.md` 与相应协议共同约束数据；更改须显式版本化。

@@ -5,6 +5,7 @@ import json
 import re
 from pathlib import Path
 from collections import Counter
+from uuid import uuid4
 
 from environment.delta_mapper import flatten_state
 from evaluation.leakage import assert_no_leaks
@@ -18,10 +19,14 @@ def load(path):
 
 
 def save(path, value):
+    save_text(path,json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+
+
+def save_text(path, value):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + '.tmp')
-    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    temporary = path.with_suffix(path.suffix + '.' + uuid4().hex + '.tmp')
+    temporary.write_text(value, encoding='utf-8')
     temporary.replace(path)
 
 
@@ -51,7 +56,8 @@ def author_call(provider, payload, validator=lambda x: x):
                          {'temperature': 0.2}, validator, context='offline choice author', max_attempts=2)
 
 
-def assemble(raw, *, task, source, public_input, ordinal, index, replay_status='not_required', delayed_horizon=None):
+def assemble(raw, *, task, source, public_input, ordinal, index, replay_status='not_required', delayed_horizon=None, instance_id=None):
+    raw = deepcopy(raw)
     target = raw['target_spec']
     target['state_owner'] = public_input['target_character']['character_id']
     target['state_target'] = public_input['role']['character_id']
@@ -76,7 +82,7 @@ def assemble(raw, *, task, source, public_input, ordinal, index, replay_status='
             target['action_id']=next(iter(mentioned))
         target['prediction_window']={'baseline':'t2:after_environment_response','immediate':'next_environment_response',
                                      'delayed':{'environment_responses':horizon,'includes_immediate':True}}
-    item = {'instance_id': f'SFO-{ordinal*12 + {"T1":0,"T2":4,"T3":8}[task] + index + 1:03d}',
+    item = {'instance_id': instance_id or f'SFO-{ordinal*12 + {"T1":0,"T2":4,"T3":8}[task] + index + 1:03d}',
             'benchmark_version': VERSION, 'task': task, 'subtype': raw['subtype'],
             'story_id': source['scenario_id'], 'pair_id': source['trajectory_id'] + ':t2:history_pair' if task == 'T2' else None,
             'modality': 'text', 'input': deepcopy(public_input), 'question': raw['question'],
@@ -95,7 +101,7 @@ def assemble(raw, *, task, source, public_input, ordinal, index, replay_status='
     # Rotate correct positions deterministically; rotate all diagnostics with the options.
     old = list(item['options'])
     desired = (ordinal + index + {'T1':0,'T2':1,'T3':2}[task]) % len(old)
-    if raw['subtype'] == 'current_intensity':
+    if raw['subtype'] == 'current_intensity' and instance_id is None:
         desired = [0,1,2,4,5][ordinal % 5]  # Five six-choice items include both E and F.
     offset = (desired - old.index(item['authoring']['answer'])) % len(old)
     mapping = {letter: old[(i+offset) % len(old)] for i, letter in enumerate(old)}
@@ -126,9 +132,9 @@ def write_bundle(items, output):
     for item in items:
         validate_item(item)
     for name, values in [('items.jsonl', items), ('public.jsonl', [public_instance(x) for x in items])]:
-        (output/name).write_text(''.join(json.dumps(v, ensure_ascii=False)+'\n' for v in values), encoding='utf-8')
+        save_text(output/name,''.join(json.dumps(v, ensure_ascii=False)+'\n' for v in values))
     ready=[i for i in items if i['task']=='T1' or i['authoring']['replay_status']=='validated']
-    (output/'replay_ready.items.jsonl').write_text(''.join(json.dumps(i,ensure_ascii=False)+'\n' for i in ready),encoding='utf-8')
+    save_text(output/'replay_ready.items.jsonl',''.join(json.dumps(i,ensure_ascii=False)+'\n' for i in ready))
     coverage = Counter((i['task'], FAMILIES[f]) for i in items for f in {p.split('.')[0] for p in i['target_spec']['target_state_ids']})
     manifest = {'format': VERSION, 'item_count': len(items), 'tasks': dict(Counter(x['task'] for x in items)),
                 'subtypes': dict(Counter(x['task']+'/'+x['subtype'] for x in items)),
@@ -139,7 +145,9 @@ def write_bundle(items, output):
                 'replay_ready_tasks':dict(Counter(i['task'] for i in ready)),
                 'replay_pending_ids':[i['instance_id'] for i in items if i not in ready], 'items_sha256': sha(output/'items.jsonl'), 'public_sha256': sha(output/'public.jsonl')}
     save(output/'manifest.json', manifest)
-    lines = ['# SocialFlux offline T1–T3 开发题（完整题面与作者参考答案）', '',
+    task_names=' / '.join(sorted({x['task'] for x in items}))
+    lines = [f'# SocialFlux offline {task_names} 开发题（完整题面与作者参考答案）', '',
+             f'本文件包含实际已生成的 {len(items)} 道题、{manifest["scenario_count"]} 个场景；目标覆盖与缺项见同批 manifest。', '',
              '所有答案是待人工审核的开发参考，不是已冻结真值。下面每题先给出完整可见材料，再给出作者侧标注。',
              '主评测只答 `{"answer":"B"}`。证据诊断另加 `evidence_ids`，分别计分。', '']
     for x in items:
@@ -172,5 +180,5 @@ def write_bundle(items, output):
                   '分维映射：'+json.dumps(a['option_variable_map'],ensure_ascii=False),
                   '可接受答案：'+', '.join(a.get('acceptable_answers',[a['answer']])),
                   '审核备注：'+str(a['review_notes']), '分支验证：'+a['replay_status'], '']
-    (output/'examples.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
+    save_text(output/'examples.md','\n'.join(lines)+'\n')
     return manifest

@@ -1,0 +1,373 @@
+{
+  "format": "socialflux_offline_gpt50_validation_v1",
+  "complete": false,
+  "status": "generation_in_progress_authorized",
+  "captured_at_utc": "2026-10-10T17:46:38.660275+00:00",
+  "requested_scenarios": 50,
+  "expected_items": 400,
+  "actual_items": 212,
+  "scenarios_with_items": 49,
+  "tasks": {
+    "T1": 196,
+    "T3": 16
+  },
+  "task_state_coverage": {
+    "T1/Behavioral Disposition": 107,
+    "T1/Emotion": 27,
+    "T1/Interaction Risk": 22,
+    "T1/Relationship": 61,
+    "T3/Behavioral Disposition": 5,
+    "T3/Emotion": 4,
+    "T3/Interaction Risk": 4,
+    "T3/Relationship": 4
+  },
+  "combinations": 53,
+  "machine_structure_check": {
+    "validated": 212,
+    "provider_calls": 0
+  },
+  "formal_check": {
+    "blocked": true,
+    "reason": "formal scoring requires human ground truth",
+    "provider_calls": 0
+  },
+  "regression_tests": {
+    "run": 75,
+    "passed": 67,
+    "skipped": 8,
+    "log": "build/offline_gpt50_t1_t3/regression_resume.log"
+  },
+  "focused_python_tests": {
+    "run": 32,
+    "passed": 32,
+    "log": "build/offline_gpt50_t1_t3/focused_resume_tests.log"
+  },
+  "prior_broader_test_limit": "89 checks: 88 passed; one pre-existing missing/stale historical scenario manifest, documented in 2026-10-10_git_checkpoint_validation.json",
+  "provider_smoke": {
+    "path": "data/offline_gpt50_t1_t3/smoke_text_first",
+    "items_sha256": "0ba85376568462164cceedb1232ebee44b7a3b6020c10a23bc650c92bdeabebb",
+    "score": {
+      "n": 4,
+      "correct": 4,
+      "accuracy": 1.0,
+      "semantic_errors": 0,
+      "format_failures": 0,
+      "call_failures": 0
+    },
+    "label_basis": "provisional_author_answers"
+  },
+  "pairing": {
+    "logical_pairs": 192,
+    "variants": 384,
+    "unique_videos": 44
+  },
+  "case_failure_records": {
+    "TimeoutError": 75,
+    "RemoteDisconnected": 1,
+    "StructuredOutputError": 2,
+    "ValueError": 15,
+    "ProviderHTTPError": 2
+  },
+  "preserved_old_bank": {
+    "items": 60,
+    "items_sha256": "bd4b168a6183b3d6d4df7da83911ef70abbdd117d8158bc7659c290a20728990"
+  },
+  "source_inventory": {
+    "complete": 43,
+    "partial_usable": 3,
+    "original_missing_history": 4,
+    "new_prefixes_completed": 3,
+    "model_approve": 37,
+    "model_reject": 9,
+    "model_not_reviewed": 4
+  },
+  "pending_scenario_tasks": [
+    {
+      "scenario_id": "GPT50_001",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_005",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_006",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_007",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_008",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_009",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_010",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_011",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_012",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_013",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_014",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_015",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_016",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_017",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_018",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_020",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_021",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_022",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_023",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_025",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_027",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_028",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_029",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_030",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_031",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_032",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_033",
+      "tasks": [
+        "T1",
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_034",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_035",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_036",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_037",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_038",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_039",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_040",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_041",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_042",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_043",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_044",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_045",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_046",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_047",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_048",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_049",
+      "tasks": [
+        "T3"
+      ]
+    },
+    {
+      "scenario_id": "GPT50_050",
+      "tasks": [
+        "T3"
+      ]
+    }
+  ],
+  "human_ground_truth_items": 0,
+  "browser_gpt50": {
+    "passed": true,
+    "checks": [
+      "T1/T3 bank selection",
+      "unchanged draft survives append",
+      "changed draft archived",
+      "old60 retained"
+    ]
+  }
+}

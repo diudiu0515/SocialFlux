@@ -1,0 +1,190 @@
+{
+  "logical_pairs": 192,
+  "variants": 384,
+  "unique_videos": 44,
+  "gaps": [
+    {
+      "instance_id": "SFG50-005-T1-01",
+      "asset_id": "GPT50_005:online_nonverbal_v1:open_engagement",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-005-T1-01",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-005-T1-02",
+      "asset_id": "GPT50_005:online_nonverbal_v1:open_engagement",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-005-T1-02",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-005-T1-03",
+      "asset_id": "GPT50_005:online_nonverbal_v1:open_engagement",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-005-T1-03",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-005-T1-04",
+      "asset_id": "GPT50_005:online_nonverbal_v1:open_engagement",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-005-T1-04",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-020-T1-01",
+      "asset_id": "GPT50_020:online_nonverbal_v1:open_engagement",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-020-T1-01",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-020-T1-02",
+      "asset_id": "GPT50_020:online_nonverbal_v1:open_engagement",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-020-T1-02",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-020-T1-03",
+      "asset_id": "GPT50_020:online_nonverbal_v1:open_engagement",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-020-T1-03",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-020-T1-04",
+      "asset_id": "GPT50_020:online_nonverbal_v1:open_engagement",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-020-T1-04",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-034-T1-01",
+      "asset_id": "GPT50_034:online_nonverbal_v1:easing_tension",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-034-T1-01",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-034-T1-02",
+      "asset_id": "GPT50_034:online_nonverbal_v1:easing_tension",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-034-T1-02",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-034-T1-03",
+      "asset_id": "GPT50_034:online_nonverbal_v1:easing_tension",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-034-T1-03",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-034-T1-04",
+      "asset_id": "GPT50_034:online_nonverbal_v1:easing_tension",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-034-T1-04",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-036-T1-01",
+      "asset_id": "GPT50_036:online_nonverbal_v1:easing_tension",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-036-T1-01",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-036-T1-02",
+      "asset_id": "GPT50_036:online_nonverbal_v1:easing_tension",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-036-T1-02",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-036-T1-03",
+      "asset_id": "GPT50_036:online_nonverbal_v1:easing_tension",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-036-T1-03",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-036-T1-04",
+      "asset_id": "GPT50_036:online_nonverbal_v1:easing_tension",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-036-T1-04",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-039-T1-01",
+      "asset_id": "GPT50_039:online_nonverbal_v1:open_engagement",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-039-T1-01",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-039-T1-02",
+      "asset_id": "GPT50_039:online_nonverbal_v1:open_engagement",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-039-T1-02",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-039-T1-03",
+      "asset_id": "GPT50_039:online_nonverbal_v1:open_engagement",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-039-T1-03",
+      "reason": "no_matched_source_video"
+    },
+    {
+      "instance_id": "SFG50-039-T1-04",
+      "asset_id": "GPT50_039:online_nonverbal_v1:open_engagement",
+      "reason": "exact_source_asset_missing"
+    },
+    {
+      "instance_id": "SFG50-039-T1-04",
+      "reason": "no_matched_source_video"
+    }
+  ],
+  "human_media_review": "pending",
+  "frame_transport_limit": "sampled visual frames; no audio/prosody evaluation",
+  "nonverbal_history_relation": "see each item authoring.nonverbal_history_relation; T2 reuses exact shared-prefix clip on both sides"
+}

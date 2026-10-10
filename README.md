@@ -4,6 +4,11 @@ SocialFlux 使用同一套社会状态环境生成 rollout、构建 T1–T3 离�
 
 当前开发入口包括 GPT50 场景与轨迹、多模态资产，以及基于其中 5 个场景的 60 道 T1–T3 选择题。开发题已有 56 道完成所需回放，4 道 T3 待补；全部答案仍待人工审核。数量与状态以对应批次 manifest 为准，详见 [项目进度](PROJECT_PROGRESS.md) 和 [开发题报告](reports/experiments/2026-10-10_offline_t1_t3_dev60.md)。
 
+另已接入固定 50 场景的 [T1/T3 扩展批次](docs/operations/OFFLINE_GPT50_T1_T3.md)，
+T2 暂停新增。目标为每场景 4 道 T1、4 道 T3，共 400 题；
+已获授权继续使用现有 provider，实际产出和缺项见批次 manifest。网页新入口为
+`/offline-review?bank=gpt50-t1-t3`，旧 60 题继续独立保留。
+
 ## 从哪里开始
 
 | 目标 | 入口 |

@@ -77,6 +77,25 @@ class OfflineReviewTest(unittest.TestCase):
         self.assertNotEqual(before["bank_sha256"], after["bank_sha256"])
         self.assertNotEqual(before["metadata"]["item_sha256"], after["metadata"]["item_sha256"])
 
+    def test_bank_selection_is_allowlisted_and_isolated_across_threads(self):
+        from concurrent.futures import ThreadPoolExecutor
+        other = deepcopy(self.item)
+        other['instance_id'] = 'other-bank'
+        directory = self.root / review.BANK_PATHS['gpt50-t1-t3']
+        directory.mkdir(parents=True)
+        (directory / 'items.jsonl').write_text(json.dumps(other) + '\n')
+        (directory / 'manifest.json').write_text(json.dumps({'expected_items':400,'complete':False,'paused_tasks':['T2']}))
+        def read(bank):
+            return api_payload('/api/offline-review', offline_bank=bank)
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            rows = list(pool.map(read, [None, 'gpt50-t1-t3'] * 8))
+        self.assertEqual([r['items'][0]['instance_id'] for r in rows], ['q1','other-bank'] * 8)
+        self.assertEqual(rows[1]['summary']['expected_items'],400)
+        self.assertFalse(rows[1]['summary']['generation_complete'])
+        self.assertIsNone(read('../../private'))
+        self.assertIsNone(api_payload('/api/offline-review/q1', offline_bank='gpt50-t1-t3'))
+        self.assertEqual(review.bank_path(), review.BANK)
+
     def test_t3_branch_is_reference_only_and_requires_matching_action(self):
         self.item.update(task="T3", subtype="immediate_effect")
         self.item["input"]["candidate_actions"] = [{"action_id": "action_1", "text": "cooperate"}]
