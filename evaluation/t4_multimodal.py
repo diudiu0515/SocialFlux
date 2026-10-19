@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import subprocess
 from threading import Lock
+from time import monotonic
 
 from evaluation.t4_batch import save
 from evaluation.t4_media import compact_media, provider_messages, video_blocks, extract_frames, sha_file
@@ -44,6 +45,8 @@ class AuditedProvider:
         self.index += 1
         messages = provider_messages(messages, self.config["provider"])
         record = {"messages": compact_media(messages), "sampling": sampling, "status": "started"}
+        started = monotonic()
+        audit_start = len(getattr(self.provider, "audit_records", []))
         path = self.directory / f"{self.index:04d}.json"
         save(path, record)
         try:
@@ -54,8 +57,38 @@ class AuditedProvider:
             record.update(status="failed", error=str(exc))
             raise
         finally:
+            record["wall_seconds"] = round(monotonic() - started, 3)
+            record["response_audits"] = [
+                {key: value for key, value in audit.items() if key != "request"}
+                for audit in getattr(self.provider, "audit_records", [])[audit_start:]
+            ]
             record["provider_metrics"] = self.provider.metrics
             save(path, record)
+
+
+def assess_run_health(rows, video_models, max_failure_fraction=0.2, require_pairs=True):
+    """Gate expansion on transport reliability and real paired video exposure."""
+    attempted = [r for r in rows if r["status"] != "unsupported_video_input"]
+    failures = [r for r in attempted if r["status"] not in {
+        "completed", "completed_without_video_exposure"}]
+    fraction = len(failures) / len(attempted) if attempted else 1.0
+    pairs = {}
+    for name in video_models:
+        text = {r["scenario_id"] for r in rows if r["model_id"] == name
+                and r["condition"] == "text_only" and r["status"] == "completed"}
+        video = {r["scenario_id"] for r in rows if r["model_id"] == name
+                 and r["condition"] == "text_video" and r["status"] == "completed"
+                 and r.get("video_delivery_count", 0) > 0}
+        pairs[name] = len(text & video)
+    reasons = []
+    if fraction > max_failure_fraction:
+        reasons.append("episode_failure_fraction_exceeded")
+    if require_pairs and (not pairs or any(n < 1 for n in pairs.values())):
+        reasons.append("missing_valid_pair_for_supported_video_model")
+    return {"passed": not reasons, "reasons": reasons,
+            "attempted": len(attempted), "failures": len(failures),
+            "failure_fraction": fraction, "max_failure_fraction": max_failure_fraction,
+            "matched_pairs": pairs, "require_pairs": require_pairs}
 
 
 class AssetPolicy(ModelPolicy):

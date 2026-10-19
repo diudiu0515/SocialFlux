@@ -207,14 +207,17 @@ class OpenAICompatibleProvider(ModelProvider):
                 sleep(delay)
             finally:
                 self._request_duration_seconds += monotonic() - started
+        body_started = monotonic()
         try:
             with response_context as response:
                 if options.get("stream"):
-                    return self._read_stream(response)
+                    return self._read_stream(response, request=json.loads(payload))
                 data = json.loads(response.read().decode("utf-8"))
         except Exception:
             self._failed_request_count += 1
             raise
+        finally:
+            self._request_duration_seconds += monotonic() - body_started
         self._record_usage(data.get("usage"))
         try:
             choice = data["choices"][0]
@@ -246,32 +249,62 @@ class OpenAICompatibleProvider(ModelProvider):
             )
         return raw_output
 
-    def _read_stream(self, response):
+    def _read_stream(self, response, request=None):
         """Aggregate OpenAI-compatible SSE chunks into one assistant message."""
         parts = []
-        for raw_line in response:
-            line = raw_line.decode("utf-8").strip()
-            if not line or line.startswith(":") or not line.startswith("data:"):
-                continue
-            payload = line[5:].strip()
-            if payload == "[DONE]":
-                break
-            data = json.loads(payload)
-            self._record_usage(data.get("usage"))
-            for choice in data.get("choices", []):
-                self._record_finish_reason(choice.get("finish_reason"))
-                delta = choice.get("delta") or {}
-                if (choice.get("finish_reason") in {"refusal", "content_filter"}
-                        or delta.get("refusal") or (choice.get("message") or {}).get("refusal")):
-                    raise ProviderRefusalError("provider explicitly refused the request")
-                content = delta.get("content")
-                if isinstance(content, str):
-                    parts.append(content)
-                elif isinstance((choice.get("message") or {}).get("content"), str):
-                    parts.append(choice["message"]["content"])
-        if not parts:
-            raise ValueError("streaming provider response lacks assistant content")
-        return "".join(parts)
+        record = {"request": request, "stream_events": [], "raw_output": "",
+                  "finish_reason": None, "usage": {}, "complete": False}
+        self._audit_records.append(record)
+        done = False
+        try:
+            for raw_line in response:
+                line = raw_line.decode("utf-8").strip()
+                if not line or line.startswith(":"):
+                    continue
+                if not line.startswith("data:"):
+                    record.setdefault("non_data_lines", []).append(line)
+                    continue
+                payload = line[5:].strip()
+                if payload == "[DONE]":
+                    done = True
+                    break
+                data = json.loads(payload)
+                record["stream_events"].append(data)
+                if data.get("error"):
+                    raise RuntimeError("provider stream error: " + json.dumps(data["error"]))
+                if isinstance(data.get("usage"), dict):
+                    record["usage"].update(data["usage"])
+                for choice in data.get("choices", []):
+                    reason = choice.get("finish_reason")
+                    if reason:
+                        record["finish_reason"] = reason
+                        self._record_finish_reason(reason)
+                    delta = choice.get("delta") or {}
+                    if (reason in {"refusal", "content_filter"}
+                            or delta.get("refusal") or (choice.get("message") or {}).get("refusal")):
+                        raise ProviderRefusalError("provider explicitly refused the request")
+                    content = delta.get("content")
+                    if isinstance(content, str):
+                        parts.append(content)
+                    elif isinstance((choice.get("message") or {}).get("content"), str):
+                        parts.append(choice["message"]["content"])
+            raw_output = "".join(parts)
+            reason = record["finish_reason"]
+            if reason in {"length", "max_tokens"} or not (done or reason):
+                raise IncompleteModelOutputError(
+                    "provider stream was truncated: " + str(reason or "unexpected_eof"),
+                    finish_reason=reason or "unexpected_eof", raw_output=raw_output, request=request,
+                )
+            if not raw_output.strip():
+                raise ValueError("streaming provider response lacks assistant content")
+            record["complete"] = True
+            return raw_output
+        except Exception as exc:
+            record["error"] = str(exc)
+            raise
+        finally:
+            record["raw_output"] = "".join(parts)
+            self._record_usage(record["usage"])
 
     @property
     def audit_records(self):

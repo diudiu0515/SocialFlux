@@ -17,7 +17,7 @@ sys.path.insert(0, str(ROOT))
 from evaluation.t4_asset_coverage import audit_asset_coverage, require_complete_assets
 from evaluation.t4_batch import save, digest, summarize, aggregate_scores
 from evaluation.t4_media import extract_frames
-from evaluation.t4_multimodal import RequestBudget, AuditedProvider, AssetPolicy, prepare_controls, probe_model
+from evaluation.t4_multimodal import RequestBudget, AuditedProvider, AssetPolicy, prepare_controls, probe_model, assess_run_health
 from environment.online_multimodal import build_online_multimodal_profile
 from environment.unified_appraisal import UnifiedEnvironmentFactory
 from pipeline.runtime import build_environment_factory
@@ -213,7 +213,9 @@ def main():
         # A bounded initial block makes implementation failures visible before
         # the rest of the dataset is scheduled. No outcomes are filtered.
         pilot_size = min(2, cohort_size)
-        for indices in (range(pilot_size), range(pilot_size, cohort_size)):
+        for block_start in range(0, cohort_size, pilot_size):
+            indices = range(block_start, min(block_start + pilot_size, cohort_size))
+            block_rows = []
             with ThreadPoolExecutor(max_workers=config["workers"]) as pool:
                 pending = {pool.submit(run_one, i, scenarios[i], name, condition): (i, name, condition)
                            for i in indices for name in providers for condition in ("text_only", "text_video")}
@@ -222,18 +224,28 @@ def main():
                     for future in done:
                         i, name, condition = pending.pop(future)
                         try:
-                            rows.append(future.result())
+                            row = future.result()
                         except Exception as exc:
-                            rows.append({"scenario_id": scenarios[i]["scenario_id"], "model_id": name,
-                                         "condition": condition, "status": "runner_failed", "error": str(exc)})
+                            row = {"scenario_id": scenarios[i]["scenario_id"], "model_id": name,
+                                   "condition": condition, "status": "runner_failed", "error": str(exc)}
+                        rows.append(row)
+                        block_rows.append(row)
                         save(out / "results.json", rows)
                     summaries = {name: summarize([r for r in rows if r["model_id"] == name]) for name in providers}
                     save(out / "summary.json", summaries)
                     save(out / "status.json", {"status": "running", "updated_at": now(),
                          "finished": len(rows), "planned": cohort_size * len(providers) * 2,
                          "api_requests": budget.count, "models": summaries})
-            if len(rows) == pilot_size * len(providers) * 2 and not any(r["status"] == "completed" and r["condition"] == "text_video" for r in rows):
-                save(out / "status.json", {"status": "stopped_pilot_no_valid_video_episode", "updated_at": now(), "finished": len(rows)})
+            health = assess_run_health(
+                block_rows, [name for name in providers if capabilities[name]["selected_transport"]],
+                max_failure_fraction=config.get("max_episode_failure_fraction", 0.2),
+                require_pairs=block_start == 0,
+            )
+            save(out / "health_checks" / f"{block_start:04d}.json", health)
+            if not health["passed"]:
+                save(out / "status.json", {"status": "stopped_health_gate", "updated_at": now(),
+                     "finished": len(rows), "planned": cohort_size * len(providers) * 2,
+                     "api_requests": budget.count, "health": health})
                 return
         save(out / "status.json", {"status": "completed_with_recorded_outcomes", "updated_at": now(),
              "finished": len(rows), "planned": cohort_size * len(providers) * 2, "api_requests": budget.count})
