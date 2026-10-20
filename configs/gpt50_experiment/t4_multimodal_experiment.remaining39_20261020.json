@@ -1,0 +1,85 @@
+{
+  "scenario_manifest": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_gpt50/manifest.json",
+  "environment_config": "configs/gpt50_experiment/rollout.state_observed_evidence_v6_candidate.json",
+  "video_batch_root": "data/gpt50/experiment",
+  "video_manifest": "build/t4_gpt41_paired_20261008/video_manifest.json",
+  "workers": 2,
+  "request_budget": 20000,
+  "judge": "claude",
+  "models": [
+    {
+      "id": "gpt",
+      "routes": "configs/gpt50_experiment/model_routes.hybrid.json",
+      "overrides": {
+        "stream": true
+      }
+    },
+    {
+      "id": "claude",
+      "routes": "configs/model_routes.frontier_api.json"
+    },
+    {
+      "id": "deepseek",
+      "routes": "configs/gpt50_experiment/model_routes.hybrid.json",
+      "overrides": {
+        "model": "DeepSeek-V4-Pro",
+        "api_key_env": "AUTODL_API_KEY",
+        "api_key_file": "/root/.config/socialflux/autodl_api_key",
+        "reasoning_effort": null
+      }
+    }
+  ],
+  "scenario_ids": [
+    "GPT50_003",
+    "GPT50_004",
+    "GPT50_006",
+    "GPT50_008",
+    "GPT50_009",
+    "GPT50_010",
+    "GPT50_011",
+    "GPT50_012",
+    "GPT50_013",
+    "GPT50_014",
+    "GPT50_016",
+    "GPT50_017",
+    "GPT50_018",
+    "GPT50_019",
+    "GPT50_021",
+    "GPT50_022",
+    "GPT50_023",
+    "GPT50_024",
+    "GPT50_026",
+    "GPT50_027",
+    "GPT50_028",
+    "GPT50_029",
+    "GPT50_030",
+    "GPT50_031",
+    "GPT50_032",
+    "GPT50_033",
+    "GPT50_035",
+    "GPT50_038",
+    "GPT50_040",
+    "GPT50_041",
+    "GPT50_042",
+    "GPT50_043",
+    "GPT50_044",
+    "GPT50_045",
+    "GPT50_046",
+    "GPT50_047",
+    "GPT50_048",
+    "GPT50_049",
+    "GPT50_050"
+  ],
+  "frame_cache": "/root/autodl-tmp/emotree/build/t4_gpt41_paired_20261008/frames",
+  "provider_timeout_seconds": 180,
+  "max_episode_failure_fraction": 0.2,
+  "experiment_stage": "diagnostic_remaining39_human_review_20261020",
+  "predecessor_run": "build/t4_gpt41_paired_20261020/run",
+  "resume_reason": "User explicitly requests continuing all remaining scenarios despite health warnings, retaining trajectories for independent human scoring.",
+  "stop_on_health_gate": false,
+  "human_review": {
+    "enabled": true,
+    "automatic_scores_hidden": true,
+    "review_status": "pending_human_review"
+  }
+}

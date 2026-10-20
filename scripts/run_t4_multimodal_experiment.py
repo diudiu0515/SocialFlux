@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from evaluation.t4_asset_coverage import audit_asset_coverage, require_complete_assets
 from evaluation.t4_batch import save, digest, summarize, aggregate_scores
+from evaluation.t4_human_review import export_human_review
 from evaluation.t4_media import extract_frames
 from evaluation.t4_multimodal import RequestBudget, AuditedProvider, AssetPolicy, prepare_controls, probe_model, assess_run_health
 from environment.online_multimodal import build_online_multimodal_profile
@@ -192,6 +193,8 @@ def main():
             try:
                 trajectory = RolloutRunner(audited_environment, checkpoint_writer=lambda value: save(directory / "checkpoint.json", value)).run(policy, max_turns=20)
                 save(directory / "trajectory.json", trajectory)
+                row["human_review"] = export_human_review(
+                    trajectory, scenario, directory, out / "human_review")
                 judge = AuditedProvider({**providers[config["judge"]], "max_tokens": 4000}, directory / "calls" / "judge", budget)
                 called_providers["judge"] = judge
                 packet, judgment, _ = generate_judgment(judge, trajectory, scenario, 7401, max_attempts=2)
@@ -242,7 +245,7 @@ def main():
                 require_pairs=block_start == 0,
             )
             save(out / "health_checks" / f"{block_start:04d}.json", health)
-            if not health["passed"]:
+            if config.get("stop_on_health_gate", True) and not health["passed"]:
                 save(out / "status.json", {"status": "stopped_health_gate", "updated_at": now(),
                      "finished": len(rows), "planned": cohort_size * len(providers) * 2,
                      "api_requests": budget.count, "health": health})
