@@ -1,0 +1,40 @@
+T4 多接口并发加速 — 2026-10-20
+
+用户授权与目标
+用户要求利用现有 API/接口尽量加速。保留原两路任务及已产生轨迹，将尚未启动的完整场景分给额外四路，合计最多六条 episode 并发。
+不换被测模型、环境模型、终局裁判、提示、seed、五维尺度或视频输入方式，不按得分筛选结果。
+
+瓶颈证据
+加速前原批次仅两路 episode 并发；环境 state 请求中位耗时约 112 秒，interaction 约 51 秒，policy 约 9 秒，response 约 11 秒。
+现有凭据包含 GPT 专用、通用一、通用二三个路由，以及两个 Claude 凭据路由；它们共享同一供应商域名，不声称是独立供应商或独立后端。
+备用路由单次重放原环境请求作组件验证，产物 build/t4_route_probe_20261020；实际启用路由以冻结配置为准。该探测不计为实验分数。
+
+分工与轨迹保护
+原进程继续当前场景及一个未启动的缓冲场景块，不终止其进行中请求。
+新增批次从 GPT50_011 起接手 33 个未启动场景，共 198 个计划项；原批次保留 6 个场景（003、004、006、008、009、010）。加上更早完成的首批两个场景，完整计划范围仍为原 41 场景。
+转移前逐场景确认无 episode 目录/调用/检查点；已有任何痕迹都拒绝移交。
+原 run 的未来 episode 只创建 status=delegated_to_run、is_measurement=false 的原子调度记录，指向新 run 的实际 result.json。
+原 runner 已有“result 存在就跳过”的规则，因此不会重复发起被转移的 API 请求。调度记录没有分数、不能算成功或 API 失败，也不计为有效轨迹。
+source/delegation.json 与 target/delegation_source.json 保存双向映射。人工/统计汇报须排除 delegated_to_run 作为测量，只读取目标 run 的实际结果，避免重复计数。
+原快照的健康诊断可能把移交计作非完成；其 stop_on_health_gate=false，诊断不会停批，移交不代表真实失败。
+
+调度与路由
+新增 workers=4、scenario_block_size=6；扩大待调度窗口以减少少数慢请求导致空闲，不改变模型输入或场景顺序。
+环境凭据按原 50 场景中的 source_index 确定性分配；同场景所有模型和 text/text_video 使用相同环境凭据槽位，实际槽位记入 result.json。
+只允许替换 api_key_file/api_key_env，禁止通过分发配置改 endpoint/model/prompt/sampling。清除旧 secret 引用后再设置新引用，避免环境变量优先级使分发失效。
+被测策略与统一 Claude 终局裁判继续用原路由，因此原视频时序能力测试仍适用；环境状态/交互解析是纯文本请求。
+环境回复按验证可用的 Claude 凭据分配；配置/日志不包含密钥正文。
+保留 20000 请求预算、每路传输最多一次和原 schema 有界重试；单条失败留档继续，健康诊断不停止整批。
+
+产物和统计
+原批次：build/t4_gpt39_continuation_20261020/run
+新增批次：build/t4_gpt33_parallel_20261020/run
+配置：configs/gpt50_experiment/t4_multimodal_experiment.parallel33_20261020.json
+唯一入口仍为 scripts/run_t4_multimodal_experiment.py；新增批次使用独立已提交运行快照，不读取 T1/T3 正在修改的代码。
+完整 trajectory、checkpoint、API 请求审计、实际视频送达记录、盲评公开材料和空白人工评分表继续保存。
+统计按 run 保留 provenance；同一场景两条件均在同一 run 完成，不能跨 run 拼接成功单边。后续可在披露路由/批次差异后汇报互不重叠场景的总体描述统计。
+仅增加并发不能保证线性提速；实际吞吐量和失败率以真实结果为准，不预报未经测量的完成时间。
+
+启动状态以后续 process.json/status.json 为准；本报告不把准备完成写成实验完成。
+
+冻结前验证：GPT 通用备用凭据返回有效状态 JSON（197.785 秒）；Claude 第二凭据返回有效回复 JSON（25.237 秒）。本次启用原 GPT 专用 + 通用一，共 2 个 GPT 凭据槽位，以及 2 个 Claude 凭据槽位；GPT 通用二尚在探测，未纳入新批次，避免等待阻塞扩容。47 项相关测试通过。

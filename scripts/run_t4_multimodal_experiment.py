@@ -43,6 +43,26 @@ def model_configs(config):
     return result
 
 
+def environment_for_episode(base_env, config, source_index):
+    """Distribute the same environment models across existing credential routes."""
+    env, slots = deepcopy(base_env), {}
+    allowed = {"api_key_file", "api_key_env"}
+    for role, keys in (("appraisal", ("provider", "state_appraisal_provider", "interaction_appraisal_provider")),
+                       ("response", ("response_provider",))):
+        routes = config.get("environment_credential_routes", {}).get(role, [])
+        if not routes:
+            continue
+        if any(not isinstance(r, dict) or not r or set(r) - allowed for r in routes):
+            raise ValueError("environment credential routes may only change secret references")
+        slot = source_index % len(routes)
+        slots[role] = slot
+        for key in keys:
+            env[key] = {k: v for k, v in env[key].items()
+                        if k not in {"api_key", "api_keys", "api_key_env", "api_key_file", "api_key_files"}}
+            env[key].update(routes[slot])
+    return env, slots
+
+
 def run_capability_probes(providers, out, budget):
     controls = prepare_controls(out / "controls")
     with ThreadPoolExecutor(max_workers=min(3, len(providers))) as pool:
@@ -98,7 +118,8 @@ def main():
             base_env[key] = {**base_env[key], "max_tokens": 6500}
         base_env["response_provider"] = {**base_env["response_provider"], "max_tokens": 6000}
         for scenario in scenarios:
-            UnifiedEnvironmentFactory(build_environment_factory(scenario, base_env))()
+            scenario_env, _ = environment_for_episode(base_env, config, source_indices[scenario["scenario_id"]])
+            UnifiedEnvironmentFactory(build_environment_factory(scenario, scenario_env))()
         plan = {"status": "prepared_waiting_for_all_videos", "config": config,
                 "scenario_sha256": {s["scenario_id"]: digest(s) for s in scenarios},
                 "cohort_size": cohort_size, "source_indices": {s["scenario_id"]: source_indices[s["scenario_id"]] for s in scenarios},
@@ -170,7 +191,8 @@ def main():
                 row.update(status="interrupted_retained", error="existing partial trajectory retained; no resampling")
                 save(result_file, row)
                 return row
-            env = deepcopy(base_env)
+            env, row["environment_route_slots"] = environment_for_episode(
+                base_env, config, source_indices[scenario["scenario_id"]])
             factory = UnifiedEnvironmentFactory(build_environment_factory(scenario, env))
             provider = AuditedProvider({**providers[name], "max_tokens": 1800}, directory / "calls" / "policy", budget)
             called_providers = {"policy": provider}
@@ -215,7 +237,10 @@ def main():
 
         # A bounded initial block makes implementation failures visible before
         # the rest of the dataset is scheduled. No outcomes are filtered.
-        pilot_size = min(2, cohort_size)
+        block_size = config.get("scenario_block_size", 2)
+        if not isinstance(block_size, int) or block_size < 1:
+            raise ValueError("scenario_block_size must be a positive integer")
+        pilot_size = min(block_size, cohort_size)
         for block_start in range(0, cohort_size, pilot_size):
             indices = range(block_start, min(block_start + pilot_size, cohort_size))
             block_rows = []
