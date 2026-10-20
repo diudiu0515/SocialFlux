@@ -43,6 +43,17 @@ def model_configs(config):
     return result
 
 
+def policy_configs(config, providers):
+    """Select evaluated policies without changing environment or judge routes."""
+    names = config.get("policy_models", list(providers))
+    if (not isinstance(names, list) or not names
+            or any(not isinstance(name, str) for name in names)
+            or len(set(names)) != len(names)
+            or set(names) - set(providers)):
+        raise ValueError("policy_models must name a nonempty unique subset of configured models")
+    return {name: providers[name] for name in names}
+
+
 def environment_for_episode(base_env, config, source_index):
     """Distribute the same environment models across existing credential routes."""
     env, slots = deepcopy(base_env), {}
@@ -104,6 +115,7 @@ def main():
     with (out / ".lock").open("w") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         providers = model_configs(config)
+        policies = policy_configs(config, providers)
         source = json.loads(Path(config["scenario_manifest"]).read_text())
         scenarios = [json.loads(Path(r["candidate"]).read_text()) for r in source["cases"]]
         source_indices = {s["scenario_id"]: index for index, s in enumerate(scenarios)}
@@ -138,7 +150,7 @@ def main():
         if args.probe_only:
             budget = RequestBudget(out / "request_budget.json", config["request_budget"])
             save(out / "status.json", {"status": "probing_model_media_inputs", "updated_at": now()})
-            capabilities = run_capability_probes(providers, out, budget)
+            capabilities = run_capability_probes(policies, out, budget)
             save(out / "status.json", {"status": "probes_complete_waiting_for_all_videos", "updated_at": now(),
                  "api_requests": budget.count, "capabilities": capabilities, "scenario_episodes_started": False})
             return
@@ -171,7 +183,7 @@ def main():
         save(prereg, freeze)
         budget = RequestBudget(out / "request_budget.json", config["request_budget"])
         save(out / "status.json", {"status": "probing_model_media_inputs", "updated_at": now(), "cohort_size": cohort_size})
-        capabilities = run_capability_probes(providers, out, budget)
+        capabilities = run_capability_probes(policies, out, budget)
         rows = []
 
         def run_one(index, scenario, name, condition):
@@ -246,7 +258,7 @@ def main():
             block_rows = []
             with ThreadPoolExecutor(max_workers=config["workers"]) as pool:
                 pending = {pool.submit(run_one, i, scenarios[i], name, condition): (i, name, condition)
-                           for i in indices for name in providers for condition in ("text_only", "text_video")}
+                           for i in indices for name in policies for condition in ("text_only", "text_video")}
                 while pending:
                     done, _ = wait(pending, timeout=30, return_when=FIRST_COMPLETED)
                     for future in done:
@@ -259,24 +271,24 @@ def main():
                         rows.append(row)
                         block_rows.append(row)
                         save(out / "results.json", rows)
-                    summaries = {name: summarize([r for r in rows if r["model_id"] == name]) for name in providers}
+                    summaries = {name: summarize([r for r in rows if r["model_id"] == name]) for name in policies}
                     save(out / "summary.json", summaries)
                     save(out / "status.json", {"status": "running", "updated_at": now(),
-                         "finished": len(rows), "planned": cohort_size * len(providers) * 2,
+                         "finished": len(rows), "planned": cohort_size * len(policies) * 2,
                          "api_requests": budget.count, "models": summaries})
             health = assess_run_health(
-                block_rows, [name for name in providers if capabilities[name]["selected_transport"]],
+                block_rows, [name for name in policies if capabilities[name]["selected_transport"]],
                 max_failure_fraction=config.get("max_episode_failure_fraction", 0.2),
                 require_pairs=block_start == 0,
             )
             save(out / "health_checks" / f"{block_start:04d}.json", health)
             if config.get("stop_on_health_gate", True) and not health["passed"]:
                 save(out / "status.json", {"status": "stopped_health_gate", "updated_at": now(),
-                     "finished": len(rows), "planned": cohort_size * len(providers) * 2,
+                     "finished": len(rows), "planned": cohort_size * len(policies) * 2,
                      "api_requests": budget.count, "health": health})
                 return
         save(out / "status.json", {"status": "completed_with_recorded_outcomes", "updated_at": now(),
-             "finished": len(rows), "planned": cohort_size * len(providers) * 2, "api_requests": budget.count})
+             "finished": len(rows), "planned": cohort_size * len(policies) * 2, "api_requests": budget.count})
         lines = ["GPT50 T4 text / text+video 多 API 配对实验", f"完成时间：{now()}",
                  "完整结果与失败见 results.json；五维分数及配对差值见 summary.json。",
                  "所有统计按被测模型分组；不支持视觉输入与未触发视频的轨迹单独标记。",

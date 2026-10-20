@@ -4,11 +4,21 @@ from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
 
-from scripts.run_t4_multimodal_experiment import select_cohort, model_configs
+from scripts.run_t4_multimodal_experiment import select_cohort, model_configs, policy_configs
 from evaluation.t4_asset_coverage import audit_asset_coverage, require_complete_assets
 
 
 class CohortTest(unittest.TestCase):
+    def test_policy_subset_keeps_environment_routes_available(self):
+        providers = {name: {"model": name} for name in ("gpt", "claude", "qwen")}
+        self.assertEqual(policy_configs({}, providers), providers)
+        self.assertEqual(policy_configs({"policy_models": ["qwen"]}, providers),
+                         {"qwen": providers["qwen"]})
+        self.assertEqual(set(providers), {"gpt", "claude", "qwen"})
+        for names in ([], ["absent"], ["qwen", "qwen"], "qwen", [None]):
+            with self.assertRaises(ValueError):
+                policy_configs({"policy_models": names}, providers)
+
     def test_explicit_subset_excludes_other_media_but_keeps_all_selected_branches(self):
         scenarios = [{'scenario_id': x} for x in ['A', 'B']]
         inventory = {'requests': [
