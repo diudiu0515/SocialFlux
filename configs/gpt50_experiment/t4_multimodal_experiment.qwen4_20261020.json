@@ -23,9 +23,9 @@
       "routes": "configs/gpt50_experiment/model_routes.hybrid.json",
       "overrides": {
         "model": "Qwen3.5-397B-A17B",
-        "endpoint": "https://llmapi.paratera.com/v1/chat/completions",
-        "api_key_env": "SOCIALFLUX_API_KEY",
-        "api_key_file": "/root/.config/socialflux/paratera_api_key",
+        "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+        "api_key_env": "AUTODL_API_KEY",
+        "api_key_file": "/root/.config/socialflux/autodl_api_key",
         "reasoning_effort": null,
         "stream": true
       }
@@ -40,9 +40,9 @@
   "frame_cache": "/root/autodl-tmp/emotree/build/t4_gpt41_paired_20261008/frames",
   "provider_timeout_seconds": 180,
   "max_episode_failure_fraction": 0.2,
-  "experiment_stage": "diagnostic_qwen_policy_20261020",
+  "experiment_stage": "diagnostic_qwen_policy_autodl_20261020",
   "predecessor_run": "build/t4_gpt33_parallel_20261020/run",
-  "resume_reason": "User requested an additional Qwen or DeepSeek comparison; first four source-order scenarios, independent of outcome; keep frozen prior runs unchanged.",
+  "resume_reason": "User clarified that the additional Qwen/DeepSeek tests must use the existing AutoDL interface. First four source-order scenarios, independent of outcome; the unstarted Paratera plan and all prior runs remain unchanged.",
   "stop_on_health_gate": false,
   "human_review": {
     "enabled": true,

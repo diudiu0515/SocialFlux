@@ -71,3 +71,12 @@ B. Qwen3.8-Max 和 DeepSeek-V4-Pro-0813：复评同一批 16 条已冻结 Claude
 终态记录包含失败和不支持，不能当作成功数。
 新增 Paratera 后台启动被自动审批拒绝：需要明确授权这些具体数据发往 llmapi.paratera.com。
 已向用户说明目的地和范围并请求确认。新增两项均未启动，没有声称已有补测分数。
+
+后续接口纠正（用户指出“接口不是autodl吗”）
+沿用原 AutoDL 服务 https://www.autodl.art/api/v1/chat/completions。
+Paratera 计划保留作历史记录，不启动；使用独立的 autodl 输出目录重新冻结。
+AutoDL 模型目录确认包含 Qwen3.5-397B-A17B、qwen3.7-max 和 DeepSeek-V4-Pro。
+新增被测模型仍为 Qwen3.5-397B-A17B；独立复评型号改为 qwen3.7-max、DeepSeek-V4-Pro。
+新的被测策略批次：build/t4_qwen4_autodl_20261020。
+新的独立裁判批次：build/t4_claude_rejudge_autodl_20261020。
+模型目录只证明服务列出了型号；输入支持、响应成功和评分完成须由实际调用记录确认。
