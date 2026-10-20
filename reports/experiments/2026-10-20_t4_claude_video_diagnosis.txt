@@ -80,3 +80,16 @@ AutoDL 模型目录确认包含 Qwen3.5-397B-A17B、qwen3.7-max 和 DeepSeek-V4-
 新的被测策略批次：build/t4_qwen4_autodl_20261020。
 新的独立裁判批次：build/t4_claude_rejudge_autodl_20261020。
 模型目录只证明服务列出了型号；输入支持、响应成功和评分完成须由实际调用记录确认。
+
+授权与实际启动
+用户明确回复“允许，按上述范围通过 AutoDL 立即运行”后，两项任务已于
+2026-10-20 16:49（Asia/Shanghai）启动：
+  Qwen 配对 PID 55326；build/t4_qwen4_autodl_20261020/process.json
+  独立复评 PID 55327；build/t4_claude_rejudge_autodl_20261020/process.json
+此前的自动审批拦截已解除；Paratera 任务未启动。
+Qwen3.5 的两个原生视频时序控制均通过，selected_transport=native_video；
+证据：build/t4_qwen4_autodl_20261020/run/capabilities/qwen/result.json。
+这证明该次接口测试能处理控制视频，不等于正式场景已完成或视频理解已人工验收。
+原 Claude 实验使用四个带时间戳的帧；新增 Qwen 使用原生视频，跨模型比较应注明传输差异。
+Qwen3.7 与 DeepSeek 已发出首批复评请求。实时完成数、失败及五维成绩以各自
+status.json、results.json、summary.json 和请求审计为准，不把已启动写成已完成。
