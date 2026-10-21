@@ -1,0 +1,49 @@
+﻿scenario_id,model_id,model_name,text_status,video_status,video_display,transport,trigger_turn_ids,video_deferred_turn_ids,text_deferred_turn_ids,successful_media_calls,valid_pair,core_four_delta,first_messages_equal,first_sampling_equal,no_media_reason,failure_roles,error_category,error
+GPT50_002,gpt,gpt-6-astra,completed,completed,评分✓ 媒1 配对✓,video_frames,"[""t1"", ""t3""]",[],"[""t1""]",1,True,-1.25,True,True,已成功调用媒体输入,[],,
+GPT50_002,claude,claude-fable-5,failed,failed,失败 媒1,video_frames,"[""t1""]","[""t1""]",[],1,False,,True,True,已成功调用媒体输入,"[""interaction""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_002,qwen,Qwen3.5-397B-A17B,completed,completed,评分✓ 媒1 配对✓,native_video,"[""t1"", ""t3""]",[],[],1,True,0.75,True,True,已成功调用媒体输入,[],,
+GPT50_002,qwen37,qwen3.7-max,failed,unsupported_video_input,探测未过,,[],[],[],0,False,,,,视觉能力探测未通过，未运行视频轨迹,[],other,model did not pass temporal media controls
+GPT50_002,qwen_vl,qwen3-vl-plus,failed,failed,失败 媒1,native_video,"[""t1""]",[],[],1,False,,True,True,已成功调用媒体输入,"[""interaction""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_002,kimi,Kimi-K3,completed,failed,失败 未见触发,native_video,[],[],[],0,False,,True,True,第一轮完成前调用失败，未到触发环节,"[""interaction"", ""state""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_002,glm,GLM-5.3,failed,unsupported_video_input,探测未过,,[],[],[],0,False,,,,视觉能力探测未通过，未运行视频轨迹,[],other,model did not pass temporal media controls
+GPT50_002,deepseek_flash,DeepSeek-V4.1-Flash,completed,failed,失败 未见触发,video_frames,[],[],[],0,False,,True,True,第一轮完成前调用失败，未到触发环节,"[""state""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_014,gpt,gpt-6-astra,failed,failed,失败 媒1,video_frames,"[""t1""]","[""t1""]",[],1,False,,True,True,已成功调用媒体输入,"[""interaction"", ""state""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_014,claude,claude-fable-5,failed,failed,失败 未见触发,video_frames,[],[],[],0,False,,True,True,已保存轮的状态未变化，未达到触发条件,"[""interaction""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_014,qwen,Qwen3.5-397B-A17B,failed,failed,失败 媒1,native_video,"[""t1""]",[],[],1,False,,True,True,已成功调用媒体输入,"[""state""]",upstream_stream_error,"provider stream error: {""message"": ""Request could not be completed"", ""type"": ""upstream_error""}"
+GPT50_014,qwen37,qwen3.7-max,completed,unsupported_video_input,探测未过,,[],[],[],0,False,,,,视觉能力探测未通过，未运行视频轨迹,[],other,model did not pass temporal media controls
+GPT50_014,qwen_vl,qwen3-vl-plus,completed,failed,失败 未见触发,native_video,[],[],[],0,False,,True,True,第一轮完成前调用失败，未到触发环节,"[""response""]",environment_schema,structured environment response failed JSON/schema validation after 4 attempts
+GPT50_014,kimi,Kimi-K3,failed,failed,失败 未见触发,native_video,[],[],[],0,False,,True,True,第一轮完成前调用失败，未到触发环节,"[""policy""]",other,"provider HTTP 400: {""error"":{""message"":""parameter temperature is incompatible with the selected model: value must be one of: 1 (request id: 202610201215197674623888268d9d6rAMiNEmD)"",""type"":""invalid_request_error"",""param"":""temperature"",""code"":""invalid_request""}}"
+GPT50_014,glm,GLM-5.3,failed,unsupported_video_input,探测未过,,[],[],[],0,False,,,,视觉能力探测未通过，未运行视频轨迹,[],other,model did not pass temporal media controls
+GPT50_014,deepseek_flash,DeepSeek-V4.1-Flash,failed,completed,评分✓ 媒1,video_frames,"[""t1""]",[],[],1,False,,True,True,已成功调用媒体输入,[],,
+GPT50_019,gpt,gpt-6-astra,failed,failed,失败 媒1,video_frames,"[""t1""]","[""t1""]","[""t1""]",1,False,,True,True,已成功调用媒体输入,"[""state""]",upstream_stream_error,"provider stream error: {""message"": ""Request could not be completed"", ""type"": ""upstream_error""}"
+GPT50_019,claude,claude-fable-5,completed,completed,评分✓ 媒2 配对✓,video_frames,"[""t1"", ""t3""]",[],[],2,True,-1,True,True,已成功调用媒体输入,[],,
+GPT50_019,qwen,Qwen3.5-397B-A17B,completed,completed,评分✓ 媒2 配对✓,native_video,"[""t1"", ""t3""]",[],[],2,True,-0.75,True,True,已成功调用媒体输入,[],,
+GPT50_019,qwen37,qwen3.7-max,failed,unsupported_video_input,探测未过,,[],[],"[""t1""]",0,False,,,,视觉能力探测未通过，未运行视频轨迹,[],other,model did not pass temporal media controls
+GPT50_019,qwen_vl,qwen3-vl-plus,completed,completed,评分✓ 媒2 配对✓,native_video,"[""t1"", ""t3""]",[],[],2,True,-2,True,True,已成功调用媒体输入,[],,
+GPT50_019,kimi,Kimi-K3,failed,failed,失败 媒1,native_video,"[""t1"", ""t3""]",[],[],1,False,,True,True,已成功调用媒体输入,"[""policy""]",timeout,The read operation timed out
+GPT50_019,glm,GLM-5.3,completed,unsupported_video_input,探测未过,,[],[],[],0,False,,,,视觉能力探测未通过，未运行视频轨迹,[],other,model did not pass temporal media controls
+GPT50_019,deepseek_flash,DeepSeek-V4.1-Flash,completed,completed,评分✓ 媒1 配对✓,video_frames,"[""t1"", ""t3""]",[],[],1,True,0.25,True,True,已成功调用媒体输入,[],,
+GPT50_024,gpt,gpt-6-astra,failed,completed,评分✓ 媒1,video_frames,"[""t1""]",[],[],1,False,,True,True,已成功调用媒体输入,[],,
+GPT50_024,claude,claude-fable-5,completed,completed,评分✓ 媒1 配对✓,video_frames,"[""t1""]","[""t1""]",[],1,True,-5.75,True,True,已成功调用媒体输入,[],,
+GPT50_024,qwen,Qwen3.5-397B-A17B,failed,failed,失败 未见触发,native_video,[],[],[],0,False,,True,True,第一轮完成前调用失败，未到触发环节,"[""policy""]",truncated_response,provider stream was truncated: length
+GPT50_024,qwen37,qwen3.7-max,completed,unsupported_video_input,探测未过,,[],[],[],0,False,,,,视觉能力探测未通过，未运行视频轨迹,[],other,model did not pass temporal media controls
+GPT50_024,qwen_vl,qwen3-vl-plus,completed,completed,评分✓ 媒1 配对✓,native_video,"[""t1"", ""t3""]",[],[],1,True,2.5,True,True,已成功调用媒体输入,[],,
+GPT50_024,kimi,Kimi-K3,completed,completed,评分✓ 媒1 配对✓,native_video,"[""t1""]","[""t1""]",[],1,True,1.5,True,True,已成功调用媒体输入,[],,
+GPT50_024,glm,GLM-5.3,failed,unsupported_video_input,探测未过,,[],[],[],0,False,,,,视觉能力探测未通过，未运行视频轨迹,[],other,model did not pass temporal media controls
+GPT50_024,deepseek_flash,DeepSeek-V4.1-Flash,completed,completed,评分✓ 媒2 配对✓,video_frames,"[""t1"", ""t3""]",[],[],2,True,1.25,True,True,已成功调用媒体输入,[],,
+GPT50_026,gpt,gpt-6-astra,completed,completed,评分✓ 媒2 配对✓,video_frames,"[""t1"", ""t3"", ""t5""]",[],[],2,True,0.0,True,True,已成功调用媒体输入,[],,
+GPT50_026,claude,claude-fable-5,completed,failed,失败 媒3,video_frames,"[""t1"", ""t3"", ""t5""]","[""t1""]",[],3,False,,True,True,已成功调用媒体输入,"[""judge""]",judge_schema,T4 judgment 5ca0837ab4c84faaadc29f58e9f41466 failed JSON/schema validation after 2 attempts
+GPT50_026,qwen,Qwen3.5-397B-A17B,failed,completed,评分✓ 媒1,native_video,"[""t1""]",[],[],1,False,,True,True,已成功调用媒体输入,[],,
+GPT50_026,qwen37,qwen3.7-max,completed,unsupported_video_input,探测未过,,[],[],[],0,False,,,,视觉能力探测未通过，未运行视频轨迹,[],other,model did not pass temporal media controls
+GPT50_026,qwen_vl,qwen3-vl-plus,completed,completed,评分✓ 媒2 配对✓,native_video,"[""t1"", ""t3""]","[""t1""]",[],2,True,-0.75,True,True,已成功调用媒体输入,[],,
+GPT50_026,kimi,Kimi-K3,completed,completed,评分✓ 媒2 配对✓,native_video,"[""t1"", ""t3""]",[],[],2,True,1.25,True,True,已成功调用媒体输入,[],,
+GPT50_026,glm,GLM-5.3,failed,unsupported_video_input,探测未过,,[],[],[],0,False,,,,视觉能力探测未通过，未运行视频轨迹,[],other,model did not pass temporal media controls
+GPT50_026,deepseek_flash,DeepSeek-V4.1-Flash,completed,completed,评分✓ 媒1 配对✓,video_frames,"[""t1"", ""t3""]",[],[],1,True,-0.75,True,True,已成功调用媒体输入,[],,
+GPT50_031,gpt,gpt-6-astra,failed,failed,失败 未见触发,video_frames,[],[],[],0,False,,True,True,第一轮完成前调用失败，未到触发环节,"[""policy""]",upstream_stream_error,"provider stream error: {""message"": ""Request could not be completed"", ""type"": ""upstream_error""}"
+GPT50_031,claude,claude-fable-5,completed,completed,评分✓ 媒1 配对✓,video_frames,"[""t1""]","[""t1""]",[],1,True,-0.25,True,True,已成功调用媒体输入,[],,
+GPT50_031,qwen,Qwen3.5-397B-A17B,completed,completed,评分✓ 媒1 配对✓,native_video,"[""t1"", ""t3""]",[],[],1,True,-1.25,True,True,已成功调用媒体输入,[],,
+GPT50_031,qwen37,qwen3.7-max,completed,unsupported_video_input,探测未过,,[],[],[],0,False,,,,视觉能力探测未通过，未运行视频轨迹,[],other,model did not pass temporal media controls
+GPT50_031,qwen_vl,qwen3-vl-plus,completed,failed,失败 未见触发,native_video,[],[],[],0,False,,True,True,第一轮完成前调用失败，未到触发环节,"[""interaction""]",upstream_stream_error,"provider stream error: {""message"": ""Request could not be completed"", ""type"": ""upstream_error""}"
+GPT50_031,kimi,Kimi-K3,completed,failed,失败 未见触发,native_video,[],[],[],0,False,,True,True,第一轮完成前调用失败，未到触发环节,"[""policy""]",other,"provider HTTP 400: {""error"":{""message"":""parameter temperature is incompatible with the selected model: value must be one of: 1 (request id: 202610201501109965841918268d9d6SZiB03Wu)"",""type"":""invalid_request_error"",""param"":""temperature"",""code"":""invalid_request""}}"
+GPT50_031,glm,GLM-5.3,completed,unsupported_video_input,探测未过,,[],[],"[""t1""]",0,False,,,,视觉能力探测未通过，未运行视频轨迹,[],other,model did not pass temporal media controls
+GPT50_031,deepseek_flash,DeepSeek-V4.1-Flash,failed,completed,评分✓ 媒1,video_frames,"[""t1""]",[],[],1,False,,True,True,已成功调用媒体输入,[],,

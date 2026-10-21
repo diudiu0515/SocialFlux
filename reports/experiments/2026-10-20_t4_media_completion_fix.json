@@ -1,0 +1,187 @@
+{
+  "checked_at": "2026-10-20T18:43:55.304232+08:00",
+  "source_audit_time": "2026-10-20T18:42:11+08:00",
+  "source_audit_sha256": "02fba38c227d60f0744311ac920409210c853b83f6984aac96016e01f4548dc3",
+  "api_requests": 0,
+  "validation": "saved termination decisions replayed through new pure guard; no new policy or environment responses",
+  "cases": [
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "gpt",
+      "source_path": "build/t4_gpt41_paired_20261020/run/episodes/GPT50_002/gpt/text_video/trajectory.json",
+      "source_sha256": "bae31d8ae4b6e051631b38583148d8e7fec728f01cc21d35a8f5a33a08caee54",
+      "old_ending": {
+        "reason": "natural_completion",
+        "turn_id": 1
+      },
+      "guard": {
+        "policy": "first_event_response_v1",
+        "first_video_event": true,
+        "available_media": true,
+        "natural_completion_requested": true,
+        "hard_termination": false,
+        "natural_completion_deferred": true,
+        "response_opportunity_turn": 2,
+        "event_ids": [
+          "media_t01_ommv2_relationship_perceived_responsiveness_up"
+        ]
+      },
+      "source_unchanged": true,
+      "hard_stop_checked": true,
+      "scenario_max_turns": 20,
+      "scenario_sha256": "413702f48d8fd4c976c0a157837a8e6d44c1a8166365e68fe8cd93d29a1bcee0"
+    },
+    {
+      "scenario_id": "GPT50_014",
+      "model_id": "gpt",
+      "source_path": "build/t4_gpt33_parallel_20261020/run/episodes/GPT50_014/gpt/text_video/trajectory.json",
+      "source_sha256": "9dfb4ff04839cc511fe1cf28c28c139eb3b26241e6380c6e2659bc2a0f328eef",
+      "old_ending": {
+        "reason": "natural_completion",
+        "turn_id": 1
+      },
+      "guard": {
+        "policy": "first_event_response_v1",
+        "first_video_event": true,
+        "available_media": true,
+        "natural_completion_requested": true,
+        "hard_termination": false,
+        "natural_completion_deferred": true,
+        "response_opportunity_turn": 2,
+        "event_ids": [
+          "media_t01_ommv2_emotion_anxiety_up"
+        ]
+      },
+      "source_unchanged": true,
+      "hard_stop_checked": true,
+      "scenario_max_turns": 20,
+      "scenario_sha256": "471a090def33f0cd2c12e69311240a55bc04bcf5738bc739ac23f5404b35b498"
+    },
+    {
+      "scenario_id": "GPT50_019",
+      "model_id": "gpt",
+      "source_path": "build/t4_gpt33_parallel_20261020/run/episodes/GPT50_019/gpt/text_video/trajectory.json",
+      "source_sha256": "b263003d12d6de8e729fa6f5cc21c443258d6411886c7d499a26e079e4c5a835",
+      "old_ending": {
+        "reason": "natural_completion",
+        "turn_id": 1
+      },
+      "guard": {
+        "policy": "first_event_response_v1",
+        "first_video_event": true,
+        "available_media": true,
+        "natural_completion_requested": true,
+        "hard_termination": false,
+        "natural_completion_deferred": true,
+        "response_opportunity_turn": 2,
+        "event_ids": [
+          "media_t01_ommv2_emotion_frustration_down"
+        ]
+      },
+      "source_unchanged": true,
+      "hard_stop_checked": true,
+      "scenario_max_turns": 20,
+      "scenario_sha256": "d3593075e2af239b715dbc06074d50107437e958cbf9b3ee0842012322359a8f"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "claude",
+      "source_path": "build/t4_gpt33_parallel_20261020/run/episodes/GPT50_024/claude/text_video/trajectory.json",
+      "source_sha256": "bdf549f7472aa9b4d0d272400e58eb30c7263ea6864c5ec68ad9ae40065331f3",
+      "old_ending": {
+        "reason": "natural_completion",
+        "turn_id": 1
+      },
+      "guard": {
+        "policy": "first_event_response_v1",
+        "first_video_event": true,
+        "available_media": true,
+        "natural_completion_requested": true,
+        "hard_termination": false,
+        "natural_completion_deferred": true,
+        "response_opportunity_turn": 2,
+        "event_ids": [
+          "media_t01_ommv2_emotion_frustration_up"
+        ]
+      },
+      "source_unchanged": true,
+      "hard_stop_checked": true,
+      "scenario_max_turns": 20,
+      "scenario_sha256": "d4430214175f9aafdef4212fa123e76e6c6b7f60264c35905ae1810c5a94765f"
+    },
+    {
+      "scenario_id": "GPT50_026",
+      "model_id": "gpt",
+      "source_path": "build/t4_gpt33_parallel_20261020/run/episodes/GPT50_026/gpt/text_video/trajectory.json",
+      "source_sha256": "ad2308435f247397c7fe9a65ec48aecb5b9d38a52a7c39b750796567372680e2",
+      "old_ending": {
+        "reason": "natural_completion",
+        "turn_id": 1
+      },
+      "guard": {
+        "policy": "first_event_response_v1",
+        "first_video_event": true,
+        "available_media": true,
+        "natural_completion_requested": true,
+        "hard_termination": false,
+        "natural_completion_deferred": true,
+        "response_opportunity_turn": 2,
+        "event_ids": [
+          "media_t01_ommv2_emotion_anxiety_up"
+        ]
+      },
+      "source_unchanged": true,
+      "hard_stop_checked": true,
+      "scenario_max_turns": 20,
+      "scenario_sha256": "acfc1b302cdb82810e72fd66c1c06ec7b88fbb7f49c7712d7430084a146ad9f4"
+    },
+    {
+      "scenario_id": "GPT50_031",
+      "model_id": "claude",
+      "source_path": "build/t4_gpt33_parallel_20261020/run/episodes/GPT50_031/claude/text_video/trajectory.json",
+      "source_sha256": "0e94e5c459075438935b06f2e8d23ae814c89e23f793fad7cbc9445356f2a448",
+      "old_ending": {
+        "reason": "natural_completion",
+        "turn_id": 1
+      },
+      "guard": {
+        "policy": "first_event_response_v1",
+        "first_video_event": true,
+        "available_media": true,
+        "natural_completion_requested": true,
+        "hard_termination": false,
+        "natural_completion_deferred": true,
+        "response_opportunity_turn": 2,
+        "event_ids": [
+          "media_t01_ommv2_emotion_anxiety_up"
+        ]
+      },
+      "source_unchanged": true,
+      "hard_stop_checked": true,
+      "scenario_max_turns": 20,
+      "scenario_sha256": "4a396703d16faa466bad5af376eb9008db579314f08f33aa27b03962186886ac"
+    }
+  ],
+  "no_media_reason_counts": {
+    "failed_before_first_completed_turn": 12,
+    "capability_probe_failed": 33,
+    "terminal_event_without_followup": 6,
+    "media_call_failed": 2,
+    "unchanged_state_in_saved_turns": 1,
+    "awaiting_first_completed_turn": 1,
+    "not_started": 23
+  },
+  "prepared_plan": "build/t4_first_media_response_v1_20261020/run/plan.json",
+  "tests": {
+    "passed": 70,
+    "modules": [
+      "test_t4_media_completion",
+      "test_multimodal",
+      "test_t4_contract",
+      "test_t4_experiment_cohort",
+      "test_t4_route_distribution",
+      "test_t4_exposure_audit",
+      "test_model_environment"
+    ]
+  }
+}

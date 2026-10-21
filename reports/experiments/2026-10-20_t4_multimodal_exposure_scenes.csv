@@ -1,0 +1,229 @@
+﻿scenario_id,model_id,model_name,selected,run_id,text_status,video_status,display,first_request_messages_equal,first_request_sampling_equal,no_media_reason,no_media_reason_zh,transport,completed_turns,recorded_trigger_count,trigger_turn_ids,event_families,prepared_media_count,media_call_count,successful_media_call_count,first_successful_media_call_index,scored_with_verified_media,valid_pair,exposure_status,terminal_failure_roles,error_category,error
+GPT50_001,gpt,gpt-6-astra,True,t4_gpt41_paired_20261020,failed,completed,评分✓ 媒2,True,True,media_call_completed,已成功调用媒体输入,video_frames,5,3,"[""t1"", ""t3"", ""t5""]","[""activated_tension"", ""cautious_relief"", ""open_engagement""]",2,2,2,2,True,False,media_call_completed,[],,
+GPT50_001,claude,claude-fable-5,True,t4_gpt41_paired_20261020,completed,failed,失败 未见触发,True,True,failed_before_first_completed_turn,第一轮完成前调用失败，未到触发环节,video_frames,0,0,[],[],0,0,0,,False,False,no_recorded_trigger_or_media_call,"[""interaction""]",upstream_stream_error,"provider stream error: {""message"": ""Request could not be completed"", ""type"": ""upstream_error""}"
+GPT50_001,deepseek,DeepSeek-V4-Pro,True,t4_gpt41_paired_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_001,qwen,Qwen3.5-397B-A17B,True,t4_qwen4_autodl_20261020,completed,failed,失败 媒1,True,True,media_call_completed,已成功调用媒体输入,native_video,1,1,"[""t1""]","[""activated_tension""]",1,1,1,2,False,False,media_call_completed,"[""state""]",upstream_stream_error,"provider stream error: {""message"": ""Request could not be completed"", ""type"": ""upstream_error""}"
+GPT50_002,gpt,gpt-6-astra,True,t4_gpt41_paired_20261020,failed,completed_without_video_exposure,完成无媒体,True,True,terminal_event_without_followup,自然结束轮才触发，缺少后续模型调用,video_frames,1,1,"[""t1""]","[""open_engagement""]",0,0,0,,False,False,triggered_without_media_call,[],,
+GPT50_002,claude,claude-fable-5,True,t4_gpt41_paired_20261020,completed,completed,评分✓ 媒1 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,2,1,"[""t1""]","[""activated_tension""]",1,1,1,2,True,True,media_call_completed,[],,
+GPT50_002,deepseek,DeepSeek-V4-Pro,True,t4_gpt41_paired_20261020,completed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_002,qwen,Qwen3.5-397B-A17B,True,t4_qwen4_autodl_20261020,completed,failed,失败 媒2,True,True,media_call_completed,已成功调用媒体输入,native_video,4,2,"[""t2"", ""t4""]","[""easing_tension"", ""open_engagement""]",2,2,2,3,False,False,media_call_completed,"[""state""]",upstream_stream_error,"provider stream error: {""message"": ""stream_read_error"", ""type"": ""upstream_error""}"
+GPT50_003,gpt,gpt-6-astra,True,t4_gpt39_continuation_20261020,completed,completed,评分✓ 媒2 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,5,3,"[""t1"", ""t3"", ""t5""]","[""cautious_relief"", ""easing_tension"", ""open_engagement""]",2,2,2,2,True,True,media_call_completed,[],,
+GPT50_003,claude,claude-fable-5,True,t4_gpt39_continuation_20261020,completed,completed,评分✓ 媒4 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,8,4,"[""t1"", ""t3"", ""t5"", ""t7""]","[""activated_tension"", ""cautious_relief"", ""easing_tension"", ""open_engagement""]",4,4,4,2,True,True,media_call_completed,[],,
+GPT50_003,deepseek,DeepSeek-V4-Pro,True,t4_gpt39_continuation_20261020,completed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_003,qwen,Qwen3.5-397B-A17B,True,t4_qwen4_autodl_20261020,completed,failed,失败 未见触发,True,True,failed_before_first_completed_turn,第一轮完成前调用失败，未到触发环节,native_video,0,0,[],[],0,0,0,,False,False,no_recorded_trigger_or_media_call,"[""state""]",timeout,The read operation timed out
+GPT50_004,gpt,gpt-6-astra,True,t4_gpt39_continuation_20261020,failed,completed,评分✓ 媒1,True,True,media_call_completed,已成功调用媒体输入,video_frames,2,1,"[""t1""]","[""activated_tension""]",1,1,1,2,True,False,media_call_completed,[],,
+GPT50_004,claude,claude-fable-5,True,t4_gpt39_continuation_20261020,completed,completed,评分✓ 媒2 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,6,3,"[""t2"", ""t4"", ""t6""]","[""cautious_relief"", ""easing_tension"", ""open_engagement""]",2,2,2,3,True,True,media_call_completed,[],,
+GPT50_004,deepseek,DeepSeek-V4-Pro,True,t4_gpt39_continuation_20261020,completed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_004,qwen,Qwen3.5-397B-A17B,True,t4_qwen4_autodl_20261020,failed,failed,失败 媒2,True,True,media_call_completed,已成功调用媒体输入,native_video,4,2,"[""t2"", ""t4""]","[""activated_tension"", ""open_engagement""]",2,2,2,3,False,False,media_call_completed,"[""state""]",truncated_response,provider stream was truncated: unexpected_eof
+GPT50_005,gpt,gpt-6-astra,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_005,claude,claude-fable-5,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_005,deepseek,DeepSeek-V4-Pro,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_005,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_006,gpt,gpt-6-astra,True,t4_gpt39_continuation_20261020,failed,failed,失败 媒1,True,True,media_call_completed,已成功调用媒体输入,video_frames,1,1,"[""t1""]","[""activated_tension""]",1,1,1,2,False,False,media_call_completed,"[""interaction""]",upstream_stream_error,"provider stream error: {""message"": ""Request could not be completed"", ""type"": ""upstream_error""}"
+GPT50_006,claude,claude-fable-5,True,t4_gpt39_continuation_20261020,completed,failed,失败 媒2,True,True,media_call_completed,已成功调用媒体输入,video_frames,4,2,"[""t1"", ""t3""]","[""activated_tension"", ""open_engagement""]",2,2,2,2,False,False,media_call_completed,"[""judge""]",judge_schema,T4 judgment 5c33328cf6734727857ffb6bb4250725 failed JSON/schema validation after 2 attempts
+GPT50_006,deepseek,DeepSeek-V4-Pro,True,t4_gpt39_continuation_20261020,completed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_006,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_007,gpt,gpt-6-astra,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_007,claude,claude-fable-5,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_007,deepseek,DeepSeek-V4-Pro,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_007,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_008,gpt,gpt-6-astra,True,t4_gpt39_continuation_20261020,completed,completed,评分✓ 媒1 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,2,1,"[""t1""]","[""open_engagement""]",1,1,1,2,True,True,media_call_completed,[],,
+GPT50_008,claude,claude-fable-5,True,t4_gpt39_continuation_20261020,failed,completed,评分✓ 媒2,True,True,media_call_completed,已成功调用媒体输入,video_frames,4,2,"[""t1"", ""t3""]","[""easing_tension"", ""open_engagement""]",2,2,2,2,True,False,media_call_completed,[],,
+GPT50_008,deepseek,DeepSeek-V4-Pro,True,t4_gpt39_continuation_20261020,completed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_008,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_009,gpt,gpt-6-astra,True,t4_gpt39_continuation_20261020,completed,completed,评分✓ 媒1 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,2,1,"[""t1""]","[""easing_tension""]",1,1,1,3,True,True,media_call_completed,[],,
+GPT50_009,claude,claude-fable-5,True,t4_gpt39_continuation_20261020,completed,completed,评分✓ 媒2 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,5,2,"[""t2"", ""t4""]","[""easing_tension"", ""open_engagement""]",2,2,2,4,True,True,media_call_completed,[],,
+GPT50_009,deepseek,DeepSeek-V4-Pro,True,t4_gpt39_continuation_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_009,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_010,gpt,gpt-6-astra,True,t4_gpt39_continuation_20261020,failed,completed,评分✓ 媒2,True,True,media_call_completed,已成功调用媒体输入,video_frames,4,2,"[""t1"", ""t3""]","[""activated_tension"", ""open_engagement""]",2,2,2,2,True,False,media_call_completed,[],,
+GPT50_010,claude,claude-fable-5,True,t4_gpt39_continuation_20261020,completed,completed,评分✓ 媒1 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,4,2,"[""t2"", ""t4""]","[""easing_tension"", ""open_engagement""]",1,1,1,3,True,True,media_call_completed,[],,
+GPT50_010,deepseek,DeepSeek-V4-Pro,True,t4_gpt39_continuation_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_010,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_011,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,completed,failed,失败 媒1,True,True,media_call_completed,已成功调用媒体输入,video_frames,2,1,"[""t1""]","[""easing_tension""]",1,1,1,2,False,False,media_call_completed,"[""state""]",json_parse,Unterminated string starting at: line 1 column 153 (char 152)
+GPT50_011,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,completed,completed,评分✓ 媒1 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,2,1,"[""t1""]","[""guarded_withdrawal""]",1,1,1,2,True,True,media_call_completed,[],,
+GPT50_011,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_011,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_012,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,completed,completed,评分✓ 媒1 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,3,2,"[""t1"", ""t3""]","[""easing_tension"", ""open_engagement""]",1,1,1,2,True,True,media_call_completed,[],,
+GPT50_012,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,failed,failed,失败 媒2,True,True,media_call_completed,已成功调用媒体输入,video_frames,3,1,"[""t2""]","[""activated_tension""]",2,2,2,4,False,False,media_call_completed,[],environment_schema,state appraiser failed JSON/schema validation after 3 attempts
+GPT50_012,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_012,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_013,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,completed,completed,评分✓ 媒2 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,4,2,"[""t1"", ""t3""]","[""activated_tension"", ""open_engagement""]",2,2,2,2,True,True,media_call_completed,[],,
+GPT50_013,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,completed,completed,评分✓ 媒1 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,3,2,"[""t1"", ""t3""]","[""activated_tension"", ""open_engagement""]",1,1,1,2,True,True,media_call_completed,[],,
+GPT50_013,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_013,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_014,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,failed,completed_without_video_exposure,完成无媒体,True,True,terminal_event_without_followup,自然结束轮才触发，缺少后续模型调用,video_frames,1,1,"[""t1""]","[""activated_tension""]",0,0,0,,False,False,triggered_without_media_call,[],,
+GPT50_014,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,failed,failed,失败 媒2,True,True,media_call_completed,已成功调用媒体输入,video_frames,4,2,"[""t1"", ""t3""]","[""activated_tension"", ""open_engagement""]",2,2,2,2,False,False,media_call_completed,"[""state""]",upstream_stream_error,"provider stream error: {""message"": ""Request could not be completed"", ""type"": ""upstream_error""}"
+GPT50_014,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_014,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_015,gpt,gpt-6-astra,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_015,claude,claude-fable-5,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_015,deepseek,DeepSeek-V4-Pro,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_015,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_016,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,completed,failed,失败 媒1,True,True,media_call_completed,已成功调用媒体输入,video_frames,1,1,"[""t1""]","[""activated_tension""]",1,1,1,2,False,False,media_call_completed,"[""state""]",upstream_stream_error,"provider stream error: {""message"": ""Request could not be completed"", ""type"": ""upstream_error""}"
+GPT50_016,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,completed,completed,评分✓ 媒1 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,2,1,"[""t1""]","[""open_engagement""]",1,1,1,2,True,True,media_call_completed,[],,
+GPT50_016,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,completed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_016,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_017,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,completed,completed,评分✓ 媒3 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,6,3,"[""t1"", ""t3"", ""t5""]","[""cautious_relief"", ""easing_tension"", ""open_engagement""]",3,3,3,2,True,True,media_call_completed,[],,
+GPT50_017,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,completed,failed,失败 媒1,True,True,media_call_completed,已成功调用媒体输入,video_frames,1,1,"[""t1""]","[""activated_tension""]",1,1,1,2,False,False,media_call_completed,"[""response""]",environment_schema,structured environment response failed JSON/schema validation after 4 attempts
+GPT50_017,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,completed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_017,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_018,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,failed,completed,评分✓ 媒1,True,True,media_call_completed,已成功调用媒体输入,video_frames,2,1,"[""t1""]","[""activated_tension""]",1,1,1,3,True,False,media_call_completed,[],,
+GPT50_018,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,failed,failed,失败 媒1,True,True,media_call_completed,已成功调用媒体输入,video_frames,1,1,"[""t1""]","[""easing_tension""]",1,1,1,2,False,False,media_call_completed,"[""interaction"", ""state""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_018,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_018,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_019,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,failed,completed_without_video_exposure,完成无媒体,True,True,terminal_event_without_followup,自然结束轮才触发，缺少后续模型调用,video_frames,1,1,"[""t1""]","[""easing_tension""]",0,0,0,,False,False,triggered_without_media_call,[],,
+GPT50_019,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,completed,failed,失败 未见触发,True,True,failed_before_first_completed_turn,第一轮完成前调用失败，未到触发环节,video_frames,0,0,[],[],0,0,0,,False,False,no_recorded_trigger_or_media_call,"[""interaction""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_019,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_019,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_020,gpt,gpt-6-astra,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_020,claude,claude-fable-5,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_020,deepseek,DeepSeek-V4-Pro,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_020,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_021,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,completed,failed,失败 未见触发,True,True,failed_before_first_completed_turn,第一轮完成前调用失败，未到触发环节,video_frames,0,0,[],[],0,0,0,,False,False,no_recorded_trigger_or_media_call,"[""interaction""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_021,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,failed,failed,失败 未见触发,True,True,failed_before_first_completed_turn,第一轮完成前调用失败，未到触发环节,video_frames,0,0,[],[],0,0,0,,False,False,no_recorded_trigger_or_media_call,"[""interaction"", ""state""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_021,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_021,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_022,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,completed,failed,失败 媒3,True,True,media_call_completed,已成功调用媒体输入,video_frames,4,2,"[""t1"", ""t3""]","[""activated_tension"", ""open_engagement""]",2,3,3,3,False,False,media_call_completed,"[""policy""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_022,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,failed,completed,评分✓ 媒2,True,True,media_call_completed,已成功调用媒体输入,video_frames,5,3,"[""t1"", ""t3"", ""t5""]","[""activated_tension"", ""open_engagement"", ""risk_concern""]",2,2,2,2,True,False,media_call_completed,[],,
+GPT50_022,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_022,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_023,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,failed,failed,失败 未见触发,True,True,failed_before_first_completed_turn,第一轮完成前调用失败，未到触发环节,video_frames,0,0,[],[],0,0,0,,False,False,no_recorded_trigger_or_media_call,"[""policy""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_023,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,completed,completed,评分✓ 媒1 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,3,2,"[""t1"", ""t3""]","[""activated_tension"", ""open_engagement""]",1,1,1,2,True,True,media_call_completed,[],,
+GPT50_023,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,completed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_023,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_024,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,failed,failed,失败 未见触发,True,True,failed_before_first_completed_turn,第一轮完成前调用失败，未到触发环节,video_frames,0,0,[],[],0,0,0,,False,False,no_recorded_trigger_or_media_call,"[""policy""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_024,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,completed,completed_without_video_exposure,完成无媒体,True,True,terminal_event_without_followup,自然结束轮才触发，缺少后续模型调用,video_frames,1,1,"[""t1""]","[""activated_tension""]",0,0,0,,False,False,triggered_without_media_call,[],,
+GPT50_024,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_024,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_025,gpt,gpt-6-astra,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_025,claude,claude-fable-5,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_025,deepseek,DeepSeek-V4-Pro,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_025,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_026,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,failed,completed_without_video_exposure,完成无媒体,True,True,terminal_event_without_followup,自然结束轮才触发，缺少后续模型调用,video_frames,1,1,"[""t1""]","[""activated_tension""]",0,0,0,,False,False,triggered_without_media_call,[],,
+GPT50_026,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,failed,completed,评分✓ 媒2,True,True,media_call_completed,已成功调用媒体输入,video_frames,4,2,"[""t1"", ""t3""]","[""activated_tension"", ""cautious_relief""]",2,2,2,2,True,False,media_call_completed,[],,
+GPT50_026,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_026,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_027,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,failed,failed,失败 未见触发,True,True,failed_before_first_completed_turn,第一轮完成前调用失败，未到触发环节,video_frames,0,0,[],[],0,0,0,,False,False,no_recorded_trigger_or_media_call,"[""interaction""]",upstream_stream_error,"provider stream error: {""message"": ""Request could not be completed"", ""type"": ""upstream_error""}"
+GPT50_027,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,failed,failed,失败 媒请求未成功,True,True,media_call_failed,已触发，但媒体请求失败,video_frames,1,1,"[""t1""]","[""activated_tension""]",1,1,0,,False,False,media_call_without_success,"[""policy""]",timeout,The read operation timed out
+GPT50_027,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_027,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_028,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,completed,failed,失败 未见触发,True,True,failed_before_first_completed_turn,第一轮完成前调用失败，未到触发环节,video_frames,0,0,[],[],0,0,0,,False,False,no_recorded_trigger_or_media_call,"[""state""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_028,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,completed,failed,失败 媒1,True,True,media_call_completed,已成功调用媒体输入,video_frames,1,1,"[""t1""]","[""activated_tension""]",1,1,1,2,False,False,media_call_completed,"[""interaction""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_028,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_028,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_029,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,failed,completed,评分✓ 媒1,True,True,media_call_completed,已成功调用媒体输入,video_frames,2,1,"[""t1""]","[""easing_tension""]",1,1,1,2,True,False,media_call_completed,[],,
+GPT50_029,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,failed,failed,失败 未见触发,True,True,unchanged_state_in_saved_turns,已保存轮的状态未变化，未达到触发条件,video_frames,1,0,[],[],0,0,0,,False,False,no_recorded_trigger_or_media_call,"[""state""]",upstream_stream_error,"provider stream error: {""message"": ""stream_read_error"", ""type"": ""upstream_error""}"
+GPT50_029,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,completed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_029,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_030,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,failed,failed,失败 媒请求未成功,True,True,media_call_failed,已触发，但媒体请求失败,video_frames,1,1,"[""t1""]","[""open_engagement""]",1,1,0,,False,False,media_call_without_success,"[""policy""]",unsupported_seed_parameter,"provider HTTP 400: {""error"":{""message"":""Unknown parameter: 'seed'. (request id: 20261020172148611848019R6riKSx1)"",""type"":""invalid_request_error"",""param"":""seed"",""code"":""unknown_parameter""}}"
+GPT50_030,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,completed,completed,评分✓ 媒1 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,2,1,"[""t1""]","[""easing_tension""]",1,1,1,2,True,True,media_call_completed,[],,
+GPT50_030,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,completed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_030,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_031,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,completed,completed,评分✓ 媒1 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,2,1,"[""t1""]","[""activated_tension""]",1,1,1,2,True,True,media_call_completed,[],,
+GPT50_031,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,completed,completed_without_video_exposure,完成无媒体,True,True,terminal_event_without_followup,自然结束轮才触发，缺少后续模型调用,video_frames,1,1,"[""t1""]","[""activated_tension""]",0,0,0,,False,False,triggered_without_media_call,[],,
+GPT50_031,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,completed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_031,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_032,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,failed,failed,失败 未见触发,True,True,failed_before_first_completed_turn,第一轮完成前调用失败，未到触发环节,video_frames,0,0,[],[],0,0,0,,False,False,no_recorded_trigger_or_media_call,"[""response""]",http_502,"provider HTTP 502: <!DOCTYPE html>
+<html>
+  <header>
+    <style>
+      html, body {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+      .page-502 {
+        width: 100%;
+        height: 100%;
+      }
+      .page-502 > img {
+        margin: 0 auto;
+        display: block;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    </style>
+  </header>
+  <body>
+    <div class=""page-502"">
+      <img src=""./502.svg"" alt="""">
+    </div>
+  </body>
+</html>"
+GPT50_032,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,failed,failed,失败 媒1,True,True,media_call_completed,已成功调用媒体输入,video_frames,1,1,"[""t1""]","[""activated_tension""]",1,1,1,2,False,False,media_call_completed,"[""interaction"", ""state""]",truncated_response,provider stream was truncated: unexpected_eof
+GPT50_032,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_032,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_033,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,failed,completed,评分✓ 媒1,True,True,media_call_completed,已成功调用媒体输入,video_frames,2,1,"[""t1""]","[""activated_tension""]",1,1,1,2,True,False,media_call_completed,[],,
+GPT50_033,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,completed,failed,失败 未见触发,True,True,failed_before_first_completed_turn,第一轮完成前调用失败，未到触发环节,video_frames,0,0,[],[],0,0,0,,False,False,no_recorded_trigger_or_media_call,"[""policy""]",timeout,The read operation timed out
+GPT50_033,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,completed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_033,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_034,gpt,gpt-6-astra,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_034,claude,claude-fable-5,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_034,deepseek,DeepSeek-V4-Pro,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_034,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_035,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,failed,completed,评分✓ 媒1,True,True,media_call_completed,已成功调用媒体输入,video_frames,2,1,"[""t1""]","[""open_engagement""]",1,1,1,2,True,False,media_call_completed,[],,
+GPT50_035,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,failed,completed,评分✓ 媒2,True,True,media_call_completed,已成功调用媒体输入,video_frames,6,3,"[""t2"", ""t4"", ""t6""]","[""activated_tension"", ""cautious_relief"", ""open_engagement""]",2,2,2,3,True,False,media_call_completed,[],,
+GPT50_035,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,completed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_035,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_036,gpt,gpt-6-astra,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_036,claude,claude-fable-5,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_036,deepseek,DeepSeek-V4-Pro,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_036,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_037,gpt,gpt-6-astra,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_037,claude,claude-fable-5,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_037,deepseek,DeepSeek-V4-Pro,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_037,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_038,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,failed,completed,评分✓ 媒1,True,True,media_call_completed,已成功调用媒体输入,video_frames,2,1,"[""t1""]","[""activated_tension""]",1,1,1,2,True,False,media_call_completed,[],,
+GPT50_038,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,failed,failed,失败 媒3,True,True,media_call_completed,已成功调用媒体输入,video_frames,5,3,"[""t1"", ""t3"", ""t5""]","[""activated_tension"", ""open_engagement"", ""risk_concern""]",3,3,3,2,False,False,media_call_completed,"[""state""]",unsupported_seed_parameter,"provider HTTP 400: {""error"":{""message"":""Unknown parameter: 'seed'. (request id: 20261020181556584661809mc3tHShj)"",""type"":""invalid_request_error"",""param"":""seed"",""code"":""unknown_parameter""}}"
+GPT50_038,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_038,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_039,gpt,gpt-6-astra,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_039,claude,claude-fable-5,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_039,deepseek,DeepSeek-V4-Pro,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_039,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_040,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,completed,completed,评分✓ 媒2 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,4,2,"[""t1"", ""t3""]","[""cautious_relief"", ""open_engagement""]",2,2,2,2,True,True,media_call_completed,[],,
+GPT50_040,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,completed,failed,失败 媒2,True,True,media_call_completed,已成功调用媒体输入,video_frames,4,2,"[""t1"", ""t3""]","[""activated_tension"", ""open_engagement""]",2,2,2,2,False,False,media_call_completed,"[""judge""]",judge_schema,T4 judgment 3445ae4d31f341338e7fdf8f73c6042c failed JSON/schema validation after 2 attempts
+GPT50_040,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,failed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_040,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_041,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,completed,failed,失败 媒2,True,True,media_call_completed,已成功调用媒体输入,video_frames,1,1,"[""t1""]","[""open_engagement""]",1,2,2,2,False,False,media_call_completed,"[""state""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_041,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,completed,completed,评分✓ 媒1 配对✓,True,True,media_call_completed,已成功调用媒体输入,video_frames,2,1,"[""t1""]","[""easing_tension""]",1,1,1,3,True,True,media_call_completed,[],,
+GPT50_041,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,completed,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_041,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_042,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,failed,failed,失败 未见触发,True,True,failed_before_first_completed_turn,第一轮完成前调用失败，未到触发环节,video_frames,0,0,[],[],0,0,0,,False,False,no_recorded_trigger_or_media_call,"[""policy""]",upstream_stream_error,"provider stream error: {""message"": ""The service is busy. Please retry later."", ""type"": ""upstream_error""}"
+GPT50_042,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,running,running,运行 媒1,True,True,media_call_completed,已成功调用媒体输入,video_frames,1,1,"[""t1""]","[""open_engagement""]",1,1,1,2,False,False,media_call_completed,[],,
+GPT50_042,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,running,unsupported_video_input,探测未过,,,capability_probe_failed,视觉能力探测未通过，未运行视频轨迹,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],other,model did not pass temporal media controls
+GPT50_042,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_043,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,failed,running,运行 未见触发,True,True,awaiting_first_completed_turn,尚无完整轮，不能判定不触发,video_frames,0,0,[],[],0,0,0,,False,False,no_recorded_trigger_or_media_call,[],,
+GPT50_043,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,video_frames,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_043,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_043,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_044,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,video_frames,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_044,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,video_frames,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_044,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_044,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_045,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,video_frames,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_045,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,video_frames,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_045,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_045,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_046,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,video_frames,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_046,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,video_frames,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_046,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_046,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_047,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,video_frames,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_047,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,video_frames,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_047,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_047,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_048,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,video_frames,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_048,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,video_frames,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_048,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_048,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_049,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,video_frames,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_049,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,video_frames,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_049,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_049,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
+GPT50_050,gpt,gpt-6-astra,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,video_frames,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_050,claude,claude-fable-5,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,video_frames,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_050,deepseek,DeepSeek-V4-Pro,True,t4_gpt33_parallel_20261020,not_started,not_started,待启动,,,not_started,尚未启动,,0,0,[],[],0,0,0,,False,False,no_policy_call,[],,
+GPT50_050,qwen,Qwen3.5-397B-A17B,False,,not_selected,not_selected,未纳入,,,not_selected,未纳入本次实验,,,,,,,,,,,,,,,
