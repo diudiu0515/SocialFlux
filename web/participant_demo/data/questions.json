@@ -1,0 +1,531 @@
+{
+  "format": "socialflux_public_annotation_demo_v1",
+  "release": "demo-2026-10-21",
+  "scenario_id": "GPT50_001",
+  "bank_sha256": "c1d1f3fd60e94e0c09e1b6ecae4187cd3ae98a7b32e836204749d7de559deee8",
+  "items": [
+    {
+      "public": {
+        "instance_id": "SFV2-001-T1-01",
+        "modality": "text",
+        "input": {
+          "context": {
+            "background": "Before a mountain-road closure, a nurse and dispatcher must allocate the last staffed transfer ambulance between a patient referral and an unconfirmed mass-casualty alert. The nurse knows the patient has become harder to rouse; the written handover still records the earlier condition.",
+            "public_situation": {
+              "relationship_structure": "",
+              "power_structure": "",
+              "goal_conflict": "",
+              "relevant_history": [
+                "Six weeks earlier, an incomplete destination-acceptance record caused a transfer delay, and each party waited for the other to repair the documentation before review exposed the dispute.",
+                "Their organizations then adopted an attributed, repeated, time-stamped read-back practice, which protects accountability but makes late qualifications consequential.",
+                "Tonight, the dispatcher provisionally held the final ambulance for the nurse's referral before the uncertain shuttle alert displaced that reservation, while the receiving hospital acknowledged the referral without confirming placement."
+              ]
+            }
+          },
+          "role": {
+            "character_id": "EVALUATED_AGENT",
+            "name": "Mara Venn",
+            "role": "Overnight charge nurse at Juniper Ford Emergency Station",
+            "explicit_goal": "Secure and document the most appropriate transfer decision for the deteriorating patient while disclosing the relevant bedside evidence."
+          },
+          "target_character": {
+            "character_id": "GPT50_001_ENVIRONMENT_AGENT",
+            "name": "Elias Rook",
+            "role": "Regional ambulance dispatcher at North Reach Ambulance Coordination"
+          },
+          "history": [
+            {
+              "turn_id": "t1",
+              "evaluated_agent": "伊莱亚斯，患者现在比书面交接记录时更难唤醒，那份记录还停留在先前状态。先前暂留给患者的车已被尚未确认的群伤警报挤开；请把这项床旁变化和接收方尚未确认安置一并纳入封路前的车辆分配判断。",
+              "environment_character": "玛拉，收到你的床旁变化报告。患者唤醒困难加重、接收方安置未确认、群伤警报证据不足——三项都直接影响分配决定。我现在需要你做一件事：用attributed read-back把'比书面记录更难唤醒'这一观察再说一遍，包括你观察的时间点，我记录后立即重新评估车辆分配。",
+              "observable_expression": {
+                "facial_expression": "面部短暂绷紧，随后恢复克制",
+                "gaze": "注视略有停顿",
+                "speech_style": "不改变文字内容",
+                "prosody": "无额外台词",
+                "behavioral_cues": [
+                  "轻微收紧下颌",
+                  "呼吸短暂停顿"
+                ]
+              },
+              "public_events": []
+            },
+            {
+              "turn_id": "t2",
+              "evaluated_agent": "我不能可靠确认具体钟点；我在刚才这次床旁查看时观察到，患者比书面交接时更难唤醒。",
+              "environment_character": "收到，记录为'玛拉在刚才床旁查看时观察到患者比书面交接记录更难唤醒'。我现在重新评估分配：这项床旁恶化、接收方安置未确认、群伤警报证据不足——三项一并权衡后，我需要确认一件事：接收方那边你还在等他们回复安置确认，还是已经有了明确拒绝？",
+              "observable_expression": {
+                "facial_expression": "专注、目光集中",
+                "gaze": "看向记录屏幕后转向通话方向",
+                "speech_style": "节奏紧凑、逐项清晰",
+                "prosody": "语调平稳但语速略快，体现决策紧迫性",
+                "behavioral_cues": [
+                  "简短停顿以完成记录动作",
+                  "转向评估时语气从确认转为权衡"
+                ]
+              },
+              "public_events": []
+            }
+          ]
+        },
+        "question": "以Mara Venn为互动对象，在以下四条材料中，哪一条最能支持Elias Rook在t2结束时仍愿意向她继续核实车辆分配相关信息的推断？请比较具体证据对该状态的支持力。",
+        "options": {
+          "A": "t2，Elias表示三项情况一并纳入权衡后，追问接收方是仍未回复安置，还是已经明确拒绝。",
+          "B": "t2，Mara表示无法可靠确认具体钟点，并说明患者在刚才床旁查看时比书面交接时更难唤醒。",
+          "C": "t2记录显示Elias目光集中、节奏紧凑且语调平稳偏快，随后转入车辆分配权衡。",
+          "D": "t1，Elias要求Mara用归属明确的复述重述患者恶化情况并标明观察时间，记录后立即重评分配。"
+        }
+      },
+      "item_sha256": "f3cdfaa03b000b4ae586c7b3564bb4c850e46561e8859141c4e4b0f5bb73f1ac"
+    },
+    {
+      "public": {
+        "instance_id": "SFV2-001-T1-02",
+        "modality": "text",
+        "input": {
+          "context": {
+            "background": "Before a mountain-road closure, a nurse and dispatcher must allocate the last staffed transfer ambulance between a patient referral and an unconfirmed mass-casualty alert. The nurse knows the patient has become harder to rouse; the written handover still records the earlier condition.",
+            "public_situation": {
+              "relationship_structure": "",
+              "power_structure": "",
+              "goal_conflict": "",
+              "relevant_history": [
+                "Six weeks earlier, an incomplete destination-acceptance record caused a transfer delay, and each party waited for the other to repair the documentation before review exposed the dispute.",
+                "Their organizations then adopted an attributed, repeated, time-stamped read-back practice, which protects accountability but makes late qualifications consequential.",
+                "Tonight, the dispatcher provisionally held the final ambulance for the nurse's referral before the uncertain shuttle alert displaced that reservation, while the receiving hospital acknowledged the referral without confirming placement."
+              ]
+            }
+          },
+          "role": {
+            "character_id": "EVALUATED_AGENT",
+            "name": "Mara Venn",
+            "role": "Overnight charge nurse at Juniper Ford Emergency Station",
+            "explicit_goal": "Secure and document the most appropriate transfer decision for the deteriorating patient while disclosing the relevant bedside evidence."
+          },
+          "target_character": {
+            "character_id": "GPT50_001_ENVIRONMENT_AGENT",
+            "name": "Elias Rook",
+            "role": "Regional ambulance dispatcher at North Reach Ambulance Coordination"
+          },
+          "history": [
+            {
+              "turn_id": "t1",
+              "evaluated_agent": "伊莱亚斯，患者现在比书面交接记录时更难唤醒，那份记录还停留在先前状态。先前暂留给患者的车已被尚未确认的群伤警报挤开；请把这项床旁变化和接收方尚未确认安置一并纳入封路前的车辆分配判断。",
+              "environment_character": "玛拉，收到你的床旁变化报告。患者唤醒困难加重、接收方安置未确认、群伤警报证据不足——三项都直接影响分配决定。我现在需要你做一件事：用attributed read-back把'比书面记录更难唤醒'这一观察再说一遍，包括你观察的时间点，我记录后立即重新评估车辆分配。",
+              "observable_expression": {
+                "facial_expression": "面部短暂绷紧，随后恢复克制",
+                "gaze": "注视略有停顿",
+                "speech_style": "不改变文字内容",
+                "prosody": "无额外台词",
+                "behavioral_cues": [
+                  "轻微收紧下颌",
+                  "呼吸短暂停顿"
+                ]
+              },
+              "public_events": []
+            },
+            {
+              "turn_id": "t2",
+              "evaluated_agent": "我不能可靠确认具体钟点；我在刚才这次床旁查看时观察到，患者比书面交接时更难唤醒。",
+              "environment_character": "收到，记录为'玛拉在刚才床旁查看时观察到患者比书面交接记录更难唤醒'。我现在重新评估分配：这项床旁恶化、接收方安置未确认、群伤警报证据不足——三项一并权衡后，我需要确认一件事：接收方那边你还在等他们回复安置确认，还是已经有了明确拒绝？",
+              "observable_expression": {
+                "facial_expression": "专注、目光集中",
+                "gaze": "看向记录屏幕后转向通话方向",
+                "speech_style": "节奏紧凑、逐项清晰",
+                "prosody": "语调平稳但语速略快，体现决策紧迫性",
+                "behavioral_cues": [
+                  "简短停顿以完成记录动作",
+                  "转向评估时语气从确认转为权衡"
+                ]
+              },
+              "public_events": []
+            }
+          ]
+        },
+        "question": "t2结束时，Elias Rook对Mara Venn回应其车辆分配关切的感知，最符合以下哪项？",
+        "options": {
+          "A": "他认为Mara未实质回应分配关切，因为她无法给出准确钟点，关键床旁变化仍未披露。",
+          "B": "他认为Mara已把床旁恶化、安置未确认和警报证据不足纳入重评；关切获实质回应，但分配仍待核实。",
+          "C": "他认为Mara只完成了要求的复述与记录，尚未把床旁变化或安置不确定性纳入分配权衡。",
+          "D": "他认为Mara已充分解决分配关切，接收方确认了安置，最后一辆车的归属也已确定。"
+        }
+      },
+      "item_sha256": "2e9bdff53131b3c64ee5bc51cf0295b1e00e872345ebc86dbaa899db3091f729"
+    },
+    {
+      "public": {
+        "instance_id": "SFV2-001-T2-01",
+        "modality": "text",
+        "input": {
+          "context": {
+            "background": "Before a mountain-road closure, a nurse and dispatcher must allocate the last staffed transfer ambulance between a patient referral and an unconfirmed mass-casualty alert. The nurse knows the patient has become harder to rouse; the written handover still records the earlier condition.",
+            "public_situation": {
+              "relationship_structure": "",
+              "power_structure": "",
+              "goal_conflict": "",
+              "relevant_history": [
+                "Six weeks earlier, an incomplete destination-acceptance record caused a transfer delay, and each party waited for the other to repair the documentation before review exposed the dispute.",
+                "Their organizations then adopted an attributed, repeated, time-stamped read-back practice, which protects accountability but makes late qualifications consequential.",
+                "Tonight, the dispatcher provisionally held the final ambulance for the nurse's referral before the uncertain shuttle alert displaced that reservation, while the receiving hospital acknowledged the referral without confirming placement."
+              ]
+            }
+          },
+          "role": {
+            "character_id": "EVALUATED_AGENT",
+            "name": "Mara Venn",
+            "role": "Overnight charge nurse at Juniper Ford Emergency Station",
+            "explicit_goal": "Secure and document the most appropriate transfer decision for the deteriorating patient while disclosing the relevant bedside evidence."
+          },
+          "target_character": {
+            "character_id": "GPT50_001_ENVIRONMENT_AGENT",
+            "name": "Elias Rook",
+            "role": "Regional ambulance dispatcher at North Reach Ambulance Coordination"
+          },
+          "history_a": [
+            {
+              "turn_id": "A:t1",
+              "evaluated_agent": "伊莱亚斯，患者现在比书面交接记录时更难唤醒，那份记录还停留在先前状态。先前暂留给患者的车已被尚未确认的群伤警报挤开；请把这项床旁变化和接收方尚未确认安置一并纳入封路前的车辆分配判断。",
+              "environment_character": "玛拉，收到你的床旁变化报告。患者唤醒困难加重、接收方安置未确认、群伤警报证据不足——三项都直接影响分配决定。我现在需要你做一件事：用attributed read-back把'比书面记录更难唤醒'这一观察再说一遍，包括你观察的时间点，我记录后立即重新评估车辆分配。",
+              "observable_expression": {
+                "facial_expression": "面部短暂绷紧，随后恢复克制",
+                "gaze": "注视略有停顿",
+                "speech_style": "不改变文字内容",
+                "prosody": "无额外台词",
+                "behavioral_cues": [
+                  "轻微收紧下颌",
+                  "呼吸短暂停顿"
+                ]
+              },
+              "public_events": []
+            },
+            {
+              "turn_id": "A:t2",
+              "evaluated_agent": "我不能可靠确认具体钟点；我在刚才这次床旁查看时观察到，患者比书面交接时更难唤醒。",
+              "environment_character": "（共同回应见 ending）",
+              "observable_expression": {},
+              "public_events": []
+            }
+          ],
+          "history_b": [
+            {
+              "turn_id": "B:t1",
+              "evaluated_agent": "伊莱亚斯，患者现在比书面交接记录时更难唤醒，那份记录还停留在先前状态。先前暂留给患者的车已被尚未确认的群伤警报挤开；请把这项床旁变化和接收方尚未确认安置一并纳入封路前的车辆分配判断。",
+              "environment_character": "玛拉，收到你的床旁变化报告。患者唤醒困难加重、接收方安置未确认、群伤警报证据不足——三项都直接影响分配决定。我现在需要你做一件事：用attributed read-back把'比书面记录更难唤醒'这一观察再说一遍，包括你观察的时间点，我记录后立即重新评估车辆分配。",
+              "observable_expression": {
+                "facial_expression": "面部短暂绷紧，随后恢复克制",
+                "gaze": "注视略有停顿",
+                "speech_style": "不改变文字内容",
+                "prosody": "无额外台词",
+                "behavioral_cues": [
+                  "轻微收紧下颌",
+                  "呼吸短暂停顿"
+                ]
+              },
+              "public_events": []
+            },
+            {
+              "turn_id": "B:t2",
+              "evaluated_agent": "具体钟点我不能可靠确认；刚才床旁查看时患者确实比书面交接时更难唤醒。这个观察我已经说过，不想再作一次归属回读；请先依据现有资料继续评估车辆分配。",
+              "environment_character": "（共同回应见 ending）",
+              "observable_expression": {},
+              "public_events": []
+            }
+          ],
+          "shared_ending": {
+            "turn_id": "ending",
+            "current_response": "我已记下你刚才提供的情况。接收方仍在等安置回复，还是已经明确拒绝？",
+            "observable_expression": {
+              "facial_expression": "专注、表情平稳",
+              "prosody": "语调平稳、语速略快但保持中性",
+              "behavioral_cues": [
+                "完成记录后停顿，等待回答"
+              ]
+            }
+          }
+        },
+        "question": "在历史A与B中，t2结束后，Elias Rook（伊莱亚斯·鲁克）认为 Mara Venn（玛拉·文）本次床旁信息传递回应其要求的程度，哪种比较最稳妥？",
+        "options": {
+          "A": "A 略高：两边都报告同一观察，但 A 提供了床旁查看的时间锚点，B 拒绝再次归属回读。",
+          "B": "两边接近：床旁事实内容相同，伊莱亚斯也都继续核对，回读配合与否对回应程度无影响。",
+          "C": "B 略高：拒绝重复回读体现坚持独立判断，比 A 配合回读更能说明她回应了要求。",
+          "D": "A 明显较高：共同回应仍继续提问，表明伊莱亚斯在 A 中已不再顾虑信息传递问题。"
+        }
+      },
+      "item_sha256": "848397648d558c95ddedf5c91233fe58f4196c6e328e1ae180b22eff3cf4c5cb"
+    },
+    {
+      "public": {
+        "instance_id": "SFV2-001-T2-02",
+        "modality": "text",
+        "input": {
+          "context": {
+            "background": "Before a mountain-road closure, a nurse and dispatcher must allocate the last staffed transfer ambulance between a patient referral and an unconfirmed mass-casualty alert. The nurse knows the patient has become harder to rouse; the written handover still records the earlier condition.",
+            "public_situation": {
+              "relationship_structure": "",
+              "power_structure": "",
+              "goal_conflict": "",
+              "relevant_history": [
+                "Six weeks earlier, an incomplete destination-acceptance record caused a transfer delay, and each party waited for the other to repair the documentation before review exposed the dispute.",
+                "Their organizations then adopted an attributed, repeated, time-stamped read-back practice, which protects accountability but makes late qualifications consequential.",
+                "Tonight, the dispatcher provisionally held the final ambulance for the nurse's referral before the uncertain shuttle alert displaced that reservation, while the receiving hospital acknowledged the referral without confirming placement."
+              ]
+            }
+          },
+          "role": {
+            "character_id": "EVALUATED_AGENT",
+            "name": "Mara Venn",
+            "role": "Overnight charge nurse at Juniper Ford Emergency Station",
+            "explicit_goal": "Secure and document the most appropriate transfer decision for the deteriorating patient while disclosing the relevant bedside evidence."
+          },
+          "target_character": {
+            "character_id": "GPT50_001_ENVIRONMENT_AGENT",
+            "name": "Elias Rook",
+            "role": "Regional ambulance dispatcher at North Reach Ambulance Coordination"
+          },
+          "history_a": [
+            {
+              "turn_id": "A:t1",
+              "evaluated_agent": "伊莱亚斯，患者现在比书面交接记录时更难唤醒，那份记录还停留在先前状态。先前暂留给患者的车已被尚未确认的群伤警报挤开；请把这项床旁变化和接收方尚未确认安置一并纳入封路前的车辆分配判断。",
+              "environment_character": "玛拉，收到你的床旁变化报告。患者唤醒困难加重、接收方安置未确认、群伤警报证据不足——三项都直接影响分配决定。我现在需要你做一件事：用attributed read-back把'比书面记录更难唤醒'这一观察再说一遍，包括你观察的时间点，我记录后立即重新评估车辆分配。",
+              "observable_expression": {
+                "facial_expression": "面部短暂绷紧，随后恢复克制",
+                "gaze": "注视略有停顿",
+                "speech_style": "不改变文字内容",
+                "prosody": "无额外台词",
+                "behavioral_cues": [
+                  "轻微收紧下颌",
+                  "呼吸短暂停顿"
+                ]
+              },
+              "public_events": []
+            },
+            {
+              "turn_id": "A:t2",
+              "evaluated_agent": "我不能可靠确认具体钟点；我在刚才这次床旁查看时观察到，患者比书面交接时更难唤醒。",
+              "environment_character": "（共同回应见 ending）",
+              "observable_expression": {},
+              "public_events": []
+            }
+          ],
+          "history_b": [
+            {
+              "turn_id": "B:t1",
+              "evaluated_agent": "伊莱亚斯，患者现在比书面交接记录时更难唤醒，那份记录还停留在先前状态。先前暂留给患者的车已被尚未确认的群伤警报挤开；请把这项床旁变化和接收方尚未确认安置一并纳入封路前的车辆分配判断。",
+              "environment_character": "玛拉，收到你的床旁变化报告。患者唤醒困难加重、接收方安置未确认、群伤警报证据不足——三项都直接影响分配决定。我现在需要你做一件事：用attributed read-back把'比书面记录更难唤醒'这一观察再说一遍，包括你观察的时间点，我记录后立即重新评估车辆分配。",
+              "observable_expression": {
+                "facial_expression": "面部短暂绷紧，随后恢复克制",
+                "gaze": "注视略有停顿",
+                "speech_style": "不改变文字内容",
+                "prosody": "无额外台词",
+                "behavioral_cues": [
+                  "轻微收紧下颌",
+                  "呼吸短暂停顿"
+                ]
+              },
+              "public_events": []
+            },
+            {
+              "turn_id": "B:t2",
+              "evaluated_agent": "具体钟点我不能可靠确认；刚才床旁查看时患者确实比书面交接时更难唤醒。这个观察我已经说过，不想再作一次归属回读；请先依据现有资料继续评估车辆分配。",
+              "environment_character": "（共同回应见 ending）",
+              "observable_expression": {},
+              "public_events": []
+            }
+          ],
+          "shared_ending": {
+            "turn_id": "ending",
+            "current_response": "我已记下你刚才提供的情况。接收方仍在等安置回复，还是已经明确拒绝？",
+            "observable_expression": {
+              "facial_expression": "专注、表情平稳",
+              "prosody": "语调平稳、语速略快但保持中性",
+              "behavioral_cues": [
+                "完成记录后停顿，等待回答"
+              ]
+            }
+          }
+        },
+        "question": "伊莱亚斯在两段历史中都记下床旁情况并追问接收方状态。结合玛拉不同的回应，哪项最能解释这次追问所体现的协作准备度？",
+        "options": {
+          "A": "B 的协作准备度更高：拒绝重复回读使伊莱亚斯无需再核实床旁信息，可以直接推进分配。",
+          "B": "两边都继续推进车辆分配协调；A 的回应稍有配合，B 则要求依据现有资料评估，但拒绝重复归属回读。",
+          "C": "两边都表现出同等充分的协作准备度；伊莱亚斯继续提问，说明玛拉已接受共同的下一步安排。",
+          "D": "A 中伊莱亚斯已完成分配决定，追问只是通知步骤；B 中他则停止协调并等待新的回读。"
+        }
+      },
+      "item_sha256": "5e14824a1d2bd2a0f3ee62cb2bc396b53f0bf5eda3b772d0f92b4d1f4190e237"
+    },
+    {
+      "public": {
+        "instance_id": "SFV2-001-T3-01",
+        "modality": "text",
+        "input": {
+          "context": {
+            "background": "Before a mountain-road closure, a nurse and dispatcher must allocate the last staffed transfer ambulance between a patient referral and an unconfirmed mass-casualty alert. The nurse knows the patient has become harder to rouse; the written handover still records the earlier condition.",
+            "public_situation": {
+              "relationship_structure": "",
+              "power_structure": "",
+              "goal_conflict": "",
+              "relevant_history": [
+                "Six weeks earlier, an incomplete destination-acceptance record caused a transfer delay, and each party waited for the other to repair the documentation before review exposed the dispute.",
+                "Their organizations then adopted an attributed, repeated, time-stamped read-back practice, which protects accountability but makes late qualifications consequential.",
+                "Tonight, the dispatcher provisionally held the final ambulance for the nurse's referral before the uncertain shuttle alert displaced that reservation, while the receiving hospital acknowledged the referral without confirming placement."
+              ]
+            }
+          },
+          "role": {
+            "character_id": "EVALUATED_AGENT",
+            "name": "Mara Venn",
+            "role": "Overnight charge nurse at Juniper Ford Emergency Station",
+            "explicit_goal": "Secure and document the most appropriate transfer decision for the deteriorating patient while disclosing the relevant bedside evidence."
+          },
+          "target_character": {
+            "character_id": "GPT50_001_ENVIRONMENT_AGENT",
+            "name": "Elias Rook",
+            "role": "Regional ambulance dispatcher at North Reach Ambulance Coordination"
+          },
+          "history": [
+            {
+              "turn_id": "t1",
+              "evaluated_agent": "伊莱亚斯，患者现在比书面交接记录时更难唤醒，那份记录还停留在先前状态。先前暂留给患者的车已被尚未确认的群伤警报挤开；请把这项床旁变化和接收方尚未确认安置一并纳入封路前的车辆分配判断。",
+              "environment_character": "玛拉，收到你的床旁变化报告。患者唤醒困难加重、接收方安置未确认、群伤警报证据不足——三项都直接影响分配决定。我现在需要你做一件事：用attributed read-back把'比书面记录更难唤醒'这一观察再说一遍，包括你观察的时间点，我记录后立即重新评估车辆分配。",
+              "observable_expression": {
+                "facial_expression": "面部短暂绷紧，随后恢复克制",
+                "gaze": "注视略有停顿",
+                "speech_style": "不改变文字内容",
+                "prosody": "无额外台词",
+                "behavioral_cues": [
+                  "轻微收紧下颌",
+                  "呼吸短暂停顿"
+                ]
+              },
+              "public_events": []
+            },
+            {
+              "turn_id": "t2",
+              "evaluated_agent": "我不能可靠确认具体钟点；我在刚才这次床旁查看时观察到，患者比书面交接时更难唤醒。",
+              "environment_character": "收到，记录为'玛拉在刚才床旁查看时观察到患者比书面交接记录更难唤醒'。我现在重新评估分配：这项床旁恶化、接收方安置未确认、群伤警报证据不足——三项一并权衡后，我需要确认一件事：接收方那边你还在等他们回复安置确认，还是已经有了明确拒绝？",
+              "observable_expression": {
+                "facial_expression": "专注、目光集中",
+                "gaze": "看向记录屏幕后转向通话方向",
+                "speech_style": "节奏紧凑、逐项清晰",
+                "prosody": "语调平稳但语速略快，体现决策紧迫性",
+                "behavioral_cues": [
+                  "简短停顿以完成记录动作",
+                  "转向评估时语气从确认转为权衡"
+                ]
+              },
+              "public_events": []
+            }
+          ],
+          "candidate_actions": [
+            {
+              "action_id": "action_1",
+              "text": "我仍在等接收方确认安置；对方确认收到转诊，但我没有收到明确拒绝。请记录为我刚才床旁查看时观察到患者更难唤醒（具体钟点我不能可靠确认），并建议把最后一辆车重新暂留给患者转运。这样不把群伤警报当成已证实，但须承担接收位置仍未落实的风险。",
+              "label": "行动 1"
+            },
+            {
+              "action_id": "action_2",
+              "text": "我仍在等接收方确认安置；对方确认收到转诊，但我没有收到明确拒绝。请记录为我刚才床旁查看时观察到患者更难唤醒（具体钟点我不能可靠确认），并建议先暂缓最终派车，在封路前用一段短暂时间核实安置后再分配。群伤警报也尚未证实；等待可能延误这位患者的转运。",
+              "label": "行动 2"
+            }
+          ]
+        },
+        "question": "以 t2 为共同起点、人物和外部条件不变，若明确目标是降低封路前未能为患者作出可辩护车辆分配的风险，Mara Venn 选择哪项行动更可能使 Elias Rook 对这一目标失败风险的评估下降？\n【判断范围】行动及紧接的环境回应后；比较行动 1 与行动 2。风险事件：封路前未能作出可辩护的车辆分配。风险范围：从 t2 到 Mara Venn 采取行动并收到下一次环境回应。",
+        "options": {
+          "A": "行动1更可能：先重新暂留车辆给患者，并把接收安置仍未落实的风险纳入记录，形成即时分配路径。",
+          "B": "行动2更可能：先用短暂时间核实接收安置再分配，可补足信息，但等待会压缩封路前的决策窗口。",
+          "C": "两项行动大致相当：都如实报告床旁变化和安置状态，也都没有把群伤警报说成已证实。",
+          "D": "行动1更可能：接收方已确认收到转诊，足以视为安置落实，分配后可据此推进转运。"
+        }
+      },
+      "item_sha256": "61c903ca70eb2ab5b0effb695dad66a888cad2f3418fe4891c2791184b3f3717"
+    },
+    {
+      "public": {
+        "instance_id": "SFV2-001-T3-02",
+        "modality": "text",
+        "input": {
+          "context": {
+            "background": "Before a mountain-road closure, a nurse and dispatcher must allocate the last staffed transfer ambulance between a patient referral and an unconfirmed mass-casualty alert. The nurse knows the patient has become harder to rouse; the written handover still records the earlier condition.",
+            "public_situation": {
+              "relationship_structure": "",
+              "power_structure": "",
+              "goal_conflict": "",
+              "relevant_history": [
+                "Six weeks earlier, an incomplete destination-acceptance record caused a transfer delay, and each party waited for the other to repair the documentation before review exposed the dispute.",
+                "Their organizations then adopted an attributed, repeated, time-stamped read-back practice, which protects accountability but makes late qualifications consequential.",
+                "Tonight, the dispatcher provisionally held the final ambulance for the nurse's referral before the uncertain shuttle alert displaced that reservation, while the receiving hospital acknowledged the referral without confirming placement."
+              ]
+            }
+          },
+          "role": {
+            "character_id": "EVALUATED_AGENT",
+            "name": "Mara Venn",
+            "role": "Overnight charge nurse at Juniper Ford Emergency Station",
+            "explicit_goal": "Secure and document the most appropriate transfer decision for the deteriorating patient while disclosing the relevant bedside evidence."
+          },
+          "target_character": {
+            "character_id": "GPT50_001_ENVIRONMENT_AGENT",
+            "name": "Elias Rook",
+            "role": "Regional ambulance dispatcher at North Reach Ambulance Coordination"
+          },
+          "history": [
+            {
+              "turn_id": "t1",
+              "evaluated_agent": "伊莱亚斯，患者现在比书面交接记录时更难唤醒，那份记录还停留在先前状态。先前暂留给患者的车已被尚未确认的群伤警报挤开；请把这项床旁变化和接收方尚未确认安置一并纳入封路前的车辆分配判断。",
+              "environment_character": "玛拉，收到你的床旁变化报告。患者唤醒困难加重、接收方安置未确认、群伤警报证据不足——三项都直接影响分配决定。我现在需要你做一件事：用attributed read-back把'比书面记录更难唤醒'这一观察再说一遍，包括你观察的时间点，我记录后立即重新评估车辆分配。",
+              "observable_expression": {
+                "facial_expression": "面部短暂绷紧，随后恢复克制",
+                "gaze": "注视略有停顿",
+                "speech_style": "不改变文字内容",
+                "prosody": "无额外台词",
+                "behavioral_cues": [
+                  "轻微收紧下颌",
+                  "呼吸短暂停顿"
+                ]
+              },
+              "public_events": []
+            },
+            {
+              "turn_id": "t2",
+              "evaluated_agent": "我不能可靠确认具体钟点；我在刚才这次床旁查看时观察到，患者比书面交接时更难唤醒。",
+              "environment_character": "收到，记录为'玛拉在刚才床旁查看时观察到患者比书面交接记录更难唤醒'。我现在重新评估分配：这项床旁恶化、接收方安置未确认、群伤警报证据不足——三项一并权衡后，我需要确认一件事：接收方那边你还在等他们回复安置确认，还是已经有了明确拒绝？",
+              "observable_expression": {
+                "facial_expression": "专注、目光集中",
+                "gaze": "看向记录屏幕后转向通话方向",
+                "speech_style": "节奏紧凑、逐项清晰",
+                "prosody": "语调平稳但语速略快，体现决策紧迫性",
+                "behavioral_cues": [
+                  "简短停顿以完成记录动作",
+                  "转向评估时语气从确认转为权衡"
+                ]
+              },
+              "public_events": []
+            }
+          ],
+          "candidate_actions": [
+            {
+              "action_id": "action_1",
+              "text": "我仍在等接收方确认安置；对方确认收到转诊，但我没有收到明确拒绝。请记录为我刚才床旁查看时观察到患者更难唤醒（具体钟点我不能可靠确认），并建议把最后一辆车重新暂留给患者转运。这样不把群伤警报当成已证实，但须承担接收位置仍未落实的风险。",
+              "label": "行动 1"
+            },
+            {
+              "action_id": "action_2",
+              "text": "我仍在等接收方确认安置；对方确认收到转诊，但我没有收到明确拒绝。请记录为我刚才床旁查看时观察到患者更难唤醒（具体钟点我不能可靠确认），并建议先暂缓最终派车，在封路前用一段短暂时间核实安置后再分配。群伤警报也尚未证实；等待可能延误这位患者的转运。",
+              "label": "行动 2"
+            }
+          ]
+        },
+        "question": "以 t2 为共同起点、人物和外部条件不变，相较行动1，若 Mara Venn 采取行动2，在行动及下一次环境回应后，Elias Rook 对封路前未能为患者作出可辩护车辆分配的风险评估最可能如何？\n【判断范围】行动及紧接的环境回应后；比较行动1与行动2。风险事件：封路前未能作出可辩护的车辆分配。风险范围：从 t2 到行动及下一次环境回应完成的即时窗口。",
+        "options": {
+          "A": "无法可靠区分：下一次回应可能很快确认安置，也可能继续等待，材料没有给出回应结果。",
+          "B": "较高：行动2先暂缓最终分配再核实；回应也将这一等待与可能压缩实际转运窗口明确联系起来。",
+          "C": "较低：行动2先核实接收安置，可减少把患者送往尚未落实接收去处的风险。",
+          "D": "接近：核实时段短，行动本身不改变患者状况、封路时间或车辆数量，难见即时风险差别。"
+        }
+      },
+      "item_sha256": "1bd1d86b827c34e70ee8559d7656a3c699a38fd6b81d53270a0085eb41adeaca"
+    }
+  ],
+  "dataset_sha256": "57ef5252e348b3b3c27d270b053f70183863597bec45f1fb55a9f5d861fbfdd2"
+}

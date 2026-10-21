@@ -1,5 +1,7 @@
 # SocialFlux Annotation Studio
 
+受邀者使用独立托管的 [匿名标注 demo](participant_demo/README.md)，支持公开材料、恢复码及持久化提交；发布与验收说明见 [操作文档](../docs/operations/ANNOTATION_DEMO.md)。
+
 ## 实验管理台
 
 独立入口：`http://127.0.0.1:8000/lab`，沿用现有服务与 SSH 隧道。
@@ -63,6 +65,21 @@ Offline T1–T3 开发题标注入口：
 ```text
 http://127.0.0.1:8000/offline-review
 ```
+
+台词视频小批预览入口：`http://127.0.0.1:8000/offline-talking-preview`。
+当前仅选择 GPT50_001–008，共 24 个公开说话节点、37 个分段。预览清单绑定
+新版题库 SHA；页面只显示选中节点、原文和已校验视频。原人物参考 URL 过期且
+截帧被供应商人像规则拒绝，本批以全新虚构人物建立场景内一致性，不宣称与旧版
+演员一致。人工作品审核保持 pending；本地 ASR 只筛查转写差异，不自动批准素材。
+
+只运行已选预览范围：
+
+```bash
+python -m offline.talking_head --phase run --preview --submit-new --workers 4 \
+  --manifest data/offline_talking_head_v1/c1d1f3fd60e94e0c/manifest.json
+```
+
+八场景预览不调用 `publish`，不会扩展到其余 42 个场景。
 
 默认同样使用新版 50 场景题库。历史 `?bank=gpt50-t1-t3` 读取
 `data/offline_gpt50_t1_t3/items.jsonl`，原 60 题用 `?bank=dev60` 进入。
