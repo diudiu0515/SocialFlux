@@ -16,7 +16,7 @@ from .longitudinal import (
     public_longitudinal_view,
 )
 from .memory import MemoryModule
-from .multimodal import ObservableExpressionLayer
+from .multimodal import ObservableExpressionLayer, media_completion_guard
 from .observation import (
     build_policy_observation,
     build_public_evaluated_role,
@@ -481,16 +481,30 @@ class StatefulEnvironment:
                 or answered_then_can_close
             )
         )
-        if natural_completion:
+        hard_ended, hard_reason = check_termination(
+            frame["turn_id"],
+            self.scenario.get("max_turns", 20),
+            transition_result["state_after"],
+            transition_result["dynamics_after"],
+            self.scenario,
+        )
+        media_guard = media_completion_guard(
+            self.expression_layer.trigger_policy,
+            turn_id=frame["turn_id"],
+            previous_trigger_turns=frame["snapshot_before"]["last_trigger_turns"],
+            multimodal=response_result["multimodal"],
+            natural_completion=natural_completion,
+            hard_termination=hard_ended,
+        )
+        if media_guard is not None:
+            response_result["media_completion_guard"] = media_guard
+        defer_completion = bool(media_guard and media_guard["natural_completion_deferred"])
+        if media_guard is not None and hard_ended:
+            ended, reason = True, hard_reason
+        elif natural_completion and not defer_completion:
             ended, reason = True, "natural_completion"
         else:
-            ended, reason = check_termination(
-                frame["turn_id"],
-                self.scenario.get("max_turns", 20),
-                transition_result["state_after"],
-                transition_result["dynamics_after"],
-                self.scenario,
-            )
+            ended, reason = hard_ended, hard_reason
         if ended:
             self.session["status"] = "completed"
             self.session["ending"] = {
@@ -578,6 +592,8 @@ class StatefulEnvironment:
             "elapsed_time_after": self.session.get("elapsed_time", 0),
         }
         log["observation_after"] = self.observe()
+        if "media_completion_guard" in response_result:
+            log["media_completion_guard"] = deepcopy(response_result["media_completion_guard"])
         for key in ("state_appraisal_call", "interaction_appraisal_call", "combined_appraisal_call"):
             if key in transition:
                 log[key] = deepcopy(transition[key])

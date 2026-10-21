@@ -74,6 +74,30 @@ def environment_for_episode(base_env, config, source_index):
     return env, slots
 
 
+def configure_media_completion(base_env, config):
+    """Apply an explicitly versioned ending rule to both paired conditions."""
+    name = config.get("media_completion_policy", "natural_v1")
+    if name not in {"natural_v1", "first_event_response_v1"}:
+        raise ValueError("unknown media_completion_policy")
+    env = deepcopy(base_env)
+    if name == "first_event_response_v1":
+        if env.get("multimodal_trigger_policy", {}).get("profile") != "online_multimodal_v2":
+            raise ValueError("first_event_response_v1 requires online_multimodal_v2")
+        env["multimodal_trigger_policy"]["defer_first_media_completion"] = True
+    return env
+
+
+def policy_sampling(config, source_index):
+    """Keep paired sampling equal while allowing a seedless API diagnostic."""
+    mode = config.get("policy_seed_mode", "scenario_seed_v1")
+    if mode not in {"scenario_seed_v1", "omit"}:
+        raise ValueError("unknown policy_seed_mode")
+    sampling = {"temperature": 0.6, "top_p": 0.9}
+    if mode == "scenario_seed_v1":
+        sampling["seed"] = 8600 + source_index
+    return sampling
+
+
 def run_capability_probes(providers, out, budget):
     controls = prepare_controls(out / "controls")
     with ThreadPoolExecutor(max_workers=min(3, len(providers))) as pool:
@@ -116,6 +140,7 @@ def main():
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         providers = model_configs(config)
         policies = policy_configs(config, providers)
+        policy_sampling(config, 0)
         source = json.loads(Path(config["scenario_manifest"]).read_text())
         scenarios = [json.loads(Path(r["candidate"]).read_text()) for r in source["cases"]]
         source_indices = {s["scenario_id"]: index for index, s in enumerate(scenarios)}
@@ -129,6 +154,7 @@ def main():
         for key in ("provider", "state_appraisal_provider", "interaction_appraisal_provider"):
             base_env[key] = {**base_env[key], "max_tokens": 6500}
         base_env["response_provider"] = {**base_env["response_provider"], "max_tokens": 6000}
+        base_env = configure_media_completion(base_env, config)
         for scenario in scenarios:
             scenario_env, _ = environment_for_episode(base_env, config, source_indices[scenario["scenario_id"]])
             UnifiedEnvironmentFactory(build_environment_factory(scenario, scenario_env))()
@@ -141,6 +167,8 @@ def main():
                 "human_validation_status": "not_human_validated", "formal_admission": False,
                 "primary_comparison": "within-model paired end-to-end text_video minus text_only on the same scenario",
                 "interpretation": "Exploratory study; divergent trajectories estimate total condition effect, not a matched-checkpoint causal effect."}
+        if "media_completion_policy" in config:
+            plan["media_completion_policy"] = config["media_completion_policy"]
         if (out / "plan.json").exists() and json.loads((out / "plan.json").read_text()) != plan:
             raise ValueError("frozen experiment plan changed")
         save(out / "plan.json", plan)
@@ -206,11 +234,12 @@ def main():
             env, row["environment_route_slots"] = environment_for_episode(
                 base_env, config, source_indices[scenario["scenario_id"]])
             factory = UnifiedEnvironmentFactory(build_environment_factory(scenario, env))
-            provider = AuditedProvider({**providers[name], "max_tokens": 1800}, directory / "calls" / "policy", budget)
+            provider = AuditedProvider({**providers[name], "max_tokens": 1800}, directory / "calls" / "policy", budget,
+                                       max_attempts=config.get("audited_transport_attempts", 1))
             called_providers = {"policy": provider}
             policy = AssetPolicy(f"t4_{scenario['scenario_id']}_{name}", provider,
                     prompt_id="task_t4_action_v21", validation_profile="hard_only", minimum_natural_turns=1,
-                    sampling={"temperature": 0.6, "top_p": 0.9, "seed": 8600 + source_indices[scenario["scenario_id"]]},
+                    sampling=policy_sampling(config, source_indices[scenario["scenario_id"]]),
                     observation_condition=condition, media_input_format="openai_video_url" if condition == "text_video" else None,
                     assets=assets, transport=transport, audit_path=directory / "video_deliveries.json")
 
@@ -219,7 +248,8 @@ def main():
                 # Replace only provider transport; keep the canonical appraisers,
                 # response generation, deterministic updater, and ledger intact.
                 for role, key in (("state", "state_appraisal_provider"), ("interaction", "interaction_appraisal_provider"), ("response", "response_provider")):
-                    called_providers[role] = AuditedProvider(env[key], directory / "calls" / role, budget)
+                    called_providers[role] = AuditedProvider(env[key], directory / "calls" / role, budget,
+                        max_attempts=config.get("audited_transport_attempts", 1))
                 environment.state_updater.state_appraiser.provider.provider = called_providers["state"]
                 environment.state_updater.interaction_appraiser.provider = called_providers["interaction"]
                 environment.response_generator.provider = called_providers["response"]
@@ -229,7 +259,8 @@ def main():
                 save(directory / "trajectory.json", trajectory)
                 row["human_review"] = export_human_review(
                     trajectory, scenario, directory, out / "human_review")
-                judge = AuditedProvider({**providers[config["judge"]], "max_tokens": 4000}, directory / "calls" / "judge", budget)
+                judge = AuditedProvider({**providers[config["judge"]], "max_tokens": 4000}, directory / "calls" / "judge", budget,
+                    max_attempts=config.get("audited_transport_attempts", 1))
                 called_providers["judge"] = judge
                 packet, judgment, _ = generate_judgment(judge, trajectory, scenario, 7401, max_attempts=2)
                 row.update(status="completed", observed_turns=len(trajectory["turns"]), ending=trajectory["ending"],

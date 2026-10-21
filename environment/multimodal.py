@@ -64,6 +64,7 @@ def _trigger_policy(value):
         "max_fires_per_trigger": None,
         "global_cooldown_turns": 0,
         "event_family_cooldown_turns": 0,
+        "defer_first_media_completion": False,
         "event_assets": {},
     }
     if supplied.get("profile") == ONLINE_MULTIMODAL_PROFILE:
@@ -91,6 +92,10 @@ def _trigger_policy(value):
         raise ValueError("canonical online runtime allows exactly one media event per turn")
     if not isinstance(policy["crossing_as_threshold"], bool):
         raise ValueError("multimodal trigger policy crossing_as_threshold must be boolean")
+    if not isinstance(policy["defer_first_media_completion"], bool):
+        raise ValueError("multimodal trigger policy defer_first_media_completion must be boolean")
+    if policy["defer_first_media_completion"] and policy["profile"] != ONLINE_MULTIMODAL_PROFILE:
+        raise ValueError("first media completion deferral requires online_multimodal_v2")
     for key in ("max_events_per_episode", "max_fires_per_trigger"):
         limit = policy[key]
         if limit is not None and (
@@ -114,6 +119,38 @@ def _trigger_policy(value):
             "multimodal trigger policy event_assets must be an object"
         )
     return policy
+
+
+def media_completion_guard(
+    trigger_policy, *, turn_id, previous_trigger_turns, multimodal,
+    natural_completion, hard_termination,
+):
+    """Reserve one response to the first real video event in either condition.
+
+    Only a natural ending on the event-producing turn can be deferred. State,
+    thresholds, later endings, explicit scenario stops and the turn cap are not
+    changed. The environment does not inspect the policy's modality condition.
+    """
+    if not trigger_policy.get("defer_first_media_completion", False):
+        return None
+    events = [event for event in multimodal.get("private_events", [])
+              if event.get("media_type") == "video"]
+    available = any(
+        item.get("media_type") == "video" and item.get("asset_status") == "available"
+        for item in multimodal.get("media", [])
+    )
+    first_event = bool(events) and previous_trigger_turns.get("__event_count__", 0) == 0
+    deferred = bool(natural_completion and first_event and available and not hard_termination)
+    return {
+        "policy": "first_event_response_v1",
+        "first_video_event": first_event,
+        "available_media": available,
+        "natural_completion_requested": bool(natural_completion),
+        "hard_termination": bool(hard_termination),
+        "natural_completion_deferred": deferred,
+        "response_opportunity_turn": turn_id + 1 if deferred else None,
+        "event_ids": [event.get("media_event_id") for event in events],
+    }
 
 
 def _public_media(event):

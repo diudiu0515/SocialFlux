@@ -138,3 +138,25 @@ python scripts/run_multimodal_video_queue.py \
 第一阶段每个 scenario 的 `activated_tension` clip 由固定的 fictional identity spec 生成；第二阶段同 scenario 的其余 clip 将该锚点作为 `reference_video`。跨 scenario 禁止复用锚点。Pilot 通过后，移除两条命令中的 `--scenario-limit 5` 即可扩展到完整 323 条。
 
 生成后运行 `scripts/finalize_online_multimodal_assets.py`。它检查视频流、4 秒时长容差，以及同步非语言音轨存在；只有每条资产人工审核全部通过、且提供公共 HTTPS 资产基址后，才会输出 `runtime_ready: true` 的 `event_assets.reviewed.json`。T4 配置只能加载该 reviewed 映射，不能加载 `event_assets.pending.json`。
+
+## 10. 首次媒体事件后的回应机会
+
+2026-10-20 的逐场景审计发现 6 条轨迹在第 1 轮生成了真实视频事件，但同轮自然结束，
+因此没有下一次 policy 调用接收视频。这是触发后的结束时机问题；这些记录的状态阈值已经满足。
+另有调用失败前尚未完成第一轮、状态未变化、视觉能力探测未过和未启动等情况，分别保留原因。
+
+新增独立实验配置项 `media_completion_policy: first_event_response_v1`。
+运行器据此设置 `multimodal_trigger_policy.defer_first_media_completion: true`：
+
+- 只在首次真实视频事件已经产生、资产可用且该轮原本要自然结束时，保留下一轮回应机会。
+- 两个条件的环境采用相同规则；文字条件继续仅发送文字，视频条件在后续请求中附加媒体。
+- 仅保护首次事件，不因后续事件不断延长对话；无状态变化时不强行产生事件。
+- 显式场景停止条件和最多 20 轮的上限优先，接口失败仍如实记为失败。
+- 不改变 S0、状态更新、阈值、事件冷却、当前环境回复或已保存结果。
+- 轨迹私有日志保存 `media_completion_guard`，记录原自然结束判断、是否延后及下一次回应轮。
+  这些字段不进入 policy 的文字输入。
+
+该选项默认关闭，旧配置及冻结运行保持原规则。启用后是新的结束协议，
+应独立保存结果，不能用新的分数覆盖或拼接旧实验。
+目标六场景的 [新版配置](../../configs/gpt50_experiment/t4_multimodal_experiment.first_media_response_v1_20261020.json)
+只用于机制验证，不代表随机抽取的性能样本；详见 [修复与本地验证](../../reports/experiments/2026-10-20_t4_media_completion_fix.md)。

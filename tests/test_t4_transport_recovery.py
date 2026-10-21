@@ -69,6 +69,50 @@ class TransportRecoveryTest(unittest.TestCase):
             self.assertIn("wall_seconds", saved)
             self.assertEqual(saved["response_audits"][0]["stream_events"][0]["error"]["message"], "upstream failure")
 
+    @patch("evaluation.t4_multimodal.sleep")
+    def test_transient_retries_keep_request_and_charge_each_attempt(self, sleep):
+        with TemporaryDirectory() as directory:
+            budget = RequestBudget(Path(directory) / "budget.json", 3)
+            p = AuditedProvider({"provider": "openai_compatible", "endpoint": "http://localhost/api",
+                                 "model": "fixture"}, Path(directory) / "calls", budget, max_attempts=3)
+            with patch.object(p.provider, "complete", side_effect=[
+                    RuntimeError("provider HTTP 503"), RuntimeError("The service is busy"), "ok"]):
+                self.assertEqual(p.complete([{"role": "user", "content": "fixed"}], temperature=0.6), "ok")
+            calls = [json.loads(p.read_text()) for p in sorted((Path(directory) / "calls").glob("*.json"))]
+            self.assertEqual(budget.count, 3)
+            self.assertEqual([c["status"] for c in calls], ["failed", "failed", "completed"])
+            self.assertTrue(all(c["messages"] == calls[0]["messages"] and c["sampling"] == calls[0]["sampling"] for c in calls))
+
+    @patch("evaluation.t4_multimodal.sleep")
+    def test_truncation_and_parameter_errors_are_not_resampled(self, sleep):
+        for error in ("provider stream was truncated: length", "parameter temperature is incompatible"):
+            with TemporaryDirectory() as directory:
+                budget = RequestBudget(Path(directory) / "budget.json", 3)
+                p = AuditedProvider({"provider": "openai_compatible", "endpoint": "http://localhost/api",
+                                     "model": "fixture"}, Path(directory) / "calls", budget, max_attempts=3)
+                with patch.object(p.provider, "complete", side_effect=RuntimeError(error)):
+                    with self.assertRaises(RuntimeError):
+                        p.complete([{"role": "user", "content": "fixed"}])
+                self.assertEqual(budget.count, 1)
+
+    def test_exact_replay_preserves_invalid_output_and_rejects_changed_request(self):
+        from scripts.resume_t4_transport import ExactReplayProvider
+        with TemporaryDirectory() as directory:
+            source, dest = Path(directory) / "source", Path(directory) / "dest"
+            source.mkdir()
+            messages = [{"role": "user", "content": "original"}]
+            (source / "0001.json").write_text(json.dumps({"messages": messages,
+                "sampling": {"temperature": 0.6}, "status": "completed", "raw_output": "invalid json retained"}))
+            budget = RequestBudget(Path(directory) / "budget.json", 3)
+            config = {"provider": "openai_compatible", "endpoint": "http://localhost/api", "model": "fixture"}
+            p = ExactReplayProvider(config, source, dest, budget, dry_run=True)
+            self.assertEqual(p.complete(messages, temperature=0.6), "invalid json retained")
+            self.assertEqual(budget.count, 0)
+            p = ExactReplayProvider(config, source, dest, budget, dry_run=True)
+            with self.assertRaisesRegex(RuntimeError, "saved request mismatch"):
+                p.complete(messages, temperature=1)
+            self.assertEqual(budget.count, 0)
+
     def test_one_video_success_cannot_unlock_high_failure_pilot(self):
         rows = [{"scenario_id": "A", "model_id": "gpt", "condition": c, "status": "completed",
                  "video_delivery_count": int(c == "text_video")} for c in ["text_only", "text_video"]]

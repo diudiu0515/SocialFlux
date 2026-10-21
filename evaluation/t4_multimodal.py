@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 import subprocess
 from threading import Lock
-from time import monotonic
+from time import monotonic, sleep
 
 from evaluation.t4_batch import save
 from evaluation.t4_media import compact_media, provider_messages, video_blocks, extract_frames, sha_file
@@ -29,7 +29,10 @@ class RequestBudget:
 
 
 class AuditedProvider:
-    def __init__(self, config, directory, budget):
+    def __init__(self, config, directory, budget, max_attempts=1):
+        if not isinstance(max_attempts, int) or not 1 <= max_attempts <= 3:
+            raise ValueError("audited transport attempts must be between 1 and 3")
+        self.max_attempts = max_attempts
         self.config, self.directory, self.budget = config, Path(directory), budget
         self.provider = build_provider(config)
         self.index = len(list(self.directory.glob("*.json")))
@@ -41,6 +44,15 @@ class AuditedProvider:
         self.provider.reset()
 
     def complete(self, messages, **sampling):
+        for attempt in range(self.max_attempts):
+            try:
+                return self._complete_once(messages, **sampling)
+            except Exception as exc:
+                if attempt + 1 == self.max_attempts or not transient_transport_error(str(exc)):
+                    raise
+                sleep(5 * (attempt + 1))
+
+    def _complete_once(self, messages, **sampling):
         self.budget.take()
         self.index += 1
         messages = provider_messages(messages, self.config["provider"])
@@ -64,6 +76,18 @@ class AuditedProvider:
             ]
             record["provider_metrics"] = self.provider.metrics
             save(path, record)
+
+
+def transient_transport_error(error):
+    """Retry unavailable transport only; never change sampling or accept truncation."""
+    return any(term in error.lower() for term in (
+        "the service is busy", "request could not be completed", "upstream_error",
+        "timed out", "timeout", "connection reset", "remote end closed",
+        "http 429", "http 500", "http 502", "http 503", "http 504",
+        "unterminated string starting at",
+    )) and not any(term in error.lower() for term in (
+        "json/schema", "truncated", "incompatible", "invalid parameter",
+    ))
 
 
 def assess_run_health(rows, video_models, max_failure_fraction=0.2, require_pairs=True):

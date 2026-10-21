@@ -4,11 +4,21 @@ from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
 
-from scripts.run_t4_multimodal_experiment import select_cohort, model_configs, policy_configs
+from scripts.run_t4_multimodal_experiment import select_cohort, model_configs, policy_configs, policy_sampling
 from evaluation.t4_asset_coverage import audit_asset_coverage, require_complete_assets
 
 
 class CohortTest(unittest.TestCase):
+    def test_seedless_diagnostic_omits_seed_without_changing_default(self):
+        self.assertEqual(policy_sampling({}, 13),
+                         {"temperature": 0.6, "top_p": 0.9, "seed": 8613})
+        config = {"policy_seed_mode": "omit"}
+        text, video = policy_sampling(config, 13), policy_sampling(config, 13)
+        self.assertEqual(text, video)
+        self.assertEqual(text, {"temperature": 0.6, "top_p": 0.9})
+        with self.assertRaises(ValueError):
+            policy_sampling({"policy_seed_mode": "invalid"}, 0)
+
     def test_policy_subset_keeps_environment_routes_available(self):
         providers = {name: {"model": name} for name in ("gpt", "claude", "qwen")}
         self.assertEqual(policy_configs({}, providers), providers)
