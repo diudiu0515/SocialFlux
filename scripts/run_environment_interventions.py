@@ -64,7 +64,8 @@ def select_intervention_checkpoint(trajectory):
     return turns[target_turn - 1]
 
 
-def _paraphrase(provider, sampling, trajectory, checkpoint):
+def _paraphrase(provider, sampling, trajectory, checkpoint, *,
+                prompt_id="environment_paraphrase_probe_v1", max_attempts=5):
     original = checkpoint["policy_action"]["text"]
     payload = {
         "scenario_id": trajectory["scenario_id"],
@@ -89,14 +90,14 @@ def _paraphrase(provider, sampling, trajectory, checkpoint):
             raise ValueError(f"strict paraphrase precheck failed: {precheck['reasons']}")
         return text
 
-    prompt = render_prompt("environment_paraphrase_probe_v1", payload)
+    prompt = render_prompt(prompt_id, payload)
     return complete_json(
         provider,
         [{"role": "user", "content": prompt}],
         sampling,
         validate,
         context="environment paraphrase probe",
-        max_attempts=5,
+        max_attempts=max_attempts,
     )
 
 

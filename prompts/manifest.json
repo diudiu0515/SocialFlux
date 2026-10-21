@@ -265,6 +265,16 @@
       "path": "offline_talking_head_exact_v1.md",
       "sha256": "cd5c0e1ceaf6f29cb00c0908a87266653f346aae99ae71d2828e4a1d77aa7358",
       "version": "v1"
+    },
+    "environment_paraphrase_probe_v2": {
+      "path": "environment_paraphrase_probe_v2.md",
+      "sha256": "55c06d662aeba6d4b92e0c53c2e062916cad23adc45f97c6b4990f455cc187d0",
+      "version": "v2"
+    },
+    "environment_paraphrase_equivalence_v1": {
+      "path": "environment_paraphrase_equivalence_v1.md",
+      "sha256": "5bb93e67c99b398a3b7ee7bceb742ebadb3f1047a31bc8911562cc2b6238f8aa",
+      "version": "v1"
     }
   }
 }
