@@ -19,7 +19,7 @@ from tasks.offline_choice import FAMILIES, public_instance, visible_evidence
 ROOT = Path(__file__).resolve().parents[1]
 BANK = ROOT / "data/offline_t1_t3_dev60"
 _bank_override = ContextVar('offline_review_bank',default=None)
-BANK_PATHS = {'dev60':'data/offline_t1_t3_dev60','gpt50-t1-t3':'data/offline_gpt50_t1_t3'}
+BANK_PATHS = {'dev60':'data/offline_t1_t3_dev60','gpt50-t1-t3':'data/offline_gpt50_t1_t3','design-v2':'tasks/examples/offline_design_v2', 'scenarios-v2':'tasks/examples/offline_scenarios_v2'}
 
 
 def bank_path():
@@ -68,21 +68,45 @@ def active_generation_jobs():
     return len(pids)
 
 
+@lru_cache(maxsize=2)
+def _migration_index(path, modified_ns, size):
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    return {row["instance_id"]: row for row in data.get("items", []) + data.get("pending_items", [])}
+
+
+def migration_review(item):
+    path = ROOT / "tasks/examples/offline_legacy_api_audit/results.json"
+    if not path.is_file():
+        return None
+    stat = path.stat()
+    row = _migration_index(str(path), stat.st_mtime_ns, stat.st_size).get(item["instance_id"])
+    # Audit conclusions cannot survive edits to the frozen source question.
+    return row if row and row.get("item_sha256") == item_digest(item) else None
+
+
 def metadata(item):
     author = item["authoring"]
+    audit = migration_review(item)
+    analysis = item.get("analysis") or (audit or {}).get("review", {})
     return {
         "instance_id": item["instance_id"], "task": item["task"],
         "subtype": item["subtype"], "scenario_id": item["story_id"],
         "trajectory_id": item["metadata"]["source_trajectory_id"],
         "pair_id": item.get("pair_id"), "item_sha256": item_digest(item),
         "question": item["question"],
+        "character_name": item["input"]["target_character"].get("name", ""),
         "families": sorted({FAMILIES[p.split(".")[0]] for p in
                             item["target_spec"]["target_state_ids"]}),
         "combination": len(next(iter(author["option_variable_map"].values()))) > 1,
         "replay_status": author.get("replay_status", "pending"),
         "label_status": item["label_status"],
         "source_review_status": author.get('construction_source',{}).get('source_review_status'),
+        "primary_capability": analysis.get("primary_capability"),
+        "design_difficulty": analysis.get("design_difficulty"),
+        "migration_level": (audit or {}).get("migration_level"),
+        "migration_status": (audit or {}).get("migration_status"),
         "source_origin": author.get('construction_source',{}).get('origin'),
+        "oracle_status": author.get("oracle_reference", {}).get("status"),
     }
 
 
@@ -127,6 +151,13 @@ def media_records(item):
     if not pair_matches(item):
         return []
     records = read_json(bank_path() / "media.json", {}).get(item["instance_id"] + "-video", [])
+    paired = _paired_items((bank_path() / "paired.items.jsonl").read_bytes())[item["instance_id"] + "-video"]
+    bindings = paired["authoring"].get("matched_assets")
+    if bindings is not None and bindings != [
+            {"sha256": r["sha256"], "evidence_ids": r.get("evidence_ids", [])} for r in records]:
+        return []
+    if any(not r.get("evidence_ids") or not set(r["evidence_ids"]) <= visible_evidence(item) for r in records):
+        return []
     result = []
     for record in records:
         path = (ROOT / record["path"]).resolve()
@@ -137,10 +168,32 @@ def media_records(item):
             "asset_id": record["source_asset_id"], "sha256": record["sha256"],
             "evidence_ids": record.get("evidence_ids", []),
             "human_review": record.get("human_review", "pending"),
+            "response_neutral": record.get("response_neutral", False),
             "available": available,
             "url": "/online-video/gpt/" + quote(path.name) if available else None,
         })
     return result
+
+
+def media_pairing_report(bank_sha):
+    report = read_json(bank_path() / "pairing_report.json", {})
+    path = bank_path() / "media.json"
+    if (report.get("items_sha256") != bank_sha or not path.is_file()
+            or report.get("media_sha256") != digest(path.read_bytes())):
+        return {}
+    return report
+
+
+def media_coverage(item, records):
+    covered = {e for record in records if record["available"] for e in record["evidence_ids"]}
+    if item["task"] == "T2":
+        required = {t["turn_id"] for key in ("history_a", "history_b") for t in item["input"][key][:-1]}
+        required.add(item["input"]["shared_ending"]["turn_id"])
+    else:
+        required = {t["turn_id"] for t in item["input"]["history"]}
+    return {"covered_evidence_ids": sorted(covered),
+            "uncovered_evidence_ids": sorted(required - covered),
+            "status": "missing" if not covered else "partial" if required - covered else "complete"}
 
 
 def _state_values(state, variables):
@@ -164,14 +217,15 @@ def author_reference(item, bank_sha):
     author = item["authoring"]
     source = author["construction_source"]
     variables = item["target_spec"]["target_state_ids"]
-    scenario = checked_source(source["scenario_path"], source.get("scenario_sha256"))
-    trajectory = checked_source(source["trajectory_path"], source.get("trajectory_sha256"))
+    scenario = checked_source(source["scenario_path"], source.get("scenario_sha256")) if source.get("scenario_path") else None
+    trajectory = checked_source(source["trajectory_path"], source.get("trajectory_sha256")) if source.get("trajectory_path") else None
     checks = {"scenario": scenario is not None, "trajectory": trajectory is not None}
     reference = {
         "instance_id": item["instance_id"], "bank_sha256": bank_sha,
         "item_sha256": item_digest(item),
         "authoring": author, "ground_truth": item.get("ground_truth"),
-        "target_spec": item["target_spec"], "source_checks": checks,
+        "migration_review": migration_review(item),
+        "target_spec": item["target_spec"], "analysis": item.get("analysis"), "source_checks": checks,
         "scenario": scenario, "state_semantics": {
             variable: STATE_VARIABLE_ONTOLOGY[variable] for variable in variables},
         "source_turns": [], "replays": [],
@@ -186,6 +240,11 @@ def author_reference(item, bank_sha):
         visible = visible_evidence(item)
         reference["source_turns"] = [_review_turn(t, variables) for t in trajectory.get("turns", [])
                                      if t["turn_id"] in visible or "A:" + t["turn_id"] in visible]
+        if item["task"] == "T2":
+            # The original factual t2 response is not the controlled shared
+            # ending. Only common earlier turns belong alongside the A/B replay.
+            last = item["input"]["history_a"][-1]["turn_id"].split(":")[-1]
+            reference["source_turns"] = [t for t in reference["source_turns"] if t["turn_id"] != last]
     if source.get("replay_path"):
         replay = checked_source(source["replay_path"], source.get("replay_sha256"))
         checks["replay"] = replay is not None
@@ -213,6 +272,10 @@ def author_reference(item, bank_sha):
     if crosscheck.get("items_sha256") == bank_sha:
         reference["state_crosscheck"] = next((row for row in crosscheck["rows"]
                                               if row["instance_id"] == item["instance_id"]), None)
+    oracle = author.get("oracle_reference", {})
+    if oracle.get("packet_path"):
+        reference["oracle_packet"] = checked_source(oracle["packet_path"], oracle.get("packet_sha256"))
+        checks["oracle_packet"] = reference["oracle_packet"] is not None
     return reference
 
 
@@ -231,6 +294,7 @@ def _load_review(instance_id=None, reference=False):
     if instance_id is None:
         rows = [metadata(item) for item in items]
         manifest=read_json(bank_path()/'manifest.json',{})
+        pairing = media_pairing_report(bank_sha)
         return {
             "format": "socialflux_offline_choice_review_v1", "bank_id": bank_path().name,
             "bank_sha256": bank_sha, "status": "available" if items else "not_generated",
@@ -240,11 +304,20 @@ def _load_review(instance_id=None, reference=False):
                 "combinations": sum(row["combination"] for row in rows),
                 "replay_pending": sum(row["task"] in {"T2", "T3"} and
                                       row["replay_status"] != "validated" for row in rows),
+                "machine_concerns": sum(row.get("oracle_status") == "machine_concerns_pending_revision" for row in rows),
                 "expected_items":manifest.get('expected_items',len(items)),
                 "requested_scenarios":manifest.get('requested_scenarios',len({i['story_id'] for i in items})),
                 "generation_complete":manifest.get('complete',True),
                 "paused_tasks":manifest.get('paused_tasks',[]),
                 "active_generation_jobs":active_generation_jobs(),
+                "media_pairs": pairing.get("logical_pairs"),
+                "media_missing": pairing.get("coverage_counts", {}).get("missing"),
+                "primary_capabilities":manifest.get("primary_capabilities",{}),
+                "design_difficulties":manifest.get("design_difficulties",{}),
+                "authored_illustrations":manifest.get("authored_illustrations",0),
+                "scene_coverage":manifest.get("scene_coverage",[]),
+                "migration_levels":dict(Counter(row["migration_level"] for row in rows if row.get("migration_level"))),
+                "migration_pending":sum(row.get("migration_status")=="pending" for row in rows),
             }, "items": rows,
         }
     item = next((item for item in items if item["instance_id"] == instance_id), None)
@@ -252,7 +325,8 @@ def _load_review(instance_id=None, reference=False):
         return None
     if reference:
         return author_reference(item, bank_sha)
+    media = media_records(item)
     return {"bank_sha256": bank_sha, "metadata": metadata(item),
             "public": public_instance(item), "evidence_ids": sorted(visible_evidence(item)),
-            "media": media_records(item),
+            "media": media, "media_coverage": media_coverage(item, media),
             "nonverbal_history_relation": item["authoring"].get("nonverbal_history_relation")}

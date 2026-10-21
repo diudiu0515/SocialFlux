@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SocialFlux · 人类盲答与 GT</title>
+  <link rel="stylesheet" href="/offline_review.css?v=2">
+  <link rel="stylesheet" href="/offline_annotation.css?v=1">
+</head>
+<body>
+  <header class="topbar">
+    <div><a class="back" href="/offline-demo">← 离线题库</a><h1>SocialFlux <span>人类盲答与 GT</span></h1></div>
+    <div class="tools"><button id="exportSession" hidden>导出本次记录</button><button id="newAssignment" hidden>回到任务选择</button></div>
+  </header>
+  <div id="message" role="status" aria-live="polite"></div>
+  <main id="setup" class="annotation-setup">
+    <section class="card">
+      <h2>先独立作答，再制作标准答案</h2>
+      <p>每次分配包含所选场景的全部题目。先完成并锁定全部盲答，再查看私有证据；独立 GT 初判全部提交后，才开放机器建议。</p>
+      <p class="muted">文字条件与被测模型使用相同题目材料。盲答只需选择答案；后续审核不会覆盖原答案。人类分数需要其他标注人的独立 GT，目前不会用自己的 GT 给自己打分。</p>
+      <form id="startForm">
+        <div class="field-grid">
+          <label>标注人 ID<input id="participant" required maxlength="100" autocomplete="username" placeholder="使用固定的匿名 ID"></label>
+          <label>本次场景<select id="assignmentScene" required><option value="">正在载入…</option></select></label>
+          <label>此前是否看过所选场景的答案或私有信息？<select id="priorExposure" required><option value="">请选择</option><option value="no">未看过</option><option value="yes">看过（仍可参与 GT 审核）</option></select></label>
+        </div>
+        <p class="muted">标注人身份由本人声明。请保持同一 ID；重复作答或已接触私有信息的记录会保留，但不计入首次盲答基线。</p>
+        <button class="primary" type="submit">开始本次任务</button>
+      </form>
+    </section>
+    <section id="resumeCard" class="card" hidden><h2>继续上次任务</h2><div id="resumeList"></div></section>
+  </main>
+  <div id="sessionLayout" class="layout" hidden>
+    <aside class="question-sidebar">
+      <div class="sidebar-heading"><h2>本次题目</h2><span id="assignmentCount" class="badge"></span></div>
+      <p id="sessionProgress" class="muted"></p>
+      <nav id="sessionNav" aria-label="本次分配的题目"></nav>
+    </aside>
+    <main>
+      <section class="card phase-card"><h2 id="phaseTitle"></h2><p id="phaseDescription"></p><p id="baselineNotice" class="muted"></p></section>
+      <div id="annotationWorkspace" aria-busy="false"></div>
+    </main>
+  </div>
+  <script src="/offline_annotation.js?v=1"></script>
+</body>
+</html>

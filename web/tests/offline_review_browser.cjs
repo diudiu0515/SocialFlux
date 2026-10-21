@@ -25,6 +25,7 @@ const {chromium} = require('playwright');
     assert.match(await page.locator('#sharedEnding').innerText(), /相同的当前表达/);
     await page.selectOption('#taskFilter', 'T2');
     assert.equal(await page.locator('#itemNav button').count(), 20);
+    await page.locator('#advancedFilters summary').click();
     await page.selectOption('#shapeFilter', 'combo');
     assert.equal(await page.locator('#itemNav button').count(), 5);
     await page.selectOption('#shapeFilter', '');

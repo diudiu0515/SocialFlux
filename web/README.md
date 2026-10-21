@@ -1,17 +1,75 @@
 # SocialFlux Annotation Studio
 
+## 实验管理台
+
+独立入口：`http://127.0.0.1:8000/lab`，沿用现有服务与 SSH 隧道。
+
+- **实验总览**：当前批次、开发题库、四个 Gate 和下一步计划。
+- **实验计划**：新增或编辑研究问题、方法、完成标准、负责人、优先级、
+  日期、状态、结果指标与结论，保留修改记录；支持 CSV 导出。
+- **实时结果**：读取已登记的 T4 run、E1–E9 与新版题库摘要，每 30 秒更新。
+  批次单独展示，失败、移交、有效 n 和 N/A 保持原统计口径。
+- **报告与数据**：自动索引 `reports/experiments/` 下的 MD、TXT、JSON、
+  JSONL、CSV（含历史归档），支持搜索、来源原文、SHA-256 和文件下载；
+  可导出含计划、文件索引与实时摘要的 JSON 汇总。
+
+计划与修改历史持久化在 `data/experiment_hub/notebook.sqlite3`，不依赖
+浏览器 localStorage，换浏览器仍可继续。初次使用从已有文档整理 9 项待办，
+均为待开展的计划建议；不代表已经运行、人工批准或来源 Gate 通过。
+并发修改使用版本号检查，旧页面不会覆盖新内容。实验状态只管理研究计划，
+不会调用模型、改写原始实验结果或批准正式 GT。备份时需包含该 SQLite 文件；
+服务运行中使用 SQLite backup API 制作一致备份。
+
+报告库的收录范围在页面上明确显示，原始轨迹、视频及 provider 调用日志保留
+在原目录；实时摘要沿用 `web/experiment_status.py` 的批次注册。新增批次时应
+先核对协议，再登记摘要适配，不能把不同运行的结果直接混算。
+
+验证：`python -m unittest web.tests.test_experiment_hub -v`。浏览器验证使用
+`web/tests/experiment_hub_browser.cjs`，仅可对设置临时 `experiment_hub.STORE`
+的测试服务运行，并传入 `LAB_TEST_URL` 与 `LAB_TEST_ISOLATED=1`。
+
+中文字体优先使用系统字体，缺失时回退到随站点提供的 Noto Sans SC 子集
+`static/fonts/socialflux-cjk.woff2`（覆盖界面与当前报告字符）。字体来自
+[Google Fonts](https://github.com/google/fonts/tree/main/ofl/notosanssc)，
+采用 [SIL Open Font License](static/fonts/OFL-NotoSansSC.txt)。
+
+新版任务设计 Demo（2026-10-20）：
+
+```text
+http://127.0.0.1:8000/offline-demo
+```
+
+默认读取 `tasks/examples/offline_scenarios_v2/`：50 场景按 T1/T2/T3 各 2 题编配，
+共 300 题。场景筛选显示各任务题数，也可按主要能力、普通/Hard、状态维度筛选。
+先独立作答，再展开参考、反证、难度理由、API 盲试答、T2 编辑与 T3 分支。
+可用 `?scene=GPT50_001` 定位场景。完整进度、来源与核验缺口见
+[50 场景新版报告](../reports/experiments/2026-10-20_scenarios_v2.md)。
+文字/视频配对复用原资产，缺少视频不会回退成不对应的素材；新 T2 的共同焦点
+表达没有匹配音视频，新增历史编辑仍待环境回放。全部待人工审核。
+2026-10-21 已按当前题目与冻结前史重新核对 270 对、45 段非语言视频，另外 30 题缺素材。
+“配对材料”显示实际覆盖的历史轮次和未覆盖位置；T2 明确显示 A/B 共用前史视频，
+共同结尾仍为文字。运行 `python -m scripts.match_offline_multimodal` 可独立刷新配对和
+评测抽帧清单，保留题目与参考答案。详见离线 v2 协议的“多模态与统计”。
+原 24 道题型示例改由 `?bank=design-v2` 查看，旧 460 题移入历史批次。
+完整设计见 [离线 v2 协议](../docs/protocols/OFFLINE_T1_T3_CHOICE_V2.md)。
+
+旧题 API 适配结果见 `/offline-review?bank=dev60` 和 `?bank=gpt50-t1-t3`，
+使用“新版适配”筛选原题保留、轻改、重写或只复用材料；按题目 SHA 绑定，题目修改后
+旧复核不会继续套用。参考区显示模型依据及助手核对出的争议，均不自动变成人工批准。
+完整进度与方法见 [旧题迁移核验](../reports/experiments/2026-10-20_legacy_task_migration.md)。
+
 Offline T1–T3 开发题标注入口：
 
 ```text
 http://127.0.0.1:8000/offline-review
 ```
 
-默认读取 `data/offline_gpt50_t1_t3/items.jsonl`，对应 50 个 scenario 的 T1/T3
-开发批次，T2 暂停；页面显示实际题数与缺项。来源是固定版本的 scenario + rollout，
-T3 另有候选行动分支。题库选择器保留原 60 题，也可用 `?bank=dev60` 进入。
+默认同样使用新版 50 场景题库。历史 `?bank=gpt50-t1-t3` 读取
+`data/offline_gpt50_t1_t3/items.jsonl`，原 60 题用 `?bank=dev60` 进入。
+页面显示实际题数与缺项；新增题目生成时刷新即可继续检查。
 入口也在 `/gpt50` 和 `/gpt50-live` 导航中。
 支持任务、四维 state、单维／组合、标注进度筛选，以及按题号或场景搜索。
-可用 `/offline-review#SFG50-010-T1-01` 直接打开某题；旧 `#SFO-005` 书签仍选择原题库。
+可用 `/offline-review#SFV2-010-T1-01` 直接打开新版题；旧 `#SFO-005` 与 `#SFG50-010-T1-01` 书签仍选择原题库。
 
 默认只读取模型可见材料；点击“查看参考答案与来源”才请求作者参考、原始 scenario、
 相关 state、T2 改写位置和 T3 未来分支。原始 source 路径与 SHA 必须匹配才会展示；
@@ -105,3 +163,18 @@ python -m unittest discover -s web/tests -v
 curl http://127.0.0.1:8000/api/health
 curl http://127.0.0.1:8000/api/gpt50-review
 ```
+# 四个 Gate 与实验结果
+
+`/experiments` 每 30 秒读取当前 Gate2/Gate3、新版题库和独立 T4 run 的实际摘要。
+`/api/experiment-status` 只返回白名单统计、来源路径及哈希，不返回轨迹、私有状态或调用消息。
+页面保留失败、未送达视频、不支持视频及移交槽位；逐维显示有效 n，恢复 N/A 不补零，
+五维完整子集与配对差值分开。旧 Gate2 和历史 T4 只在独立折叠区展示。
+`python -m scripts.publish_experiment_status` 生成同源报告快照，不调用模型。
+
+# 人类盲答与上帝视角 GT
+
+`/offline-annotation` 提供独立采集流程：完整场景组盲答锁定、私有证据独立初判、机器建议、最终人工审核。记录保存在 `data/human_annotations/sessions/`，会话码保存在当前浏览器，可刷新继续和导出。此目录含制作侧信息与人工记录，不通过静态文件服务公开。
+
+文字条件使用与模型完全相同的 `public_instance`。服务器强制整组解锁和不可覆盖提交；身份为本地自报 ID。`web.annotation_sessions.human_results()` 提供独立人类一致标签与排除本人标签后的基线分数。机器候选、人工 GT 与正式来源准入分开记录。
+
+可重复检查：`python -m unittest web.tests.test_annotation_sessions tests.test_offline_oracle`；浏览器流程见 `web/tests/offline_annotation_browser.cjs`，须使用临时 `STORE` 的测试服务，避免测试记录污染真实标注。

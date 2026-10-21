@@ -137,6 +137,36 @@ class OfflineReviewTest(unittest.TestCase):
         path.write_text("\n".join(json.dumps(i) for i in (text_item, video_item)))
         self.assertEqual(review.load_review("q1")["media"], [])
 
+    def test_media_cannot_be_reassigned_to_another_evidence_position(self):
+        review.VIDEO_ROOT.mkdir()
+        video = review.VIDEO_ROOT / "clip.mp4"
+        video.write_bytes(b"video fixture")
+        binding = {"sha256": review.digest(video.read_bytes()), "evidence_ids": ["t1"]}
+        text_item, video_item = deepcopy(self.item), deepcopy(self.item)
+        for variant in (text_item, video_item):
+            variant["metadata"]["modality_pair_id"] = "q1"
+        video_item.update(instance_id="q1-video", modality="text+video")
+        video_item["authoring"]["matched_assets"] = [binding]
+        (review.BANK / "paired.items.jsonl").write_text("\n".join(json.dumps(i) for i in (text_item, video_item)))
+        media = {"q1-video": [{**binding, "path": str(video), "source_asset_id": "fixture"}]}
+        self.write("bank/media.json", media)
+        self.assertEqual(review.load_review("q1")["media_coverage"]["status"], "complete")
+        media["q1-video"][0]["evidence_ids"] = ["context"]
+        self.write("bank/media.json", media)
+        detail = review.load_review("q1")
+        self.assertEqual(detail["media"], [])
+        self.assertEqual(detail["media_coverage"]["status"], "missing")
+
+    def test_pairing_summary_is_bound_to_current_bank_and_media(self):
+        media_sha = self.write("bank/media.json", {})
+        self.write("bank/pairing_report.json", {
+            "items_sha256": review.load_review()["bank_sha256"], "media_sha256": media_sha,
+            "logical_pairs": 0, "coverage_counts": {"missing": 1}})
+        self.assertEqual(review.load_review()["summary"]["media_missing"], 1)
+        self.item["question"] += "新版"
+        self.save_bank()
+        self.assertIsNone(review.load_review()["summary"]["media_missing"])
+
 
 if __name__ == "__main__":
     unittest.main()

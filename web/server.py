@@ -32,6 +32,12 @@ from schemas.validate import validate_scenario
 from scripts.scenario_docs import discover_scenario_paths
 from web.live_rollouts import load_live
 from web.offline_review import load_review as load_offline_review
+from web.experiment_status import load_experiment_status
+from web.annotation_sessions import dispatch as annotation_action
+from web.experiment_hub import (
+    load_hub, save_record as save_experiment_record, history as experiment_history,
+    source_document as experiment_document, ConflictError,
+)
 
 SCENARIO_DIR = ROOT / "configs" / "scenarios"
 PIPELINE_DIR = ROOT / "build" / "pipeline_20turn_selected"
@@ -40,11 +46,15 @@ STATIC_DIR = Path(__file__).resolve().parent / "static"
 # One page registry owns both current entries and old bookmark compatibility.
 # Retired HTML/JS implementations are not needed to serve these aliases.
 PAGE_ROUTES = {
+    "/lab": "/experiment_hub.html", "/lab/": "/experiment_hub.html",
+    "/offline-annotation": "/offline_annotation.html", "/offline-annotation/": "/offline_annotation.html",
+    "/experiments": "/experiments.html", "/experiments/": "/experiments.html",
     "/": "/gpt50_gate1.html", "": "/gpt50_gate1.html",
     "/gpt50": "/gpt50_gate1.html", "/gpt50/": "/gpt50_gate1.html",
     "/gpt50-live": "/gpt50_live.html", "/gpt50-live/": "/gpt50_live.html",
     "/multimodal": "/multimodal_review.html", "/multimodal/": "/multimodal_review.html",
     "/state-annotation": "/state_annotation.html", "/state-annotation/": "/state_annotation.html",
+    "/offline-demo": "/offline_review.html", "/offline-demo/": "/offline_review.html",
     "/offline-review": "/offline_review.html", "/offline-review/": "/offline_review.html",
 }
 LEGACY_PAGE_ALIASES = {
@@ -2316,6 +2326,12 @@ def scenario_detail(scenario_id):
 
 def api_payload(path, *, offline_bank=None):
     parts = [unquote(part) for part in path.strip("/").split("/") if part]
+    if parts == ["api", "lab"]:
+        return load_hub()
+    if len(parts) == 4 and parts[:2] == ["api", "lab"] and parts[3] == "history":
+        return {"events": experiment_history(parts[2])}
+    if parts == ["api", "experiment-status"]:
+        return load_experiment_status()
     if parts == ["api", "offline-review"]:
         return load_offline_review(bank_id=offline_bank)
     if len(parts) == 3 and parts[:2] == ["api", "offline-review"]:
@@ -2452,10 +2468,54 @@ class App(SimpleHTTPRequestHandler):
         self.end_headers()
         return False
 
+    def do_POST(self):
+        if not self.authenticate():
+            return
+        parsed = urlparse(self.path)
+        is_lab = parsed.path == "/api/lab/records"
+        if not is_lab and not parsed.path.startswith("/api/offline-annotation/"):
+            self.send_json({"error": "not found"}, 404)
+            return
+        origin = self.headers.get("Origin")
+        if origin and urlparse(origin).netloc != self.headers.get("Host"):
+            self.send_json({"error": "跨站提交未被允许"}, 403)
+            return
+        if is_lab and (
+            self.headers.get_content_type() != "application/json"
+            or self.headers.get("Sec-Fetch-Site") == "cross-site"
+        ):
+            self.send_json({"error": "实验记录只接受同源 JSON 提交"}, 403)
+            return
+        try:
+            length = int(self.headers.get("Content-Length", "0"))
+            if not 0 < length <= 100_000:
+                raise ValueError("提交内容为空或过长")
+            payload = json.loads(self.rfile.read(length))
+            if not isinstance(payload, dict):
+                raise ValueError("提交格式无效")
+            if is_lab:
+                result = save_experiment_record(payload)
+            else:
+                action = parsed.path.removeprefix("/api/offline-annotation/")
+                result = annotation_action(action, payload)
+            self.send_json(result, 200)
+        except ConflictError as exc:
+            self.send_json({"error": str(exc)}, 409)
+        except (ValueError, KeyError, TypeError) as exc:
+            self.send_json({"error": str(exc)}, 400)
+
     def do_GET(self):
         if not self.authenticate():
             return
         parsed = urlparse(self.path)
+        if parsed.path == "/api/lab/source":
+            relative = parse_qs(parsed.query).get("path", [""])[0]
+            try:
+                payload = experiment_document(relative)
+                self.send_json(payload or {"error": "未收录此来源文件"}, 200 if payload else 404)
+            except OSError:
+                self.send_json({"error": "文件暂不可读，请稍后重试"}, 503)
+            return
         if parsed.path.startswith((
             "/online-video/", "/online-review-video/", "/talking-video/"
         )):

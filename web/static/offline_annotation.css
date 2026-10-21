@@ -1,0 +1,20 @@
+[hidden] { display: none !important; }
+.annotation-setup { max-width: 960px; margin: 30px auto; padding: 0 20px; }
+.annotation-setup input, .annotation-setup select, .annotation-setup label { width: 100%; }
+.annotation-setup .field-grid { margin: 24px 0; }
+.annotation-setup label { display: grid; gap: 8px; }
+.phase-card { border-left: 4px solid #146b58; }
+#sessionNav { display: grid; gap: 8px; }
+.annotation-evidence details { margin: 12px 0; border: 1px solid #dce5e1; padding: 12px; border-radius: 10px; }
+.annotation-evidence summary { cursor: pointer; font-weight: 600; }
+.annotation-evidence .field { overflow-wrap: anywhere; }
+.annotation-evidence .value { white-space: pre-wrap; }
+.locked-answer { background: #edf6f1; border-radius: 10px; padding: 14px; }
+.annotation-form { display: grid; gap: 16px; }
+.annotation-form textarea { min-height: 110px; width: 100%; }
+.annotation-form label { display: grid; gap: 7px; }
+.annotation-form .attestation { display: flex; align-items: center; }
+.annotation-form .attestation input { width: auto; }
+.session-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+.resume-button { display: block; width: 100%; margin: 10px 0; text-align: left; }
+@media (max-width: 650px) { .annotation-setup { margin: 15px auto; padding: 0 12px; } }
