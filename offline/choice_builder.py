@@ -160,6 +160,13 @@ def write_bundle(items, output):
     for x in items:
         a=x['authoring']; lines += [f"## {x['instance_id']} · {x['task']} / {x['subtype']}", '',
             f"来源：{x['story_id']}；轨迹：{x['metadata']['source_trajectory_id']}；状态持有者：{x['input']['target_character']['name']}；交互对方：{x['input']['role']['name']}。关系判断由状态持有者指向交互对方。", '']
+        if x.get('analysis'):
+            from tasks.offline_design import CAPABILITIES
+            analysis=x['analysis']
+            lines += ['主要能力：'+CAPABILITIES[analysis['primary_capability']],
+                      '辅助能力：'+('、'.join(CAPABILITIES[c] for c in analysis['auxiliary_capabilities']) or '无'),
+                      '设计难度：'+analysis['design_difficulty']+'；依据：'+(analysis['difficulty_reason'] or '关键证据直接一致'),
+                      '实测难度：未测' if analysis['empirical_difficulty'] is None else '实测难度：'+json.dumps(analysis['empirical_difficulty'],ensure_ascii=False), '']
         inp=x['input']; lines += ['背景：'+inp['context']['background'], '角色目标：'+inp['role'].get('explicit_goal',''), '']
         situation=inp['context'].get('public_situation', {})
         for key,value in situation.items():
@@ -178,11 +185,11 @@ def write_bundle(items, output):
         if inp.get('shared_ending'):
             lines += ['共同 ending（两侧完全相同）：'+json.dumps(inp['shared_ending'],ensure_ascii=False), '']
         for action in inp.get('candidate_actions',[]):
-            lines += [f"- 候选行动 {action['action_id']}：{action['text']}"]
+            lines += [f"- {action.get('label', action['action_id'])}：{action['text']}"]
         lines += ['', '**题目：'+x['question']+'**', '']
         lines += [f"- **{k}.** {v}" for k,v in x['options'].items()]
         lines += ['', f"**作者参考答案：{a['answer']}（待审）**", '', a['rationale'], '',
-                  '证据：'+', '.join(a['evidence_ids']), '变量／时间：'+json.dumps(x['target_spec'],ensure_ascii=False),
+                  '证据：'+', '.join(a['evidence_ids']), '反证／限制线索：'+', '.join(a.get('counterevidence_ids',[])), '变量／时间：'+json.dumps(x['target_spec'],ensure_ascii=False),
                   '错项类型：'+json.dumps(a['option_errors'],ensure_ascii=False),
                   '分维映射：'+json.dumps(a['option_variable_map'],ensure_ascii=False),
                   '可接受答案：'+', '.join(a.get('acceptable_answers',[a['answer']])),

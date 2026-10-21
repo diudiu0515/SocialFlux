@@ -1,6 +1,8 @@
 # SocialFlux Tasks
 
-当前 offline 主评测采用 [T1–T3 选择题协议](../docs/protocols/OFFLINE_T1_T3_CHOICE_V1.md)：只需 `{"answer":"B"}`，证据为独立诊断模式。`socialflux_offline_choice_v1` 使用新协议，下述概率合同保留用于旧资产复现。
+新增 [v2 能力框架与任务合同](../docs/protocols/OFFLINE_T1_T3_CHOICE_V2.md)，当前默认是 [50 场景新版题库](examples/offline_scenarios_v2/examples.md)：每场景 T1/T2/T3 各 2 题。网站 `/offline-demo` 可按场景查看、试答与筛选能力／难度。另保留 [24 道首批题型示例](examples/offline_design_v2/examples.md)和旧 460 题迁移记录；v1 生成配方及历史资产用于复现。
+
+当前新版开发题采用 `socialflux_offline_choice_v2`；[旧 v1 选择题协议](../docs/protocols/OFFLINE_T1_T3_CHOICE_V1.md)继续兼容。主回答只需 `{"answer":"B"}`，证据为独立诊断模式，下述概率合同保留用于旧资产复现。新版尚待人工核验，不据机器一致性自动变成正式真值。
 
 Git 中保存了 2026-10-10 的 [60 题完整可读样例](examples/offline_t1_t3_dev60/examples.md)、
 [机器可读题目](examples/offline_t1_t3_dev60/items.jsonl)及 [来源与哈希](examples/offline_t1_t3_dev60/snapshot.json)。

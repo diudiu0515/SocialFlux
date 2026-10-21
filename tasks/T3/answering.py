@@ -37,7 +37,7 @@ def canonicalize_instance(instance):
 
 
 def answer_prompt(instance, private_persona=None, condition="main"):
-    if instance.get("benchmark_version") == "socialflux_offline_choice_v1":
+    if instance.get("benchmark_version") in {"socialflux_offline_choice_v1", "socialflux_offline_choice_v2"}:
         from tasks.offline_choice import answer_prompt as choice_prompt
         return choice_prompt(instance)
     state_ids = instance["target_spec"]["target_state_ids"]
@@ -83,7 +83,7 @@ def answer_prompt(instance, private_persona=None, condition="main"):
 
 
 def validate_answer(value, instance):
-    if instance.get("benchmark_version") == "socialflux_offline_choice_v1":
+    if instance.get("benchmark_version") in {"socialflux_offline_choice_v1", "socialflux_offline_choice_v2"}:
         from tasks.offline_choice import parse_answer
         parsed = parse_answer(json.dumps(value), instance["options"])
         if parsed["format_error"]:
@@ -139,7 +139,7 @@ def generate_answer(
     provider, instance, seed, *, private_persona=None, max_attempts=3,
     condition="main",
 ):
-    if instance.get("benchmark_version") == "socialflux_offline_choice_v1":
+    if instance.get("benchmark_version") in {"socialflux_offline_choice_v1", "socialflux_offline_choice_v2"}:
         from tasks.offline_choice import generate_answer as choice_answer
         return choice_answer(provider, instance, seed)
     instance = canonicalize_instance(instance)

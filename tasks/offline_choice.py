@@ -7,6 +7,8 @@ from environment.state_ontology import STATE_VARIABLE_ONTOLOGY
 from prompts.loader import render_prompt
 
 VERSION = 'socialflux_offline_choice_v1'
+VERSION_V2 = 'socialflux_offline_choice_v2'
+VERSIONS = {VERSION, VERSION_V2}
 FAMILIES = {'emotion': 'Emotion', 'behavioral_disposition': 'Behavioral Disposition',
             'relationship': 'Relationship', 'consequence_risk': 'Interaction Risk'}
 SUBTYPES = {'T1': {'current_intensity', 'interval_change', 'joint_change'},
@@ -38,7 +40,7 @@ def public_instance(item):
     assert_no_leaks(result)
     def reject_private(value):
         if isinstance(value, dict):
-            if set(value) & {'persona', 'initial_state', 'oracle_state', 'future_turns', 'authoring', 'ground_truth', 'target_spec'}:
+            if set(value) & {'persona', 'initial_state', 'oracle_state', 'future_turns', 'authoring', 'ground_truth', 'target_spec', 'analysis', 'primary_capability', 'difficulty_reason', 'branch_evidence'}:
                 raise ValueError('private field in evaluated input')
             for child in value.values():
                 reject_private(child)
@@ -99,15 +101,19 @@ def parse_answer(raw, options, diagnostic=False):
 
 
 def validate_item(item, formal=False):
-    if item.get('benchmark_version') != VERSION:
+    if item.get('benchmark_version') not in VERSIONS:
         raise ValueError('unknown offline protocol version')
     task = item['task']
-    if item['subtype'] not in SUBTYPES[task]:
+    v2 = item.get('benchmark_version') == VERSION_V2
+    from tasks.offline_design import SUBTYPES_V2, validate_design
+    if task not in SUBTYPES or item['subtype'] not in (SUBTYPES_V2 if v2 else SUBTYPES)[task]:
         raise ValueError('task/subtype mismatch')
     options = item['options']
     if not 3 <= len(options) <= 6 or list(options) != list('ABCDEF'[:len(options)]):
         raise ValueError('options must be 3–6 consecutive letters')
     expected_count = (6 if item['subtype'] == 'current_intensity' else 4 if item['subtype'] in {'expression_meaning','joint_change','joint_comparison','immediate_delayed'} else None)
+    if v2:
+        expected_count = None if item['subtype'] in {'interval_change', 'history_comparison'} else 4
     if (expected_count is not None and len(options) != expected_count) or (expected_count is None and len(options) not in {3,4}):
         raise ValueError('option count does not match subtype')
     if len(set(options.values())) != len(options) or any(not str(x).strip() for x in options.values()):
@@ -142,7 +148,7 @@ def validate_item(item, formal=False):
         a, b = item['input']['history_a'], item['input']['history_b']
         if not a or len(a) != len(b) or a == b:
             raise ValueError('invalid controlled histories')
-        if any({k:v for k,v in left.items() if k!='turn_id'} != {k:v for k,v in right.items() if k!='turn_id'} for left,right in zip(a[:-1],b[:-1])):
+        if not v2 and any({k:v for k,v in left.items() if k!='turn_id'} != {k:v for k,v in right.items() if k!='turn_id'} for left,right in zip(a[:-1],b[:-1])):
             raise ValueError('controlled T2 shared prefix changed')
         evidence = author['evidence_ids']
         if not any(x.startswith('A:') for x in evidence) or not any(x.startswith('B:') for x in evidence):
@@ -153,10 +159,12 @@ def validate_item(item, formal=False):
         actions = item['input']['candidate_actions']
         if not 2 <= len(actions) <= 4 or len({a['action_id'] for a in actions}) != len(actions):
             raise ValueError('T3 requires 2–4 distinct actions')
-        if not 5 <= spec['delayed_horizon'] <= 10:
+        if not v2 and not 5 <= spec['delayed_horizon'] <= 10:
             raise ValueError('invalid delayed horizon')
         action_ids={a['action_id'] for a in actions}
-        if item['subtype'] == 'action_comparison':
+        if v2:
+            pass  # v2 validates explicit action/baseline comparisons below.
+        elif item['subtype'] == 'action_comparison':
             if spec.get('comparison_horizon') not in {None,'immediate','delayed'}:
                 raise ValueError('comparison needs an explicit immediate or delayed horizon')
             compared=spec.get('comparison_actions',[])
@@ -191,6 +199,8 @@ def validate_item(item, formal=False):
             raise ValueError('formal video review pending')
         if task in {'T2', 'T3'} and author.get('replay_status') != 'validated':
             raise ValueError('formal controlled replay not validated')
+    if v2:
+        validate_design(item)
     public_instance(item)
     return item
 

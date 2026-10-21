@@ -51,7 +51,15 @@ def score_items(items, responses, *, diagnostic=False, formal=False):
         for key in ['overall', 'task/' + item['task'], 'subtype/' + item['task'] + '/' + item['subtype'],
                     'structure/' + ('combination' if combo else 'single'), 'modality/' + item['modality']]:
             groups[key].append(row)
+        analysis = item.get('analysis', {})
+        if analysis:
+            groups['capability/' + analysis['primary_capability']].append(row)
+            groups['difficulty/' + analysis['design_difficulty']].append(row)
+            groups['task_capability/' + item['task'] + '/' + analysis['primary_capability']].append(row)
+            for capability in analysis['auxiliary_capabilities']:
+                groups['auxiliary_capability/' + capability].append(row)
         for family in sorted({p.split('.')[0] for p in variables}):
+            groups['state/' + FAMILIES[family]].append(row)
             groups['task_state/' + item['task'] + '/' + FAMILIES[family]].append(row)
         if combo and parsed['answer']:
             selected = maps[parsed['answer']]

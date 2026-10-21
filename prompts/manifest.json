@@ -250,6 +250,21 @@
       "path": "video_public_rendering_adaptation_v1.md",
       "sha256": "6ff6b0ad44256fd1f50e57fcbd2543a08691dd0c1c2b2482557e9a00c54dc21f",
       "version": "v1"
+    },
+    "offline_choice_author_v2": {
+      "path": "offline_choice_author_v2.md",
+      "sha256": "20a412010cbdaf2135a1384a2bce5b4511b08ef099948e3816e532b96c2fe878",
+      "version": "v2"
+    },
+    "offline_scenario_author_v2": {
+      "path": "offline_scenario_author_v2.md",
+      "sha256": "999036a7874e0f2c2efeb288119a770f92cbce4ab9ac7a6df2326234b2184b44",
+      "version": "v2"
+    },
+    "offline_talking_head_exact_v1": {
+      "path": "offline_talking_head_exact_v1.md",
+      "sha256": "cd5c0e1ceaf6f29cb00c0908a87266653f346aae99ae71d2828e4a1d77aa7358",
+      "version": "v1"
     }
   }
 }
