@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from scripts.multimodal_video_profiles import THIRD_EVENTS, UTTERANCES
-from scripts.scenario_docs import discover_scenario_paths
+from scenario_design.catalog import discover_scenario_paths
 
 SCENARIOS = ROOT / "configs" / "scenarios"
 

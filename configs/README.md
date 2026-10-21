@@ -6,8 +6,10 @@
 
 | 用途 | 配置或入口 | 说明 |
 |---|---|---|
-| Offline T1–T3 开发题 | [`offline_choice_dev60.json`](offline_choice_dev60.json) | 固定 5 个场景、源轨迹、路由、输出目录和延迟窗口 |
-| GPT50 T1/T3 扩展 | [`offline_gpt50_t1_t3.json`](offline_gpt50_t1_t3.json) | 固定 50 场景、目标 400 题；T2 暂停，完成数以 manifest 为准 |
+| 当前场景题库 v2 | [`offline/scenario_v2.py`](../offline/scenario_v2.py)、[发布 manifest](../tasks/examples/offline_scenarios_v2/manifest.json) | 50 场景，T1/T2/T3 各 100 题；生成参数由批次产物保存 |
+| 历史 Offline 60 题 | [`offline_choice_dev60.json`](offline_choice_dev60.json) | 固定 5 个场景；保留来源、路由和延迟窗口 |
+| 历史 GPT50 T1/T3 扩展 | [`offline_gpt50_t1_t3.json`](offline_gpt50_t1_t3.json) | 旧 50 场景、目标 400 题配置；不是当前 v2 题库计数 |
+| T4 41 场景批次 | [`t4_multimodal_experiment.reliable41_20261021.json`](gpt50_experiment/t4_multimodal_experiment.reliable41_20261021.json) | GPT、Claude × 41 场景 × text/video，共 164 个槽位；使用冻结运行目录 |
 | GPT50 开发与当前轨迹 | [`gpt50_experiment/README.md`](gpt50_experiment/README.md)、[批次手册](../docs/operations/ACTIVE_BATCH_PIPELINE.md) | 当前来源由批次 manifest 绑定，不将所有 rollout.* 候选合并 |
 | Claude150 批次 | [`claude150_v1/README.md`](claude150_v1/README.md) | 独立的场景、路由、产物与恢复记录 |
 | 网站进程 | [`web.supervisord.conf`](web.supervisord.conf) | 监听 127.0.0.1:8000，服务环境与日志在 build/web-service |
@@ -30,6 +32,12 @@ Offline 当前显式引用 `gpt50_experiment/rollout.state_observed_evidence_v6_
 模型通过 `providers/model_routes.py` 和 `providers/factory.py` 注入。Anthropic、OpenAI-compatible 与 Responses 传输各有 owner；领域代码不应绕过 provider 直接发 HTTP。凭据从环境或私有文件读取，不写入报告、题目或清理备份。
 
 ## 历史配置的保留
+
+2026-10-21 核对：共 126 个 JSON 配置，规范化 JSON 内容没有完全相同的副本；
+其中 56 个引用已退役 prompt。此次重构没有删除配置或替换 prompt ID。
+这不表示其余 70 个均可直接运行，具体入口仍需通过各自来源、Gate 和运行前检查。
+逐文件格式、SHA 和退役引用见[配置审计清单](../build/code_cleanup_20261021/config_inventory.json)，
+代码退役与保留依据见[代码审计](../docs/architecture/CODE_AUDIT.md)。
 
 2026-10-10 已按确认链路撤下 39 份中间 prompt。56 份历史配置中的旧 ID 继续
 作为来源记录保留，引用已撤下模板时会明确报错；不能直接用于新调用或把 ID

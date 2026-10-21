@@ -20,7 +20,7 @@ from evaluation.review_registry import (
 )
 from pipeline.scenarios import load_scenario_records
 from schemas.validate import validate_scenario
-from scripts.scenario_docs import write_document
+from scenario_design.catalog import write_document
 
 
 BROWSER_FORMAT = "socialflux_gpt50_gate1_browser_export_v1"

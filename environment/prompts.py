@@ -38,7 +38,3 @@ def build_appraisal_prompt(
         "appraisal_context": appraisal_context or {},
         "action": action,
     }, latest_action_text=str(action.get("text", "")).strip())
-
-
-def build_response_prompt(context):
-    return render_prompt("environment_response_v25", context)

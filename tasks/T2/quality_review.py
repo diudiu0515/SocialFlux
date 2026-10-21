@@ -10,9 +10,7 @@ from __future__ import annotations
 import json
 
 from providers.structured import complete_json
-from tasks.T2.runtime import call_count
-
-
+from providers.base import call_count
 ENVIRONMENT_ISSUE_CATEGORIES = {
     "empty_repetition",
     "request_omission",

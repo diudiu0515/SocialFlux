@@ -32,7 +32,7 @@ from scripts.run_history_dependence import (
     _interpretation_comparison,
     critical_turn,
 )
-from scripts.scenario_docs import discover_scenario_paths
+from scenario_design.catalog import discover_scenario_paths
 
 
 def load_actual_scenarios(root):
@@ -403,52 +403,6 @@ def _e5(factory, candidate_generator, checkpoint):
         "distinct_direction_signature_count": len(signatures),
         "automatic_screen_passed": len(branches) >= 2 and len(signatures) >= 2,
         "social_plausibility": "pending_human_review",
-    }
-
-
-def _subtract(after, before):
-    if isinstance(before, dict):
-        return {key: _subtract(after[key], value) for key, value in before.items()}
-    return after - before
-
-
-def _existing_e5(branches):
-    first = branches[0]
-    same_checkpoint = all(
-        item.get("source_trajectory_id") == first.get("source_trajectory_id")
-        and item.get("checkpoint_turn_id") == first.get("checkpoint_turn_id")
-        and item.get("state_before") == first.get("state_before")
-        and item.get("dynamics_before") == first.get("dynamics_before")
-        for item in branches
-    )
-    converted = []
-    signatures = set()
-    for item in branches:
-        output = {
-            "numeric_state_delta": _subtract(item["state_after_immediate"], item["state_before"]),
-            "numeric_dynamics_delta": _subtract(item["dynamics_after_immediate"], item["dynamics_before"]),
-        }
-        signature = _direction_signature(output)
-        signatures.add(json.dumps(signature, ensure_ascii=False, sort_keys=True))
-        converted.append({
-            "candidate_action": item["candidate_action"]["text"],
-            "state_after_immediate": item["state_after_immediate"],
-            "state_after_delayed": item["state_after_delayed"],
-            "dynamics_after_immediate": item["dynamics_after_immediate"],
-            "dynamics_after_delayed": item["dynamics_after_delayed"],
-            "direction_signature": signature,
-        })
-    return {
-        "source_trajectory_id": first.get("source_trajectory_id"),
-        "checkpoint_turn_id": first.get("checkpoint_turn_id"),
-        "state_before": first["state_before"],
-        "dynamics_before": first["dynamics_before"],
-        "branches": converted,
-        "same_checkpoint_verified": same_checkpoint,
-        "distinct_direction_signature_count": len(signatures),
-        "automatic_screen_passed": same_checkpoint and len(branches) >= 2 and len(signatures) >= 2,
-        "social_plausibility": "pending_human_review",
-        "reused_evidence": "build/pipeline_v2/*/validation/local_action_interventions.json",
     }
 
 

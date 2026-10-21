@@ -13,22 +13,12 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from scripts.scenario_docs import discover_scenario_paths
+from scenario_design.catalog import discover_scenario_paths
+from shared.artifacts import atomic_json as atomic
 
 
 def now():
     return datetime.now(timezone.utc).isoformat()
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def artifact_path(rollout_root, scenario_directory, attempt):

@@ -6,7 +6,7 @@ import unittest
 
 from evaluation.review_registry import load_review_registry, validate_human_review
 from scripts.apply_gpt50_gate1 import apply_review
-from scripts.scenario_docs import write_document
+from scenario_design.catalog import write_document
 
 
 class ApplyGpt50Gate1Test(unittest.TestCase):

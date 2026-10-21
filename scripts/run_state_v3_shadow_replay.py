@@ -36,6 +36,7 @@ from evaluation.state_v3_metrics import state_v3_trajectory_metrics  # noqa: E40
 from providers.factory import build_provider, public_provider_config  # noqa: E402
 from providers.model_routes import ModelRoutes  # noqa: E402
 from rollout.configuration import load_rollout_config  # noqa: E402
+from shared.artifacts import atomic_json as atomic
 
 
 FORMAT = "socialflux_state_v31_shadow_replay_v2"
@@ -54,17 +55,6 @@ def sha256_json(value):
         value, ensure_ascii=False, sort_keys=True, separators=(",", ":")
     ).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 class FixedTranscriptResponseGenerator:

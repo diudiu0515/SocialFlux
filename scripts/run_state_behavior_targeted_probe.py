@@ -22,6 +22,7 @@ from environment.state_transition_contract import validate_state_v3_scenario  # 
 from providers.factory import build_provider, public_provider_config  # noqa: E402
 from rollout.configuration import load_rollout_config  # noqa: E402
 from scripts.run_state_v3_shadow_replay import ShadowReplayStateUpdater  # noqa: E402
+from shared.artifacts import atomic_json as atomic
 
 
 def load(path):
@@ -30,17 +31,6 @@ def load(path):
 
 def sha256_file(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def behavioral(items):

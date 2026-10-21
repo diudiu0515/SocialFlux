@@ -12,7 +12,7 @@ import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from scripts.scenario_docs import discover_scenario_paths
+from scenario_design.catalog import discover_scenario_paths
 
 ROOT = Path(__file__).resolve().parents[1]
 SCENARIOS = ROOT / "configs" / "scenarios"

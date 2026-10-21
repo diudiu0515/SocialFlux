@@ -10,7 +10,12 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+import sys
 from urllib.parse import quote
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from shared.artifacts import atomic_json as atomic
 
 
 def utc_now():
@@ -19,17 +24,6 @@ def utc_now():
 
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def sha256(path):

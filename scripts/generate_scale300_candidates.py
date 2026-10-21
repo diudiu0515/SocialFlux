@@ -31,7 +31,8 @@ from schemas.validate import (
     validate_scenario,
     validate_v2_dynamics,
 )
-from scripts.scenario_docs import write_document
+from scenario_design.catalog import write_document
+from shared.artifacts import atomic_json as _atomic_json
 
 
 DEFAULT_ROUTES = Path("configs/model_routes.frontier_api.json")
@@ -90,17 +91,6 @@ INITIAL_PRESENTATION_FIELDS = {
 
 def _now():
     return datetime.now(timezone.utc).isoformat()
-
-
-def _atomic_json(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def _artifact_has_public_evaluated_persona(path):

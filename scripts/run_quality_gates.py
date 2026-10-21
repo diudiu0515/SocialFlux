@@ -17,7 +17,7 @@ from evaluation.quality_gates import (
 )
 from pipeline.constants import SCENARIO_ROOT
 from pipeline.scenarios import load_scenarios
-from scripts.scenario_docs import discover_scenario_paths
+from scenario_design.catalog import discover_scenario_paths
 
 
 def markdown(report):

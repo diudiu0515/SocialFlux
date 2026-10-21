@@ -23,11 +23,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from prompts.loader import prompt_manifest
 from providers.model_routes import ModelRoutes
 from schemas.validate import validate_scenario
-from scripts.generate_scale300_candidates import (
-    REQUIRED_BRIEF_FIELDS,
-    _validate_brief,
-)
-from scripts.scenario_docs import write_catalog, write_document
+from scripts.generate_scale300_candidates import _validate_brief
+from scenario_design.catalog import write_catalog, write_document
+from shared.artifacts import atomic_json
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -40,17 +38,6 @@ RUN_FORMAT = "socialflux_gpt50_scenario_run_v1"
 
 def now():
     return datetime.now(timezone.utc).isoformat()
-
-
-def atomic_json(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def sha256_file(path):

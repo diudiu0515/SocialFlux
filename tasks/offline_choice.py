@@ -100,6 +100,14 @@ def parse_answer(raw, options, diagnostic=False):
     return result
 
 
+def validate_answer(value, instance):
+    """Validate a decoded answer through the same parser used for API output."""
+    parsed = parse_answer(json.dumps(value), instance["options"])
+    if parsed["format_error"]:
+        raise ValueError(parsed["format_error"])
+    return {"answer": parsed["answer"]}
+
+
 def validate_item(item, formal=False):
     if item.get('benchmark_version') not in VERSIONS:
         raise ValueError('unknown offline protocol version')

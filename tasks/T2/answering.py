@@ -6,13 +6,12 @@ import json
 
 from prompts.loader import render_prompt
 from providers.structured import complete_json
-from tasks.T2.runtime import DIRECTIONS, call_count
-
-
+from tasks.T2.runtime import DIRECTIONS
+from providers.base import call_count
+from tasks import offline_choice
 def answer_prompt(instance, private_persona=None):
-    if instance.get("benchmark_version") in {"socialflux_offline_choice_v1", "socialflux_offline_choice_v2"}:
-        from tasks.offline_choice import answer_prompt as choice_prompt
-        return choice_prompt(instance)
+    if instance.get("benchmark_version") in offline_choice.VERSIONS:
+        return offline_choice.answer_prompt(instance)
     visible_ids = [turn["turn_id"] for turn in instance["input"]["history_a"]]
     example_turn = visible_ids[0]
     schema = {
@@ -66,12 +65,8 @@ def answer_prompt(instance, private_persona=None):
 
 
 def validate_answer(value, instance):
-    if instance.get("benchmark_version") in {"socialflux_offline_choice_v1", "socialflux_offline_choice_v2"}:
-        from tasks.offline_choice import parse_answer
-        parsed = parse_answer(json.dumps(value), instance["options"])
-        if parsed["format_error"]:
-            raise ValueError(parsed["format_error"])
-        return {"answer": parsed["answer"]}
+    if instance.get("benchmark_version") in offline_choice.VERSIONS:
+        return offline_choice.validate_answer(value, instance)
     expected = {
         "instance_id", "selected_state_ids", "predictions",
         "shared_expression_explanation", "history_necessity",
@@ -165,9 +160,8 @@ def validate_answer(value, instance):
 def generate_answer(
     provider, instance, seed, *, private_persona=None, max_attempts=3,
 ):
-    if instance.get("benchmark_version") in {"socialflux_offline_choice_v1", "socialflux_offline_choice_v2"}:
-        from tasks.offline_choice import generate_answer as choice_answer
-        return choice_answer(provider, instance, seed)
+    if instance.get("benchmark_version") in offline_choice.VERSIONS:
+        return offline_choice.generate_answer(provider, instance, seed)
     answer = complete_json(
         provider,
         [{"role": "user", "content": answer_prompt(instance, private_persona)}],

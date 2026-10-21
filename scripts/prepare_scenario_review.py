@@ -13,7 +13,7 @@ from evaluation.review_registry import (
     REQUIRED_QUALITY_SCORES,
     file_sha256,
 )
-from scripts.scenario_docs import discover_scenario_paths
+from scenario_design.catalog import discover_scenario_paths
 
 
 def main():

@@ -28,7 +28,8 @@ from scripts.prepare_multimodal_video_queue import (  # noqa: E402
     observable_behavior,
     select_important_turns,
 )
-from scripts.scenario_docs import discover_scenario_paths  # noqa: E402
+from scenario_design.catalog import discover_scenario_paths
+from shared.artifacts import atomic_json as atomic
 
 
 DEFAULT_CONFIG = ROOT / "configs" / "multimodal_delivery.json"
@@ -40,17 +41,6 @@ def utc_now():
 
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def canonical_sha256(value):

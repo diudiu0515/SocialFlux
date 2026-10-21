@@ -96,6 +96,26 @@ SFD2-001—012 保留旧 scenario、trajectory、T2 编辑／回放和 T3 分支
 
 ## 多模态与统计
 
+### 逐字台词 talking-head 制作
+
+新版 300 题的环境角色台词去重为 150 个节点：50 个 t1、50 个 t2、50 个 T2 共同结尾。`offline.talking_head` 按原语言保留完整台词，长句无损拆成 241 段，分段连接必须逐字还原原文。T2 的相同前史和共同结尾分别复用同一文件，候选行动的未来台词不进入题面视频。生成请求只发送公开台词、公开表情和虚构人物参考，不发送答案、私有状态或未来分支。
+
+此队列使用独立的 `offline_talking_head_exact_v1` 提示；旧英文压缩渲染流程保持原版本。49 个场景有现成人物参考，GPT50_036 先生成首段作为新参考，再用于同场景后续片段。全部产物、provider state、原文台词表和题目版本绑定保存在 `data/offline_talking_head_v1/<题库SHA前16位>/`，提交失败和已提交 task ID 均保留，可续查下载。
+
+```bash
+# 准备和状态检查不调用视频 API
+python -m offline.talking_head --phase prepare
+python -m offline.talking_head --phase status --manifest data/offline_talking_head_v1/c1d1f3fd60e94e0c/manifest.json
+# 经授权后，显式提交；可用 --request-id 先选一段样片
+python -m offline.talking_head --phase run --manifest data/offline_talking_head_v1/c1d1f3fd60e94e0c/manifest.json --submit-new --workers 4
+# 全部节点完成后发布到开发审核页；未完成时保留既有配对
+python -m offline.talking_head --phase publish --manifest data/offline_talking_head_v1/c1d1f3fd60e94e0c/manifest.json
+```
+
+生成完成只代表视频文件和音轨存在。原文发音、逐字完整性、口型、人物一致性及表情仍需审核；网站保留待审标记，不转为正式人工通过。帧图传输仍只包含视觉信息。当前只完成请求准备，实际提交须以 provider state 为准，不能把清单数量当作生成数量。
+
+### 已有非语言素材配对
+
 当前 50 场景、300 题的已有非语言视频配对由 `scripts.match_offline_multimodal` 独立刷新，不重新出题或覆盖 oracle 参考。逐项核对冻结轨迹 SHA、公开台词、表情、公开事件与历史轮次，再按原 `media_asset_id` 和视频 SHA 绑定。2026-10-21 核对为 270 对（T1/T2/T3 各 90 对）、45 段视频；GPT50_005、020、034、036、039 的对应素材尚未生成，涉及 30 题。所有已匹配视频仅覆盖 t1；T2 对应 A:t1/B:t1，共同结尾未匹配视频。此条件是文字加前史非语言 cue，不是朗读当前台词的 talking head。
 
 `pairing_report.json` 保存逐题覆盖、缺口、当前题库及媒体清单 SHA。`media.json` 包含原视频及每段 0.25/1.25/2.25/3.25 秒的四张帧图，帧图缓存位于 `data/offline_multimodal_frames/`。帧图传输只评测视觉信息，不包含音轨与语音韵律；所有素材仍待人工审核。

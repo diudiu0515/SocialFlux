@@ -23,7 +23,7 @@ from evaluation.instance_quality import audit_trajectory
 from policies.model_policy import ModelPolicy
 from providers.factory import build_provider, public_provider_config
 from schemas.validate import validate_scenario, validate_trajectory
-from scripts.scenario_docs import discover_scenario_paths
+from scenario_design.catalog import discover_scenario_paths
 
 VERSION = "r3_rule_length_ablation_v3"
 CLOSURE_RE = re.compile(

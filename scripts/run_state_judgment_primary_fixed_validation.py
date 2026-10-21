@@ -21,6 +21,7 @@ from environment.state_updater import ModelStateUpdater
 from providers.factory import build_provider, public_provider_config
 from prompts.loader import prompt_manifest
 from rollout.configuration import load_rollout_config
+from shared.artifacts import atomic_json as atomic
 
 
 DEFAULT_MANIFEST = (
@@ -57,16 +58,6 @@ def sha256(path):
 
 def relative(path):
     return str(Path(path).resolve().relative_to(ROOT))
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
-    temporary.replace(path)
 
 
 def find_turn(source, turn_id):

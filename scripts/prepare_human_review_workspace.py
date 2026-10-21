@@ -19,7 +19,7 @@ from evaluation.quality_gates import (
 )
 from evaluation.rollout_gate import content_sha256
 from scripts.audit_formal_rollout_pool import load_records
-from scripts.scenario_docs import discover_scenario_paths
+from scenario_design.catalog import discover_scenario_paths
 
 
 ROOT = Path(__file__).resolve().parents[1]

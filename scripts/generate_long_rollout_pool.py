@@ -46,6 +46,7 @@ from rollout.manifest import write_manifest
 from rollout.runner import RolloutRunner
 from rollout.configuration import load_rollout_config, public_rollout_config
 from schemas.validate import validate_trajectory
+from shared.artifacts import canonical_json_sha256 as _scenario_fingerprint
 
 
 MAX_TURNS = 20
@@ -111,14 +112,6 @@ def _quality_fingerprint():
         digest.update(relative.encode("utf-8"))
         digest.update(path.read_bytes())
     return digest.hexdigest()
-
-
-def _scenario_fingerprint(scenario):
-    """Pin a trajectory to the exact canonical scenario content it used."""
-    payload = json.dumps(
-        scenario, ensure_ascii=False, sort_keys=True, separators=(",", ":")
-    ).encode("utf-8")
-    return hashlib.sha256(payload).hexdigest()
 
 
 def _utc_now():

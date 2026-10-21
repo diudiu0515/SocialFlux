@@ -29,7 +29,7 @@ from evaluation.rollout_gate import (
 from policies.model_policy import ModelPolicy
 from prompts.loader import get_prompt
 from schemas.validate import validate_scenario
-from scripts.scenario_docs import discover_scenario_paths
+from scenario_design.catalog import discover_scenario_paths
 from web.live_rollouts import load_live
 from web.offline_review import load_review as load_offline_review
 from web.experiment_status import load_experiment_status
@@ -38,6 +38,7 @@ from web.experiment_hub import (
     load_hub, save_record as save_experiment_record, history as experiment_history,
     source_document as experiment_document, ConflictError,
 )
+from shared.artifacts import canonical_json_sha256 as _scenario_fingerprint
 
 SCENARIO_DIR = ROOT / "configs" / "scenarios"
 PIPELINE_DIR = ROOT / "build" / "pipeline_20turn_selected"
@@ -2149,13 +2150,6 @@ def _legacy_rollouts(scenario_id):
             })
             rollouts.append(trajectory)
     return rollouts
-
-
-def _scenario_fingerprint(scenario):
-    payload = json.dumps(
-        scenario, ensure_ascii=False, sort_keys=True, separators=(",", ":")
-    ).encode("utf-8")
-    return hashlib.sha256(payload).hexdigest()
 
 
 def load_long_rollouts(scenario_id):

@@ -15,11 +15,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from evaluation.quality_gates import audit_environment_gate
-from evaluation.timescale_validity import (
-    machine_timescale_packet_ready,
-    pending_timescale_payload,
-    trajectory_timescale_items,
-)
+from evaluation.timescale_validity import machine_timescale_packet_ready, pending_timescale_payload
 from providers.model_routes import ModelRoutes
 from rollout.configuration import load_rollout_config
 from scripts.audit_formal_rollout_pool import load_records
@@ -29,6 +25,7 @@ from scripts.prepare_human_review_workspace import (
     pending_e1_e2,
 )
 from scripts.run_environment_interventions import load_actual_scenarios
+from shared.artifacts import atomic_json as atomic
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -50,17 +47,6 @@ def evidence_reference(path):
         "path": str(path),
         "sha256": hashlib.sha256(payload).hexdigest(),
     }
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def stable_sample(items, count):
@@ -112,48 +98,6 @@ def cohort_summary(trajectories):
             bool(trajectories) and natural_main_window == len(trajectories)
         ),
     }
-
-
-def scenario_covered_timescale_payload(trajectories):
-    """Select one variable per timescale family for every retained scenario."""
-    selected = []
-    for trajectory in sorted(
-        trajectories,
-        key=lambda item: (item.get("scenario_id", ""), item.get("trajectory_id", "")),
-    ):
-        items = trajectory_timescale_items(trajectory)
-        for timescale in ("fast", "medium", "slow", "context_dependent"):
-            match = next(
-                (
-                    item for item in items
-                    if item.get("expected_timescale_prior") == timescale
-                ),
-                None,
-            )
-            if match is not None:
-                selected.append(match)
-    if not selected:
-        return pending_timescale_payload(trajectories, limit=1)
-    base = pending_timescale_payload(
-        trajectories,
-        limit=sum(len(trajectory_timescale_items(item)) for item in trajectories),
-    )
-    families = Counter(
-        item["expected_timescale_prior"] for item in selected
-    )
-    base["review_items"] = selected
-    base["record"].update({
-        "candidate_variable_count": len(selected),
-        "timescale_families": dict(sorted(families.items())),
-        "non_degenerate": any(
-            item.get("changed_turn_count", 0) > 0 for item in selected
-        ),
-        "coverage_mode": "one_variable_per_timescale_family_per_scenario",
-        "covered_scenario_count": len({
-            item.get("scenario_id") for item in selected
-        }),
-    })
-    return base
 
 
 def run(command):

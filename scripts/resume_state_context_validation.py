@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """One bounded transport recovery of frozen, previously unanswered samples."""
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
@@ -17,6 +16,9 @@ from rollout.configuration import load_rollout_config
 OLD = v.OUTPUT
 OUT = OLD.parent / 'context_samples_v724_transport_recovery'
 
+from pipeline.runtime import appraisal_route_config as route_config
+
+
 class DeadlineProvider:
     def __init__(self, config):
         self.provider = build_provider(config)
@@ -31,15 +33,6 @@ class DeadlineProvider:
             raise TimeoutError('600-second logical-call deadline exceeded')
         self.provider.timeout = remaining
         return self.provider.complete(messages, **generation)
-
-def route_config(env, slot):
-    original = env.get('state_appraisal_provider', env['provider'])
-    result = deepcopy(original['candidates'][slot])
-    for key in ('model', 'stream', 'reasoning_effort', 'max_tokens'):
-        if key in original:
-            result[key] = original[key]
-    result.update(timeout=600, max_transport_attempts=1)
-    return result
 
 def main():
     if (OUT / 'preregistration.json').exists():

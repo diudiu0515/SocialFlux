@@ -11,7 +11,7 @@ from scripts import run_unified_gpt50 as batch
 from scripts import run_unified_three_pilot as pilot
 from scripts.recover_exploratory_response_budget import ReplayPrefixProvider
 from scripts.validate_state_context_samples import load,save
-from scripts.resume_state_context_validation import route_config
+from pipeline.runtime import appraisal_route_config as route_config
 from providers.factory import public_provider_config
 
 SOURCE=batch.OUT

@@ -19,7 +19,7 @@ from scripts.run_multimodal_video_queue import (
     seedance_payload,
     select_records,
 )
-from scripts.scenario_docs import discover_scenario_paths
+from scenario_design.catalog import discover_scenario_paths
 
 
 SCENARIO_ROOT = Path("data/gpt50/experiment/scenario/scenarios")

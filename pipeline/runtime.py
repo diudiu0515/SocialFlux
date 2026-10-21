@@ -15,6 +15,21 @@ from .constants import (
 )
 
 
+def appraisal_route_config(environment, slot):
+    """Pin an appraisal failover slot without changing its model settings.
+
+    This is the explicit single-attempt route used by offline replay and
+    bounded recovery. It does not construct a provider or invoke any API.
+    """
+    original = environment.get("state_appraisal_provider", environment["provider"])
+    result = deepcopy(original["candidates"][slot])
+    for key in ("model", "stream", "reasoning_effort", "max_tokens"):
+        if key in original:
+            result[key] = original[key]
+    result.update(timeout=600, max_transport_attempts=1)
+    return result
+
+
 def assert_fable_providers(provider_configs, *, context):
     models = {
         provider.get("model")

@@ -27,6 +27,12 @@ archives/
 reviews/*signed*.json
 configs/scenarios/scenario_*/rollouts/
 media/talking_head/assets/
+
+# Generated author-side question banks and audit exports stay local.
+# Publish reviewed public demo projections separately from these source bundles.
+tasks/examples/offline_design_v2/
+tasks/examples/offline_legacy_api_audit/
+tasks/examples/offline_scenarios_v2/
 .local_models/
 .local_tools/
 

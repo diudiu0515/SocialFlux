@@ -5,9 +5,7 @@ from __future__ import annotations
 from evaluation.t4_evaluation import public_t4_judge_packet, validate_t4_judgment
 from prompts.loader import render_prompt
 from providers.structured import complete_json
-from tasks.T2.runtime import call_count
-
-
+from providers.base import call_count
 def generate_judgment(provider, trajectory, scenario, seed, *, max_attempts=3,
                       observation_condition="text_only", sampling=None):
     packet = public_t4_judge_packet(trajectory, scenario)

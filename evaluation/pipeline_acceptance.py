@@ -8,11 +8,7 @@ from .environment_validity import (
     trajectory_structure,
 )
 from .timescale_validity import build_timescale_review_items
-from scripts.scenario_docs import (
-    assert_document_current,
-    assert_manifest_current,
-    discover_scenario_paths,
-)
+from scenario_design.catalog import assert_document_current, assert_manifest_current, discover_scenario_paths
 
 
 CRITERIA = (
@@ -36,29 +32,6 @@ def load_scenarios(directory):
         assert_document_current(path)
         scenarios.append(json.loads(path.read_text(encoding="utf-8")))
     return scenarios
-
-
-def load_trajectory_pool(directory):
-    trajectories = []
-    for bundle in sorted(Path(directory).glob("scenario_*/rollouts")):
-        manifest_path = bundle / "manifest.json"
-        if not manifest_path.exists():
-            continue
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        if manifest.get("config", {}).get("origin") != "free_form_model_interaction":
-            continue
-        for trajectory_id in manifest.get("trajectory_ids", []):
-            path = bundle / f"{trajectory_id}.json"
-            if path.exists():
-                trajectories.append(json.loads(path.read_text(encoding="utf-8")))
-    return trajectories
-
-
-def load_local_interventions(output_dir):
-    records = []
-    for path in sorted(Path(output_dir).glob("*/validation/local_action_interventions.json")):
-        records.extend(json.loads(path.read_text(encoding="utf-8")))
-    return records
 
 
 def _pending(criterion, requirement):

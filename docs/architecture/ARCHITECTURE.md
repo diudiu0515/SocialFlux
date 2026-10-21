@@ -1,6 +1,6 @@
 # SocialFlux Architecture
 
-本文说明截至 2026-10-10 的代码职责、入口与产物边界。研究约束以 [DESIGN_CONTRACT](../../DESIGN_CONTRACT.md) 为准，执行顺序见 [Pipeline](PIPELINE.md)，批次状态见 [活跃批次手册](../operations/ACTIVE_BATCH_PIPELINE.md)。
+本文说明代码职责、入口与产物边界，公共模块归属更新于 2026-10-21。研究约束以 [DESIGN_CONTRACT](../../DESIGN_CONTRACT.md) 为准，执行顺序见 [Pipeline](PIPELINE.md)，批次状态见 [活跃批次手册](../operations/ACTIVE_BATCH_PIPELINE.md)。
 
 ## 一条数据主线，三个使用出口
 
@@ -40,9 +40,12 @@ Gate 与来源哈希控制数据能否进入正式阶段。图中的开发构建
 | 任务协议 | `tasks/offline_choice.py`、`tasks/T1`–`T4` | 公开投影、输入/输出合同与版本分发；旧概率协议用于已有资产复现 |
 | 评分与 Gate | `evaluation/`、`annotation/` | 答案、证据与错误分析；环境、轨迹和任务质量门；人工审核合同 |
 | 场景与语义 | `scenario_design/`、`schemas/`、`shared/` | 场景修订、结构校验、四维 state 语义 |
+| 公共产物操作 | `shared/artifacts.py` | JSON 原子写入、规范 JSON 内容哈希；不依赖任务或脚本 |
 | 网站 | `web/server.py`、`live_rollouts.py`、`offline_review.py` | 只读读取固定来源并提供审核视图，浏览器保存草稿；不构造第二套环境 |
 
-`tasks/T2/runtime.py` 是旧 T2 构造共用运行服务的 owner。各任务和历史脚本直接导入它；原 `scripts/t2_common.py` 转发层已撤除。任务包不应反向依赖 CLI 脚本。仍由 `scripts/scenario_docs.py` 提供的场景文档/发现工具是现有复用边界，本轮没有移动或复制它。
+`scenario_design/catalog.py` 统一提供场景发现、文档渲染和目录校验，`scripts/scenario_docs.py` 只处理命令参数。`pipeline/runtime.py` 拥有环境装配及 appraisal 路由选择，离线构建不再导入历史续跑脚本。
+
+`tasks/T2/runtime.py` 保留 T2 回放、状态比较和请求汇总；provider 调用计数归 `providers/base.py`，三个离线任务的选择题解析归 `tasks/offline_choice.py`。领域模块不能导入 `scripts/`；唯一允许的分发入口是 `pipeline/cli.py`，此边界由测试检查。
 
 ## 环境调用顺序
 
@@ -69,24 +72,24 @@ policy 读取公开 observation → 自由文本 action
 | T2 历史依赖 | 共享背景、不同 History A/B、相同 ending | 改写位置、来源哈希、受控回放及人工判断 |
 | T3 后果预测 | 行动前历史、2–4 个候选行动 | 同一 snapshot 与外部条件上的分支；即时为下一次环境回应，延迟 5 轮，必要时最多 10 轮 |
 
-当前开发协议为 `socialflux_offline_choice_v1`，主回答只需 `{"answer":"B"}`。`public_instance()` 使用白名单产生模型输入，能力标签、state 路径、错项类型、参考答案与未来分支留在作者侧。证据定位单独诊断；组合选项保存变量映射，分维诊断不混入整题成绩。完整定义见[选择题协议](../protocols/OFFLINE_T1_T3_CHOICE_V1.md)。
+当前场景题库使用 `socialflux_offline_choice_v2`，旧 v1 题库保留复核入口；主回答只需 `{"answer":"B"}`。`public_instance()` 使用白名单产生模型输入，能力标签、state 路径、错项类型、参考答案与未来分支留在作者侧。证据定位单独诊断；组合选项保存变量映射，分维诊断不混入整题成绩。完整定义见[当前选择题协议](../protocols/OFFLINE_T1_T3_CHOICE_V2.md)和[历史 v1 协议](../protocols/OFFLINE_T1_T3_CHOICE_V1.md)。
 
 T2 制作阶段可以调用 provider 进行状态与互动回放；offline 指被测模型回答固定材料，不意味着制作阶段没有 API。强制相同 ending 是构造控制，不等于两边的自然性已经通过人工审核。
 
 ## 配置与数据分层
 
-- **入口配置**：`configs/offline_choice_dev60.json` 保留旧 60 题；`configs/offline_gpt50_t1_t3.json` 固定 50 场景的 T1/T3 扩展，T2 暂停新增。共享出题在 `offline/choice_pipeline.py`，固定批次编排在 `offline/choice_batch.py`，脚本只做入口转发。GPT50、Claude150 和 T4 各有批次配置，见[配置索引](../../configs/README.md)。
+- **入口配置**：当前 v2 场景题库入口为 `offline/scenario_v2.py`。`configs/offline_choice_dev60.json` 和 `configs/offline_gpt50_t1_t3.json` 保留旧题库来源；对应出题服务为 `offline/choice_pipeline.py` 和 `offline/choice_batch.py`。GPT50、Claude150 和 T4 各有批次配置，见[配置索引](../../configs/README.md)。
 - **通用正式默认值**：`pipeline/constants.py` 仍保留 Fable 基线默认值。不能用该默认值推断 GPT 开发批次的实际模型；本轮未切换配置。
-- **固定指令**：`prompts/manifest.json` 注册 50 份可调用模板并校验哈希。已删除 39 份中间实验稿，`retired.json` 只记录其 ID 与原 SHA；[运行时目录](../prompts/RUNTIME_PROMPT_CATALOG.md)区分当前链路和仍有调用方的兼容入口。
+- **固定指令**：`prompts/manifest.json` 注册可调用模板并校验哈希。已删除 39 份中间实验稿，`retired.json` 只记录其 ID 与原 SHA；[运行时目录](../prompts/RUNTIME_PROMPT_CATALOG.md)区分当前链路和仍有调用方的兼容入口。
 - **结构与语义合同**：`schemas/`、`environment/state_ontology.py`、`shared/STATE_ONTOLOGY_v2.md` 与相应协议共同约束数据；更改须显式版本化。
 - **批次产物**：`data/` 保存场景、私有轨迹、公开题目、视频、调用记录和审核来源。`build/` 同时含可重建检查结果、不可随意丢弃的实验结果和 `web-service` 运行环境，不能整目录当缓存清空。
 - **结论与历史**：`reports/` 保存方法与失败证据，`docs/source-notes/` 保存设计输入，`archives/` 保存不参与默认加载的恢复副本。
 
-当前题库在 `data/offline_t1_t3_dev60/`：`items.jsonl` 为完整 60 题设计包，`public.jsonl` 为公开投影，`replay_ready.items.jsonl` 为 56 题可回放开发子集；`sources/` 保存构造来源，`paired.*` 和 `media.json` 保存 text/video 配对。网页直接读取这些文件，避免再维护一份题库。
+当前发布的场景题库在 `tasks/examples/offline_scenarios_v2/`，manifest 记录 50 场景、T1/T2/T3 各 100 题，作者侧产物在 `data/offline_scenarios_v2_20261020_main/`。旧 `data/offline_t1_t3_dev60/` 及后续扩展题库作为历史资产保留；实际网页来源由 `web/offline_review.py` 声明，不能把多个版本的题数相加当作当前题库。
 
 ## 网站与人工标注
 
-`web/server.py` 的 `PAGE_ROUTES` 统一声明当前页面；`LEGACY_PAGE_ALIASES` 仅保留旧书签映射。当前入口为 `/gpt50`、`/gpt50-live`、`/offline-review`、`/multimodal`、`/state-annotation`。旧示例页 `task_examples.html` 仍可直接访问，因此其 `styles.css` 继续保留。
+`web/server.py` 的 `PAGE_ROUTES` 统一声明当前页面；`LEGACY_PAGE_ALIASES` 仅保留旧书签映射。实验台、题库、轨迹与标注入口以[网站说明](../../web/README.md)及路由表为准。旧示例页 `task_examples.html` 仍可直接访问，因此其 `styles.css` 继续保留。
 
 新版题目页默认请求公开题目，按需通过独立 reference 接口获取私有 state、构造来源和未来分支。来源文件须匹配题目记录的 SHA；不传原始 provider 请求、调用日志或环境快照。视频同时检查题目配对、文件哈希和历史位置。
 
@@ -96,7 +99,9 @@ T2 制作阶段可以调用 provider 进行状态与互动回放；offline 指�
 
 判断文件是否可删除，应同时检查：代码导入、CLI/网页入口、配置与 prompt manifest、实验/报告引用，以及是否是运行服务或未提交工作。文件名包含 `old`、`candidate`、版本号或 `.orig` 不能单独作为删除理由。
 
-本轮清理：
+2026-10-21 代码清理把公共能力移到领域模块，合并 33 份相同的原子写入实现，删除 8 个无调用函数及 3 个完成使命的单次脚本。完整清单、冻结目录核验与测试基线见[代码审计](CODE_AUDIT.md)。
+
+2026-10-10 清理：
 
 - 删除已被路由替代的 `web/static/index.html`、`review.html`、`scale150.html`、`scale300_tasks.html`、`t2_dev_review.html` 和专用 `app.js`；旧 URL 保留兼容。
 - 17 个仓库调用方直接导入 `tasks.T2.runtime`，删除无调用方的 `scripts/t2_common.py`。

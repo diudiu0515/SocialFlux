@@ -6,9 +6,7 @@ import json
 
 from prompts.loader import render_prompt
 from providers.structured import complete_json
-from tasks.T2.runtime import call_count
-
-
+from providers.base import call_count
 def action_prompt(checkpoint, count=3):
     schema = {
         "actions": [

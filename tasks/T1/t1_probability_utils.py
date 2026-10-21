@@ -9,16 +9,6 @@ ORDINAL_VALUES = {"absent": 0, "mild": 1, "moderate": 2, "strong": 3, "very_stro
 HUMAN_CONFIDENCE_VALUES = {"low": 1, "medium": 2, "high": 3, "very_high": 4}
 
 
-def normalize_scores(scores, labels=INTENSITY_LABELS):
-    values = {label: float(scores.get(label, 0.0)) for label in labels}
-    if any(value < 0 or not math.isfinite(value) for value in values.values()):
-        raise ValueError("scores must be finite and non-negative")
-    total = sum(values.values())
-    if total <= 0:
-        raise ValueError("at least one score must be positive")
-    return {label: value / total for label, value in values.items()}
-
-
 def validate_probabilities(probabilities, labels=INTENSITY_LABELS, tolerance=1e-6):
     if set(probabilities) != set(labels):
         raise ValueError("probability keys do not match required labels")

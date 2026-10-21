@@ -12,23 +12,16 @@ import subprocess
 import sys
 import time
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from shared.artifacts import atomic_json as atomic
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def now():
     return datetime.now(timezone.utc).isoformat()
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def project_path(path):

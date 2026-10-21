@@ -14,6 +14,7 @@ import time
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts.audit_active_batch import audit_batch, failure_report, stage_complete
+from shared.artifacts import atomic_json as atomic
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -43,17 +44,6 @@ def load(path, default=None):
     if not path.exists():
         return default
     return json.loads(path.read_text(encoding="utf-8"))
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def validate_stage_output(name, batch, expected_count):

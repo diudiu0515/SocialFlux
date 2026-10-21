@@ -3,6 +3,10 @@
 from abc import ABC, abstractmethod
 
 
+def call_count(provider):
+    """Read a provider's actual call counter, including wrapper delegation."""
+    return int(getattr(provider, "_call_index", 0) or 0)
+
 
 class ProviderRefusalError(RuntimeError):
     """An explicit refusal is not a transport failure or empty model output."""

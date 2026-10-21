@@ -20,13 +20,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from providers.factory import build_provider, public_provider_config
 from providers.model_routes import ModelRoutes
-from tasks.T2.runtime import ROOT, atomic, load, now, scenario_path
+from tasks.T2.runtime import ROOT, load, now, scenario_path
 from tasks.T2.spec_authoring import author_spec, candidate_windows
 from tasks.source_catalog import (
     assess_source,
     load_source_packages,
     load_source_reviews,
 )
+from shared.artifacts import atomic_json as atomic
 
 
 DEFAULT_SOURCE_PACKAGES = ROOT / "build/scale300_tasks_v2"
@@ -37,6 +38,8 @@ ROUTE_NAME = "t2_spec_authoring"
 SPEC_FORMAT = "socialflux_t2_source_adaptation_specs_v2"
 AUTHORING_FORMAT = "socialflux_t2_spec_authoring_run_v1"
 FINGERPRINT_FILES = (
+    "shared/artifacts.py",
+    "providers/base.py",
     "tasks/T2/spec_authoring.py",
     "tasks/source_catalog.py",
     "scripts/author_t2_pair_specs.py",

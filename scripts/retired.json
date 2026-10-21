@@ -1,0 +1,68 @@
+{
+  "format": "socialflux_retired_code_catalog_v1",
+  "retired_on": "2026-10-21",
+  "recovery_archive": "archives/code-cleanup-2026-10-21/before_cleanup.tar.gz",
+  "restore_policy": "Inspect or restore in an isolated checkout with matching frozen dependencies; never restore into an active batch.",
+  "scripts": [
+    {
+      "path": "scripts/prepare_role_visible_pilot.py",
+      "sha256": "e9b13d5a91ffff82dd54cba153e7ff7e49c867307ff4599d252a07ce7fa6b09c",
+      "reason": "Completed fixed six-copy preparation; no code, CLI, test or documentation callers.",
+      "retained_evidence": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/observed_evidence_v6_pilot_preparation/manifest.json"
+    },
+    {
+      "path": "scripts/recover_exploratory_empty_response.py",
+      "sha256": "b08ae94c9595ba53b4acd85e70a3e7ca5e2868c7be923802b97860bdeb7087f6",
+      "reason": "Completed single-use empty-response recovery; refuses any second run and has no callers.",
+      "retained_evidence": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_empty_response_recovery/01_GPT50_026_gpt/result.json"
+    },
+    {
+      "path": "scripts/validate_observed_evidence_candidate.py",
+      "sha256": "9b6de9946e342d9e9d6681c09c76be9bc20fa8fabab57362e9f3e26dcada2390",
+      "reason": "Completed preregistered candidate comparison; superseded by the active configuration and has no callers.",
+      "retained_evidence": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/observed_evidence_v6_fixed/results.json"
+    }
+  ],
+  "unused_functions": [
+    {
+      "file": "environment/prompts.py",
+      "name": "build_response_prompt",
+      "lines": 2
+    },
+    {
+      "file": "evaluation/pipeline_acceptance.py",
+      "name": "load_local_interventions",
+      "lines": 5
+    },
+    {
+      "file": "evaluation/pipeline_acceptance.py",
+      "name": "load_trajectory_pool",
+      "lines": 14
+    },
+    {
+      "file": "evaluation/rollout_gate.py",
+      "name": "_tail_has_repetitive_loop",
+      "lines": 17
+    },
+    {
+      "file": "scripts/prepare_batch_gate2.py",
+      "name": "scenario_covered_timescale_payload",
+      "lines": 40
+    },
+    {
+      "file": "scripts/run_environment_interventions.py",
+      "name": "_existing_e5",
+      "lines": 38
+    },
+    {
+      "file": "tasks/T1/t1_probability_utils.py",
+      "name": "normalize_scores",
+      "lines": 8
+    },
+    {
+      "file": "scripts/run_environment_interventions.py",
+      "name": "_subtract",
+      "lines": 4
+    }
+  ]
+}

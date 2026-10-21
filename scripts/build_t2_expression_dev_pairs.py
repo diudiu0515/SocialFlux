@@ -15,22 +15,8 @@ from evaluation.leakage import assert_no_leaks
 from providers.factory import build_provider
 from providers.model_routes import ModelRoutes
 from providers.structured import complete_json
-from tasks.T2.runtime import (
-    DIRECTIONS,
-    ROOT,
-    atomic,
-    environment_call_counts as model_calls,
-    environment_for,
-    flat_private,
-    internal_direction,
-    load,
-    now,
-    public_turn,
-    scenario_path,
-    supported_t2_candidates,
-)
-
-
+from tasks.T2.runtime import DIRECTIONS, ROOT, environment_call_counts as model_calls, environment_for, flat_private, internal_direction, load, now, public_turn, scenario_path, supported_t2_candidates
+from shared.artifacts import atomic_json as atomic
 OUT = ROOT / "build" / "t2_expression_dev_v1"
 DEFAULT_MODEL_ROUTES = ROOT / "configs" / "model_routes.frontier_api.json"
 

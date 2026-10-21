@@ -10,12 +10,11 @@ from collections import Counter, defaultdict
 from copy import deepcopy
 import hashlib
 import json
-import math
 import re
 
 from environment.delta_mapper import flatten_state
 from evaluation.instance_quality import audit_trajectory
-from providers.text import dialogue_template_signatures, text_similarity
+from providers.text import text_similarity
 
 
 QUALITY_DIMENSIONS = (
@@ -116,25 +115,6 @@ def _progression_score(trajectory):
     last = turns[-1].get("policy_action", {}).get("text", "")
     lexical_change = 1.0 - text_similarity(first, last)
     return round(min(1.0, 0.65 * state_change + 0.35 * lexical_change), 4)
-
-
-def _tail_has_repetitive_loop(values, window=4):
-    """Detect a repeated-content tail, not isolated confirmation or topic duration."""
-    tail = [str(value).strip() for value in values[-window:] if str(value).strip()]
-    if len(tail) < 3:
-        return False
-    counts = Counter(
-        signature
-        for value in tail
-        for signature in dialogue_template_signatures(value)
-    )
-    repeated_frame = any(count >= 3 for count in counts.values())
-    similarities = [
-        text_similarity(tail[left], tail[right])
-        for left in range(len(tail))
-        for right in range(left + 1, len(tail))
-    ]
-    return repeated_frame and max(similarities, default=0.0) >= 0.45
 
 
 def _heuristic_scores(trajectory, structural):

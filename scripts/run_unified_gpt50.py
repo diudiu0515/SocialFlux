@@ -9,7 +9,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from scripts import run_unified_three_pilot as pilot
 from scripts.prepare_unified_gpt50 import prepare, OUT
-from scripts.resume_state_context_validation import route_config
+from pipeline.runtime import appraisal_route_config as route_config
 from scripts.validate_state_context_samples import load, save
 from rollout.configuration import load_rollout_config
 from pipeline.runtime import build_environment_factory

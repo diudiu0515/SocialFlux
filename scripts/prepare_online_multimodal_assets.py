@@ -25,7 +25,8 @@ from environment.online_video_assets import (  # noqa: E402
 )
 from prompts.loader import prompt_manifest  # noqa: E402
 from schemas.validate import validate_scenario  # noqa: E402
-from scripts.scenario_docs import discover_scenario_paths  # noqa: E402
+from scenario_design.catalog import discover_scenario_paths
+from shared.artifacts import atomic_json as atomic
 
 
 DEFAULT_CONFIG = ROOT / "configs" / "online_multimodal_assets.json"
@@ -37,17 +38,6 @@ def utc_now():
 
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def canonical_sha256(value):

@@ -6,8 +6,8 @@ import json
 
 from prompts.loader import render_prompt
 from providers.structured import complete_json
-from tasks.T2.runtime import call_count
 from tasks.extraction import public_history
+from providers.base import call_count
 
 
 EXPRESSION_FIELDS = {

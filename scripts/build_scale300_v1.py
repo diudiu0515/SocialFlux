@@ -18,7 +18,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from schemas.validate import validate_scenario
-from scripts.scenario_docs import write_catalog, write_document
+from scenario_design.catalog import write_catalog, write_document
 
 
 ROOT = Path(__file__).resolve().parents[1]

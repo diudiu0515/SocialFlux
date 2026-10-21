@@ -30,6 +30,7 @@ from providers.structured import (
 )
 from scripts.audit_formal_rollout_pool import load_records
 from scripts.run_environment_interventions import load_actual_scenarios
+from shared.artifacts import atomic_json as atomic
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -60,17 +61,6 @@ def continuity_references_from_manifest(path):
     if not references:
         raise ValueError("continuity manifest contains no anchor requests")
     return references
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 VIDEO_RENDERING_ADAPTATION_PROMPT_ID = "video_public_rendering_adaptation_v1"

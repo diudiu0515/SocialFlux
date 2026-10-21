@@ -15,7 +15,8 @@ from environment.delta_mapper import apply_semantic_deltas, flatten_state
 from providers.factory import public_provider_config
 from rollout.configuration import load_rollout_config
 from scripts import validate_state_context_samples as v
-from scripts.resume_state_context_validation import DeadlineProvider, route_config
+from scripts.resume_state_context_validation import DeadlineProvider
+from pipeline.runtime import appraisal_route_config as route_config
 
 CONFIG = ROOT / 'configs/gpt50_experiment/state_actor_bound_v1_candidate.json'
 OUT = v.BASE / 'actor_bound_v1_fixed'

@@ -20,7 +20,7 @@ from rollout.configuration import load_rollout_config
 from rollout.runner import RolloutRunner
 from schemas.validate import validate_scenario
 from scripts.validate_state_context_samples import save, load, LoggedProvider, BASE
-from scripts.resume_state_context_validation import route_config
+from pipeline.runtime import appraisal_route_config as route_config
 
 PREP=BASE/'observed_evidence_v6_pilot_preparation'
 OUT=BASE/'observed_evidence_v6_shadow_six'

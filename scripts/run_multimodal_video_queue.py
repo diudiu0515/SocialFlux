@@ -22,6 +22,7 @@ from scripts.run_autodl_seedance_video import (  # noqa: E402
     run as run_seedance,
     validate_payload,
 )
+from shared.artifacts import atomic_json as atomic
 
 
 DEFAULT_MODEL = "doubao-seedance-2-0-260128"
@@ -35,17 +36,6 @@ def utc_now():
 
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def canonical_sha256(value):

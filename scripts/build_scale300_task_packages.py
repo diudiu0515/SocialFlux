@@ -13,13 +13,14 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from providers.model_routes import ModelRoutes
-from tasks.T2.runtime import ROOT, atomic, load, scenario_path
+from tasks.T2.runtime import ROOT, load, scenario_path
 from tasks.package_builder import BUILDER_ID, TaskPackageBuilder
 from tasks.source_catalog import (
     assess_source,
     load_source_packages,
     load_source_reviews,
 )
+from shared.artifacts import atomic_json as atomic
 
 
 DEFAULT_OLD_PACKAGES = ROOT / "build/scale300_tasks_v2"
@@ -34,6 +35,9 @@ REQUIRED_ROUTES = (
     "t4_judge",
 )
 FINGERPRINT_FILES = (
+    "shared/artifacts.py",
+    "providers/base.py",
+    "tasks/offline_choice.py",
     "tasks/package_builder.py",
     "tasks/extraction.py",
     "tasks/T1/answering.py",

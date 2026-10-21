@@ -18,6 +18,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from schemas.validate import STATE_CONTRACT_VERSION, validate_scenario, validate_trajectory
+from shared.artifacts import atomic_json as atomic
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -33,17 +34,6 @@ def load(path, default=None):
     if not path.exists():
         return default
     return json.loads(path.read_text(encoding="utf-8"))
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def scenario_id(prefix, ordinal):

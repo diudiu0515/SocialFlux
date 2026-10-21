@@ -9,11 +9,10 @@ observable layer; it never updates latent state or environment text.
 from __future__ import annotations
 
 from copy import deepcopy
-import hashlib
-import json
 import re
 
 from .delta_mapper import flatten_state
+from shared.artifacts import canonical_json_sha256 as _scenario_sha256
 
 
 ONLINE_MULTIMODAL_PROFILE = "online_multimodal_v2"
@@ -120,16 +119,6 @@ _EVENT_FAMILIES = {
 }
 
 ONLINE_EVENT_FAMILIES = tuple(_EVENT_FAMILIES)
-
-
-def _scenario_sha256(scenario):
-    payload = json.dumps(
-        scenario,
-        ensure_ascii=False,
-        sort_keys=True,
-        separators=(",", ":"),
-    ).encode("utf-8")
-    return hashlib.sha256(payload).hexdigest()
 
 
 def _slug(value):

@@ -38,7 +38,7 @@ def prepare():
                "initial_observation": p["observation"]} for p in selected]
     paths = [Path(__file__).relative_to(ROOT), Path("scripts/run_unified_three_pilot.py"),
              Path("scripts/run_role_visible_shadow_pilot.py"), Path("scripts/export_shadow_pilot_review.py")]
-    for directory in ("environment", "policies", "providers", "rollout", "evaluation", "pipeline", "schemas"):
+    for directory in ("environment", "policies", "providers", "rollout", "evaluation", "pipeline", "schemas", "scenario_design", "shared"):
         paths.extend(p.relative_to(ROOT) for p in (ROOT / directory).rglob("*.py"))
     paths.extend(p.relative_to(ROOT) for p in (ROOT / "prompts").iterdir() if p.is_file())
     paths.extend(Path(p["case"]["candidate"]) for p in selected)

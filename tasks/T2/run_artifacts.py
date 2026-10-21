@@ -4,8 +4,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from tasks.T2.runtime import atomic, load, now
+from tasks.T2.runtime import load, now
 from tasks.T2.pair_builder import BUILDER_VERSION, sha256_file
+
+
+from tasks.T2.runtime import count_requests
+from shared.artifacts import atomic_json as atomic
 
 
 def result_name(index, spec):
@@ -135,15 +139,3 @@ def summarize_run(run_dir):
     }
     atomic(run_dir / "summary.json", summary)
     return summary
-
-
-def count_requests(counts):
-    total = 0
-    for key, value in counts.items():
-        if key in {"environment_stage_count_per_turn", "actual_requests_include_retries", "total"}:
-            continue
-        if isinstance(value, dict):
-            total += sum(int(item) for item in value.values())
-        elif isinstance(value, (int, float)):
-            total += int(value)
-    return total

@@ -17,7 +17,8 @@ from rollout.configuration import load_rollout_config
 from providers.factory import public_provider_config
 from scripts import validate_actor_bound_state as previous
 from scripts import validate_state_context_samples as v
-from scripts.resume_state_context_validation import DeadlineProvider, route_config
+from scripts.resume_state_context_validation import DeadlineProvider
+from pipeline.runtime import appraisal_route_config as route_config
 
 CONFIG = ROOT / 'configs/gpt50_experiment/state_unified_v1_candidate.json'
 OUT = v.BASE / 'unified_current_trust_v1_fixed'

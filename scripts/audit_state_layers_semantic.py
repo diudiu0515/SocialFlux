@@ -17,13 +17,8 @@ from prompts.loader import prompt_manifest, render_prompt
 from providers.factory import build_provider, public_provider_config
 from providers.model_routes import ModelRoutes
 from providers.structured import complete_json
-from scripts.reauthor_state_layers import (
-    atomic_json,
-    compact_ontology,
-    flatten_selected,
-    load_json,
-    sha256_file,
-)
+from scripts.reauthor_state_layers import compact_ontology, flatten_selected, load_json, sha256_file
+from shared.artifacts import atomic_json
 
 
 PROMPT_ID = "scenario_state_semantic_audit_v1"

@@ -14,6 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from environment.factory import ModelEnvironmentFactory
 from rollout.configuration import load_rollout_config
 from scripts.run_pipeline import load_scenario_records, select_scenario_records
+from shared.artifacts import atomic_json as _write
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -46,17 +47,6 @@ def _environment(config, scenario):
         ),
         horizon_mode=environment["horizon_mode"],
     )()
-
-
-def _write(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def main():

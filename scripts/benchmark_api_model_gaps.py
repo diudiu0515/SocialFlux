@@ -29,8 +29,9 @@ from evaluation.rollout_semantic_review import (
     deterministic_review_sampling,
     validate_judgment,
 )
-from tasks.T2.runtime import ROOT, atomic, load
+from tasks.T2.runtime import ROOT, load
 from tasks.extraction import generate_extraction
+from shared.artifacts import atomic_json as atomic
 
 
 ROLE_TOKEN_BUDGETS = {

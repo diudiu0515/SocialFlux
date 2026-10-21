@@ -80,4 +80,6 @@ python -m unittest tests.test_offline_choice tests.test_t2_source_adaptation -v
 
 全量回归另用 `python -m unittest discover -s tests -v`；部分历史集成测试需要各自冻结的数据资产，不应为通过测试而补造旧场景。
 
+2026-10-21 的公共模块拆分、重复实现清理、退役入口及回归基线见[代码审计](docs/architecture/CODE_AUDIT.md)。
+
 正式流程为 Gate 1 → 一场景一条自然 rollout → Gate 2/3 → T1–T3/T4 → Gate 4。开发产物、模型审核和浏览器草稿均不代表正式 human GT。正式命令与证据要求见 [Formal Rollout Runbook](docs/operations/FORMAL_ROLLOUT_RUNBOOK.md)。不可变约束及提交规则见 [DESIGN_CONTRACT](DESIGN_CONTRACT.md)。

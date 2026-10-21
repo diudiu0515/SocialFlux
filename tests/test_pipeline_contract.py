@@ -11,11 +11,7 @@ from pipeline.scenarios import (
     load_scenarios,
     select_scenario_records,
 )
-from scripts.scenario_docs import (
-    assert_document_current,
-    assert_manifest_current,
-    write_document,
-)
+from scenario_design.catalog import assert_document_current, assert_manifest_current, write_document
 
 
 class PipelineContractTest(unittest.TestCase):

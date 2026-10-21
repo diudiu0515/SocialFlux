@@ -28,7 +28,8 @@ from providers.model_routes import ModelRoutes
 from providers.structured import complete_json
 from schemas.validate import STATE_VARIABLE_ONTOLOGY as APPROVED_STATE_VARIABLES
 from schemas.validate import validate_scenario
-from scripts.scenario_docs import assert_document_current, write_document
+from scenario_design.catalog import assert_document_current, write_document
+from shared.artifacts import atomic_json
 
 
 PROMPT_ID = "scenario_state_reauthoring_v1"
@@ -60,17 +61,6 @@ def sha256_bytes(value):
 
 def sha256_file(path):
     return sha256_bytes(Path(path).read_bytes())
-
-
-def atomic_json(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def is_provider_overload(error):

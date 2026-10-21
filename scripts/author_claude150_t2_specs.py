@@ -17,6 +17,7 @@ from providers.factory import build_provider, public_provider_config
 from providers.model_routes import ModelRoutes
 from tasks.T2.spec_authoring import author_spec, candidate_windows
 from tasks.source_catalog import assess_source, load_source_packages, load_source_reviews
+from shared.artifacts import atomic_json as atomic
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,17 +28,6 @@ ROUTE = "t2_spec_authoring"
 
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def fingerprint():

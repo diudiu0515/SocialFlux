@@ -18,6 +18,7 @@ from providers.model_routes import ModelRoutes
 from scripts.audit_active_batch import package_complete
 from tasks.package_builder import BUILDER_ID, TaskPackageBuilder
 from tasks.source_catalog import load_source_packages, load_source_reviews
+from shared.artifacts import atomic_json as atomic
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,6 +32,9 @@ REQUIRED_ROUTES = (
     "t4_judge",
 )
 FINGERPRINT_FILES = (
+    "shared/artifacts.py",
+    "providers/base.py",
+    "tasks/offline_choice.py",
     "tasks/package_builder.py",
     "tasks/extraction.py",
     "tasks/T1/answering.py",
@@ -43,17 +47,6 @@ FINGERPRINT_FILES = (
 
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def fingerprint():

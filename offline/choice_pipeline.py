@@ -16,10 +16,10 @@ from environment.unified_appraisal import UnifiedEnvironmentFactory
 from pipeline.runtime import build_environment_factory, build_policy
 from rollout.configuration import load_rollout_config
 from rollout.counterfactual import branch_counterfactuals
-from providers.factory import build_provider, public_provider_config
+from providers.factory import build_provider
 from providers.model_routes import ModelRoutes
 from offline.provider_compat import OfflineSamplingProvider, OfflineRuntimeFactory
-from scripts.resume_state_context_validation import route_config
+from pipeline.runtime import appraisal_route_config as route_config
 
 QUESTION_SCHEMA = {
     'subtype': 'one permitted subtype', 'question': '中文问题，明确人物方向和时间',

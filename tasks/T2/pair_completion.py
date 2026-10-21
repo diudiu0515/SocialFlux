@@ -13,6 +13,9 @@ from tasks.T2.answering import generate_answer
 from tasks.T2.quality_review import review_answer, review_pair
 
 
+from tasks.T2.runtime import count_requests as total_requests
+
+
 def error_record(error):
     record = {"type": type(error).__name__, "message": str(error)}
     if getattr(error, "last_error", None) is not None:
@@ -22,22 +25,6 @@ def error_record(error):
     if getattr(error, "last_raw", None):
         record["last_raw_output"] = error.last_raw
     return record
-
-
-def total_requests(counts):
-    total = 0
-    for key, value in counts.items():
-        if key in {
-            "environment_stage_count_per_turn",
-            "actual_requests_include_retries",
-            "total",
-        }:
-            continue
-        if isinstance(value, dict):
-            total += sum(int(item) for item in value.values())
-        elif isinstance(value, (int, float)):
-            total += int(value)
-    return total
 
 
 class PairCompletion:

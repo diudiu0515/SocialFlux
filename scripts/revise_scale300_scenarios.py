@@ -19,7 +19,8 @@ from providers.model_routes import ModelRoutes
 from scenario_design.revision import apply_revision, generate_revision
 from schemas.validate import validate_scenario
 from scripts.run_pipeline import load_scenario_records, select_scenario_records
-from scripts.scenario_docs import write_catalog, write_document
+from scenario_design.catalog import write_catalog, write_document
+from shared.artifacts import atomic_json
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,17 +31,6 @@ DEFAULT_ROUTES = ROOT / "configs" / "model_routes.frontier_api.json"
 
 def now():
     return datetime.now(timezone.utc).isoformat()
-
-
-def atomic_json(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def scenario_ordinal(path):

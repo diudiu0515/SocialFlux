@@ -14,6 +14,7 @@ from pathlib import Path
 
 from environment.delta_mapper import flatten_state
 from environment.factory import ModelEnvironmentFactory
+from providers.base import call_count
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -30,17 +31,6 @@ def now():
 
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    temporary.replace(path)
 
 
 def scenario_path(ordinal):
@@ -151,12 +141,20 @@ def internal_direction(state_a, state_b, state_id):
     return "similar"
 
 
-def call_count(provider):
-    return int(getattr(provider, "_call_index", 0) or 0)
-
-
 def environment_call_counts(environment):
     return {
         "appraisal": call_count(environment.state_updater.provider),
         "response": call_count(environment.response_generator.provider),
     }
+
+
+def count_requests(counts):
+    total = 0
+    for key, value in counts.items():
+        if key in {"environment_stage_count_per_turn", "actual_requests_include_retries", "total"}:
+            continue
+        if isinstance(value, dict):
+            total += sum(int(item) for item in value.values())
+        elif isinstance(value, (int, float)):
+            total += int(value)
+    return total

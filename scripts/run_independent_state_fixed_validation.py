@@ -18,6 +18,7 @@ from environment.independent_appraisal import ModelInteractionAppraiser, ModelSt
 from environment.state_updater import ModelStateUpdater
 from providers.factory import build_provider, public_provider_config
 from rollout.configuration import load_rollout_config
+from shared.artifacts import atomic_json as atomic
 
 
 DEFAULT_MANIFEST = ROOT / "data/gpt50/experiment/state_v3_validation/v3227_independent_per_variable/fixed_set_preregistration.json"
@@ -26,16 +27,6 @@ DEFAULT_OUTPUT = ROOT / "data/gpt50/experiment/state_v3_validation/v3227_indepen
 
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
-
-
-def atomic(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(path.suffix + ".tmp")
-    temporary.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
-    temporary.replace(path)
 
 
 def find_turn(source, turn_id):

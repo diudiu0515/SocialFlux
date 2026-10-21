@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 from schemas.validate import STATE_CONTRACT_VERSION, validate_scenario
-from scripts.scenario_docs import discover_scenario_paths
+from scenario_design.catalog import discover_scenario_paths
 
 
 def load_scenario_records(directory, *, require_documents=True):
