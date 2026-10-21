@@ -1,5 +1,8 @@
 import unittest
-from evaluation.gate2_followup_analysis import matched_controls
+import json
+import tempfile
+from pathlib import Path
+from evaluation.gate2_followup_analysis import matched_controls, audit_repeat_inputs
 
 
 class MatchedControlTests(unittest.TestCase):
@@ -19,6 +22,18 @@ class MatchedControlTests(unittest.TestCase):
         r = matched_controls([])
         self.assertIsNone(r['repeat_direction_agreement'])
         self.assertIsNone(r['paraphrase_minus_repeat'])
+
+    def test_input_audit_catches_changed_sampling(self):
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            for condition in ('original', 'repeat'):
+                for stage in ('state', 'interaction'):
+                    p = root/'calls'/'scene'/condition/stage/'one.json'; p.parent.mkdir(parents=True)
+                    p.write_text(json.dumps(dict(started_at_unix=1, messages=[{'content':'same'}], generation={'seed':1})))
+            records = [dict(scenario_id='scene', comparisons={'repeat':{}})]
+            self.assertTrue(audit_repeat_inputs(root, records)['all_checked_inputs_identical'])
+            p = root/'calls'/'scene'/'repeat'/'state'/'one.json'; row = json.loads(p.read_text()); row['generation']['seed'] = 2; p.write_text(json.dumps(row))
+            self.assertFalse(audit_repeat_inputs(root, records)['all_checked_inputs_identical'])
 
 
 if __name__ == '__main__': unittest.main()

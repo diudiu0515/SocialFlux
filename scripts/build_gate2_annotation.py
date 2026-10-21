@@ -79,8 +79,10 @@ def build(site):
             [question('plausible', '角色动机、背景约束与初始状态是否相互一致？')])
         if sid in trajectories:
             path, trj = trajectories[sid]
-            add('rollout:' + sid, sid, 'rollout', '完整 rollout 核对',
+            source_status = trj.get('gate2_audit_input', {}).get('source_status', 'unknown')
+            add('rollout:' + sid, sid, 'rollout', 'Rollout 核对（部分轨迹，仅诊断）' if source_status == 'generation_error' else '完整 rollout 核对',
                 dict(note='这是 Gate2 冻结轨迹。请按实际保存的轮次判断；部分轨迹不能当作完整 E2 样本。',
+                     **(dict(source_status=source_status) if source_status == 'generation_error' else {}),
                      trajectory_id=trj['trajectory_id'], ending=trj.get('ending'), initial_state=trj['initial_state'],
                      turns=[turn_view(t) for t in trj['turns']]),
                 [question('plausible', '对话发展、状态变化与角色行为是否合理？')], source_sha256=hashlib.sha256(path.read_bytes()).hexdigest())
@@ -104,6 +106,25 @@ def build(site):
             dict(action=r['action'], full_history=r['full_history'], critical_removed_history=r['critical_removed_history'],
                  full_output=output(r['full_output']), critical_removed_output=output(r['critical_removed_output'])),
             [question('plausible', '删除关键历史后，差异（或不变）是否有合理依据？')])
+    # Availability-only human sampling; the machine result denominator keeps all
+    # 46 sources and failures. Never select these packets by effect direction.
+    recent_reviewed = 0
+    final_run = ROOT / 'data/gate2_followup_final_20261022'
+    for path in sorted((final_run / 'results').glob('*.json')):
+        r = read(path)
+        if 'recent3' not in r.get('comparisons', {}) or recent_reviewed >= 10:
+            continue
+        sid = r['scenario_id']; t = checkpoint(sid, r['checkpoint_turn_id'])
+        history = t['environment_snapshot_before'].get('history', [])
+        from scripts.run_gate2_followup import recent_snapshot
+        recent = recent_snapshot(t['environment_snapshot_before'])['history']
+        add('E3-recent3:' + sid, sid, 'E3-recent3', '近三轮历史的影响（补测）',
+            dict(sampling='按场景 ID 取前 10 个有完整配对的样本；未按差异大小选样，失败仍留在机器实验分母。',
+                 action=t['policy_action'], state_before=t['state_before'], full_history=history, recent3_history=recent,
+                 full_output=output(read(final_run / 'outputs' / sid / 'original.json')),
+                 recent3_output=output(read(final_run / 'outputs' / sid / 'recent3.json'))),
+            [question('plausible', '仅保留最后三轮后，状态差异（或不变）是否有上下文依据？')])
+        recent_reviewed += 1
     pairs = {(r['scenario_id'], r['original_action'], r['paraphrase']): r for r in rows('paraphrase_robustness')}
     followup_paths = sorted((ROOT / 'data/gate2_followup_20261022/results').glob('*.json'))
     followup_paths += sorted((ROOT / 'data/gate2_followup_budget_20261022/results').glob('*.json'))

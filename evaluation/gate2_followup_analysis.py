@@ -9,6 +9,34 @@ from pathlib import Path
 
 from evaluation.transition_metrics import sign
 
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def audit_repeat_inputs(directory, records):
+    checked, mismatches, missing = 0, [], []
+    for record in records:
+        if 'repeat' not in record.get('comparisons', {}):
+            continue
+        sid = record['scenario_id']
+        for stage in ('state', 'interaction'):
+            first = []
+            for condition in ('original', 'repeat'):
+                reused = record.get('reused_outputs', {}).get(condition)
+                source = (ROOT / reused['path']).parents[2] if reused else directory
+                logs = [json.loads(p.read_text()) for p in (source / 'calls' / sid / condition / stage).glob('*.json')]
+                if not logs:
+                    first.append(None)
+                else:
+                    call = min(logs, key=lambda x: x['started_at_unix'])
+                    first.append(dict(messages=call['messages'], generation=call['generation']))
+            if any(x is None for x in first):
+                missing.append(dict(scenario_id=sid, stage=stage)); continue
+            checked += 1
+            if first[0] != first[1]:
+                mismatches.append(dict(scenario_id=sid, stage=stage))
+    return dict(compared_stage_pairs=checked, matched_stage_pairs=checked-len(mismatches), mismatches=mismatches,
+                missing=missing, all_checked_inputs_identical=bool(checked) and not mismatches and not missing)
+
 
 def matched_controls(records):
     scenes = []
@@ -51,6 +79,7 @@ def matched_controls(records):
 def report(directory):
     records = [json.loads(p.read_text()) for p in sorted(directory.glob('results/*.json'))]
     result = matched_controls(records)
+    result['repeat_input_audit'] = audit_repeat_inputs(directory, records)
     result['recorded_sources'] = len(records)
     from offline.choice_builder import save
     save(directory / 'matched_controls.json', result)
