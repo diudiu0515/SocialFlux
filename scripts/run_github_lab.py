@@ -123,6 +123,11 @@ def main():
     elif run(["git", "--git-dir", str(repository), "remote", "get-url", "origin"]) != args.remote:
         parser.error("existing deployment repository has a different origin")
     git = ["git", "--git-dir", str(repository)]
+    # Seed existing history locally; downloading the full research repository
+    # again can exceed startup timeouts on the server's outbound connection.
+    if not run(git + ["for-each-ref", "--format=%(refname)"]):
+        run(git + ["fetch", "--no-tags", str(args.data_root),
+                   "+refs/heads/*:refs/remotes/local-bootstrap/*"])
     environment = {**os.environ, "SOCIALFLUX_DATA_ROOT": str(args.data_root),
                    "GIT_TERMINAL_PROMPT": "0", "PYTHONDONTWRITEBYTECODE": "1"}
     # Always import the selected release, even when the caller has PYTHONPATH set.
