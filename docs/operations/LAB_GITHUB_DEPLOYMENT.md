@@ -35,6 +35,8 @@ Supervisor 在进程退出时自动重启；整台实例重启后需再次运行
 用户名 `socialflux`；密码保存在 `.secrets/lab-public-password`，权限必须为 600。
 密码与私有研究数据不会提交 GitHub。不要把密码放进 URL 或 GitHub 配置。
 所有页面、API 和视频均使用已有 HTTP Basic 登录保护，提交仍要求同源 JSON。
+AutoDL 代理可能重写 Host，`--public-origin` 仅允许明确配置的外部 HTTPS Origin，
+不信任客户端提供的转发头，也不开放跨站提交。GitHub 同步复用原项目的 SSH 配置。
 
 公网检查应验证：匿名访问返回 401，登录后页面与 `/api/lab` 返回 200，
 页面无资源加载错误，矩阵、报告与表格可导出。写入测试必须使用临时数据目录，

@@ -79,11 +79,14 @@ def prepare_release(repository, directory, commit, environment):
 
 
 def launch(release, args, environment):
-    return subprocess.Popen([
+    command = [
         sys.executable, "-u", "-m", "web.server", "--host", args.host,
         "--port", str(args.port), "--username", args.username,
         "--password-file", str(args.password_file),
-    ], cwd=release, env=environment)
+    ]
+    if args.public_origin:
+        command.extend(["--public-origin", args.public_origin])
+    return subprocess.Popen(command, cwd=release, env=environment)
 
 
 def main():
@@ -94,6 +97,7 @@ def main():
     parser.add_argument("--state-dir", type=Path, required=True)
     parser.add_argument("--password-file", type=Path, required=True)
     parser.add_argument("--username", default="socialflux")
+    parser.add_argument("--public-origin")
     parser.add_argument("--host", default="0.0.0.0")
     parser.add_argument("--port", type=int, default=6006)
     parser.add_argument("--interval", type=int, default=60)
@@ -123,6 +127,11 @@ def main():
                    "GIT_TERMINAL_PROMPT": "0", "PYTHONDONTWRITEBYTECODE": "1"}
     # Always import the selected release, even when the caller has PYTHONPATH set.
     environment.pop("PYTHONPATH", None)
+    # Reuse this project's scoped SSH identity, never a different account/key.
+    configured_ssh = subprocess.run(["git", "-C", str(args.data_root), "config", "--get",
+                                     "core.sshCommand"], capture_output=True, text=True, timeout=10)
+    if configured_ssh.returncode == 0 and configured_ssh.stdout.strip():
+        environment["GIT_SSH_COMMAND"] = configured_ssh.stdout.strip()
     active_file = args.state_dir / "active.json"
     status_file = args.state_dir / "status.json"
     current = json.loads(active_file.read_text())["commit"] if active_file.exists() else None
