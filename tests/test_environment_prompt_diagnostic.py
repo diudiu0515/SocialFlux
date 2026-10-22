@@ -1,9 +1,14 @@
 import json
 from pathlib import Path
 import unittest
+from unittest.mock import patch
+from types import SimpleNamespace
 
 from scripts.evaluate_environment_prompt import environment_config, summarize
 from scripts.serve_qwen_local import command
+from scripts.deploy_qwen_local import available_gpus
+from scripts.install_qwen_runtime import compatible_wheel
+from packaging.tags import Tag
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -41,6 +46,26 @@ class EnvironmentPromptDiagnosticTests(unittest.TestCase):
         args = command(deployment)
         self.assertEqual(args[args.index('--host') + 1], '127.0.0.1')
         self.assertEqual(args[args.index('--served-model-name') + 1], deployment['model'])
+
+    def test_existing_gpu_workload_delays_start(self):
+        config = {'tensor_parallel_size': 4, 'gpu_memory_utilization': 0.9}
+        with patch('scripts.deploy_qwen_local.subprocess.run', return_value=SimpleNamespace(
+                stdout='0, 30000, 49140\n1, 49139, 49140\n2, 49139, 49140\n3, 49139, 49140\n')):
+            ready, cards = available_gpus(config)
+        self.assertFalse(ready)
+        self.assertEqual(len(cards), 4)
+        with patch('scripts.deploy_qwen_local.subprocess.run', return_value=SimpleNamespace(
+                stdout='0, 49139, 49140\n1, 49139, 49140\n2, 49139, 49140\n3, 49139, 49140\n')):
+            self.assertTrue(available_gpus(config)[0])
+
+    def test_wheel_selection_rejects_wrong_architecture_and_yanked_release(self):
+        files = [
+            {'filename': 'sample-1.0-py3-none-any.whl', 'packagetype': 'bdist_wheel', 'yanked': False},
+            {'filename': 'sample-1.0-cp312-cp312-manylinux_2_28_x86_64.whl', 'packagetype': 'bdist_wheel', 'yanked': True},
+            {'filename': 'sample-1.0-cp312-cp312-manylinux_2_28_aarch64.whl', 'packagetype': 'bdist_wheel', 'yanked': False},
+        ]
+        tags = [Tag('cp312', 'cp312', 'manylinux_2_28_x86_64'), Tag('py3', 'none', 'any')]
+        self.assertEqual(compatible_wheel(files, tags)['filename'], files[0]['filename'])
 
 
 if __name__ == '__main__':

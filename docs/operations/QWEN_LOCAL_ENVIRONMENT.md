@@ -23,6 +23,9 @@
 ## 启动与检查
 
 依赖使用独立环境 `build/qwen_deployment/venv`，版本固定为 vLLM 0.32.0。
+依赖安装由 `scripts/install_qwen_runtime.py` 负责：先固定解析版本，从
+PyPI 元数据选择当前 Python/平台可用的 wheel，再分片下载并核对 SHA-256，
+最后离线安装。下载中断可以保留已有分片重试，避免重新流式下载大型 CUDA 包。
 权重必须完成下载和校验后再启动：
 
 ```bash
@@ -42,6 +45,8 @@ supervisorctl -c configs/qwen.supervisord.conf status
 真实生成检查与已准备的诊断。阶段及异常写入
 `build/qwen_deployment/status.json`；`ready` 只在模型实际生成成功后为 true，
 `diagnostic_completed` 只在所有预定样本都尝试后为 true，失败样本仍计数。
+后台流程在启动服务前检查四张 GPU 的可用显存；已有标注视频渲染任务占用
+显卡时记录 `waiting_for_gpu` 并等待，最长 24 小时，不终止已有任务。
 
 `configs/qwen_local_deployment.json` 的 `provider` 可用于环境各阶段。
 state 和 interaction 仍分别调用，之后 Python 更新数值，再调用 response。

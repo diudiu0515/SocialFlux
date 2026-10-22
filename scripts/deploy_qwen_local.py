@@ -43,23 +43,23 @@ def direct_environment():
 
 def install(config, existing_pid):
     if existing_pid:
-        deadline = time.monotonic() + 7200
+        deadline = time.monotonic() + 8 * 3600
         cmdline = Path('/proc') / str(existing_pid) / 'cmdline'
         while cmdline.exists():
             try:
-                if b'qwen_deployment/venv/bin/uv' not in cmdline.read_bytes():
+                command = cmdline.read_bytes()
+                if not any(value in command for value in (b'qwen_deployment/venv/bin/uv', b'install_qwen_runtime.py')):
                     break
             except FileNotFoundError:
                 break
             if time.monotonic() > deadline:
-                raise TimeoutError('Existing dependency installation exceeded two hours')
+                raise TimeoutError('Existing dependency installation exceeded eight hours')
             time.sleep(10)
     python = str(WORK / 'venv/bin/python')
     check = [python, '-c', 'import importlib.metadata as m; assert m.version("vllm") == ' + repr(config['vllm_version'])]
     if subprocess.run(check, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode:
-        run([str(WORK / 'venv/bin/uv'), 'pip', 'install', '--python', python,
-             '--index-url', 'https://pypi.org/simple', 'vllm==' + config['vllm_version']],
-            'install_pipeline.log', env=direct_environment(), timeout=7200)
+        run([sys.executable, str(ROOT / 'scripts/install_qwen_runtime.py')],
+            'install_pipeline.log', env=direct_environment(), timeout=8 * 3600)
     run([python, '-c', 'import vllm, torch; print(vllm.__version__, torch.__version__, torch.version.cuda); assert torch.cuda.device_count() == 4'],
         'runtime_check.log', timeout=180)
     with (WORK / 'requirements.lock.txt').open('w') as out:
@@ -89,6 +89,17 @@ def api(path, payload=None):
                   headers={'Content-Type': 'application/json'})
     with opener.open(req, timeout=180 if payload else 5) as response:
         return json.loads(response.read())
+
+
+def available_gpus(config):
+    result = subprocess.run(['nvidia-smi', '--query-gpu=index,memory.free,memory.total',
+                             '--format=csv,noheader,nounits'], capture_output=True, text=True, check=True)
+    cards = [dict(zip(('index', 'free_mib', 'total_mib'), map(int, row.split(','))))
+             for row in result.stdout.strip().splitlines()]
+    selected = [c for c in cards if c['index'] in (0, 1, 2, 3)]
+    ready = len(selected) == config['tensor_parallel_size'] and all(
+        c['free_mib'] >= c['total_mib'] * config['gpu_memory_utilization'] for c in selected)
+    return ready, selected
 
 
 def main():
@@ -122,6 +133,15 @@ def main():
                 raise
             update('runtime_installed_waiting_for_weights')
             weights.result()
+        gpu_deadline = time.monotonic() + 24 * 3600
+        while True:
+            ready, cards = available_gpus(config)
+            if ready:
+                break
+            update('waiting_for_gpu', gpu_memory=cards)
+            if time.monotonic() > gpu_deadline:
+                raise TimeoutError('GPUs remained occupied for 24 hours; existing workloads were left running')
+            time.sleep(30)
         update('starting_server')
         if json.loads((ROOT / 'configs/qwen_local_deployment.json').read_text()) != config:
             raise ValueError('Deployment configuration changed while downloading')
