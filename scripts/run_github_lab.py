@@ -136,7 +136,8 @@ def main():
     configured_ssh = subprocess.run(["git", "-C", str(args.data_root), "config", "--get",
                                      "core.sshCommand"], capture_output=True, text=True, timeout=10)
     if configured_ssh.returncode == 0 and configured_ssh.stdout.strip():
-        environment["GIT_SSH_COMMAND"] = configured_ssh.stdout.strip()
+        environment["GIT_SSH_COMMAND"] = (configured_ssh.stdout.strip()
+            + " -o ConnectTimeout=15 -o ServerAliveInterval=10 -o ServerAliveCountMax=2")
     active_file = args.state_dir / "active.json"
     status_file = args.state_dir / "status.json"
     current = json.loads(active_file.read_text())["commit"] if active_file.exists() else None
