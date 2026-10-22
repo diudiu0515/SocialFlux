@@ -1,0 +1,30 @@
+{
+  "model": "Qwen/Qwen3.8-Flash-Next-FP8",
+  "huggingface_revision": "236dfdf285828023ca3bcd3f37366c58a3469b13",
+  "download_source": "https://modelscope.cn/models/Qwen/Qwen3.8-Flash-Next-FP8",
+  "download_manifest": "build/qwen_deployment/modelscope_metadata.json",
+  "modelscope_weight_revision": "47b13b2ed4491728d4509761a557d6e75bc96c9c",
+  "model_path": "build/qwen_deployment/models/Qwen3.8-Flash-Next-FP8",
+  "vllm_version": "0.32.0",
+  "host": "127.0.0.1",
+  "port": 8010,
+  "tensor_parallel_size": 4,
+  "max_model_len": 32768,
+  "max_num_seqs": 8,
+  "gpu_memory_utilization": 0.90,
+  "enable_expert_parallel": true,
+  "engram_config": {"cpu_offload": true},
+  "reasoning_parser": "qwen3",
+  "environment_source_config": "configs/gpt50_experiment/rollout.state_observed_evidence_v6_candidate.json",
+  "environment_profile": "unified_current_trust_schema_v1",
+  "provider": {
+    "provider": "local_vllm",
+    "model": "Qwen/Qwen3.8-Flash-Next-FP8",
+    "endpoint": "http://127.0.0.1:8010/v1/chat/completions",
+    "use_proxy": false,
+    "timeout": 600,
+    "max_transport_attempts": 1,
+    "max_tokens": 8192,
+    "chat_template_kwargs": {"enable_thinking": false}
+  }
+}
