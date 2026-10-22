@@ -6,10 +6,10 @@
 
 独立入口：`http://127.0.0.1:8000/lab`，沿用现有服务与 SSH 隧道。
 
-完整功能的 [公网 Lab](https://u294990-9e81-c55878e7.westc.seetacloud.com:8443/lab)
-由 GitHub `lab-backend-deploy-20261022` 分支联动当前 AutoDL 后端，需登录。
-计划编辑、回执导入与实时数据继续保存在当前服务器；代码更新不替换研究数据。
-部署、更新和重启说明见 [GitHub 联动后端](../docs/operations/LAB_GITHUB_DEPLOYMENT.md)。
+最新发布目标是 GitHub Pages 页面与独立云端后端，完成后不依赖 AutoDL。
+配置位于 `lab-independent-hosting-20261022` 分支，目前待 GitHub Pages 授权、
+独立托管连接和数据迁移；尚未上线，不能把计划中的 github.io 地址当作可用网址。
+完整流程见 [独立部署说明](../docs/operations/LAB_INDEPENDENT_HOSTING.md)。
 
 - **实验总览**：当前批次、开发题库、四个 Gate 和下一步计划。
   总览上方新增实时数据总表：按 GPT50 / CF150 列出 scenario、完整可用 rollout、

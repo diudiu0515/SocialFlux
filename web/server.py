@@ -2435,6 +2435,7 @@ class App(SimpleHTTPRequestHandler):
     auth_username = None
     auth_password = None
     public_origin = None
+    trusted_api_origins = frozenset()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(STATIC_DIR), **kwargs)
@@ -2481,12 +2482,13 @@ class App(SimpleHTTPRequestHandler):
             self.send_json({"error": "not found"}, 404)
             return
         origin = self.headers.get("Origin")
-        if origin and origin != self.public_origin and urlparse(origin).netloc != self.headers.get("Host"):
+        trusted_frontend = origin in self.trusted_api_origins
+        if origin and not trusted_frontend and origin != self.public_origin and urlparse(origin).netloc != self.headers.get("Host"):
             self.send_json({"error": "跨站提交未被允许"}, 403)
             return
         if is_lab and (
             self.headers.get_content_type() != "application/json"
-            or self.headers.get("Sec-Fetch-Site") == "cross-site"
+            or (self.headers.get("Sec-Fetch-Site") == "cross-site" and not trusted_frontend)
         ):
             self.send_json({"error": "实验记录只接受同源 JSON 提交"}, 403)
             return
