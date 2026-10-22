@@ -12,7 +12,7 @@ from evaluation.t4_evaluation import T4_DIMENSIONS, validate_t4_judgment
 from web.experiment_tables import make_table
 from web.gate2_human import validate_gate2, gate2_coverage
 
-ROOT = Path(__file__).resolve().parents[1]
+from web.runtime_paths import DATA_ROOT as ROOT
 STORE = ROOT / 'data/human_gt_20261022/participant_exports'
 RELEASE = ROOT / 'data/human_gt_20261022/release.json'
 ANNOTATION400_RELEASE = ROOT / 'data/offline_annotation400_en_20261022/release.json'

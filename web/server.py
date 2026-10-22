@@ -12,9 +12,11 @@ import sys
 from urllib.parse import unquote, urlparse, parse_qs
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+CODE_ROOT = Path(__file__).resolve().parents[1]
+if str(CODE_ROOT) not in sys.path:
+    sys.path.insert(0, str(CODE_ROOT))
+
+from web.runtime_paths import DATA_ROOT as ROOT
 
 from environment.observation import (
     PRIVATE_AUTHOR_FIELDS,

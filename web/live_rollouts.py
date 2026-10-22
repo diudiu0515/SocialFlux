@@ -5,7 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 
-ROOT=Path(__file__).resolve().parents[1]
+from web.runtime_paths import DATA_ROOT as ROOT
 BASE=ROOT/'data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary'
 ACTIVE=BASE/'unified_current_trust_v1_gpt50_active'
 SCENARIOS=BASE/'unified_current_trust_v1_gpt50'
@@ -29,6 +29,8 @@ def artifact(directory):
 def versions(index,scenario_id):
     rows=[]
     for key,label,root,invalid in SOURCES:
+        if key != 'current' and (ACTIVE/'language_cleanup.json').is_file():
+            continue
         directory=root/f'{index:02d}_{scenario_id}_gpt'
         path=artifact(directory)
         if path is None:continue

@@ -16,7 +16,7 @@ from web.experiment_catalog import load_matrix, planned_records
 from web.experiment_tables import build_paper_tables
 from web.human_gt import load_human_gt
 
-ROOT = Path(__file__).resolve().parents[1]
+from web.runtime_paths import DATA_ROOT as ROOT
 STORE = ROOT / "data/experiment_hub"
 STATUSES = ("planned", "running", "blocked", "review", "completed", "archived")
 CATEGORIES = ("Gate 1", "Gate 2", "Gate 3", "Gate 4", "T1–T3", "T4", "环境消融", "多模态", "其他")
