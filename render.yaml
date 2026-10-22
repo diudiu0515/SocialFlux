@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: socialflux-lab
+    runtime: docker
+    repo: https://github.com/diudiu0515/SocialFlux
+    branch: lab-independent-hosting-20261022
+    dockerfilePath: ./deploy/lab/Dockerfile
+    dockerContext: .
+    plan: starter
+    healthCheckPath: /healthz
+    autoDeployTrigger: commit
+    envVars:
+      - key: LAB_USERNAME
+        value: socialflux
+      - key: LAB_PASSWORD
+        generateValue: true
+      - key: LAB_FRONTEND_ORIGIN
+        value: https://diudiu0515.github.io
+      - key: SOCIALFLUX_DATA_ROOT
+        value: /var/data/lab
+    disk:
+      name: lab-research-data
+      mountPath: /var/data
+      sizeGB: 20
