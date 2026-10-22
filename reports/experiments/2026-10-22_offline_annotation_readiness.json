@@ -334,11 +334,13 @@
     "source_sync_and_native_save_pending": true
   },
   "current_plan": {
-    "action": "push_code_to_github",
+    "action": "revise_offline_checkpoint_videos",
     "new_site_deployment": false,
-    "video_quality": "revision_pending",
-    "user_feedback": "口型、表情啥的都不好",
-    "keep_existing_material_hashes_until_reviewed_replacement": true
+    "video_quality": "checkpoint_revision_rendering",
+    "user_feedback": "单条4–5秒，一句checkpoint；改进口型和神情",
+    "keep_existing_material_hashes_until_reviewed_replacement": true,
+    "candidate_manifest": "data/offline_checkpoint_v2_20261022/manifest.json",
+    "candidate_is_current_release": false
   },
   "local_material_manifest": "reports/experiments/2026-10-22_offline_annotation_local_materials.json"
 }

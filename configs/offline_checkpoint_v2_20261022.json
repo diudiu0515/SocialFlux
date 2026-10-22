@@ -1,0 +1,1364 @@
+{
+  "format": "socialflux_checkpoint_lines_v2",
+  "status": "revision_candidate_not_published",
+  "target_video_seconds": 4.6,
+  "requested_duration_range_seconds": [
+    4,
+    5
+  ],
+  "scope": "offline_T1_T3_only",
+  "full_reply_remains_in_text": true,
+  "source_bank_sha256": "637665ef21fa556dd04d13da635d3fa733ec3590bb4e4476e684f77bc4fe8105",
+  "nodes": [
+    {
+      "node_id": "GPT50_001-t1-e30dc6556d3865ac",
+      "original_response": "Mara, I received your bedside-change report. Worsening difficulty rousing the patient, placement unconfirmed by the receiving hospital, and insufficient evidence for the mass-casualty alert—all three directly affect the allocation decision. I need you to do one thing now: repeat the observation 'harder to rouse than at the time of the written handoff' using an attributed read-back, including when you observed it. I'll record it and immediately reassess the vehicle allocation.",
+      "checkpoint_text": "I'll record it and immediately reassess the vehicle allocation.",
+      "verbatim_excerpt": true,
+      "source_quote": "I'll record it and immediately reassess the vehicle allocation.",
+      "omitted_context_note": "保留即刻记录并重新评估车辆分配的意向；省略床旁病情、接收状态和署名复述要求，完整文本继续保留。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_001-t2-5d18d259564c3313",
+      "original_response": "Understood. I'll record: 'Mara observed during her bedside check just now that the patient was harder to rouse than at the time of the written handoff.' I'm reassessing the allocation now: weighing the bedside deterioration, unconfirmed placement with the receiving hospital, and insufficient evidence for the mass-casualty alert together, I need to confirm one thing: are you still waiting for them to confirm placement, or has there been an explicit refusal?",
+      "checkpoint_text": "Is placement still awaiting confirmation, or have they explicitly refused?",
+      "verbatim_excerpt": false,
+      "source_quote": "are you still waiting for them to confirm placement, or has there been an explicit refusal?",
+      "omitted_context_note": "保留接收状态尚未确认与明确拒收之间的核实问题；省略已记录的床旁观察及分配权衡。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_001-ending-1b364b3389f724c3",
+      "original_response": "I've noted what you just told me. Are you still waiting for placement confirmation from the receiving hospital, or have they explicitly refused?",
+      "checkpoint_text": "Are you awaiting placement confirmation, or have they explicitly refused?",
+      "verbatim_excerpt": false,
+      "source_quote": "Are you still waiting for placement confirmation from the receiving hospital, or have they explicitly refused?",
+      "omitted_context_note": "压缩措辞，保留等待确认与明确拒收两种状态的询问，不推定接收结果。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_002-t1-60a950beac0c8e6a",
+      "original_response": "All right, I'll write it down now: side-door entry during exam week, a separate room in Room 216 on the second floor, a quiet reset when needed, and normal attendance recording; this arrangement will be confirmed before the roster is locked, and committee review comes afterward.",
+      "checkpoint_text": "These arrangements will be confirmed before the roster is locked.",
+      "verbatim_excerpt": false,
+      "source_quote": "this arrangement will be confirmed before the roster is locked, and committee review comes afterward.",
+      "omitted_context_note": "保留锁定名单前确认安排的时序；侧门、216房间、安静休息、出勤及后续委员会审查详见完整文本。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_002-t2-fac8adb46da51784",
+      "original_response": "Understood, privacy will be protected during implementation. I will notify the examination staff and the staff on duty at the side door: when the student arrives, direct her straight to 216 without asking why; when she needs to leave for a reset, the accompanying staff member will wait outside the door, with no discussion in the corridor.",
+      "checkpoint_text": "Privacy will be protected when we put these arrangements into practice.",
+      "verbatim_excerpt": false,
+      "source_quote": "Understood, privacy will be protected during implementation.",
+      "omitted_context_note": "保留落实时保护隐私的承诺；省略告知考务和侧门工作人员、直接引导至216及避免走廊讨论的执行细节。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_002-ending-1ac5af00bda8f526",
+      "original_response": "I understand. We can go on to check the details of the arrangements.",
+      "checkpoint_text": "We can go on to check the details of the arrangements.",
+      "verbatim_excerpt": true,
+      "source_quote": "We can go on to check the details of the arrangements.",
+      "omitted_context_note": "采用原文完整句，仅省略开头的理解回应；保留继续核对安排细节的开放状态。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_003-t1-fa6e45292b307f45",
+      "original_response": "We can publish the contracts and invoices, but the source of that instruction received consulting fees from a subcontractor during the bidding process. How do you plan to handle that conflict?",
+      "checkpoint_text": "How do you plan to handle that conflict?",
+      "verbatim_excerpt": true,
+      "source_quote": "How do you plan to handle that conflict?",
+      "omitted_context_note": "采用原文完整问题；合同发票公开及分包咨询费所涉利益冲突的背景仍在完整文本中。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_003-t2-14ffe66f849cc752",
+      "original_response": "All right, let's do that. Tell me directly about any new evidence you obtain after Monday.",
+      "checkpoint_text": "Tell me directly about any new evidence you obtain after Monday.",
+      "verbatim_excerpt": true,
+      "source_quote": "Tell me directly about any new evidence you obtain after Monday.",
+      "omitted_context_note": "采用原文完整句，保留周一后新证据的直接报告要求；省略开头同意语。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_003-ending-ae024eb0984cb85d",
+      "original_response": "I hear you, Sami. Please put the verification and publication schedule in writing, then we can confirm each point.",
+      "checkpoint_text": "Please put the verification and publication schedule in writing.",
+      "verbatim_excerpt": false,
+      "source_quote": "Please put the verification and publication schedule in writing, then we can confirm each point.",
+      "omitted_context_note": "摘取原文连续分句并补句号；保留书面列出核实与发布时间表的要求，后续逐项确认尚未完成。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_004-t1-aa4cddf50c743819",
+      "original_response": "The endpoint shutdown and evidence preservation are being arranged now. Regarding the notice wording: do you think the two requests constitute a cross-tenant exposure, or are they only suspected, with actual impact still requiring further verification?",
+      "checkpoint_text": "The endpoint shutdown and evidence preservation are being arranged now.",
+      "verbatim_excerpt": true,
+      "source_quote": "The endpoint shutdown and evidence preservation are being arranged now.",
+      "omitted_context_note": "采用原文完整句，保留正在安排停用与保全的进行状态；是否构成已确认暴露仍须按完整文本核实。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_004-t2-20b64d46079f50cd",
+      "original_response": "Understood. I’ll move forward with the token rotation and endpoint shutdown together. I’ll send the notice after you approve the draft; please provide the specific investigation scope and expected completion time now, so the notice can state the next steps and set reasonable expectations for customers.",
+      "checkpoint_text": "I’ll send the notice after you approve the draft.",
+      "verbatim_excerpt": false,
+      "source_quote": "I’ll send the notice after you approve the draft;",
+      "omitted_context_note": "摘取原文连续分句并补句号；保留草稿获批后才发通知的条件，令牌轮换和调查范围等细节留在完整文本。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_004-ending-691ce1e4579bc7e4",
+      "original_response": "I’ve heard your recommendations about the investigation, containment, and order of notification. Whether the impact is confirmed still needs to be distinguished based on the evidence.",
+      "checkpoint_text": "Whether the impact is confirmed still depends on the evidence.",
+      "verbatim_excerpt": false,
+      "source_quote": "Whether the impact is confirmed still needs to be distinguished based on the evidence.",
+      "omitted_context_note": "保留影响是否确认仍须根据证据区分的不确定状态；省略已听取调查、遏制与通知建议的回顾。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_005-t1-065f6b343c169ffe",
+      "original_response": "Okay, this week I’ll organize the team and equipment data, then we’ll calculate capacity and costs together and make external commitments only once we’ve worked them out.",
+      "checkpoint_text": "We’ll make external commitments only after calculating capacity and costs.",
+      "verbatim_excerpt": false,
+      "source_quote": "then we’ll calculate capacity and costs together and make external commitments only once we’ve worked them out.",
+      "omitted_context_note": "保留算清产能和成本后才对外承诺的条件；省略本周整理团队与设备数据的准备工作。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_005-t2-005cfda3af381506",
+      "original_response": "Good. Let’s meet Thursday afternoon and go through your list and my data together. We need to work out how much we can handle during peak periods; we can’t leave the teams unable to cope.",
+      "checkpoint_text": "Let’s meet Thursday afternoon to review the list and data.",
+      "verbatim_excerpt": false,
+      "source_quote": "Let’s meet Thursday afternoon and go through your list and my data together.",
+      "omitted_context_note": "保留周四下午共同核对清单与数据的提议；省略峰值产能和团队承受能力的后续核算。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_005-ending-b99e908636b1007f",
+      "original_response": "Good. Let’s meet Thursday afternoon and go through your list and my data together. We need to work out how much we can handle during peak periods; we can’t leave the teams unable to cope.",
+      "checkpoint_text": "Let’s meet Thursday afternoon to review the list and data.",
+      "verbatim_excerpt": false,
+      "source_quote": "Let’s meet Thursday afternoon and go through your list and my data together.",
+      "omitted_context_note": "保留周四下午共同核对清单与数据的提议；省略峰值产能和团队承受能力的后续核算。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_006-t1-660d9f813cc06da9",
+      "original_response": "The matching funds window closes at midnight; missing it means a permanent loss. If both households sign written confirmations, can you authorize publication tonight?",
+      "checkpoint_text": "If both households sign written confirmations, can you authorize publication tonight?",
+      "verbatim_excerpt": true,
+      "source_quote": "If both households sign written confirmations, can you authorize publication tonight?",
+      "omitted_context_note": "保留两户书面确认这一前提及今晚能否授权发布的询问；省略午夜配套资金窗口背景，未把问题改成授权。 Cross-review correction retains the original signature condition, follow-up sequence, or dispatch timing.",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_006-t2-4a9ceeb86218895e",
+      "original_response": "Can we get both households' written confirmations before ten? If so, I'll prepare the publication process immediately.",
+      "checkpoint_text": "Can we get both households' written confirmations before ten?",
+      "verbatim_excerpt": true,
+      "source_quote": "Can we get both households' written confirmations before ten?",
+      "omitted_context_note": "采用原文完整问题，保留两户书面确认及十点前的时限；后续准备发布流程仍以取得确认为条件。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_006-ending-b39e68c0c7725ea0",
+      "original_response": "Can we get both households' written confirmations before ten? If so, I'll prepare the publication process immediately.",
+      "checkpoint_text": "Can we get both households' written confirmations before ten?",
+      "verbatim_excerpt": true,
+      "source_quote": "Can we get both households' written confirmations before ten?",
+      "omitted_context_note": "采用原文完整问题，保留两户书面确认及十点前的时限；后续准备发布流程仍以取得确认为条件。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_007-t1-93d1e7fc3b3004c2",
+      "original_response": "The temperature instability does need to be checked. I accept your proposal: we’ll jointly examine the effects of gain and normalization on this batch of data, then decide together how to word the conclusion. How long will you need to complete this round of review?",
+      "checkpoint_text": "The temperature instability does need to be checked.",
+      "verbatim_excerpt": true,
+      "source_quote": "The temperature instability does need to be checked.",
+      "omitted_context_note": "采用原文完整句，保留温度不稳定仍需检查的判断；省略共同复核增益和归一化、商定结论及询问用时。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_007-t2-22613fdc5c916593",
+      "original_response": "Today works. Once the results are available, we’ll discuss the wording in person; if a temperature artifact is confirmed, we’ll need to define which data points it affected.",
+      "checkpoint_text": "Once results arrive, we’ll discuss the wording in person.",
+      "verbatim_excerpt": false,
+      "source_quote": "Once the results are available, we’ll discuss the wording in person;",
+      "omitted_context_note": "保留结果可用后再当面讨论措辞的时序；温度伪影仅在确认后界定受影响点，未把它改成既定事实。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_007-ending-08ea791f9ec8778c",
+      "original_response": "Today works. Once the results are available, we’ll discuss the wording in person; if a temperature artifact is confirmed, we’ll need to define which data points it affected.",
+      "checkpoint_text": "Once results arrive, we’ll discuss the wording in person.",
+      "verbatim_excerpt": false,
+      "source_quote": "Once the results are available, we’ll discuss the wording in person;",
+      "omitted_context_note": "保留结果可用后再当面讨论措辞的时序；温度伪影仅在确认后界定受影响点，未把它改成既定事实。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_008-t1-539f1f8ebcaa090f",
+      "original_response": "I will provide the written assessment as soon as possible, and independent verification can also be arranged; I agree to include an installment plan in the discussion, but we need to clarify: if the engineer confirms that completion is required before the freeze, does installments mean payment installments, or can the work itself be phased?",
+      "checkpoint_text": "Do you mean installments for payment or for the work?",
+      "verbatim_excerpt": false,
+      "source_quote": "does installments mean payment installments, or can the work itself be phased?",
+      "omitted_context_note": "保留分期付款还是分期施工的未决问题；工程师若要求冰冻前完工的前提及书面评估安排保留在完整文本。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_008-t2-f864b3ca1dd9e152",
+      "original_response": "Understood, payment installments; I will arrange the verification and written assessment this week. We need to establish a time frame for the installment plan, because both the contractor's availability and insurance coverage have time limits.",
+      "checkpoint_text": "I will arrange the verification and written assessment this week.",
+      "verbatim_excerpt": true,
+      "source_quote": "I will arrange the verification and written assessment this week.",
+      "omitted_context_note": "采用原文连续完整句，保留本周安排核验与书面评估的意向；已澄清为付款分期及承包商保险时限留在完整文本。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_008-ending-1e0bab9c64d13f9f",
+      "original_response": "Okay, let's discuss the timeline and payment installments next. Once we have the written assessment and clear verification arrangements, we can work out the details.",
+      "checkpoint_text": "Okay, let's discuss the timeline and payment installments next.",
+      "verbatim_excerpt": true,
+      "source_quote": "Okay, let's discuss the timeline and payment installments next.",
+      "omitted_context_note": "采用原文完整句，仅推进讨论；书面评估和明确核验安排到位后才能敲定细节的前提仍在完整文本。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_009-t1-38f98385ea22edbd",
+      "original_response": "I agree with this approach. I can provide the clinic’s needs right away—the current inventory list and actual usage this week, all verifiable on site. Let’s reconcile the accounts first, confirm the specific destinations of the six pallets, and then make sure receiving responsibility is assigned before departure.",
+      "checkpoint_text": "Let’s confirm where each pallet goes before departure.",
+      "verbatim_excerpt": false,
+      "source_quote": "Let’s reconcile the accounts first, confirm the specific destinations of the six pallets, and then make sure receiving responsibility is assigned before departure.",
+      "omitted_context_note": "保留出发前核实每托盘具体去向的要求；对账和随后落实接收责任的流程仍在完整文本中，未声称已核实。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_009-t2-7e9b283747bf0307",
+      "original_response": "Received. Once you provide the inventory and usage figures, I’ll work with the team to confirm the loading and receiving arrangements before departure, ensuring the clinic’s shipment is clear and traceable.",
+      "checkpoint_text": "Once inventory and usage figures arrive, we’ll confirm departure arrangements.",
+      "verbatim_excerpt": false,
+      "source_quote": "Once you provide the inventory and usage figures, I’ll work with the team to confirm the loading and receiving arrangements before departure, ensuring the clinic’s shipment is clear and traceable.",
+      "omitted_context_note": "保留收到库存及用量数据后才确认安排的条件；装载、接收和诊所货物可追溯细节仍在完整文本。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_009-ending-870643548350656f",
+      "original_response": "Received. Once you provide the inventory and usage figures, I’ll work with the team to confirm the loading and receiving arrangements before departure, ensuring the clinic’s shipment is clear and traceable.",
+      "checkpoint_text": "Once inventory and usage figures arrive, we’ll confirm departure arrangements.",
+      "verbatim_excerpt": false,
+      "source_quote": "Once you provide the inventory and usage figures, I’ll work with the team to confirm the loading and receiving arrangements before departure, ensuring the clinic’s shipment is clear and traceable.",
+      "omitted_context_note": "保留收到库存及用量数据后才确认安排的条件；装载、接收和诊所货物可追溯细节仍在完整文本。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_010-t1-d32fdb8457d528c4",
+      "original_response": "Owen, I accept your proposal. Let's settle the compensation and credit now; the rehearsal work already done must be appropriately compensated. We'll discuss the amount and exact form right away, then let the person decide whether to continue.",
+      "checkpoint_text": "The rehearsal work already done must be appropriately compensated.",
+      "verbatim_excerpt": false,
+      "source_quote": "the rehearsal work already done must be appropriately compensated.",
+      "omitted_context_note": "摘取原文连续分句并将首字母大写；保留已完成排练应获补偿的立场，金额、署名和本人是否继续仍需讨论。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_010-t2-d83aa5af542e403b",
+      "original_response": "I agree with paying for rehearsal time plus extra compensation for solo preparation, and “solo understudy” as the program credit works too. The person must participate in agreeing on the amount, and I'll schedule time to sit down and discuss it this week.",
+      "checkpoint_text": "The person must participate in agreeing on the amount.",
+      "verbatim_excerpt": false,
+      "source_quote": "The person must participate in agreeing on the amount,",
+      "omitted_context_note": "摘取原文连续分句并补句号；保留金额须本人参与商定的要求，排练费、独奏准备补偿及署名形式详见完整文本。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_010-ending-54f12216ce69c1a9",
+      "original_response": "I hear you. Let's continue discussing this arrangement until we have clarified it.",
+      "checkpoint_text": "Let's continue discussing this arrangement until we have clarified it.",
+      "verbatim_excerpt": true,
+      "source_quote": "Let's continue discussing this arrangement until we have clarified it.",
+      "omitted_context_note": "采用原文完整句，仅省略理解回应；保留安排仍需继续讨论澄清的状态。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_011-t1-0b57c5fdbbc4144d",
+      "original_response": "That direction is workable. Preservation preparation is within the scope of the council's permission, and I can provide existing records and a format assessment; digitization and public access do indeed require separate decisions. But when you say you have records on hand that we can check, what exactly do you mean?",
+      "checkpoint_text": "Digitization and public access still require separate decisions.",
+      "verbatim_excerpt": false,
+      "source_quote": "digitization and public access do indeed require separate decisions.",
+      "omitted_context_note": "保留数字化和公开访问须分别决定的边界；省略保存准备权限、记录支持及关于现有记录的追问。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_011-t2-61ed806154ca3977",
+      "original_response": "All right, I understand. Those three points—the scope the funder accepts, the boundaries for drafting the application, and who holds the right to revise metadata—are all clear; once you send the material from that side, I'll check it before confirming submission.",
+      "checkpoint_text": "Once it arrives, I’ll check the material before confirming submission.",
+      "verbatim_excerpt": false,
+      "source_quote": "once you send the material from that side, I'll check it before confirming submission.",
+      "omitted_context_note": "保留材料送达后核对、再确认提交的顺序；资助范围、草稿边界和元数据修订权细节留在完整文本。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_011-ending-a48612b3bde05508",
+      "original_response": "All right, I'll note the current arrangements for now; once the application draft is ready, we can discuss the next step.",
+      "checkpoint_text": "Once the application draft is ready, we can discuss next steps.",
+      "verbatim_excerpt": false,
+      "source_quote": "once the application draft is ready, we can discuss the next step.",
+      "omitted_context_note": "保留草稿准备好后再讨论下一步的条件；省略暂记当前安排的开场，未把下一步改为已批准。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_012-t1-8a951c267048987d",
+      "original_response": "Starting before dusk is acceptable, provided the compensation standard and risk map are put in place first. Can you say now whose land the route passes through?",
+      "checkpoint_text": "Can you tell me whose land the route crosses?",
+      "verbatim_excerpt": false,
+      "source_quote": "Can you say now whose land the route passes through?",
+      "omitted_context_note": "压缩为核实路线经过谁家土地的问题；黄昏前启动仍须先落实补偿标准与风险地图，完整文本保留该前提。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_012-t2-8bd453a37219b73b",
+      "original_response": "Including nearby ranches in the risk assessment is the right thing to do. When you say “nearby along the route,” what distance range do you mean?",
+      "checkpoint_text": "How far does “nearby along the route” extend?",
+      "verbatim_excerpt": false,
+      "source_quote": "When you say “nearby along the route,” what distance range do you mean?",
+      "omitted_context_note": "保留核实沿线附近距离范围的问题；省略赞同将附近牧场纳入风险评估的前句。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_012-ending-55a60c5bde7af92e",
+      "original_response": "Including nearby ranches in the risk assessment is the right thing to do. When you say “nearby along the route,” what distance range do you mean?",
+      "checkpoint_text": "How far does “nearby along the route” extend?",
+      "verbatim_excerpt": false,
+      "source_quote": "When you say “nearby along the route,” what distance range do you mean?",
+      "omitted_context_note": "保留核实沿线附近距离范围的问题；省略赞同将附近牧场纳入风险评估的前句。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_013-t1-2952cdf21f0fb8c2",
+      "original_response": "I need to confirm whether that relative will be present to interfere with his decision, and whether the witness is willing to meet without family members or police officers present. If the witness provides information that differs from the existing record, it may help him better understand whether he should accept the agreement.",
+      "checkpoint_text": "Is the witness willing to meet without family or police?",
+      "verbatim_excerpt": false,
+      "source_quote": "whether the witness is willing to meet without family members or police officers present.",
+      "omitted_context_note": "把待确认事项压缩为直接问题，保留无家属或警员在场时是否愿意见面；亲属干预及证据差异背景留在完整文本。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_013-t2-e63959d7a5a24885",
+      "original_response": "Okay, I will wait for your notice. If he is willing to talk about the situation at home or has concerns about the agreement, I can be present to add background he needs to know, but the choice is his alone.",
+      "checkpoint_text": "I’ll wait for your notice; the choice is his alone.",
+      "verbatim_excerpt": false,
+      "source_quote": "Okay, I will wait for your notice. If he is willing to talk about the situation at home or has concerns about the agreement, I can be present to add background he needs to know, but the choice is his alone.",
+      "omitted_context_note": "保留等待通知和决定权属于本人；省略仅在本人愿谈或有顾虑时可在场补充背景的安排，未扩大介入授权。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_013-ending-19fbe789761597b6",
+      "original_response": "Okay, I will wait for your notice. If he is willing to talk about the situation at home or has concerns about the agreement, I can be present to add background he needs to know, but the choice is his alone.",
+      "checkpoint_text": "I’ll wait for your notice; the choice is his alone.",
+      "verbatim_excerpt": false,
+      "source_quote": "Okay, I will wait for your notice. If he is willing to talk about the situation at home or has concerns about the agreement, I can be present to add background he needs to know, but the choice is his alone.",
+      "omitted_context_note": "保留等待通知和决定权属于本人；省略仅在本人愿谈或有顾虑时可在场补充背景的安排，未扩大介入授权。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_014-t1-cacbf1db422b2c77",
+      "original_response": "Understood. The near miss must be documented. Who was the maintenance vehicle operator, and which signal did they pass? I will include this account in the assessment; final authorization is my decision.",
+      "checkpoint_text": "Which operator was involved, and which signal did they pass?",
+      "verbatim_excerpt": false,
+      "source_quote": "Who was the maintenance vehicle operator, and which signal did they pass?",
+      "omitted_context_note": "保留核实操作员和越过哪个信号的问题；省略险情记录、维护车辆背景及最终授权归属，未给出恢复授权。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_014-t2-322cd4e7f0defc23",
+      "original_response": "I agree to include the right to stop in an emergency in the conditions. Resumption will not be delayed any further: assign lookouts to the culvert section and use manual routing in the other sections. Under this arrangement, are the operators willing to proceed?",
+      "checkpoint_text": "Under this arrangement, are the operators willing to proceed?",
+      "verbatim_excerpt": true,
+      "source_quote": "Under this arrangement, are the operators willing to proceed?",
+      "omitted_context_note": "采用原文完整问题，保留询问操作员是否愿按该安排继续；紧急停止权、涵洞瞭望和其他区段人工调度见完整文本。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_014-ending-278930186ac63a2e",
+      "original_response": "I understand your position. I will record your proposed conditions separately from the matters still awaiting verification; I will not describe any unresolved matter as already resolved now.",
+      "checkpoint_text": "I will not describe unresolved matters as already resolved.",
+      "verbatim_excerpt": false,
+      "source_quote": "I will not describe any unresolved matter as already resolved now.",
+      "omitted_context_note": "保留不得将未决事项表述为已解决的否定立场；省略将拟议条件与待核实事项分开记录的执行细节。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_015-t1-00971314c91d4fed",
+      "original_response": "A fall this serious absolutely requires a medical assessment. But this room may be gone today, and a full assessment usually takes a few weeks; if we give up the reservation now, it will be hard to find another suitable accessible room later.",
+      "checkpoint_text": "A fall this serious absolutely requires a medical assessment.",
+      "verbatim_excerpt": true,
+      "source_quote": "A fall this serious absolutely requires a medical assessment.",
+      "omitted_context_note": "采用原文完整句，保留严重跌倒需医学评估的判断；房源时限、评估等待和保留房间的权衡仍在完整文本。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_015-t2-08aa740b928c9622",
+      "original_response": "I'll call now to ask about the refund terms, but I'm not sure we'll get a clear answer before five. If they can't get back to us today, how would you like to handle it?",
+      "checkpoint_text": "I’ll ask about refunds, but an answer before five isn’t certain.",
+      "verbatim_excerpt": false,
+      "source_quote": "I'll call now to ask about the refund terms, but I'm not sure we'll get a clear answer before five.",
+      "omitted_context_note": "保留询问退款以及五点前答复不确定的状态；省略当天无答复时如何处理的追问，未承诺取得答复。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_015-ending-66baffde5926438d",
+      "original_response": "I hear you. Let's first sort out what we can verify today, then discuss how to arrange the next step.",
+      "checkpoint_text": "Let’s first establish what we can actually verify today.",
+      "verbatim_excerpt": false,
+      "source_quote": "Let's first sort out what we can verify today, then discuss how to arrange the next step.",
+      "omitted_context_note": "保留先厘清今天可核实什么的顺序；省略听取回应和后续安排讨论，未声称任何事实已核实。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_016-t1-57fd97e7d27d809c",
+      "original_response": "How much should we narrow it? Give me a scope we can stand behind, and once I confirm it, I'll immediately hold a meeting to adjust expectations for marketing and channels.",
+      "checkpoint_text": "Give me a scope we can stand behind.",
+      "verbatim_excerpt": false,
+      "source_quote": "Give me a scope we can stand behind,",
+      "omitted_context_note": "摘取原文连续分句并补句号；保留要求可负责范围的动作，调整营销和渠道预期仍须本人确认范围后进行。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_016-t2-2318c7c818f38e86",
+      "original_response": "Okay, I accept this scope. How long will the separation verification take? I need that time point to work backward from it for channel notifications and the window for adjusting materials.",
+      "checkpoint_text": "I accept this scope; how long will verification take?",
+      "verbatim_excerpt": false,
+      "source_quote": "I accept this scope. How long will the separation verification take?",
+      "omitted_context_note": "保留接受范围并询问隔离核验用时；压缩核验名称，渠道通知和材料调整窗口的倒排关系留在完整文本。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_016-ending-8af1bea3c12aca2b",
+      "original_response": "Understood. The verification timeline and channel-adjustment window still need to be aligned.",
+      "checkpoint_text": "The verification timeline and channel-adjustment window still need to be aligned.",
+      "verbatim_excerpt": true,
+      "source_quote": "The verification timeline and channel-adjustment window still need to be aligned.",
+      "omitted_context_note": "采用原文完整句，仅省略理解回应；保留核验时间与渠道调整窗口尚需对齐的状态。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_017-t1-9bf6427aa7254fbf",
+      "original_response": "Emergency care is $750, and round-trip transportation is $350. The medical center's billing office can verify the bill, and I can provide his own authorization by phone and a written guarantee.",
+      "checkpoint_text": "The billing office can verify this medical bill.",
+      "verbatim_excerpt": false,
+      "source_quote": "The medical center's billing office can verify the bill,",
+      "omitted_context_note": "保留账务处可以核验医疗账单的能力，不声称已核验；医疗中心名称、费用明细、电话授权和书面担保留在完整文本。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_017-t2-6f94d6cc3bc21a72",
+      "original_response": "Thank you for being willing to verify. I will call the medical center right now. A three-way call can allow authorization and inquiries to happen at the same time, saving some time.",
+      "checkpoint_text": "I will call the medical center right now.",
+      "verbatim_excerpt": true,
+      "source_quote": "I will call the medical center right now.",
+      "omitted_context_note": "采用原文完整句，保留即刻联系医疗中心的意向；省略致谢与通过三方通话同步授权及询问的办法。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_017-ending-51823f267403477f",
+      "original_response": "Thank you for being willing to verify. I will call the medical center right now. A three-way call can allow authorization and inquiries to happen at the same time, saving some time.",
+      "checkpoint_text": "I will call the medical center right now.",
+      "verbatim_excerpt": true,
+      "source_quote": "I will call the medical center right now.",
+      "omitted_context_note": "采用原文完整句，保留即刻联系医疗中心的意向；省略致谢与通过三方通话同步授权及询问的办法。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_018-t1-6dbf900697a43634",
+      "original_response": "You're right; the protocol requirements must be met. The manufacturer's written declaration won't arrive until Monday, so it's too late now. What do you mean by separately validated preparation—can it be done on site within ninety minutes?",
+      "checkpoint_text": "The manufacturer's written declaration won't arrive until Monday.",
+      "verbatim_excerpt": false,
+      "source_quote": "The manufacturer's written declaration won't arrive until Monday, so it's too late now.",
+      "omitted_context_note": "摘取原文连续分句并补句号，保留书面声明周一才到的限制；必须符合规程和九十分钟内独立验证制备是否可行仍见完整文本。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_018-t2-8a793e3ef6103807",
+      "original_response": "Understood. I'll go check the ingredients and equipment now and get back to you within five minutes.",
+      "checkpoint_text": "I’ll check the ingredients and equipment and report within five minutes.",
+      "verbatim_excerpt": false,
+      "source_quote": "I'll go check the ingredients and equipment now and get back to you within five minutes.",
+      "omitted_context_note": "保留检查原料、设备并在五分钟内回复的意向；未把计划检查表述为已经验证通过。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_018-ending-3c0e3a1da2833667",
+      "original_response": "Understood. I'll go check the ingredients and equipment now and get back to you within five minutes.",
+      "checkpoint_text": "I’ll check the ingredients and equipment and report within five minutes.",
+      "verbatim_excerpt": false,
+      "source_quote": "I'll go check the ingredients and equipment now and get back to you within five minutes.",
+      "omitted_context_note": "保留检查原料、设备并在五分钟内回复的意向；未把计划检查表述为已经验证通过。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_019-t1-ef0b123358a66417",
+      "original_response": "This is a necessary correction. Should the loan agreement be made only after legality is confirmed, or should arrangements proceed while doubts remain?",
+      "checkpoint_text": "Should we wait for confirmed legality before making the loan agreement?",
+      "verbatim_excerpt": false,
+      "source_quote": "Should the loan agreement be made only after legality is confirmed, or should arrangements proceed while doubts remain?",
+      "omitted_context_note": "保留签借展协议是否须等待合法性确认的询问；省略另一选项的重复表述，未改成已批准或已合法。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_019-t2-b88e53a299426fb4",
+      "original_response": "Agreed. The assessments can proceed, but please make this clear: the materials are only for feasibility analysis, not a basis for a loan or possession.",
+      "checkpoint_text": "These materials support feasibility analysis, not a loan or possession.",
+      "verbatim_excerpt": false,
+      "source_quote": "the materials are only for feasibility analysis, not a basis for a loan or possession.",
+      "omitted_context_note": "保留材料用途仅为可行性分析及不能据此借展或占有的边界；省略评估可继续的开场。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_019-ending-2b5633ebbe7311b2",
+      "original_response": "I have heard the arrangement you proposed, and I have heard that no loan authorization has been given at this stage. I will take the arrangement and the matters still awaiting review back to the council for discussion; this does not mean our side has already authorized it.",
+      "checkpoint_text": "I’ll take this to the council; we haven’t authorized it.",
+      "verbatim_excerpt": false,
+      "source_quote": "I will take the arrangement and the matters still awaiting review back to the council for discussion; this does not mean our side has already authorized it.",
+      "omitted_context_note": "保留带回理事会讨论及己方尚未授权的否定；待审事项和目前未获借展授权的细节仍在完整文本。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_020-t1-5b582443fd422a9f",
+      "original_response": "A 20-hour minimum guarantee, two weeks of schedules, and no retroactive attendance penalties—I’ll take these three points to the regional agenda.",
+      "checkpoint_text": "I’ll take these three points to the regional agenda.",
+      "verbatim_excerpt": true,
+      "source_quote": "I’ll take these three points to the regional agenda.",
+      "omitted_context_note": "采用原文连续完整句；二十小时保底、两周排班、不得追溯考勤处罚这三项内容继续展示在完整文本中，不暗示已获区域批准。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_020-t2-84ef4a14b3d514b3",
+      "original_response": "Put it in writing: schedules must not be cut because of participating in the action. What specific alternative concession are you considering?",
+      "checkpoint_text": "Schedules must not be cut because people join the action.",
+      "verbatim_excerpt": false,
+      "source_quote": "schedules must not be cut because of participating in the action.",
+      "omitted_context_note": "保留不得因参与行动而削减排班的否定要求；省略写入书面的指令与对替代让步的追问。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_020-ending-f1b4ec1618cbfd80",
+      "original_response": "Put it in writing: schedules must not be cut because of participating in the action. What specific alternative concession are you considering?",
+      "checkpoint_text": "Schedules must not be cut because people join the action.",
+      "verbatim_excerpt": false,
+      "source_quote": "schedules must not be cut because of participating in the action.",
+      "omitted_context_note": "保留不得因参与行动而削减排班的否定要求；省略写入书面的指令与对替代让步的追问。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_021-t1-4e11cb4aeb93cf54",
+      "original_response": "This adult's identity and background have not been verified, so I cannot approve a placement for tonight. I need to know his name, his relationship to you, and whether he will be living here long-term or staying temporarily.",
+      "checkpoint_text": "Identity and background remain unverified; I cannot approve tonight’s placement.",
+      "verbatim_excerpt": false,
+      "source_quote": "This adult's identity and background have not been verified, so I cannot approve a placement for tonight.",
+      "omitted_context_note": "保留身份背景未核实及今晚无法批准安置的边界；省略姓名、关系和居住期限的信息要求。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_021-t2-bac4010d938444de",
+      "original_response": "I will confirm a safe temporary arrangement tonight and will prioritize a foster home close to the school; however, if an emergency placement is necessary, it may be outside her school district. After you report the information, I will move your assessment forward as soon as possible to see whether she can come into your care within a few days.",
+      "checkpoint_text": "An emergency placement may be outside her school district.",
+      "verbatim_excerpt": false,
+      "source_quote": "however, if an emergency placement is necessary, it may be outside her school district.",
+      "omitted_context_note": "保留紧急安置可能在学区外的不确定性，仅谈必要时的紧急安置；优先近校、安全临时安排及评估推进仍在完整文本。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_021-ending-eaa8bc86f91434c2",
+      "original_response": "I will confirm a safe temporary arrangement tonight and will prioritize a foster home close to the school; however, if an emergency placement is necessary, it may be outside her school district. After you report the information, I will move your assessment forward as soon as possible to see whether she can come into your care within a few days.",
+      "checkpoint_text": "An emergency placement may be outside her school district.",
+      "verbatim_excerpt": false,
+      "source_quote": "however, if an emergency placement is necessary, it may be outside her school district.",
+      "omitted_context_note": "保留紧急安置可能在学区外的不确定性，仅谈必要时的紧急安置；优先近校、安全临时安排及评估推进仍在完整文本。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_022-t1-3a92732d94650e3e",
+      "original_response": "These accounts must be included in the disclosure decision. I agree to explicitly state the possible risk of a drop in blood oxygen and the existing uncertainty in the document, while we need to complete an integrity check of the device calibration records and monitoring logs in parallel.",
+      "checkpoint_text": "These accounts must be included in the disclosure decision.",
+      "verbatim_excerpt": true,
+      "source_quote": "These accounts must be included in the disclosure decision.",
+      "omitted_context_note": "采用原文完整句，保留披露决定必须纳入这些报告的立场；血氧下降风险及现有不确定性须披露、校准监测记录并行核验见完整文本。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_022-t2-507572697f991b27",
+      "original_response": "I support this pause. Responsibility for reviewing and communicating the corrected text should be clear. I suggest that the monitoring board confirm the corrected version, and then the study coordinators at each site contact enrolled participants within three working days.",
+      "checkpoint_text": "I suggest the monitoring board confirm the corrected version first.",
+      "verbatim_excerpt": false,
+      "source_quote": "I suggest that the monitoring board confirm the corrected version, and then the study coordinators at each site contact enrolled participants within three working days.",
+      "omitted_context_note": "保留建议监测委员会先确认修订稿的提议状态；暂停、责任划分及各站点三工作日内联系参与者的后续安排见完整文本。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_022-ending-5f2353e9861ad29f",
+      "original_response": "I hear you. Let us first record each person's views and the matters requiring confirmation, then continue discussing the next step.",
+      "checkpoint_text": "Let’s record everyone’s views and what still needs confirmation.",
+      "verbatim_excerpt": false,
+      "source_quote": "Let us first record each person's views and the matters requiring confirmation, then continue discussing the next step.",
+      "omitted_context_note": "保留记录各方意见和仍须确认事项的动作；省略理解回应与后续讨论，不把待确认事项变成已确认。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_023-t1-42fcac54f1ae0367",
+      "original_response": "I agree to the basic rotation and the six-day expiration; there must also be a written record. I can draft an allocation memorandum now listing the protected plots, priority crops, and expiration date. Can you use it to confirm with the members?",
+      "checkpoint_text": "I agree to the basic rotation and the six-day expiration.",
+      "verbatim_excerpt": false,
+      "source_quote": "I agree to the basic rotation and the six-day expiration;",
+      "omitted_context_note": "摘取原文连续分句并补句号；保留对基本轮换及六天到期的同意，书面备忘录内容及成员确认仍见完整文本。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_023-t2-ed650474e77e0ab4",
+      "original_response": "The memorandum will include a verification method: record the gate status and each point's meter reading before allocation, then have both sides verify them in person after the allocation period ends. If the meter readings and gate positions do not match, we will use the lower of the two as the record, so the members will not be disadvantaged.",
+      "checkpoint_text": "If readings and gate positions disagree, we’ll record the lower value.",
+      "verbatim_excerpt": false,
+      "source_quote": "If the meter readings and gate positions do not match, we will use the lower of the two as the record, so the members will not be disadvantaged.",
+      "omitted_context_note": "保留读数与闸位不一致时取较低值记录的条件；分配前记录和结束后双方核验的流程详见完整文本。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_023-ending-331335ed1391101b",
+      "original_response": "I will write into the memorandum the recording of gate positions and each point's meter reading before allocation, joint verification after expiration, and recording the lower value in case of discrepancy; we can continue checking the wording and then decide whether to proceed.",
+      "checkpoint_text": "Let’s check the wording before deciding whether to proceed.",
+      "verbatim_excerpt": false,
+      "source_quote": "we can continue checking the wording and then decide whether to proceed.",
+      "omitted_context_note": "保留先核对措辞再决定是否推进的未决状态；闸位读数记录、共同核验及不一致时较低值规则留在完整文本。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_024-t1-6efa65026b8c5b43",
+      "original_response": "Okay, then exactly which parts have to be removed? If we remove the dates and inferences now, can you clear it before six?",
+      "checkpoint_text": "Okay, then exactly which parts have to be removed?",
+      "verbatim_excerpt": true,
+      "source_quote": "Okay, then exactly which parts have to be removed?",
+      "omitted_context_note": "采用原文完整问题，保留询问删除范围；删除日期和推断后能否六点前放行仍是完整文本中的条件性问题。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_024-t2-59141fc52ec1cd4a",
+      "original_response": "Okay, I'll arrange to have those three parts removed right away, send you the revision for review, and confirm that the sources have been notified.",
+      "checkpoint_text": "I’ll arrange the removals and send the revision for review.",
+      "verbatim_excerpt": false,
+      "source_quote": "I'll arrange to have those three parts removed right away, send you the revision for review, and confirm that the sources have been notified.",
+      "omitted_context_note": "保留安排删除并将修订稿送审的意向；三处具体范围和确认消息源已获通知的任务留在完整文本，未声称送审完成。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_024-ending-6ed9775498e4bfe6",
+      "original_response": "I'll prepare a revised draft first, then confirm the publication arrangements with you once it's done.",
+      "checkpoint_text": "I’ll prepare the revised draft before confirming publication with you.",
+      "verbatim_excerpt": false,
+      "source_quote": "I'll prepare a revised draft first, then confirm the publication arrangements with you once it's done.",
+      "omitted_context_note": "保留先准备修订稿、完成后再确认发布安排的顺序；未把安排确认为现在已获发布许可。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_025-t1-5d05feb013e7b83f",
+      "original_response": "I’m contacting the customer now to confirm the authorization boundaries. The reconciliation process’s tolerance for tenant isolation depends on whether they allow a manual rollback channel and how long a delay window they can accept—I need those two parameters first before I can give you a definite answer.",
+      "checkpoint_text": "I’m contacting the customer to check what they authorize.",
+      "verbatim_excerpt": false,
+      "source_quote": "I’m contacting the customer now to confirm the authorization boundaries.",
+      "omitted_context_note": "保留正在联系客户核实授权范围的动作；手动回滚许可及容许延迟参数仍待取得，未声称已经授权。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_025-t2-127f44d9e235b77f",
+      "original_response": "Understood; when I contact the customer, I’ll confirm who has rollback decision authority and the response time, to avoid a coordination gap after isolation takes effect.",
+      "checkpoint_text": "I’ll confirm who decides rollbacks and their response time.",
+      "verbatim_excerpt": false,
+      "source_quote": "when I contact the customer, I’ll confirm who has rollback decision authority and the response time, to avoid a coordination gap after isolation takes effect.",
+      "omitted_context_note": "保留尚待确认的回滚决策人和响应时间；将与客户核实及避免隔离后协调空档的细节仍在完整文本。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_025-ending-49ffbbf676772d53",
+      "original_response": "Understood; when I contact the customer, I’ll confirm who has rollback decision authority and the response time, to avoid a coordination gap after isolation takes effect.",
+      "checkpoint_text": "I’ll confirm who decides rollbacks and their response time.",
+      "verbatim_excerpt": false,
+      "source_quote": "when I contact the customer, I’ll confirm who has rollback decision authority and the response time, to avoid a coordination gap after isolation takes effect.",
+      "omitted_context_note": "保留尚待确认的回滚决策人和响应时间；将与客户核实及避免隔离后协调空档的细节仍在完整文本。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_026-t1-6ca4ce2bf2d540a6",
+      "original_response": "If we delay, the cremation appointment will need to be rescheduled, Ada will remain here, and the whole process will be pushed back. Her prepaid contract remains in effect until you authorize it. When is the reading of the planning notes scheduled?",
+      "checkpoint_text": "If we delay, the cremation appointment will need to be rescheduled.",
+      "verbatim_excerpt": false,
+      "source_quote": "If we delay, the cremation appointment will need to be rescheduled",
+      "omitted_context_note": "省略遗体留置、预付合同和笔记宣读时间；仅说明延迟的条件性后果，并未授权火化。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_026-t2-1c97cb44187526f7",
+      "original_response": "The reading of the notes is scheduled for later; I'll wait for your notice. If the family's request for a private farewell doesn't involve a public ceremony, can it be arranged within the scope of your authorization, or do we need to wait until the notes clarify matters before deciding?",
+      "checkpoint_text": "Can your authorization cover a private farewell without a public ceremony?",
+      "verbatim_excerpt": false,
+      "source_quote": "The reading of the notes is scheduled for later; I'll wait for your notice. If the family's request for a private farewell doesn't involve a public ceremony, can it be arranged within the scope of your authorization, or do we need to wait until the notes clarify matters before deciding?",
+      "omitted_context_note": "保留私人告别不含公开仪式的限定和授权疑问；省略等待通知及是否须先等笔记澄清的另一选项，并未确认获准。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_026-ending-5c16019bdea12f06",
+      "original_response": "I understand your distinction between preparations, farewell arrangements, and final authorization. Let's continue confirming, one by one, what can be done now and what still needs to wait for the notes.",
+      "checkpoint_text": "I understand how preparations differ from final authorization.",
+      "verbatim_excerpt": false,
+      "source_quote": "I understand your distinction between preparations, farewell arrangements, and final authorization.",
+      "omitted_context_note": "因实测音频超时进一步缩短，聚焦准备与最终授权有别；告别安排以及逐项核对现在可做和须等笔记的要求保留文字，不表示已取得最终授权。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_027-t1-36be768a57974486",
+      "original_response": "I must respect the family's informed consent. But if we do not submit this afternoon, the case will be dismissed as out of time, and they will lose this avenue of relief. Can you complete a confirmation call within two hours so they can explicitly state whether they are willing to submit using the current wording?",
+      "checkpoint_text": "Can you confirm whether the family consents within two hours?",
+      "verbatim_excerpt": false,
+      "source_quote": "Can you complete a confirmation call within two hours so they can explicitly state whether they are willing to submit using the current wording?",
+      "omitted_context_note": "保留两小时内确认家属是否同意的询问；省略下午申报截止及逾期风险，明确未将待确认意愿写成已同意提交。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_027-t2-af491e3e609310a0",
+      "original_response": "I accept confirmation with the family within two hours. But I need to be clear: given that a decision must be made today, how will you ensure that this call does not make the family feel time pressure and thereby affect their autonomous choice?",
+      "checkpoint_text": "How will you avoid pressuring the family's choice during today's call?",
+      "verbatim_excerpt": false,
+      "source_quote": "I accept confirmation with the family within two hours. But I need to be clear: given that a decision must be made today, how will you ensure that this call does not make the family feel time pressure and thereby affect their autonomous choice?",
+      "omitted_context_note": "聚焦避免时间压力损害自主选择；省略已接受两小时内联系的安排，未确认家属已作决定。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_027-ending-c9465b40f7beb7ea",
+      "original_response": "I hear you. Please clarify the confirmation arrangements and the available options if explicit consent is not obtained, and then we can continue the discussion.",
+      "checkpoint_text": "Please clarify our options if explicit consent is not obtained.",
+      "verbatim_excerpt": false,
+      "source_quote": "I hear you. Please clarify the confirmation arrangements and the available options if explicit consent is not obtained, and then we can continue the discussion.",
+      "omitted_context_note": "保留未获得明确同意这一条件；省略确认电话的具体安排和继续讨论的过渡句。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_028-t1-abd919f441411d4c",
+      "original_response": "Understood, she cannot play. But the medical record will directly affect her scholarship renewal—can she be listed as 'pending' rather than 'medically removed' before completing the evaluation, or can you complete the evaluation tonight?",
+      "checkpoint_text": "She cannot play; can we list her as pending?",
+      "verbatim_excerpt": false,
+      "source_quote": "Understood, she cannot play. But the medical record will directly affect her scholarship renewal—can she be listed as 'pending' rather than 'medically removed' before completing the evaluation, or can you complete the evaluation tonight?",
+      "omitted_context_note": "保留不能参赛和待定登记仍是请求；省略奖学金续期影响及今晚完成评估的备选询问，未批准参赛。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_028-t2-a57b589f86448a57",
+      "original_response": "Changing the designation to pending is important. Do you think there is still a way, within tonight's timeframe, to meet medical safety requirements without closing off her opportunity to participate, or are those two goals now impossible to reconcile?",
+      "checkpoint_text": "Can medical safety and her participation opportunity be reconciled tonight?",
+      "verbatim_excerpt": false,
+      "source_quote": "Changing the designation to pending is important. Do you think there is still a way, within tonight's timeframe, to meet medical safety requirements without closing off her opportunity to participate, or are those two goals now impossible to reconcile?",
+      "omitted_context_note": "保留今晚、医疗安全和参赛机会能否兼容的疑问；省略待定标签的重要性，未宣称已找到安全参赛方案。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_028-ending-089ee3d92ad988aa",
+      "original_response": "I understand. Is there still a chance tonight to find a way to reconcile medical safety with her opportunity to participate?",
+      "checkpoint_text": "Can we reconcile safety and her participation opportunity tonight?",
+      "verbatim_excerpt": false,
+      "source_quote": "I understand. Is there still a chance tonight to find a way to reconcile medical safety with her opportunity to participate?",
+      "omitted_context_note": "将寻找兼顾医疗安全与参赛机会的办法压缩成疑问；省略开头理解回应，不表示已经获得参赛许可。 完整原回复保留为文字，旧视频版本不覆盖。 Cross-review correction retains the original signature condition, follow-up sequence, or dispatch timing.",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_029-t1-4cac8f96b372fab1",
+      "original_response": "I can participate in the review, provided you first provide the full impact analysis and rollback verification results, including the number of affected lease instances, the expected recovery time window, and the rollback trigger conditions. These are necessary for me to assess the risk and authorize the release.",
+      "checkpoint_text": "I can review once full impact and rollback evidence arrives.",
+      "verbatim_excerpt": false,
+      "source_quote": "I can participate in the review, provided you first provide the full impact analysis and rollback verification results, including the number of affected lease instances, the expected recovery time window, and the rollback trigger conditions.",
+      "omitted_context_note": "保留先取得完整影响分析和回滚验证结果的前提；省略受影响实例数、恢复时间和回滚触发条件的明细，不表示已授权发布。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_029-t2-1b39a3d1a1e85bb7",
+      "original_response": "I acknowledge your commitment. I'll review the complete materials as soon as I receive them, but as a volunteer maintainer I can't promise a specific time window. If your production window has a hard deadline, please tell me now; we need to confirm whether this path is feasible within that timeframe.",
+      "checkpoint_text": "As a volunteer maintainer, I can't promise a specific time window.",
+      "verbatim_excerpt": false,
+      "source_quote": "as a volunteer maintainer I can't promise a specific time window.",
+      "omitted_context_note": "保留无法承诺审阅时段；省略收到完整材料后尽快审阅及询问生产硬截止时间，并非拒绝审阅。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_029-ending-2eade6802a6f1277",
+      "original_response": "I acknowledge your commitment. I'll review the complete materials as soon as I receive them, but as a volunteer maintainer I can't promise a specific time window. If your production window has a hard deadline, please tell me now; we need to confirm whether this path is feasible within that timeframe.",
+      "checkpoint_text": "As a volunteer maintainer, I can't promise a specific time window.",
+      "verbatim_excerpt": false,
+      "source_quote": "as a volunteer maintainer I can't promise a specific time window.",
+      "omitted_context_note": "与本节点相同原回复保持一致；省略收到完整材料后尽快审阅及硬截止可行性核对，并非拒绝审阅。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_030-t1-0bed1e41bdca9d2f",
+      "original_response": "I agree with all four points. Delay the poster release, keep Mina's role unchanged, and make the written plan as you described. Temporary changes must be confirmed first; the stage manager will enforce this during the evening rehearsal, and nobody, including the lead actors, can bypass it.",
+      "checkpoint_text": "Temporary changes must be confirmed first; nobody can bypass that.",
+      "verbatim_excerpt": false,
+      "source_quote": "Temporary changes must be confirmed first; the stage manager will enforce this during the evening rehearsal, and nobody, including the lead actors, can bypass it.",
+      "omitted_context_note": "保留临时变更须先确认且无人例外；省略推迟海报、保留Mina角色、书面计划及舞台经理执行细节。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_030-t2-e0210171e32e2e8f",
+      "original_response": "Agreed. Give Mina the written plan to review, and stop to correct any discrepancies found during rehearsal.",
+      "checkpoint_text": "Stop to correct any discrepancies found during rehearsal.",
+      "verbatim_excerpt": false,
+      "source_quote": "stop to correct any discrepancies found during rehearsal.",
+      "omitted_context_note": "原文连续分句独立成句，仅首字母与结尾标点调整；省略先把书面计划交Mina审阅的安排。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_030-ending-b455f1eb50154079",
+      "original_response": "Agreed. Give Mina the written plan to review, and stop to correct any discrepancies found during rehearsal.",
+      "checkpoint_text": "Stop to correct any discrepancies found during rehearsal.",
+      "verbatim_excerpt": false,
+      "source_quote": "stop to correct any discrepancies found during rehearsal.",
+      "omitted_context_note": "与本节点相同原回复保持一致；连续分句独立成句，省略交Mina审阅书面计划，不表示可忽略其审核。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_031-t1-bbc4995ad9250b6f",
+      "original_response": "I accept the transfer recommendation. Your handoff document needs to include the progress observations and the two risks you just mentioned. Before approving, I will check whether the document is complete.",
+      "checkpoint_text": "Before approving, I will check whether the document is complete.",
+      "verbatim_excerpt": true,
+      "source_quote": "Before approving, I will check whether the document is complete.",
+      "omitted_context_note": "原文完整一句；省略接受转移建议、进展观察及两项风险须写入交接文件，保留审批前核查条件。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_031-t2-6c5cc50082dc2ea0",
+      "original_response": "The document is written as required. Since the vaccine date has not been verified, I need to weigh this: should I complete the transfer using the existing records and marking it as 'unknown,' or first contact the previous shelter to verify it before approving?",
+      "checkpoint_text": "Should we mark the vaccine date unknown or verify it first?",
+      "verbatim_excerpt": false,
+      "source_quote": "The document is written as required. Since the vaccine date has not been verified, I need to weigh this: should I complete the transfer using the existing records and marking it as 'unknown,' or first contact the previous shelter to verify it before approving?",
+      "omitted_context_note": "保留疫苗日期未核实及两个选项仍待权衡；省略向原收容所核实的途径，未确认日期或批准转移。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_031-ending-d01e5343e268924e",
+      "original_response": "I am still weighing how to handle the unverified items: proceed based on the existing records marked as unknown, or contact the previous shelter to verify them before approving.",
+      "checkpoint_text": "I'm still weighing whether to proceed or verify those unknowns first.",
+      "verbatim_excerpt": false,
+      "source_quote": "I am still weighing how to handle the unverified items: proceed based on the existing records marked as unknown, or contact the previous shelter to verify them before approving.",
+      "omitted_context_note": "保留仍在权衡的状态和先核实的选项；省略现有记录标为未知及联系原收容所的细节，未作出批准决定。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_032-t1-4c3fbc9e9b2e76dd",
+      "original_response": "I agree. Do you have recent cash flow records and current inventory information on hand? Those will help me assess short-term repayment capacity.",
+      "checkpoint_text": "Do you have recent cash flow records and current inventory information?",
+      "verbatim_excerpt": false,
+      "source_quote": "Do you have recent cash flow records and current inventory information on hand?",
+      "omitted_context_note": "压缩原文询问并保留近期现金流和当前库存两类材料；省略同意回应及评估短期偿债能力的用途。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_032-t2-80fd625f3a19e871",
+      "original_response": "Good, then send them to me as soon as possible. When do you expect to have these two sets of materials ready?",
+      "checkpoint_text": "Good, then send them to me as soon as possible.",
+      "verbatim_excerpt": true,
+      "source_quote": "Good, then send them to me as soon as possible.",
+      "omitted_context_note": "原文完整一句；省略询问两套材料何时齐备，them仍指完整文字中明确的现金流和库存资料。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_032-ending-f68298bd8107007b",
+      "original_response": "Good, then send them to me as soon as possible. When do you expect to have these two sets of materials ready?",
+      "checkpoint_text": "Good, then send them to me as soon as possible.",
+      "verbatim_excerpt": true,
+      "source_quote": "Good, then send them to me as soon as possible.",
+      "omitted_context_note": "与本节点相同原回复保持一致，保留原文完整一句；省略材料就绪时间的追问。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_033-t1-656178260b52fa06",
+      "original_response": "We can initiate an emergency review. The review will verify the assessment of vulnerability and the basis for informational value, while also confirming that crate allocation and provenance records are completed before shipment; you need to list these two reasons for each item of remains in your application.",
+      "checkpoint_text": "We can initiate an emergency review; please justify each item.",
+      "verbatim_excerpt": false,
+      "source_quote": "We can initiate an emergency review. The review will verify the assessment of vulnerability and the basis for informational value, while also confirming that crate allocation and provenance records are completed before shipment; you need to list these two reasons for each item of remains in your application.",
+      "omitted_context_note": "保留可以启动审查而非已经通过；省略每项遗存的脆弱性和信息价值两项理由、装箱分配及来源记录的详细要求。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_033-t2-96c95378e569058d",
+      "original_response": "Securing remains on site requires location photographs and numbered labels; authorized removal from the site requires passing the emergency review, registration photographs after packing, and an attached record of review approval. Detached fragments may be listed separately, but their spatial relationship to their original locations must also be explained.",
+      "checkpoint_text": "Authorized removal requires passing review, packing photographs, and an approval record.",
+      "verbatim_excerpt": false,
+      "source_quote": "Securing remains on site requires location photographs and numbered labels; authorized removal from the site requires passing the emergency review, registration photographs after packing, and an attached record of review approval. Detached fragments may be listed separately, but their spatial relationship to their original locations must also be explained.",
+      "omitted_context_note": "保留移出现场须通过审查并附装箱照片、批准记录；省略现场加固的位置照片、编号以及碎片空间关系要求。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_033-ending-9fdfcbf7bc63a732",
+      "original_response": "Securing remains on site requires location photographs and numbers; authorized removal still requires passing the emergency review, with packing photographs and approval records attached. You may continue submitting the list, and we will check the items one by one.",
+      "checkpoint_text": "Removal still requires passing review, with packing photographs and approval records.",
+      "verbatim_excerpt": false,
+      "source_quote": "Securing remains on site requires location photographs and numbers; authorized removal still requires passing the emergency review, with packing photographs and approval records attached. You may continue submitting the list, and we will check the items one by one.",
+      "omitted_context_note": "保留移出须审查通过的前提；省略现场定位照片、编号、继续交清单及逐项核验，未把提交清单视为获准。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_034-t1-8687e45b12066051",
+      "original_response": "I agree to classroom use. There isn't time to review them, so remove the disputed recordings for now and put them back after review. The attribution must say on what occasion the recordings were provided, not just list names.",
+      "checkpoint_text": "Remove the disputed recordings for now and restore them after review.",
+      "verbatim_excerpt": false,
+      "source_quote": "There isn't time to review them, so remove the disputed recordings for now and put them back after review.",
+      "omitted_context_note": "保留暂时移除争议录音及审阅后恢复的先后关系；省略课堂使用认可和署名须解释提供场合的要求。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_034-t2-c6726c7b1fe0d596",
+      "original_response": "Okay. I will list the conditions of use for those recordings separately, so teachers can see when they receive the materials which content needs background explained before playback.",
+      "checkpoint_text": "I will list the recordings' conditions of use separately for teachers.",
+      "verbatim_excerpt": false,
+      "source_quote": "Okay. I will list the conditions of use for those recordings separately, so teachers can see when they receive the materials which content needs background explained before playback.",
+      "omitted_context_note": "保留单独列明录音使用条件；省略教师领取材料后识别哪些内容须先解释背景的用途。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_034-ending-973f101673c8e1ba",
+      "original_response": "Okay. I will list the conditions of use for those recordings separately, so teachers can see when they receive the materials which content needs background explained before playback.",
+      "checkpoint_text": "I will list the recordings' conditions of use separately for teachers.",
+      "verbatim_excerpt": false,
+      "source_quote": "Okay. I will list the conditions of use for those recordings separately, so teachers can see when they receive the materials which content needs background explained before playback.",
+      "omitted_context_note": "与本节点相同原回复保持一致；省略播放前背景解释的详细用途，并未宣布录音已无条件获准使用。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_035-t1-a51835dc1c8e3a73",
+      "original_response": "Understood. I’ll preserve both crews’ exact words in the record and begin cross-checking the recorder data. I’ll finish within 75 minutes and notify you. Until then, I won’t endorse passenger release.",
+      "checkpoint_text": "Until the data check finishes, I won't endorse passenger release.",
+      "verbatim_excerpt": false,
+      "source_quote": "Understood. I’ll preserve both crews’ exact words in the record and begin cross-checking the recorder data. I’ll finish within 75 minutes and notify you. Until then, I won’t endorse passenger release.",
+      "omitted_context_note": "保留核对完成前不支持放行旅客；省略保存两组原话、75分钟时限及完成后通知，不把核对中的证据写成已验证。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_035-t2-b148865ffa892a75",
+      "original_response": "Understood. The comprehensive assessment will consider the recorder data and crew statements side by side. I’m starting the cross-check now and will notify you directly when it’s complete.",
+      "checkpoint_text": "I'll compare recorder data and crew statements, then notify you.",
+      "verbatim_excerpt": false,
+      "source_quote": "Understood. The comprehensive assessment will consider the recorder data and crew statements side by side. I’m starting the cross-check now and will notify you directly when it’s complete.",
+      "omitted_context_note": "保留记录器数据与机组陈述对照及完成后通知；省略综合评估的说明，不表示核对已经完成或允许放行。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_035-ending-19a352bcdb29586f",
+      "original_response": "I understand your assessment recommendation. I’ll check the data first, and we can discuss it once the results are available.",
+      "checkpoint_text": "I'll check the data first; we can discuss the results afterward.",
+      "verbatim_excerpt": false,
+      "source_quote": "I understand your assessment recommendation. I’ll check the data first, and we can discuss it once the results are available.",
+      "omitted_context_note": "保留先核查、结果可用后再讨论；省略理解评估建议的开头，不把可讨论改成批准或既定结论。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_036-t1-161242ce4a441aed",
+      "original_response": "I can sign off on technical quality. For the broad claims, I need to see the specific description—if it goes beyond the validated scope, I will mark which parts are inferences. Is the filing you mentioned a provisional or a formal application?",
+      "checkpoint_text": "I'll mark any claims beyond the validated scope as inferences.",
+      "verbatim_excerpt": false,
+      "source_quote": "For the broad claims, I need to see the specific description—if it goes beyond the validated scope, I will mark which parts are inferences.",
+      "omitted_context_note": "保留超出已验证范围的主张须标为推论；省略技术质量可签字及申报属临时还是正式申请的询问。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_036-t2-49fa8ddba8314edd",
+      "original_response": "All right, I will look at the description now; once I have finished annotating it, I will send it to you for confirmation, and if everything is confirmed to be correct, I will sign off on technical quality.",
+      "checkpoint_text": "If everything is confirmed correct, I'll sign off on technical quality.",
+      "verbatim_excerpt": false,
+      "source_quote": "if everything is confirmed to be correct, I will sign off on technical quality.",
+      "omitted_context_note": "明确保留确认无误后才签技术质量的条件；省略先阅说明、作注释、发给对方确认的流程，不表示已经签字。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_036-ending-23b141e8dca0afa2",
+      "original_response": "All right, I will look at the description now; once I have finished annotating it, I will send it to you for confirmation, and if everything is confirmed to be correct, I will sign off on technical quality.",
+      "checkpoint_text": "If everything is confirmed correct, I'll sign off on technical quality.",
+      "verbatim_excerpt": false,
+      "source_quote": "if everything is confirmed to be correct, I will sign off on technical quality.",
+      "omitted_context_note": "与本节点相同原回复保持一致；省略审阅和注释流程，保留确认无误这一签字前提。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_037-t1-cf9ea8e594d8ce14",
+      "original_response": "All right, then let’s pause. When can you explain the scope, permanence, and identifying details to them, and then let me know the outcome?",
+      "checkpoint_text": "When can you explain the scope, permanence, and identifying details?",
+      "verbatim_excerpt": false,
+      "source_quote": "When can you explain the scope, permanence, and identifying details to them, and then let me know the outcome?",
+      "omitted_context_note": "保留需要解释范围、永久性及可识别信息的时间询问；省略先暂停、向当事人说明及反馈结果，不表示已取得同意。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_037-t2-a9fb64eddd2353d0",
+      "original_response": "Thank you. When you have their answer, let me know and we'll take the next step from there.",
+      "checkpoint_text": "When you have their answer, let me know the outcome.",
+      "verbatim_excerpt": false,
+      "source_quote": "When you have their answer, let me know and we'll take the next step from there.",
+      "omitted_context_note": "保留先得到当事人答复再通知的顺序；省略感谢及随后再推进的说明，未推断当事人将同意。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_037-ending-8b91402a5694ff8d",
+      "original_response": "Thanks. When you have spoken with them, let me know what they say, and we’ll consider the next step.",
+      "checkpoint_text": "After you've spoken with them, let me know their answer.",
+      "verbatim_excerpt": false,
+      "source_quote": "When you have spoken with them, let me know what they say, and we’ll consider the next step.",
+      "omitted_context_note": "保留与当事人交谈并报告答复；省略感谢及再考虑下一步，未预设答复内容或同意状态。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_038-t1-459c0eb865db068c",
+      "original_response": "The list does establish forced acquisition. The risk is that the shot shows a family member holding it, which connects that household to the discovery. Can the scene frame the document itself without including the person?",
+      "checkpoint_text": "Can the scene frame the document itself without including the person?",
+      "verbatim_excerpt": true,
+      "source_quote": "Can the scene frame the document itself without including the person?",
+      "omitted_context_note": "原文完整一句；省略文书证明强制取得及画面关联该家庭的风险说明，保留只拍文件的询问。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_038-t2-f3e78005bf8792ff",
+      "original_response": "That framing removes the household risk. The audio is the next piece—if it names the relative or describes the location, we'd need to address that before you take it to the funder.",
+      "checkpoint_text": "If audio identifies the relative or location, we must address it.",
+      "verbatim_excerpt": false,
+      "source_quote": "That framing removes the household risk. The audio is the next piece—if it names the relative or describes the location, we'd need to address that before you take it to the funder.",
+      "omitted_context_note": "保留音频暴露亲属或地点时才须处理的条件；省略已解决画面风险及交资助方之前的时间要求，不宣称音频已确认泄露。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_038-ending-4e1beb4abcd10134",
+      "original_response": "The document-only framing addresses the household exposure I raised. Before we take the version further, we still need to settle whether the audio names the relative or describes the location.",
+      "checkpoint_text": "We still need to check audio for names or location details.",
+      "verbatim_excerpt": false,
+      "source_quote": "The document-only framing addresses the household exposure I raised. Before we take the version further, we still need to settle whether the audio names the relative or describes the location.",
+      "omitted_context_note": "保留音频是否暴露亲属姓名或地点仍待核查；省略只拍文件已处理画面暴露的说明，未把待核查写成安全确认。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_039-t1-0085851ae06aa579",
+      "original_response": "I'll bring the couple into this decision now. The redacted summary is sufficient for me to understand the concern, and I agree we need a written response from Naranj House before the cancellation window closes.",
+      "checkpoint_text": "I'll bring the couple into this decision now.",
+      "verbatim_excerpt": true,
+      "source_quote": "I'll bring the couple into this decision now.",
+      "omitted_context_note": "原文完整一句；省略删节摘要足以说明问题、以及取消窗口关闭前需书面答复的安排。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_039-t2-e0b3e71364d7bfbc",
+      "original_response": "I'll contact them this afternoon with the redacted summary and ask them to join the decision about requesting a written response from Naranj House.",
+      "checkpoint_text": "I'll contact them this afternoon using the redacted summary.",
+      "verbatim_excerpt": false,
+      "source_quote": "I'll contact them this afternoon with the redacted summary",
+      "omitted_context_note": "为改善ASR，将with the改成语义等同的using the；保留今天下午联系及使用删节摘要。省略请二人参与是否要求场地方书面回复的决定，未替他们作出决定。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_039-ending-578bc4b367410bf7",
+      "original_response": "Understood. Let's keep the written safety response and cancellation-authority question separate while we work out who should be involved next.",
+      "checkpoint_text": "Let's keep the safety response separate from the cancellation authority question.",
+      "verbatim_excerpt": false,
+      "source_quote": "Understood. Let's keep the written safety response and cancellation-authority question separate while we work out who should be involved next.",
+      "omitted_context_note": "保留安全回复与取消授权问题须区分；省略继续讨论下一步参与者，未声称已确定取消权限。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_040-t1-ec536ce2a66dcb53",
+      "original_response": "Targeted limits around spawning boundaries work with the data we have, and tying enforcement and relief to the same standard answers the equity failure directly. The gap I need to name now is the missing western transect—verification coverage will have a documented blind spot until we complete that survey leg.",
+      "checkpoint_text": "Verification has a blind spot until we complete the western transect.",
+      "verbatim_excerpt": false,
+      "source_quote": "The gap I need to name now is the missing western transect—verification coverage will have a documented blind spot until we complete that survey leg.",
+      "omitted_context_note": "保留西侧样线未完成导致核验盲区；省略产卵边界限制和执法救济统一标准，未补造西侧证据。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_040-t2-a88d59a58deccd8a",
+      "original_response": "That works—we label the western coverage gap explicitly in any recommendation, and enforcement starts only when relief is accessible. The practical question now is whether we can complete the western transect before the commission deadline, or whether we document it as a known limitation and proceed with the areas we've verified.",
+      "checkpoint_text": "Enforcement starts only when relief is accessible, with western gaps documented.",
+      "verbatim_excerpt": false,
+      "source_quote": "That works—we label the western coverage gap explicitly in any recommendation, and enforcement starts only when relief is accessible.",
+      "omitted_context_note": "保留救济可获得后才执法及明确记录西侧缺口；省略赶在截止前完成调查还是带限制推进的未决选择。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_040-ending-a0ab2d3ec5e3d7a4",
+      "original_response": "Let's put the western coverage gap and the next step before the deadline on the record, then decide how to frame the recommendation.",
+      "checkpoint_text": "Let's record the western gap before deciding how to frame recommendations.",
+      "verbatim_excerpt": false,
+      "source_quote": "Let's put the western coverage gap and the next step before the deadline on the record, then decide how to frame the recommendation.",
+      "omitted_context_note": "保留先记下缺口再决定建议表述；省略截止前下一步也须记录，未说缺口已经补齐或建议已定稿。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_041-t1-7e393a330b7b5f43",
+      "original_response": "Placement is authorized for tonight, and we'll review it after the interpreter visit and school contact tomorrow as you've outlined. When we document this, should I note that we're securing Jun while the family gets language-accessible fact-finding, or frame it differently?",
+      "checkpoint_text": "We'll review after tomorrow's interpreter visit and school contact.",
+      "verbatim_excerpt": false,
+      "source_quote": "Placement is authorized for tonight, and we'll review it after the interpreter visit and school contact tomorrow as you've outlined.",
+      "omitted_context_note": "因实测音频超时进一步缩短，保留仅今晚安置已获授权及明日复核；复核在口译访问和学校联系之后、记录如何表述等细节保留文字，不表示长期安置获准。 完整原回复保留为文字，旧视频版本不覆盖。 Cross-review correction retains the original signature condition, follow-up sequence, or dispatch timing.",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_041-t2-4f25f56ea5f1f6dc",
+      "original_response": "That follow-up works—it'll give us a concrete basis for the review. Should I expect your recommendation by end-of-day tomorrow, or do you need the weekend to coordinate with the school and interpreter before we decide whether to extend placement or transition to supervised family care?",
+      "checkpoint_text": "Should your recommendation arrive tomorrow, or do you need the weekend?",
+      "verbatim_excerpt": false,
+      "source_quote": "That follow-up works—it'll give us a concrete basis for the review. Should I expect your recommendation by end-of-day tomorrow, or do you need the weekend to coordinate with the school and interpreter before we decide whether to extend placement or transition to supervised family care?",
+      "omitted_context_note": "保留建议时间仍待确认和周末协调的选项；省略决定延长安置还是转为监督下家庭照护的后续事项。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_041-ending-077f0e6f666df889",
+      "original_response": "That follow-up works—it'll give us a concrete basis for the review. Should I expect your recommendation by end-of-day tomorrow, or do you need the weekend to coordinate with the school and interpreter before we decide whether to extend placement or transition to supervised family care?",
+      "checkpoint_text": "Should your recommendation arrive tomorrow, or do you need the weekend?",
+      "verbatim_excerpt": false,
+      "source_quote": "That follow-up works—it'll give us a concrete basis for the review. Should I expect your recommendation by end-of-day tomorrow, or do you need the weekend to coordinate with the school and interpreter before we decide whether to extend placement or transition to supervised family care?",
+      "omitted_context_note": "与本节点相同原回复保持一致；省略学校和口译协调用途及安置方式选择，未提前作出安置决定。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_042-t1-ecd7a574c8cb6f66",
+      "original_response": "I'll acknowledge the exposure in tomorrow's statement to the board and affected families. Anonymous entry stays, and if we can't verify the safety plan with the insurer by four this afternoon, we reschedule and notify registrants by five.",
+      "checkpoint_text": "If we can't verify the safety plan by four, we'll reschedule.",
+      "verbatim_excerpt": false,
+      "source_quote": "Anonymous entry stays, and if we can't verify the safety plan with the insurer by four this afternoon, we reschedule and notify registrants by five.",
+      "omitted_context_note": "保留四点前未能核实安全方案才改期；省略与保险方核实、匿名登记保留、公开说明及五点前通知的细节。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_042-t2-9c8705679e07c226",
+      "original_response": "Agreed. I'll post a schedule update on the main page and our social channels now, and if we reschedule, that update will go out by five along with direct notification.",
+      "checkpoint_text": "If we reschedule, we'll send direct notifications by five.",
+      "verbatim_excerpt": false,
+      "source_quote": "Agreed. I'll post a schedule update on the main page and our social channels now, and if we reschedule, that update will go out by five along with direct notification.",
+      "omitted_context_note": "保留改期仍是条件及五点前直接通知；省略现时主页和社交渠道更新，不宣称已经决定改期。 完整原回复保留为文字，旧视频版本不覆盖。 Cross-review correction retains the original signature condition, follow-up sequence, or dispatch timing.",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_042-ending-334bd79a4d294098",
+      "original_response": "I hear the concern. Let's keep working through the next steps.",
+      "checkpoint_text": "I hear the concern; let's keep working through the next steps.",
+      "verbatim_excerpt": false,
+      "source_quote": "I hear the concern. Let's keep working through the next steps.",
+      "omitted_context_note": "仅把原文两句合为一个自然复句；没有增加新的安排、结论或承诺。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_043-t1-bb31412e2526ebf7",
+      "original_response": "I'll file the report before five with the repair-shop records and message timeline identified. Should I frame it as a chronological narrative of the technical decisions and communications, or do you want me to explicitly call out what students thought was allowed versus what the rules actually prohibited?",
+      "checkpoint_text": "I'll file the report before five, citing those records.",
+      "verbatim_excerpt": false,
+      "source_quote": "I'll file the report before five with the repair-shop records and message timeline identified.",
+      "omitted_context_note": "为改善ASR改为简短的citing those records，保留五点前提交报告。records指原文的维修店记录及消息时间线，仅表示引用材料，不声称维修已完成或其结论已获核实；后续叙述方式询问保留文字。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_043-t2-3fbf4aa7eb920c54",
+      "original_response": "I'll include the explicit understanding-versus-rule distinction in the chronology and cite the records to show the decision sequence while preserving the provisional status and framing any remedy as a request. Should I name the individuals who authorized or performed each step, or describe the communication pattern and roles without individual attribution?",
+      "checkpoint_text": "I'll preserve provisional status and frame any remedy as a request.",
+      "verbatim_excerpt": false,
+      "source_quote": "I'll include the explicit understanding-versus-rule distinction in the chronology and cite the records to show the decision sequence while preserving the provisional status and framing any remedy as a request.",
+      "omitted_context_note": "保留临时状态及补救只能表述为请求；省略时间顺序、材料引用和个人姓名或角色归属的未决询问。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_043-ending-54699b49941f5a20",
+      "original_response": "I will organize the chronology around the records. How would you like me to identify the decision-making and execution roles?",
+      "checkpoint_text": "I will organize the chronology around the records.",
+      "verbatim_excerpt": true,
+      "source_quote": "I will organize the chronology around the records.",
+      "omitted_context_note": "原文完整一句；省略如何标明决策和执行角色的追问，未预先分配个人责任。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_044-t1-001a5d027e145590",
+      "original_response": "Juniper Hall will close at 7:28 p.m., limited to voters affected by the tabulator failure that began at 6:18, and all machine logs and site records are being preserved for the scheduled judicial review.",
+      "checkpoint_text": "Only voters affected by the tabulator failure qualify for extended hours.",
+      "verbatim_excerpt": false,
+      "source_quote": "Juniper Hall will close at 7:28 p.m., limited to voters affected by the tabulator failure that began at 6:18, and all machine logs and site records are being preserved for the scheduled judicial review.",
+      "omitted_context_note": "保留延时适用人群仅限受计票机故障影响的选民；精确7:28关门、6:18故障起始和证据保存仍保留完整文字。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_044-t2-69cd28f381c559b2",
+      "original_response": "That covers the immediate need and the coordination boundary we both needed, and I'll issue the formal notice now with that same scope and timing.",
+      "checkpoint_text": "I'll issue the formal notice now with that same scope and timing.",
+      "verbatim_excerpt": true,
+      "source_quote": "I'll issue the formal notice now with that same scope and timing.",
+      "omitted_context_note": "原文连续完整主句；省略即时需要及协调边界已经满足的说明，that仍指原文约定范围与时间。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 12
+    },
+    {
+      "node_id": "GPT50_044-ending-37a6ae8ef5a6b4ab",
+      "original_response": "I hear your position. Let's continue to make the public wording and agreed scope clear.",
+      "checkpoint_text": "Let's continue to make the public wording and agreed scope clear.",
+      "verbatim_excerpt": true,
+      "source_quote": "Let's continue to make the public wording and agreed scope clear.",
+      "omitted_context_note": "原文完整一句；省略理解立场的开头，未扩张约定范围。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_045-t1-1ffb01d404480385",
+      "original_response": "That's workable. I'll draft language that explicitly names those three points—review status, not enrollment, and unresolved eligibility and risk—and send it to you for approval before six.",
+      "checkpoint_text": "Review isn't enrollment; eligibility and risks remain unresolved.",
+      "verbatim_excerpt": false,
+      "source_quote": "I'll draft language that explicitly names those three points—review status, not enrollment, and unresolved eligibility and risk—and send it to you for approval before six.",
+      "omitted_context_note": "因实测音频超时进一步缩短，保留审查不等于入组以及资格和风险尚未解决；草稿撰写、六点前发出并请对方批准的流程保留文字，不表示已获批准。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_045-t2-ff44aea545bd220c",
+      "original_response": "Company attribution will be clear in every version. Given the six o'clock window, should I expect your review answer by five-thirty, or do you need the draft earlier to allow time for any needed revision?",
+      "checkpoint_text": "Company attribution will be clear in every version.",
+      "verbatim_excerpt": true,
+      "source_quote": "Company attribution will be clear in every version.",
+      "omitted_context_note": "原文完整一句；省略五点半反馈或更早草稿的时间询问，不替对方承诺审核完成时间。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 8
+    },
+    {
+      "node_id": "GPT50_045-ending-35f02a9990c87313",
+      "original_response": "Company attribution will be clear. I will send the draft first; when can you provide your comments?",
+      "checkpoint_text": "I will send the draft first; when can you provide your comments?",
+      "verbatim_excerpt": true,
+      "source_quote": "I will send the draft first; when can you provide your comments?",
+      "omitted_context_note": "原文完整一句；省略公司署名会清楚的上一句，保留先给草稿再询问意见时间。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 12
+    },
+    {
+      "node_id": "GPT50_046-t1-f7342e2c8ba59660",
+      "original_response": "By five I can tell you whether the applicant meets our documented eligibility criteria for non-donor scholarships, and I can outline the timeline for getting counsel clearance on the donor-funded option. I can't commit the donor scholarship itself until we have that legal review, but I can give you a clear picture of what aid paths are available now versus what requires the additional step.",
+      "checkpoint_text": "I can't commit the donor scholarship before the required legal review.",
+      "verbatim_excerpt": false,
+      "source_quote": "I can't commit the donor scholarship itself until we have that legal review",
+      "omitted_context_note": "保留捐赠奖学金须先法律审查、目前不能承诺；省略五点提供非捐赠奖学金资格和审查时间线的安排。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_046-t2-2809d3b09e7bcf71",
+      "original_response": "Understood—the five o'clock update will show the donor-funded option as provisional pending counsel review. After your admission decision is final, we'll coordinate on what aid can be confirmed.",
+      "checkpoint_text": "The donor option remains provisional, pending review by legal counsel.",
+      "verbatim_excerpt": false,
+      "source_quote": "Understood—the five o'clock update will show the donor-funded option as provisional pending counsel review.",
+      "omitted_context_note": "保留捐赠资助仍是待律师审查的临时选项；省略五点更新和入学决定完成后协调确认资助的步骤。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_046-ending-3ed3d12eccdf7c72",
+      "original_response": "Let’s keep the five o’clock update within what the current review supports, and we can discuss how to describe the pending option.",
+      "checkpoint_text": "Let's keep the update within what the current review supports.",
+      "verbatim_excerpt": false,
+      "source_quote": "Let’s keep the five o’clock update within what the current review supports, and we can discuss how to describe the pending option.",
+      "omitted_context_note": "保留更新不能超出当前审查支持范围；省略五点时限及如何描述待审选项仍可讨论。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_047-t1-8b2d4157ee5f811d",
+      "original_response": "The proxy delivery stays in, and I'll add a phone alternative for the homebound route. The notice will describe the overall shortfall without claiming we can distinguish documented losses from unlogged handoffs—our current log doesn't track that separation.",
+      "checkpoint_text": "Our log can't distinguish documented losses from unlogged handoffs.",
+      "verbatim_excerpt": false,
+      "source_quote": "The notice will describe the overall shortfall without claiming we can distinguish documented losses from unlogged handoffs—our current log doesn't track that separation.",
+      "omitted_context_note": "保留日志无法区分已记录损失与未记录交接的证据限制；省略代理领取保留、居家路线电话替代及通知整体短缺的安排。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_047-t2-492837b86069a82f",
+      "original_response": "Agreed—the audit scope will include phone access and volunteer workload alongside the main delivery review. Without your approval on the new checks, the notice will describe the inventory shortfall and the existing proxy procedures, not announce a tightened requirement.",
+      "checkpoint_text": "Without your approval, the notice won't announce a tightened requirement.",
+      "verbatim_excerpt": false,
+      "source_quote": "Without your approval on the new checks, the notice will describe the inventory shortfall and the existing proxy procedures, not announce a tightened requirement.",
+      "omitted_context_note": "保留未获对方批准前不得宣布收紧要求；省略电话可及性、志愿者负担的审计范围和现有代理程序。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_047-ending-7374f0fc9601474b",
+      "original_response": "I hear your position. The notice wording and audit scope are still on the table; what should we clarify next?",
+      "checkpoint_text": "The notice wording and audit scope still need further discussion.",
+      "verbatim_excerpt": false,
+      "source_quote": "I hear your position. The notice wording and audit scope are still on the table; what should we clarify next?",
+      "omitted_context_note": "保留通知措辞和审计范围尚未定案；省略理解立场及具体下一项澄清的开放询问。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_048-t1-68355e91c3b307c9",
+      "original_response": "The housing issue is legitimate, and I won't ask you to endorse arrangements you can't verify. Without the acknowledgment by five, the fund will likely reassign the award and the contractor will release the schedule—so we need to decide whether Monday mobilization is off the table or whether there's a verification path that could still support it.",
+      "checkpoint_text": "I won't ask you to endorse arrangements you can't verify.",
+      "verbatim_excerpt": true,
+      "source_quote": "I won't ask you to endorse arrangements you can't verify.",
+      "omitted_context_note": "原文连续完整主句；省略住房问题认可、五点前缺确认可能失去资助和档期的风险，以及周一开工仍待决定。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_048-t2-0c18ee7caff1dedd",
+      "original_response": "I can accept that condition and recommend the partial mobilization to the contractor - exterior and non-occupancy work can begin Monday while the housing verification proceeds. That preserves the grant timeline without requiring your acknowledgment of unverified arrangements.",
+      "checkpoint_text": "Exterior work can begin Monday while housing checks continue.",
+      "verbatim_excerpt": false,
+      "source_quote": "I can accept that condition and recommend the partial mobilization to the contractor - exterior and non-occupancy work can begin Monday while the housing verification proceeds.",
+      "omitted_context_note": "因实测音频超时进一步缩短，口播只取原授权范围中的外部工程，并保留住房仍在核实；不涉及入住的其他工程范围、向承包方推荐及拨款时限解释保留文字，不扩展为全部工程获准。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_048-ending-4591c612dc257b8e",
+      "original_response": "I understand your scope condition. I will check with the contractor what work can proceed under the current conditions and report back.",
+      "checkpoint_text": "I'll check what work the contractor can do under current conditions.",
+      "verbatim_excerpt": false,
+      "source_quote": "I will check with the contractor what work can proceed under the current conditions and report back.",
+      "omitted_context_note": "保留须向承包方核查当前条件允许的工作；省略理解范围条件和随后反馈，不写成承包方已确认可施工。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_049-t1-ed31b0222a3638b4",
+      "original_response": "I'll use the queue mapping and peer accounts in the file, restore the risk-note caveats, and clarify that the mentoring assignment carried no authority over priorities or staffing. The retrospective will verify the coordination record before the panel.",
+      "checkpoint_text": "I'll clarify that mentoring carried no authority over priorities or staffing.",
+      "verbatim_excerpt": false,
+      "source_quote": "I'll use the queue mapping and peer accounts in the file, restore the risk-note caveats, and clarify that the mentoring assignment carried no authority over priorities or staffing.",
+      "omitted_context_note": "保留导师任务不赋予优先级和人员配置权；省略队列资料、同伴叙述、恢复风险备注及评审前核验。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_049-t2-1d96111651f86f45",
+      "original_response": "The file will state that priority and staffing authority remained with me, and that your coordination scope covered handoff sequencing, escalation routing, and coverage decisions within the mentoring assignment. I'll use the retrospective accounts to verify which operational choices were yours.",
+      "checkpoint_text": "I'll check which operational choices were yours using records.",
+      "verbatim_excerpt": false,
+      "source_quote": "The file will state that priority and staffing authority remained with me, and that your coordination scope covered handoff sequencing, escalation routing, and coverage decisions within the mentoring assignment. I'll use the retrospective accounts to verify which operational choices were yours.",
+      "omitted_context_note": "因实测音频超时进一步缩短，聚焦依据记录核实哪些操作选择属于对方，未把责任归属写成已核实；优先级和人员配置权归管理者、导师任务中的具体协调范围保留文字。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 9
+    },
+    {
+      "node_id": "GPT50_049-ending-b31610159e00ebf9",
+      "original_response": "Mara Dain says she will bring both sides' materials into the review and confirm the basis for the records before the panel.",
+      "checkpoint_text": "I'll bring both sides' materials into the review before the panel.",
+      "verbatim_excerpt": false,
+      "source_quote": "Mara Dain says she will bring both sides' materials into the review and confirm the basis for the records before the panel.",
+      "omitted_context_note": "原回复为Mara Dain的第三人称转述；request.speaker.name同为Mara Dain，因此转成其第一人称待执行表述。省略核对记录依据的后续要求，不表示已经完成核实。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_050-t1-4002463e21eaa5d7",
+      "original_response": "That works—we'll publish the dashboard with the specialty-follow-up category held until the independent review completes. The remaining outbreak pattern, testing sites, and prevention guidance will stand on their own without creating a gap that misleads residents. Should I send you the final dashboard text before it goes live at four, or would you prefer I route a copy to the network immediately after publication?",
+      "checkpoint_text": "We'll withhold that category until the independent review is complete.",
+      "verbatim_excerpt": false,
+      "source_quote": "That works—we'll publish the dashboard with the specialty-follow-up category held until the independent review completes.",
+      "omitted_context_note": "that category仅指完整文字中的specialty-follow-up类别；保留独立审查完成前暂缓该类，未把整个仪表板暂停；省略其余内容发布及四点前后送审安排。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    },
+    {
+      "node_id": "GPT50_050-t2-3e4d55c83cb0f856",
+      "original_response": "I'll send you the draft by three-thirty. If the framing looks solid after your check, we'll finalize it before four; if you see a reconstruction risk, we'll revise the language or remove that section.",
+      "checkpoint_text": "If you find reconstruction risk, we'll revise or remove that section.",
+      "verbatim_excerpt": false,
+      "source_quote": "If the framing looks solid after your check, we'll finalize it before four; if you see a reconstruction risk, we'll revise the language or remove that section.",
+      "omitted_context_note": "保留对方核查发现重建风险时才修改或移除该节；省略三点半送草稿、无问题则四点前定稿，不预判已发现风险或已通过。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 11
+    },
+    {
+      "node_id": "GPT50_050-ending-f7aa04a09047d9f5",
+      "original_response": "I will send the draft for your privacy check first, then confirm what steps still need to be addressed before publication.",
+      "checkpoint_text": "I'll send the draft for your privacy check before publication.",
+      "verbatim_excerpt": false,
+      "source_quote": "I will send the draft for your privacy check first, then confirm what steps still need to be addressed before publication.",
+      "omitted_context_note": "保留发布前先做隐私核查；省略之后确认仍须处理哪些步骤，未表示隐私审查已经通过。 完整原回复保留为文字，旧视频版本不覆盖。",
+      "word_count": 10
+    }
+  ]
+}
