@@ -7,7 +7,7 @@ const {createHash} = require('node:crypto');
 const {execFileSync} = require('node:child_process');
 
 const root = path.resolve(__dirname, '..');
-const entry = path.resolve(process.env.CHECKPOINT_PREVIEW || path.join(root, 'build/offline-checkpoint-pilot-preview/index.html'));
+const entry = path.resolve(process.env.CHECKPOINT_PREVIEW || path.join(root, 'build/offline-checkpoint-preview/index.html'));
 const output = path.resolve(process.env.CHECKPOINT_BROWSER_OUTPUT || path.join(root, 'build/offline-video-revision-audit/browser-check.json'));
 const report = {entry, testedAt: new Date().toISOString(), protocol: 'file:', checks: [], videos: [],
   pageErrors: [], consoleErrors: [], failedRequests: [], externalRequests: [], passed: false};
@@ -61,7 +61,7 @@ async function check(name, action) {
   await check('all cards and candidate warning', async () => {
     assert.equal(await page.locator('article.card').count(), data.nodes.length);
     assert.equal(await page.locator('video').count(), data.nodes.filter(x => x.video).length);
-    assert.match(await page.locator('.notice').innerText(), /未发布.*待观感复核/);
+    assert.match(await page.locator('main > .notice').innerText(), /未发布.*待观感复核/);
     assert.equal(data.published, false);
     assert.equal(data.release_eligible, false);
     return {cards: data.nodes.length};
@@ -111,6 +111,7 @@ async function check(name, action) {
       const result = {nodeId: node.node_id, mediaStatus: node.status, before, after,
         audio: audio.map(x => ({codec: x.codec_name, channels: x.channels, sampleRate: x.sample_rate, duration: x.duration}))};
       report.videos.push(result);
+      if (report.videos.length % 10 === 0) console.log(JSON.stringify({playbackChecked: report.videos.length, totalVideos: data.video_count}));
       return result;
     });
   }
@@ -118,12 +119,15 @@ async function check(name, action) {
     const results = [];
     for (const scene of ['', ...new Set(data.nodes.map(x => x.scene))]) {
       await page.locator('#scene').selectOption(scene);
-      for (const status of ['', 'issues', 'failed', 'pending', 'passed']) {
+      const statuses = await page.locator('#status option').evaluateAll(options => options.map(x => x.value));
+      for (const status of statuses) {
         await page.locator('#status').selectOption(status);
         const expected = data.nodes.filter(n => (!scene || n.scene === scene) &&
-          (!status || (status === 'issues' ? n.status !== 'passed' : status === 'failed' ? ['failed', 'invalid'].includes(n.status)
+          (!status || (status === 'visual' ? n.frame_review?.priority === 'priority_visual_rewatch'
+            : status === 'issues' ? n.status !== 'passed' : status === 'failed' ? ['failed', 'invalid'].includes(n.status)
             : status === 'pending' ? ['missing', 'pending'].includes(n.status) : n.status === 'passed')));
         assert.equal(await page.locator('article.card').count(), expected.length, `${scene}/${status}`);
+        if (status === 'visual') assert.deepEqual(await page.locator('article.card > div.meta').allTextContents(), expected.map(x => x.node_id));
         if (!expected.length) assert.match(await page.locator('#cards').innerText(), /没有符合筛选条件/);
         results.push({scene, status, count: expected.length});
       }
@@ -131,18 +135,62 @@ async function check(name, action) {
     await page.locator('#scene').selectOption(''); await page.locator('#status').selectOption('');
     return results;
   });
+  const detailsByTitle = (card, title) => card.locator('details').filter({has: page.locator('summary').filter({hasText: new RegExp('^' + title + '$')})});
+  await check('frame review details, exact video SHA binding and visual priority filter', async () => {
+    const reviewed = data.nodes.filter(x => x.frame_review);
+    const visualOption = await page.locator('#status option[value="visual"]').count();
+    if (!visualOption && !reviewed.length) return {supported: false, reviewed: 0};
+    const visualPath = path.resolve(process.env.CHECKPOINT_VISUAL_REVIEW || path.join(root, 'build/offline-video-revision-audit/visual-combined-review.json'));
+    const original = JSON.parse(fs.readFileSync(visualPath, 'utf8'));
+    const samples = new Map(original.samples.map(x => [x.node_id, x]));
+    const priority = reviewed.filter(x => x.frame_review.priority === 'priority_visual_rewatch');
+    for (const node of data.nodes) {
+      const card = page.locator('article.card').filter({has: page.locator('div.meta', {hasText: node.node_id})});
+      const panel = detailsByTitle(card, '帧级抽查，非完整观感验收');
+      const sample = samples.get(node.node_id);
+      const exact = sample && node.video && sample.video_sha256 === node.hashes['video.mp4'];
+      if (exact) {
+        assert.equal(node.frame_review_status, 'frame_sample_reviewed');
+        assert.ok(node.frame_review);
+        assert.equal(node.frame_review.priority, sample.findings.follow_up_priority);
+        assert.equal(sha(path.resolve(path.dirname(entry), node.video)), sample.video_sha256);
+        assert.equal(await panel.count(), 1);
+        await panel.locator('summary').click();
+        assert.equal(await panel.evaluate(el => el.open), true);
+        const content = JSON.parse(await panel.locator('pre').innerText());
+        assert.deepEqual(content, node.frame_review.findings);
+        for (const [key, value] of Object.entries(content)) {
+          assert.ok(sample.findings[key]);
+          for (const [field, text] of Object.entries(value)) assert.deepEqual(text, sample.findings[key][field]);
+        }
+        assert.equal(node.human_review, 'pending');
+      } else {
+        assert.equal(await panel.count(), 0, 'Unbound review must not be shown for ' + node.node_id);
+        assert.ok(!node.frame_review);
+      }
+    }
+    await page.locator('#status').selectOption('visual');
+    assert.deepEqual(await page.locator('article.card > div.meta').allTextContents(), priority.map(x => x.node_id));
+    assert.equal(await page.locator('article.card').count(), priority.length);
+    for (const node of priority) assert.equal(samples.get(node.node_id).video_sha256, node.hashes['video.mp4']);
+    await page.locator('#status').selectOption('');
+    return {supported: true, reviewed: reviewed.length, priority: priority.length,
+      priorityNodeIds: priority.map(x => x.node_id), sourceReportSha256: sha(visualPath)};
+  });
   await check('details expand and preserve full public content', async () => {
     for (let index = 0; index < data.nodes.length; index++) {
-      const details = page.locator('article.card').nth(index).locator('details');
-      for (let j = 0; j < 3; j++) {
-        const item = details.nth(j);
+      const card = page.locator('article.card').nth(index);
+      for (const title of ['完整原回复', '公开表情与动作线索', '本条 SHA 绑定']) {
+        const item = detailsByTitle(card, title);
         assert.equal(await item.evaluate(el => el.open), false);
         await item.locator('summary').click();
         assert.equal(await item.evaluate(el => el.open), true);
         await item.locator('pre').waitFor({state: 'visible'});
       }
-      assert.equal(await details.nth(0).locator('pre').innerText(), data.nodes[index].full_response);
-      assert.deepEqual(JSON.parse(await details.nth(1).locator('pre').innerText()), data.nodes[index].expression);
+      assert.equal(await detailsByTitle(card, '完整原回复').locator('pre').innerText(), data.nodes[index].full_response || '请求尚未通过校验。');
+      assert.deepEqual(JSON.parse(await detailsByTitle(card, '公开表情与动作线索').locator('pre').innerText()), data.nodes[index].expression);
+      assert.deepEqual(JSON.parse(await detailsByTitle(card, '本条 SHA 绑定').locator('pre').innerText()),
+        {spec_sha256: data.nodes[index].spec_sha256, ...data.nodes[index].hashes});
     }
     return {expanded: data.nodes.length * 3};
   });
@@ -163,7 +211,8 @@ async function check(name, action) {
         footer.style.overflowWrap = previous;
         return result;
       });
-      await page.screenshot({path: path.join(path.dirname(output), `checkpoint-preview-mobile-${width}.png`), fullPage: true});
+      await page.evaluate(() => scrollTo(0, 0));
+      await page.screenshot({path: path.join(path.dirname(output), `checkpoint-preview-mobile-${width}.png`), fullPage: false});
       assert.ok(geometry.scrollWidth <= width + 1, JSON.stringify(geometry));
       return geometry;
     });

@@ -1,0 +1,126 @@
+{
+  "format": "offline_checkpoint_revision_report_v1",
+  "created_at_utc": "2026-10-22T14:40:00.342451+00:00",
+  "status": "candidate_complete_pending_visual_review",
+  "scope": "offline",
+  "published": false,
+  "release_eligible": false,
+  "human_review": "pending",
+  "request": "每条4–5秒，一句checkpoint，改进口型与神情；完整公开回复保留文字；本轮不上线。",
+  "counts": {
+    "total_nodes": 150,
+    "video_files_present": 150,
+    "completed_hash_bound_videos": 150,
+    "asr_hash_bound_passed": 150,
+    "complete_clip_sync_hash_bound_passed": 150,
+    "measured_structure_4_to_5_seconds_passed": 150,
+    "all_machine_checks_passed": 150,
+    "machine_failure_nodes": 0,
+    "invalid_binding_nodes": 0,
+    "pending_nodes": 0,
+    "frozen_old_video_sha_matches": 150
+  },
+  "durations": {
+    "measured_current_files_total_seconds": 690.0,
+    "hash_bound_completed_videos_total_seconds": 690.0,
+    "all_machine_passed_videos_total_seconds": 690.0,
+    "planned_150_target_seconds_not_completed": 690.0,
+    "frozen_150_original_total_seconds": 2101.84,
+    "per_video_seconds": 4.6,
+    "total_minutes": 11.5
+  },
+  "machine_checks": {
+    "asr": "Unprompted local transcription; current request, waveform and stable-input evidence bound by SHA.",
+    "sync": "Actual face detection and track coverage recorded; every track passes confidence >=3 and abs(offset)<=2; no mean-offset acceptance.",
+    "model_edge_limit": "The local five-frame SyncNet feature loop does not use the final video frame; face detection and track coverage still require every frame.",
+    "scope_limit": "Machine results and sampled still frames do not establish continuous audiovisual naturalness or human acceptance.",
+    "sync_confidence_min": 3.012648582458496,
+    "sync_offset_frames": [
+      0
+    ],
+    "guidance_repairs": {
+      "current_hash_bound_video_count": 38,
+      "confirmed_repairs_from_hash_bound_failed_lower_guidance_count": 0,
+      "confirmed_repairs_now_sync_passed": 0,
+      "confirmed_repairs_now_sync_failed": 0,
+      "confirmed_repairs_now_sync_pending": 0,
+      "current_1_5_without_failed_lower_guidance_proof": 38,
+      "confirmed_repair_nodes": [],
+      "legacy_failure_indicated_repair_count": 8,
+      "legacy_failure_indicated_repair_nodes": [
+        "GPT50_001-t2-5d18d259564c3313",
+        "GPT50_003-t1-fa6e45292b307f45",
+        "GPT50_005-t2-005cfda3af381506",
+        "GPT50_010-ending-54f12216ce69c1a9",
+        "GPT50_017-t2-6f94d6cc3bc21a72",
+        "GPT50_017-ending-51823f267403477f",
+        "GPT50_025-t1-5d05feb013e7b83f",
+        "GPT50_037-t2-a9fb64eddd2353d0"
+      ],
+      "legacy_evidence_counts_as_current_pass": false
+    }
+  },
+  "visual_sample": {
+    "sample_count": 20,
+    "sampled_frame_count": 160,
+    "priority_node_ids": [
+      "GPT50_003-t1-fa6e45292b307f45",
+      "GPT50_003-ending-ae024eb0984cb85d",
+      "GPT50_007-t1-93d1e7fc3b3004c2",
+      "GPT50_024-ending-6ed9775498e4bfe6",
+      "GPT50_026-t2-1c97cb44187526f7",
+      "GPT50_029-t1-4cac8f96b372fab1",
+      "GPT50_035-t2-b148865ffa892a75"
+    ],
+    "coverage": "Purposive sample, not a prevalence estimate or complete audiovisual review.",
+    "report_path": "build/offline-video-revision-audit/visual-combined-review.json",
+    "report_sha256": "ceb9e65d65db0d76b27747a7cfd9077e326a33778271f3cdc1c320c6823164f1"
+  },
+  "portable_preview": {
+    "path": "build/offline-checkpoint-preview.zip",
+    "sha256": "8b375341c1db2cec78a0db141038c3bc672e13efcbc4916060d36eabbc2272bc",
+    "bytes": 38406210,
+    "instructions": "Unzip the full folder and open index.html with videos/ beside it.",
+    "browser": {
+      "passed": true,
+      "checks_passed": 157,
+      "videos_played_with_audio": 150,
+      "page_errors": [],
+      "external_requests": [],
+      "report_path": "build/offline-video-revision-audit/browser-final.json",
+      "report_sha256": "a59705a29527e164e7df3979c806d6a0a8daa7935ae67c8340be7e4b5bd94c0b"
+    }
+  },
+  "unit_tests": {
+    "tested_at_utc": "2026-10-22T14:24:40.556239+00:00",
+    "command": "python -m unittest tests.test_revision_motion tests.test_annotation400_public_motion tests.test_checkpoint_revision tests.test_checkpoint_package tests.test_revision_checks",
+    "tests": 60,
+    "passed": true
+  },
+  "frozen_old_media": {
+    "checked": 150,
+    "sha_matches": 150,
+    "all_150_original_videos_unchanged": true,
+    "issues": [],
+    "scope": "Original local video_path bytes compared with published_sha256 in the pre-revision duration audit. That audit has no baseline speech-WAV SHA, so this does not assert an audio-file immutability check."
+  },
+  "source_sha256": {
+    "configs/offline_checkpoint_v2_20261022.json": "959a3edbcd0179c19818b58db4ee0b93163d72f8e493832b5e7a74ba00a81fb7",
+    "docs/operations/OFFLINE_CHECKPOINT_VIDEO_V2.md": "6c2cb38aa686415be90c2ff053418cc9b00a7086f2a47269eec095988627a06b",
+    "offline/revision_checks.py": "7231c9a57ae493568afbb99990a9a0007b15b6bfd0221d8ba37744cf7f41bea5",
+    "offline/revision_motion.py": "7bdf0a0d1d5ce669ebbf22531bc572789f434db3e1f983f3b577109dcbba62eb",
+    "scripts/package_checkpoint_revision.py": "390088d93291017025669591bff924ee9d43aa9785c5a1c2c62d61ec1c19daa0",
+    "scripts/render_annotation400_revision.py": "b75646f3bfc539067fb33758d4685cd8018cac1a3a58db1dbb7370a51efe5a77",
+    "tests/checkpoint_preview_browser.cjs": "33cd792db5cefda3afad587f910acfa4d3e273c6680841bbc08f82c9c467ece4",
+    "tests/test_checkpoint_package.py": "4920ce27ba2fd2ae99d884ffc19ff6d7bf0ee07698e703eb916ec6321c503a3a",
+    "tests/test_checkpoint_revision.py": "066ab3cffcbf3fa75ff7b5160179efd86de0444752db45a56c31049b77ddd261",
+    "tests/test_revision_checks.py": "7cbeae646b2c1f2b3366b73e5a732894c49dd2227a7616fdcc6068e92dd86f02",
+    "tests/test_revision_motion.py": "c4334c14246f9431227b632dd67b0a72a9e16526bba14fea331538287fbf68d9"
+  },
+  "candidate_manifest_sha256": "93dfeb320ff96b7efd0ae9af2b5822858ee6467dd21f742a259dacc659357996",
+  "notes": [
+    "Current deployed v15 remains unchanged.",
+    "New media require new release bindings and review packet before dispatch.",
+    "The original 400-item assignment plan is not automatically reclassified as a short-video release."
+  ]
+}

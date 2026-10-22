@@ -1,6 +1,6 @@
 {
   "prepared_at": "2026-10-22T08:31:59.464552+00:00",
-  "status": "offline_source_ready_video_revision_pending",
+  "status": "offline_checkpoint_candidate_complete_visual_review_pending",
   "scope": {
     "verified_at": "2026-10-22T08:24:35.510552+00:00",
     "scope": "offline",
@@ -280,7 +280,7 @@
     "post_deployment_documentation_updated": true
   },
   "remaining_before_dispatch": [
-    "revise_lip_sync_and_expression_then_review",
+    "review_checkpoint_candidate_visual_quality_and_create_new_media_bound_release",
     "assign_unique_participant_aliases_and_deadlines",
     "non_study_scene_training",
     "set_receipt_collection_and_adjudication_owner"
@@ -323,7 +323,7 @@
     },
     "source_sync_and_native_save_pending": false
   },
-  "updated_at": "2026-10-22T10:48:18.783273+00:00",
+  "updated_at": "2026-10-22T14:40:00.342451+00:00",
   "superseded_local_archive": {
     "path": "build/offline-annotation-20261022.tar.gz",
     "sha256": "2628dad68fa17632616eb752c2c3a5477ef253d4f16441793a03440c27797a3f",
@@ -336,11 +336,12 @@
   "current_plan": {
     "action": "revise_offline_checkpoint_videos",
     "new_site_deployment": false,
-    "video_quality": "checkpoint_revision_rendering",
+    "video_quality": "candidate_complete_pending_visual_review",
     "user_feedback": "单条4–5秒，一句checkpoint；改进口型和神情",
     "keep_existing_material_hashes_until_reviewed_replacement": true,
     "candidate_manifest": "data/offline_checkpoint_v2_20261022/manifest.json",
-    "candidate_is_current_release": false
+    "candidate_is_current_release": false,
+    "revision_report": "reports/experiments/2026-10-22_offline_checkpoint_revision.json"
   },
   "local_material_manifest": "reports/experiments/2026-10-22_offline_annotation_local_materials.json"
 }

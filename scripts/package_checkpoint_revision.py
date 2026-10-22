@@ -15,10 +15,14 @@ import math
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from offline.revision_checks import (ASR_SCREEN_VERSION, SYNC_SCREEN_VERSION,
+                                     audio_evidence_valid, sync_evidence_valid)
 FORMAT = 'socialflux_checkpoint_preview_v1'
 EXPRESSION_KEYS = ('facial_expression', 'gaze', 'speech_style', 'prosody', 'behavioral_cues')
 
@@ -164,15 +168,16 @@ def build_card(row, manifest_dir, destination, root=ROOT, probe=probe_video):
                  and speech.get('generation_sha256') == digest(generation)
                  and audio_screen.get('spec_sha256') == spec
                  and audio_screen.get('sha256') == media['speech.wav']
-                 and audio_screen.get('expected') == text)
-        passed = (audio_screen.get('machine_screen_passed') is True
-                  and audio_screen.get('language') == 'en'
-                  and number(audio_screen.get('normalized_similarity'))
-                  and audio_screen['normalized_similarity'] >= .98
-                  and audio_screen.get('critical_content_match') is True
-                  and audio_screen.get('unprompted') is True)
+                 and audio_screen.get('expected') == text
+                 and audio_screen.get('version') == ASR_SCREEN_VERSION
+                 and audio_screen.get('input_stable') is True
+                 and audio_screen.get('input_sha256_before') == media['speech.wav']
+                 and audio_screen.get('input_sha256_after') == media['speech.wav']
+                 and audio_screen.get('request_sha256_before') == hashes['request.json']
+                 and audio_screen.get('request_sha256_after') == hashes['request.json'])
+        passed = audio_evidence_valid(audio_screen)
         if not bound:
-            checks['audio'] = check('invalid', '音频或语音检查 SHA/台词不匹配，旧结果不可用。')
+            checks['audio'] = check('invalid', '音频/请求 SHA、台词或新版稳定输入证据不匹配；旧回执需重新检测。')
         else:
             details = {}
             if number(audio_screen.get('normalized_similarity')):
@@ -237,15 +242,19 @@ def build_card(row, manifest_dir, destination, root=ROOT, probe=probe_video):
     if sync is None:
         checks['sync'] = check('pending', '口型同步机器检查尚未生成。')
     elif (not video_bound or sync.get('video_sha256') != media.get('video.mp4')
-          or checks['video_binding']['status'] != 'passed'):
-        checks['sync'] = check('invalid', '同步检查与当前视频/输入 SHA 不一致，旧分数不可用。')
+          or checks['video_binding']['status'] != 'passed'
+          or sync.get('version') != SYNC_SCREEN_VERSION or sync.get('input_stable') is not True
+          or sync.get('input_sha256_before') != media.get('video.mp4')
+          or sync.get('input_sha256_after') != media.get('video.mp4')
+          or sync.get('request_sha256_before') != hashes['request.json']
+          or sync.get('request_sha256_after') != hashes['request.json']):
+        checks['sync'] = check('invalid', '同步回执缺少新版稳定输入证据，或与当前视频/请求 SHA 不匹配；旧分数需重新检测。')
     else:
         confidence, offset = sync.get('confidence'), sync.get('offset_frames')
-        passed = (sync.get('complete_clip') is True and sync.get('machine_screen_passed') is True
-                  and number(confidence) and confidence >= 3 and number(offset) and abs(offset) <= 2)
+        passed = sync_evidence_valid(sync)
         details = {k: v for k, v in {'confidence': confidence, 'offset_frames': offset}.items() if number(v)}
         checks['sync'] = check('passed' if passed else 'failed',
-            *([] if passed else ['完整片段口型同步机器检查未通过。']), **details)
+            *([] if passed else ['真实帧覆盖、逐轨迹证据或口型同步分数未通过；单个 complete_clip 标记不足以通过。']), **details)
 
     # Batch rendering may continue while packaging; never retain scores from a torn snapshot.
     if any(not path.is_file() or file_sha(path) != fingerprint for path, fingerprint in tracked.items()):
@@ -257,6 +266,56 @@ def build_card(row, manifest_dir, destination, root=ROOT, probe=probe_video):
     return card
 
 
+
+def attach_frame_reviews(cards, report):
+    """Export only public findings for the exact copied video; never human acceptance."""
+    samples = {}
+    if report is not None:
+        if not isinstance(report, dict) or not isinstance(report.get('samples'), list):
+            raise ValueError('Visual review must contain a samples list')
+        for sample in report['samples']:
+            if not isinstance(sample, dict) or not isinstance(sample.get('node_id'), str):
+                raise ValueError('Invalid visual review sample')
+            if sample['node_id'] in samples:
+                raise ValueError('Duplicate visual review node')
+            samples[sample['node_id']] = sample
+    for card in cards:
+        card.pop('frame_review', None)
+        card['frame_review_status'] = 'pending'
+        sample = samples.get(card['node_id'])
+        if sample is None:
+            continue
+        if (not card.get('video') or not sample.get('video_sha256')
+                or sample['video_sha256'] != card['hashes'].get('video.mp4')):
+            card['frame_review_status'] = 'stale'
+            continue
+        findings = sample.get('findings')
+        if (sample.get('visual_review_status') != 'frame_sample_reviewed'
+                or sample.get('review_scope') != 'frame_level_only' or not isinstance(findings, dict)):
+            continue
+        public = {}
+        for category in ('mouth_compositing', 'face_integrity', 'cue_visibility', 'baseline'):
+            item = findings.get(category)
+            if not isinstance(item, dict):
+                continue
+            selected = {key: item[key] for key in ('assessment', 'finding')
+                        if isinstance(item.get(key), str)}
+            times = item.get('evidence_times_seconds')
+            if isinstance(times, list):
+                selected['evidence_times_seconds'] = [t for t in times if number(t) and t >= 0
+                    and (card.get('duration_seconds') is None or t <= card['duration_seconds'])]
+            if selected:
+                public[category] = selected
+        if not public:
+            continue
+        priority = findings.get('follow_up_priority')
+        if priority not in ('normal', 'low', 'priority_visual_rewatch'):
+            priority = 'unspecified'
+        card['frame_review_status'] = 'frame_sample_reviewed'
+        card['frame_review'] = {'findings': public, 'priority': priority}
+        # card.status is the machine summary; human_review stays pending.
+
+
 HTML = r'''<!doctype html>
 <html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Checkpoint 视频候选版 · 本地预览</title>
@@ -265,9 +324,9 @@ HTML = r'''<!doctype html>
 footer{overflow-wrap:anywhere}
 </style><main>
 <h1>4–5秒 checkpoint 候选版</h1>
-<div class="notice"><strong>未发布 / 待观感复核</strong><p>视频只读一句 checkpoint，完整原回复仍保留为文本。请重点看神情、口型和自然度。机器检查通过不代表人工已通过，也不代表可以派发正式标注。</p></div>
+<div class="notice"><strong>未发布 / 待观感复核</strong><p>视频只读一句 checkpoint，完整原回复仍保留为文本。请重点看神情、口型和自然度。机器检查通过不代表人工已通过，也不代表可以派发正式标注。附带观察仅为帧级抽查，非完整观感验收。</p></div>
 <p>解压整个文件夹后，双击 index.html 即可播放。视频在同目录的 videos 文件夹中，无需服务或网络。此包是打包时的快照；未生成和检查不通过的条目会明确标出。</p>
-<div class="filters"><label>场景<select id="scene"><option value="">全部场景</option></select></label><label>检查状态<select id="status"><option value="">全部</option><option value="issues">全部待处理</option><option value="failed">检验失败 / 绑定失效</option><option value="pending">未生成 / 待检查</option><option value="passed">机器检查通过</option></select></label></div>
+<div class="filters"><label>场景<select id="scene"><option value="">全部场景</option></select></label><label>检查状态<select id="status"><option value="">全部</option><option value="issues">全部待处理</option><option value="failed">检验失败 / 绑定失效</option><option value="pending">未生成 / 待检查</option><option value="passed">机器检查通过</option><option value="visual">神情重点复核</option></select></label></div>
 <p id="summary" aria-live="polite"></p><div id="cards" class="grid"></div><footer id="footer"></footer>
 </main><script id="preview-data" type="application/json">__DATA__</script><script>
 'use strict';
@@ -280,11 +339,14 @@ const scene=document.getElementById('scene'),status=document.getElementById('sta
 function details(title,text){const d=make('details');d.append(make('summary',title),make('pre',text));return d;}
 function render(){
  cards.replaceChildren();
- const selected=data.nodes.filter(n=>(!scene.value||n.scene===scene.value)&&(!status.value||(status.value==='issues'?n.status!=='passed':status.value==='failed'?['failed','invalid'].includes(n.status):status.value==='pending'?['missing','pending'].includes(n.status):n.status==='passed')));
+ const selected=data.nodes.filter(n=>(!scene.value||n.scene===scene.value)&&(!status.value||(status.value==='visual'?n.frame_review?.priority==='priority_visual_rewatch':status.value==='issues'?n.status!=='passed':status.value==='failed'?['failed','invalid'].includes(n.status):status.value==='pending'?['missing','pending'].includes(n.status):n.status==='passed')));
  document.getElementById('summary').textContent=`显示 ${selected.length} / ${data.nodes.length} 条；本包包含 ${data.video_count} 个新版视频。全部待人工观感复核。`;
  selected.forEach(n=>{const c=make('article',undefined,'card');c.append(make('h2',`${n.scene} · ${n.location||'未知位置'}`),make('div',n.node_id,'meta'),make('p',labels[n.status],`pill ${n.status}`),make('p',n.checkpoint_text||'当前请求未通过校验，未展示台词。','line'));
  if(n.video){const v=make('video');v.controls=true;v.preload='metadata';v.playsInline=true;v.src=n.video;v.addEventListener('error',()=>{if(!v.dataset.error){v.dataset.error='1';v.after(make('p','视频无法播放：请确认完整解压 videos 文件夹，并使用支持 MP4 的浏览器。','empty'))}});c.append(v)}else c.append(make('p','新版视频未生成或 SHA 绑定失效，本卡片没有可播放文件。','empty'));
  c.append(make('p',n.duration_seconds===null?'实际秒数：尚未测得':`实际秒数：${n.duration_seconds.toFixed(2)} 秒`,'meta'));
+ const frame=n.frame_review;
+ if(frame){if(frame.priority==='priority_visual_rewatch')c.append(make('p','神情重点复核：请完整播放，重点查看表情方向、变化幅度与自然度。','notice'));c.append(details('帧级抽查，非完整观感验收',JSON.stringify(frame.findings,null,2)));}
+ else c.append(make('p',n.frame_review_status==='stale'?'帧级抽查记录已过期或未绑定当前视频，未沿用结论；仍待复核。':'帧级抽查：未抽查 / 待复核。','meta'));
  const ul=make('ul',undefined,'checks');Object.entries(n.checks).forEach(([key,x])=>{let text=`${checkNames[key]||key}：${labels[x.status]}`;if(x.confidence!==undefined)text+=` · confidence ${x.confidence.toFixed(3)} / offset ${x.offset_frames??'未知'} 帧`;if(x.normalized_similarity!==undefined)text+=` · 相似度 ${x.normalized_similarity.toFixed(3)}`;if(x.reasons.length)text+='；'+x.reasons.join(' ');ul.append(make('li',text))});c.append(ul);
  c.append(details('完整原回复',n.full_response||'请求尚未通过校验。'),details('公开表情与动作线索',JSON.stringify(n.expression,null,2)),details('本条 SHA 绑定',JSON.stringify({spec_sha256:n.spec_sha256,...n.hashes},null,2)));cards.append(c)});
  if(!selected.length)cards.append(make('p','没有符合筛选条件的条目。','empty'));
@@ -323,7 +385,7 @@ def verify_package(directory):
     return {'verified_files': len(files), 'nodes': len(payload['nodes']), 'videos': payload['video_count']}
 
 
-def package(manifest, output, zip_path=None, root=ROOT, probe=probe_video):
+def package(manifest, output, zip_path=None, root=ROOT, probe=probe_video, visual_review=None):
     manifest, output, root = Path(manifest).resolve(), Path(output).absolute(), Path(root).resolve()
     if output.is_symlink() or output.resolve().is_relative_to(manifest.parent) or manifest.is_relative_to(output.resolve()):
         raise ValueError('Output must be separate from revision inputs')
@@ -345,10 +407,17 @@ def package(manifest, output, zip_path=None, root=ROOT, probe=probe_video):
         raise ValueError('Manifest node count mismatch')
     if len({r['node_id'] for r in source['nodes']}) != len(source['nodes']):
         raise ValueError('Duplicate manifest nodes')
+    visual_report, visual_sha = None, None
+    visual_path = Path(visual_review).resolve() if visual_review is not None else None
+    if visual_path is not None and visual_path.is_file():
+        visual_report, visual_sha = read_json(visual_path)
     output.parent.mkdir(parents=True, exist_ok=True)
     stage = Path(tempfile.mkdtemp(prefix='.' + output.name + '-', dir=output.parent))
     try:
         nodes = [build_card(row, manifest.parent, stage, root=root, probe=probe) for row in source['nodes']]
+        attach_frame_reviews(nodes, visual_report)
+        if visual_sha is not None and file_sha(visual_path) != visual_sha:
+            raise ValueError('Visual review changed during packaging; retry with a stable report')
         if file_sha(manifest) != source_sha:
             raise ValueError('Manifest changed during packaging; retry with a stable manifest')
         data = {'format': FORMAT, 'version': source['version'],
@@ -386,13 +455,14 @@ def main():
     parser.add_argument('--output', type=Path, default=ROOT / 'build/offline-checkpoint-preview')
     parser.add_argument('--zip', action='store_true', help='Also create a portable ZIP beside the output directory')
     parser.add_argument('--zip-path', type=Path)
+    parser.add_argument('--visual-review', type=Path, help='Optional frame-sample report; findings require an exact video SHA match')
     parser.add_argument('--verify', type=Path, metavar='DIRECTORY', help='Verify an existing unpacked snapshot')
     args = parser.parse_args()
     if args.verify:
         result = verify_package(args.verify)
     else:
         zip_path = args.zip_path or args.output.with_suffix('.zip') if args.zip or args.zip_path else None
-        result = package(args.manifest, args.output, zip_path=zip_path)
+        result = package(args.manifest, args.output, zip_path=zip_path, visual_review=args.visual_review)
     print(json.dumps(result, ensure_ascii=False))
 
 

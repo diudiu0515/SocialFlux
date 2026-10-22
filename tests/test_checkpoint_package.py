@@ -1,4 +1,5 @@
 """Portable preview tests: strict source binding, incomplete batches, and public-only output."""
+import copy
 import json
 from pathlib import Path
 import tempfile
@@ -6,6 +7,8 @@ import unittest
 import zipfile
 
 from scripts import package_checkpoint_revision as preview
+from offline.revision_checks import (ASR_SCREEN_VERSION, SYNC_SCREEN_VERSION,
+                                     sync_coverage, sync_window_evidence)
 
 
 class CheckpointPackageTest(unittest.TestCase):
@@ -44,7 +47,11 @@ class CheckpointPackageTest(unittest.TestCase):
                                   'spoken_text': self.request['source_public_response'],
                                   'generation_spec': speech_generation,
                                   'generation_sha256': preview.digest(speech_generation)})
-        self.save('audio_screen.json', {'spec_sha256': self.spec, 'sha256': audio,
+        request_sha = preview.file_sha(self.directory / 'request.json')
+        self.save('audio_screen.json', {'version': ASR_SCREEN_VERSION,
+            'spec_sha256': self.spec, 'sha256': audio,
+            'input_stable': True, 'input_sha256_before': audio, 'input_sha256_after': audio,
+            'request_sha256_before': request_sha, 'request_sha256_after': request_sha,
             'expected': self.request['source_public_response'], 'transcript': self.request['source_public_response'],
             'language': 'en', 'normalized_similarity': 1.0, 'critical_content_match': True,
             'unprompted': True, 'machine_screen_passed': True,
@@ -58,8 +65,20 @@ class CheckpointPackageTest(unittest.TestCase):
                                 'motion_sha256': motion, 'spoken_text': self.request['source_public_response'],
                                 'generation_spec': generation, 'generation_sha256': preview.digest(generation),
                                 'structural_metadata': {'duration_seconds_actual': 99}})
-        self.save('lipsync_screen.json', {'video_sha256': video, 'complete_clip': True,
-                                         'confidence': 4.1, 'offset_frames': 0, 'machine_screen_passed': True})
+        frames = list(range(115))
+        crop_sha = preview.digest('track crop fixture')
+        tracks = [{'track_id': 0, 'crop_sha256': crop_sha, 'input_stable': True,
+                   'input_sha256_before': crop_sha, 'input_sha256_after': crop_sha,
+                   'frame_indices': frames, 'detected_frame_indices': frames,
+                   'interpolated_frame_indices': [], 'crop_frame_count': 115,
+                   'model_window': sync_window_evidence(frames, 115, 115),
+                   'confidence': 4.1, 'offset_frames': 0}]
+        self.save('lipsync_screen.json', {'version': SYNC_SCREEN_VERSION,
+            'video_sha256': video, 'complete_clip': True,
+            'input_stable': True, 'input_sha256_before': video, 'input_sha256_after': video,
+            'request_sha256_before': request_sha, 'request_sha256_after': request_sha,
+            'tracks': tracks, 'coverage': sync_coverage(115, 115, frames, tracks),
+            'confidence': 4.1, 'offset_frames': 0, 'machine_screen_passed': True})
 
     def save(self, name, value):
         (self.directory / name).write_text(json.dumps(value))
@@ -217,6 +236,93 @@ class CheckpointPackageTest(unittest.TestCase):
         self.assertNotIn('normalized_similarity', card['checks']['audio'])
         self.assertEqual(card['checks']['video_binding']['status'], 'invalid')
         self.assertEqual(card['checks']['sync']['status'], 'invalid')
+
+    def test_visual_review_rejects_stale_sha_and_never_changes_human_status(self):
+        report = self.root / 'visual-review.json'
+        sample = {'node_id': 'scene-t1', 'video_sha256': 'old-video-sha',
+                  'visual_review_status': 'frame_sample_reviewed', 'review_scope': 'frame_level_only',
+                  'human_review': 'accepted', 'video_path': '/private/video.mp4',
+                  'identity_source_sha256': 'DO_NOT_EXPORT_PRIVATE_HASH',
+                  'findings': {'follow_up_priority': 'priority_visual_rewatch',
+                               'baseline': {'assessment': 'possible_baseline_conflict',
+                                            'finding': '请完整播放复核眉间紧张与放松变化。',
+                                            'private_path': '/private/source.png'},
+                               'private_notes': 'DO_NOT_EXPORT_PRIVATE_FINDINGS'}}
+        report.write_text(json.dumps({'samples': [sample]}))
+        self.package(visual_review=report)
+        card = self.card()
+        self.assertEqual(card['frame_review_status'], 'stale')
+        self.assertNotIn('frame_review', card)
+        self.assertEqual(card['status'], 'passed')
+        self.assertEqual(card['human_review'], 'pending')
+        sample['video_sha256'] = preview.file_sha(self.directory / 'video.mp4')
+        report.write_text(json.dumps({'samples': [sample]}))
+        self.package(visual_review=report)
+        card = self.card()
+        self.assertEqual(card['frame_review_status'], 'frame_sample_reviewed')
+        self.assertEqual(card['frame_review']['priority'], 'priority_visual_rewatch')
+        self.assertEqual(set(card['frame_review']), {'findings', 'priority'})
+        self.assertEqual(card['status'], 'passed')
+        self.assertEqual(card['human_review'], 'pending')
+        page = (self.output / 'index.html').read_text()
+        self.assertIn('神情重点复核', page)
+        self.assertIn('帧级抽查，非完整观感验收', page)
+        self.assertNotIn('DO_NOT_EXPORT', page)
+        self.assertNotIn('/private/', page)
+        # An absent report produces no inferred observation or acceptance.
+        self.package(visual_review=self.root / 'not-created.json')
+        self.assertEqual(self.card()['frame_review_status'], 'pending')
+        self.assertNotIn('frame_review', self.card())
+
+    def test_legacy_flags_and_stale_request_stability_cannot_pass(self):
+        for name, check_key in [('audio_screen.json', 'audio'), ('lipsync_screen.json', 'sync')]:
+            original = json.loads((self.directory / name).read_text())
+            for changes in ({'version': 'legacy', 'complete_clip': True},
+                            {'input_stable': False},
+                            {'input_sha256_after': 'a' * 64},
+                            {'request_sha256_before': 'b' * 64, 'request_sha256_after': 'b' * 64}):
+                with self.subTest(receipt=name, changes=changes):
+                    self.save(name, {**original, **changes})
+                    self.package()
+                    self.assertEqual(self.card()['checks'][check_key]['status'], 'invalid')
+                    self.assertNotEqual(self.card()['status'], 'passed')
+            self.save(name, original)
+
+    def test_sync_coverage_and_every_track_are_required_even_with_positive_flags(self):
+        original = json.loads((self.directory / 'lipsync_screen.json').read_text())
+        cases = []
+        missing = copy.deepcopy(original)
+        missing.pop('tracks')
+        cases.append(('no_tracks', missing))
+        partial = copy.deepcopy(original)
+        partial['tracks'][0]['detected_frame_indices'] = list(range(114))
+        partial['tracks'][0]['interpolated_frame_indices'] = [114]
+        partial['coverage'] = sync_coverage(115, 115, list(range(114)), partial['tracks'])
+        cases.append(('interpolation_is_not_detection', partial))
+        truncated_audio = copy.deepcopy(original)
+        truncated_audio['tracks'][0]['model_window'] = sync_window_evidence(list(range(115)), 115, 100)
+        cases.append(('truncated_crop_audio', truncated_audio))
+        cancelled = copy.deepcopy(original)
+        cancelled['tracks'].append(copy.deepcopy(cancelled['tracks'][0]))
+        cancelled['tracks'][0]['offset_frames'] = 3
+        cancelled['tracks'][1].update(track_id=1, offset_frames=-3)
+        cancelled['coverage'] = sync_coverage(115, 115, list(range(115)), cancelled['tracks'])
+        cancelled['offset_frames'] = 0  # An old averaged score must not hide either bad track.
+        cases.append(('opposite_offsets_do_not_cancel', cancelled))
+        weak_track = copy.deepcopy(original)
+        weak_track['tracks'][0]['confidence'] = 2.8
+        cases.append(('positive_summary_does_not_override_track', weak_track))
+        for label, receipt in cases:
+            with self.subTest(label=label):
+                self.save('lipsync_screen.json', receipt)
+                self.package()
+                card = self.card()
+                self.assertEqual(card['checks']['sync']['status'], 'failed')
+                self.assertEqual(card['human_review'], 'pending')
+                self.assertNotEqual(card['status'], 'passed')
+        self.save('lipsync_screen.json', original)
+        self.package()
+        self.assertEqual(self.card()['checks']['sync']['status'], 'passed')
 
     def test_audio_video_duration_is_measured_and_failed_independently(self):
         preview.package(self.manifest, self.output, root=self.root,

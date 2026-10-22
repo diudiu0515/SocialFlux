@@ -31,19 +31,21 @@ CUDA_VISIBLE_DEVICES=0 .local_models/annotation400-av-env/bin/python scripts/ren
 
 画面使用 LivePortrait 的公开动作控制和按原始嘴部开合阈值启用的闭口归一化；口型使用 LatentSync 40 步、关闭 DeepCache。缓存绑定输入波形、动作、身份、模型、配置、mask 与实现指纹。初次 guidance 1.0 的完整片段同步检查失败时，只允许自动重试一次 1.5，并保留失败视频及分数；未通过的片段仍显示待修订。
 
-机器检查包括独立无提示词 ASR、完整片段 SyncNet 和音视频时长。它们不能证明表情自然、情绪强度恰当或人体动作无伪影；候选版的人工状态始终为 pending。
+机器检查包括独立无提示词 ASR、逐轨迹 SyncNet 和音视频时长。ASR、Sync 回执均校验检查前后的媒体与请求 SHA；旧版回执不可沿用。同步检查记录原始检测帧、插值框、完整轨迹覆盖及每条轨迹的分数，不以平均 offset 抵消失败。当前本地 SyncNet 的五帧窗口实现不使用最后一帧，这个模型边缘限制单独记录，不能据此忽略丢失的轨迹或检测帧。它们不能证明表情自然、情绪强度恰当或人体动作无伪影；候选版的人工状态始终为 pending。
 
 ## 可携带预览包
 
 ```bash
 python scripts/package_checkpoint_revision.py --zip
+# 如有与当前视频 SHA 绑定的帧级抽查记录，可加入重点复核提示：
+python scripts/package_checkpoint_revision.py --visual-review build/offline-video-revision-audit/visual-combined-review.json --zip
 python scripts/package_checkpoint_revision.py --verify build/offline-checkpoint-preview
 ```
 
-发送 `build/offline-checkpoint-preview.zip`，接收者解压后打开 `index.html`，保留旁边的 `videos` 目录即可。页面可按场景或检查状态筛选，展开完整回复及公开表情说明，播放每条视频。短句、视频文件和检查记录采用实际 SHA 绑定；缺失或过期分数不会显示成通过。预览包不包含答案、私有证据或任何标注者回执。
+发送 `build/offline-checkpoint-preview.zip`，接收者解压后打开 `index.html`，保留旁边的 `videos` 目录即可。页面可按场景或检查状态筛选，展开完整回复及公开表情说明，播放每条视频。短句、视频文件和检查记录采用实际 SHA 绑定；缺失或过期分数不会显示成通过。预览包不包含答案、私有证据或任何标注者回执。可选的帧级抽查记录仅在视频 SHA 一致时展示；“神情重点复核”筛选用于定位需要完整播放确认的片段，不代表人工验收通过。
 
 ```bash
-python -m unittest tests.test_revision_motion tests.test_annotation400_public_motion tests.test_checkpoint_revision tests.test_checkpoint_package
+python -m unittest tests.test_revision_motion tests.test_annotation400_public_motion tests.test_checkpoint_revision tests.test_checkpoint_package tests.test_revision_checks
 ```
 
 这组检查覆盖动作线索、冻结目录保护、模型缓存失效、尾词保留、分片输入绑定及可分享文件完整性。不会产生正式人工记录。
