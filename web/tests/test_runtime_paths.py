@@ -1,11 +1,16 @@
 """Deployment must share persistent data without serving source or secrets."""
 import json
+import base64
+import http.client
+from http.server import ThreadingHTTPServer
 import os
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
+from threading import Thread
 
 
 class RuntimePathsTest(unittest.TestCase):
@@ -44,6 +49,48 @@ print(json.dumps({'root': str(server.ROOT), 'code': str(CODE_ROOT)}))
                                     env={**os.environ, "SOCIALFLUX_DATA_ROOT": directory + "/missing"})
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("existing project data directory", result.stderr)
+
+    def test_proxy_origin_accepts_only_authenticated_same_site_json(self):
+        from web.server import App
+
+        class ProxyApp(App):
+            public_origin = "https://lab.example:8443"
+            auth_username = "test-user"
+            auth_password = "test-password"
+
+            def log_message(self, *args):
+                pass
+
+        server = ThreadingHTTPServer(("127.0.0.1", 0), ProxyApp)
+        thread = Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        auth = "Basic " + base64.b64encode(b"test-user:test-password").decode()
+
+        def post(origin, authenticated=True, content_type="application/json"):
+            connection = http.client.HTTPConnection(*server.server_address, timeout=5)
+            headers = {"Host": "backend.internal:6006", "Origin": origin, "Content-Type": content_type}
+            if authenticated:
+                headers["Authorization"] = auth
+            try:
+                connection.request("POST", "/api/lab/records", body="{}", headers=headers)
+                response = connection.getresponse()
+                response.read()
+                return response.status
+            finally:
+                connection.close()
+
+        try:
+            with patch("web.server.save_experiment_record", return_value={"id": "test"}) as save:
+                self.assertEqual(post(ProxyApp.public_origin, authenticated=False), 401)
+                self.assertEqual(post("https://untrusted.example"), 403)
+                self.assertEqual(post("https://lab.example"), 403)
+                self.assertEqual(post(ProxyApp.public_origin, content_type="text/plain"), 403)
+                self.assertEqual(post(ProxyApp.public_origin), 200)
+                save.assert_called_once_with({})
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join(timeout=5)
 
 
 if __name__ == "__main__":

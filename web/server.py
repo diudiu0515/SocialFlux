@@ -2434,6 +2434,7 @@ def api_payload(path, *, offline_bank=None):
 class App(SimpleHTTPRequestHandler):
     auth_username = None
     auth_password = None
+    public_origin = None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(STATIC_DIR), **kwargs)
@@ -2480,7 +2481,7 @@ class App(SimpleHTTPRequestHandler):
             self.send_json({"error": "not found"}, 404)
             return
         origin = self.headers.get("Origin")
-        if origin and urlparse(origin).netloc != self.headers.get("Host"):
+        if origin and origin != self.public_origin and urlparse(origin).netloc != self.headers.get("Host"):
             self.send_json({"error": "跨站提交未被允许"}, 403)
             return
         if is_lab and (
@@ -2680,7 +2681,14 @@ def main():
     parser.add_argument("--port", type=int, default=8000)
     parser.add_argument("--username", default="socialflux")
     parser.add_argument("--password-file", type=Path)
+    parser.add_argument("--public-origin", help="Exact HTTPS origin used by the trusted reverse proxy")
     args = parser.parse_args()
+    if args.public_origin:
+        public = urlparse(args.public_origin)
+        if (public.scheme != "https" or not public.hostname or public.username or public.password
+                or public.path or public.params or public.query or public.fragment):
+            parser.error("--public-origin must be an HTTPS origin without a path or credentials")
+        App.public_origin = args.public_origin
     if args.password_file:
         password = args.password_file.read_text(encoding="utf-8").strip()
         if not password:
