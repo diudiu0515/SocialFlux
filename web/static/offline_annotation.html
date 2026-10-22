@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>SocialFlux · 人类盲答与 GT</title>
   <link rel="stylesheet" href="/offline_review.css?v=2">
-  <link rel="stylesheet" href="/offline_annotation.css?v=1">
+  <link rel="stylesheet" href="/offline_annotation.css?v=2">
 </head>
 <body>
   <header class="topbar">
@@ -17,7 +17,8 @@
     <section class="card">
       <h2>先独立作答，再制作标准答案</h2>
       <p>每次分配包含所选场景的全部题目。先完成并锁定全部盲答，再查看私有证据；独立 GT 初判全部提交后，才开放机器建议。</p>
-      <p class="muted">文字条件与被测模型使用相同题目材料。盲答只需选择答案；后续审核不会覆盖原答案。人类分数需要其他标注人的独立 GT，目前不会用自己的 GT 给自己打分。</p>
+      <p class="muted">新任务使用文字＋视频，与题库的视频条件绑定相同材料。请观看对应片段并结合完整题面作答。后续审核不会覆盖盲答；人类分数需要其他标注人的独立 GT。</p>
+      <p id="videoCoverage" class="muted">正在核对有视频的场景…</p>
       <form id="startForm">
         <div class="field-grid">
           <label>标注人 ID<input id="participant" required maxlength="100" autocomplete="username" placeholder="使用固定的匿名 ID"></label>
@@ -37,10 +38,10 @@
       <nav id="sessionNav" aria-label="本次分配的题目"></nav>
     </aside>
     <main>
-      <section class="card phase-card"><h2 id="phaseTitle"></h2><p id="phaseDescription"></p><p id="baselineNotice" class="muted"></p></section>
+      <section class="card phase-card"><h2 id="phaseTitle"></h2><p id="phaseDescription"></p><p id="sessionCondition"></p><p id="baselineNotice" class="muted"></p></section>
       <div id="annotationWorkspace" aria-busy="false"></div>
     </main>
   </div>
-  <script src="/offline_annotation.js?v=1"></script>
+  <script src="/offline_annotation.js?v=2"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 import { env } from "cloudflare:workers";
-import { ConflictError, current, exportRecord, payload, save, start } from "../../../../lib/store";
+import { ConflictError, current, exportRecord, payload, save, start, evidence, researchCatalog } from "../../../../lib/store";
 import { InputError } from "../../../../lib/protocol";
 import { cookie, digest, readCookie, recoveryPattern } from "../../../../lib/credentials";
 export const dynamic = "force-dynamic";
@@ -24,16 +24,16 @@ export async function GET(request: Request, context: Context) {
       if (!row) return reply({error: "请先开始或恢复标注。"}, 401);
       return reply(exportRecord(row), 200, {"Content-Disposition": 'attachment; filename="socialflux-annotation.json"'});
     }
-    return reply(row ? {...payload(row), invited: true} : {session: null, invited: await invited(request)});
+    return reply(row ? {...payload(row), invited: true} : {session: null, invited: await invited(request), catalog: researchCatalog()});
   } catch { return reply({error: "暂时无法读取记录，请稍后重试。"}, 503); }
 }
 export async function POST(request: Request, context: Context) {
   const {action} = await context.params;
-  if (!["access", "start", "recover", "logout", "draft", "submit"].includes(action)) return reply({error: "没有这个接口。"}, 404);
+  if (!["access", "start", "recover", "logout", "draft", "submit", "lock", "gate2-lock", "evidence"].includes(action)) return reply({error: "没有这个接口。"}, 404);
   const origin = request.headers.get("origin");
   if ((origin && origin !== new URL(request.url).origin) || !request.headers.get("content-type")?.startsWith("application/json")) return reply({error: "请求来源或格式无效。"}, 403);
   try {
-    const raw = await request.text(); if (raw.length > 30000) return reply({error: "内容过长。"}, 413);
+    const raw = await request.text(); if (raw.length > 1000000) return reply({error: "内容过长。"}, 413);
     let data: Record<string, unknown>;
     try { data = JSON.parse(raw); } catch { return reply({error: "请求格式无效。"}, 400); }
     if (!data || typeof data !== "object" || Array.isArray(data)) return reply({error: "请求格式无效。"}, 400);
@@ -55,7 +55,8 @@ export async function POST(request: Request, context: Context) {
     }
     const id = await identity(request);
     if (!id || !await current(id)) return reply({error: "请使用编号和恢复码重新进入。"}, 401);
-    return reply({...await save(id, data, action === "submit"), invited: true});
+    if (action === 'evidence') return reply(evidence((await current(id))!, data.instanceId));
+    return reply({...await save(id, data, action === "submit", action), invited: true});
   } catch (error) {
     if (error instanceof InputError) return reply({error: error.message}, 400);
     if (error instanceof ConflictError) return reply({error: error.message}, 409);

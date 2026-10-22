@@ -1,5 +1,6 @@
 "use strict";
 const $ = id => document.getElementById(id);
+const selectedBank = new URLSearchParams(location.search).get("bank") || "scenarios-v2";
 const phases = {
   blind: ["1 · 独立盲答", "本次全部题目提交后，才开放私有证据。答案一经提交即锁定。"],
   private_review: ["2 · 私有证据与独立 GT 初判", "查看相关完整对话、实际私有状态和分支，独立判断答案。全部初判提交后才开放机器建议。"],
@@ -37,7 +38,7 @@ function display(value) {
 async function api(action, payload = {}) {
   const response = await fetch("/api/offline-annotation/" + action, {
     method: "POST", headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({...payload, ...(token && !["start", "catalog"].includes(action) ? {token} : {})}),
+    body: JSON.stringify({...payload, ...(["start", "catalog"].includes(action) ? {bank: selectedBank} : {}), ...(token && !["start", "catalog"].includes(action) ? {token} : {})}),
   });
   const data = await response.json();
   if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
@@ -57,6 +58,9 @@ function renderNavigation() {
     : "本次含重复作答或先前信息接触记录，仅参与审核，不计入首次盲答基线。";
   $("assignmentCount").textContent = `${session.counts.total} 题`;
   $("sessionProgress").textContent = `盲答 ${session.counts.blind} · 独立初判 ${session.counts.private} · 最终审核 ${session.counts.final}`;
+  $("sessionCondition").textContent = session.modality === "text+video"
+    ? "本次输入：文字＋视频。请结合题面和对应视频作答；同一会话保持相同输入条件。"
+    : "这是此前领取的文字任务，原答案和输入条件已保留。新的视频任务可从“回到任务选择”领取。";
   $("sessionNav").replaceChildren();
   session.items.forEach((row, index) => {
     const done = session.stage === "blind" ? row.blind_submitted : session.stage === "private_review" ? row.private_submitted : row.final_submitted;
@@ -105,6 +109,31 @@ function material(input) {
     input.candidate_actions.forEach(a => { const row = node("article", "turn"); row.append(node("strong", "", a.label), display(a.text)); box.append(row); });
   }
   return box;
+}
+function publicMedia(data) {
+  const section = card("题目视频"); section.id = "annotationMedia";
+  section.append(node("p", "muted", "请结合下面标明的位置观看视频，再阅读完整题面并作答。"));
+  for (const asset of data.media || []) {
+    const clip = node("article", "annotation-clip");
+    clip.append(node("h3", "", "对应位置：" + asset.evidence_ids.join("、")));
+    if (asset.evidence_ids.some(id => id.startsWith("A:")) && asset.evidence_ids.some(id => id.startsWith("B:"))) {
+      clip.append(node("p", "muted", "History A / B 共用这段视频。"));
+    }
+    const video = node("video"); video.controls = true; video.playsInline = true;
+    video.preload = "metadata"; video.src = asset.url; video.dataset.assetId = asset.asset_id;
+    video.setAttribute("aria-label", "题目视频：" + asset.evidence_ids.join("、"));
+    video.addEventListener("error", () => {
+      if (!clip.isConnected) return;
+      clip.append(node("p", "warning", "视频加载失败，请刷新后重试；视频可播放后再提交本题。"));
+      const submit = $("submitJudgment"); if (submit) submit.disabled = true;
+    }, {once: true});
+    clip.append(video);
+    if (asset.response_neutral) clip.append(node("p", "muted", "这段视频提供表情与动作线索；对白请结合题面文字阅读。"));
+    section.append(clip);
+  }
+  const uncovered = (data.media_coverage?.uncovered_evidence_ids || []).map(id => id === "ending" ? "共同结尾" : id);
+  if (uncovered.length) section.append(node("p", "muted", "以下位置仍以文字呈现：" + uncovered.join("、") + "。"));
+  return section;
 }
 function choices(options, selected, disabled = false) {
   const box = node("div", "options");
@@ -155,7 +184,9 @@ async function openItem(identity) {
     const data = await api("item", {instance_id: identity});
     if (version !== loadVersion) return;
     const question = data.public, header = card(`第 ${session.items.findIndex(x => x.instance_id === identity) + 1} 题`);
-    header.append(node("p", "question", question.question)); workspace.replaceChildren(header, material(question.input));
+    header.append(node("p", "question", question.question)); workspace.replaceChildren(header);
+    if (session.modality === "text+video") workspace.append(publicMedia(data));
+    workspace.append(material(question.input));
     if (session.stage === "blind") {
       const answer = card(data.blind_response ? "已锁定的盲答" : "你的独立答案");
       if (data.blind_response) { answer.append(choices(question.options, data.blind_response.answer, true), node("p", "locked-answer", "原始答案已保存，不能修改。")); }
@@ -215,14 +246,16 @@ async function setup() {
   try {
     const catalog = await api("catalog");
     $("assignmentScene").replaceChildren(node("option", "", "请选择场景")); $("assignmentScene").firstChild.value = "";
-    catalog.scenes.forEach(row => { const option = node("option", "", `${row.scene} · ${row.questions} 题`); option.value = row.scene; $("assignmentScene").append(option); });
-    const all = node("option", "", `全部 ${catalog.scenes.length} 个场景（全部盲答完成后统一解锁）`); all.value = "all"; $("assignmentScene").append(all);
+    const ready = catalog.scenes.filter(row => row.video_available), missing = catalog.scenes.filter(row => !row.video_available);
+    catalog.scenes.forEach(row => { const option = node("option", "", `${row.scene} · ${row.questions} 题 · ${row.video_available ? "有视频" : "缺少配对视频"}`); option.value = row.scene; option.disabled = !row.video_available; $("assignmentScene").append(option); });
+    const all = node("option", "", `全部 ${ready.length} 个有视频场景（全部盲答完成后统一解锁）`); all.value = "all"; all.disabled = !ready.length; $("assignmentScene").append(all);
+    $("videoCoverage").textContent = `${ready.length}/${catalog.scenes.length} 个场景有配对视频，共 ${ready.reduce((sum,row) => sum + row.questions, 0)} 题。` + (missing.length ? `暂不分配的视频缺失场景：${missing.map(row => row.scene).join("、")}。` : "");
     $("startForm").onsubmit = async event => {
       event.preventDefault(); const button = event.submitter; button.disabled = true;
       try {
         const scene = $("assignmentScene").value;
-        const value = await api("start", {reviewer: $("participant").value, scenes: scene === "all" ? catalog.scenes.map(x => x.scene) : [scene],
-          prior_exposure: $("priorExposure").value === "yes", modality: "text"});
+        const value = await api("start", {reviewer: $("participant").value, scenes: scene === "all" ? ready.map(x => x.scene) : [scene],
+          prior_exposure: $("priorExposure").value === "yes", modality: "text+video"});
         await enter(value);
       } catch (error) { say(error.message); button.disabled = false; }
     };

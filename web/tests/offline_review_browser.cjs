@@ -18,6 +18,7 @@ const {chromium} = require('playwright');
     await fs.mkdir(output, {recursive: true});
     await page.goto(base + '/offline-review?bank=dev60#SFO-005');
     await page.waitForSelector('#sharedEnding');
+    assert.equal(await page.locator('#modality').inputValue(), 'text+video');
     assert.equal(await page.locator('#itemNav button').count(), 60);
     assert.equal(await page.locator('[data-history]').count(), 2);
     assert.equal(referenceRequests.length, 0, 'references must not be fetched by default');

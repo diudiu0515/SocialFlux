@@ -15,10 +15,32 @@ from environment.video_requests import (
     estimate_spoken_duration,
 )
 from scripts.run_autodl_seedance_video import validate_payload, video_url
-from scripts.run_multimodal_video_queue import seedance_payload, select_records
+from scripts.run_multimodal_video_queue import seedance_payload, select_records, ensure_state
 
 
 class MultimodalVideoQueueTest(unittest.TestCase):
+    def test_image_identity_reference_is_audio_free_and_hash_bound(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'identity.png').write_bytes(b'first-image')
+            request = {'prompt': 'Say exactly the new English line.', 'duration_seconds': 5,
+                       'generate_audio': True, 'reference_image_file': 'identity.png'}
+            payload = seedance_payload(request, reference_root=root)
+            self.assertEqual(payload['content'][1]['role'], 'reference_image')
+            self.assertTrue(payload['content'][1]['image_url']['url'].startswith('data:image/png;base64,'))
+            self.assertNotIn('local_reference_video', payload)
+            with self.assertRaises(ValueError):
+                seedance_payload({**request, 'reference_video_file': 'old.mp4'}, reference_root=root)
+            with self.assertRaises(ValueError):
+                seedance_payload({**request, 'reference_image_file': '../outside.png'}, reference_root=root)
+            (root / 'requests').mkdir()
+            (root / 'requests/x.json').write_text(json.dumps(request))
+            record = {'request_id': 'x', 'request_file': 'requests/x.json'}
+            ensure_state(root, record, model='doubao-seedance-2-0-260128', resolution='720p')
+            (root / 'identity.png').write_bytes(b'changed-image')
+            with self.assertRaisesRegex(ValueError, 'changed after state creation'):
+                ensure_state(root, record, model='doubao-seedance-2-0-260128', resolution='720p')
+
     def test_review_sample_covers_scenarios_then_fills_target(self):
         records = [
             {

@@ -15,6 +15,31 @@ if (!base || process.env.LAB_TEST_ISOLATED !== '1') throw Error('Set LAB_TEST_UR
     await page.waitForSelector('#stats .stat-card');
     assert.equal(await page.locator('#gate-summary .gate-step').count(), 4);
     assert.equal(await page.locator('#stats .stat-card').count(), 4);
+    await page.click('a[data-view="matrix"]');
+    assert.equal(await page.locator('#research-matrix tbody tr').count(), 16);
+    assert.match(await page.locator('#research-matrix').innerText(), /约 30 个场景/);
+    assert.match(await page.locator('#research-matrix').innerText(), /text\+caption/);
+    await page.click('[data-edit="study-state-update-ablation"]');
+    assert.match(await page.inputValue('[name="method"]'), /移除状态更新 prompt/);
+    await page.click('#record-dialog .close');
+    const matrixDownload = page.waitForEvent('download');
+    await page.click('#export-matrix');
+    assert.equal((await matrixDownload).suggestedFilename(), 'socialflux-experiment-matrix.csv');
+    assert.match(await page.locator('#gate2-relation').innerText(), /Gate2 补充消融/);
+    await page.click('a[data-view="paper"]');
+    assert.equal(await page.locator('#paper-table tbody tr').count(), 9);
+    assert.match(await page.locator('#paper-table').innerText(), /48\.84%/);
+    assert.match(await page.locator('#paper-table').innerText(), /49\.87%/);
+    await page.screenshot({path:'/tmp/socialflux-paper-tables.png',fullPage:true});
+    await page.selectOption('#paper-select', 'gate-overview');
+    assert.equal(await page.locator('#paper-table tbody tr').count(), 4);
+    await page.selectOption('#paper-select', 'gate2-methods');
+    assert.match(await page.locator('#paper-table').innerText(), /recent-k/);
+    for(const [button,ext] of [['paper-markdown','md'],['paper-latex','tex'],['paper-csv','csv']]){
+      const event=page.waitForEvent('download');await page.click('#'+button);
+      assert.equal((await event).suggestedFilename(),'gate2-methods.'+ext);
+    }
+    await page.click('a[data-view="overview"]');
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: '/tmp/socialflux-lab-desktop.png', fullPage: true });
     await page.click('#create');
@@ -70,7 +95,7 @@ if (!base || process.env.LAB_TEST_ISOLATED !== '1') throw Error('Set LAB_TEST_UR
     await page.click('#export-all');
     assert.match((await jsonDownload).suggestedFilename(), /\.json$/);
     await page.setViewportSize({width: 390, height: 844});
-    for (const tab of ['overview','plans','results','library']) {
+    for (const tab of ['overview','matrix','paper','plans','results','library']) {
       await page.click(`a[data-view="${tab}"]`);
       await page.waitForSelector(`#${tab}-view`, {state: 'visible'});
       assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2), tab + ' overflow');

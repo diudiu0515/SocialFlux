@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 import hashlib
@@ -93,10 +94,25 @@ def seedance_payload(
         "watermark": False,
     }
     reference = request.get("reference_video_file")
+    image_reference = request.get("reference_image_file")
+    if reference and image_reference:
+        raise ValueError("choose one identity reference transport")
+    if image_reference:
+        path = _local_reference_path(reference_root, image_reference)
+        mime = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}.get(path.suffix.lower())
+        if not mime or path.stat().st_size > 20 * 1024 * 1024:
+            raise ValueError("reference image must be PNG/JPEG within 20 MiB")
+        payload["content"].append({"type": "image_url", "role": "reference_image",
+            "image_url": {"url": "data:" + mime + ";base64," + base64.b64encode(path.read_bytes()).decode()}})
     if reference:
         payload["local_reference_video"] = str(
             _local_reference_path(reference_root, reference)
         )
+        transport=request.get("reference_video_transport","provider_url")
+        if transport not in {"provider_url","data_uri","provided_url"}:
+            raise ValueError("unsupported reference video transport")
+        if transport!="provider_url":payload["local_reference_transport"]=transport
+        if transport=="provided_url":payload["local_reference_url"]=request.get("reference_video_url")
     return validate_payload(payload)
 
 
@@ -143,6 +159,9 @@ def ensure_state(batch_root, record, *, model, resolution):
     if reference:
         reference_path = _local_reference_path(batch_root, reference)
         fingerprint_source["reference_video_sha256"] = file_sha256(reference_path)
+    image_reference = request.get("reference_image_file")
+    if image_reference:
+        fingerprint_source["reference_image_sha256"] = file_sha256(_local_reference_path(batch_root, image_reference))
     fingerprint = canonical_sha256(fingerprint_source)
     path = state_path(batch_root, record)
     if path.exists():
@@ -168,6 +187,7 @@ def ensure_state(batch_root, record, *, model, resolution):
         "format": "socialflux_seedance_queue_state_v1",
         "created_at_utc": utc_now(),
         "request_id": record["request_id"],
+        "request_profile": request.get("profile"),
         "provider_neutral_request_file": record["request_file"],
         "provider_neutral_request_sha256": fingerprint,
         "request": seedance_payload(

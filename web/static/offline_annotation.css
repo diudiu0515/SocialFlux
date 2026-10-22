@@ -17,4 +17,6 @@
 .annotation-form .attestation input { width: auto; }
 .session-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
 .resume-button { display: block; width: 100%; margin: 10px 0; text-align: left; }
+.annotation-clip { margin: 16px 0; }
+#annotationMedia video { width: min(100%, 640px); max-height: 420px; }
 @media (max-width: 650px) { .annotation-setup { margin: 15px auto; padding: 0 12px; } }

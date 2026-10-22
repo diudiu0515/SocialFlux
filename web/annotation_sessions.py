@@ -16,7 +16,10 @@ from threading import RLock
 
 from offline.choice_builder import save
 from tasks.offline_choice import public_instance
-from web.offline_review import ROOT, BANK_PATHS, author_reference, checked_source, item_digest
+from web.offline_review import (
+    ROOT, BANK_PATHS, author_reference, checked_source, item_digest,
+    bound_video_materials, frozen_media_available,
+)
 
 STORE = ROOT / "data/human_annotations"
 LOCK = RLock()
@@ -36,8 +39,13 @@ def current_items(bank):
 def catalog(bank="scenarios-v2"):
     items, bank_sha = current_items(bank)
     counts = Counter(x["story_id"] for x in items)
+    videos = bound_video_materials(items, bank)
+    ready = Counter(x['story_id'] for x in items if videos[x['instance_id']]['ready'])
     return {"bank": bank, "bank_sha256": bank_sha,
-            "scenes": [{"scene": scene, "questions": counts[scene]} for scene in sorted(counts)]}
+            "default_modality": "text+video",
+            "scenes": [{"scene": scene, "questions": counts[scene],
+                        "video_questions": ready[scene], "video_available": ready[scene] == counts[scene]}
+                       for scene in sorted(counts)]}
 
 
 def session_path(token):
@@ -83,8 +91,9 @@ def start(payload):
         raise ValueError("请填写不超过 100 字的标注人 ID")
     if payload.get("prior_exposure") not in (True, False):
         raise ValueError("请声明是否已经看过该场景的私有材料或参考答案")
-    if payload.get("modality", "text") != "text":
-        raise ValueError("本轮固定为文字条件，视频条件须另行分配，不能作答中途切换")
+    modality = payload.get("modality", "text+video")
+    if modality not in ("text", "text+video"):
+        raise ValueError("展示条件无效")
     bank = payload.get("bank", "scenarios-v2")
     items, bank_sha = current_items(bank)
     scenes = payload.get("scenes", [])
@@ -93,6 +102,10 @@ def start(payload):
     if not set(scenes) <= {x["story_id"] for x in items}:
         raise ValueError("场景不存在")
     selected = [x for x in items if x["story_id"] in scenes]
+    video_inputs = bound_video_materials(selected, bank) if modality == 'text+video' else {}
+    missing = [x['instance_id'] for x in selected if video_inputs and not video_inputs[x['instance_id']]['ready']]
+    if missing:
+        raise ValueError("所选场景缺少与当前题目版本匹配的视频，不能按视频条件分配：" + '、'.join(missing))
     exclusions = ["self_reported_prior_exposure"] if payload["prior_exposure"] else []
     # Cross-release exposure and repeat-test checks are participant/scene scoped.
     for path in (STORE / "sessions").glob("*.json"):
@@ -106,12 +119,15 @@ def start(payload):
             exclusions.append("prior_same_scene_private_exposure:" + prior["token"][:12])
     token = secrets.token_hex(32)
     session = {"format": "socialflux_human_annotation_session_v1", "token": token, "created_at": now(),
-               "reviewer": reviewer, "bank": bank, "bank_sha256": bank_sha, "modality": "text",
+               "reviewer": reviewer, "bank": bank, "bank_sha256": bank_sha, "modality": modality,
+               "video_inputs": video_inputs,
                "items": selected, "blind": {}, "private_judgments": {}, "final_judgments": {},
                "evidence_opened": {}, "machine_opened": {}, "events": [],
                "baseline_eligible": not exclusions, "baseline_exclusions": exclusions,
                "prior_exposure_declaration": payload["prior_exposure"]}
-    event(session, "start", scenes=scenes, item_hashes={x["instance_id"]: item_digest(x) for x in selected})
+    event(session, "start", scenes=scenes, modality=modality,
+          item_hashes={x["instance_id"]: item_digest(x) for x in selected},
+          media_hashes=media_hashes(session))
     save(session_path(token), session)
     return status(session)
 
@@ -121,6 +137,21 @@ def selected_item(session, identity):
     if item is None:
         raise ValueError("题目不在此次分配中")
     return item
+
+
+def media_hashes(session):
+    return {identity: [{'asset_id': a['asset_id'], 'sha256': a['sha256'], 'evidence_ids': a['evidence_ids']}
+                       for a in value['media']]
+            for identity, value in session.get('video_inputs', {}).items()}
+
+
+def video_material(session, identity):
+    if session['modality'] == 'text':
+        return None
+    material = session.get('video_inputs', {}).get(identity)
+    if not material or not material['media'] or not all(frozen_media_available(a) for a in material['media']):
+        raise ValueError('已分配视频缺失或内容发生变化，请恢复原视频后继续；本次保持文字＋视频条件。')
+    return material
 
 
 def judgment(payload, item, *, rationale_required):
@@ -173,6 +204,8 @@ def export_session(session):
             "independent_private_judgments": deepcopy(session["private_judgments"]),
             "machine_assisted_final_judgments": deepcopy(session["final_judgments"]),
             "item_hashes": {key: item_digest(value) for key, value in items.items()},
+            "media_hashes": media_hashes(session),
+            "public_input_hashes": {key: item_digest(value['public']) for key,value in session.get('video_inputs',{}).items()},
             "events": deepcopy(session["events"]),
             "formal_ground_truth": False,
             "scoring_rule": "Exclude this participant's GT and require two other independent agreeing reviewers; unresolved accuracy is null."}
@@ -193,7 +226,10 @@ def dispatch(action, payload):
         identity = item["instance_id"]
         if action == "item":
             # Exact evaluated input: no capability, difficulty, author or source ratings.
-            return {"public": public_instance(item),
+            material = video_material(session, identity)
+            return {"public": deepcopy(material['public']) if material else public_instance(item),
+                    "media": deepcopy(material['media']) if material else [],
+                    "media_coverage": deepcopy(material['media_coverage']) if material else None,
                     "blind_response": session["blind"].get(identity),
                     "private_judgment": session["private_judgments"].get(identity),
                     "final_judgment": session["final_judgments"].get(identity)}
@@ -202,8 +238,10 @@ def dispatch(action, payload):
                 raise ValueError("盲答已提交并锁定，不能覆盖")
             if session["evidence_opened"]:
                 raise ValueError("已查看私有证据，不能再提交盲答")
+            video_material(session, identity)
             row = judgment(payload, item, rationale_required=False)
-            row.update(modality=session["modality"], reviewer=session["reviewer"])
+            row.update(modality=session["modality"], reviewer=session["reviewer"],
+                       media_hashes=media_hashes(session).get(identity, []))
             session["blind"][identity] = row
             event(session, "blind_submitted", instance_id=identity)
         elif action == "evidence":
@@ -282,6 +320,7 @@ def human_results():
                 resolved += 1
                 correct += row["answer"] == answer
         scores.append({"reviewer": session["reviewer"], "baseline_eligible": eligible,
+                       "modality": session['modality'], "media_hashes": media_hashes(session),
                        "blind_submitted": len(session["blind"]), "independently_scored": resolved,
                        "correct": correct if resolved else None, "accuracy": correct / resolved if resolved else None})
     return {"ground_truth_candidates": gt, "human_baselines": scores, "identity_basis": "self_reported_reviewer_id"}

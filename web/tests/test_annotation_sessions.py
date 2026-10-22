@@ -25,7 +25,47 @@ class AnnotationSessionTests(unittest.TestCase):
 
     def start(self, reviewer="person-one", prior=False):
         return sessions.dispatch("start", {"reviewer": reviewer, "scenes": ["GPT50_001"],
-                                         "prior_exposure": prior})["token"]
+                                         "prior_exposure": prior, "modality": "text"})["token"]
+
+    def test_new_default_is_frozen_video_input_with_exported_bindings(self):
+        value = sessions.dispatch('start', {'reviewer':'video-person','scenes':['GPT50_001'],'prior_exposure':False})
+        self.assertEqual(value['modality'], 'text+video')
+        token=value['token'];identity=self.items[0]['instance_id']
+        data=self.call('item',token)
+        self.assertEqual(data['public']['modality'],'text+video')
+        self.assertEqual(data['public']['instance_id'],identity+'-video')
+        self.assertEqual(data['public']['input'],self.items[0]['input'])
+        self.assertTrue(data['media'])
+        self.assertNotIn('authoring',json.dumps(data))
+        self.assertNotIn('human_review',json.dumps(data))
+        self.items[0]['question']='A later source edit must not change this session'
+        self.assertEqual(self.call('item',token)['public'],data['public'])
+        self.call('blind',token,answer='A')
+        exported=self.call('export',token)
+        self.assertEqual(exported['modality'],'text+video')
+        self.assertEqual(exported['blind_responses'][identity]['media_hashes'],exported['media_hashes'][identity])
+        self.assertEqual(sessions.human_results()['human_baselines'][0]['modality'],'text+video')
+
+    def test_video_assignment_rejects_stale_binding_and_missing_frozen_file(self):
+        payload={'reviewer':'video-person','scenes':['GPT50_001'],'prior_exposure':False}
+        token=sessions.dispatch('start',payload)['token']
+        with patch.object(sessions,'frozen_media_available',return_value=False):
+            for action in ('item','blind'):
+                with self.assertRaisesRegex(ValueError,'视频缺失或内容发生变化'):
+                    self.call(action,token,answer='A')
+        self.items[0]['question']='changed source question'
+        with self.assertRaisesRegex(ValueError,'缺少与当前题目版本匹配的视频'):
+            sessions.dispatch('start',payload)
+        catalog=sessions.catalog()
+        self.assertFalse(catalog['scenes'][0]['video_available'])
+        self.assertEqual(catalog['scenes'][0]['video_questions'],1)
+
+    def test_legacy_text_session_keeps_its_input_without_video(self):
+        token=self.start()
+        data=self.call('item',token)
+        self.assertEqual(data['public']['modality'],'text')
+        self.assertEqual(data['media'],[])
+        self.assertEqual(self.call('export',token)['media_hashes'],{})
 
     def call(self, action, token, identity=None, **kwargs):
         return sessions.dispatch(action, {"token": token, "instance_id": identity or self.items[0]["instance_id"], **kwargs})

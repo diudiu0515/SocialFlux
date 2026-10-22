@@ -11,7 +11,7 @@ import time
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from offline.choice_builder import save, sha
-from tasks.offline_choice import answer_prompt, validate_item
+from tasks.offline_choice import answer_prompt, validate_item, visible_evidence
 from evaluation.offline_choice import score_items
 from evaluation.t4_media import video_blocks, provider_messages, compact_media
 from providers.factory import build_provider, public_provider_config
@@ -22,6 +22,26 @@ def read_jsonl(path):
     return [json.loads(line) for line in Path(path).read_text(encoding='utf-8').splitlines() if line.strip()]
 
 
+def validate_media(item, media, transport):
+    if not media or transport not in {'native_video', 'video_frames'}:
+        raise ValueError('video condition requires verified media and explicit transport')
+    bindings = item['authoring'].get('matched_assets')
+    if bindings is not None and bindings != [
+            {'sha256': a['sha256'], 'evidence_ids': a.get('evidence_ids', [])} for a in media]:
+        raise ValueError('media does not match the frozen question bindings')
+    for asset in media:
+        if not asset.get('evidence_ids') or not set(asset['evidence_ids']) <= visible_evidence(item):
+            raise ValueError('media cites invisible evidence')
+        if sha(asset['path']) != asset['sha256']:
+            raise ValueError('frozen video checksum mismatch')
+        if transport == 'video_frames':
+            if not asset.get('frames'):
+                raise ValueError('video_frames requires extracted frames')
+            for frame in asset['frames']:
+                if sha(frame['path']) != frame['sha256']:
+                    raise ValueError('frozen frame checksum mismatch')
+
+
 def call_item(item, provider_config, *, diagnostic=False, media=None, transport=None):
     start=time.monotonic()
     record={'instance_id':item['instance_id'],'provider':public_provider_config(provider_config),
@@ -29,8 +49,7 @@ def call_item(item, provider_config, *, diagnostic=False, media=None, transport=
     try:
         messages=[{'role':'user','content':answer_prompt(item,diagnostic)}]
         if item['modality']=='text+video':
-            if not media or not transport:
-                raise ValueError('video condition requires verified media and explicit transport')
+            validate_media(item, media, transport)
             content=[{'type':'text','text':messages[0]['content']}]
             for asset in media:
                 content.append({'type':'text','text':'以下视频对应公开历史定位：'+', '.join(asset.get('evidence_ids', []))})
@@ -67,7 +86,14 @@ def main(argv=None):
     if args.limit:items=items[:args.limit]
     for item in items:validate_item(item,formal=args.formal)
     if args.check_only:
-        print(json.dumps({'validated':len(items),'formal':args.formal,'provider_calls':0}));return
+        result = {'validated': len(items), 'formal': args.formal, 'provider_calls': 0}
+        if args.media_manifest or args.transport:
+            media = json.loads(args.media_manifest.read_text()) if args.media_manifest else {}
+            videos = [item for item in items if item['modality'] == 'text+video']
+            for item in videos:
+                validate_media(item, media.get(item['instance_id']), args.transport)
+            result.update(media_validated=len(videos), transport=args.transport)
+        print(json.dumps(result));return
     args.output.mkdir(parents=True,exist_ok=True)
     if not args.responses and (args.output/'responses.jsonl').exists():
         raise FileExistsError('response log already exists; use a new output directory or --responses to score it')

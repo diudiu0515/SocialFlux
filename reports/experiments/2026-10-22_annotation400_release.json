@@ -1,0 +1,30 @@
+{
+  "release": "annotation400-en-20261022-v1",
+  "dataset_sha256": "338a2502b00b4146525b96c864debee2d2da35cf9da6c06151169d900b18d9bc",
+  "source_bank_sha256": "637665ef21fa556dd04d13da635d3fa733ec3590bb4e4476e684f77bc4fe8105",
+  "items": 400,
+  "scenes": 50,
+  "language": "en",
+  "task_difficulty": {
+    "T1": {
+      "ordinary": 90,
+      "hard": 60
+    },
+    "T2": {
+      "ordinary": 60,
+      "hard": 40
+    },
+    "T3": {
+      "ordinary": 90,
+      "hard": 60
+    }
+  },
+  "media_readiness": {
+    "required_nodes": 150,
+    "completed_nodes": 150,
+    "complete_items": 400,
+    "gaps": [],
+    "audio_required": true,
+    "human_review": "pending"
+  }
+}

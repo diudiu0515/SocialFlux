@@ -30,7 +30,7 @@ const LABELS = {
 };
 const RATINGS = {clarity: "题目是否清楚", evidence_support: "证据是否充分", answer_distinguishability: "答案是否可区分", analyzability: "结果是否便于分析"};
 const FILTER_IDS = ["sceneFilter", "taskFilter", "familyFilter", "capabilityFilter", "difficultyFilter", "migrationFilter", "shapeFilter", "statusFilter", "search"];
-let bank, detail, activeId, requestVersion = 0, modality = "text";
+let bank, detail, activeId, requestVersion = 0, modality = "text+video";
 let draft = {reviewer: "", annotations: {}};
 const detailCache = new Map();
 
@@ -71,7 +71,7 @@ function annotation(id = activeId) {
     const meta = bank.items.find(item => item.instance_id === id);
     draft.annotations[id] = {instance_id: id, item_sha256: meta.item_sha256, status: "draft",
       answer: null, acceptable_answers: [], evidence_ids: [], ratings: {}, decision: "",
-      rationale: "", revision_note: "", reference_viewed_at: null, modalities_seen: ["text"]};
+      rationale: "", revision_note: "", reference_viewed_at: null, modalities_seen: []};
   }
   return draft.annotations[id];
 }
@@ -148,7 +148,7 @@ function checkItemVersion(value, id) {
 async function selectItem(id) {
   if (!bank.items.some(i => i.instance_id === id)) return;
   const version = ++requestVersion;
-  activeId = id; detail = null; modality = "text";
+  activeId = id; detail = null; modality = "text+video";
   history.replaceState(null, "", "#" + encodeURIComponent(id));
   $("workspace").setAttribute("aria-busy", "true");
   $("workspace").replaceChildren(el("p", "muted", "正在加载题目…"));
@@ -213,22 +213,41 @@ function renderMaterial(input) {
   return section;
 }
 function renderMedia() {
-  const section = card("配对材料");
+  const section = card("题目视频与展示条件");
   const select = el("select"); select.id = "modality";
   select.append(new Option("文字", "text"), new Option("文字 + 视频", "text+video")); select.value = modality;
   const label = el("label", "", "展示条件"); label.append(select); section.append(label);
   const clips = el("div"); clips.id = "mediaClips"; section.append(clips);
   function show() {
     clips.replaceChildren();
+    if (modality === 'text' || detail.media.some(asset => asset.available)) {
+      const ann = annotation();
+      if (!ann.modalities_seen.includes(modality)) {
+        ann.modalities_seen.push(modality);
+        ann.media_displayed_at = new Date().toISOString();
+        ann.displayed_media = detail.media.filter(asset => asset.available).map(({asset_id,sha256,evidence_ids}) => ({asset_id,sha256,evidence_ids}));
+        save();
+      }
+    }
     if (modality === "text") {clips.append(el("p", "muted", "当前只展示文字与原有非语言描述。")); return;}
     clips.append(el("p", "muted", "与文字版共用题干、选项和待审答案。" + (LABELS[detail.nonverbal_history_relation] || "")));
     const uncovered = (detail.media_coverage?.uncovered_evidence_ids || []).map(id => id === "ending" ? "共同结尾" : id);
     if (uncovered.length) clips.append(el("p", "muted", "尚无对应视频：" + uncovered.join("、") + "。这些位置仍以题面文字为准。"));
-    if (detail.metadata.task === "T2" && detail.media.length) clips.append(el("p", "muted", "A/B 共用同一段未改写前史视频；共同结尾没有配对视频。"));
+    if (detail.metadata.task === "T2" && detail.media.length) {
+      const ending = detail.public.input.shared_ending.turn_id;
+      const hasEnding = detail.media.some(asset => asset.available && asset.evidence_ids.includes(ending));
+      clips.append(el("p", "muted", hasEnding ? "A/B 共用相同的前史和共同结尾视频，保持表达条件一致。" : "A/B 共用同一段未改写前史视频；共同结尾没有配对视频。"));
+    }
     if (!detail.media.length) clips.append(el("p", "warning", "没有与当前题目版本匹配的配对视频。"));
     detail.media.forEach(asset => {
       clips.append(el("p", "", "历史位置：" + asset.evidence_ids.join("、")));
       if (asset.response_neutral) clips.append(el("p", "muted", "非语言表情与动作片段，不朗读题中台词。"));
+      if (asset.media_kind === "talking_head") {
+        const transcript = el("details");
+        transcript.append(el("summary", "", "对应原文台词"), el("p", "", asset.spoken_text));
+        clips.append(transcript);
+        if (!asset.speech_verified) clips.append(el("p", "muted", "已按原文生成；逐字语音与口型仍待审核。"));
+      }
       if (asset.available) {
         const video = el("video"); video.controls = true; video.preload = "metadata"; video.playsInline = true;
         video.src = asset.url; clips.append(video);
@@ -238,8 +257,7 @@ function renderMedia() {
   }
   select.onchange = () => {
     modality = select.value;
-    const seen = new Set(annotation().modalities_seen); seen.add(modality);
-    update("modalities_seen", [...seen]); show();
+    show();
   };
   show(); return section;
 }
@@ -449,7 +467,7 @@ function renderItem() {
   if (meta.source_origin === 'authored_illustration_not_environment_rollout') title.append(el('p', 'warning', '受控写作示例：用于展示题型，尚未经环境回放与人工核验。'));
   if (meta.source_origin === 'existing_partial_rollout') title.append(el('p', 'muted', '本题复用原轨迹已完成的历史片段。'));
   if (meta.source_origin === 'new_offline_source_prefix_original_failure_preserved') title.append(el('p', 'muted', '原轨迹缺少可用历史，本题使用另行生成的开发前史；原失败记录保留。'));
-  workspace.append(title, renderMaterial(detail.public.input), renderMedia(), renderAnnotation(), renderReference());
+  workspace.append(title, renderMedia(), renderMaterial(detail.public.input), renderAnnotation(), renderReference());
   updateStatus(); document.title = `${meta.instance_id} · SocialFlux 题目标注`;
 }
 function exportDraft() {
@@ -525,6 +543,7 @@ async function init() {
     if(scenes.has(requestedScene))$('sceneFilter').value=requestedScene;
     $("bankMeta").textContent = `${summary.combinations} 道组合题 · ${summary.replay_pending} 题回放待完成`;
     if (summary.media_pairs != null) $("bankMeta").textContent += ` · ${summary.media_pairs} 题有配对视频 · ${summary.media_missing || 0} 题缺少视频`;
+    if (summary.talking_head?.node_count) $("bankMeta").textContent += ` · ${summary.talking_head.preview_only ? '英文样片' : '台词视频'} ${summary.talking_head.downloaded_nodes || 0}/${summary.talking_head.node_count} 个节点已下载`;
     if (summary.machine_concerns) $("bankMeta").textContent += ` · ${summary.machine_concerns} 题机器争议待修订`;
     const audited = Object.values(summary.migration_levels || {}).reduce((a,b) => a+b,0);
     if (audited) $("bankMeta").textContent += ` · 新版适配已机器复核 ${audited} 题`;

@@ -49,6 +49,30 @@ class OfflineReviewTest(unittest.TestCase):
             self.assertNotIn(key, rendered)
         self.assertIsNone(api_payload("/api/offline-review/missing"))
 
+    def test_talking_preview_is_bound_to_bank_and_selected_public_nodes(self):
+        bank_sha = review.digest((review.BANK / 'items.jsonl').read_bytes())
+        prefix = 'data/offline_talking_head_en_v1/' + bank_sha[:16] + '/'
+        (self.root / prefix).mkdir(parents=True)
+        self.write(prefix + 'preview_selection.json', {'items_sha256': bank_sha,
+                   'scene_ids': ['scene'], 'node_ids': ['selected']})
+        public_node = {'node_id': 'selected', 'scenario_id': 'scene', 'location': 'ending',
+                       'speaker': 'Fictional speaker', 'source_public_response': '中文源记录',
+                       'spoken_text': 'Exact public line', 'speech_language': 'en',
+                       'source_observable_expression': {}, 'segment_request_ids': ['segment'],
+                       'scenario_source': {'private': 'PRIVATE_SOURCE_SENTINEL'}}
+        self.write(prefix + 'manifest.json', {'items_sha256': bank_sha,
+                   'nodes': [public_node, {**public_node, 'node_id': 'excluded'}]})
+        with patch.dict(review.BANK_PATHS, {'scenarios-v2': 'bank'}):
+            result = api_payload('/api/offline-talking-preview')
+            self.assertEqual(result['node_count'], 1)
+            self.assertEqual(result['ready_nodes'], 0)
+            self.assertEqual(result['scenes'][0]['nodes'][0]['spoken_text'], 'Exact public line')
+            self.assertEqual(result['scenes'][0]['nodes'][0]['source_text'], '中文源记录')
+            self.assertNotIn('PRIVATE_SOURCE_SENTINEL', json.dumps(result))
+            self.item['question'] += 'changed'
+            self.save_bank()
+            self.assertEqual(api_payload('/api/offline-talking-preview')['node_count'], 0)
+
     def test_reference_retains_provenance_without_exposing_raw_calls_or_future_source(self):
         ref = api_payload("/api/offline-review/q1/reference")
         self.assertEqual(ref["scenario"]["title"], "frozen scenario")
@@ -166,6 +190,37 @@ class OfflineReviewTest(unittest.TestCase):
         self.item["question"] += "新版"
         self.save_bank()
         self.assertIsNone(review.load_review()["summary"]["media_missing"])
+
+    def test_talking_head_serving_requires_registered_hash_and_exact_public_line(self):
+        directory = self.root / "data/offline_talking_head_en_v1" / ("a" * 16)
+        assets = directory / "assets"
+        assets.mkdir(parents=True)
+        video = assets / "node.mp4"
+        video.write_bytes(b"talking video fixture")
+        asset = {"path": str(video), "sha256": review.digest(video.read_bytes()),
+                 "source_asset_id": "node", "media_kind": "talking_head",
+                 "spoken_text": self.item["input"]["history"][0]["environment_character"],
+                 "evidence_ids": ["t1"]}
+        (directory / "completed_nodes.json").write_text(json.dumps([{"node_id": "node", "asset": asset}]))
+        self.assertEqual(review.talking_video_target("a" * 16, "node.mp4"), video)
+        self.assertIsNone(review.talking_video_target("../outside", "node.mp4"))
+        self.assertIsNone(review.talking_video_target("a" * 16, "../node.mp4"))
+        pairs = [deepcopy(self.item), deepcopy(self.item)]
+        for pair in pairs:
+            pair["metadata"]["modality_pair_id"] = "q1"
+        pairs[1].update(instance_id="q1-video", modality="text+video")
+        pairs[1]["authoring"]["matched_assets"] = [{k: asset[k] for k in ("sha256", "evidence_ids")}]
+        (review.BANK / "paired.items.jsonl").write_text("\n".join(json.dumps(pair) for pair in pairs))
+        self.write("bank/media.json", {"q1-video": [asset]})
+        media = review.load_review("q1")["media"][0]
+        self.assertTrue(media["available"])
+        self.assertTrue(media["url"].startswith("/offline-talking-video/"))
+        self.assertFalse(media["speech_verified"])
+        asset["spoken_text"] = "unrelated words"
+        self.write("bank/media.json", {"q1-video": [asset]})
+        self.assertEqual(review.load_review("q1")["media"], [])
+        video.write_bytes(b"changed video")
+        self.assertIsNone(review.talking_video_target("a" * 16, "node.mp4"))
 
 
 if __name__ == "__main__":

@@ -10,6 +10,7 @@ from functools import lru_cache
 from contextvars import ContextVar
 import hashlib
 import json
+import re
 from pathlib import Path
 from urllib.parse import quote
 
@@ -19,7 +20,7 @@ from tasks.offline_choice import FAMILIES, public_instance, visible_evidence
 ROOT = Path(__file__).resolve().parents[1]
 BANK = ROOT / "data/offline_t1_t3_dev60"
 _bank_override = ContextVar('offline_review_bank',default=None)
-BANK_PATHS = {'dev60':'data/offline_t1_t3_dev60','gpt50-t1-t3':'data/offline_gpt50_t1_t3','design-v2':'tasks/examples/offline_design_v2', 'scenarios-v2':'tasks/examples/offline_scenarios_v2'}
+BANK_PATHS = {'dev60':'data/offline_t1_t3_dev60','gpt50-t1-t3':'data/offline_gpt50_t1_t3','design-v2':'tasks/examples/offline_design_v2', 'scenarios-v2':'tasks/examples/offline_scenarios_v2', 'annotation400-en':'data/offline_annotation400_en_20261022'}
 
 
 def bank_path():
@@ -128,11 +129,12 @@ def _paired_items(raw):
             if line.strip() for item in [json.loads(line)]}
 
 
-def pair_matches(item):
-    path = bank_path() / "paired.items.jsonl"
-    if not path.is_file():
-        return False
-    pairs = _paired_items(path.read_bytes())
+def pair_matches(item, pairs=None):
+    if pairs is None:
+        path = bank_path() / "paired.items.jsonl"
+        if not path.is_file():
+            return False
+        pairs = _paired_items(path.read_bytes())
     for suffix, modality in (("", "text"), ("-video", "text+video")):
         paired = deepcopy(pairs.get(item["instance_id"] + suffix))
         if not paired or paired["modality"] != modality:
@@ -147,11 +149,15 @@ def pair_matches(item):
     return True
 
 
-def media_records(item):
-    if not pair_matches(item):
+def media_records(item, *, pairs=None, media_index=None, file_hashes=None):
+    if not pair_matches(item, pairs):
         return []
-    records = read_json(bank_path() / "media.json", {}).get(item["instance_id"] + "-video", [])
-    paired = _paired_items((bank_path() / "paired.items.jsonl").read_bytes())[item["instance_id"] + "-video"]
+    if media_index is None:
+        media_index = read_json(bank_path() / "media.json", {})
+    records = media_index.get(item["instance_id"] + "-video", [])
+    if pairs is None:
+        pairs = _paired_items((bank_path() / "paired.items.jsonl").read_bytes())
+    paired = pairs[item["instance_id"] + "-video"]
     bindings = paired["authoring"].get("matched_assets")
     if bindings is not None and bindings != [
             {"sha256": r["sha256"], "evidence_ids": r.get("evidence_ids", [])} for r in records]:
@@ -161,18 +167,146 @@ def media_records(item):
     result = []
     for record in records:
         path = (ROOT / record["path"]).resolve()
-        available = path.parent == VIDEO_ROOT.resolve() and path.is_file()
+        talking = record.get("media_kind") == "talking_head"
+        if talking:
+            public_lines = {t["turn_id"]: t["environment_character"] for key in
+                            ("history", "history_a", "history_b") for t in item["input"].get(key, [])}
+            ending = item["input"].get("shared_ending")
+            if ending:
+                public_lines[ending["turn_id"]] = ending["current_response"]
+            if any(public_lines.get(e) != record.get("spoken_text") for e in record["evidence_ids"]):
+                return []
+            allowed = (path.parent.name == "assets" and path.parent.parent.parent ==
+                       (ROOT / "data/offline_talking_head_en_v1").resolve())
+            url = "/offline-talking-video/" + quote(path.parent.parent.name) + "/" + quote(path.name)
+        else:
+            allowed = path.parent == VIDEO_ROOT.resolve()
+            url = "/online-video/gpt/" + quote(path.name)
+        available = allowed and path.is_file()
         if available:
-            available = digest(path.read_bytes()) == record["sha256"]
+            if file_hashes is None:
+                actual = digest(path.read_bytes())
+            else:
+                if path not in file_hashes:
+                    file_hashes[path] = digest(path.read_bytes())
+                actual = file_hashes[path]
+            available = actual == record["sha256"]
         result.append({
             "asset_id": record["source_asset_id"], "sha256": record["sha256"],
             "evidence_ids": record.get("evidence_ids", []),
             "human_review": record.get("human_review", "pending"),
             "response_neutral": record.get("response_neutral", False),
+            "media_kind": record.get("media_kind", "nonverbal_cue"),
+            "spoken_text": record.get("spoken_text") if talking else None,
+            "speech_verified": record.get("speech_verified", False),
             "available": available,
-            "url": "/online-video/gpt/" + quote(path.name) if available else None,
+            "url": url if available else None,
         })
     return result
+
+
+def bound_video_materials(items, bank_id):
+    """Verify the registered video condition in one read; no private projection."""
+    if bank_id not in BANK_PATHS:
+        raise ValueError("未知题库")
+    token = _bank_override.set(ROOT / BANK_PATHS[bank_id])
+    try:
+        path = bank_path() / "paired.items.jsonl"
+        pairs = _paired_items(path.read_bytes()) if path.is_file() else {}
+        media_index = read_json(bank_path() / "media.json", {})
+        hashes, result = {}, {}
+        for item in items:
+            media = media_records(item, pairs=pairs, media_index=media_index, file_hashes=hashes)
+            ready = bool(media) and all(asset['available'] for asset in media)
+            result[item['instance_id']] = {
+                'public': public_instance(pairs[item['instance_id'] + '-video']) if ready else None,
+                'media': [{k:v for k,v in asset.items() if k != 'human_review'} for asset in media],
+                'media_coverage': media_coverage(item, media), 'ready': ready,
+            }
+        return result
+    finally:
+        _bank_override.reset(token)
+
+
+def frozen_media_available(asset):
+    """Check a frozen session's file without rebinding it to a newer question."""
+    url = asset.get('url') or ''
+    if url.startswith('/online-video/gpt/'):
+        filename = url.removeprefix('/online-video/gpt/')
+        if not re.fullmatch(r'[A-Za-z0-9_-]+\.mp4', filename):
+            return False
+        path = VIDEO_ROOT / filename
+        if path.resolve().parent != VIDEO_ROOT.resolve():
+            return False
+    elif url.startswith('/offline-talking-video/'):
+        parts = url.removeprefix('/offline-talking-video/').split('/')
+        if len(parts) != 2:
+            return False
+        path = talking_video_target(*parts)
+        if path is None:
+            return False
+    else:
+        return False
+    return path.is_file() and digest(path.read_bytes()) == asset.get('sha256')
+
+
+def talking_video_target(release, filename):
+    if not re.fullmatch(r"[a-f0-9]{16}", release) or not re.fullmatch(r"[A-Za-z0-9_-]+\.mp4", filename):
+        return None
+    directory = ROOT / "data/offline_talking_head_en_v1" / release
+    target = directory / "assets" / filename
+    if target.resolve().parent != (directory / "assets").resolve() or not target.is_file():
+        return None
+    completed = read_json(directory / "completed_nodes.json", [])
+    row = next((row for row in completed if row["node_id"] + ".mp4" == filename), None)
+    if not row or digest(target.read_bytes()) != row["asset"]["sha256"]:
+        return None
+    return target
+
+
+def load_talking_preview():
+    """Expose only the selected preview's public dialogue and registered media."""
+    bank = ROOT / BANK_PATHS['scenarios-v2']
+    bank_sha = digest((bank / 'items.jsonl').read_bytes())
+    directory = ROOT / 'data/offline_talking_head_en_v1' / bank_sha[:16]
+    selection = read_json(directory / 'preview_selection.json', {})
+    manifest = read_json(directory / 'manifest.json', {})
+    if manifest.get('items_sha256') != bank_sha or selection.get('items_sha256') != bank_sha:
+        return {'scenes': [], 'ready_nodes': 0, 'node_count': 0, 'error': '当前题库尚无有效预览清单'}
+    screens = read_json(directory / 'speech_screen.json', {}).get('nodes', {})
+    findings = read_json(directory / 'review_findings.json', {}).get('nodes', {})
+    assets = {row['node_id']: row['asset'] for row in read_json(directory / 'completed_nodes.json', [])}
+    scenes = []
+    for scene_id in selection['scene_ids']:
+        nodes = []
+        for node in manifest['nodes']:
+            if node['scenario_id'] != scene_id or node['node_id'] not in selection['node_ids']:
+                continue
+            filename = node['node_id'] + '.mp4'
+            available = talking_video_target(bank_sha[:16], filename) is not None
+            asset_sha = assets.get(node['node_id'], {}).get('sha256', '')
+            screen = screens.get(node['node_id'])
+            if screen and screen.get('video_sha256') != asset_sha:
+                screen = None
+            finding = findings.get(node['node_id'])
+            if finding and finding.get('video_sha256') != asset_sha:
+                finding = None
+            statuses = [read_json(directory / 'provider_states' / (rid + '.json'), {}).get('status', 'not_submitted')
+                        for rid in node['segment_request_ids']]
+            nodes.append({'node_id': node['node_id'], 'location': node['location'],
+                          'speaker': node['speaker'], 'spoken_text': node.get('spoken_text', node['source_public_response']),
+                          'source_text': node['source_public_response'],
+                          'speech_language': node.get('speech_language'),
+                          'observable_expression': node['source_observable_expression'],
+                          'available': available, 'segment_statuses': statuses,
+                          'url': f'/offline-talking-video/{bank_sha[:16]}/{filename}?v={asset_sha[:12]}' if available else None,
+                          'speech_screen': screen, 'review_issue': finding, 'human_review': 'pending'})
+        scenes.append({'scene_id': scene_id, 'nodes': nodes})
+    return {'scenes': scenes, 'ready_nodes': sum(n['available'] for s in scenes for n in s['nodes']),
+            'node_count': sum(len(s['nodes']) for s in scenes), 'items_sha256': bank_sha,
+            'excluded_scenes': [{'scene_id': x['scene_id'], 'reason': x['reason']}
+                                for x in selection.get('excluded_scenes', [])],
+            'human_review': 'pending'}
 
 
 def media_pairing_report(bank_sha):
@@ -295,6 +429,9 @@ def _load_review(instance_id=None, reference=False):
         rows = [metadata(item) for item in items]
         manifest=read_json(bank_path()/'manifest.json',{})
         pairing = media_pairing_report(bank_sha)
+        talking = read_json(bank_path() / "talking_head_status.json", {})
+        if talking.get("items_sha256") != bank_sha:
+            talking = {}
         return {
             "format": "socialflux_offline_choice_review_v1", "bank_id": bank_path().name,
             "bank_sha256": bank_sha, "status": "available" if items else "not_generated",
@@ -312,6 +449,7 @@ def _load_review(instance_id=None, reference=False):
                 "active_generation_jobs":active_generation_jobs(),
                 "media_pairs": pairing.get("logical_pairs"),
                 "media_missing": pairing.get("coverage_counts", {}).get("missing"),
+                "talking_head": {k: talking[k] for k in ("node_count", "request_count", "downloaded_nodes", "downloaded_segments") if k in talking},
                 "primary_capabilities":manifest.get("primary_capabilities",{}),
                 "design_difficulties":manifest.get("design_difficulties",{}),
                 "authored_illustrations":manifest.get("authored_illustrations",0),

@@ -115,7 +115,10 @@ def validate_design(item):
     if item['task'] == 'T3':
         actions = inp['candidate_actions']
         ids = [x['action_id'] for x in actions]
-        if ids != [f'action_{i+1}' for i in range(len(actions))] or any(x.get('label') != f'行动 {i+1}' for i, x in enumerate(actions)):
+        labels = [x.get('label') for x in actions]
+        valid_labels = ([f'行动 {i+1}' for i in range(len(actions))],
+                        [f'Action {i+1}' for i in range(len(actions))])
+        if ids != [f'action_{i+1}' for i in range(len(actions))] or labels not in valid_labels:
             raise ValueError('candidate actions use numbered labels, answers use letters')
         if len({x['text'] for x in actions}) != len(actions):
             raise ValueError('duplicate candidate actions')

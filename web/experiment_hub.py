@@ -12,11 +12,14 @@ import sqlite3
 import uuid
 
 from web.experiment_status import load_experiment_status
+from web.experiment_catalog import load_matrix, planned_records
+from web.experiment_tables import build_paper_tables
+from web.human_gt import load_human_gt
 
 ROOT = Path(__file__).resolve().parents[1]
 STORE = ROOT / "data/experiment_hub"
 STATUSES = ("planned", "running", "blocked", "review", "completed", "archived")
-CATEGORIES = ("Gate 1", "Gate 2", "Gate 3", "Gate 4", "T1–T3", "T4", "多模态", "其他")
+CATEGORIES = ("Gate 1", "Gate 2", "Gate 3", "Gate 4", "T1–T3", "T4", "环境消融", "多模态", "其他")
 FIELDS = ("title", "category", "status", "priority", "owner", "due_date",
           "hypothesis", "method", "acceptance", "notes", "sources", "metrics")
 
@@ -88,6 +91,7 @@ def connect():
                    at TEXT NOT NULL, body TEXT NOT NULL)""")
     db.execute("CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT NOT NULL)")
     with db:
+        db.execute("BEGIN IMMEDIATE")
         if not db.execute("SELECT 1 FROM meta WHERE key='seed_v1'").fetchone():
             for key, title, category, priority, hypothesis, method, acceptance, source in SEEDS:
                 record = dict(id="plan-" + key, title=title, category=category,
@@ -99,6 +103,67 @@ def connect():
                 db.execute("INSERT OR IGNORE INTO records VALUES (?, ?)",
                            (record["id"], json.dumps(record, ensure_ascii=False)))
             db.execute("INSERT OR IGNORE INTO meta VALUES ('seed_v1', '1')")
+        # Add the requested matrix to existing notebooks too, without replacing edits.
+        if not db.execute("SELECT 1 FROM meta WHERE key='research_matrix_20261021'").fetchone():
+            for record in planned_records(now()):
+                inserted = db.execute("INSERT OR IGNORE INTO records VALUES (?, ?)",
+                                      (record["id"], json.dumps(record, ensure_ascii=False)))
+                if inserted.rowcount:
+                    event = dict(at=record["created_at"], action="created", before=None, after=record)
+                    db.execute("INSERT INTO events (record_id, at, body) VALUES (?, ?, ?)",
+                               (record["id"], record["created_at"], json.dumps(event, ensure_ascii=False)))
+            db.execute("INSERT OR IGNORE INTO meta VALUES ('research_matrix_20261021', '1')")
+        if not db.execute("SELECT 1 FROM meta WHERE key='gate_protocols_v2'").fetchone():
+            for proposed in planned_records(now()):
+                stored = db.execute("SELECT body FROM records WHERE id=?", (proposed["id"],)).fetchone()
+                event = db.execute("SELECT body FROM events WHERE record_id=? ORDER BY sequence LIMIT 1",
+                                   (proposed["id"],)).fetchone()
+                if not stored or not event:
+                    continue
+                before = json.loads(stored["body"])
+                baseline = json.loads(event["body"]).get("after", {})
+                if before.get("origin") != "research_matrix_20261021":
+                    continue
+                updated = dict(before)
+                for field in ("title", "category", "hypothesis", "method", "acceptance", "notes", "sources"):
+                    if before.get(field) == baseline.get(field):
+                        updated[field] = proposed[field]
+                if updated != before:
+                    updated.update(revision=before["revision"] + 1, updated_at=now())
+                    db.execute("UPDATE records SET body=? WHERE id=?", (json.dumps(updated, ensure_ascii=False), updated["id"]))
+                    event = dict(at=updated["updated_at"], action="updated", before=before, after=updated,
+                                 reason="补齐 Gate 方法与归属；只更新未被手动修改的字段")
+                    db.execute("INSERT INTO events (record_id, at, body) VALUES (?, ?, ?)",
+                               (updated["id"], updated["updated_at"], json.dumps(event, ensure_ascii=False)))
+            db.execute("INSERT INTO meta VALUES ('gate_protocols_v2', '1')")
+        if not db.execute("SELECT 1 FROM meta WHERE key='gate_scope_v3'").fetchone():
+            automatic_reason = "补齐 Gate 方法与归属；只更新未被手动修改的字段"
+            for proposed in planned_records(now()):
+                stored = db.execute("SELECT body FROM records WHERE id=?", (proposed['id'],)).fetchone()
+                if not stored:
+                    continue
+                before = json.loads(stored['body'])
+                if before.get('origin') != 'research_matrix_20261021':
+                    continue
+                events = [json.loads(r['body']) for r in db.execute(
+                    'SELECT body FROM events WHERE record_id=? ORDER BY sequence', (proposed['id'],))]
+                updated = dict(before)
+                for field in ('title','category','hypothesis','method','acceptance','notes','sources'):
+                    changes = [e for e in events if (e.get('before') or {}).get(field) != (e.get('after') or {}).get(field)]
+                    if not changes:
+                        continue
+                    latest = changes[-1]
+                    automatic = latest.get('before') is None or latest.get('reason') == automatic_reason
+                    if automatic and before.get(field) == latest['after'].get(field):
+                        updated[field] = proposed[field]
+                if updated != before:
+                    updated.update(revision=before['revision']+1, updated_at=now())
+                    db.execute('UPDATE records SET body=? WHERE id=?', (json.dumps(updated,ensure_ascii=False),updated['id']))
+                    event = dict(at=updated['updated_at'], action='updated', before=before, after=updated,
+                                 reason='校正 E7/S0 及实际测试覆盖范围；保留手动编辑字段')
+                    db.execute('INSERT INTO events (record_id,at,body) VALUES (?,?,?)',
+                               (updated['id'],updated['updated_at'],json.dumps(event,ensure_ascii=False)))
+            db.execute("INSERT INTO meta VALUES ('gate_scope_v3','1')")
     return db
 
 
@@ -226,7 +291,7 @@ def source_path(relative):
         "docs/protocols/OFFLINE_T1_T3_CHOICE_V2.md",
     }
     if not allowed or not target.is_file() or target.suffix.lower() not in {
-        ".md", ".txt", ".json", ".jsonl", ".csv"
+        ".md", ".txt", ".json", ".jsonl", ".csv", ".tex"
     }:
         return None
     return target
@@ -279,8 +344,13 @@ def load_hub():
     except (OSError, ValueError, KeyError, TypeError) as exc:
         live = None
         live_error = f"当前实验文件暂不可读（{type(exc).__name__}），请稍后刷新。"
-    return {"schema": "socialflux_experiment_hub_v1", "generated_at": now(),
-            "records": records(), "reports": reports, "live": live,
+    notebook = records()
+    matrix = load_matrix(ROOT, live, notebook)
+    human = load_human_gt()
+    return {"schema": "socialflux_experiment_hub_v2", "generated_at": now(),
+            "records": notebook, "reports": reports, "live": live,
+            "matrix": matrix, "human_annotation": human,
+            "paper_tables": build_paper_tables(live, matrix) + human['tables'],
             "live_error": live_error, "catalog_errors": errors,
             "scope": "收录 reports/experiments 下全部文本、JSON、JSONL、CSV；实时摘要覆盖已登记批次。原始轨迹、视频和调用日志保留在原目录。",
             "storage": "data/experiment_hub/notebook.sqlite3",

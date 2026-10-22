@@ -1,0 +1,211 @@
+{
+  "project_id": "appgprj_6ad82de6ff188191b48c72ec8787d069",
+  "source_commit": "70f18157762a1ddd23e53cd9c1a04648ab9d7bcb",
+  "source_checkout": "/root/autodl-tmp/emotree/build/offline-publication-79kad8r2",
+  "version": 15,
+  "version_id": "appgprj_6ad82de6ff188191b48c72ec8787d069~appgver_49260e9d156081919eb367ecac17d762",
+  "deployment_id": "appgdep_6ad9e8606a148191961122f77ccb133b",
+  "status": "published_and_public_runtime_verified",
+  "active_live_version": 15,
+  "url": "https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site",
+  "deployed_at": "2026-10-22T10:45:35.551217+00:00",
+  "verified_at": "2026-10-22T10:46:26.960Z",
+  "publication_mode": "remote_build_after_archive_upload_timeouts",
+  "local_archive": {
+    "archive": "/root/autodl-tmp/emotree/build/offline-annotation-publish-compact-20261022.tar",
+    "gzip_archive": "/root/autodl-tmp/emotree/build/offline-annotation-publish-compact-20261022.tar.gz",
+    "tar_bytes": 235202560,
+    "gzip_bytes": 225324907,
+    "sha256": "856357366d3ef259a0fae44c84264695cb9e4eb54bb30ea2d8820a6daaa3ba24",
+    "entries": 366,
+    "unpacked_file_bytes": 234916618,
+    "no_preview_or_secret_files": true
+  },
+  "local_archive_uploaded": false,
+  "remote_deployed_archive": {
+    "archive_format": "tar",
+    "sediment_file_id": "file_000000007bf081f7b5b6d270bbce1085",
+    "content_hash": "sha256:9eb32aa926237dc8b9102a6d489d217ef7c4f690ab6700c49d7ac039818102e5",
+    "size_bytes": 235192320,
+    "file_count": 345
+  },
+  "archive_limit_resolved": true,
+  "deferred_t4_asset_count": 33,
+  "deferred_asset_manifest": "build/offline-publication-qa/deferred-t4-assets.json",
+  "deferred_assets_preserved_in_research_workspace": true,
+  "all_v12_public_media_unchanged": true,
+  "all_offline_media_hashes_verified": 190,
+  "registry_memory_fix": {
+    "source_commit": "70f18157762a1ddd23e53cd9c1a04648ab9d7bcb",
+    "review_packet_sha256": "bbdda524393a9fd4329e5c7bcc5607ad78ef9345d4065f2be6a496a7fd440d1f",
+    "offline_tasks": 475,
+    "all_offline_media_files_verified": 190,
+    "v12_public_media_unchanged": true,
+    "registry_decoded_bytes": 10882333,
+    "registry_versions": 11,
+    "pooled_tasks": 903,
+    "all_task_references": 4236,
+    "memory_reduction_percent": 75.25
+  },
+  "access_mode": "public",
+  "invite_configuration_preserved": true,
+  "env_set_revision": 1,
+  "complete_original_invite_link_required_for_new_tasks": true,
+  "production_test_records_written": false,
+  "public_runtime_validation": {
+    "ok": true,
+    "url": "https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site",
+    "anonymous_no_account_access": true,
+    "invite_required_for_new_tasks": true,
+    "scope": "offline",
+    "assignments": 20,
+    "scenes": 50,
+    "questions": 400,
+    "current_unique_media": 150,
+    "mobile_no_overflow": true,
+    "recovery_entry_available": true,
+    "public_media_hashes_verified": [
+      {
+        "kind": "current",
+        "sha256": "bae0d7ee206262e52aadc92a1eda62d40c5cf2d21c82a83bc790c9c4843429d7"
+      },
+      {
+        "kind": "E8",
+        "sha256": "a6ea671a1260923d0aee15012d4f2ff1d2f2b134644b957456fc36bae722407f"
+      }
+    ],
+    "production_records_written": false,
+    "checked_at": "2026-10-22T10:46:26.960Z"
+  },
+  "runtime_error_events_last_five_minutes": 0,
+  "local_validation": {
+    "node_tests_passed": 30,
+    "python_registry_tests_passed": 8,
+    "typecheck": true,
+    "production_build": true,
+    "offline_browser": {
+      "ok": true,
+      "checks": {
+        "scope": {
+          "scope": "offline",
+          "scenes": 50,
+          "questions": 400,
+          "uniqueMedia": 150
+        },
+        "online": {
+          "enabled": false,
+          "newT4Rejected": true,
+          "t4WorkflowTested": false
+        },
+        "offline": {
+          "questions": 40,
+          "uniqueMediaReviews": 15,
+          "requiresAllMedia": true,
+          "videoPlayed": true
+        }
+      },
+      "errors": []
+    },
+    "gate2_browser": true,
+    "legacy_recovery": {
+      "ok": true,
+      "checked_at_utc": "2026-10-22T10:38:12.005703+00:00",
+      "base_url": "http://127.0.0.1:8022",
+      "isolated_local_d1": true,
+      "read_only": true,
+      "production_requests": 0,
+      "operations": [
+        "POST recover (read existing session; set local client cookie)",
+        "GET status",
+        "GET export"
+      ],
+      "legacy_recovery_and_export": [
+        "qa-legacy",
+        "qa-media",
+        "qa-research-v3",
+        "qa-t4-legacy"
+      ],
+      "cases": [
+        {
+          "alias": "qa-legacy",
+          "dataset_kind": "text",
+          "dataset_sha256": "57ef5252e348b3b3c27d270b053f70183863597bec45f1fb55a9f5d861fbfdd2",
+          "question_count": 6,
+          "format": "socialflux_public_demo_annotation_v1",
+          "revision": 0,
+          "status": "in_progress",
+          "stable_recovery_status_export": true,
+          "recovery_secret_excluded": true
+        },
+        {
+          "alias": "qa-media",
+          "dataset_kind": "multimodal_review",
+          "dataset_sha256": "5912f0b36db69f2a3d6f12fd602d604333f318f41c79dc9cbe9ebaf85a873e27",
+          "question_count": 270,
+          "format": "socialflux_multimodal_review_v1",
+          "revision": 0,
+          "status": "in_progress",
+          "stable_recovery_status_export": true,
+          "recovery_secret_excluded": true
+        },
+        {
+          "alias": "qa-research-v3",
+          "dataset_kind": "research",
+          "dataset_sha256": "6dffb119b7295ea192bb8fc047d6e90df624df44b44108f9bb391e4b1b958184",
+          "question_count": 30,
+          "format": "socialflux_human_gt_v1",
+          "revision": 1,
+          "status": "in_progress",
+          "stable_recovery_status_export": true,
+          "recovery_secret_excluded": true,
+          "track": "offline_text",
+          "phase": "blind",
+          "gate2_review_present": false
+        },
+        {
+          "alias": "qa-t4-legacy",
+          "dataset_kind": "research",
+          "dataset_sha256": "338a2502b00b4146525b96c864debee2d2da35cf9da6c06151169d900b18d9bc",
+          "question_count": 0,
+          "format": "socialflux_human_gt_v1",
+          "revision": 1,
+          "status": "submitted",
+          "stable_recovery_status_export": true,
+          "recovery_secret_excluded": true,
+          "track": "t4",
+          "phase": "complete",
+          "gate2_review_present": false,
+          "trajectory_count": 5
+        }
+      ],
+      "offline_mobile_no_overflow": "not rerun in this read-only compatibility check"
+    }
+  },
+  "earlier_attempts": [
+    {
+      "version": 13,
+      "deployment_id": "appgdep_6ad9dc919a108191b56240daf36e7d1a",
+      "status": "failed",
+      "reason": "Input archive exceeded 256 MiB; resolved by excluding 33 unpublished T4-only assets."
+    },
+    {
+      "version": 14,
+      "deployment_id": "appgdep_6ad9e075146c8191a0613bba29c5db6b",
+      "status": "failed",
+      "reason": "Transient remote Sandbox Worker request failed before response; retried same saved version."
+    },
+    {
+      "version": 14,
+      "deployment_id": "appgdep_6ad9e2286e9881919ad56bafd1e0071b",
+      "deployment_status": "succeeded",
+      "runtime_status": "failed",
+      "reason": "Dynamic import exceeded memory limits.",
+      "rollback_version": 12,
+      "rollback_deployment_id": "appgdep_6ad9e49e8f788191ada3abee5023c68a",
+      "resolved_by_version": 15
+    }
+  ],
+  "human_review": "pending",
+  "formal_admission": false,
+  "future_t4_dispatch": false
+}

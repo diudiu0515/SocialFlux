@@ -31,9 +31,10 @@ from prompts.loader import get_prompt
 from schemas.validate import validate_scenario
 from scenario_design.catalog import discover_scenario_paths
 from web.live_rollouts import load_live
-from web.offline_review import load_review as load_offline_review
+from web.offline_review import load_review as load_offline_review, talking_video_target, load_talking_preview
 from web.experiment_status import load_experiment_status
 from web.annotation_sessions import dispatch as annotation_action
+from web.human_gt import import_receipt, adjudicate
 from web.experiment_hub import (
     load_hub, save_record as save_experiment_record, history as experiment_history,
     source_document as experiment_document, ConflictError,
@@ -57,6 +58,8 @@ PAGE_ROUTES = {
     "/state-annotation": "/state_annotation.html", "/state-annotation/": "/state_annotation.html",
     "/offline-demo": "/offline_review.html", "/offline-demo/": "/offline_review.html",
     "/offline-review": "/offline_review.html", "/offline-review/": "/offline_review.html",
+    "/offline-talking-preview": "/offline_talking_preview.html",
+    "/offline-talking-preview/": "/offline_talking_preview.html",
 }
 LEGACY_PAGE_ALIASES = {
     path: "/gpt50_gate1.html" for path in (
@@ -2328,6 +2331,8 @@ def api_payload(path, *, offline_bank=None):
         return load_experiment_status()
     if parts == ["api", "offline-review"]:
         return load_offline_review(bank_id=offline_bank)
+    if parts == ["api", "offline-talking-preview"]:
+        return load_talking_preview()
     if len(parts) == 3 and parts[:2] == ["api", "offline-review"]:
         return load_offline_review(parts[2],bank_id=offline_bank)
     if len(parts) == 4 and parts[:2] == ["api", "offline-review"] and parts[3] == "reference":
@@ -2466,7 +2471,9 @@ class App(SimpleHTTPRequestHandler):
         if not self.authenticate():
             return
         parsed = urlparse(self.path)
-        is_lab = parsed.path == "/api/lab/records"
+        is_human_import = parsed.path == '/api/lab/human-import'
+        is_human_adjudicate = parsed.path == '/api/lab/human-adjudicate'
+        is_lab = parsed.path == "/api/lab/records" or is_human_import or is_human_adjudicate
         if not is_lab and not parsed.path.startswith("/api/offline-annotation/"):
             self.send_json({"error": "not found"}, 404)
             return
@@ -2482,12 +2489,16 @@ class App(SimpleHTTPRequestHandler):
             return
         try:
             length = int(self.headers.get("Content-Length", "0"))
-            if not 0 < length <= 100_000:
+            if not 0 < length <= (1_000_000 if is_human_import else 100_000):
                 raise ValueError("提交内容为空或过长")
             payload = json.loads(self.rfile.read(length))
             if not isinstance(payload, dict):
                 raise ValueError("提交格式无效")
-            if is_lab:
+            if is_human_import:
+                result = import_receipt(payload)
+            elif is_human_adjudicate:
+                result = adjudicate(payload)
+            elif is_lab:
                 result = save_experiment_record(payload)
             else:
                 action = parsed.path.removeprefix("/api/offline-annotation/")
@@ -2511,12 +2522,13 @@ class App(SimpleHTTPRequestHandler):
                 self.send_json({"error": "文件暂不可读，请稍后重试"}, 503)
             return
         if parsed.path.startswith((
-            "/online-video/", "/online-review-video/", "/talking-video/"
+            "/online-video/", "/online-review-video/", "/talking-video/", "/offline-talking-video/"
         )):
+            offline_talking = parsed.path.startswith("/offline-talking-video/")
             talking_head = parsed.path.startswith("/talking-video/")
             review_copy = parsed.path.startswith("/online-review-video/")
             prefix = (
-                "/talking-video/"
+                "/offline-talking-video/" if offline_talking else "/talking-video/"
                 if talking_head
                 else "/online-review-video/"
                 if review_copy
@@ -2524,7 +2536,13 @@ class App(SimpleHTTPRequestHandler):
             )
             relative = unquote(parsed.path.removeprefix(prefix))
             batch_name, separator, batch_filename = relative.partition("/")
-            if talking_head:
+            if offline_talking:
+                target = talking_video_target(batch_name, batch_filename) if separator else None
+                if target is None:
+                    self.send_error(404, "offline talking-head video not found")
+                    return
+                asset_root, filename = target.parent.resolve(), target.name
+            elif talking_head:
                 if not separator or batch_name not in MULTIMODAL_DELIVERY_BATCHES:
                     self.send_error(404, "talking-head video not found")
                     return

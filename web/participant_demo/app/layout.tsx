@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 export const metadata: Metadata = {
-  title: "SocialFlux · 对话理解标注",
-  description: "阅读一段对话，独立记录你的判断。SocialFlux 受邀标注者体验。",
+  title: "SocialFlux · 人工标注与 GT",
+  description: "T1–3 独立作答、私有证据核验与 GT；T4 轨迹五维评分及 Claude 对照。",
   robots: {index: false, follow: false},
   icons: {icon: "/favicon.svg"},
 };

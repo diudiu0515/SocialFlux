@@ -266,6 +266,31 @@
       "sha256": "cd5c0e1ceaf6f29cb00c0908a87266653f346aae99ae71d2828e4a1d77aa7358",
       "version": "v1"
     },
+    "offline_talking_head_edit_zh_v2": {
+      "path": "offline_talking_head_edit_zh_v2.md",
+      "sha256": "bc25806524003f70d1b392ff2b2ab78193e0ca168b4702069339bbe7af4c2811",
+      "version": "v2"
+    },
+    "offline_talking_head_standalone_zh_v3": {
+      "path": "offline_talking_head_standalone_zh_v3.md",
+      "sha256": "147ab0975f940296586f5ff87db4376476fcfdc0f7476312bffb6a59b7a2f1fc",
+      "version": "v3"
+    },
+    "offline_talking_head_english_v1": {
+      "path": "offline_talking_head_english_v1.md",
+      "sha256": "9e6db2e3e9236f493a408415af1ba30b09c2d7d0d8234f5fd580d093dbce8b22",
+      "version": "v1"
+    },
+    "offline_talking_head_english_pronunciation_v2": {
+      "path": "offline_talking_head_english_pronunciation_v2.md",
+      "sha256": "3534964d1342ad161e209b3130dbf1f275d6f7f5a3aa0bed08990b162de89bbd",
+      "version": "v2"
+    },
+    "offline_choice_answer_en_v1": {
+      "path": "offline_choice_answer_en_v1.md",
+      "sha256": "268d24e3c59b038ec0cab5a7d94526b0c71090c45ce73e2060285dc29735d14b",
+      "version": "v1"
+    },
     "environment_paraphrase_probe_v2": {
       "path": "environment_paraphrase_probe_v2.md",
       "sha256": "55c06d662aeba6d4b92e0c53c2e062916cad23adc45f97c6b4990f455cc187d0",

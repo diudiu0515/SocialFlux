@@ -55,7 +55,8 @@ def translate_case(source, case, index, config):
     atomic_json(output / 'status.json', {'status': 'translating', 'source': str(artifact.relative_to(ROOT)),
                                        'source_projection_sha256': projection_hash})
     translated = translate_export(scenario, trajectory, provider, output / 'string_cache.json',
-                                  sampling=config['sampling'])
+                                  sampling=config['sampling'],
+                                  preserve_source_evidence=config.get('preserve_source_evidence', True))
     check_export(trajectory, translated, provider, config['sampling'])
     translated['localization']['source_artifact'] = str(artifact.relative_to(ROOT))
     translated['localization']['provider'] = provider.provenance

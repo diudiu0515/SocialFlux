@@ -52,6 +52,10 @@ def public_instance(item):
 
 
 def answer_prompt(instance, diagnostic=False):
+    if instance.get('metadata', {}).get('language') == 'en':
+        return render_prompt('offline_choice_answer_en_v1', public_instance(instance),
+                             evidence_instruction=('Also return an evidence_ids array of strings citing visible evidence IDs; answer and evidence are scored separately.'
+                                                   if diagnostic else 'Return only answer; no explanation or evidence is required.'))
     return render_prompt('offline_choice_answer_v1', public_instance(instance),
                          evidence_instruction=('额外输出 evidence_ids 字符串数组，引用材料中的定位 ID；答案与证据分别计分。'
                                                if diagnostic else '只输出 answer，不要求解释或证据。'))
@@ -209,7 +213,10 @@ def validate_item(item, formal=False):
             raise ValueError('formal controlled replay not validated')
     if v2:
         validate_design(item)
-    public_instance(item)
+    public = public_instance(item)
+    if (item.get('metadata', {}).get('language') == 'en'
+            and re.search(r'[\u3400-\u9fff]', json.dumps(public, ensure_ascii=False))):
+        raise ValueError('English item contains Chinese public text')
     return item
 
 

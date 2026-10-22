@@ -57,6 +57,8 @@ T3 同起点提供 2–4 个合理且可执行的回应，行动在信息、承�
 
 `design_difficulty=ordinary`：证据直接一致或后果关系明确。`hard`：分散证据、冲突线索、状态不同步、累积、反证、修复或跨时取舍，必须记录一句具体 `difficulty_reason`。单维也可 Hard，多维也可普通，例如 SFD2-016 的三个状态均由直接表达支持。`empirical_difficulty` 初始为 null，未来按具体模型运行另存 run_id、sample_size、accuracy；不可把设计 Hard 当成实测困难。
 
+2026-10-22 的英文迁移保持 300 道题的 ID、选项顺序、答案与难度标签。T1/T2/T3 各 100 题，其中 Hard 分别为 10/36/24 题。英文候选行动显示为 `Action 1`、`Action 2`，内部 ID 仍为 `action_1`、`action_2`；标注 `metadata.language=en` 的题目使用独立的英文作答提示词。迁移与校验状态见 `data/english_migration_20261022/release_report.json`。
+
 ## 三组数据字段
 
 `records.jsonl` 是三组物理字段导出；`items.jsonl` 保留现有运行器兼容布局，由 `grouped_record()` 映射，不要求模型输出任何数据侧标签。
@@ -98,21 +100,19 @@ SFD2-001—012 保留旧 scenario、trajectory、T2 编辑／回放和 T3 分支
 
 ### 逐字台词 talking-head 制作
 
-新版 300 题的环境角色台词去重为 150 个节点：50 个 t1、50 个 t2、50 个 T2 共同结尾。`offline.talking_head` 按原语言保留完整台词，长句无损拆成 241 段，分段连接必须逐字还原原文。T2 的相同前史和共同结尾分别复用同一文件，候选行动的未来台词不进入题面视频。生成请求只发送公开台词、公开表情和虚构人物参考，不发送答案、私有状态或未来分支。
+新版 300 题的环境角色台词去重为 150 个节点：50 个 t1、50 个 t2、50 个 T2 共同结尾。视频对白应为英文。内部中文源记录须通过保留来源绑定的英文映射后用于配音，不能直接当成目标对白。T2 的相同前史和共同结尾分别复用同一文件，候选行动的未来台词不进入题面视频。生成请求只发送公开台词、公开表情和虚构人物描述，不发送答案、私有状态或未来分支。
 
-此队列使用独立的 `offline_talking_head_exact_v1` 提示；旧英文压缩渲染流程保持原版本。49 个场景有现成人物参考，GPT50_036 先生成首段作为新参考，再用于同场景后续片段。全部产物、provider state、原文台词表和题目版本绑定保存在 `data/offline_talking_head_v1/<题库SHA前16位>/`，提交失败和已提交 task ID 均保留，可续查下载。
+当前小批只展示 GPT50_001–004、006、008–009 的七条独立英文 T2 共同回应样片，人物连续性尚未覆盖完整前史。英文映射位于 `configs/offline_talking_preview_en_v1.json`：第 6 场景复用已有英文轨迹，其余为新版受控共同回应的忠实英译。`offline.english_preview` 验证中文源记录、冻结场景与英文出处，并生成独立英文清单；生成接口不再允许中文提示或对白。新批次位于 `data/offline_talking_head_en_v1/<题库SHA前16位>/`，原错误中文批次留在 `data/offline_talking_head_v1/` 供追溯。49 个旧人物参考链接已过期，参考视频试生成还有沿用旧对白的问题；本批采用独立虚构人物。GPT50_005、007 的候选输出被供应商策略拦截，停止对应场景后续生成。
 
 ```bash
 # 准备和状态检查不调用视频 API
-python -m offline.talking_head --phase prepare
-python -m offline.talking_head --phase status --manifest data/offline_talking_head_v1/c1d1f3fd60e94e0c/manifest.json
-# 经授权后，显式提交；可用 --request-id 先选一段样片
-python -m offline.talking_head --phase run --manifest data/offline_talking_head_v1/c1d1f3fd60e94e0c/manifest.json --submit-new --workers 4
-# 全部节点完成后发布到开发审核页；未完成时保留既有配对
-python -m offline.talking_head --phase publish --manifest data/offline_talking_head_v1/c1d1f3fd60e94e0c/manifest.json
+python -m offline.english_preview
+python -m offline.talking_head --phase status --manifest data/offline_talking_head_en_v1/c1d1f3fd60e94e0c/manifest.json
+# 本次仅提交保存的预览范围；不扩展为全题库生成
+python -m offline.talking_head --phase run --preview --manifest data/offline_talking_head_en_v1/c1d1f3fd60e94e0c/manifest.json --submit-new --workers 4
 ```
 
-生成完成只代表视频文件和音轨存在。原文发音、逐字完整性、口型、人物一致性及表情仍需审核；网站保留待审标记，不转为正式人工通过。帧图传输仍只包含视觉信息。当前只完成请求准备，实际提交须以 provider state 为准，不能把清单数量当作生成数量。
+本批 `preview_only` 清单禁止发布为完整题库。生成完成只代表视频文件和音轨存在。英文发音、逐字完整性、口型、人物一致性及表情仍需审核；网站保留待审标记，不转为正式人工通过。本地无原文提示的 ASR 对照英文对白保留实际转写，不替代听看复核。帧图传输仍只包含视觉信息。实际提交和完成数以 provider state、预览清单及文件 SHA 为准，不能把全量清单数量当作生成数量。
 
 ### 已有非语言素材配对
 

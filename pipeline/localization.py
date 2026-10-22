@@ -107,7 +107,8 @@ def replace_strings(value, mapping):
     return value
 
 
-def translate_export(scenario, trajectory, provider, cache_path, *, sampling=None):
+def translate_export(scenario, trajectory, provider, cache_path, *, sampling=None,
+                     preserve_source_evidence=True):
     """Translate text only, caching exact source strings per scenario."""
     projection = export_projection(scenario, trajectory)
     path = Path(cache_path)
@@ -156,7 +157,7 @@ def translate_export(scenario, trajectory, provider, cache_path, *, sampling=Non
     for original, translated in zip(projection['rollout']['turns'], result['rollout']['turns']):
         for family in ('state_judgments', 'dynamics_judgments'):
             for old, new in zip(original.get(family) or [], translated.get(family) or []):
-                if old.get('evidence_span'):
+                if preserve_source_evidence and old.get('evidence_span'):
                     new['source_evidence_span'] = old['evidence_span']
     result['localization'] = {
         'language': 'en', 'kind': 'translation' if source_strings else 'native_english',

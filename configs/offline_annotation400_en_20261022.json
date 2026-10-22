@@ -1,0 +1,29 @@
+{
+  "release": "annotation400-en-20261022-v1",
+  "source_scenes": "GPT50_001..GPT50_050",
+  "language": "en",
+  "bank": "data/offline_annotation400_en_20261022",
+  "per_scene": {"T1": 3, "T2": 2, "T3": 3},
+  "task_difficulty": {
+    "T1": {"ordinary": 90, "hard": 60},
+    "T2": {"ordinary": 60, "hard": 40},
+    "T3": {"ordinary": 90, "hard": 60}
+  },
+  "total": 400,
+  "design_difficulty_total": {"ordinary": 240, "hard": 160},
+  "assignment_scene_count": 5,
+  "assignment_item_count": 40,
+  "conditions": ["text", "text+video+audio"],
+  "media": {
+    "speech_language": "en",
+    "exact_public_dialogue": true,
+    "audio_required": true,
+    "shared_t2_ending_asset": true,
+    "require_complete_item_coverage": true,
+    "silent_or_partial_video_counts_as_complete": false,
+    "human_review": "pending"
+  },
+  "ground_truth": null,
+  "label_status": "pending_human_annotation",
+  "formal_admitted": false
+}

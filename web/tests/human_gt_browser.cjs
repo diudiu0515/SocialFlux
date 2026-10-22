@@ -1,0 +1,15 @@
+const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=require('node:fs');
+const base=process.env.LAB_TEST_URL;if(!base||process.env.LAB_TEST_ISOLATED!=='1')throw Error('Use isolated Lab server');
+(async()=>{const browser=await chromium.launch({headless:true,args:['--no-sandbox']});const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];page.on('pageerror',e=>errors.push(e.message));try{
+ await page.goto(base+'/lab#human');await page.locator('#human-summary .stat-card').first().waitFor();
+ assert.equal(await page.locator('a[href="https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site/"]').count(),2);
+ const first=JSON.parse(fs.readFileSync('/tmp/socialflux-research-browser/offline-export.json'));
+ await page.locator('#human-import').setInputFiles({name:'first.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(first))});await page.getByText('已导入 1 份回执，按回执和标注人去重。',{exact:true}).waitFor();
+ const second=structuredClone(first);second.receipt_id='qa-second-'+Date.now();second.reviewer_alias='second-distinct-reviewer';for(const row of Object.values(second.machine_assisted_gt)){row.answer='B';row.acceptable_answers=['B'];}second.workflow.gt=second.machine_assisted_gt;
+ await page.locator('#human-import').setInputFiles({name:'second.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(second))});await page.locator('#human-adjudication').waitFor();assert.equal(await page.locator('#adjudication-item option').count(),30);
+ await page.locator('#adjudicator').fill('third-distinct-adjudicator');await page.locator('#adjudication-answer').selectOption('A');await page.locator('#adjudication-rationale').fill('QA only: reviewed source and both judgments.');await page.locator('#adjudication-attest').check();await page.getByRole('button',{name:'保存裁决',exact:true}).click();await page.getByText('裁决已保存，原始分歧仍保留。',{exact:true}).waitFor();assert.equal(await page.locator('#adjudication-item option').count(),29);
+ await page.locator('#human-import').setInputFiles('/tmp/socialflux-research-browser/t4-export.json');await page.getByText('已导入 1 份回执，按回执和标注人去重。',{exact:true}).waitFor();
+ await page.screenshot({path:'/tmp/socialflux-lab-human-gt.png',fullPage:true});await page.click('a[data-view=paper]');await page.selectOption('#paper-select','human-t4-calibration');assert.equal(await page.locator('#paper-table tbody tr').count(),5);
+ for(const [button,ext]of[['paper-csv','csv'],['paper-markdown','md'],['paper-latex','tex']]){const ev=page.waitForEvent('download');await page.click('#'+button);assert.equal((await ev).suggestedFilename(),'human-t4-calibration.'+ext);}
+ await page.selectOption('#paper-select','human-gt-coverage');assert.match(await page.locator('#paper-table').innerText(),/裁决 GT/);assert.deepEqual(errors,[]);console.log(JSON.stringify({ok:true,checks:['unified site link','receipt import','disagreement retained','independent third-person adjudication','T4 receipt calibration','paper exports']}));
+}finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

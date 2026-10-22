@@ -9,6 +9,8 @@ const {chromium}=require('playwright');
   const base=process.env.REVIEW_TEST_URL||'http://127.0.0.1:8000';
   try{
     await page.goto(base+'/offline-demo');await page.waitForSelector('#revealReference');
+    assert.equal(await page.locator('#modality').inputValue(),'text+video');
+    await page.waitForFunction(()=>document.querySelector('video')?.readyState>=1);
     assert.equal(await page.locator('#bankSelect').inputValue(),'scenarios-v2');
     assert.equal(await page.locator('#itemNav button').count(),300);
     assert.equal(await page.locator('#sceneFilter option').count(),51);
@@ -33,6 +35,7 @@ const {chromium}=require('playwright');
     assert.match(await page.locator('#referenceBody').innerText(),/API 盲试答/);
     await page.selectOption('#sceneFilter','GPT50_001');await page.selectOption('#taskFilter','T2');
     await page.locator('#itemNav button').first().click();await page.waitForSelector('#sharedEnding');
+    assert.equal(await page.locator('#modality').inputValue(),'text+video');
     assert.equal(await page.locator('[data-history]').count(),2);assert.equal(await page.locator('#sharedEnding').count(),1);
     assert.equal(await page.locator('#referenceBody').innerText(),'');
     await page.selectOption('#modality','text+video');await page.waitForFunction(()=>document.querySelector('video')?.readyState>=1);

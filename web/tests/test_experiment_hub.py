@@ -11,6 +11,7 @@ from urllib.error import HTTPError
 from urllib.request import Request, build_opener, ProxyHandler
 
 from web import experiment_hub as hub
+from web.experiment_catalog import definitions
 from web.server import App
 
 
@@ -32,7 +33,7 @@ class ExperimentHubTests(unittest.TestCase):
 
     def test_seed_only_once_and_user_edits_survive_reopening(self):
         initial = hub.records()
-        self.assertEqual(len(initial), len(hub.SEEDS))
+        self.assertEqual(len(initial), len(hub.SEEDS) + len(definitions()))
         updated = dict(initial[0], title="修改后的研究问题", status="blocked")
         saved = hub.save_record(updated)
         reopened = hub.records()
@@ -93,7 +94,47 @@ class ExperimentHubTests(unittest.TestCase):
             data = hub.load_hub()
         self.assertIsNone(data["live"])
         self.assertTrue(data["live_error"])
-        self.assertEqual(len(data["records"]), len(hub.SEEDS))
+        self.assertEqual(len(data["records"]), len(hub.SEEDS) + len(definitions()))
+        self.assertEqual(len(data["matrix"]["experiments"]), 16)
+        self.assertEqual(data["matrix"]["experiments"][0]["evidence_status"], "unavailable")
+
+    def test_matrix_migration_preserves_existing_edits_and_is_idempotent(self):
+        initial = hub.records()
+        original = next(r for r in initial if r["id"] == "study-t4-caption")
+        saved = hub.save_record(dict(original, notes="研究者自己的 caption 方案", status="review"))
+        db = hub.connect()
+        with db:
+            db.execute("DELETE FROM meta WHERE key='research_matrix_20261021'")
+            db.execute("DELETE FROM records WHERE id='study-s0-sensitivity'")
+        db.close()
+        migrated = hub.records()
+        self.assertEqual(len(migrated), len(initial))
+        self.assertIn(saved, migrated)
+        self.assertEqual(hub.records(), migrated)
+        self.assertEqual(len(hub.history(saved["id"])), 2)
+
+    def test_protocol_upgrade_updates_seeded_fields_but_preserves_manual_notes(self):
+        initial = next(r for r in hub.records() if r["id"] == "study-s0-sensitivity")
+        old = dict(initial, method="旧版通用方法", category="环境消融")
+        event = dict(at=old["created_at"], action="created", before=None, after=old)
+        db = hub.connect()
+        with db:
+            db.execute("UPDATE records SET body=? WHERE id=?", (json.dumps(old), old["id"]))
+            db.execute("UPDATE events SET body=? WHERE record_id=?", (json.dumps(event), old["id"]))
+        db.close()
+        edited = hub.save_record(dict(old, notes="研究者补充", owner="Alice", status="running"))
+        db = hub.connect()
+        with db:
+            db.execute("DELETE FROM meta WHERE key='gate_protocols_v2'")
+        db.close()
+        updated = next(r for r in hub.records() if r["id"] == old["id"])
+        self.assertEqual(updated["category"], "Gate 2")
+        self.assertNotEqual(updated["method"], "旧版通用方法")
+        self.assertEqual(updated["notes"], "研究者补充")
+        self.assertEqual(updated["owner"], "Alice")
+        self.assertEqual(updated["status"], "running")
+        self.assertEqual(updated["revision"], edited["revision"] + 1)
+        self.assertIn(updated, hub.records())
 
     def test_http_conflicts_and_cross_site_writes(self):
         server = ThreadingHTTPServer(("127.0.0.1", 0), App)
