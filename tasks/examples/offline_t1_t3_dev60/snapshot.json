@@ -1,0 +1,43 @@
+{
+  "format": "socialflux_offline_choice_review_snapshot_v1",
+  "snapshot_date": "2026-10-10",
+  "purpose": "Versioned review examples; runtime website continues to read data/offline_t1_t3_dev60.",
+  "formal_admission": false,
+  "label_status": "pending_human_review",
+  "item_count": 60,
+  "task_counts": {
+    "T1": 20,
+    "T2": 20,
+    "T3": 20
+  },
+  "replay_ready_item_count": 56,
+  "pending_replay_item_ids": [
+    "SFO-033",
+    "SFO-034",
+    "SFO-035",
+    "SFO-036"
+  ],
+  "source_config": "configs/offline_choice_dev60.json",
+  "files": [
+    {
+      "path": "items.jsonl",
+      "source_path": "data/offline_t1_t3_dev60/items.jsonl",
+      "sha256": "bd4b168a6183b3d6d4df7da83911ef70abbdd117d8158bc7659c290a20728990",
+      "source_sha256": "bd4b168a6183b3d6d4df7da83911ef70abbdd117d8158bc7659c290a20728990"
+    },
+    {
+      "path": "examples.md",
+      "source_path": "data/offline_t1_t3_dev60/examples.md",
+      "sha256": "b2ec4f0c072456fddf0fa39bf03858b75ad305437d2dbf1f43842ebd6a1006a2",
+      "source_sha256": "9544e35c5efa1d2acc85e33805eba95a397cac92c63879668fd2c153df449c5a",
+      "normalization": "Removed trailing whitespace and redundant final blank line from the Markdown review copy; item JSONL is byte-for-byte unchanged."
+    }
+  ],
+  "excluded_assets": [
+    "raw provider calls",
+    "private environment snapshots",
+    "source rollouts and branch files",
+    "video files",
+    "browser annotations"
+  ]
+}

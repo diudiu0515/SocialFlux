@@ -1,24 +1,24 @@
-# SocialFlux Initial State Configuration v1
+# SocialFlux Initial State Configuration v2
 
-Purpose: propose candidate S0/D0 only after an approved source has been normalized into a scenario blueprint. Solve causal consistency first; serialize last.
+Purpose: propose the candidate initial state and runtime dynamics seed only after an approved v2 source has been normalized. Solve causal consistency first and serialize last.
 
-Inputs: approved normalized persona, background, goals, hidden intention, selected state variables, dynamics concepts, and multimodal event concepts.
+Inputs include the private stable environment persona, background, goals, hidden intention, canonical selected state variables, and multimodal concepts. This is an author-side prompt; none of its private fields may enter the evaluated model's observation.
 
 Constraints:
 
-- initialize only selected variables on the 0–10 scale;
-- use scenario-specific variables and values; never copy a default state bundle or trigger pair across unrelated scenarios;
-- derive expression and trigger concepts from this scenario’s distinctive social mechanism, not from a generic anger/withdrawal template;
+- require `state_contract_version=socialflux_state_v2`;
+- initialize exactly `emotion`, `behavioral_disposition`, `relationship`, and `consequence_risk` using the selected approved variables on 0–10;
 - persona traits remain stable context, never state;
-- values must follow from persona + background + goals + hidden intention + initial situation;
-- avoid unjustified extremes and leave room for multiple natural trajectories;
-- no video trigger may already be active at S0/D0;
-- plausible free interaction within the horizon must be able to reach salient trigger regions;
-- create thresholds and observable-expression specifications, never action effects or a prescribed strategy;
-- media is sparse: ordinary turns are text, selected threshold/crossing/state-change events emit safe observable media specifications;
-- status must be candidate_pending_human_freeze. A model cannot freeze its own proposal.
+- use 2–5 flat canonical external dynamics only: `deadline_pressure`, `resource_scarcity`, `information_asymmetry`, `public_exposure`, `negotiation_openness`, `coordination_stability`, `institutional_constraint`;
+- do not duplicate external dynamics as consequence-risk state;
+- values must follow from persona, background, goals, hidden intention, history, and initial situation;
+- avoid unjustified extremes and preserve several plausible interaction paths; never copy a default state bundle or trigger pair across unrelated scenarios;
+- no video trigger may already be active at the initial state and dynamics seed;
+- set max_turns to 20 and t3_delayed_horizon to 5–10;
+- create thresholds and observable-expression specifications, never action effects, answers, or a prescribed strategy;
+- status is `candidate_pending_human_freeze`; a model cannot freeze its own proposal.
 
-Return JSON only conforming to schemas/initial_state_proposal.schema.json with exactly: initial_state, initial_dynamics, observable_expression, media_generation, video_triggers, max_turns, t3_delayed_horizon, sampling_plan, rationale, trigger_reachability, status.
+Return JSON only conforming to `schemas/initial_state_proposal.schema.json`.
 
 Approved scenario blueprint:
 {{payload_json}}

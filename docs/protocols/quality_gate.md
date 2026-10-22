@@ -11,7 +11,7 @@ State / Environment Configuration
         ↓
 Gate 2 — Environment Validity Gate
         ↓
-Free-form Multi-model Rollouts
+One Free-form Natural Rollout per Approved Scenario
         ↓
 Gate 3 — Rollout Quality Gate
         ↓
@@ -51,7 +51,7 @@ Offline T1/T2/T3 必须来自和 T4 相同的 online stateful environment 中自
 ```text
 Scenario
 ↓
-Frozen S0 / D0
+Frozen initial state and machine-validated runtime dynamics seed
 ↓
 Stateful Environment
 ↓
@@ -60,55 +60,17 @@ Free-form Model Interaction
 Complete Trajectory
 ```
 
-## Rollout Models
+## Rollout Model and Count
 
-为控制成本，采用：
+Claude/Fable 是主批次模型；GPT 小批次只做端到端设计审计。不同 provider、
+run ID 和 manifest 的数据不得混为同一批次。
 
-```text
-Main:
-locally deployed strong open-weight models
+每个通过 Gate 1 的 scenario 从冻结的 initial state 和机器验证的 runtime dynamics seed 只生成 1 条自然 trajectory，
+使用 1 个记录在 provenance 中的 seed。不做三倍 rollout、best-of-N 或失败后的
+replacement seed。格式重试只修复同一次逻辑调用，不能变成重新抽一条轨迹。
 
-Supplement:
-small amount of strong API models
-```
-
-目标不是获得“最完美”的对话，而是：
-
-```text
-Plausibility
-+
-History Dependence
-+
-Behavioral Diversity
-+
-Model-family Diversity
-```
-
-每个 scenario 使用多个 rollout models 和多个 seeds。
-
-例如：
-
-```text
-Local Model A × 3
-Local Model B × 3
-Local Model C × 3
-
-Optional strong API model × 1–2
-```
-
-不要每个 scenario 只保留最高分的一条 trajectory。
-
-最终选择：
-
-```text
-Quality Gate
-+
-Deduplication
-+
-Diversity Selection
-```
-
-保留若干高质量但演化路径不同的 trajectories。
+Gate 3 对这条唯一轨迹做准入或淘汰；全局去重和多样性检查可以拒绝问题数据，
+不能借此选择额外候选。
 
 ---
 
@@ -176,6 +138,13 @@ Overall mean >= 4.0
 Environment 未通过本 Gate 前，只能产生 development rollout。
 
 正式 benchmark rollout 必须在 Environment freeze 后重新生成。
+
+Gate 2 的抽样量由 active run manifest 按批次规模声明，不能在协议中写死
+20/100/200/300。E1 抽真实 transition，E2 抽完整 trajectory；
+E3/E4/E5/E7 由脚本先在 matched checkpoint 上自动生成，真人复核实验控制、
+语义等价/社会合理性和抽样结果。E6 是自动 backbone 实验。E8 使用重要节点
+视频验证状态外显一致性。自动结果不会写入 `human_attestation`。
+E9 从 private trajectory 生成变量级变化摘要，但变化速度是否合理仍由真人判断。
 
 必须验证：
 
@@ -269,6 +238,15 @@ appraisal / relevant state transition
 
 这是验证 longitudinal dependency 的核心实验。
 
+自动化命令：
+
+```bash
+python scripts/run_environment_interventions.py --resume
+```
+
+输出保存在 `data/formal/environment/history_intervention.json`，并保留
+Full/Removed 两次 appraisal、state/dynamics direction 与 change score。
+
 ---
 
 ## E4 Paraphrase Robustness
@@ -312,6 +290,9 @@ Human 判断相对方向是否合理。
 
 这只是 validation intervention，不是 rollout strategy。
 
+E3/E4/E5/E7 的覆盖量必须写入当前 run manifest；真人确认前，文件即使 machine
+screen 通过也保持 pending。
+
 ---
 
 ## E6 Simulator Backbone Sensitivity
@@ -336,6 +317,59 @@ revise state definition
 或
 remove that state
 ```
+
+---
+
+## E7 Persona-Only Intervention
+
+固定同一个 checkpoint 的 state、dynamics、history 和 current action，只改变
+persona 的 temperament、communication style、decision style、conflict style；
+姓名、角色、核心价值与边界保持不变。比较 appraisal 与 state transition 是否产生
+可解释变化。至少保留 10 个 matched checkpoints，机器结果与真人判断分开记录。
+
+---
+
+## E8 Video–State Consistency
+
+从自然 rollout 的重要节点生成视频，抽取至少 40 个跨场景节点。API 请求只包含
+公开 response 与 observable expression，不包含 private state、阈值或答案。
+先做文件结构检查，再由真人检查 state-expression alignment、persona consistency、
+temporal continuity、lip sync 和 private-state leakage。视频缺失时 Gate2 保持
+pending，但不阻塞候选 task 的生成。
+
+---
+
+## E9 Timescale Validity
+
+对每个抽中的 `trajectory × state variable` 统计：
+
+```text
+changed-turn rate
+total / maximum absolute change
+net change
+direction reversal count
+evidence turn IDs
+```
+
+审核先验为：
+
+```text
+Emotion -> fast
+Behavioral Disposition -> medium
+Relationship -> slow
+Interaction Risk -> context-dependent
+```
+
+这些先验不是硬编码更新速度。真人必须结合 action、history、persona 和外生事件判断：
+
+- 快变量是否对有证据的事件及时反应，而非无故抖动；
+- 中速变量是否需要若干相关互动才能稳定变化；
+- 慢变量是否只在累积证据或强诊断事件后显著改变；
+- risk 的跳变或累积是否与威胁强度和历史一致。
+
+至少审核 10 个变量并覆盖 fast / medium / slow；`context-dependent` 单独汇报。
+机器统计只能生成 `timescale_validity.json` 待审包，不能设置
+`human_attestation=true` 或自动通过 Gate 2。
 
 ---
 
@@ -479,13 +513,19 @@ trigger threshold
 
 普通 turn 可以保持 text-only。
 
-Video 应当是 sparse event，不要求每条 trajectory 固定数量。
+Offline 数据构造优先从每条完整 trajectory 的重要节点生成多个视频；默认每条选
+4 个节点，可按预算提高每节点 variant 数。节点优先级来自 state/dynamics 变化、
+已有 trigger、承诺/拒绝等 consequential event，以及后段 history-bearing 位置。
+
+Online T4 使用独立的 runtime trigger policy。当前 `online_relaxed_v1` 将绝对阈值
+与变化阈值各放宽 1、cooldown 设为 2，并允许 crossing 条件持续满足时按 threshold
+触发；仍坚持每轮最多一个最高优先级事件，且普通 turn 可以保持 text-only。
 
 ---
 
 # 5. Gate 3 — Rollout Quality Gate
 
-多个 models × seeds 产生 raw trajectories 后，每条 trajectory 必须过筛。
+每个 approved scenario 的唯一 raw trajectory 都必须过筛。
 
 ## Hard Reject
 
@@ -523,27 +563,12 @@ Character Consistency >= 4
 Naturalness >= 4
 ```
 
-通过后再做：
+Gate 3 只做 pass/reject，不排名、不补抽、不在同一 scenario 内择优。通过后该条
+trajectory 成为 canonical；全局 duplicate 检查仍可将其拒绝。
 
-```text
-Deduplication
-+
-Diversity Selection
-```
-
-最终不要只留最高分 trajectory。
-
-优先保留：
-
-```text
-高质量
-+
-非重复
-+
-演化路径有差异
-```
-
-的 trajectories。
+当前活跃 Claude150 批次使用一个质量审核模型对全量 trajectory 执行上述六维和
+hard-reject 检查，随后由人工抽检；不再要求多模型 Gate3 主筛。模型结论只是筛选
+建议，不替代人工验收。
 
 ---
 
@@ -577,6 +602,13 @@ Critical Event Removed
 
 通过 Gate 3 的 trajectory 才能用于 T1/T2/T3 construction。
 
+Task label 先由冻结 simulator 的私有 state 与 counterfactual branch 生成
+可审计的 machine proposal。Gate 4 不要求真人重做每一道题，而是按 task
+type 做确定性 10% 分层抽样（每类至少 2 题）。两名真人 reviewer 独立检查
+完全相同的样本；两人一致通过则接受，一致拒绝则该题/同类题回炉，只有
+分歧才交给不同的第三人 adjudicate。Machine proposal 在抽查通过前不是
+formal GT。
+
 ## T1 Gate
 
 ```text
@@ -600,7 +632,7 @@ Current-only shortcut check
 ## T2 Gate
 
 ```text
-[ ] History A/B 均来自自然 rollout
+[ ] History A 来自自然 rollout，History B 是受控改写并独立重放
 [ ] 两段 history 有 meaningful divergence
 [ ] O*_A == O*_B
 [ ] text+video variant 中 video_A == video_B
@@ -630,18 +662,18 @@ Current-only shortcut check
 
 ---
 
-# 8. Formal GT
+# 8. Label Release
 
-只有通过 Gate 4 的 instances 才进入正式 annotation。
+只有通过 Gate 4 双人同样本抽查的 machine proposals 才能进入 label release。
 
 ```text
-Candidate Instance
+Machine-proposed Label
 ↓
-Independent Human Annotation
+Two Independent Reviews on the Same Deterministic Sample
 ↓
 Agreement
 ↓
-Adjudication / Ambiguous Removal
+Disagreement-only Adjudication / Rejected-family Repair
 ↓
 Formal GT
 ```
@@ -649,9 +681,9 @@ Formal GT
 原则：
 
 ```text
-Simulator state = candidate signal
+Simulator state / branch = machine proposal
 
-Human annotation = formal benchmark GT
+Human audit = release control; it does not retroactively become a full manual label set
 ```
 
 ---
@@ -669,17 +701,15 @@ Gate 2
 ↓
 Environment Freeze
 ↓
-Multi-model Free Rollout
+One Free-form Natural Rollout per Scenario
 ↓
 Gate 3
 ↓
-Clean + Diverse Trajectory Pool
+Admitted Canonical Trajectories
 ↓
 T1 / T2 / T3 Construction
 ↓
-Gate 4
-↓
-Human GT
+Gate 4 same-sample double audit
 ↓
 Final Benchmark
 ```

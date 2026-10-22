@@ -1,59 +1,873 @@
 """Persona- and history-conditioned appraisal for arbitrary free-form actions."""
 
 from copy import deepcopy
+import re
 
 from providers.structured import complete_json
 
+from .calibration import FEATURE_NAMES
+from .appraisal_normalization import (
+    canonicalize_event_features,
+    canonicalize_impact_lists,
+    canonicalize_social_act,
+)
+from .delta_mapper import flatten_state
+from .interaction_ledger import validate_semantic_ledger_events
 from .prompts import build_appraisal_prompt
+from .observation import build_public_evaluated_role
+from .public_situation import render_public_background
+from .state_ontology import build_state_semantics
 
 
-def _validate_appraisal(result, allowed_evidence_ids=None):
+SOCIAL_ACTS = {
+    "inform", "question", "request", "proposal", "conditional_offer",
+    "tentative_plan", "commitment", "delivery", "concession", "clarification",
+    "challenge", "accusation", "threat", "boundary", "refusal", "deferral",
+    "repair", "withdrawal", "pause", "other",
+}
+STATE_IMPACT_FAMILY_CAPS = {
+    "emotion": 2,
+    "behavioral_disposition": 1,
+    "relationship": 1,
+    "consequence_risk": 1,
+}
+STATE_IMPACT_FAMILY_CAPS_V13 = {
+    "emotion": 1,
+    "behavioral_disposition": 1,
+    "relationship": 1,
+    "consequence_risk": 1,
+}
+STATE_IMPACT_FAMILY_CAPS_V14 = {
+    "emotion": 1,
+    "behavioral_disposition": 1,
+    "relationship": 2,
+    "consequence_risk": 1,
+}
+# v36 lets appraisal expose every evidence-grounded variable candidate.
+# Deterministic calibration retains its separate update budgets.
+STATE_IMPACT_FAMILY_CAPS_V36 = {}
+
+_QUOTE_EQUIVALENCE = str.maketrans({
+    "‘": "'",
+    "’": "'",
+    "“": '"',
+    "”": '"',
+})
+
+
+def _validate_impacts(
+    impacts, allowed_variables, label, *,
+    require_evidence=False, action_text="", family_caps=None,
+    require_distinct_family_evidence_spans=False,
+):
+    if not isinstance(impacts, list):
+        raise ValueError(f"{label} must be a list")
+    seen = set()
+    family_counts = {}
+    family_evidence_spans = {}
+    required = {
+        "variable", "direction", "evidence_strength",
+        "directness", "new_evidence",
+    }
+    if require_evidence:
+        required |= {"evidence_feature", "evidence_span"}
+    for impact in impacts:
+        if not isinstance(impact, dict) or set(impact) != required:
+            raise ValueError(f"each {label} entry must contain exactly {sorted(required)}")
+        variable = impact["variable"]
+        if variable not in allowed_variables:
+            raise ValueError(f"{label} references unknown variable {variable!r}")
+        if variable in seen:
+            raise ValueError(f"{label} repeats variable {variable!r}")
+        seen.add(variable)
+        family = variable.split(".", 1)[0]
+        family_counts[family] = family_counts.get(family, 0) + 1
+        cap = (family_caps or {}).get(family)
+        if cap is not None and family_counts[family] > cap:
+            raise ValueError(
+                f"{label} allows at most {cap} candidate(s) from {family}"
+            )
+        if impact["direction"] not in {"increase", "decrease"}:
+            raise ValueError(f"{label} has invalid direction")
+        strength = impact["evidence_strength"]
+        if (
+            isinstance(strength, bool)
+            or not isinstance(strength, int)
+            or strength not in {1, 2}
+        ):
+            raise ValueError(f"{label} evidence_strength must be 1 or 2")
+        if impact["directness"] not in {"direct", "indirect"}:
+            raise ValueError(f"{label} directness must be direct or indirect")
+        if not isinstance(impact["new_evidence"], bool):
+            raise ValueError(f"{label} new_evidence must be boolean")
+        if require_evidence:
+            if impact["evidence_feature"] not in FEATURE_NAMES:
+                raise ValueError(f"{label} evidence_feature is invalid")
+            impact["evidence_span"] = _exact_span_or_empty(
+                impact["evidence_span"], str(action_text).strip(),
+                f"{label} impact",
+            )
+            if require_distinct_family_evidence_spans:
+                spans = family_evidence_spans.setdefault(family, set())
+                if impact["evidence_span"] in spans:
+                    raise ValueError(
+                        f"{label} candidates from {family} must use distinct "
+                        "evidence spans"
+                    )
+                spans.add(impact["evidence_span"])
+
+
+def appraisal_preserves_action_owner(appraisal, environment_speaker=None):
+    """The appraisal intent must describe the evaluated speaker's latest action."""
+    intent = str((appraisal or {}).get("speaker_intent", "")).strip()
+    speaker = environment_speaker or {}
+    labels = {
+        str(speaker.get("name", "")).strip(),
+        "环境角色",
+        "环境参与者",
+    } - {""}
+    actor_move = r"(?:正|正在|试图|需要|希望|要求|请求|想|意在|打算|寻求|旨在|准备)"
+    return not any(
+        re.match(rf"^{re.escape(label)}{actor_move}", intent)
+        for label in labels
+    )
+
+
+NOVELTY_LABELS = {
+    "new_explanation", "new_position", "new_tradeoff", "new_evidence",
+    "new_decision", "necessary_confirmation", "none",
+}
+CLAIM_IMPACT_DOMAINS = {
+    "responsibility", "rights", "action_feasibility", "task_answer",
+}
+CLAIM_GROUNDING = {
+    "observable_fact", "speaker_report", "proposal_or_hypothetical",
+    "unsupported_assertion", "uncertain",
+}
+CONTINUATION_STATUS = {"must_answer", "continue", "can_close"}
+
+_V11_PLUS_PROMPTS = frozenset({
+    "environment_appraisal_v11", "environment_appraisal_v12",
+    "environment_appraisal_v13", "environment_appraisal_v14",
+    "environment_appraisal_v15", "environment_appraisal_v16",
+    "environment_appraisal_v17", "environment_appraisal_v18",
+    "environment_appraisal_v19", "environment_appraisal_v15_environment_owned",
+    "environment_appraisal_v20_slow_evidence_recall",
+    "environment_appraisal_v21_slow_candidate_audit",
+    "environment_appraisal_v22_slow_first",
+    "environment_appraisal_v23_feature_consistent_slow_first",
+    "environment_appraisal_v24_balanced_slow_evidence",
+
+    "environment_appraisal_v25_operational_slow_evidence",
+
+
+    "environment_appraisal_v26_bound_slow_evidence",
+
+
+
+    "environment_appraisal_v27_memory_bound_slow_evidence",
+    "environment_appraisal_v28_actor_memory_bound_slow_evidence",
+    "environment_appraisal_v29_concise_actor_memory_slow_evidence",
+    "environment_appraisal_v30_scope_aware_actor_memory_slow_evidence",
+    "environment_appraisal_v31_scope_novelty_actor_memory_slow_evidence",
+    "environment_appraisal_v32_scope_novelty_strength_actor_memory_slow_evidence",
+    "environment_appraisal_v33_safety_scope_actor_memory_slow_evidence",
+    "environment_appraisal_v34_safety_eligibility_actor_memory_slow_evidence",
+    "environment_appraisal_v35_adjacent_variable_recheck_actor_memory_slow_evidence",
+    "environment_appraisal_v36_evidence_grounded_state_interpretation",
+})
+_DIALOGUE_DIAGNOSTIC_PROMPTS = _V11_PLUS_PROMPTS
+_AFTER_DIRECT_RESPONSE_PROMPTS = _V11_PLUS_PROMPTS
+_LEDGER_EVENT_PROMPTS = _V11_PLUS_PROMPTS
+_LEDGER_NORMALIZATION_PROMPTS = _V11_PLUS_PROMPTS
+_LIVE_QUESTION_PARTITION_PROMPTS = frozenset()
+_ASSERTION_MODE_PROMPTS = _V11_PLUS_PROMPTS
+_IMPACT_EVIDENCE_PROMPTS = frozenset({
+    "environment_appraisal_v12", "environment_appraisal_v13",
+    "environment_appraisal_v14", "environment_appraisal_v15",
+    "environment_appraisal_v16", "environment_appraisal_v17",
+    "environment_appraisal_v18", "environment_appraisal_v19",
+    "environment_appraisal_v15_environment_owned",
+    "environment_appraisal_v20_slow_evidence_recall",
+    "environment_appraisal_v21_slow_candidate_audit",
+    "environment_appraisal_v22_slow_first",
+    "environment_appraisal_v23_feature_consistent_slow_first",
+    "environment_appraisal_v24_balanced_slow_evidence",
+
+    "environment_appraisal_v25_operational_slow_evidence",
+
+
+    "environment_appraisal_v26_bound_slow_evidence",
+
+
+
+    "environment_appraisal_v27_memory_bound_slow_evidence",
+    "environment_appraisal_v28_actor_memory_bound_slow_evidence",
+    "environment_appraisal_v29_concise_actor_memory_slow_evidence",
+    "environment_appraisal_v30_scope_aware_actor_memory_slow_evidence",
+    "environment_appraisal_v31_scope_novelty_actor_memory_slow_evidence",
+    "environment_appraisal_v32_scope_novelty_strength_actor_memory_slow_evidence",
+    "environment_appraisal_v33_safety_scope_actor_memory_slow_evidence",
+    "environment_appraisal_v34_safety_eligibility_actor_memory_slow_evidence",
+    "environment_appraisal_v35_adjacent_variable_recheck_actor_memory_slow_evidence",
+    "environment_appraisal_v36_evidence_grounded_state_interpretation",
+})
+_STATE_IMPACT_FAMILY_CAPS_BY_PROMPT = {
+    "environment_appraisal_v12": STATE_IMPACT_FAMILY_CAPS,
+    "environment_appraisal_v13": STATE_IMPACT_FAMILY_CAPS_V13,
+    "environment_appraisal_v14": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v15": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v16": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v17": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v18": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v19": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v15_environment_owned": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v20_slow_evidence_recall": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v21_slow_candidate_audit": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v22_slow_first": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v23_feature_consistent_slow_first": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v24_balanced_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+
+    "environment_appraisal_v25_operational_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+
+
+    "environment_appraisal_v26_bound_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+
+
+
+    "environment_appraisal_v27_memory_bound_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v28_actor_memory_bound_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v29_concise_actor_memory_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v30_scope_aware_actor_memory_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v31_scope_novelty_actor_memory_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v32_scope_novelty_strength_actor_memory_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v33_safety_scope_actor_memory_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v34_safety_eligibility_actor_memory_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v35_adjacent_variable_recheck_actor_memory_slow_evidence": STATE_IMPACT_FAMILY_CAPS_V14,
+    "environment_appraisal_v36_evidence_grounded_state_interpretation": STATE_IMPACT_FAMILY_CAPS_V36,
+}
+
+
+def _exact_span_or_empty(span, action_text, label, allow_empty=False):
+    if not isinstance(span, str):
+        raise ValueError(f"{label} evidence span must be text")
+    if not span and allow_empty:
+        return span
+    if span and span in action_text:
+        return span
+    if span:
+        normalized = span.translate(_QUOTE_EQUIVALENCE)
+        width = len(span)
+        matches = [
+            action_text[start:start + width]
+            for start in range(len(action_text) - width + 1)
+            if action_text[start:start + width].translate(_QUOTE_EQUIVALENCE)
+            == normalized
+        ]
+        if len(matches) == 1:
+            return matches[0]
+    raise ValueError(
+        f"{label} evidence span must be an exact latest-action substring"
+    )
+
+
+def _validate_ledger_resolutions(value, action_text, active_proposals=None):
+    if not isinstance(value, list) or len(value) > 3:
+        raise ValueError("ledger_resolutions must be a list of at most three")
+    proposal_by_id = {
+        item.get("id"): item
+        for item in (active_proposals or [])
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }
+    seen = set()
+    for resolution in value:
+        if not isinstance(resolution, dict) or set(resolution) != {
+            "target_id", "resolution", "evidence_span"
+        }:
+            raise ValueError("ledger resolution has an invalid shape")
+        target_id = resolution["target_id"]
+        if target_id in seen:
+            raise ValueError("ledger_resolutions repeats target_id")
+        if target_id not in proposal_by_id:
+            raise ValueError("ledger resolution target_id is not an active proposal")
+        if proposal_by_id[target_id].get("speaker") == "evaluated_agent":
+            raise ValueError("evaluated speaker cannot resolve their own proposal")
+        if resolution["resolution"] not in {
+            "accepted", "rejected", "countered"
+        }:
+            raise ValueError("ledger resolution status is invalid")
+        _exact_span_or_empty(
+            resolution["evidence_span"], action_text, "ledger resolution"
+        )
+        seen.add(target_id)
+
+
+def _validate_dialogue_diagnostics(
+    value, action_text, require_after_direct_response=False,
+    live_questions=None, require_live_question_partition=False,
+):
+    if not isinstance(value, dict) or set(value) != {
+        "substantive_novelty", "consequential_claims", "continuation"
+    }:
+        raise ValueError("dialogue_diagnostics has an invalid shape")
+    novelty = value["substantive_novelty"]
+    if not isinstance(novelty, dict) or set(novelty) != {"label", "evidence_span"}:
+        raise ValueError("substantive_novelty has an invalid shape")
+    novelty_aliases = {
+        "new_confirmation": "necessary_confirmation",
+        "new_question": "new_position",
+        "new_request": "new_position",
+        "new_inquiry": "new_position",
+        "new_clarification": "new_position",
+        "new_proposal": "new_position",
+        "question": "new_position",
+        "confirmation": "necessary_confirmation",
+        "no_novelty": "none",
+    }
+    novelty["label"] = novelty_aliases.get(novelty["label"], novelty["label"])
+    if novelty["label"] not in NOVELTY_LABELS:
+        raise ValueError("substantive_novelty label is invalid")
+    try:
+        _exact_span_or_empty(
+            novelty["evidence_span"], action_text, "substantive_novelty",
+            allow_empty=novelty["label"] == "none",
+        )
+    except ValueError:
+        novelty["evidence_span"] = (
+            "" if novelty["label"] == "none" else action_text
+        )
+    claims = value["consequential_claims"]
+    if not isinstance(claims, list) or len(claims) > 3:
+        raise ValueError("consequential_claims must be a list of at most three")
+    valid_claims = []
+    for claim in claims:
+        if (
+            isinstance(claim, dict)
+            and "claim_span" not in claim
+            and ("span" in claim or "evidence_span" in claim)
+        ):
+            claim = dict(claim)
+            alias = "span" if "span" in claim else "evidence_span"
+            claim["claim_span"] = claim.pop(alias)
+        if (
+            isinstance(claim, dict)
+            and set(claim) == {"claim_span", "impact_domain", "grounding"}
+        ):
+            domain = claim.pop("impact_domain")
+            claim["impact_domains"] = (
+                list(domain) if isinstance(domain, list) else [domain]
+            )
+        if not isinstance(claim, dict) or set(claim) != {
+            "claim_span", "impact_domains", "grounding"
+        }:
+            # Consequential claims are diagnostic only.  Preserve uncertainty by
+            # dropping a malformed annotation instead of inventing its grounding
+            # or aborting an otherwise valid state appraisal.
+            continue
+        try:
+            _exact_span_or_empty(claim["claim_span"], action_text, "claim")
+        except ValueError:
+            # Consequential claims are diagnostic annotations. An unsupported
+            # annotation is discarded rather than aborting a valid appraisal.
+            continue
+        domains = claim["impact_domains"]
+        domain_aliases = {
+            "communication_boundary": "responsibility",
+            "feasibility": "action_feasibility",
+            "answer": "task_answer",
+        }
+        if isinstance(domains, list):
+            domains = list(dict.fromkeys(
+                domain_aliases.get(domain, domain) for domain in domains
+            ))
+            claim["impact_domains"] = domains
+        if (
+            not isinstance(domains, list) or not domains
+            or len(domains) != len(set(domains))
+            or not set(domains).issubset(CLAIM_IMPACT_DOMAINS)
+        ):
+            continue
+        if isinstance(claim["grounding"], list):
+            if (
+                len(claim["grounding"]) == 1
+                and claim["grounding"][0] in CLAIM_GROUNDING
+            ):
+                claim["grounding"] = claim["grounding"][0]
+            else:
+                continue
+        if claim["grounding"] not in CLAIM_GROUNDING:
+            continue
+        valid_claims.append(claim)
+    value["consequential_claims"] = valid_claims
+    continuation = value["continuation"]
+    allowed_continuation = {"status", "evidence_span", "after_direct_response"}
+    if (
+        not isinstance(continuation, dict)
+        or not {"status", "evidence_span"}.issubset(continuation)
+        or not set(continuation).issubset(allowed_continuation)
+        or (require_after_direct_response and "after_direct_response" not in continuation)
+    ):
+        raise ValueError("continuation has an invalid shape")
+    if continuation["status"] not in CONTINUATION_STATUS:
+        raise ValueError("continuation status is invalid")
+    try:
+        _exact_span_or_empty(
+            continuation["evidence_span"], action_text, "continuation",
+            allow_empty=continuation["status"] == "can_close",
+        )
+    except ValueError:
+        continuation["evidence_span"] = (
+            "" if continuation["status"] == "can_close" else action_text
+        )
+    after_direct = continuation.get("after_direct_response")
+    if after_direct is not None:
+        # Some otherwise valid appraisals reuse the pre-response ``must_answer``
+        # label here. After a direct response that can only mean "continue":
+        # canonicalize conservatively and never let this alias create a pause.
+        if (
+            isinstance(after_direct, dict)
+            and after_direct.get("status") == "must_answer"
+        ):
+            after_direct["status"] = "continue"
+        base_after_keys = {"status", "evidence_span"}
+        partition_keys = {"resolved_live_questions", "remaining_live_questions"}
+        supplied_after_keys = set(after_direct) if isinstance(after_direct, dict) else set()
+        shape_valid = (
+            supplied_after_keys == base_after_keys | partition_keys
+            if require_live_question_partition
+            else (
+                base_after_keys.issubset(supplied_after_keys)
+                and supplied_after_keys.issubset(base_after_keys | partition_keys)
+            )
+        )
+        if (
+            not isinstance(after_direct, dict)
+            or not shape_valid
+            or after_direct.get("status") not in {"can_close", "continue"}
+        ):
+            raise ValueError("after_direct_response has an invalid shape")
+        try:
+            _exact_span_or_empty(
+                after_direct["evidence_span"], action_text,
+                "after_direct_response",
+            )
+        except ValueError:
+            after_direct["evidence_span"] = action_text
+        if require_live_question_partition:
+            supplied = list(live_questions or [])
+            resolved = after_direct["resolved_live_questions"]
+            remaining = after_direct["remaining_live_questions"]
+            if not isinstance(resolved, list) or not isinstance(remaining, list):
+                raise ValueError("live-question partition must use lists")
+            if (
+                any(not isinstance(item, str) for item in resolved + remaining)
+                or len(supplied) != len(set(supplied))
+            ):
+                raise ValueError("live-question partition must use unique text questions")
+            raw_resolved = set(resolved)
+            raw_remaining = set(remaining)
+            # Only an exact, unconflicted copy counts as resolved. Unknown,
+            # paraphrased, omitted, duplicated, or conflicting entries remain
+            # unresolved. This can delay a pause but can never create one.
+            canonical_resolved = [
+                item for item in supplied
+                if item in raw_resolved and item not in raw_remaining
+            ]
+            canonical_remaining = [
+                item for item in supplied if item not in canonical_resolved
+            ]
+            after_direct["resolved_live_questions"] = canonical_resolved
+            after_direct["remaining_live_questions"] = canonical_remaining
+            # Keep the exact partition as diagnostic evidence.  Live questions
+            # describe possible discussion space; they do not override the
+            # model's semantic judgment that this contact can naturally close.
+    return value
+
+
+def _validate_appraisal(
+    result,
+    allowed_evidence_ids=None,
+    state_variables=None,
+    dynamics_variables=None,
+    environment_speaker=None,
+    action_text="",
+    require_dialogue_diagnostics=False,
+    require_after_direct_response=False,
+    live_questions=None,
+    require_live_question_partition=False,
+    require_ledger_events=False,
+    require_assertion_mode=False,
+    normalize_ledger_noise=False,
+    require_impact_evidence=False,
+    state_impact_family_caps=None,
+    require_distinct_family_evidence_spans=False,
+    require_nonzero_impact_features=False,
+    active_proposals=None,
+):
+    if not isinstance(result, dict):
+        raise ValueError("model appraiser must return an object")
+    appraisal = result.get("appraisal")
+    # A known schema-only variation places diagnostics beside appraisal. Move
+    # the supplied object to its canonical location without changing any
+    # semantic value or making another model request.
+    if (
+        set(result) == {"appraisal", "dialogue_diagnostics", "evidence_turn_ids"}
+        and isinstance(appraisal, dict)
+        and "dialogue_diagnostics" not in appraisal
+        and isinstance(result.get("dialogue_diagnostics"), dict)
+    ):
+        appraisal = dict(appraisal)
+        appraisal["dialogue_diagnostics"] = result["dialogue_diagnostics"]
+        result = {
+            "appraisal": appraisal,
+            "evidence_turn_ids": result["evidence_turn_ids"],
+        }
+    if (
+        set(result) == {"appraisal"}
+        and isinstance(appraisal, dict)
+        and "evidence_turn_ids" in appraisal
+    ):
+        appraisal = dict(appraisal)
+        evidence = appraisal.pop("evidence_turn_ids")
+        result = {"appraisal": appraisal, "evidence_turn_ids": evidence}
     if set(result) != {"appraisal", "evidence_turn_ids"}:
         raise ValueError("model appraiser must return appraisal and evidence_turn_ids")
     evidence = result["evidence_turn_ids"]
     if not isinstance(result["appraisal"], dict) or not isinstance(evidence, list):
         raise ValueError("model appraisal has an invalid shape")
-    if (
-        len(evidence) > 4
-        or len(evidence) != len(set(evidence))
-        or not all(isinstance(turn_id, str) for turn_id in evidence)
+    appraisal = result["appraisal"]
+    required = {
+        "speaker_intent", "social_act", "event_features",
+        "state_impacts", "dynamics_impacts",
+    }
+    allowed = required | {
+        "dialogue_diagnostics", "ledger_events", "ledger_resolutions",
+        "ledger_event_normalizations",
+    }
+    if not required.issubset(appraisal) or not set(appraisal).issubset(allowed):
+        raise ValueError(
+            f"structured appraisal must contain {sorted(required)} and only supported optional fields"
+        )
+    if require_dialogue_diagnostics and "dialogue_diagnostics" not in appraisal:
+        raise ValueError("structured appraisal must include dialogue_diagnostics")
+    if require_ledger_events and "ledger_events" not in appraisal:
+        raise ValueError("structured appraisal must include ledger_events")
+    appraisal.pop("ledger_event_normalizations", None)
+    appraisal.setdefault("ledger_resolutions", [])
+    _validate_ledger_resolutions(
+        appraisal["ledger_resolutions"], str(action_text).strip(), active_proposals
+    )
+    if "ledger_events" in appraisal:
+        ledger_event_normalizations = []
+        appraisal["ledger_events"] = validate_semantic_ledger_events(
+            appraisal["ledger_events"], str(action_text).strip(),
+            "evaluated_agent", drop_irrelevant=normalize_ledger_noise,
+            normalize_tentative_commitments=normalize_ledger_noise,
+            normalize_pending_commitments=normalize_ledger_noise,
+            drop_acceptance_commitments=normalize_ledger_noise,
+            drop_acceptance_events=normalize_ledger_noise,
+            active_proposals=active_proposals,
+            normalization_log=ledger_event_normalizations,
+            require_assertion_mode=require_assertion_mode,
+        )
+        if ledger_event_normalizations:
+            appraisal["ledger_event_normalizations"] = ledger_event_normalizations
+    if "dialogue_diagnostics" in appraisal:
+        _validate_dialogue_diagnostics(
+            appraisal["dialogue_diagnostics"], str(action_text).strip(),
+            require_after_direct_response=require_after_direct_response,
+            live_questions=live_questions,
+            require_live_question_partition=require_live_question_partition,
+        )
+    raw_impact_count = sum(
+        len(appraisal.get(key, []))
+        for key in ("state_impacts", "dynamics_impacts")
+        if isinstance(appraisal.get(key), list)
+    )
+    if state_variables is not None and dynamics_variables is not None:
+        appraisal = canonicalize_impact_lists(
+            appraisal, state_variables, dynamics_variables,
+            preserve_evidence=require_impact_evidence,
+        )
+        result = dict(result)
+        result["appraisal"] = appraisal
+    if not isinstance(appraisal["speaker_intent"], str) or not appraisal["speaker_intent"].strip():
+        raise ValueError("speaker_intent must be non-empty text")
+    if not appraisal_preserves_action_owner(appraisal, environment_speaker):
+        raise ValueError(
+            "speaker_intent assigned the evaluated action to the environment character"
+        )
+    appraisal["social_act"] = canonicalize_social_act(appraisal["social_act"], SOCIAL_ACTS)
+    features = canonicalize_event_features(appraisal["event_features"], FEATURE_NAMES)
+    appraisal["event_features"] = features
+    if "ledger_events" in appraisal and features.get("commitment_signal", 0) <= 0:
+        inconsistent = [
+            event for event in appraisal["ledger_events"]
+            if event["event_type"] == "commitment"
+            and event["status"] in {"firm", "conditional"}
+        ]
+        if inconsistent:
+            appraisal["ledger_events"] = [
+                event for event in appraisal["ledger_events"]
+                if event not in inconsistent
+            ]
+            appraisal.setdefault("ledger_event_normalizations", []).extend([{
+                "operation": "drop_internally_inconsistent_commitment",
+                "reason": "commitment_event_conflicts_with_nonpositive_commitment_signal",
+                "event": deepcopy(event),
+            } for event in inconsistent])
+    result["appraisal"] = appraisal
+    if not isinstance(features, dict) or set(features) != set(FEATURE_NAMES):
+        raise ValueError("event_features must contain the fixed feature set exactly once")
+    if any(
+        isinstance(value, bool) or not isinstance(value, int) or value < -2 or value > 2
+        for value in features.values()
     ):
-        raise ValueError("model appraisal evidence IDs must be unique strings, at most four")
-    if allowed_evidence_ids is not None and not set(evidence).issubset(set(allowed_evidence_ids)):
-        raise ValueError("model appraisal invented an evidence turn ID")
+        raise ValueError("every event feature must be an integer from -2 to 2")
+    if state_variables is not None:
+        _validate_impacts(
+            appraisal["state_impacts"], set(state_variables), "state_impacts",
+            require_evidence=require_impact_evidence,
+            action_text=action_text,
+            family_caps=(
+                state_impact_family_caps
+                if state_impact_family_caps is not None
+                else (
+                    STATE_IMPACT_FAMILY_CAPS
+                    if require_impact_evidence else None
+                )
+            ),
+            require_distinct_family_evidence_spans=(
+                require_distinct_family_evidence_spans
+            ),
+        )
+    if dynamics_variables is not None:
+        _validate_impacts(
+            appraisal["dynamics_impacts"], set(dynamics_variables), "dynamics_impacts",
+            require_evidence=require_impact_evidence,
+            action_text=action_text,
+        )
+    if require_nonzero_impact_features:
+        zero_feature_impacts = [
+            impact
+            for key in ("state_impacts", "dynamics_impacts")
+            for impact in appraisal.get(key, [])
+            if features.get(impact.get("evidence_feature"), 0) == 0
+        ]
+        if zero_feature_impacts:
+            variables = sorted(
+                impact.get("variable", "") for impact in zero_feature_impacts
+            )
+            raise ValueError(
+                "impact evidence_feature must have a non-zero event feature: "
+                + ", ".join(variables)
+            )
+    normalized_impact_count = (
+        len(appraisal["state_impacts"]) + len(appraisal["dynamics_impacts"])
+    )
+    if raw_impact_count and not normalized_impact_count:
+        raise ValueError(
+            "candidate impacts were unusable; every impact needs a valid variable path"
+        )
+    allowed_ids = (
+        set(allowed_evidence_ids) if allowed_evidence_ids is not None else None
+    )
+    normalized_evidence = []
+    for evidence_id in evidence:
+        if not isinstance(evidence_id, str):
+            continue
+        if allowed_ids is not None and evidence_id not in allowed_ids:
+            continue
+        if evidence_id not in normalized_evidence:
+            normalized_evidence.append(evidence_id)
+        if len(normalized_evidence) == 4:
+            break
+    result["evidence_turn_ids"] = normalized_evidence
     return result
 
 
 class ModelAppraiser:
-    def __init__(self, scenario, provider, sampling=None):
+    def __init__(
+        self, scenario, provider, sampling=None,
+        prompt_id="environment_appraisal_v11",
+    ):
         self.scenario = deepcopy(scenario)
         self.provider = provider
         self.sampling = dict(sampling or {})
+        self.prompt_id = prompt_id
+        configured_max = self.sampling.get("max_tokens")
+        if configured_max is None:
+            provider_defaults = getattr(provider, "generation_defaults", {})
+            provider_max = getattr(provider, "max_tokens", None)
+            if not isinstance(provider_max, int) or isinstance(provider_max, bool):
+                provider_max = (
+                    provider_defaults.get("max_tokens")
+                    if isinstance(provider_defaults, dict) else None
+                )
+            self.sampling["max_tokens"] = (
+                provider_max
+                if isinstance(provider_max, int)
+                and not isinstance(provider_max, bool)
+                and provider_max > 0
+                else 2800
+            )
+        elif (
+            not isinstance(configured_max, int)
+            or isinstance(configured_max, bool)
+            or configured_max < 1
+        ):
+            raise ValueError("appraisal max_tokens must be a positive integer")
 
     @property
     def provenance(self):
         return {
             **getattr(self.provider, "provenance", {}),
-            "prompt_id": "environment_appraisal_v2",
+            "prompt_id": self.prompt_id,
             "sampling": dict(self.sampling),
         }
 
-    def appraise(self, *, action, previous_state, previous_dynamics, memory):
+    def appraise(
+        self, *, action, previous_state, previous_dynamics, memory,
+        longitudinal_context=None, interaction_ledger=None, appraisal_context=None,
+    ):
         agent = self.scenario["environment_agent"]
+        evaluated = build_public_evaluated_role(
+            self.scenario.get("evaluated_agent_role", {})
+        )
         prompt = build_appraisal_prompt(
             persona=agent["persona"],
-            background=self.scenario["background"],
+            background=render_public_background(self.scenario),
             explicit_goal=agent["explicit_goal"],
             hidden_intention=agent["hidden_intention"],
+            evaluated_agent=evaluated,
             previous_state=previous_state,
             previous_dynamics=previous_dynamics,
             memory=memory,
             action=action,
+            longitudinal_context=longitudinal_context,
+            interaction_ledger=interaction_ledger,
+            appraisal_context=appraisal_context,
+            state_semantics=build_state_semantics(self.scenario),
+            prompt_id=self.prompt_id,
         )
-        return complete_json(
+        environment_persona = agent.get("persona", agent)
+        system_prompt = (
+            "你是结构化 appraisal 分析器，不扮演任何对话人物。最新 action 的唯一作者是 "
+            f"evaluated_agent：{evaluated.get('name', '被评估参与者')}（"
+            f"{evaluated.get('role', '被评估参与者')}）；被该行动影响并将在之后回应的是 "
+            f"environment_agent：{environment_persona.get('name', '环境参与者')}（"
+            f"{environment_persona.get('role', '环境参与者')}）。speaker_intent 必须描述 "
+            "evaluated_agent 此刻在做什么，绝不能把 action 写成 environment_agent 的意图、"
+            "请求、承诺或行动。只返回指定 JSON。"
+        )
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": prompt},
+        ]
+        audit_start = len(getattr(self.provider, "audit_records", []))
+        retry_diagnostics = []
+        result = complete_json(
             self.provider,
-            [{"role": "user", "content": prompt}],
+            messages,
             self.sampling,
-            lambda result: _validate_appraisal(result, memory.get("relevant_turn_ids", [])),
+            lambda result: _validate_appraisal(
+                result,
+                memory.get("relevant_turn_ids", []),
+                flatten_state(previous_state),
+                flatten_state(previous_dynamics),
+                environment_speaker=agent.get("persona", agent),
+                action_text=action.get("text", ""),
+                require_dialogue_diagnostics=(
+                    self.prompt_id in _DIALOGUE_DIAGNOSTIC_PROMPTS
+                ),
+                require_after_direct_response=(
+                    self.prompt_id in _AFTER_DIRECT_RESPONSE_PROMPTS
+                ),
+                live_questions=(longitudinal_context or {}).get(
+                    "segment", {}
+                ).get("live_questions", []),
+                require_live_question_partition=(
+                    self.prompt_id in _LIVE_QUESTION_PARTITION_PROMPTS
+                ),
+                require_ledger_events=self.prompt_id in _LEDGER_EVENT_PROMPTS,
+                require_assertion_mode=self.prompt_id in _ASSERTION_MODE_PROMPTS,
+                normalize_ledger_noise=(
+                    self.prompt_id in _LEDGER_NORMALIZATION_PROMPTS
+                ),
+                require_impact_evidence=(
+                    self.prompt_id in _IMPACT_EVIDENCE_PROMPTS
+                ),
+                state_impact_family_caps=(
+                    _STATE_IMPACT_FAMILY_CAPS_BY_PROMPT.get(self.prompt_id)
+                ),
+                require_distinct_family_evidence_spans=(
+                    self.prompt_id in {
+                        "environment_appraisal_v14",
+                        "environment_appraisal_v15",
+                        "environment_appraisal_v16",
+                        "environment_appraisal_v17",
+                        "environment_appraisal_v18",
+                        "environment_appraisal_v20_slow_evidence_recall",
+                        "environment_appraisal_v21_slow_candidate_audit",
+                        "environment_appraisal_v22_slow_first",
+                        "environment_appraisal_v23_feature_consistent_slow_first",
+                        "environment_appraisal_v24_balanced_slow_evidence",
+
+                        "environment_appraisal_v25_operational_slow_evidence",
+
+
+                        "environment_appraisal_v26_bound_slow_evidence",
+
+
+
+                        "environment_appraisal_v27_memory_bound_slow_evidence",
+                        "environment_appraisal_v28_actor_memory_bound_slow_evidence",
+                        "environment_appraisal_v29_concise_actor_memory_slow_evidence",
+                        "environment_appraisal_v30_scope_aware_actor_memory_slow_evidence",
+                        "environment_appraisal_v31_scope_novelty_actor_memory_slow_evidence",
+                        "environment_appraisal_v32_scope_novelty_strength_actor_memory_slow_evidence",
+                        "environment_appraisal_v33_safety_scope_actor_memory_slow_evidence",
+                        "environment_appraisal_v34_safety_eligibility_actor_memory_slow_evidence",
+                        "environment_appraisal_v35_adjacent_variable_recheck_actor_memory_slow_evidence",
+                    }
+                ),
+                require_nonzero_impact_features=(
+                    self.prompt_id in {
+                        "environment_appraisal_v23_feature_consistent_slow_first",
+                        "environment_appraisal_v24_balanced_slow_evidence",
+
+                        "environment_appraisal_v25_operational_slow_evidence",
+
+
+                        "environment_appraisal_v26_bound_slow_evidence",
+
+
+
+                        "environment_appraisal_v27_memory_bound_slow_evidence",
+                        "environment_appraisal_v28_actor_memory_bound_slow_evidence",
+                        "environment_appraisal_v29_concise_actor_memory_slow_evidence",
+                        "environment_appraisal_v30_scope_aware_actor_memory_slow_evidence",
+                        "environment_appraisal_v31_scope_novelty_actor_memory_slow_evidence",
+                        "environment_appraisal_v32_scope_novelty_strength_actor_memory_slow_evidence",
+                        "environment_appraisal_v33_safety_scope_actor_memory_slow_evidence",
+                        "environment_appraisal_v34_safety_eligibility_actor_memory_slow_evidence",
+                        "environment_appraisal_v35_adjacent_variable_recheck_actor_memory_slow_evidence",
+                        "environment_appraisal_v36_evidence_grounded_state_interpretation",
+                    }
+                ),
+                active_proposals=(interaction_ledger or {}).get(
+                    "active_proposals", []
+                ),
+            ),
             context="model appraiser",
+            diagnostics_sink=retry_diagnostics,
+            repair_unescaped_interior_quotes=True,
         )
+        result["request_retry_diagnostics"] = retry_diagnostics
+        result["request_messages"] = deepcopy(messages)
+        result["request_sampling"] = dict(self.sampling)
+        result["provider_audit_records"] = deepcopy(
+            getattr(self.provider, "audit_records", [])[audit_start:]
+        )
+
+        return result

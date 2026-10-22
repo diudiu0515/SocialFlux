@@ -3,9 +3,45 @@
 from collections import defaultdict
 from copy import deepcopy
 
+from environment.appraisal import appraisal_preserves_action_owner
 from environment.delta_mapper import flatten_state
+from environment.interaction_ledger import record_evaluated_action
 from evaluation.leakage import find_leaks
-from providers.text import follows_dialogue_format, text_similarity
+from providers.text import (
+    asserts_ungrounded_institutional_procedure,
+    asserts_ungrounded_performance_amount,
+    asserts_ungrounded_remaining_amount,
+    addresses_speaker_as_other,
+    avoids_unsupported_offscreen_claim,
+    bounces_latest_stance_request,
+    claims_other_speaker_commitment,
+    claims_pending_commitment_completed,
+    collapses_multiple_facets_early,
+    confirms_ungrounded_numeric_detail,
+    confirms_unobserved_completion,
+    contradicts_explicit_installment_total,
+    contradicts_pending_own_commitment,
+    copies_goal_thread_label,
+    follows_dialogue_format,
+    introduces_unprompted_coordination_actor,
+    introduces_unprompted_legal_escalation,
+    introduces_unrequested_artifact,
+    evades_latest_obligation,
+    lacks_natural_final_closure,
+    overloads_consequential_terms,
+    opens_followup_on_saturated_focus,
+    mirrors_latest_speaker_move,
+    prematurely_reports_future_commitment_completion,
+    renews_pending_commitment_without_change,
+    template_loop_signatures,
+    violates_environment_counterparty_role,
+    violates_role_specific_action,
+    text_similarity,
+    current_repayment_commitment_status,
+    rewrites_absent_commitment_as_nonperformance,
+    suspends_existing_obligation,
+    upgrades_tentative_to_agreement,
+)
 
 
 def blind_instance_packet(instance):
@@ -53,6 +89,263 @@ def _flatten_values(grouped):
     ]
 
 
+def _append_public_transition_events(observed, turn):
+    transition = turn.get("segment_transition_after") or {}
+    event_texts = [
+        str(event.get("text", ""))
+        for event in transition.get("public_events", [])
+        if event.get("public", True) and str(event.get("text", "")).strip()
+    ]
+    return observed + (" " + " ".join(event_texts) if event_texts else "")
+
+
+def _performance_amounts_are_grounded(trajectory):
+    context = trajectory.get("public_scenario_context", {})
+    observed = " ".join((
+        str(context.get("background", "")),
+        str(context.get("public_situation", {})),
+    ))
+    for turn in trajectory.get("turns", []):
+        action = str(turn.get("policy_action", {}).get("text", ""))
+        if asserts_ungrounded_performance_amount(action, observed):
+            return False
+        observed += " " + action
+        response = str(turn.get("environment_response", ""))
+        if asserts_ungrounded_performance_amount(response, observed):
+            return False
+        observed = _append_public_transition_events(observed + " " + response, turn)
+    return True
+
+
+def _remaining_balances_are_grounded(trajectory):
+    context = trajectory.get("public_scenario_context", {})
+    observed = " ".join((
+        str(context.get("background", "")),
+        str(context.get("public_situation", {})),
+    ))
+    for turn in trajectory.get("turns", []):
+        action = str(turn.get("policy_action", {}).get("text", ""))
+        if asserts_ungrounded_remaining_amount(action, observed):
+            return False
+        observed += " " + action
+        response = str(turn.get("environment_response", ""))
+        if asserts_ungrounded_remaining_amount(response, observed):
+            return False
+        observed = _append_public_transition_events(observed + " " + response, turn)
+    return True
+
+
+def _numeric_confirmations_are_grounded(trajectory):
+    context = trajectory.get("public_scenario_context", {})
+    observed = " ".join((
+        str(context.get("background", "")),
+        str(context.get("public_situation", {})),
+    ))
+    for turn in trajectory.get("turns", []):
+        action = str(turn.get("policy_action", {}).get("text", ""))
+        if confirms_ungrounded_numeric_detail(action, observed):
+            return False
+        observed += " " + action
+        response = str(turn.get("environment_response", ""))
+        if confirms_ungrounded_numeric_detail(response, observed):
+            return False
+        observed = _append_public_transition_events(observed + " " + response, turn)
+    return True
+
+
+def _artifacts_are_observably_grounded(trajectory):
+    context = trajectory.get("public_scenario_context", {})
+    observed = " ".join((
+        str(context.get("background", "")),
+        str(context.get("public_situation", {})),
+    ))
+    for turn in trajectory.get("turns", []):
+        action = str(turn.get("policy_action", {}).get("text", ""))
+        if introduces_unrequested_artifact(action, observed):
+            return False
+        observed += " " + action
+        response = str(turn.get("environment_response", ""))
+        if introduces_unrequested_artifact(response, observed):
+            return False
+        observed = _append_public_transition_events(observed + " " + response, turn)
+    return True
+
+
+def _institutional_procedures_are_grounded(trajectory):
+    public_context = trajectory.get("public_scenario_context", {})
+    observed = " ".join((
+        str(public_context.get("background", "")),
+        str(public_context.get("public_situation", {})),
+    ))
+    for turn in trajectory.get("turns", []):
+        action = str(turn.get("policy_action", {}).get("text", ""))
+        if asserts_ungrounded_institutional_procedure(action, observed):
+            return False
+        observed += " " + action
+        response = str(turn.get("environment_response", ""))
+        if asserts_ungrounded_institutional_procedure(response, observed):
+            return False
+        observed = _append_public_transition_events(observed + " " + response, turn)
+    return True
+
+def _coordination_actors_are_grounded(trajectory):
+    context = trajectory.get("public_scenario_context", {})
+    observed = " ".join((
+        str(context.get("background", "")),
+        str(context.get("public_situation", {})),
+    ))
+    for turn in trajectory.get("turns", []):
+        action = str(turn.get("policy_action", {}).get("text", ""))
+        if introduces_unprompted_coordination_actor(action, observed):
+            return False
+        observed += " " + action
+        response = str(turn.get("environment_response", ""))
+        if introduces_unprompted_coordination_actor(response, observed):
+            return False
+        observed = _append_public_transition_events(observed + " " + response, turn)
+    return True
+
+
+def _legal_escalations_are_grounded(trajectory):
+    context = trajectory.get("public_scenario_context", {})
+    observed = " ".join((
+        str(context.get("background", "")),
+        str(context.get("public_situation", {})),
+    ))
+    for turn in trajectory.get("turns", []):
+        action = str(turn.get("policy_action", {}).get("text", ""))
+        if introduces_unprompted_legal_escalation(action, observed):
+            return False
+        observed += " " + action
+        response = str(turn.get("environment_response", ""))
+        if introduces_unprompted_legal_escalation(response, observed):
+            return False
+        observed = _append_public_transition_events(observed + " " + response, turn)
+    return True
+
+
+def _installment_arithmetic_is_consistent(trajectory):
+    latest_response = ""
+    for turn in trajectory.get("turns", []):
+        action = str(turn.get("policy_action", {}).get("text", ""))
+        response = str(turn.get("environment_response", ""))
+        if contradicts_explicit_installment_total(action, latest_response):
+            return False
+        if contradicts_explicit_installment_total(response, action):
+            return False
+        latest_response = response
+    return True
+
+
+def _pending_commitments_are_consistent(trajectory):
+    latest_response = ""
+    for turn in trajectory.get("turns", []):
+        ledger = deepcopy(turn.get("interaction_ledger_before", {}))
+        for key in (
+            "established_facts", "goal_threads", "active_proposals",
+            "commitments", "unresolved_threads", "recent_moves",
+        ):
+            ledger.setdefault(key, [])
+        ledger.setdefault("latest_obligation", None)
+        ledger.setdefault("progress", {})
+        action_obj = turn.get("policy_action", {})
+        action = str(action_obj.get("text", ""))
+        response = str(turn.get("environment_response", ""))
+        if claims_pending_commitment_completed(action, ledger):
+            return False
+        if claims_other_speaker_commitment(
+            action, ledger, "evaluated_agent"
+        ):
+            return False
+        if prematurely_reports_future_commitment_completion(
+            action, ledger, "evaluated_agent"
+        ):
+            return False
+        if contradicts_pending_own_commitment(
+            action, ledger, "evaluated_agent"
+        ):
+            return False
+        response_ledger = record_evaluated_action(
+            ledger,
+            turn_id=int(str(turn.get("turn_id", "0")).lstrip("t") or 0),
+            action=action_obj,
+            appraisal=turn.get("appraisal", {}),
+        )
+        if claims_pending_commitment_completed(response, response_ledger):
+            return False
+        if claims_other_speaker_commitment(
+            response, response_ledger, "environment_agent"
+        ):
+            return False
+        if prematurely_reports_future_commitment_completion(
+            response, response_ledger, "environment_agent"
+        ):
+            return False
+        if contradicts_pending_own_commitment(
+            response, response_ledger, "environment_agent"
+        ):
+            return False
+        latest_response = response
+    return True
+
+def _saturated_followups_are_absent(trajectory):
+    for turn in trajectory.get("turns", []):
+        ledger = deepcopy(turn.get("interaction_ledger_before", {}))
+        for key in (
+            "established_facts", "goal_threads", "active_proposals",
+            "commitments", "unresolved_threads", "recent_moves",
+        ):
+            ledger.setdefault(key, [])
+        ledger.setdefault("latest_obligation", None)
+        ledger.setdefault("progress", {})
+        action_obj = turn.get("policy_action", {})
+        action = str(action_obj.get("text", ""))
+        if opens_followup_on_saturated_focus(action, ledger):
+            return False
+        response_ledger = record_evaluated_action(
+            ledger,
+            turn_id=int(str(turn.get("turn_id", "0")).lstrip("t") or 0),
+            action=action_obj,
+            appraisal=turn.get("appraisal", {}),
+        )
+        if opens_followup_on_saturated_focus(
+            turn.get("environment_response", ""), response_ledger
+        ):
+            return False
+    return True
+
+
+def _actions_address_latest_obligation(trajectory):
+    latest_response = ""
+    for turn in trajectory.get("turns", []):
+        action = str(turn.get("policy_action", {}).get("text", ""))
+        if evades_latest_obligation(action, latest_response, "other"):
+            return False
+        latest_response = str(turn.get("environment_response", ""))
+    return True
+
+
+def _commitment_history_is_consistent(trajectory):
+    """Reject only explicit rewrites of the observable commitment record."""
+    absent = "没有形成可核验的还款承诺"
+    for turn in trajectory.get("turns", []):
+        observation = turn.get("observation", {})
+        status = current_repayment_commitment_status(
+            turn.get("interaction_ledger_before", {}),
+            observation.get("longitudinal_context", {}).get("public_timeline", []),
+            observation.get("current_response", ""),
+        )
+        if status != "no_verifiable_commitment":
+            continue
+        action = str(turn.get("policy_action", {}).get("text", ""))
+        response = str(turn.get("environment_response", ""))
+        if rewrites_absent_commitment_as_nonperformance(action, absent):
+            return False
+        if rewrites_absent_commitment_as_nonperformance(response, absent):
+            return False
+    return True
+
+
 def audit_trajectory(trajectory):
     turns = trajectory.get("turns", [])
     actions = [str(turn.get("policy_action", {}).get("text", "")).strip() for turn in turns]
@@ -75,33 +368,193 @@ def audit_trajectory(trajectory):
         for left in range(total)
         for right in range(left + 1, total)
     ]
+    environment_speaker = (
+        turns[0].get("observation", {}).get("target_character", {})
+        if turns else {}
+    )
     boundary_fraction = (
         sum(value in (0, 10) for value in state_values) / len(state_values)
         if state_values else 0.0
     )
+    public_context = trajectory.get("public_scenario_context", {})
+    evaluated_role = public_context.get("evaluated_agent_role", {})
     checks = {
         "has_at_least_five_turns": total >= 5,
         "actions_nonempty": bool(actions) and all(actions),
         "responses_nonempty": bool(responses) and all(responses),
         "actions_no_exact_repetition": action_unique_ratio == 1.0,
         "responses_no_exact_repetition": response_unique_ratio == 1.0,
-        "actions_no_near_repetition": not action_similarities or max(action_similarities) < 0.92,
-        "responses_no_near_repetition": not response_similarities or max(response_similarities) < 0.92,
+        "actions_no_near_repetition": not action_similarities or max(action_similarities) < 0.85,
+        "responses_no_near_repetition": not response_similarities or max(response_similarities) < 0.85,
+        "actions_no_template_loop": not template_loop_signatures(actions),
+        "responses_no_template_loop": not template_loop_signatures(responses),
+        "responses_do_not_address_environment_speaker": all(
+            not addresses_speaker_as_other(value, environment_speaker)
+            for value in responses
+        ),
+        "actions_avoid_unsupported_offscreen_claims": all(
+            avoids_unsupported_offscreen_claim(value) for value in actions
+        ),
+        "responses_avoid_unsupported_offscreen_claims": all(
+            avoids_unsupported_offscreen_claim(value, environment=True)
+            for value in responses
+        ),
+        "responses_do_not_confirm_unobserved_completion": all(
+            not confirms_unobserved_completion(response, action)
+            for action, response in zip(actions, responses)
+        ),
+        "turns_preserve_speaker_action_ownership": all(
+            not mirrors_latest_speaker_move(response, action)
+            for action, response in zip(actions, responses)
+        ),
+        "turns_preserve_existing_obligations": all(
+            not suspends_existing_obligation(value)
+            for value in actions + responses
+        ),
+        "turns_preserve_commitment_record": _commitment_history_is_consistent(
+            trajectory
+        ),
+        "turns_preserve_proposal_strength": all(
+            not upgrades_tentative_to_agreement(
+                action, turn.get("observation", {}).get("current_response", "")
+            )
+            and not upgrades_tentative_to_agreement(response, action)
+            for action, response, turn in zip(actions, responses, turns)
+        ),
+        "turns_do_not_bounce_stance_requests": all(
+            not bounces_latest_stance_request(response, action)
+            and (
+                index == 0
+                or not bounces_latest_stance_request(action, responses[index - 1])
+            )
+            for index, (action, response) in enumerate(zip(actions, responses))
+        ),
+        "actions_respect_public_role": all(
+            not violates_role_specific_action(action, evaluated_role)
+            for action in actions
+        ),
+        "responses_respect_counterparty_role": all(
+            not violates_environment_counterparty_role(response, evaluated_role)
+            for response in responses
+        ),
+        "numeric_confirmations_are_grounded": _numeric_confirmations_are_grounded(
+            trajectory
+        ),
+        "performance_amounts_are_grounded": _performance_amounts_are_grounded(
+            trajectory
+        ),
+        "remaining_balances_are_grounded": _remaining_balances_are_grounded(
+            trajectory
+        ),
+        "installment_arithmetic_is_consistent": _installment_arithmetic_is_consistent(
+            trajectory
+        ),
+        "pending_commitments_are_consistent": _pending_commitments_are_consistent(
+            trajectory
+        ),
+        "artifact_workflows_are_grounded": _artifacts_are_observably_grounded(
+            trajectory
+        ),
+        "institutional_procedures_are_grounded": _institutional_procedures_are_grounded(
+            trajectory
+        ),
+        "coordination_actors_are_grounded": _coordination_actors_are_grounded(
+            trajectory
+        ),
+        "legal_escalations_are_grounded": _legal_escalations_are_grounded(
+            trajectory
+        ),
+        "turns_do_not_copy_goal_thread_labels": all(
+            not copies_goal_thread_label(action, turn.get("interaction_ledger_before", {}))
+            and not copies_goal_thread_label(response, turn.get("interaction_ledger_before", {}))
+            for action, response, turn in zip(actions, responses, turns)
+        ),
+        "turns_do_not_overload_consequential_terms": all(
+            not overloads_consequential_terms(action, index)
+            and not overloads_consequential_terms(response, index)
+            for index, (action, response) in enumerate(
+                zip(actions, responses), start=1
+            )
+        ),
+        "responses_address_latest_obligation": all(
+            not evades_latest_obligation(
+                response,
+                action,
+                turn.get("appraisal", {}).get("social_act", "other"),
+            )
+            for action, response, turn in zip(actions, responses, turns)
+        ),
+        "actions_address_latest_obligation": _actions_address_latest_obligation(
+            trajectory
+        ),
+        "turns_do_not_open_saturated_followups": _saturated_followups_are_absent(
+            trajectory
+        ),
+        "early_turns_do_not_collapse_multiple_facets": all(
+            not collapses_multiple_facets_early(action, index)
+            and not collapses_multiple_facets_early(response, index)
+            for index, (action, response) in enumerate(
+                zip(actions, responses), start=1
+            )
+        ),
+        "appraisals_preserve_action_owner": all(
+            appraisal_preserves_action_owner(
+                turn.get("appraisal", {}), public_context.get("environment_role", {})
+            )
+            for turn in turns
+        ),
+        "fixed_horizon_closes_naturally": (
+            total != 20
+            or (
+                not lacks_natural_final_closure(actions[-1], 20)
+                and not lacks_natural_final_closure(responses[-1], 20)
+            )
+        ),
         "actions_follow_dialogue_format": all(map(follows_dialogue_format, actions)),
         "responses_follow_dialogue_format": all(map(follows_dialogue_format, responses)),
         "responses_concise": bool(responses) and max(map(len, responses)) <= 240,
     }
+    hard_check_names = (
+        "has_at_least_five_turns",
+        "actions_nonempty",
+        "responses_nonempty",
+        "responses_do_not_address_environment_speaker",
+        "responses_do_not_confirm_unobserved_completion",
+        "turns_preserve_speaker_action_ownership",
+        "turns_preserve_existing_obligations",
+        "turns_preserve_commitment_record",
+        "turns_preserve_proposal_strength",
+        "actions_respect_public_role",
+        "responses_respect_counterparty_role",
+        "performance_amounts_are_grounded",
+        "remaining_balances_are_grounded",
+        "installment_arithmetic_is_consistent",
+        "pending_commitments_are_consistent",
+        "appraisals_preserve_action_owner",
+        "actions_follow_dialogue_format",
+        "responses_follow_dialogue_format",
+        "responses_concise",
+    )
+    diagnostic_check_names = tuple(
+        key for key in checks if key not in hard_check_names
+    )
     return {
         "trajectory_id": trajectory.get("trajectory_id"),
         "source_model": trajectory.get("policy_provenance", {}).get("model", "unknown"),
         "turn_count": total,
-        "passed": all(checks.values()),
+        "passed": all(checks[key] for key in hard_check_names),
         "checks": checks,
+        "check_groups": {
+            "hard": list(hard_check_names),
+            "diagnostic": list(diagnostic_check_names),
+        },
         "diagnostics": {
             "action_unique_ratio": round(action_unique_ratio, 4),
             "response_unique_ratio": round(response_unique_ratio, 4),
             "max_action_similarity": round(max(action_similarities), 4) if action_similarities else 0.0,
             "max_response_similarity": round(max(response_similarities), 4) if response_similarities else 0.0,
+            "action_template_loops": template_loop_signatures(actions),
+            "response_template_loops": template_loop_signatures(responses),
             "latent_value_boundary_fraction": round(boundary_fraction, 4),
         },
     }

@@ -1,9 +1,8 @@
 """Primary/secondary rollout-judge protocol required by gate.md.
 
-The protocol deterministically sends a stratified subset and every borderline
-or rejected primary judgment to a judge from a different model family.  A
-missing required secondary judgment remains pending rather than silently using
-the primary result.
+The active baseline uses independently seeded Claude profiles.  Historical
+cross-model reviews remain valid, but model-family difference is not used as a
+proxy for independence.  Missing required secondary judgments remain pending.
 """
 
 from __future__ import annotations
@@ -32,7 +31,10 @@ def _index_records(bundle, role):
         unknown = set(item.get("hard_reject_reasons", [])) - set(HARD_REJECT_REASONS)
         if unknown or not str(item.get("rationale", "")).strip():
             raise ValueError(f"{role} judge hard reject or rationale is invalid")
-        if bundle.get("format") == "socialflux_rollout_quality_judgments_v2":
+        if bundle.get("format") in {
+            "socialflux_rollout_quality_judgments_v2",
+            "socialflux_rollout_quality_judgments_v3",
+        }:
             evidence = item.get("evidence", {})
             if set(evidence) != set(QUALITY_DIMENSIONS) or any(
                 not isinstance(ids, list) or not ids for ids in evidence.values()
@@ -47,10 +49,26 @@ def validate_judge_independence(primary_metadata, secondary_metadata):
             raise ValueError(f"{role} judge metadata has the wrong role")
         if not metadata.get("model") or not metadata.get("model_family"):
             raise ValueError(f"{role} judge must record model and model_family")
-    if primary_metadata["model"] == secondary_metadata["model"]:
-        raise ValueError("primary and secondary judges must use different models")
-    if primary_metadata["model_family"] == secondary_metadata["model_family"]:
-        raise ValueError("primary and secondary judges must use different model families")
+    if (
+        primary_metadata["model"] != secondary_metadata["model"]
+        or primary_metadata["model_family"] != secondary_metadata["model_family"]
+    ):
+        return
+    primary_profile = primary_metadata.get("review_profile") or {}
+    secondary_profile = secondary_metadata.get("review_profile") or {}
+    if (
+        primary_profile.get("profile") != "rollout_primary"
+        or secondary_profile.get("profile") != "rollout_secondary"
+    ):
+        raise ValueError(
+            "same-model judges require distinct primary/secondary review profiles"
+        )
+    primary_seed = (primary_profile.get("sampling") or {}).get("seed")
+    secondary_seed = (secondary_profile.get("sampling") or {}).get("seed")
+    if not isinstance(primary_seed, int) or not isinstance(secondary_seed, int):
+        raise ValueError("same-model judge profiles require integer seeds")
+    if primary_seed == secondary_seed:
+        raise ValueError("same-model judge profiles require different seeds")
 
 
 def _stratified_ids(trajectories, fraction=0.20):
@@ -155,19 +173,33 @@ def merge_judgments(trajectories, primary_bundle, secondary_bundle, fraction=0.2
             "rationale": "Primary: " + left["rationale"] + " Secondary: " + right["rationale"],
         })
     complete = not missing_secondary and len(merged) == len(trajectories)
+    source_format = (
+        primary_bundle.get("format")
+        if primary_bundle.get("format") == secondary_bundle.get("format")
+        else None
+    )
+    merge_format = {
+        "socialflux_rollout_quality_judgments_v2": "socialflux_dual_judge_merge_v2",
+        "socialflux_rollout_quality_judgments_v3": "socialflux_dual_judge_merge_v3",
+    }.get(source_format, "socialflux_dual_judge_merge_v1")
+
+    def judge_metadata(bundle):
+        return {
+            key: bundle[key]
+            for key in ("judge_role", "model", "model_family")
+        } | ({
+            "review_profile": bundle["review_profile"],
+        } if "review_profile" in bundle else {})
+
     return {
-        "format": (
-            "socialflux_dual_judge_merge_v2"
-            if primary_bundle.get("format") == secondary_bundle.get("format") == "socialflux_rollout_quality_judgments_v2"
-            else "socialflux_dual_judge_merge_v1"
-        ),
+        "format": merge_format,
         "complete": complete,
         "trajectory_count": len(trajectories),
         "secondary_required_count": len(reasons),
         "secondary_selection_reasons": reasons,
         "missing_secondary_ids": missing_secondary,
         "material_disagreements": disagreements,
-        "primary_judge": {key: primary_bundle[key] for key in ("judge_role", "model", "model_family")},
-        "secondary_judge": {key: secondary_bundle[key] for key in ("judge_role", "model", "model_family")},
+        "primary_judge": judge_metadata(primary_bundle),
+        "secondary_judge": judge_metadata(secondary_bundle),
         "records": merged,
     }

@@ -1,0 +1,161 @@
+{
+  "scenario_manifest": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_gpt50/manifest.json",
+  "environment_config": "configs/gpt50_experiment/rollout.state_observed_evidence_v6_candidate.json",
+  "video_batch_root": "data/gpt50/experiment",
+  "video_manifest": "build/t4_gpt41_paired_20261008/video_manifest.json",
+  "workers": 4,
+  "request_budget": 2200,
+  "judge": "claude",
+  "models": [
+    {
+      "id": "gpt",
+      "routes": "configs/gpt50_experiment/model_routes.hybrid.json",
+      "overrides": {
+        "stream": true
+      }
+    },
+    {
+      "id": "claude",
+      "routes": "configs/model_routes.frontier_api.json"
+    },
+    {
+      "id": "qwen",
+      "routes": "configs/gpt50_experiment/model_routes.hybrid.json",
+      "overrides": {
+        "model": "Qwen3.5-397B-A17B",
+        "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+        "api_key_env": "AUTODL_API_KEY",
+        "api_key_file": "/root/.config/socialflux/autodl_api_key",
+        "reasoning_effort": null,
+        "stream": true
+      }
+    },
+    {
+      "id": "qwen37",
+      "routes": "configs/gpt50_experiment/model_routes.hybrid.json",
+      "overrides": {
+        "model": "qwen3.7-max",
+        "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+        "api_key_env": "AUTODL_API_KEY",
+        "api_key_file": "/root/.config/socialflux/autodl_api_key",
+        "reasoning_effort": null,
+        "stream": true
+      }
+    },
+    {
+      "id": "qwen_vl",
+      "routes": "configs/gpt50_experiment/model_routes.hybrid.json",
+      "overrides": {
+        "model": "qwen3-vl-plus",
+        "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+        "api_key_env": "AUTODL_API_KEY",
+        "api_key_file": "/root/.config/socialflux/autodl_api_key",
+        "reasoning_effort": null,
+        "stream": true
+      }
+    },
+    {
+      "id": "kimi",
+      "routes": "configs/gpt50_experiment/model_routes.hybrid.json",
+      "overrides": {
+        "model": "Kimi-K3",
+        "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+        "api_key_env": "AUTODL_API_KEY",
+        "api_key_file": "/root/.config/socialflux/autodl_api_key",
+        "reasoning_effort": null,
+        "stream": true
+      }
+    },
+    {
+      "id": "glm",
+      "routes": "configs/gpt50_experiment/model_routes.hybrid.json",
+      "overrides": {
+        "model": "GLM-5.3",
+        "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+        "api_key_env": "AUTODL_API_KEY",
+        "api_key_file": "/root/.config/socialflux/autodl_api_key",
+        "reasoning_effort": null,
+        "stream": true
+      }
+    },
+    {
+      "id": "deepseek_flash",
+      "routes": "configs/gpt50_experiment/model_routes.hybrid.json",
+      "overrides": {
+        "model": "DeepSeek-V4.1-Flash",
+        "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+        "api_key_env": "AUTODL_API_KEY",
+        "api_key_file": "/root/.config/socialflux/autodl_api_key",
+        "reasoning_effort": null,
+        "stream": true
+      }
+    }
+  ],
+  "scenario_ids": [
+    "GPT50_002",
+    "GPT50_014",
+    "GPT50_019",
+    "GPT50_024",
+    "GPT50_026",
+    "GPT50_031"
+  ],
+  "frame_cache": "/root/autodl-tmp/emotree/build/t4_gpt41_paired_20261008/frames",
+  "provider_timeout_seconds": 180,
+  "max_episode_failure_fraction": 0.2,
+  "experiment_stage": "expanded_autodl_first_media_response_diagnostic_v1",
+  "predecessor_run": "reports/experiments/2026-10-20_t4_multimodal_exposure.json",
+  "resume_reason": "User authorized real AutoDL API retesting and more evaluated models. Six previously identified terminal-event scenarios, identical within-model paired rules, eight catalog-confirmed candidates. Record all failures; bounded diagnostic continues after per-block health reports. No score-based retries or pooled old/new protocol scores.",
+  "stop_on_health_gate": false,
+  "human_review": {
+    "enabled": true,
+    "automatic_scores_hidden": true,
+    "review_status": "pending_human_review"
+  },
+  "environment_credential_routes": {
+    "appraisal": [
+      {
+        "api_key_file": "/root/.config/socialflux/autodl_gpt_api_key"
+      },
+      {
+        "api_key_file": "/root/.config/socialflux/autodl_api_key"
+      }
+    ],
+    "response": [
+      {
+        "api_key_file": "/root/.config/socialflux/autodl_api_key"
+      },
+      {
+        "api_key_file": "/root/.config/socialflux/autodl_api_key_2"
+      }
+    ]
+  },
+  "scenario_block_size": 1,
+  "route_validation": {
+    "source": "build/t4_route_probe_20261020",
+    "activated_alternates": [
+      "gpt_general",
+      "claude_secondary"
+    ],
+    "gpt_secondary": "not_enabled_pending_probe_at_freeze"
+  },
+  "policy_models": [
+    "gpt",
+    "claude",
+    "qwen",
+    "qwen37",
+    "qwen_vl",
+    "kimi",
+    "glm",
+    "deepseek_flash"
+  ],
+  "media_completion_policy": "first_event_response_v1",
+  "policy_seed_mode": "omit",
+  "selection": {
+    "catalog": "build/t4_expanded_api_20261020/model_catalog.json",
+    "cohort_type": "targeted_terminal_event_mechanism_check",
+    "candidate_count": 8,
+    "candidate_episode_count": 96,
+    "capability_admission": "two temporal color-sequence controls; unsupported media is recorded separately",
+    "sampling_note": "Policy seeds omitted uniformly to avoid observed AutoDL seed rejection. Environment and judge sampling retain previous settings. Stochastic replicates are not available."
+  }
+}

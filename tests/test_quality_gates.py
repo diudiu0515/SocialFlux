@@ -15,7 +15,7 @@ class FourQualityGatesTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.scenario = json.loads(
-            (Path("configs/scenarios/scenario_002/scenario_002.json")).read_text(encoding="utf-8")
+            (Path("data/gpt50/experiment/scenario/scenarios/scenario_002/scenario_002.json")).read_text(encoding="utf-8")
         )
 
     def test_pending_scenario_review_blocks_gate_one(self):
@@ -34,20 +34,51 @@ class FourQualityGatesTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             bare = {"record": {"passed": True}}
-            for name in ("state_transition_agreement.json", "trajectory_plausibility.json", "history_intervention.json", "paraphrase_robustness.json", "local_counterfactual.json", "backbone_sensitivity.json"):
+            for name in (
+                "state_transition_agreement.json",
+                "trajectory_plausibility.json",
+                "history_intervention.json",
+                "paraphrase_robustness.json",
+                "local_counterfactual.json",
+                "backbone_sensitivity.json",
+                "persona_intervention.json",
+                "video_state_consistency.json",
+                "timescale_validity.json",
+            ):
                 (root / name).write_text(json.dumps(bare), encoding="utf-8")
             self.assertFalse(audit_environment_gate([self.scenario], root)["passed"])
             values = {
-                "state_transition_agreement.json": {"record": {"human_attestation": True, "reviewers": ["h1", "h2", "h3"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "annotator_count": 3, "transition_count": 30, "agreement": 0.7}},
-                "trajectory_plausibility.json": {"record": {"human_attestation": True, "reviewers": ["h1", "h2", "h3"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "annotator_count": 3, "trajectory_count": 15, "scores": {"persona_consistency": 3.5, "history_sensitivity": 3.5, "state_continuity": 3.5, "response_state_consistency": 3.5, "overall": 4.0}}},
+                "state_transition_agreement.json": {"record": {"human_attestation": True, "reviewers": ["h1"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "annotator_count": 1, "transition_count": 30, "agreement": 0.7}},
+                "trajectory_plausibility.json": {"record": {"human_attestation": True, "reviewers": ["h1"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "annotator_count": 1, "trajectory_count": 15, "scores": {"persona_consistency": 3.5, "history_sensitivity": 3.5, "state_continuity": 3.5, "response_state_consistency": 3.5, "overall": 4.0}}},
                 "history_intervention.json": {"record": {"passed": True, "human_attestation": True, "reviewers": ["h1"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "matched_checkpoint_count": 10, "same_persona_state_action": True}},
                 "paraphrase_robustness.json": {"record": {"passed": True, "human_attestation": True, "reviewers": ["h1"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "pair_count": 10, "direction_consistency": 0.8}},
                 "local_counterfactual.json": {"record": {"passed": True, "human_attestation": True, "reviewers": ["h1"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "checkpoint_count": 10, "same_checkpoint_verified": True}},
-                "backbone_sensitivity.json": {"format": "socialflux_backbone_sensitivity_v1", "backbones": [{"model_family": "qwen"}, {"model_family": "glm"}], "record": {"passed": True, "matched_checkpoint_count": 10}},
+                "backbone_sensitivity.json": {"format": "socialflux_backbone_sensitivity_v1", "backbones": [{"model_family": "qwen"}, {"model_family": "glm"}], "record": {"passed": True, "backbone_activity_passed": True, "matched_checkpoint_count": 10}},
+                "persona_intervention.json": {"record": {"passed": True, "human_attestation": True, "reviewers": ["h1"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "matched_checkpoint_count": 10, "same_state_history_action": True}},
+                "video_state_consistency.json": {"record": {"passed": True, "human_attestation": True, "reviewers": ["h1"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "matched_node_count": 40, "generated_video_count": 40, "request_safety_passed": True}},
+                "timescale_validity.json": {"record": {"passed": True, "human_attestation": True, "reviewers": ["h1"], "reviewed_at_utc": "2026-09-06T02:00:00Z", "matched_variable_count": 10, "timescale_families": {"fast": 3, "medium": 3, "slow": 4}, "direction_consistency": 0.7, "non_degenerate": True}},
             }
             for name, value in values.items():
                 (root / name).write_text(json.dumps(value), encoding="utf-8")
             self.assertTrue(audit_environment_gate([self.scenario], root)["passed"])
+
+    def test_unsigned_human_environment_evidence_remains_pending(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "state_transition_agreement.json").write_text(
+                json.dumps({"record": {
+                    "human_attestation": False,
+                    "review_status": "pending_human",
+                    "transition_count": 40,
+                }}),
+                encoding="utf-8",
+            )
+            result = audit_environment_gate([self.scenario], root)
+            self.assertEqual(
+                result["checks"]["E1_state_transition_agreement"]["status"],
+                "pending",
+            )
+            self.assertFalse(result["passed"])
 
     def test_selected_pool_requires_bound_passing_manifest(self):
         trajectory = {

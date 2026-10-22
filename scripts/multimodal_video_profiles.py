@@ -134,7 +134,7 @@ def _event(trigger_id, variable, operator, threshold, *, face, gaze, head, timin
 
 THIRD_EVENTS = {
     "IA_PIPE_001": _event(
-        "evidence_lands", "motivation.repair_intent", ">=", 2,
+        "evidence_lands", "behavioral_disposition.repair_intent", ">=", 2,
         face="紧绷感短暂松开，先抿唇再轻微点头",
         gaze="从记录移回学生，恢复稳定注视",
         head="先静止半拍，再做一次很小的确认点头",

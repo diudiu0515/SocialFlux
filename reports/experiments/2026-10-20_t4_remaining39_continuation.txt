@@ -1,0 +1,40 @@
+T4 多模态配对测试：继续剩余 39 场景并保留人工评分材料
+
+用户授权
+用户确认现有五维评分细则，要求继续 text+video 多模型测试，不因首批失败随意停止，并保留被测模型产生的轨迹供后续人工评分。
+本次显式设置 stop_on_health_gate=false：失败率和缺少配对仅记录警示，不中断后续场景。单条调用/轨迹失败留档后继续，保留请求预算和结构/隐私校验；不会为提高成绩更换 seed 或挑选成功样本。
+
+范围与可比性
+继续上一批次已测试的 GPT50_001 / GPT50_002 之后、尚未调度的 39 个场景，3 模型 × 2 条件，共 234 个计划槽位。
+前两个场景结果保留在 build/t4_gpt41_paired_20261020/run，不重跑、不覆盖。历史 run 结果分开汇报，不跨批次拼接单边结果制造配对。
+只有 41 个场景具备全套视频的范围限制不变，本次不声称补齐 50 个场景。
+模型、提示、seed、环境分工、每维原始整数分和小数展示口径不变。
+环境：GPT gpt-6-astra 状态/交互解析；Claude claude-fable-5 回复。
+终局自动裁判：Claude claude-fable-5，blind text-only 证据，统一五维，各 0–10，恢复无机会为 N/A。
+两条件均由同一裁判评分，不把模态或被测模型标签提供给裁判；机器评分不等于人工评分。
+
+视频能力
+沿用 2026-10-20 本机同模型、同接口、同传输参数的能力验证记录，复制证据并记录 SHA。
+GPT 与 Claude 已通过四帧时序对照，使用真实视频的 4 个带时间戳帧，不含音频。
+DeepSeek 未通过视频输入验证；text 正常尝试，text_video 明确标记 unsupported_video_input，不用文本替代视频。
+
+保存与人工评分
+每个 episode 保存 trajectory.json（完整私有诊断轨迹）、checkpoint.json（每轮检查点）、calls/（API 审计）、video_deliveries.json（实际媒体输入）与 result.json（机器结果/失败）。
+完整轨迹先落盘，再导出人工评分材料，最后请求自动裁判；因此裁判失败不会丢失已完成轨迹。
+未完成轨迹保留 checkpoint/partial_trajectory，只作失败诊断，不伪造终局分数。
+run/human_review/packets/：以不含模型标签的 review ID 命名，只有公开背景、角色目标、完整公开对话、真实结束原因和五维 rubric。
+run/human_review/ratings/：未填写的五维人工评分表，不预填机器分；已有人工填写内容不覆盖。
+run/human_review/admin/：研究者单独保管的 review ID 对照、轨迹路径/hash、模型/条件来源和视频路径；不要连同 packets 发给盲评人员。
+同一公开证据可提供两名独立 reviewer；ratings 是模板，实际分发时分别复制，不能多人覆盖同一评分表。
+text-only 终局人工评分与机器证据一致；视频感知/一致性另审，可通过 admin 对照定位实际媒体，不混为同一盲评分条件。
+本次也为两批既有完成轨迹导出相同人工评分材料，不改动其自动分数。
+
+执行
+配置：configs/gpt50_experiment/t4_multimodal_experiment.remaining39_20261020.json
+唯一入口：scripts/run_t4_multimodal_experiment.py
+目录：build/t4_gpt39_continuation_20261020/run
+并发 2；请求预算 20000；socket timeout 180 秒（不是整请求墙钟上限）；不宣称已解决上游长流故障。
+使用本地已提交代码的独立运行快照，避免另一个正在编辑的 T1/T3 工作区改变后台 T4 的模块或 prompt。
+运行前 39 个场景初始化通过、43 项相关测试通过。继续使用冻结版本，运行中不修改。
+不重试此前被拒绝的远端推送；本次修改仅本地提交，后台执行无需 push。
+实际进度查 run/status.json，进程查 run/process.json，结果查 run/results.json 和 run/summary.json。

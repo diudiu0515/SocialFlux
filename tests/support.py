@@ -15,7 +15,7 @@ class TextPolicy:
             "policy_id": policy_id,
             "provider": "test-double",
             "model": model,
-            "prompt_id": "task_t4_action_v2",
+            "prompt_id": "task_t4_action_v21",
             "sampling": {"temperature": 0.5, "seed": seed},
         }
 

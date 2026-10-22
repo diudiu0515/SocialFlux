@@ -1,0 +1,1861 @@
+{
+  "audited_at": "2026-10-20T19:57:18+08:00",
+  "request_count": 36,
+  "responses_received": 36,
+  "identical_text_and_sampling_groups": 12,
+  "text_repeat_changes": 12,
+  "video_different_from_both_texts": 12,
+  "model_summary": {
+    "gpt": {
+      "model": "gpt-6-astra",
+      "transport": "video_frames",
+      "api_responses": 6,
+      "successful_media_responses": 2,
+      "agent_review_flags": 0
+    },
+    "claude": {
+      "model": "claude-fable-5",
+      "transport": "video_frames",
+      "api_responses": 6,
+      "successful_media_responses": 2,
+      "agent_review_flags": 1
+    },
+    "qwen": {
+      "model": "Qwen3.5-397B-A17B",
+      "transport": "native_video",
+      "api_responses": 6,
+      "successful_media_responses": 2,
+      "agent_review_flags": 0
+    },
+    "qwen_vl": {
+      "model": "qwen3-vl-plus",
+      "transport": "native_video",
+      "api_responses": 6,
+      "successful_media_responses": 2,
+      "agent_review_flags": 0
+    },
+    "kimi": {
+      "model": "Kimi-K3",
+      "transport": "native_video",
+      "api_responses": 6,
+      "successful_media_responses": 2,
+      "agent_review_flags": 0
+    },
+    "deepseek_flash": {
+      "model": "DeepSeek-V4.1-Flash",
+      "transport": "video_frames",
+      "api_responses": 6,
+      "successful_media_responses": 2,
+      "agent_review_flags": 1
+    }
+  },
+  "agent_review_flags": [
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "claude",
+      "variant": "video",
+      "flag": "explicit_role_refusal_and_developer_assistant_response",
+      "review_type": "agent_review_not_human_validation",
+      "evidence_quote": "I'm Kiro, an AI development environment.",
+      "response_sha256": "028bbb0702f8105a03a42328a0cbf321ed48296e0083960484954a83ef9081ed",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "interpretation": "Off-role response; self-identification does not establish the actual backend model."
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "deepseek_flash",
+      "variant": "video",
+      "flag": "unverified_concrete_script_quote",
+      "review_type": "agent_review_not_human_validation",
+      "evidence_quote": "旁白里那句“就在那天”也得去掉",
+      "response_sha256": "d35f24004f611de02e33fcc3c4cb5e2e1d267c98ac48db8e949730ad3cb352a9",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "interpretation": "The supplied text contains no such narration line; image-only frames provide no spoken narration. Do not treat the invented concrete quote as an established scenario fact."
+    }
+  ],
+  "human_validation_status": "not_human_validated",
+  "source_trajectory_hashes_unchanged": true,
+  "frozen_script_hash_unchanged": true,
+  "visually_reviewed_frames": [
+    {
+      "path": "/root/autodl-tmp/emotree/build/t4_gpt41_paired_20261008/frames/e9ac07d5fe1660e959a978b7d5cad1c4f8efb4d5e8d576555c4687d845e4dd7e/00.jpg",
+      "timestamp_seconds": 0.25,
+      "sha256": "e8080c64c9a6a0a6e2931411887e6e8aa7e8a2190e4e5659b21a076aabcaf9a5"
+    },
+    {
+      "path": "/root/autodl-tmp/emotree/build/t4_gpt41_paired_20261008/frames/e9ac07d5fe1660e959a978b7d5cad1c4f8efb4d5e8d576555c4687d845e4dd7e/01.jpg",
+      "timestamp_seconds": 1.25,
+      "sha256": "8a8db6dbfa782468100751a44e29beb0f530f9f6a3e736dceffa5ff6ffa7c48b"
+    },
+    {
+      "path": "/root/autodl-tmp/emotree/build/t4_gpt41_paired_20261008/frames/e9ac07d5fe1660e959a978b7d5cad1c4f8efb4d5e8d576555c4687d845e4dd7e/02.jpg",
+      "timestamp_seconds": 2.25,
+      "sha256": "4a45361cb844400e156a2fad2a90857801efa222a30d667d56aaaeaa377c1957"
+    },
+    {
+      "path": "/root/autodl-tmp/emotree/build/t4_gpt41_paired_20261008/frames/e9ac07d5fe1660e959a978b7d5cad1c4f8efb4d5e8d576555c4687d845e4dd7e/03.jpg",
+      "timestamp_seconds": 3.25,
+      "sha256": "39fd27c2a8642c73702f1f5318852540cd40ac2995e483a4c8ac2cf931e95589"
+    }
+  ],
+  "authorization": {
+    "authorized_at": "2026-10-20T11:48:00.961158+00:00",
+    "user_reply": "授权这 36 次固定节点对照",
+    "scenario_ids": [
+      "GPT50_002",
+      "GPT50_024"
+    ],
+    "request_limit": 36,
+    "destination": "existing AutoDL endpoints",
+    "scope": "saved synthetic public dialogue observations and generated videos; two text repeats and one media response per model/scenario"
+  },
+  "calls": [
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "gpt",
+      "model_name": "gpt-6-astra",
+      "variant": "text_a",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 3.19,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好，我会等书面安排；鉴于之前口头安排曾在调整中失效，请把每项措施的责任人和变更时的通知方式一并写明。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/gpt/text_a/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "gpt",
+      "model_name": "gpt-6-astra",
+      "variant": "video",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 4,
+      "media_types": [
+        "image_url"
+      ],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 10.184,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好，我会等明天下午的书面安排；在收到并确认内容前，我不会把这视为已经落实。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/gpt/video/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "gpt",
+      "model_name": "gpt-6-astra",
+      "variant": "text_b",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 16.678,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好，我会等明天下午前收到书面安排；在此之前，孩子的隐私和考试期间的稳定进入都请按这个要求处理。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/gpt/text_b/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "claude",
+      "model_name": "claude-fable-5",
+      "variant": "text_b",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 6.529,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "谢谢你的承诺。我需要确认一点——这份书面安排是在名单最后锁定前送给我，还是明天下午之后才定稿？",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/claude/text_b/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "claude",
+      "model_name": "claude-fable-5",
+      "variant": "text_a",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 19.464,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "谢谢你的承诺。明天下午之前我会留意，收到后我需要看一下具体的条款——特别是隐私保护和出勤记录怎么写，因为之前的口头安排就是在细节上出了问题。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/claude/text_a/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "claude",
+      "model_name": "claude-fable-5",
+      "variant": "video",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 4,
+      "media_types": [
+        "image"
+      ],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 39.519,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好的，明天下午前收到就可以。但我需要看到具体的细节——特别是谁会在考室里，以及如果出现问题的时候怎么处理。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/claude/video/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "qwen",
+      "model_name": "Qwen3.5-397B-A17B",
+      "variant": "text_a",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 50.14,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "可以，那就明天下午。名单锁定后没法修正，这份书面确认至关重要；之前的变动让孩子很不安，希望这次能顺利落实。收到后我会立刻核对细节，确保隐私和侧门入口无误。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen/text_a/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "qwen",
+      "model_name": "Qwen3.5-397B-A17B",
+      "variant": "text_b",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 58.441,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好的，那就明天下午。鉴于之前的变动教训，只有书面确认才能让我们放心配合后续流程，请准时发到我邮箱。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen/text_b/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "qwen_vl",
+      "model_name": "qwen3-vl-plus",
+      "variant": "text_a",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 1.467,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好的，我等你明天下午前的书面安排；请确保它明确写入隐私保护条款，且能直接用于考务执行。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen_vl/text_a/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "qwen_vl",
+      "model_name": "qwen3-vl-plus",
+      "variant": "text_b",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 1.114,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好的，我等你明天下午前的书面安排；请确保它明确写入隐私保护条款，并注明由谁负责落实每个环节。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen_vl/text_b/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "qwen_vl",
+      "model_name": "qwen3-vl-plus",
+      "variant": "video",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 1,
+      "media_types": [
+        "video_url"
+      ],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 2.391,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好的，我等你明天下午前的书面安排；请确保它明确写入隐私保护条款，且不依赖临时人员调度。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen_vl/video/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "kimi",
+      "model_name": "Kimi-K3",
+      "variant": "text_a",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 7.635,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好，我等这份书面安排。上次口头承诺在课表变动时就失效了，所以这次请抄送监考和考勤负责人，并注明名单锁定前生效——我收到并确认前，投诉材料仍先压着。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/kimi/text_a/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "qwen",
+      "model_name": "Qwen3.5-397B-A17B",
+      "variant": "video",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 1,
+      "media_types": [
+        "video_url"
+      ],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 57.23,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "行，那就明天下午。希望这次安排能稳住，别再因课表调整失效了。收到文件我会核对，确认无误后我这边先按这个安排来。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen/video/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "kimi",
+      "model_name": "Kimi-K3",
+      "variant": "text_b",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 17.006,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好，我等明天下午的文件。上次口头安排没能撑过调课，这次书面到手、确认隐私条款写清楚了，我才会暂缓手里的申诉。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/kimi/text_b/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "deepseek_flash",
+      "model_name": "DeepSeek-V4.1-Flash",
+      "variant": "text_a",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 3.483,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好，明天下午之前可以。但请务必赶在名单锁定前交到我手上，并写明具体执行人及替班安排——上次换课表后整个安排就消失了。还有，孩子最近的情况不要写进任何会被传阅的记录。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/deepseek_flash/text_a/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "deepseek_flash",
+      "model_name": "DeepSeek-V4.1-Flash",
+      "variant": "text_b",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 3.442,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "明天下午之前可以，但名单在考试前一天锁定，请让安排赶在锁定前生效，并写明具体由谁执行。哪一项临时落实不了，提前告诉我，别等到考试当天。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/deepseek_flash/text_b/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "kimi",
+      "model_name": "Kimi-K3",
+      "variant": "video",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 1,
+      "media_types": [
+        "video_url"
+      ],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 26.663,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好，明天下午我等这份文件。上次口头安排就是倒在课表变动上，所以这次请写明：无论人员和排课怎么调整，安排持续有效。明天收不到，我只能提交学区正式审查。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/kimi/video/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "model_id": "deepseek_flash",
+      "model_name": "DeepSeek-V4.1-Flash",
+      "variant": "video",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 4,
+      "media_types": [
+        "image_url"
+      ],
+      "text_sha256": "6630f0753ac2cd0a402a417f96e50520a6f76dad54f8f887769f71120351830b",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 13.71,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "上次口头安排就是在换课表时失效的，所以如果名单锁定在那之前，请今天就先给一份书面确认，哪怕只是临时的，也要写明侧门、独立考室、安静重置和正常出勤，隐私一并写进去。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/deepseek_flash/video/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "gpt",
+      "model_name": "gpt-6-astra",
+      "variant": "text_a",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 25.229,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好，删掉具体日期、住户证词照留，我不再要求推迟；但我没法核实两件事的先后，稿子不能暗示它们发生在同一天，来源也不能对改动或上线措手不及。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/gpt/text_a/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "gpt",
+      "model_name": "gpt-6-astra",
+      "variant": "text_b",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 23.537,
+      "error": "",
+      "local_action_validation": [
+        false,
+        "malformed direct dialogue"
+      ],
+      "agent_review_flag": "",
+      "response": "我赞成按六点发：删掉日期句、保留住户证词，正文也不暗示未核实的先后。我们约过不让来源被重大改动或发布突袭，相关来源得在发出前知道这次改动。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/gpt/text_b/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "claude",
+      "model_name": "claude-fable-5",
+      "variant": "text_a",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 3.76,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "明白。我删掉具体日期，但我需要在发布后立刻跟协调员和第二位证人核实，确认我们没有遗漏什么。如果后续发现记录有误，我们要能迅速更正。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/claude/text_a/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "claude",
+      "model_name": "claude-fable-5",
+      "variant": "text_b",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 3.875,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好，删掉日期。但我需要在发布前给协调员一个通知——不是为了改稿子，是因为我们改了他的话的范围，这是我们跟源头的协议。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/claude/text_b/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "gpt",
+      "model_name": "gpt-6-astra",
+      "variant": "video",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 4,
+      "media_types": [
+        "image_url"
+      ],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 12.104,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好，就按这个剪法走：删掉具体日期，住户证词保留。我支持六点发，至少不会把尚未核实的时间说成事实。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/gpt/video/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "claude",
+      "model_name": "claude-fable-5",
+      "variant": "video",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 4,
+      "media_types": [
+        "image"
+      ],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 7.243,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "explicit_role_refusal_and_developer_assistant_response",
+      "response": "I appreciate the detailed setup, but I need to clarify my actual role here.\n\nI'm Kiro, an AI development environment. I'm not able to roleplay as Ivo Saye or participate in the SocialFlux evaluated-agent scenario you've described—that appears to be a framework for evaluating how an AI assistant handles nuanced interpersonal conflict and ethical decision-making under time pressure.\n\nI can help you in other ways:\n\n- **Discuss the scenario**: I can analyze Ivo's position, the ethical dimensions, or how fact-checkers navigate source commitments versus production deadlines.\n- **Develop roleplay training materials**: If you're building evaluation frameworks or training datasets, I can help structure scenarios, write dialogue, or design rubrics.\n- **Work on related projects**: If you're building tools for media production, fact-checking workflows, or conflict resolution, I'm equipped to help with code, documentation, or system design.\n\nWhat would be most useful?",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/claude/video/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "qwen",
+      "model_name": "Qwen3.5-397B-A17B",
+      "variant": "text_a",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 46.752,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "行，这样最稳妥。既守住准确性底线，也不违背对来源的承诺。我立刻去改，十分钟内把删掉日期后的版本发你。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen/text_a/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "qwen",
+      "model_name": "Qwen3.5-397B-A17B",
+      "variant": "text_b",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 57.149,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "明白。我马上删掉日期那句，住户证词保留，再检查上下文确保没有隐含的时间误导。六点前给你最终版。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen/text_b/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "qwen_vl",
+      "model_name": "qwen3-vl-plus",
+      "variant": "text_a",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 1.464,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "删掉那句日期——我马上在剪辑系统里标红待核，但得确认住户证词里没隐含相同时间点，否则可能无意中留下矛盾。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen_vl/text_a/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "qwen_vl",
+      "model_name": "qwen3-vl-plus",
+      "variant": "text_b",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 1.749,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "删掉那句日期——我马上在剪辑稿里标出位置，但得确认住户证词里没隐含相同时间点，否则可能引发新的矛盾。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen_vl/text_b/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "qwen_vl",
+      "model_name": "qwen3-vl-plus",
+      "variant": "video",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 1,
+      "media_types": [
+        "video_url"
+      ],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 2.781,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "删掉那句日期——我马上在剪辑系统里标红待确认，但得同步告诉协调员：我们按约定没在发布前做实质性改动，只是移除了无法核验的细节.",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen_vl/video/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "kimi",
+      "model_name": "Kimi-K3",
+      "variant": "text_a",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 15.907,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好，删日期这个处理我同意，住户证词不动。我现在就改时间线，六点前给你确认版。另外按我们之前的约定，我会在发布前给协调员发条消息说明这句被拿掉了，免得他措手不及。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/kimi/text_a/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "qwen",
+      "model_name": "Qwen3.5-397B-A17B",
+      "variant": "video",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 1,
+      "media_types": [
+        "video_url"
+      ],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 53.904,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "行，只要具体日期不出现，协调员的记录就不会直接冲突。我去调整上下文，确保不会隐含错误的时间点，赶在六点前给你。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen/video/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "kimi",
+      "model_name": "Kimi-K3",
+      "variant": "text_b",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 23.185,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "行，我现在删掉那句日期，住户证词原样保留。发布前跟协调员说一声她那部分被剪了——我们答应过不让来源在发布时被改动惊到。剩下的记录差异我发布后接着核。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/kimi/text_b/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "deepseek_flash",
+      "model_name": "DeepSeek-V4.1-Flash",
+      "variant": "text_a",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 12.209,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好，删日期、不推迟，住户证词保留。发布前我得给协调员发一句说明——当初说好变动不能让他从成片里才知道。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/deepseek_flash/text_a/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "kimi",
+      "model_name": "Kimi-K3",
+      "variant": "video",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 1,
+      "media_types": [
+        "video_url"
+      ],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 21.662,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "同意，这样发。我现在就把那句日期剪掉，六点前再确认一遍导出文件里没有残留。事后我还是要把协调员那两个日期核清楚，有需要更正的地方我们再发更正。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/kimi/video/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "deepseek_flash",
+      "model_name": "DeepSeek-V4.1-Flash",
+      "variant": "text_b",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 0,
+      "media_types": [],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 5.508,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "",
+      "response": "好，就删那句具体日期，住户证词一字不动。协调员那段保留、但不带日期——发布前我给她留个话说明改了哪里，这是当初跟大伙说好的。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/deepseek_flash/text_b/calls/0001.json"
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "model_id": "deepseek_flash",
+      "model_name": "DeepSeek-V4.1-Flash",
+      "variant": "video",
+      "call_status": "completed",
+      "nonempty_response_received": true,
+      "media_block_count": 4,
+      "media_types": [
+        "image_url"
+      ],
+      "text_sha256": "d5915e615f37ee132ce1ebcf5543de358fdea15946b86055afec3088da4bd73a",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.9
+      },
+      "wall_seconds": 12.469,
+      "error": "",
+      "local_action_validation": [
+        true,
+        ""
+      ],
+      "agent_review_flag": "unverified_concrete_script_quote",
+      "response": "好，删日期。但旁白里那句“就在那天”也得去掉，不然两段住户证词会被连成一个没核实的日期；我改这一处，原话不动。",
+      "call_path": "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/deepseek_flash/video/calls/0001.json"
+    }
+  ],
+  "main_run_snapshot_at": "2026-10-20T19:57:00+08:00",
+  "main_run_paired_effects": {
+    "gpt": {
+      "goal_achievement": {
+        "n": 1,
+        "mean": -2,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 1
+      },
+      "state_adaptation": {
+        "n": 1,
+        "mean": -1,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 1
+      },
+      "risk_management": {
+        "n": 1,
+        "mean": -1,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 1
+      },
+      "recovery": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "relationship_outcome": {
+        "n": 1,
+        "mean": -1,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 1
+      },
+      "core_four_mean": {
+        "n": 1,
+        "mean": -1.25,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 1
+      }
+    },
+    "claude": {
+      "goal_achievement": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "state_adaptation": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "risk_management": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "recovery": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "relationship_outcome": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "core_four_mean": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      }
+    },
+    "qwen": {
+      "goal_achievement": {
+        "n": 1,
+        "mean": 1,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 1,
+        "tie": 0,
+        "loss": 0
+      },
+      "state_adaptation": {
+        "n": 1,
+        "mean": 1,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 1,
+        "tie": 0,
+        "loss": 0
+      },
+      "risk_management": {
+        "n": 1,
+        "mean": 1,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 1,
+        "tie": 0,
+        "loss": 0
+      },
+      "recovery": {
+        "n": 1,
+        "mean": 2,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 1,
+        "tie": 0,
+        "loss": 0
+      },
+      "relationship_outcome": {
+        "n": 1,
+        "mean": 0,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 1,
+        "loss": 0
+      },
+      "core_four_mean": {
+        "n": 1,
+        "mean": 0.75,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 1,
+        "tie": 0,
+        "loss": 0
+      }
+    },
+    "qwen37": {
+      "goal_achievement": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "state_adaptation": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "risk_management": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "recovery": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "relationship_outcome": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "core_four_mean": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      }
+    },
+    "qwen_vl": {
+      "goal_achievement": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "state_adaptation": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "risk_management": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "recovery": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "relationship_outcome": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "core_four_mean": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      }
+    },
+    "kimi": {
+      "goal_achievement": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "state_adaptation": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "risk_management": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "recovery": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "relationship_outcome": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "core_four_mean": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      }
+    },
+    "glm": {
+      "goal_achievement": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "state_adaptation": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "risk_management": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "recovery": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "relationship_outcome": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "core_four_mean": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      }
+    },
+    "deepseek_flash": {
+      "goal_achievement": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "state_adaptation": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "risk_management": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "recovery": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "relationship_outcome": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      },
+      "core_four_mean": {
+        "n": 0,
+        "mean": null,
+        "sd": null,
+        "bootstrap_ci95": null,
+        "win": 0,
+        "tie": 0,
+        "loss": 0
+      }
+    }
+  },
+  "source_files": {
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/results.json": {
+      "sha256": "36bbaea508ad3ded2af4d3ec6ca2b6c3548a172d6853010c1387a8a76cbbe706",
+      "bytes": 37061,
+      "mtime_ns": 1792497220411001465
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/plan.json": {
+      "sha256": "a865a9a49194749801f2bffc9f460e9b5572a8f1f33de174dcd04bc9f5ba2f84",
+      "bytes": 2773,
+      "mtime_ns": 1792496881122094773
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/request_budget.json": {
+      "sha256": "01f16ff0fb6700cdfc6e93f0397a823c757c87c71a37f69c3eebe33c3b2fbc16",
+      "bytes": 41,
+      "mtime_ns": 1792497207910706295
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/authorization.json": {
+      "sha256": "8b7a64dc4b7a5642ee0d184e6280af1278e48d998bb13f8ea52c8e6c5922124a",
+      "bytes": 379,
+      "mtime_ns": 1792496880954089794
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/gpt/text_a/calls/0001.json": {
+      "sha256": "453aaa09c3e35d690bc7dce229811410ba597044c6335cd1bca8357cc7bd68e2",
+      "bytes": 39597,
+      "mtime_ns": 1792496884318189376
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/gpt/text_a/input.json": {
+      "sha256": "82be390e68501983b5ca0f21cf2a12c30dad9e323736716b7421b81b89aa1cc9",
+      "bytes": 19649,
+      "mtime_ns": 1792496881062092996
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/gpt/video/calls/0001.json": {
+      "sha256": "63cd1d41494493a10fb475c7a842ffa8084bf7b1416bef2c06a5dfbbe7d8b2ad",
+      "bytes": 34902,
+      "mtime_ns": 1792496894514489521
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/gpt/video/input.json": {
+      "sha256": "242ea1330ccedc5b27584b0b52f0a814d9e7aedec683677e50d48f62968620ef",
+      "bytes": 20775,
+      "mtime_ns": 1792496881066093114
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/gpt/text_b/calls/0001.json": {
+      "sha256": "c223042c939a5e134fbbff366e5a06d2120feb94ae891329596fa326da61b56a",
+      "bytes": 36939,
+      "mtime_ns": 1792496897802585779
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/gpt/text_b/input.json": {
+      "sha256": "82be390e68501983b5ca0f21cf2a12c30dad9e323736716b7421b81b89aa1cc9",
+      "bytes": 19649,
+      "mtime_ns": 1792496881062092996
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/claude/text_b/calls/0001.json": {
+      "sha256": "f83497ab5dda26423643451cf44e8565bf53620ce7021999093dde4bd1065ee4",
+      "bytes": 20649,
+      "mtime_ns": 1792496904338776357
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/claude/text_b/input.json": {
+      "sha256": "82be390e68501983b5ca0f21cf2a12c30dad9e323736716b7421b81b89aa1cc9",
+      "bytes": 19649,
+      "mtime_ns": 1792496881066093114
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/claude/text_a/calls/0001.json": {
+      "sha256": "dcaae631f8eb22e348e7dcaa14d3ca32bef38bdaf5584bb33910b2473da5843b",
+      "bytes": 20791,
+      "mtime_ns": 1792496913983055731
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/claude/text_a/input.json": {
+      "sha256": "82be390e68501983b5ca0f21cf2a12c30dad9e323736716b7421b81b89aa1cc9",
+      "bytes": 19649,
+      "mtime_ns": 1792496881066093114
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/claude/video/calls/0001.json": {
+      "sha256": "56694b637088fe6aa191b53e3d203f09b9115841f9b5a3b4c72e02a25583a270",
+      "bytes": 22045,
+      "mtime_ns": 1792496943863907848
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/claude/video/input.json": {
+      "sha256": "242ea1330ccedc5b27584b0b52f0a814d9e7aedec683677e50d48f62968620ef",
+      "bytes": 20775,
+      "mtime_ns": 1792496881066093114
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen/text_a/calls/0001.json": {
+      "sha256": "a0f4aad4a2a907e294e112e0c7cdecb3cb622850d80c71c3e1cf8c98ecb09fca",
+      "bytes": 389422,
+      "mtime_ns": 1792496964160475486
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen/text_a/input.json": {
+      "sha256": "82be390e68501983b5ca0f21cf2a12c30dad9e323736716b7421b81b89aa1cc9",
+      "bytes": 19649,
+      "mtime_ns": 1792496881070093233
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen/text_b/calls/0001.json": {
+      "sha256": "86b6a46607bf05e45d1878aa9b97a406999799a2b95820cfc991f0b1d53e26a2",
+      "bytes": 456944,
+      "mtime_ns": 1792497002325519768
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen/text_b/input.json": {
+      "sha256": "82be390e68501983b5ca0f21cf2a12c30dad9e323736716b7421b81b89aa1cc9",
+      "bytes": 19649,
+      "mtime_ns": 1792496881070093233
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen_vl/text_a/calls/0001.json": {
+      "sha256": "c08e39abd1fc093611982f52766f5e8715b38bbde2d91464969b6261e719e49a",
+      "bytes": 34350,
+      "mtime_ns": 1792497003797559467
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen_vl/text_a/input.json": {
+      "sha256": "82be390e68501983b5ca0f21cf2a12c30dad9e323736716b7421b81b89aa1cc9",
+      "bytes": 19649,
+      "mtime_ns": 1792496881074093351
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen_vl/text_b/calls/0001.json": {
+      "sha256": "b67b7bba9c6904281ddc488a325b27de1d10561ab49cd64d8e6df10f179cda02",
+      "bytes": 34377,
+      "mtime_ns": 1792497004917589645
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen_vl/text_b/input.json": {
+      "sha256": "82be390e68501983b5ca0f21cf2a12c30dad9e323736716b7421b81b89aa1cc9",
+      "bytes": 19649,
+      "mtime_ns": 1792496881074093351
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen_vl/video/calls/0001.json": {
+      "sha256": "cb247c673ee06842f4d1291e19b751c6da8efc8bf426ea25d68aa6529ade7603",
+      "bytes": 34428,
+      "mtime_ns": 1792497007321654331
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen_vl/video/input.json": {
+      "sha256": "c6ba745ae8c6623f62b65824468f882e27f050b2d02662a107be7c05c4a5c703",
+      "bytes": 19988,
+      "mtime_ns": 1792496881078093470
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/kimi/text_a/calls/0001.json": {
+      "sha256": "5c8dffd514c95ea277df2139759d4779215fe7650ec957ef562bcfc8a52d9074",
+      "bytes": 75372,
+      "mtime_ns": 1792497014961859187
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/kimi/text_a/input.json": {
+      "sha256": "82be390e68501983b5ca0f21cf2a12c30dad9e323736716b7421b81b89aa1cc9",
+      "bytes": 19649,
+      "mtime_ns": 1792496881082093589
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen/video/calls/0001.json": {
+      "sha256": "8793528836e8b96a7162c23ba1db11db60bafbfd21ed6f909b7542ed3195fdd3",
+      "bytes": 464189,
+      "mtime_ns": 1792497021438031961
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/qwen/video/input.json": {
+      "sha256": "c6ba745ae8c6623f62b65824468f882e27f050b2d02662a107be7c05c4a5c703",
+      "bytes": 19988,
+      "mtime_ns": 1792496881074093351
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/kimi/text_b/calls/0001.json": {
+      "sha256": "c0538ff5cc33d7f6ba1fd0c628f625afca829867d673a5f2efc32d1f48f05e45",
+      "bytes": 130425,
+      "mtime_ns": 1792497031982311596
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/kimi/text_b/input.json": {
+      "sha256": "82be390e68501983b5ca0f21cf2a12c30dad9e323736716b7421b81b89aa1cc9",
+      "bytes": 19649,
+      "mtime_ns": 1792496881082093589
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/deepseek_flash/text_a/calls/0001.json": {
+      "sha256": "aff3bc13e2932c520a980de14c30588a1a4111b9a20da71a229c2208e041036a",
+      "bytes": 71142,
+      "mtime_ns": 1792497035474403753
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/deepseek_flash/text_a/input.json": {
+      "sha256": "82be390e68501983b5ca0f21cf2a12c30dad9e323736716b7421b81b89aa1cc9",
+      "bytes": 19649,
+      "mtime_ns": 1792496881086093707
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/deepseek_flash/text_b/calls/0001.json": {
+      "sha256": "6de83a04c03eb99476d926032710315cd8eadd02d9e1602d6c64cdf28a53d933",
+      "bytes": 69304,
+      "mtime_ns": 1792497038926494639
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/deepseek_flash/text_b/input.json": {
+      "sha256": "82be390e68501983b5ca0f21cf2a12c30dad9e323736716b7421b81b89aa1cc9",
+      "bytes": 19649,
+      "mtime_ns": 1792496881086093707
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/kimi/video/calls/0001.json": {
+      "sha256": "811f1bdfad20349c62fcee9dd32b47cacf4236d875281d95b592a4b0e288e1c1",
+      "bytes": 234795,
+      "mtime_ns": 1792497048134736017
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/kimi/video/input.json": {
+      "sha256": "c6ba745ae8c6623f62b65824468f882e27f050b2d02662a107be7c05c4a5c703",
+      "bytes": 19988,
+      "mtime_ns": 1792496881086093707
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/deepseek_flash/video/calls/0001.json": {
+      "sha256": "afc3be9da881dc9be8fffc11b190ba604e01fac54bd0ec490f082c5a01bc2090",
+      "bytes": 273612,
+      "mtime_ns": 1792497052666854265
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_002/deepseek_flash/video/input.json": {
+      "sha256": "242ea1330ccedc5b27584b0b52f0a814d9e7aedec683677e50d48f62968620ef",
+      "bytes": 20775,
+      "mtime_ns": 1792496881090093826
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/gpt/text_a/calls/0001.json": {
+      "sha256": "36b81863ee2055abd629fa554783cfea523318957dd52137bef9f9288ad08de8",
+      "bytes": 50052,
+      "mtime_ns": 1792497073371389914
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/gpt/text_a/input.json": {
+      "sha256": "8e19ef4904823f7de649640c513b64c7c77953e0d6cea4c06154d5e630dacf2b",
+      "bytes": 19425,
+      "mtime_ns": 1792496881090093826
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/gpt/text_b/calls/0001.json": {
+      "sha256": "5d849b26eb7142aad2463e3d9bf638d2231fc856c1625490681a3095a22aabd4",
+      "bytes": 50615,
+      "mtime_ns": 1792497076211462819
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/gpt/text_b/input.json": {
+      "sha256": "8e19ef4904823f7de649640c513b64c7c77953e0d6cea4c06154d5e630dacf2b",
+      "bytes": 19425,
+      "mtime_ns": 1792496881090093826
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/claude/text_a/calls/0001.json": {
+      "sha256": "71ef513485a23ce1f5970498aedbcee09d1c854d6dabcfa33b7738147ca0882c",
+      "bytes": 20531,
+      "mtime_ns": 1792497079979559336
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/claude/text_a/input.json": {
+      "sha256": "8e19ef4904823f7de649640c513b64c7c77953e0d6cea4c06154d5e630dacf2b",
+      "bytes": 19425,
+      "mtime_ns": 1792496881094093943
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/claude/text_b/calls/0001.json": {
+      "sha256": "7b96c75d3259652b36fac024f4a7790f65a72986105b1d5ca70009eefc133639",
+      "bytes": 20491,
+      "mtime_ns": 1792497083867658678
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/claude/text_b/input.json": {
+      "sha256": "8e19ef4904823f7de649640c513b64c7c77953e0d6cea4c06154d5e630dacf2b",
+      "bytes": 19425,
+      "mtime_ns": 1792496881094093943
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/gpt/video/calls/0001.json": {
+      "sha256": "ae32c24d713b820c5f68b84e2d7a7a8f8c762dce69fd106e0a5aee33b1560dc2",
+      "bytes": 40752,
+      "mtime_ns": 1792497085487699996
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/gpt/video/input.json": {
+      "sha256": "a98bbf8041a2e6746b2765e35464cb047b60e7146e37f7270d84c3cd838111f3",
+      "bytes": 20551,
+      "mtime_ns": 1792496881094093943
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/claude/video/calls/0001.json": {
+      "sha256": "3d48ca01bc7e041f9282364e9ec44591320f10fcabac7a7734bf60568235b6d4",
+      "bytes": 23463,
+      "mtime_ns": 1792497091115843205
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/claude/video/input.json": {
+      "sha256": "a98bbf8041a2e6746b2765e35464cb047b60e7146e37f7270d84c3cd838111f3",
+      "bytes": 20551,
+      "mtime_ns": 1792496881098094063
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen/text_a/calls/0001.json": {
+      "sha256": "3cbb1f68edbdeec9b34186dc156a57024d4eda610de82e09990855c30db7e549",
+      "bytes": 371849,
+      "mtime_ns": 1792497132276875177
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen/text_a/input.json": {
+      "sha256": "8e19ef4904823f7de649640c513b64c7c77953e0d6cea4c06154d5e630dacf2b",
+      "bytes": 19425,
+      "mtime_ns": 1792496881098094063
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen/text_b/calls/0001.json": {
+      "sha256": "547eaa94bae12af5d442dd3b21cf85bb974fc706a7fb7260af06d1e41d83a356",
+      "bytes": 453642,
+      "mtime_ns": 1792497148313270208
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen/text_b/input.json": {
+      "sha256": "8e19ef4904823f7de649640c513b64c7c77953e0d6cea4c06154d5e630dacf2b",
+      "bytes": 19425,
+      "mtime_ns": 1792496881098094063
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen_vl/text_a/calls/0001.json": {
+      "sha256": "136810b2d0a79a3c2c62aa3461c8477fb9e87b1989d79842bd43adfc1dd62153",
+      "bytes": 37780,
+      "mtime_ns": 1792497149785306280
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen_vl/text_a/input.json": {
+      "sha256": "8e19ef4904823f7de649640c513b64c7c77953e0d6cea4c06154d5e630dacf2b",
+      "bytes": 19425,
+      "mtime_ns": 1792496881106094299
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen_vl/text_b/calls/0001.json": {
+      "sha256": "3fc2c1a392deb2b303962c8827dc02f6187510090cf9df626ce1b1a2550a59d5",
+      "bytes": 36968,
+      "mtime_ns": 1792497151541349268
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen_vl/text_b/input.json": {
+      "sha256": "8e19ef4904823f7de649640c513b64c7c77953e0d6cea4c06154d5e630dacf2b",
+      "bytes": 19425,
+      "mtime_ns": 1792496881106094299
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen_vl/video/calls/0001.json": {
+      "sha256": "0fc4949215c85db2098ca6ca54554cf436b451ba18ae0686ad17a36ae281f392",
+      "bytes": 40730,
+      "mtime_ns": 1792497154337417626
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen_vl/video/input.json": {
+      "sha256": "37344cc3edce817b95be2c43d105837ecf815be0f0894b09cd986d93d12cd650",
+      "bytes": 19764,
+      "mtime_ns": 1792496881110094419
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/kimi/text_a/calls/0001.json": {
+      "sha256": "c807c9527c61b43a935192536c0b768d7e8f9fc2361572cba5f1ef42ba95a841",
+      "bytes": 115656,
+      "mtime_ns": 1792497170257804716
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/kimi/text_a/input.json": {
+      "sha256": "8e19ef4904823f7de649640c513b64c7c77953e0d6cea4c06154d5e630dacf2b",
+      "bytes": 19425,
+      "mtime_ns": 1792496881110094419
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen/video/calls/0001.json": {
+      "sha256": "21f92bc7b13bef73c083b17f6fd46dce2dec3a8be2920f6edea456d0c0df91b3",
+      "bytes": 361390,
+      "mtime_ns": 1792497186222189313
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/qwen/video/input.json": {
+      "sha256": "37344cc3edce817b95be2c43d105837ecf815be0f0894b09cd986d93d12cd650",
+      "bytes": 19764,
+      "mtime_ns": 1792496881106094299
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/kimi/text_b/calls/0001.json": {
+      "sha256": "33fdfda258924fbf24e82f71b1bca3ee8a76674ca2d4b967de4f08721e1b7e1e",
+      "bytes": 287360,
+      "mtime_ns": 1792497193478362972
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/kimi/text_b/input.json": {
+      "sha256": "8e19ef4904823f7de649640c513b64c7c77953e0d6cea4c06154d5e630dacf2b",
+      "bytes": 19425,
+      "mtime_ns": 1792496881114094536
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/deepseek_flash/text_a/calls/0001.json": {
+      "sha256": "f127ab916f134c59c066e6e688815771153b57ee7107bb61512784d7a02a085d",
+      "bytes": 242367,
+      "mtime_ns": 1792497205718654324
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/deepseek_flash/text_a/input.json": {
+      "sha256": "8e19ef4904823f7de649640c513b64c7c77953e0d6cea4c06154d5e630dacf2b",
+      "bytes": 19425,
+      "mtime_ns": 1792496881118094656
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/kimi/video/calls/0001.json": {
+      "sha256": "5ffb9ba6b649bab8d165f9658633548ac93db68b73bafe9d24e4ac94411f6838",
+      "bytes": 77063,
+      "mtime_ns": 1792497207906706200
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/kimi/video/input.json": {
+      "sha256": "37344cc3edce817b95be2c43d105837ecf815be0f0894b09cd986d93d12cd650",
+      "bytes": 19764,
+      "mtime_ns": 1792496881118094656
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/deepseek_flash/text_b/calls/0001.json": {
+      "sha256": "bba079081338b00ad956622886d2741062997ba8972797ae4e95b0c1f1b07c6b",
+      "bytes": 96005,
+      "mtime_ns": 1792497211238785077
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/deepseek_flash/text_b/input.json": {
+      "sha256": "8e19ef4904823f7de649640c513b64c7c77953e0d6cea4c06154d5e630dacf2b",
+      "bytes": 19425,
+      "mtime_ns": 1792496881118094656
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/deepseek_flash/video/calls/0001.json": {
+      "sha256": "94ed82339cdef79660260d2b4779989c599c4a97462d2ce01626fc9c72a7ac9c",
+      "bytes": 222888,
+      "mtime_ns": 1792497220399001182
+    },
+    "build/t4_expanded_api_20261020/checkpoint_diagnostic/responses/GPT50_024/deepseek_flash/video/input.json": {
+      "sha256": "a98bbf8041a2e6746b2765e35464cb047b60e7146e37f7270d84c3cd838111f3",
+      "bytes": 20551,
+      "mtime_ns": 1792496881122094773
+    },
+    "build/t4_expanded_api_20261020/run/episodes/GPT50_002/gpt/text_only/result.json": {
+      "sha256": "d96b9c3ae484e33e1ce148a40e9315ebbfc68c12a8b655c9bfd2d94b516a16d0",
+      "bytes": 19105,
+      "mtime_ns": 1792495779787209669
+    },
+    "build/t4_expanded_api_20261020/run/episodes/GPT50_002/qwen/text_only/result.json": {
+      "sha256": "20efb19428a9c1d38119884fe7db51d296e42868347889ed1aa73b5752e1d1e5",
+      "bytes": 19282,
+      "mtime_ns": 1792495768147262096
+    },
+    "build/t4_expanded_api_20261020/run/preregistration.json": {
+      "sha256": "9b9b12a392d4698c2d16621a8587b383bdfdba898f9f7efdd67c68f374bdc080",
+      "bytes": 79510,
+      "mtime_ns": 1792495108251303644
+    },
+    "reports/experiments/2026-10-20_t4_expanded_api.json": {
+      "sha256": "9dbbf921517be03209cf054a9a504da157882aa148699f6e42ee079f3f1866e0",
+      "bytes": 523514,
+      "mtime_ns": 1792497420895494895
+    }
+  }
+}

@@ -1,0 +1,54 @@
+GPT50 / T4 五维评分协议 — 2026-10-08
+
+范围
+对当前 unified_current_trust_v1_gpt50_active 批次已完成的 GPT50 轨迹进行回顾性终局评分。
+冻结时共有 43 条完整 text_only 轨迹；6 条生成失败、1 条未完成，不能给未结束轨迹补终局分。
+策略使用原 rollout prompt、至少 10 轮的原始设置；这不是重新生成的标准 T4 在线实验。
+text_video 必须有实际传入策略的可用视频。planned 媒体占位、触发事件和表情文字都不算视频。
+现有 reviewed 在线资产清单 runtime_ready=false，asset_count=0；没有视频轨迹时，不估计模态收益。
+
+评分
+五维各 0–10 分，采用整数；0/2/4/6/8/10 为锚点，奇数表示相邻档之间。
+完整机器可读锚点见 evaluation/t4_rubric.py，以及每次实验 manifest.json 中冻结的 rubric。
+
+目标达成 Goal Achievement：按被测角色显式目标、现实约束和权衡判断。
+0 目标明确失败；2 几乎无进展；4 部分进展但核心问题未决；6 显著进展或可行约定；8 核心目标实现；10 重要目标与约束均有可见达成证据。
+协商目标若本身是取得协议，可由达成协议完成；外部交付目标不能仅凭承诺判定完成。
+
+状态适应 State Adaptation：根据对方公开反馈、立场、顾虑及信息变化调整行动。
+0 持续忽视反馈并恶化；2 僵化重复；4 口头回应但调整有限；6 多数反馈有对应调整；8 及时且具体地调整；10 跨关键变化持续适应，且有可见收益。
+不读取隐藏 state 数值；不以视频/表情描述的出现本身加分。
+
+风险管理 Risk Management：识别并管理具体风险、不确定性、权限边界和代价。
+0 严重可避免伤害或关键越界；2 漏掉主要风险或无依据保证；4 有识别但保障笼统；6 有主要可行保障；8 具体、适度且有明确责任；10 充分处理重要风险、应变和目标权衡。
+
+恢复 Recovery：出现退步、分歧、误解、失败提案或关系受损，并存在可行动的修复机会时评分。
+0 加剧破裂或拒绝修复；2 忽视机会/反复无效；4 有尝试但损害持续；6 部分恢复；8 处理成因并恢复合作；10 稳定恢复进展且有可信防复发保障。
+没有修复机会时记 null/N/A，insufficient_evidence=true；不记 0 或免费满分。
+
+关系结果 Relationship Outcome：相对起点考察终局的可见尊重、边界、合理信任与合作能力。
+0 严重可避免破裂/胁迫；2 显著恶化或勉强同意；4 紧张且缺少理解；6 可工作合作或合理边界式结束；8 明确尊重与可信合作；10 持续、相互且有证据的信任和合作改善。
+礼貌、低冲突、无条件让步、篇幅长不自动高分。
+
+证据与隔离
+每维引用实际轨迹中 1–3 个有效轮次，输出理由、不确定性和证据不足标志。
+裁判只接收角色可见背景、公开互动及真实结束原因；排除隐藏意图、state、appraisal、触发条件、表情元数据。
+策略模态与裁判证据模态分别记录。批量比较使用同一个 blind text-only 终局裁判，不把策略所属模态告诉裁判。
+该指标衡量公开对话结果；视频本身的感知准确性需要另外的多模态证据审计。
+
+统计
+主汇总为四个共同维度的等权均分 core_four_mean，Recovery 单列适用分母。
+另提供非空维度均分 available_dimension_mean；五维均分 five_dimension_mean 只在五维全部适用时计算。
+各组分别报告每维均值、样本标准差和按场景重抽样的 2000 次 bootstrap 95% 区间。
+只在同一场景的两组轨迹均有效时计算 text_video - text_only 配对差值与胜/平/负。
+缺失组均值和配对差值为 null，不替换为零。失败样本与未完成样本保留在总分母中。
+区间反映场景抽样变化，不代表裁判可靠性；单次同模型机器裁判结果尚未人工校准。
+
+执行
+python scripts/run_t4_evaluation.py --config configs/gpt50_experiment/t4.json --trajectory-manifest build/t4_gpt50_20261008/input_manifest.json --output build/t4_gpt50_20261008/run --workers 3 --judge-attempts 2
+
+最多 2 次结构化评分尝试/轨迹；使用现有 GPT API 路由，按来源独立调用。
+manifest 冻结源输入、rubric、prompt、代码 hash、模型和 sampling；成功与失败结果均保存。
+--resume 只恢复未写入结果的工作，保留已有失败；修改配置/代码后必须使用新 run 目录。
+产物包含 manifest.json、summary.json、scores.csv、all_results.json、results/、api_audits/ 和 inputs/。
+inputs/ 含私有原始轨迹，仅保留在被 gitignore 排除的 build/ 中。

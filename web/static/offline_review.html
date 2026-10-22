@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SocialFlux · T1–T3 题目标注</title>
+  <link rel="stylesheet" href="/offline_review.css?v=2">
+</head>
+<body>
+  <header class="topbar">
+    <div><a class="back" href="/gpt50-live">← 场景与对话</a><h1>SocialFlux <span id="pageTitle">离线题库 · T1–T3</span></h1></div>
+    <div class="tools">
+      <a href="/offline-talking-preview">台词视频预览</a>
+      <a href="/offline-annotation">人类盲答与 GT</a>
+      <a href="/experiments">Gate 与实验结果</a>
+      <label class="bank-select"><span class="sr-only">题库</span><select id="bankSelect"><option value="scenarios-v2">新版 · 50 场景 T1 / T2 / T3</option><option value="design-v2">题型示例 · 24 题</option><option value="dev60">历史批次 · 首批 60 题</option><option value="gpt50-t1-t3">历史批次 · GPT50 T1 / T3</option></select></label>
+      <button id="refreshBank" type="button">刷新题库</button>
+    </div>
+  </header>
+  <section id="bankSummary" class="summary" aria-label="题库概览" aria-busy="true"></section>
+  <div id="message" role="status" aria-live="polite"></div>
+  <div class="layout">
+    <aside class="question-sidebar">
+      <div class="sidebar-heading"><h2>题目列表</h2><span id="resultCount" class="badge"></span></div>
+      <div class="filter-controls">
+        <label class="search-field"><span class="sr-only">搜索题目</span><input id="search" type="search" placeholder="搜索场景、题目或编号"></label>
+        <label>场景<select id="sceneFilter"><option value="">全部场景</option></select></label>
+        <p id="sceneCoverage" class="muted"></p>
+        <label>任务<select id="taskFilter"><option value="">全部 T1–T3</option><option>T1</option><option>T2</option><option>T3</option></select></label>
+        <details id="advancedFilters" class="advanced-filters">
+          <summary>更多筛选<span id="filterCount"></span></summary>
+          <div class="filter-grid">
+            <label>主要能力<select id="capabilityFilter"><option value="">全部能力</option><option value="situational_evidence_integration">情境证据整合</option><option value="multidimensional_state_distinction">多维状态区分</option><option value="temporal_dynamics_reasoning">跨时动态推理</option></select></label>
+            <label>设计难度<select id="difficultyFilter"><option value="">全部难度</option><option value="ordinary">普通</option><option value="hard">Hard</option></select></label>
+            <label>新版适配<select id="migrationFilter"><option value="">全部迁移程度</option><option value="metadata_only">原题可留 · 补标签</option><option value="editorial">同一目标 · 轻改</option><option value="substantive">需要重写问题</option><option value="source_only">只复用材料</option><option value="pending">待完成 API 复核</option></select></label>
+            <label>状态维度<select id="familyFilter"><option value="">全部四维</option><option value="Emotion">情绪体验</option><option value="Behavioral Disposition">行为倾向</option><option value="Relationship">关系判断</option><option value="Interaction Risk">互动风险</option></select></label>
+            <label>题目结构<select id="shapeFilter"><option value="">全部结构</option><option value="single">单维题</option><option value="combo">组合题</option></select></label>
+            <label>标注进度<select id="statusFilter"><option value="">全部题目</option><option value="pending">待完成</option><option value="complete">已完成</option><option value="machine_concerns">机器争议待修订</option><option value="replay_pending">回放待完成</option></select></label>
+          </div>
+          <button id="resetFilters" class="reset-filters" type="button">清除筛选</button>
+        </details>
+      </div>
+      <p id="progress"></p>
+      <nav id="itemNav" aria-label="题目列表"></nav>
+    </aside>
+    <main>
+      <section class="review-toolbar" aria-label="标注与备份">
+        <label class="reviewer-field">标注人<input id="reviewer" autocomplete="name" placeholder="姓名或 ID"></label>
+        <span class="save-hint">草稿自动保存在本浏览器</span>
+        <div class="review-actions">
+          <button id="exportButton" type="button">导出标注</button>
+          <label class="import-button" tabindex="0" role="button">导入标注<input id="importFile" type="file" accept=".json,application/json"></label>
+        </div>
+      </section>
+      <div class="bank-notes">
+        <p class="notice">先根据材料独立作答，再查看作者参考。全部题目仍待人工审核。</p>
+        <p id="bankMeta" class="muted">正在读取题库…</p>
+      </div>
+      <div id="workspace" aria-busy="true"><p class="empty">正在加载题目…</p></div>
+    </main>
+  </div>
+  <script src="/offline_review.js?v=16"></script>
+</body>
+</html>

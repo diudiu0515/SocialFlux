@@ -8,19 +8,38 @@ __pycache__/
 venv/
 ENV/
 *.egg-info/
+*.orig
+# Required by the active GPT50 frozen code manifest; remove after batch archival.
+!prompts/manifest.json.orig
+*.rej
+*~
 
 # Secrets and local environment
 .secrets/
+/auth.json
 .env
 .env.*
 !.env.example
 
 # Generated outputs contain private model trajectories and review artifacts
 build/
-data/formal/
+data/
+!/web/participant_demo/data/
+/web/participant_demo/data/*
+!/web/participant_demo/data/questions.json
+!/web/participant_demo/data/multimodal.json
+archives/
 reviews/*signed*.json
 configs/scenarios/scenario_*/rollouts/
 media/talking_head/assets/
+# Videos are revised and archived separately from the GitHub code snapshot.
+/web/participant_demo/public/media/
+
+# Generated author-side question banks and audit exports stay local.
+# Publish reviewed public demo projections separately from these source bundles.
+tasks/examples/offline_design_v2/
+tasks/examples/offline_legacy_api_audit/
+tasks/examples/offline_scenarios_v2/
 .local_models/
 .local_tools/
 

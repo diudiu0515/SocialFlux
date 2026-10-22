@@ -1,0 +1,12 @@
+GPT50 扩量已启动
+
+用户授权：那就扩大吧，咱们gpt不是本来就是50个场景吗，
+范围：GPT50 原有50场景，全部使用GPT policy；当前统一trust state候选与Fable环境回应。
+独立验证目录：data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_gpt50
+50个原始场景与初始state保持不变；新增角色可见性副本。47个新整理，3个复用已有副本。
+准备检查：50个schema、初始观察和环境工厂通过；28项相关回归通过。
+模型与state语义保持冻结；回应预算6000 tokens；3并发；最多20轮；允许自然结束，不补写。
+普通后台启动被执行环境清理，未发生模型调用；已使用持续执行会话33938启动。
+逐请求、原始输出、格式修复、失败及部分轨迹保留；不自动语义重采样。
+运行中，不冒充50条已经完成。完成情况看results.json；全文/证据/曲线看review_index.txt。
+正式人工annotation尚未启动，助手可见性整理不等同于正式人工准入。未启动Claude150。

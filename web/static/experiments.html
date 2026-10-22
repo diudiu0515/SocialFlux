@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SocialFlux · 四个 Gate 与实验结果</title>
+<link rel="stylesheet" href="/gpt50_live.css">
+<style>
+body{padding-bottom:40px}main{max-width:1400px;margin:auto;padding:18px}.gate-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}.gate-grid article{border:1px solid #d9e0e7;border-radius:10px;padding:16px;background:#fff}h2{margin-top:0}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse}td,th{padding:10px;text-align:left;border-bottom:1px solid #e1e6ec;white-space:nowrap}td small{display:block;color:#596879}.muted{color:#596879}.status{font-weight:600;color:#7a5116}.tools{flex-wrap:wrap}details{margin:16px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere}a{color:#1463a0}.panel{margin-bottom:18px}.error{color:#a82d2d}@media(max-width:600px){.topbar{align-items:flex-start;flex-direction:column}main{padding:10px}.gate-grid{grid-template-columns:1fr}}
+</style></head>
+<body><header class="topbar"><div><h1>四个 Gate 与实验结果</h1><p id="updated" class="muted">正在读取实际记录…</p></div><nav class="tools"><a href="/lab">实验管理台</a><a href="/gpt50-live">场景与轨迹</a><a href="/offline-demo">新版题库 Demo</a><button id="refresh">刷新</button><button id="download">下载当前汇总</button></nav></header>
+<main><p id="error" class="error" role="alert"></p><section id="gates" class="gate-grid" aria-label="四个 Gate"></section>
+<section class="panel"><h2>当前 GPT50 来源与环境实验</h2><p id="rollouts"></p><p id="gate2Status"></p><div id="gate2Table"></div></section>
+<section class="panel"><h2>新版 T1 / T2 / T3</h2><div id="offline"></div><a href="/offline-demo">按场景查看 300 道题 →</a></section>
+<section class="panel"><h2>T4 多模型与模态实验</h2><p id="scoreNote" class="muted"></p><div id="t4"></div></section>
+<section class="panel"><details><summary>2026-09-26 历史 Gate2 实验记录</summary><p id="historyNote"></p><div id="history"></div></details><details><summary>数据来源与内容哈希</summary><pre id="sources"></pre></details></section>
+</main><script src="/experiments.js?v=3"></script></body></html>

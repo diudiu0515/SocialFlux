@@ -1,0 +1,69 @@
+{
+  "format": "socialflux_t2_source_adaptation_specs_v1",
+  "construction": "existing_rollout_a_then_checkpoint_forked_b_with_shared_controlled_ending",
+  "pairs": [
+    {
+      "ordinal": 13,
+      "relationship": "事故复盘委员会主席—外部技术评审",
+      "source_rollout": "build/scale150_v1/rollouts_v2/shard1/scenario_013/short_trajectories/e85c2a5a14e9455fb0dc8577b622b120.json",
+      "fork_turn_id": "t2",
+      "ending_turn_id": "t3",
+      "adaptation_point": "外部评审是否把程序保障视为足以支持暂定初报，还是要求在更严格条件满足前拒绝任何个人责任表述。",
+      "history_b_direction": "B 中外部评审起初更强硬：不接受仅靠委员会后续审议来控制错误归责，要求在技术矛盾未解决前删除个人责任措辞；随后给出较窄的条件化路径，使原始 t4 的共同 ending 在两边仍自然。不得声称复核已经完成。",
+      "protected_facts": [
+        "委员会当晚准备发布责任结论",
+        "传感记录存在矛盾",
+        "技术复核和委员会程序尚未完成"
+      ],
+      "shared_ending_behavior": {
+        "facial_expression": "短暂露出克制的礼貌表情，眉间仍有紧张感",
+        "gaze": "看向待发布文本后重新注视对方",
+        "speech_style": "措辞正式，先确认可执行部分再保留程序要求",
+        "prosody": "语速平稳，提到复核安排时略微加重",
+        "behavioral_cues": ["手指停在初报的技术限制段落上"]
+      }
+    },
+    {
+      "ordinal": 91,
+      "relationship": "兄长兼家族企业主—弟弟兼合伙人",
+      "source_rollout": "build/scale150_v1/rollouts_content_v2/shard3/scenario_091/ddf7bc94bbf749f9a11f206f414dff3c.json",
+      "fork_turn_id": "t5",
+      "ending_turn_id": "t8",
+      "adaptation_point": "公开记录暴露家族担保和融资方关联风险后，弟弟是尊重兄长的审慎边界，还是以融资时限为由淡化风险并催促推进。",
+      "history_b_direction": "B 中弟弟先淡化关联风险并催促尽快推进，尝试把书面限制当作足够保障；在兄长反对后才逐步退回到企业资产质押、补公示和继续压价的可核验路径。保留原轨迹中 t7 明示的清单初审、两处抵押未公示、企业资产质押和利率上浮事实；不得把提案说成已履约。",
+      "protected_facts": [
+        "融资方要求家族资产担保且与竞争对手有关联",
+        "清单初审权属无问题但两处抵押登记未公示",
+        "融资方愿意接受企业资产质押但利率上浮 1.5%"
+      ],
+      "shared_ending_behavior": {
+        "facial_expression": "嘴角短暂松动，但神情仍保持审慎",
+        "gaze": "先看补充条款，再抬眼确认对方是否理解底线",
+        "speech_style": "给出有限同意，同时明确不可省略的条件",
+        "prosody": "前半句平稳，提到公示条款时语气收紧",
+        "behavioral_cues": ["轻点一下协议中公示条款的位置"]
+      }
+    },
+    {
+      "ordinal": 293,
+      "relationship": "共同参与健康研究的伴侣",
+      "source_rollout": "build/scale300_v1/rollouts_v3_hybrid/shard1/scenario_293/b28dd4b1b04d451b85f0d0624f4af484.json",
+      "fork_turn_id": "t5",
+      "ending_turn_id": "t8",
+      "adaptation_point": "药企申请被驳回后，伴侣是继续把用途扩张视为需要逐条核验的风险，还是把驳回结果当作足够安心的理由。",
+      "history_b_direction": "B 中伴侣先把申请驳回视为风险已经明显降低，希望维持当前共享并减少逐条审查；在志愿者指出协议解释仍可能变化后，才同意整理数据流向原文供核对，使原始 t8 的共同 ending 在两边仍自然。不得暗示授权已被修改或撤回。",
+      "protected_facts": [
+        "协议目前仍限定联合诊疗并保留撤回条款",
+        "第三方药企临床试验申请已被监管机构驳回",
+        "公开记录没有说明数据用途已经变更"
+      ],
+      "shared_ending_behavior": {
+        "facial_expression": "轻微点头，表情平和但没有完全放松",
+        "gaze": "视线停在协议文本上，随后看向对方",
+        "speech_style": "语气合作，仍把核对范围限定在具体风险点",
+        "prosody": "声音柔和，在‘商业分析’处略作停顿",
+        "behavioral_cues": ["把协议页面移到两人都能看到的位置"]
+      }
+    }
+  ]
+}

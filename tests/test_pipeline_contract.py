@@ -5,54 +5,57 @@ from pathlib import Path
 
 from evaluation.leakage import assert_no_leaks
 from providers.factory import build_provider
-from scripts.run_pipeline import (
-    load_rollout_config,
+from rollout.configuration import load_rollout_config
+from pipeline.scenarios import (
     load_scenario_records,
     load_scenarios,
     select_scenario_records,
 )
-from scripts.scenario_docs import (
-    assert_document_current,
-    assert_manifest_current,
-    write_document,
-)
+from scenario_design.catalog import assert_document_current, assert_manifest_current, write_document
 
 
 class PipelineContractTest(unittest.TestCase):
     def test_formal_pool_config_meets_gate_md_sampling_contract(self):
-        from scripts.run_pipeline import load_rollout_config
-
-        config = load_rollout_config("configs/formal_rollout_pool.local.json")
+        config = load_rollout_config("configs/formal_rollout_pool.json")
         self.assertEqual(config["pool_stage"], "formal_raw")
-        self.assertEqual(sum(item["runs"] for item in config["policies"]), 12)
+        self.assertEqual(config["candidate_strategy"], "single_first_pass")
+        self.assertEqual(sum(item["runs"] for item in config["policies"]), 1)
+        self.assertEqual({item["model_family"] for item in config["policies"]}, {"claude"})
         self.assertEqual(
-            {item["model_family"] for item in config["policies"]},
-            {"glm", "qwen", "deepseek"},
+            config["model_assignment"],
+            {
+                "strategy": "single_model_all_llm_roles",
+                "model": "claude-fable-5",
+                "independent_calls": True,
+            },
         )
-        self.assertTrue(any(
-            20 <= item.get("model_parameters_billion", 0) <= 40
-            for item in config["policies"]
-        ))
-        environment_model = config["environment"]["provider"]["model"]
-        self.assertTrue(all(
-            item["provider"]["model"] != environment_model
-            for item in config["policies"]
-        ))
+        self.assertEqual(
+            {
+                config["environment"]["provider"]["model"],
+                config["environment"]["response_provider"]["model"],
+                config["construction"]["provider"]["model"],
+                *(item["provider"]["model"] for item in config["policies"]),
+            },
+            {"claude-fable-5"},
+        )
 
-    def test_formal_raw_generation_cannot_build_tasks_before_quality_gate(self):
+    def test_task_builder_only_consumes_gate_three_output(self):
         source = Path("scripts/run_pipeline.py").read_text(encoding="utf-8")
-        self.assertIn('"not_built_before_rollout_quality_gate"', source)
-        self.assertIn('config.get("pool_stage") == "formal_raw"', source)
+        self.assertNotIn("RolloutRunner", source)
+        self.assertIn('"pending_gate_4_human_review"', source)
+        self.assertIn('"--gate3-report"', source)
+        self.assertNotIn('"--quality-report"', source)
+        self.assertNotIn('"--screening-report"', source)
         self.assertIn('formal_raw rollout requires --environment-evidence', source)
 
     def test_scenario_catalog_has_both_sources_and_coverage(self):
-        directory = Path("configs/scenarios")
+        directory = Path("data/gpt50/experiment/scenario/scenarios")
         scenarios = load_scenarios(directory)
         manifest = json.loads(assert_manifest_current(directory).read_text(encoding="utf-8"))
         coverage = json.loads((directory / "coverage_matrix.json").read_text(encoding="utf-8"))
-        self.assertEqual(len(scenarios), 20)
-        self.assertEqual(manifest["source_counts"]["narrative-derived"], 10)
-        self.assertEqual(manifest["source_counts"]["synthetic-script"], 10)
+        self.assertEqual(len(scenarios), 50)
+        self.assertEqual(manifest["source_counts"]["narrative-derived"], 15)
+        self.assertEqual(manifest["source_counts"]["synthetic-script"], 35)
         self.assertRegex(manifest["prompt_manifest_sha256"], r"^[0-9a-f]{64}$")
         self.assertEqual(len(coverage["rows"]), len(scenarios))
         for entry in manifest["scenarios"]:
@@ -60,11 +63,13 @@ class PipelineContractTest(unittest.TestCase):
             self.assertRegex(entry["documentation_sha256"], r"^[0-9a-f]{64}$")
 
     def test_every_scenario_has_current_markdown_and_no_action_taxonomy(self):
-        for path in sorted(Path("configs/scenarios").glob("scenario_*/scenario_*.json")):
+        for path in sorted(Path("data/gpt50/experiment/scenario/scenarios").glob("scenario_*/scenario_*.json")):
             paired = assert_document_current(path)
             scenario = json.loads(path.read_text(encoding="utf-8"))
             self.assertEqual(path.parent.name, path.stem)
             self.assertNotIn("action_effects", scenario)
+            self.assertEqual(scenario["max_turns"], 20)
+            self.assertTrue(scenario["evaluated_agent_role"]["role"])
             text = paired.read_text(encoding="utf-8")
             self.assertIn("## 1. 叙事结构与初始化", text)
             self.assertIn("## 2. 自由交互与状态更新契约", text)
@@ -72,16 +77,22 @@ class PipelineContractTest(unittest.TestCase):
             self.assertIn("JSON SHA-256", text)
 
     def test_screen_inspired_scenarios_are_originalized_and_non_template(self):
-        paths = sorted(Path("configs/scenarios").glob("scenario_*/scenario_*.json"))[10:]
-        self.assertEqual(len(paths), 10)
-        scenarios = [json.loads(path.read_text(encoding="utf-8")) for path in paths]
-        self.assertTrue(all(item["source"]["type"] == "narrative-derived" for item in scenarios))
+        paths = sorted(Path("data/gpt50/experiment/scenario/scenarios").glob("scenario_*/scenario_*.json"))
+        scenarios = [
+            item
+            for path in paths
+            if (item := json.loads(path.read_text(encoding="utf-8")))["source"]["type"]
+            == "narrative-derived"
+        ]
+        self.assertEqual(len(scenarios), 15)
         self.assertTrue(all(
-            "no copied dialogue or scene sequence" in item["source"]["provenance_note"]
+            "all characters, settings, facts, stakes, event sequences, and dialogue are original"
+            in item["source"]["provenance_note"]
             for item in scenarios
         ))
-        self.assertEqual(len({item["opening_response"] for item in scenarios}), 10)
-        self.assertEqual(len({item["mechanism"] for item in scenarios}), 10)
+        self.assertEqual(len({item["title"] for item in scenarios}), 15)
+        self.assertEqual(len({item["background"] for item in scenarios}), 15)
+        self.assertEqual(len({item["mechanism"] for item in scenarios}), 15)
         self.assertGreaterEqual(len({
             tuple(sorted(
                 variable
@@ -89,16 +100,10 @@ class PipelineContractTest(unittest.TestCase):
                 for variable in family
             ))
             for item in scenarios
-        }), 8)
-        trigger_ids = [
-            trigger["trigger_id"]
-            for item in scenarios
-            for trigger in item["video_triggers"]
-        ]
-        self.assertEqual(len(trigger_ids), len(set(trigger_ids)))
+        }), 12)
 
     def test_missing_and_stale_documentation_are_rejected(self):
-        source = Path("configs/scenarios/scenario_001/scenario_001.json")
+        source = Path("data/gpt50/experiment/scenario/scenarios/scenario_001/scenario_001.json")
         with tempfile.TemporaryDirectory() as directory:
             candidate = Path(directory) / "scenario_001.json"
             candidate.write_bytes(source.read_bytes())
@@ -111,11 +116,11 @@ class PipelineContractTest(unittest.TestCase):
                 assert_document_current(candidate)
 
     def test_pipeline_can_select_a_reproducible_scenario_subset(self):
-        records = load_scenario_records("configs/scenarios")
-        selected = select_scenario_records(records, ["IA_PIPE_011", "IA_PIPE_018"])
+        records = load_scenario_records("data/gpt50/experiment/scenario/scenarios")
+        selected = select_scenario_records(records, ["GPT50_011", "GPT50_018"])
         self.assertEqual(
             [scenario["scenario_id"] for _, scenario in selected],
-            ["IA_PIPE_011", "IA_PIPE_018"],
+            ["GPT50_011", "GPT50_018"],
         )
         with self.assertRaises(ValueError):
             select_scenario_records(records, ["IA_PIPE_UNKNOWN"])
@@ -143,30 +148,46 @@ class PipelineContractTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 load_rollout_config(path)
 
-    def test_qwen_full_config_extracts_all_three_tasks(self):
-        config = load_rollout_config("configs/rollout_qwen35_full.example.json")
-        self.assertEqual(len(config["policies"]), 3)
-        self.assertEqual(config["pilot_limits"], {
-            "rollout_turns": 6, "t1": 6, "t2": 2, "t3": 1, "t3_horizon": 5,
-        })
-        self.assertEqual(config["t2_pairing"], "all")
+    def test_scale150_development_allows_explicit_single_first_pass(self):
+        config = {
+            "format": "socialflux_rollout_pool_v1",
+            "pool_stage": "development",
+            "candidate_strategy": "single_first_pass",
+            "environment": {"provider": {}},
+            "construction": {"provider": {}},
+            "policies": [{"policy_id": "one-pass", "provider": {"model": "x"}}],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "scale150.json"
+            path.write_text(json.dumps(config), encoding="utf-8")
+            loaded = load_rollout_config(path)
+            self.assertEqual(loaded["candidate_strategy"], "single_first_pass")
+            config["pool_stage"] = "formal_raw"
+            path.write_text(json.dumps(config), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                load_rollout_config(path)
 
-    def test_model_comparison_config_is_a_matched_pilot(self):
-        config = load_rollout_config("configs/rollout_comparison.example.json")
-        self.assertEqual(config["pilot_limits"]["rollout_turns"], 6)
-        self.assertEqual(config["pilot_limits"]["t1"], 8)
-        self.assertEqual(config["pilot_limits"]["t3"], 4)
-        self.assertEqual(config["t2_pairing"], "within_source_model")
+    def test_formal_config_resolves_semantic_model_routes(self):
+        config = load_rollout_config("configs/formal_rollout_pool.json")
+        self.assertEqual(config["environment"]["provider"]["model"], "claude-fable-5")
         self.assertEqual(
-            [item["policy_id"] for item in config["policies"]],
-            ["qwen35_seed_101", "gpt_seed_101", "qwen35_seed_202", "gpt_seed_202"],
+            config["environment"]["response_provider"]["model"],
+            "claude-fable-5",
         )
-        models = [item["provider"]["model"] for item in config["policies"]]
-        self.assertEqual(sum("Qwen3.5-9B" in model for model in models), 2)
-        self.assertEqual(sum(model == "YOUR_GPT_MODEL" for model in models), 2)
         self.assertEqual(
-            {item["sampling"]["temperature"] for item in config["policies"]},
-            {0.6},
+            config["construction"]["provider"]["model"],
+            "claude-fable-5",
+        )
+        self.assertEqual(
+            {item["provider"]["model"] for item in config["policies"]},
+            {"claude-fable-5"},
+        )
+        provenance = config["model_routes_provenance"]
+        self.assertRegex(provenance["sha256"], r"^[0-9a-f]{64}$")
+        self.assertEqual(provenance["bindings"]["environment.appraisal"], "appraisal")
+        self.assertEqual(
+            provenance["bindings"]["environment.response"],
+            "response",
         )
 
     def test_provider_factory_contracts(self):

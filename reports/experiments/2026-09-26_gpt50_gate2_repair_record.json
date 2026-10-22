@@ -1,0 +1,76 @@
+{
+  "format": "socialflux_gate2_repair_record_v1",
+  "record_date_utc": "2026-09-26",
+  "status": "not_passed_rerun_incomplete",
+  "primary_population": {
+    "source_status": "accepted",
+    "count": 31,
+    "turn_count_distribution": {"10": 26, "11": 3, "13": 2},
+    "exact_20_count": 0
+  },
+  "excluded_populations": {
+    "machine_rejected": {"count": 15, "turn_count_distribution": {"10": 13, "11": 2}},
+    "generation_error": {"count": 4, "turn_count_distribution": {"2": 2, "3": 1, "6": 1}}
+  },
+  "legacy_mixed_population": {"count": 50},
+  "e1": {
+    "legacy_mixed": {"transitions": 100, "labels": 788, "unchanged": 737, "unchanged_fraction": 0.9353},
+    "accepted_formal_sample": {"transitions": 40, "labels": 316, "unchanged": 294, "increase": 21, "decrease": 1, "unchanged_fraction": 0.9304},
+    "accepted_all_turns": {"turns": 319, "state_labels": 2521, "nonzero_state_labels": 145, "nonzero_fraction": 0.0575}
+  },
+  "e9": {
+    "legacy_mixed_sample": {"variables": 200, "never_changed": 142, "never_changed_fraction": 0.71},
+    "accepted_population": {"variables": 245, "never_changed": 173, "never_changed_fraction": 0.7061},
+    "accepted_by_timescale": {
+      "fast": {"variables": 42, "never_changed": 42, "fraction": 1.0},
+      "medium": {"variables": 75, "never_changed": 13, "fraction": 0.1733},
+      "slow": {"variables": 57, "never_changed": 54, "fraction": 0.9474},
+      "context_dependent": {"variables": 71, "never_changed": 64, "fraction": 0.9014}
+    }
+  },
+  "calibration_trace": {
+    "state_impact_candidates": 982,
+    "positive_calibrated_level": 610,
+    "zero_calibrated_level": 372,
+    "selected": 312,
+    "positive_suppressed_by_budget": 298,
+    "selected_nonzero": 145,
+    "selected_boundary_noop": 167,
+    "selected_direction_counts": {"increase": 307, "decrease": 5},
+    "applied_direction_counts": {"increase": 140, "decrease": 5}
+  },
+  "e3_legacy_failures": {
+    "total": 17,
+    "accepted": 11,
+    "machine_rejected": 5,
+    "generation_error": 1,
+    "invalid_target_selection": ["GPT50_002", "GPT50_006", "GPT50_007", "GPT50_009", "GPT50_014", "GPT50_017", "GPT50_025", "GPT50_029", "GPT50_032", "GPT50_039", "GPT50_041", "GPT50_043", "GPT50_044", "GPT50_046", "GPT50_048"],
+    "metric_dilution": ["GPT50_035"],
+    "possible_environment_capability": ["GPT50_005"]
+  },
+  "e5_legacy_failures": {
+    "total": 9,
+    "accepted": ["GPT50_003", "GPT50_022", "GPT50_029", "GPT50_030", "GPT50_041", "GPT50_045"],
+    "machine_rejected": ["GPT50_011", "GPT50_025", "GPT50_048"],
+    "all_zero_branch_sets": 8,
+    "identical_nonzero_branch_sets": 1,
+    "metric_only_failures": 0
+  },
+  "legacy_changed_item_metrics": {
+    "e4_mixed": {"zero_zero_fraction": 0.8973, "active_direction_agreement": 0.2188},
+    "e4_accepted": {"zero_zero_fraction": 0.8987, "active_direction_agreement": 0.175},
+    "e6_mixed_successful": {"successful_records": 43, "zero_zero_fraction": 0.8848, "active_direction_agreement": 0.2222, "failed_records": 7, "individual_service_errors": 8},
+    "e6_accepted_successful": {"successful_records": 27, "zero_zero_fraction": 0.8924, "active_direction_agreement": 0.2703, "failed_records": 4, "individual_service_errors": 4}
+  },
+  "targeted_rerun": {
+    "cohort": "31 accepted trajectories",
+    "e3_e4_e5_e7_successes": 0,
+    "blocking_external_error": "claude-fable-5 service-pool HTTP 429 overloaded after the existing six-candidate chat/messages failover was exhausted",
+    "e6_status": "queued_after_intervention_attempts",
+    "video_requests_performed": 0
+  },
+  "human_review": {
+    "status": "pending",
+    "model_substituted_for_human": false
+  }
+}

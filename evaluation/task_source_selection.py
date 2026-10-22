@@ -38,7 +38,7 @@ def _weighted_score(audit, weights):
     return round(sum(float(scores.get(key, 0.0)) * weight for key, weight in weights.items()), 4)
 
 
-def select_task_sources(trajectories, audits, t1_source_count=3):
+def select_task_sources(trajectories, audits, t1_source_count=3, canonical_trajectory_id=None):
     """Return independent T1/T2/T3 rankings after the common quality gate."""
     by_id = {item["trajectory_id"]: item for item in trajectories}
     audit_by_id = {
@@ -67,12 +67,21 @@ def select_task_sources(trajectories, audits, t1_source_count=3):
             eligible_ids,
             key=lambda identifier: (-scores[task][identifier], identifier),
         )
+    if canonical_trajectory_id is not None:
+        if canonical_trajectory_id not in eligible_ids:
+            raise ValueError("canonical winner is not quality-eligible")
+        for task in rankings:
+            rankings[task] = [canonical_trajectory_id] + [
+                identifier for identifier in rankings[task]
+                if identifier != canonical_trajectory_id
+            ]
 
     return {
         "format": "socialflux_task_source_selection_v1",
         "strategy": "quality_gate_then_task_specific_weighted_ranking",
         "model_quota": False,
         "model_identity_used_in_score": False,
+        "canonical_trajectory_id": canonical_trajectory_id,
         "basis": basis,
         "eligible_trajectory_ids": sorted(eligible_ids),
         "t1_source_ids": rankings["t1"][: max(1, t1_source_count)],

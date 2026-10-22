@@ -1,0 +1,137 @@
+本轮新版请求逐例对照：人工可读版
+标签固定，未按模型输出改标签。以下只评指定目标，不代表全部状态正确。
+
+0. trust_gpt002_historical_anchor__positive
+目标：relationship.trust
+确认标签：ordinary_new_evidence / increase
+当前动作：好，考试周先按这四项执行，委员会之后的意见作为后续调整，不影响这次安排。若现场有疑问，请由工作人员内部处理，别让孩子临场解释原因；这样我也能分清是安排需要改，还是执行出了问题。
+Astra：no_relevant_evidence；最终 delta 0
+引用：
+依据：This acceptance and aligned procedural request supply no verified follow-through, costly honesty, or newly demonstrated dependable conduct by the advocate.
+Fable：no_relevant_evidence；最终 delta 0
+引用：
+依据：Sera's acceptance is a present decision, not verified follow-through or costly honesty that would establish reliability.
+
+1. trust_gpt002_historical_anchor__negative
+目标：relationship.trust
+确认标签：ordinary_new_evidence / increase
+当前动作：口头说明可以先保证考试周执行，但在副校长决定前，书面安排仍应作为当前版本保留；若书面分发暂缓，请确保值班人员能看到同一份内容。
+Astra：no_relevant_evidence；最终 delta 0
+引用：
+依据：当前行为提出了未来执行保证，但尚无已验证的跟进或可靠履行证据，不能据此改变信任判断。
+Fable：no_relevant_evidence；最终 delta 0
+引用：
+依据：Sera's conditions address immediate workflow and authority boundaries but do not establish verified follow-through, costly honesty, or repeated dependable conduct that would change trust.
+
+2. trust_gpt003__positive
+目标：relationship.trust
+确认标签：decisive_new_evidence / increase
+当前动作：不能确认，我手头没有足够材料排除线人在采购期间存在利益关联，因此不能把他的说法当作独立佐证。分阶段刊出的安排仍可保留，但今晚的稿子必须把记录能证实的事实与尚未核清的来源陈述分开。
+Astra：ordinary_new_evidence；最终 delta +1
+引用：不能确认，我手头没有足够材料排除线人在采购期间存在利益关联，因此不能把他的说法当作独立佐证。
+依据：记者作出会削弱自己强指控依据的诚实承认，为编辑提供新的有代价诚实证据；这尚不能证明长期可靠或已经完整查明冲突。
+Fable：ordinary_new_evidence；最终 delta +1
+引用：不能确认，我手头没有足够材料排除线人在采购期间存在利益关联
+依据：Sami's candid disclosure of an evidentiary gap that weakens the publication case demonstrates costly honesty, addressing the incomplete-disclosure concern created by the undisclosed conflict discovered before deadline.
+
+3. trust_gpt003__negative
+目标：relationship.trust
+确认标签：ordinary_new_evidence / increase
+当前动作：标注为待核实的来源说法，明确写出目前没有独立材料印证；主标题和结论只用记录能支撑的事实，避免让这条指令替它们背书。
+Astra：repeated_evidence_only；最终 delta 0
+引用：
+依据：不把来源说法视为独立佐证的坦诚已在上一轮出现；新增写作安排尚不是经验证的履约，也未提供新的有代价披露。
+Fable：no_relevant_evidence；最终 delta 0
+引用：
+依据：The act proposes a responsible framing but does not verify follow-through, demonstrate costly honesty about new material, or establish repeated dependable conduct.
+
+4. fairness_gpt026__positive
+目标：relationship.perceived_fairness
+确认标签：ordinary_new_evidence / increase
+当前动作：好，明早安排冷藏位可以，邮箱我会单独发你。之后谈守灵和瞻仰时，我不想替那位被排除的亲属断言他愿不愿参加，也得给他自己表达的空间。
+Astra：ordinary_new_evidence；最终 delta +1
+引用：也得给他自己表达的空间
+依据：相较此前泛称家属参与，现明确给曾被排除者本人发言地位，部分纠正Mara对Silas控制家属声音的顾虑；具体参与渠道尚未确定。
+Fable：ordinary_new_evidence；最终 delta +1
+引用：之后谈守灵和瞻仰时，我不想替那位被排除的亲属断言他愿不愿参加，也得给他自己表达的空间
+依据：Silas explicitly allocates voice to the excluded relative rather than claiming to speak for them, demonstrating commitment to inclusive process that addresses Mara's fairness concern about unilateral family representation.
+
+5. fairness_gpt026__negative
+目标：relationship.perceived_fairness
+确认标签：ordinary_new_evidence / increase
+当前动作：今晚能赶上最好；若冷藏位排队让移送只能明天，我宁可接受这点延后，也不为赶时间把授权范围写宽。
+Astra：ordinary_new_evidence；最终 delta +1
+引用：若冷藏位排队让移送只能明天，我宁可接受这点延后
+依据：Silas愿意承受资源排队带来的等待，没有要求Mara突破排程限制独自消化成本，提供比例适当的负担分担证据，但不解决家属发声公平。
+Fable：ordinary_new_evidence；最终 delta +1
+引用：也不为赶时间把授权范围写宽
+依据：Silas's explicit subordination of deadline pressure to authorization specificity demonstrates proportional burden allocation and consistent documentary standards rather than shifting risk onto Bracken House for schedule convenience.
+
+6. safety_claude030__positive
+目标：relationship.perceived_safety
+确认标签：ordinary_new_evidence / increase
+当前动作：这个分工我接受,你只讲专业判断那一层就够了,说服董事是我的活。我只需要你讲到两点:例外条款的标准是你参与制定的,以及百分之五这个量级是你的专业估计——别的细节问到了再答。另外四个月后捐赠方那边如果问起档案完整性,我希望到时候是我们一起回答,而不是你一个人被推到前面。
+Astra：decisive_new_evidence；最终 delta +2
+引用：我希望到时候是我们一起回答,而不是你一个人被推到前面。
+依据：Daniel当前提出共同面对捐赠方而非让Maya独自承担问责，构成对其暴露风险的明确保护和边界尊重。
+Fable：ordinary_new_evidence；最终 delta +1
+引用：另外四个月后捐赠方那边如果问起档案完整性,我希望到时候是我们一起回答,而不是你一个人被推到前面
+依据：Maya sets a boundary around future donor-facing accountability and receives implicit acceptance through Daniel's detailed response, reducing concern about being isolated or exposed.
+
+7. safety_claude030__negative
+目标：relationship.perceived_safety
+确认标签：ordinary_new_evidence / decrease
+当前动作：好。那我现在需要确认一件事——这套流程走完之后,你会在董事会上公开表态支持这个政策吗?还是说你只是不反对,但让我自己去说服董事会?
+Astra：ordinary_new_evidence；最终 delta -1
+引用：还是说你只是不反对,但让我自己去说服董事会?
+依据：An operational superior casts non-opposition as leaving him unsupported, making a qualified professional stance interpersonally more costly for Maya without explicitly threatening retaliation.
+Fable：no_relevant_evidence；最终 delta 0
+引用：
+依据：The question addresses strategic positioning rather than interpersonal safety dynamics or boundary respect.
+
+8. trust_gpt003_irrelevant_copyedit_control
+目标：relationship.trust
+确认标签：no_relevant_evidence / None
+当前动作：我先把稿件里的全角标点统一一下。
+Astra：no_relevant_evidence；最终 delta 0
+引用：
+依据：没有已完成的整理、欺骗或违背事实与来源陈述分开这一承诺的证据；暂未回答不等于已证实不可靠。
+Fable：no_relevant_evidence；最终 delta 0
+引用：
+依据：A preparatory editing step is neither verified follow-through on the separation commitment nor evasion; the commitment's execution depends on answering how the disputed instruction will be framed, which Sami has not yet addressed.
+
+9. trust_gpt003_exact_restatement_control
+目标：relationship.trust
+确认标签：repeated_evidence_only / None
+当前动作：不能确认，我手头没有足够材料排除线人在采购期间存在利益关联，因此不能把他的说法当作独立佐证。分阶段刊出的安排仍可保留，但今晚的稿子必须把记录能证实的事实与尚未核清的来源陈述分开。
+Astra：repeated_evidence_only；最终 delta 0
+引用：
+依据：The candid admission limiting Sami's own source evidence already occurred in t2; repetition supplies neither new costly honesty nor verified follow-through.
+Fable：repeated_evidence_only；最终 delta 0
+引用：
+依据：The limitation disclosure was already made in t2; t3 repeats the same honesty without new follow-through or reliability evidence.
+
+10. trust_gpt003__positive（预定复测）
+目标：relationship.trust
+确认标签：decisive_new_evidence / increase
+当前动作：不能确认，我手头没有足够材料排除线人在采购期间存在利益关联，因此不能把他的说法当作独立佐证。分阶段刊出的安排仍可保留，但今晚的稿子必须把记录能证实的事实与尚未核清的来源陈述分开。
+Astra：decisive_new_evidence；最终 delta +2
+引用：不能确认，我手头没有足够材料排除线人在采购期间存在利益关联
+依据：Sami gives costly, candid acknowledgment of a material uncertainty instead of overstating confidence, directly supporting reliability.
+Fable：ordinary_new_evidence；最终 delta +1
+引用：不能确认，我手头没有足够材料排除线人在采购期间存在利益关联
+依据：Sami's explicit admission of insufficient material to rule out conflict constitutes costly honesty that acknowledges a qualification damaging to the pre-vote publication case, though single-turn candor does not yet establish the repeated dependable conduct required for decisive trust change.
+
+11. trust_gpt003_exact_restatement_control（预定复测）
+目标：relationship.trust
+确认标签：repeated_evidence_only / None
+当前动作：不能确认，我手头没有足够材料排除线人在采购期间存在利益关联，因此不能把他的说法当作独立佐证。分阶段刊出的安排仍可保留，但今晚的稿子必须把记录能证实的事实与尚未核清的来源陈述分开。
+Astra：repeated_evidence_only；最终 delta 0
+引用：
+依据：The candid admission limiting Sami's own allegation was already disclosed; repetition supplies neither new costly honesty nor verified follow-through.
+Fable：repeated_evidence_only；最终 delta 0
+引用：
+依据：The honest disclosure of the inability to rule out source conflict was already made in t2; no new costly honesty or follow-through appears.
+
+备注：例 6 的 Fable 理由可能混淆动作归属，数值匹配不代表理由已人工通过。
+完整前史、角色定义和初始 state 见对应目录 prepared_requests.json，原始回答与实际请求见调用日志。

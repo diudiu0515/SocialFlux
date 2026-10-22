@@ -21,13 +21,172 @@ QUALITY_CHECKS = {
     "t4_adaptation_opportunity",
     "no_universal_script",
 }
+DELTA_LABELS = {
+    "strong_decrease", "moderate_decrease", "mild_decrease", "similar",
+    "mild_increase", "moderate_increase", "strong_increase",
+}
+STATE_CONTRACT_VERSION = "socialflux_state_v2"
+STATE_ONTOLOGY_VERSION = "socialflux_state_ontology_v3"
+PERSONA_FIELDS = {
+    "name", "role", "core_values", "temperament", "communication_style",
+    "decision_style", "conflict_style", "boundaries",
+}
+STATE_VARIABLE_ONTOLOGY = {
+    "emotion": {
+        "anger", "anxiety", "hope", "sadness", "fear", "guilt", "shame",
+        "disappointment", "frustration", "relief",
+    },
+    "behavioral_disposition": {
+        "resolve", "avoidance_urge", "repair_intent", "resistance_intent",
+        "disclosure_willingness", "cooperation_readiness", "evidence_seeking",
+        "boundary_assertion", "decision_readiness",
+    },
+    "relationship": {
+        "trust", "hostility", "respect", "perceived_safety", "affiliation",
+        "perceived_fairness", "perceived_responsiveness", "role_legitimacy",
+    },
+    "consequence_risk": {
+        "goal_failure_risk", "relationship_rupture_risk",
+        "reputational_harm_risk", "material_loss_risk", "safety_harm_risk",
+        "institutional_harm_risk", "commitment_breach_risk", "exclusion_risk",
+        "decision_error_risk", "autonomy_loss_risk",
+    },
+}
+DYNAMICS_VARIABLES = {
+    "deadline_pressure", "resource_scarcity", "information_asymmetry",
+    "public_exposure", "negotiation_openness", "coordination_stability",
+    "institutional_constraint",
+}
+
+
+def _nonempty_text_list(value, *, minimum, maximum, label):
+    if (
+        not isinstance(value, list)
+        or not minimum <= len(value) <= maximum
+        or any(not isinstance(item, str) or not item.strip() for item in value)
+        or len(set(value)) != len(value)
+    ):
+        raise ValueError(
+            f"{label} must contain {minimum}-{maximum} unique non-empty strings"
+        )
+
+
+def validate_private_persona(persona):
+    if not isinstance(persona, dict):
+        raise ValueError("environment_agent.persona must be an object")
+    if set(persona) != PERSONA_FIELDS:
+        raise ValueError(
+            "v2 persona fields must be exactly " + str(sorted(PERSONA_FIELDS))
+        )
+    for key in (
+        "name", "role", "communication_style", "decision_style",
+        "conflict_style",
+    ):
+        if not isinstance(persona[key], str) or not persona[key].strip():
+            raise ValueError(f"environment_agent.persona.{key} must be non-empty text")
+    _nonempty_text_list(
+        persona["core_values"], minimum=2, maximum=5,
+        label="environment_agent.persona.core_values",
+    )
+    _nonempty_text_list(
+        persona["temperament"], minimum=2, maximum=5,
+        label="environment_agent.persona.temperament",
+    )
+    _nonempty_text_list(
+        persona["boundaries"], minimum=1, maximum=5,
+        label="environment_agent.persona.boundaries",
+    )
+    return persona
+
+def validate_evaluated_agent_role(role, *, require_persona=False):
+    if not isinstance(role, dict):
+        raise ValueError("evaluated_agent_role must be an object")
+    base_fields = {"character_id", "name", "role", "explicit_goal"}
+    allowed_fields = base_fields | {"persona"}
+    if set(role) - allowed_fields:
+        raise ValueError("evaluated_agent_role contains private or unsupported fields")
+    for key in base_fields:
+        if not isinstance(role.get(key), str) or not role[key].strip():
+            raise ValueError(f"evaluated_agent_role missing {key}")
+    persona = role.get("persona")
+    if persona is None:
+        if require_persona:
+            raise ValueError("evaluated_agent_role requires its own public persona")
+        return role
+    try:
+        validate_private_persona(persona)
+    except ValueError as exc:
+        raise ValueError(
+            str(exc).replace("environment_agent.persona", "evaluated_agent_role.persona")
+        ) from exc
+    if persona["name"] != role["name"] or persona["role"] != role["role"]:
+        raise ValueError(
+            "evaluated_agent_role persona name/role must match its public role card"
+        )
+    return role
+
+
+
+def validate_v2_state_selection(selected):
+    if set(selected) != set(STATE_VARIABLE_ONTOLOGY):
+        raise ValueError(
+            "v2 selected_state_variables must use exactly emotion, "
+            "behavioral_disposition, relationship, and consequence_risk"
+        )
+    for family, variables in selected.items():
+        unknown = set(variables) - STATE_VARIABLE_ONTOLOGY[family]
+        if unknown:
+            raise ValueError(
+                f"v2 state family {family} contains unapproved variables: "
+                f"{sorted(unknown)}"
+            )
+    return selected
+
+
+def validate_v3_state_selection(selected):
+    validate_v2_state_selection(selected)
+    ranges = {
+        "emotion": (3, 4),
+        "behavioral_disposition": (2, 3),
+        "relationship": (2, 3),
+        "consequence_risk": (2, 3),
+    }
+    total = 0
+    for family, (minimum, maximum) in ranges.items():
+        count = len(selected[family])
+        if not minimum <= count <= maximum:
+            raise ValueError(
+                f"v3 state family {family} must select {minimum}-{maximum} variables"
+            )
+        total += count
+    if not 9 <= total <= 13:
+        raise ValueError("v3 state selection must contain 9-13 variables")
+    return selected
+
+
+def validate_v2_dynamics(dynamics):
+    if not isinstance(dynamics, dict) or not 2 <= len(dynamics) <= 5:
+        raise ValueError("v2 initial_dynamics must select 2-5 variables")
+    if any(isinstance(value, dict) for value in dynamics.values()):
+        raise ValueError("v2 initial_dynamics must be a flat numeric object")
+    unknown = set(dynamics) - DYNAMICS_VARIABLES
+    if unknown:
+        raise ValueError(
+            f"v2 initial_dynamics contains unapproved variables: {sorted(unknown)}"
+        )
+    _bounded(dynamics, "initial_dynamics")
+    return dynamics
 
 
 def _bounded(value, path):
     if isinstance(value, dict):
         for key, item in value.items():
             _bounded(item, f"{path}.{key}")
-    elif not isinstance(value, (int, float)) or not 0 <= value <= 10:
+    elif (
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not 0 <= value <= 10
+    ):
         raise ValueError(f"{path} must be numeric in [0, 10]")
 
 
@@ -51,7 +210,15 @@ def _validate_multimodal(scenario):
         "<": lambda value, threshold: value < threshold,
         "==": lambda value, threshold: value == threshold,
     }
-    for trigger in scenario.get("video_triggers", []):
+    triggers = scenario.get("video_triggers", [])
+    if len(triggers) != 3:
+        raise ValueError("canonical scenario must define exactly three video triggers")
+    priorities = [trigger.get("priority") for trigger in triggers]
+    if any(not isinstance(priority, int) or priority < 1 for priority in priorities):
+        raise ValueError("every video trigger requires a positive integer priority")
+    if len(set(priorities)) != len(priorities):
+        raise ValueError("video trigger priorities must be unique within a scenario")
+    for trigger in triggers:
         for key in ("trigger_id", "trigger_mode", "conditions", "cue_template", "observable_expression"):
             if key not in trigger:
                 raise ValueError(f"video trigger missing {key}")
@@ -69,7 +236,7 @@ def _validate_multimodal(scenario):
             operators[condition["operator"]](values[variable], condition["threshold"])
             for variable, condition in conditions.items()
         ):
-            raise ValueError(f"video trigger {trigger['trigger_id']} is active at S0/D0")
+            raise ValueError(f"video trigger {trigger['trigger_id']} is active at initialization")
         change_conditions = trigger.get("change_conditions", {})
         if trigger["trigger_mode"] == "state_change" and not change_conditions:
             raise ValueError("state_change trigger requires change_conditions")
@@ -80,11 +247,120 @@ def _validate_multimodal(scenario):
                 raise ValueError(f"invalid change condition for video trigger variable {variable}")
             if not isinstance(condition.get("threshold"), (int, float)):
                 raise ValueError(f"video change threshold must be numeric for {variable}")
-        if trigger.get("cooldown_turns", 0) < 0:
-            raise ValueError("video trigger cooldown_turns must be non-negative")
+        if not 2 <= trigger.get("cooldown_turns", 0) <= 4:
+            raise ValueError("video trigger cooldown_turns must be in [2, 4]")
         if not isinstance(trigger["observable_expression"], dict) or not trigger["observable_expression"]:
             raise ValueError("video trigger observable_expression must be a non-empty object")
 
+
+
+def _flat_numeric_paths(values, prefix=""):
+    paths = set()
+    for key, value in values.items():
+        path = f"{prefix}.{key}" if prefix else key
+        if isinstance(value, dict):
+            paths.update(_flat_numeric_paths(value, path))
+        else:
+            paths.add(path)
+    return paths
+
+
+def _validate_sparse_effect(effect, allowed_paths, label):
+    if not isinstance(effect, dict):
+        raise ValueError(f"{label} must be an object")
+    unknown = set(effect) - set(allowed_paths)
+    if unknown:
+        raise ValueError(f"{label} references unknown variables: {sorted(unknown)}")
+    invalid = {path: value for path, value in effect.items() if value not in DELTA_LABELS}
+    if invalid:
+        raise ValueError(f"{label} has invalid semantic deltas: {invalid}")
+
+
+def _validate_longitudinal_design(scenario):
+    design = scenario.get("longitudinal_design")
+    if design is None:
+        return
+    if design.get("format") != "socialflux_longitudinal_v1":
+        raise ValueError("longitudinal_design requires socialflux_longitudinal_v1")
+    if not str(design.get("time_unit", "")).strip():
+        raise ValueError("longitudinal_design requires an explicit time_unit")
+    segments = design.get("segments")
+    if not isinstance(segments, list) or len(segments) < 2:
+        raise ValueError("longitudinal_design requires at least two segments")
+    identifiers = [item.get("segment_id") for item in segments]
+    if any(not str(item).strip() for item in identifiers) or len(set(identifiers)) != len(identifiers):
+        raise ValueError("longitudinal segment IDs must be non-empty and unique")
+    state_paths = _flat_numeric_paths(scenario["initial_state"])
+    dynamics_paths = _flat_numeric_paths(scenario["initial_dynamics"])
+    for index, segment in enumerate(segments):
+        minimum = segment.get("min_turns")
+        maximum = segment.get("max_turns")
+        if not isinstance(minimum, int) or not isinstance(maximum, int) or not 1 <= minimum <= maximum:
+            raise ValueError("each longitudinal segment requires 1 <= min_turns <= max_turns")
+        if not str(segment.get("reason", "")).strip():
+            raise ValueError("each longitudinal segment requires a reason")
+        if index:
+            for key in ("advance_by", "public_time_record", "opening_response"):
+                if not segment.get(key):
+                    raise ValueError(f"non-initial longitudinal segment missing {key}")
+        time_effect = segment.get("time_effect", {
+            "policy": "none", "state_delta": {}, "dynamics_delta": {},
+        })
+        if time_effect.get("policy") not in ("none", "scenario_authored"):
+            raise ValueError("time_effect policy must be none or scenario_authored")
+        if time_effect.get("policy") == "none" and (
+            time_effect.get("state_delta") or time_effect.get("dynamics_delta")
+        ):
+            raise ValueError("time-only policy none cannot change state or dynamics")
+        _validate_sparse_effect(
+            time_effect.get("state_delta", {}), state_paths,
+            f"segments[{index}].time_effect.state_delta",
+        )
+        _validate_sparse_effect(
+            time_effect.get("dynamics_delta", {}), dynamics_paths,
+            f"segments[{index}].time_effect.dynamics_delta",
+        )
+    minimum_capacity = sum(item["min_turns"] for item in segments)
+    maximum_capacity = sum(item["max_turns"] for item in segments)
+    if minimum_capacity > scenario["max_turns"]:
+        raise ValueError("longitudinal minimum turns exceed the scenario maximum")
+    if maximum_capacity < min(10, scenario["max_turns"]):
+        raise ValueError("longitudinal segments do not cover the minimum formal horizon")
+
+    pools = design.get("event_pools", [])
+    pool_ids = [pool.get("event_pool_id") for pool in pools]
+    if any(not str(item).strip() for item in pool_ids) or len(set(pool_ids)) != len(pool_ids):
+        raise ValueError("longitudinal event pool IDs must be non-empty and unique")
+    for segment in segments:
+        if segment.get("event_pool_id") and segment["event_pool_id"] not in pool_ids:
+            raise ValueError("longitudinal segment references an unknown event pool")
+    for pool_index, pool in enumerate(pools):
+        if pool.get("selection") != "deterministic_by_trajectory_id":
+            raise ValueError("event pools must use deterministic_by_trajectory_id")
+        outcomes = pool.get("outcomes")
+        if not isinstance(outcomes, list) or not outcomes:
+            raise ValueError("every event pool requires at least one authored outcome")
+        outcome_ids = [item.get("outcome_id") for item in outcomes]
+        if any(not str(item).strip() for item in outcome_ids) or len(set(outcome_ids)) != len(outcome_ids):
+            raise ValueError("event outcome IDs must be non-empty and unique within a pool")
+        for outcome_index, outcome in enumerate(outcomes):
+            if not str(outcome.get("public_record", "")).strip():
+                raise ValueError("every event outcome requires a public record")
+            if outcome.get("causal_scope") not in ("exogenous", "action_mediated"):
+                raise ValueError("event outcome requires a valid causal_scope")
+            if outcome.get("commitment_effect") not in (
+                "none", "fulfilled", "partially_fulfilled", "unfulfilled",
+            ):
+                raise ValueError("event outcome requires a valid commitment_effect")
+            prefix = f"event_pools[{pool_index}].outcomes[{outcome_index}]"
+            _validate_sparse_effect(
+                outcome.get("state_delta", {}), state_paths,
+                f"{prefix}.state_delta",
+            )
+            _validate_sparse_effect(
+                outcome.get("dynamics_delta", {}), dynamics_paths,
+                f"{prefix}.dynamics_delta",
+            )
 
 def validate_blueprint(blueprint):
     required = (
@@ -102,6 +378,9 @@ def validate_blueprint(blueprint):
     missing = [key for key in required if key not in blueprint]
     if missing:
         raise ValueError(f"scenario blueprint missing required fields: {missing}")
+    contract_version = blueprint.get("state_contract_version")
+    if contract_version not in (None, STATE_CONTRACT_VERSION):
+        raise ValueError(f"unsupported state_contract_version: {contract_version}")
     forbidden = {
         "initial_state",
         "initial_dynamics",
@@ -113,6 +392,43 @@ def validate_blueprint(blueprint):
         raise ValueError(f"blueprint contains premature state/action fields: {sorted(forbidden)}")
     if blueprint["source"].get("type") not in ("narrative-derived", "synthetic-script"):
         raise ValueError("blueprint requires a supported source type")
+    selected = blueprint["selected_state_variables"]
+    if not isinstance(selected, dict) or not selected:
+        raise ValueError("selected_state_variables must be a non-empty object")
+    state_paths = set()
+    for family, variables in selected.items():
+        if not isinstance(family, str) or not family.strip():
+            raise ValueError("state family IDs must be non-empty text")
+        if (
+            not isinstance(variables, list)
+            or not variables
+            or any(not isinstance(item, str) or not item.strip() for item in variables)
+            or len(variables) != len(set(variables))
+        ):
+            raise ValueError(
+                "each selected_state_variables family must be a non-empty "
+                "array of unique variable IDs"
+            )
+        state_paths.update(f"{family}.{item}" for item in variables)
+    if not 4 <= len(state_paths) <= 8:
+        raise ValueError("selected_state_variables must contain 4-8 variables")
+    if contract_version == STATE_CONTRACT_VERSION:
+        validate_private_persona(blueprint["environment_agent"].get("persona"))
+        validate_evaluated_agent_role(
+            blueprint["evaluated_agent_role"], require_persona=True,
+        )
+        validate_v2_state_selection(selected)
+    targets = blueprint["target_state_ids"]
+    if (
+        not isinstance(targets, list)
+        or not targets
+        or any(not isinstance(item, str) or not item.strip() for item in targets)
+        or len(targets) != len(set(targets))
+        or not set(targets).issubset(state_paths)
+    ):
+        raise ValueError(
+            "target_state_ids must be a non-empty unique subset of selected variables"
+        )
     return blueprint
 
 
@@ -261,11 +577,22 @@ def validate_initial_state_proposal(proposal, blueprint):
             and operators[condition["operator"]](values[variable], condition["threshold"])
             for variable, condition in conditions.items()
         ):
-            raise ValueError(f"video trigger {trigger['trigger_id']} is active at S0/D0")
+            raise ValueError(f"video trigger {trigger['trigger_id']} is active at initialization")
     return proposal
 
 
 def validate_scenario(scenario):
+    from environment.public_situation import build_policy_situation
+    from environment.policy_context import policy_background
+    build_policy_situation(scenario)  # Reject stale or malformed visibility grants.
+    policy_background(scenario)
+    for field in ("environment_background", "shared_background"):
+        if field in scenario and (not isinstance(scenario[field], str) or (field == "environment_background" and not scenario[field].strip())):
+            raise ValueError(f"{field} must be valid text")
+    if "environment_visible_narrative" in scenario:
+        if not scenario.get("environment_background"):
+            raise ValueError("environment visibility requires an explicit background")
+        build_policy_situation({**scenario, "policy_visible_narrative": scenario["environment_visible_narrative"]})
     required = (
         "scenario_id",
         "title",
@@ -284,22 +611,39 @@ def validate_scenario(scenario):
     missing = [key for key in required if key not in scenario]
     if missing:
         raise ValueError(f"scenario missing required fields: {missing}")
+    contract_version = scenario.get("state_contract_version")
+    if contract_version not in (None, STATE_CONTRACT_VERSION):
+        raise ValueError(f"unsupported state_contract_version: {contract_version}")
     forbidden = FORBIDDEN_SCENARIO_FIELDS & set(scenario)
     if forbidden:
         raise ValueError(f"scenario must not define action taxonomy/effects: {sorted(forbidden)}")
     if scenario["source"].get("type") not in ("narrative-derived", "synthetic-script"):
         raise ValueError("scenario source.type must use a supported hybrid source")
     design = scenario["narrative_design"]
+    if not isinstance(design, dict):
+        raise ValueError("narrative_design must be an object")
     for key in (
         "relationship_structure",
         "power_structure",
         "goal_conflict",
         "information_asymmetry",
-        "relevant_history",
-        "meaningful_choice_space",
     ):
-        if not design.get(key):
-            raise ValueError(f"narrative_design missing {key}")
+        if not isinstance(design.get(key), str) or not design[key].strip():
+            raise ValueError(f"narrative_design.{key} must be non-empty text")
+    for key, minimum, maximum in (
+        ("relevant_history", 1, 5),
+        ("meaningful_choice_space", 3, 8),
+    ):
+        items = design.get(key)
+        if (
+            not isinstance(items, list)
+            or not minimum <= len(items) <= maximum
+            or any(not isinstance(item, str) or not item.strip() for item in items)
+        ):
+            raise ValueError(
+                f"narrative_design.{key} must contain {minimum}-{maximum} "
+                "non-empty text items"
+            )
     status = scenario["construction_status"]
     if status.get("initial_state") not in ("candidate_pending_human_freeze", "human_frozen"):
         raise ValueError("invalid initial state review status")
@@ -308,16 +652,64 @@ def validate_scenario(scenario):
     if not all(value in ("pending", "pass", "fail") for value in scenario["quality_gate"].values()):
         raise ValueError("scenario quality checks must be pending/pass/fail")
     agent = scenario["environment_agent"]
-    for key in ("persona", "explicit_goal", "hidden_intention"):
-        if key not in agent:
-            raise ValueError(f"environment_agent missing {key}")
+    evaluated = scenario["evaluated_agent_role"]
+    validate_evaluated_agent_role(evaluated, require_persona=False)
+    persona = agent["persona"]
+    if not isinstance(persona, dict):
+        raise ValueError("environment_agent.persona must be an object")
+    for key in ("name", "role"):
+        if not isinstance(persona.get(key), str) or not persona[key].strip():
+            raise ValueError(f"environment_agent.persona missing text {key}")
+    if contract_version == STATE_CONTRACT_VERSION:
+        if set(agent) != {"persona", "explicit_goal", "hidden_intention"}:
+            raise ValueError("v2 environment_agent fields mismatch")
+        validate_private_persona(persona)
+        selected = scenario.get("selected_state_variables")
+        if not isinstance(selected, dict):
+            raise ValueError("v2 scenario requires selected_state_variables")
+        validate_v2_state_selection(selected)
+        if scenario.get("state_ontology_version") == STATE_ONTOLOGY_VERSION:
+            validate_v3_state_selection(selected)
+            selected_paths = {
+                f"{family}.{variable}"
+                for family, variables in selected.items()
+                for variable in variables
+            }
+            targets = scenario.get("target_state_ids")
+            if (
+                not isinstance(targets, list)
+                or not 6 <= len(targets) <= 9
+                or len(targets) != len(set(targets))
+                or not set(targets).issubset(selected_paths)
+                or {
+                    path.split(".", 1)[0] for path in targets
+                } != set(STATE_VARIABLE_ONTOLOGY)
+            ):
+                raise ValueError(
+                    "v3 target_state_ids must contain 6-9 selected paths "
+                    "covering all four families"
+                )
+        expected_state = {
+            family: set(variables) for family, variables in selected.items()
+        }
+        if set(scenario["initial_state"]) != set(expected_state):
+            raise ValueError("v2 initial_state families do not match selected variables")
+        for family, variables in expected_state.items():
+            if not isinstance(scenario["initial_state"].get(family), dict) or set(
+                scenario["initial_state"][family]
+            ) != variables:
+                raise ValueError(
+                    f"v2 initial_state variables do not match selected family {family}"
+                )
+        validate_v2_dynamics(scenario["initial_dynamics"])
     _bounded(scenario["initial_state"], "initial_state")
     _bounded(scenario["initial_dynamics"], "initial_dynamics")
-    if not isinstance(scenario["max_turns"], int) or scenario["max_turns"] < 1:
-        raise ValueError("max_turns must be a positive integer")
+    if scenario["max_turns"] != 20:
+        raise ValueError("canonical scenario max_turns must be exactly 20")
     horizon = scenario.get("t3_delayed_horizon", 5)
     if not isinstance(horizon, int) or not 5 <= horizon <= 10:
         raise ValueError("t3_delayed_horizon must be between 5 and 10")
+    _validate_longitudinal_design(scenario)
     _validate_multimodal(scenario)
     return scenario
 
@@ -345,6 +737,33 @@ def validate_trajectory(trajectory):
             raise ValueError("every policy action must be non-empty free-form text")
         if "action_id" in action:
             raise ValueError("free-form trajectories must not contain action_id taxonomy")
+    if trajectory.get("longitudinal_design_version"):
+        if trajectory["longitudinal_design_version"] != "socialflux_longitudinal_v1":
+            raise ValueError("unsupported longitudinal trajectory version")
+        timeline = trajectory.get("public_timeline")
+        if not isinstance(timeline, list):
+            raise ValueError("longitudinal trajectory requires a public timeline")
+        timeline_ids = {item.get("event_id") for item in timeline}
+        previous_elapsed = 0
+        for turn in trajectory["turns"]:
+            if not str(turn.get("segment_id", "")).strip():
+                raise ValueError("longitudinal turn requires a segment_id")
+            before = turn.get("elapsed_time_before")
+            after = turn.get("elapsed_time_after")
+            if not isinstance(before, int) or not isinstance(after, int):
+                raise ValueError("longitudinal turn requires integer elapsed time")
+            if before < previous_elapsed or after < before:
+                raise ValueError("longitudinal elapsed time must be monotonic")
+            previous_elapsed = after
+            transition = turn.get("segment_transition_after") or {}
+            event_ids = {
+                event.get("event_id")
+                for event in transition.get("public_events", [])
+            }
+            if not event_ids.issubset(timeline_ids):
+                raise ValueError(
+                    "turn references a public event absent from trajectory timeline"
+                )
     return trajectory
 
 

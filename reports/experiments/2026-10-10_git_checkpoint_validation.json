@@ -1,0 +1,62 @@
+{
+  "format": "socialflux_git_checkpoint_validation_v1",
+  "date": "2026-10-10",
+  "branch": "socialflux-v2-active-batches",
+  "base_commit": "42b2fe711db8132c32df9cae69a53aa06e29b572",
+  "prompt_catalog_count": 50,
+  "retired_prompt_count": 39,
+  "offline_snapshot_items": 60,
+  "offline_snapshot_status": "pending_human_review; 4 T3 items pending replay",
+  "offline_snapshot_check": {
+    "validated": 60,
+    "provider_calls": 0
+  },
+  "web_tests": {
+    "run": 37,
+    "result": "passed"
+  },
+  "targeted_prompt_cleanup_tests": {
+    "run": 224,
+    "result": "passed"
+  },
+  "current_context_boundary_tests": {
+    "run": 5,
+    "result": "passed"
+  },
+  "full_suite": {
+    "run": 843,
+    "failures": 4,
+    "errors": 14,
+    "skipped": 11,
+    "result": "not_all_green"
+  },
+  "pre_cleanup_comparison": {
+    "method": "Restored the pre-cleanup prompt/code archive in an independent source directory with the same local data assets.",
+    "new_failures_or_errors": [],
+    "existing_failures_or_errors": [
+      "ERROR: test_orchestrator_has_offline_gate2_and_strict_completion_flags (test_active_batch_audit.ActiveBatchAuditTest.test_orchestrator_has_offline_gate2_and_strict_completion_flags)",
+      "ERROR: test_environment_prompt_contains_its_own_prior_response_ledger (test_distinct_text.DistinctTextTest.test_environment_prompt_contains_its_own_prior_response_ledger)",
+      "ERROR: test_environment_prompt_preserves_private_motive_without_keyword_rules (test_distinct_text.DistinctTextTest.test_environment_prompt_preserves_private_motive_without_keyword_rules)",
+      "ERROR: test_environment_retries_self_address_role_swap (test_distinct_text.DistinctTextTest.test_environment_retries_self_address_role_swap)",
+      "ERROR: test_response_rejects_echo_of_latest_action (test_distinct_text.DistinctTextTest.test_response_rejects_echo_of_latest_action)",
+      "ERROR: test_response_retries_invented_third_party_system_action (test_distinct_text.DistinctTextTest.test_response_retries_invented_third_party_system_action)",
+      "ERROR: test_response_retries_prior_environment_response (test_distinct_text.DistinctTextTest.test_response_retries_prior_environment_response)",
+      "ERROR: test_prepare_only_never_loads_model_routes (test_gate2_prepare_only.Gate2PrepareOnlyTest.test_prepare_only_never_loads_model_routes)",
+      "ERROR: setUpClass (test_gpt50_horizon_repair.GPT50HorizonRepairTest)",
+      "ERROR: setUpClass (test_pipeline_acceptance.PipelineAcceptanceTest)",
+      "ERROR: test_scenario_catalog_has_both_sources_and_coverage (test_pipeline_contract.PipelineContractTest.test_scenario_catalog_has_both_sources_and_coverage)",
+      "ERROR: test_revision_preserves_source_and_numeric_state (test_scenario_revision.ScenarioRevisionTest.test_revision_preserves_source_and_numeric_state)",
+      "ERROR: test_v7_runner_accepts_only_confirmed_labels_and_audited_interface (test_state_fixed_label_confirmation.StateFixedLabelConfirmationTest.test_v7_runner_accepts_only_confirmed_labels_and_audited_interface)",
+      "ERROR: setUpClass (test_unified_gate2_followup.FollowupTests)",
+      "FAIL: test_cross_segment_absent_commitment_cannot_be_called_broken (test_distinct_text.DistinctTextTest.test_cross_segment_absent_commitment_cannot_be_called_broken)",
+      "FAIL: test_hard_only_policy_still_rejects_role_reversal (test_distinct_text.DistinctTextTest.test_hard_only_policy_still_rejects_role_reversal)",
+      "FAIL: test_substantive_verbatim_cross_speaker_echo_is_a_hard_ownership_error (test_distinct_text.DistinctTextTest.test_substantive_verbatim_cross_speaker_echo_is_a_hard_ownership_error)",
+      "FAIL: test_revision_cannot_change_character_id (test_scenario_revision.ScenarioRevisionTest.test_revision_cannot_change_character_id)"
+    ]
+  },
+  "limitations": [
+    "Full regression still includes existing fixture/configuration, structured-response stub and validator-expectation failures.",
+    "Frozen historical experiments require their matching code and data snapshot.",
+    "Raw provider calls, source rollouts, videos, browser annotations and local recovery archives are not included in Git."
+  ]
+}

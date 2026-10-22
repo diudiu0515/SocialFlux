@@ -1,0 +1,344 @@
+{
+  "prepared_at": "2026-10-22T08:31:59.464552+00:00",
+  "status": "offline_source_ready_video_revision_pending",
+  "scope": {
+    "verified_at": "2026-10-22T08:24:35.510552+00:00",
+    "scope": "offline",
+    "release": "annotation400-en-20261022-v1",
+    "dataset_sha256": "338a2502b00b4146525b96c864debee2d2da35cf9da6c06151169d900b18d9bc",
+    "review_packet_sha256": "bbdda524393a9fd4329e5c7bcc5607ad78ef9345d4065f2be6a496a7fd440d1f",
+    "scene_count": 50,
+    "items_by_task": {
+      "T1": 150,
+      "T2": 100,
+      "T3": 150
+    },
+    "items": 400,
+    "items_with_media": 400,
+    "current_media": 150,
+    "additional_e8_media": 40,
+    "verified_media_files": 190,
+    "unique_review_tasks": 475,
+    "reviews_by_kind": {
+      "scenario": 50,
+      "rollout": 50,
+      "E1": 40,
+      "E2": 20,
+      "E3": 10,
+      "E3-recent3": 10,
+      "E4": 45,
+      "E5": 10,
+      "E7": 10,
+      "E8": 40,
+      "E9": 40,
+      "media-quality": 150
+    },
+    "reviews_by_stage": {
+      "review": 390,
+      "independent": 85
+    },
+    "partial_rollout_scene_ids": [
+      "GPT50_001",
+      "GPT50_009",
+      "GPT50_023",
+      "GPT50_033",
+      "GPT50_035",
+      "GPT50_040",
+      "GPT50_050"
+    ],
+    "assignment_ids": [
+      "offline_video-01",
+      "offline_video-02",
+      "offline_video-03",
+      "offline_video-04",
+      "offline_video-05",
+      "offline_video-06",
+      "offline_video-07",
+      "offline_video-08",
+      "offline_video-09",
+      "offline_video-10",
+      "offline_text-01",
+      "offline_text-02",
+      "offline_text-03",
+      "offline_text-04",
+      "offline_text-05",
+      "offline_text-06",
+      "offline_text-07",
+      "offline_text-08",
+      "offline_text-09",
+      "offline_text-10"
+    ],
+    "human_review": "pending",
+    "formal_admission": false,
+    "future_t4_dispatch": false
+  },
+  "assignments": {
+    "balanced": {
+      "path": "reports/experiments/2026-10-22_offline_annotation_assignments_balanced.csv",
+      "assignment_slots": 40,
+      "planned_gt_reviewers_per_item": 4,
+      "planned_media_reviewers_per_current_asset": 2,
+      "unique_items": 400,
+      "unique_current_media": 150,
+      "unique_review_tasks": 475,
+      "total_blind_answers": 1600,
+      "total_gt_judgments": 1600,
+      "total_review_responses": 1600,
+      "roster_filled": false,
+      "deadlines_filled": false
+    },
+    "economical": {
+      "path": "reports/experiments/2026-10-22_offline_annotation_assignments_economical.csv",
+      "assignment_slots": 30,
+      "planned_gt_reviewers_per_item": 3,
+      "planned_media_reviewers_per_current_asset": 2,
+      "unique_items": 400,
+      "unique_current_media": 150,
+      "unique_review_tasks": 475,
+      "total_blind_answers": 1200,
+      "total_gt_judgments": 1200,
+      "total_review_responses": 1275,
+      "roster_filled": false,
+      "deadlines_filled": false
+    }
+  },
+  "workflow": [
+    "blind_and_lock",
+    "independent_environment_and_lock",
+    "machine_assisted_gt_and_reviews",
+    "submit_and_export"
+  ],
+  "validation": {
+    "typecheck": true,
+    "production_build": true,
+    "browser": {
+      "ok": true,
+      "checks": {
+        "scope": {
+          "scope": "offline",
+          "scenes": 50,
+          "questions": 400,
+          "uniqueMedia": 150
+        },
+        "online": {
+          "enabled": false,
+          "newT4Rejected": true,
+          "t4WorkflowTested": false
+        },
+        "offline": {
+          "questions": 40,
+          "uniqueMediaReviews": 15,
+          "requiresAllMedia": true,
+          "videoPlayed": true
+        }
+      },
+      "errors": []
+    },
+    "gate2_browser": true,
+    "legacy_recovery": {
+      "ok": true,
+      "checked_at_utc": "2026-10-22T10:38:12.005703+00:00",
+      "base_url": "http://127.0.0.1:8022",
+      "isolated_local_d1": true,
+      "read_only": true,
+      "production_requests": 0,
+      "operations": [
+        "POST recover (read existing session; set local client cookie)",
+        "GET status",
+        "GET export"
+      ],
+      "legacy_recovery_and_export": [
+        "qa-legacy",
+        "qa-media",
+        "qa-research-v3",
+        "qa-t4-legacy"
+      ],
+      "cases": [
+        {
+          "alias": "qa-legacy",
+          "dataset_kind": "text",
+          "dataset_sha256": "57ef5252e348b3b3c27d270b053f70183863597bec45f1fb55a9f5d861fbfdd2",
+          "question_count": 6,
+          "format": "socialflux_public_demo_annotation_v1",
+          "revision": 0,
+          "status": "in_progress",
+          "stable_recovery_status_export": true,
+          "recovery_secret_excluded": true
+        },
+        {
+          "alias": "qa-media",
+          "dataset_kind": "multimodal_review",
+          "dataset_sha256": "5912f0b36db69f2a3d6f12fd602d604333f318f41c79dc9cbe9ebaf85a873e27",
+          "question_count": 270,
+          "format": "socialflux_multimodal_review_v1",
+          "revision": 0,
+          "status": "in_progress",
+          "stable_recovery_status_export": true,
+          "recovery_secret_excluded": true
+        },
+        {
+          "alias": "qa-research-v3",
+          "dataset_kind": "research",
+          "dataset_sha256": "6dffb119b7295ea192bb8fc047d6e90df624df44b44108f9bb391e4b1b958184",
+          "question_count": 30,
+          "format": "socialflux_human_gt_v1",
+          "revision": 1,
+          "status": "in_progress",
+          "stable_recovery_status_export": true,
+          "recovery_secret_excluded": true,
+          "track": "offline_text",
+          "phase": "blind",
+          "gate2_review_present": false
+        },
+        {
+          "alias": "qa-t4-legacy",
+          "dataset_kind": "research",
+          "dataset_sha256": "338a2502b00b4146525b96c864debee2d2da35cf9da6c06151169d900b18d9bc",
+          "question_count": 0,
+          "format": "socialflux_human_gt_v1",
+          "revision": 1,
+          "status": "submitted",
+          "stable_recovery_status_export": true,
+          "recovery_secret_excluded": true,
+          "track": "t4",
+          "phase": "complete",
+          "gate2_review_present": false,
+          "trajectory_count": 5
+        }
+      ],
+      "offline_mobile_no_overflow": "not rerun in this read-only compatibility check"
+    },
+    "receipt_import": {
+      "ok": true,
+      "isolated_store": true,
+      "offline_receipts_imported": 2,
+      "simulated_consensus_items": 40,
+      "leave_self_out_baseline_empty_with_only_two_reviewers": true,
+      "production_records_written": false
+    },
+    "temporary_preview_configuration_removed": true,
+    "registry_storage": {
+      "source_commit": "70f18157762a1ddd23e53cd9c1a04648ab9d7bcb",
+      "review_packet_sha256": "bbdda524393a9fd4329e5c7bcc5607ad78ef9345d4065f2be6a496a7fd440d1f",
+      "offline_tasks": 475,
+      "all_offline_media_files_verified": 190,
+      "v12_public_media_unchanged": true,
+      "registry_decoded_bytes": 10882333,
+      "registry_versions": 11,
+      "pooled_tasks": 903,
+      "all_task_references": 4236,
+      "memory_reduction_percent": 75.25
+    },
+    "unit_tests_passed": 30,
+    "python_registry_tests_passed": 8,
+    "public_runtime": {
+      "ok": true,
+      "url": "https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site",
+      "anonymous_no_account_access": true,
+      "invite_required_for_new_tasks": true,
+      "scope": "offline",
+      "assignments": 20,
+      "scenes": 50,
+      "questions": 400,
+      "current_unique_media": 150,
+      "mobile_no_overflow": true,
+      "recovery_entry_available": true,
+      "public_media_hashes_verified": [
+        {
+          "kind": "current",
+          "sha256": "bae0d7ee206262e52aadc92a1eda62d40c5cf2d21c82a83bc790c9c4843429d7"
+        },
+        {
+          "kind": "E8",
+          "sha256": "a6ea671a1260923d0aee15012d4f2ff1d2f2b134644b957456fc36bae722407f"
+        }
+      ],
+      "production_records_written": false,
+      "checked_at": "2026-10-22T10:46:26.960Z"
+    },
+    "runtime_error_events_last_five_minutes": 0
+  },
+  "publication": {
+    "performed_this_round": true,
+    "last_verified_live_version": 15,
+    "new_offline_scope_and_review_forms_live": true,
+    "source_sync_pending": false,
+    "source_commit": "70f18157762a1ddd23e53cd9c1a04648ab9d7bcb",
+    "version_id": "appgprj_6ad82de6ff188191b48c72ec8787d069~appgver_49260e9d156081919eb367ecac17d762",
+    "deployment_id": "appgdep_6ad9e8606a148191961122f77ccb133b",
+    "url": "https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site",
+    "access_mode": "public",
+    "env_set_revision": 1,
+    "report": "reports/experiments/2026-10-22_offline_annotation_publication.json",
+    "prior_approval_blocker_resolved": {
+      "action": "Pass the current Site repository write credential to the official Sites workflow via hidden stdin",
+      "previous_auto_review_reason": "User authorized release preparation but not exposing the repository write token to the external-network terminal",
+      "auth_mode": "http_extra_header",
+      "explicit_authorization_pending": false,
+      "resolved_by": "User explicitly approved the official credential workflow and external annotator access in this conversation."
+    },
+    "post_deployment_documentation_updated": true
+  },
+  "remaining_before_dispatch": [
+    "revise_lip_sync_and_expression_then_review",
+    "assign_unique_participant_aliases_and_deadlines",
+    "non_study_scene_training",
+    "set_receipt_collection_and_adjudication_owner"
+  ],
+  "guide": "docs/operations/ANNOTATION_DEMO.md",
+  "source_sha256": {
+    "web/participant_demo/lib/research.ts": "005e82b4c3931684473a34604ddc49bcea6a4454139338082dfe483240a5c7ee",
+    "web/participant_demo/app/demo.tsx": "70ff9abc3a9e8ad5620592cacdb3f96fbe10d1ddbe1fb1d96ab104e1cddd2be1",
+    "web/participant_demo/tests/gate2-browser.cjs": "3076940f4d0651576bee94e65720d0539bc91c362af382287143f9fd5c7fdf13",
+    "web/participant_demo/tests/annotation-ready-browser.cjs": "8e3048c43804af70806bcce6800696e6370291d1b866000f7d06005206a9da93",
+    "web/participant_demo/tests/research-browser.cjs": "dd7d0bd92e9b91337378f6c9f0a4efde41f24573ce1ce7877f2ca28e953257ee",
+    "docs/operations/ANNOTATION_DEMO.md": "7823d052ef8bce971959f70fc09ac17fcaa6065b3e4b57abf614973c55528497",
+    "web/participant_demo/README.md": "6cae5e5016b9fb2b401310db04bb5504a5663a560c5367bf4e8d7e885f7c2e86",
+    "reports/experiments/2026-10-22_offline_annotation_assignments_balanced.csv": "e08ab1e5a0f9e9b9cf41689d246c177455cea56249d847f473a7b8c8dae6b3df",
+    "reports/experiments/2026-10-22_offline_annotation_assignments_economical.csv": "5410e97e35c09a4292d8902af0dddbb5a5d6ecf508e2090368a3a753970c1440",
+    "web/participant_demo/lib/gate2.ts": "25b7e5597408a152a18cc2396005803423a34be89efadc69a21545403714f180",
+    "web/participant_demo/lib/gate2-registry.ts": "ee24a3545d1ba8d6098cc44f5dd09b9573c178ac36dc50c2253c42854da5bbe0",
+    "web/participant_demo/data/gate2-review-server.json": "d59d49961f40dc0d53a4fbf7733811b43e0ae7c1036f07104d6f21f6e316a6b3",
+    "web/participant_demo/tests/gate2.test.mjs": "9c9e8a74e31cfd3f1d3d9ecb9dd452cc77e9452f02279f558159d93a7bdb3f1a",
+    "scripts/build_gate2_annotation.py": "ee0948cc6d9f019d387f36638f7c4131e696dd9ea6ad61b67dbcf0433039cf93",
+    "tests/test_gate2_annotation_release.py": "c52ac37ebf5dc306af5c887c463631601aea49fdc1e422a462d69f674ffe0c40"
+  },
+  "archive": {
+    "archive": "/root/autodl-tmp/emotree/build/offline-annotation-publish-compact-20261022.tar",
+    "gzip_archive": "/root/autodl-tmp/emotree/build/offline-annotation-publish-compact-20261022.tar.gz",
+    "tar_bytes": 235202560,
+    "gzip_bytes": 225324907,
+    "sha256": "856357366d3ef259a0fae44c84264695cb9e4eb54bb30ea2d8820a6daaa3ba24",
+    "entries": 366,
+    "unpacked_file_bytes": 234916618,
+    "no_preview_or_secret_files": true,
+    "uploaded": false,
+    "remote_build_fallback": true,
+    "deployed_archive": {
+      "archive_format": "tar",
+      "sediment_file_id": "file_000000007bf081f7b5b6d270bbce1085",
+      "content_hash": "sha256:9eb32aa926237dc8b9102a6d489d217ef7c4f690ab6700c49d7ac039818102e5",
+      "size_bytes": 235192320,
+      "file_count": 345
+    },
+    "source_sync_and_native_save_pending": false
+  },
+  "updated_at": "2026-10-22T10:48:18.783273+00:00",
+  "superseded_local_archive": {
+    "path": "build/offline-annotation-20261022.tar.gz",
+    "sha256": "2628dad68fa17632616eb752c2c3a5477ef253d4f16441793a03440c27797a3f",
+    "bytes": 284602913,
+    "entries": 399,
+    "private_preview_files_absent": true,
+    "prepared_at": "2026-10-22T09:30:51.595680+00:00",
+    "source_sync_and_native_save_pending": true
+  },
+  "current_plan": {
+    "action": "push_code_to_github",
+    "new_site_deployment": false,
+    "video_quality": "revision_pending",
+    "user_feedback": "口型、表情啥的都不好",
+    "keep_existing_material_hashes_until_reviewed_replacement": true
+  },
+  "local_material_manifest": "reports/experiments/2026-10-22_offline_annotation_local_materials.json"
+}

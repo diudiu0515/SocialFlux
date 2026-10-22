@@ -1,0 +1,73 @@
+{
+  "format": "socialflux_multimodal_delivery_config_v1",
+  "delivery_version": "multimodal_delivery_v1",
+  "render_target": {
+    "resolution": "720p",
+    "ratio": "16:9",
+    "minimum_fps": 24,
+    "video_codec": "h264_or_h265",
+    "audio_required": true,
+    "watermark": false,
+    "visible_text": false
+  },
+  "scenario_identity": {
+    "one_fictional_identity_per_scenario": true,
+    "cross_scenario_reuse": false,
+    "same_identity_across_all_video_lanes": true,
+    "continuity_reference_required_for_talking_head": true
+  },
+  "online_response_neutral": {
+    "purpose": "runtime feedback before any future public response is known",
+    "one_asset_per_reachable_event_family": true,
+    "spoken_content": false,
+    "synchronized_nonverbal_audio": true,
+    "trigger_source": "actual four-dimensional state crossings",
+    "maximum_events_per_turn": 1
+  },
+  "response_conditioned_talking_head": {
+    "purpose": "recorded accepted trajectories with an exact public environment response",
+    "important_nodes_per_trajectory": 4,
+    "minimum_turn_gap": 2,
+    "spoken_content": true,
+    "exact_public_response_required": true,
+    "phoneme_lip_sync_required": true,
+    "minimum_duration_seconds": 3,
+    "maximum_duration_seconds": 15
+  },
+  "reuse_policy": {
+    "require_semantic_request_match": true,
+    "require_target_resolution": true,
+    "require_technical_validation": true,
+    "require_human_review": true,
+    "legacy_talking_head_requires_v3_regeneration": true
+  },
+  "human_review": {
+    "online_checks": [
+      "identity_matches_scenario_anchor",
+      "event_family_is_visually_distinguishable",
+      "motion_is_natural",
+      "audio_matches_visible_action",
+      "no_speech_or_mouthing",
+      "no_visible_text_or_branding",
+      "no_private_state_or_trigger_leakage"
+    ],
+    "talking_head_checks": [
+      "identity_matches_scenario_anchor",
+      "exact_public_line_is_spoken_once",
+      "lip_sync_and_speech_are_natural",
+      "voice_is_conversational_not_recited",
+      "expression_matches_public_context",
+      "teeth_face_and_gaze_are_stable",
+      "no_visible_text_or_branding",
+      "no_private_state_or_trigger_leakage"
+    ],
+    "status": "pending"
+  },
+  "release": {
+    "require_all_designed_assets_generated": true,
+    "require_technical_validation": true,
+    "require_human_attestation": true,
+    "require_hosted_asset_url": true,
+    "require_text_fallback": true
+  }
+}

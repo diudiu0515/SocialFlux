@@ -1,0 +1,155 @@
+{
+  "format": "socialflux_model_routes_v1",
+  "description": "Claude150 automatic failover across both AutoDL protocols and all three private credentials.",
+  "provider_defaults": {
+    "provider": "failover",
+    "model": "claude-fable-5",
+    "stream": false,
+    "candidates": [
+      {
+        "provider": "openai_compatible",
+        "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+        "use_proxy": false,
+        "api_key_file": "/root/.config/socialflux/autodl_api_key",
+        "model": "claude-fable-5",
+        "timeout": 600
+      },
+      {
+        "provider": "anthropic",
+        "endpoint": "https://www.autodl.art/api/v1/anthropic/v1/messages",
+        "use_proxy": false,
+        "auth_scheme": "bearer",
+        "api_key_file": "/root/.config/socialflux/autodl_api_key",
+        "model": "claude-fable-5",
+        "timeout": 600,
+        "max_transport_attempts": 1
+      },
+      {
+        "provider": "openai_compatible",
+        "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+        "use_proxy": false,
+        "api_key_file": "/root/.config/socialflux/autodl_api_key_2",
+        "model": "claude-fable-5",
+        "timeout": 600
+      },
+      {
+        "provider": "anthropic",
+        "endpoint": "https://www.autodl.art/api/v1/anthropic/v1/messages",
+        "use_proxy": false,
+        "auth_scheme": "bearer",
+        "api_key_file": "/root/.config/socialflux/autodl_api_key_2",
+        "model": "claude-fable-5",
+        "timeout": 600,
+        "max_transport_attempts": 1
+      },
+      {
+        "provider": "openai_compatible",
+        "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+        "use_proxy": false,
+        "api_key_file": "/root/.config/socialflux/autodl_gpt_api_key",
+        "model": "claude-fable-5",
+        "timeout": 600
+      },
+      {
+        "provider": "anthropic",
+        "endpoint": "https://www.autodl.art/api/v1/anthropic/v1/messages",
+        "use_proxy": false,
+        "auth_scheme": "bearer",
+        "api_key_file": "/root/.config/socialflux/autodl_gpt_api_key",
+        "model": "claude-fable-5",
+        "timeout": 600,
+        "max_transport_attempts": 1
+      }
+    ],
+    "timeout": 240,
+    "circuit_failure_threshold": 2,
+    "circuit_cooldown_seconds": 90,
+    "circuit_max_cooldown_seconds": 300,
+    "failover_backoff_base_seconds": 2,
+    "failover_backoff_max_seconds": 15,
+    "failover_backoff_jitter_seconds": 1.5,
+    "max_candidates_per_request": 6
+  },
+  "routes": {
+    "scenario_brief_design": {
+      "max_tokens": 8000,
+      "timeout": 300
+    },
+    "scenario_authoring": {
+      "max_tokens": 5000,
+      "timeout": 240
+    },
+    "scenario_normalization": {
+      "max_tokens": 8000,
+      "timeout": 240
+    },
+    "scenario_initialization": {
+      "max_tokens": 6000,
+      "timeout": 240
+    },
+    "policy": {
+      "max_tokens": 1200,
+      "timeout": 60
+    },
+    "appraisal": {
+      "max_tokens": 3500,
+      "timeout": 90
+    },
+    "response": {
+      "max_tokens": 2600,
+      "timeout": 75
+    },
+    "t2_branch_authoring": {
+      "max_tokens": 5000,
+      "timeout": 240
+    },
+    "t2_spec_authoring": {
+      "max_tokens": 3500,
+      "timeout": 240
+    },
+    "t2_pair_review": {
+      "max_tokens": 3500,
+      "timeout": 180
+    },
+    "t2_answer": {
+      "max_tokens": 5000,
+      "timeout": 240
+    },
+    "t2_answer_review": {
+      "max_tokens": 3500,
+      "timeout": 180
+    },
+    "task_extraction": {
+      "max_tokens": 3500,
+      "timeout": 180
+    },
+    "t1_answer": {
+      "max_tokens": 5000,
+      "timeout": 240
+    },
+    "t3_action_authoring": {
+      "max_tokens": 1800,
+      "timeout": 150
+    },
+    "t3_answer": {
+      "max_tokens": 6500,
+      "timeout": 300
+    },
+    "t4_judge": {
+      "max_tokens": 3500,
+      "timeout": 180
+    },
+    "quality_review": {
+      "max_tokens": 3000,
+      "timeout": 150
+    },
+    "legacy_task_bundle": {
+      "max_tokens": 6500,
+      "timeout": 300
+    },
+    "video_translation": {
+      "max_tokens": 500,
+      "timeout": 90
+    }
+  }
+}

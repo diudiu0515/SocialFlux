@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>SocialFlux · 在线多模态视频审核</title>
+  <link rel="stylesheet" href="/multimodal_review.css?v=6">
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div><b>SocialFlux</b><span>Multimodal Review</span></div><a href="/gpt50">返回 GPT50</a></div>
+    <div class="notice">本轮默认只审核 Online 状态触发素材；Offline 响应口型视频后续另审，不计入本轮统计和导出。审核草稿只保存在当前浏览器。</div>
+    <label class="field">视频批次
+      <select id="batchSelect">
+        <option value="gpt">GPT50</option>
+        <option value="claude">Claude150</option>
+      </select>
+    </label>
+    <label class="field">审核人姓名或 ID<input id="reviewer" autocomplete="name" placeholder="导出前必填"></label>
+    <div class="review-filters">
+      <label class="field">筛选状态
+        <select id="statusFilter">
+          <option value="all">全部场景</option>
+          <option value="pending">还有待审</option>
+          <option value="rejected">包含退回</option>
+          <option value="passed">全部通过</option>
+        </select>
+      </label>
+      <label class="field">查找场景<input id="scenarioSearch" type="search" placeholder="ID 或标题"></label>
+      <label class="field">视频通道
+        <select id="assetTypeFilter">
+          <option value="all">两类都看</option>
+          <option value="online_nonverbal">状态触发 · 无台词</option>
+          <option value="talking_head">响应口型 · 有语音</option>
+        </select>
+      </label>
+    </div>
+    <div class="side-title">试产 SCENARIO <span id="scenarioCount">—</span></div>
+    <nav id="scenarioList" class="scenario-list"></nav>
+    <div class="side-actions">
+      <button id="exportReview" class="primary">导出审核 JSON</button>
+      <button id="importReview">导入已有草稿</button>
+      <input id="importFile" type="file" accept=".json,application/json" hidden>
+      <button id="clearDraft" class="danger-text">清空浏览器草稿</button>
+      <div id="progress" class="progress">正在加载…</div>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="top">
+      <div><div class="eyebrow">MULTIMODAL DELIVERY · STATE + TALKING HEAD</div><h1 id="batchTitle">状态视频与口型视频审核</h1><p>状态视频核对触发与四维覆盖；口型视频核对逐字台词、身份、表达和事实一致性。</p></div>
+      <div id="batchBadge" class="badge">loading</div>
+    </header>
+    <section id="metrics" class="metrics"></section>
+    <section class="lane-guide panel">
+      <div><b>状态触发素材 · 无台词</b><span>在 environment 的未来回复尚未生成时触发，只呈现状态反馈动作和非语言声音；审核时“出现说话或说话式口型”应退回。</span></div>
+      <div><b>响应口型视频 · 有语音</b><span>绑定 accepted rollout 的具体公开回复；必须逐字说出台词，同时像自然对话，不能机械念稿。</span></div>
+    </section>
+    <section id="triggerabilityPanel" class="triggerability panel"></section>
+    <section id="scenarioHeader" class="scenario-header panel"></section>
+    <div class="toolbar">
+      <button id="previousScenario">上一个场景</button>
+      <button id="nextPending">下一待审</button>
+      <button id="passScenario" class="primary">本场全部通过</button>
+      <button id="pendingScenario">本场恢复待审</button>
+      <span>🔊 点击播放即可听声音；网页会将音量设为 100%，播放新视频时自动暂停其他视频。</span>
+    </div>
+    <section id="videoGrid" class="video-grid"></section>
+  </main>
+</div>
+<div id="toast" class="toast" role="status"></div>
+<script src="/multimodal_review.js?v=12"></script>
+</body>
+</html>

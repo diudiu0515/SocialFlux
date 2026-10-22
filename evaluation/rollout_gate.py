@@ -10,7 +10,6 @@ from collections import Counter, defaultdict
 from copy import deepcopy
 import hashlib
 import json
-import math
 import re
 
 from environment.delta_mapper import flatten_state
@@ -166,23 +165,49 @@ def audit_rollout(trajectory, judgment=None, history_evidence=None):
     saturation = _saturation_fraction(trajectory)
     oscillation = _oscillation_fraction(trajectory)
     hard_rejects = []
+    eligibility_failures = []
     if any(marker in public_text for marker in _PRIVATE_MARKERS):
         hard_rejects.append("hidden_state_leakage")
     if not structural["checks"]["actions_nonempty"] or not structural["checks"]["responses_nonempty"]:
         hard_rejects.append("malformed_output")
     if not (
-        structural["checks"]["actions_no_exact_repetition"]
-        and structural["checks"]["responses_no_exact_repetition"]
-        and structural["checks"]["actions_no_near_repetition"]
-        and structural["checks"]["responses_no_near_repetition"]
+        structural["checks"].get("actions_respect_public_role", True)
+        and structural["checks"].get("responses_respect_counterparty_role", True)
     ):
-        hard_rejects.append("repetitive_loop")
-    if len(turns) < 5:
+        hard_rejects.append("severe_character_contradiction")
+    if not (
+        structural["checks"].get("pending_commitments_are_consistent", True)
+        and structural["checks"].get("turns_preserve_speaker_action_ownership", True)
+        and structural["checks"].get("turns_preserve_existing_obligations", True)
+        and structural["checks"].get("turns_preserve_commitment_record", True)
+        and structural["checks"].get("turns_preserve_proposal_strength", True)
+    ):
+        hard_rejects.append("broken_dialogue_logic")
+    ending = trajectory.get("ending") or {}
+    turn_count = len(turns)
+    ending_is_consistent = (
+        1 <= turn_count <= 20
+        and ending.get("turn_id") == turn_count
+        and ending.get("reason") in {"natural_completion", "max_turns"}
+        and (
+            ending.get("reason") != "max_turns"
+            or turn_count == 20
+        )
+    )
+    if not ending_is_consistent:
         hard_rejects.append("meaningless_premature_ending")
+    elif (
+        ending.get("reason") == "natural_completion"
+        and turn_count < 10
+    ):
+        eligibility_failures.append("short_natural_trajectory")
     if oscillation > 0.5:
         hard_rejects.append("nonsensical_state_oscillation")
-    if saturation > 0.75:
-        hard_rejects.append("implementation_induced_state_saturation")
+
+    actions = [
+        turn.get("policy_action", {}).get("text", "") for turn in turns
+    ]
+    responses = [turn.get("environment_response", "") for turn in turns]
 
     judge_scores, judge_errors = _validated_judge_scores(judgment)
     if judgment:
@@ -226,11 +251,14 @@ def audit_rollout(trajectory, judgment=None, history_evidence=None):
             threshold_failures.append("overall_score")
     passed = (
         not hard_rejects
+        and not eligibility_failures
         and not judge_errors
         and not missing
         and not threshold_failures
     )
-    definitive_quality_failure = bool(hard_rejects or threshold_failures)
+    definitive_quality_failure = bool(
+        hard_rejects or eligibility_failures or threshold_failures
+    )
     pending = (
         bool(missing or judge_errors)
         and not history_evidence_failed
@@ -246,6 +274,7 @@ def audit_rollout(trajectory, judgment=None, history_evidence=None):
         "missing_evidence": missing,
         "judge_errors": judge_errors,
         "hard_reject_reasons": hard_rejects,
+        "eligibility_failures": eligibility_failures,
         "diagnostics": {
             "turn_count": len(turns),
             "heuristic_scores": heuristic_scores,
@@ -398,8 +427,9 @@ def audit_pool_contract(
     selected_by_scenario=None,
     api_max_fraction=0.30,
     require_raw_minimum=True,
+    expected_raw_per_scenario=1,
 ):
-    """Audit the model/source composition and per-scenario sampling contract."""
+    """Audit the one-logical-rollout-per-scenario production contract."""
     selection_supplied = selected_by_scenario is not None
     selected_by_scenario = selected_by_scenario or {}
     total = len(trajectories)
@@ -425,23 +455,37 @@ def audit_pool_contract(
     api_fraction = sources["api"] / total if total else 0.0
     checks = {
         "nonempty": total > 0,
-        "at_least_three_local_model_families": len(families - {"unknown"}) >= 3,
-        "prioritized_20_to_40b_local_model_present": prioritized_capacity_present,
-        "api_fraction_at_most_30_percent": api_fraction <= api_max_fraction,
-        "each_scenario_has_at_least_12_raw": (
+        "every_trajectory_has_1_to_20_turns": (
+            total > 0 and all(1 <= len(item.get("turns", [])) <= 20 for item in trajectories)
+        ),
+        "every_trajectory_has_consistent_natural_or_max_ending": (
+            total > 0 and all(
+                (item.get("ending") or {}).get("turn_id") == len(item.get("turns", []))
+                and (item.get("ending") or {}).get("reason")
+                in {"natural_completion", "max_turns"}
+                and (
+                    (item.get("ending") or {}).get("reason") != "max_turns"
+                    or len(item.get("turns", [])) == 20
+                )
+                for item in trajectories
+            )
+        ),
+        "model_and_source_are_provenance_not_quotas": True,
+        "each_scenario_has_expected_raw_count": (
             not require_raw_minimum
-            or (bool(scenarios) and all(len(items) >= 12 for items in scenarios.values()))
+            or (
+                bool(scenarios)
+                and all(
+                    len(items) == expected_raw_per_scenario
+                    for items in scenarios.values()
+                )
+            )
         ),
         "each_scenario_selects_exactly_one": (
             not selection_supplied
             or (bool(selected_by_scenario) and all(
                 len(items) == 1 for items in selected_by_scenario.values()
             ))
-        ),
-        "environment_policy_separated": all(
-            item.get("policy_provenance", {}).get("model")
-            != item.get("environment_provenance", {}).get("environment", {}).get("model")
-            for item in trajectories
         ),
     }
     return {
@@ -452,6 +496,15 @@ def audit_pool_contract(
         "source_counts": dict(sources),
         "api_fraction": round(api_fraction, 4),
         "local_model_families": sorted(families),
+        "provenance_diagnostics": {
+            "api_fraction_at_most_30_percent": api_fraction <= api_max_fraction,
+            "prioritized_20_to_40b_local_model_present": prioritized_capacity_present,
+            "environment_and_policy_use_different_models": all(
+                item.get("policy_provenance", {}).get("model")
+                != item.get("environment_provenance", {}).get("environment", {}).get("model")
+                for item in trajectories
+            ),
+        },
     }
 
 

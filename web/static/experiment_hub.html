@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#173d31">
+  <title>SocialFlux · 实验管理台</title>
+  <meta name="description" content="SocialFlux 实验记录、实时结果与下一步计划。">
+  <link rel="stylesheet" href="/experiment_hub.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/lab" aria-label="SocialFlux 实验管理台"><span class="brand-mark">S<span>↗</span></span><span>SocialFlux<small>RESEARCH WORKSPACE</small></span></a>
+    <div class="nav-label">工作空间</div>
+    <nav aria-label="工作空间">
+      <a href="#overview" data-view="overview"><span>◫</span>实验总览</a>
+      <a href="#matrix" data-view="matrix"><span>⊞</span>实验矩阵</a>
+      <a href="#paper" data-view="paper"><span>▦</span>论文表格</a>
+      <a href="#human" data-view="human"><span>◇</span>人工与 GT</a>
+      <a href="#plans" data-view="plans"><span>☷</span>实验计划<span class="nav-count" id="plan-count">—</span></a>
+      <a href="#results" data-view="results"><span>▥</span>实时结果</a>
+      <a href="#library" data-view="library"><span>▤</span>报告与数据</a>
+    </nav>
+    <div class="nav-label second-label">研究工具</div>
+    <nav aria-label="研究工具">
+      <a href="/offline-demo"><span>↗</span>题库工作台</a>
+      <a href="https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site/" target="_blank" rel="noopener"><span>↗</span>统一人工标注站</a>
+      <a href="/gpt50-live"><span>↗</span>场景与轨迹</a>
+      <a href="/experiments"><span>↗</span>Gate 详细结果</a>
+    </nav>
+    <div class="sidebar-bottom"><span class="live-dot"></span>连接本地实验目录<p>实验记录保存在服务器<br>当前结果每 30 秒更新</p><span class="version">SOCIALFLUX / LAB NOTEBOOK</span></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><div class="breadcrumb">工作空间 <span>/</span> <strong id="crumb">实验总览</strong></div><div class="top-actions"><span id="sync-status" aria-live="polite">正在连接…</span><button class="icon-button" id="refresh" aria-label="刷新数据">↻</button><span class="avatar" aria-label="研究工作空间">SF</span></div></header>
+    <main id="main">
+      <div class="page-heading"><div><p class="eyebrow">SOCIALFLUX EXPERIMENTS</p><h1 id="page-title">让每一次实验，都有据可循。</h1><p id="page-subtitle">从研究问题到实验结果，在这里连接每一步。</p></div><button class="primary" id="create">＋ 新建实验</button></div>
+      <div id="error" class="error-banner" role="alert" hidden></div>
+      <div id="loading" class="loading">正在读取实验记录和数据来源…</div>
+      <section id="overview-view" class="view" hidden>
+        <div id="stats" class="stats"></div>
+        <section class="panel" id="dataset-panel"><div class="section-heading"><div><span class="eyebrow">DATA COVERAGE</span><h2>最新数据总表</h2></div><button class="secondary" id="export-dataset">导出总表 CSV ↓</button></div><p class="subtle" id="dataset-updated"></p><div id="dataset-overview"></div><div class="paper-notes" id="dataset-notes"></div><details class="inventory-details"><summary>Offline 普通 / Hard 题量与材料配对</summary><div id="offline-counts"></div></details><details class="inventory-details"><summary>Rollout 失败场景 · T4-hard 候选清单</summary><div id="t4hard-candidates"></div></details></section>
+        <section class="panel"><div class="section-heading"><h2>T4 · Text / Text+Video 配对进度</h2><button class="secondary" id="export-t4-counts">导出分批数量 CSV ↓</button></div><p class="subtle" id="t4-counts-note"></p><div id="t4-counts-current"></div><details class="inventory-details"><summary>全部已登记批次（独立统计，不累加）</summary><div id="t4-counts-all"></div></details></section>
+        <div class="notice"><span>⊞</span><p>本轮整合：T1 / T2 / T3 / T4 的文字与视频对照、T4 caption、两项约 30 场景的 S0 实验，以及 Gate2 E1–E9。<br><a href="#matrix">打开实验矩阵，查看条件、数据与待办 →</a></p></div>
+        <div class="overview-columns">
+          <div>
+            <section class="panel"><div class="section-heading"><div><span class="eyebrow">NEXT UP</span><h2>接下来做什么</h2></div><a href="#plans">查看全部 <span>→</span></a></div><div id="next-plans"></div></section>
+            <section class="panel"><div class="section-heading"><div><span class="eyebrow">LIVE EXPERIMENTS</span><h2>当前实验批次</h2></div><a href="#results">查看结果 →</a></div><div id="recent-runs"></div></section>
+          </div>
+          <div>
+            <section class="gate-panel"><div class="section-heading"><div><span class="eyebrow">EVIDENCE CHECKPOINTS</span><h2>从开发到正式证据</h2></div><span class="tag">4 GATES</span></div><div id="gate-summary"></div><p class="fine-print">计划完成状态与正式准入分别记录；机器检查不能替代人工签署。</p></section>
+            <section class="panel"><div class="section-heading"><div><span class="eyebrow">RECENT REPORTS</span><h2>最新研究记录</h2></div><a href="#library" aria-label="全部报告">↗</a></div><div id="recent-reports"></div></section>
+          </div>
+        </div>
+      </section>
+      <section id="matrix-view" class="view" hidden>
+        <div class="toolbar"><p class="subtle" id="matrix-note"></p><button id="export-matrix" class="secondary">导出实验矩阵 CSV ↓</button></div>
+        <div class="notice"><span>◈</span><p id="gate2-relation"></p></div>
+        <div id="research-matrix"></div>
+      </section>
+      <section id="paper-view" class="view" hidden>
+        <div class="notice"><span>▦</span><p>方法表和结果表使用同一份实时数据。表下注明样本单位、分母、机器／人工状态和来源。<br>Markdown 与 LaTeX 导出含表注；CSV 用于编辑数值。LaTeX 使用 longtable、booktabs、array，中文需 XeLaTeX 与中文支持。</p></div>
+        <div class="toolbar"><select id="paper-select" aria-label="选择论文表格"></select><button class="secondary" id="paper-csv">CSV ↓</button><button class="secondary" id="paper-markdown">Markdown ↓</button><button class="secondary" id="paper-latex">LaTeX ↓</button></div>
+        <section class="panel paper-panel"><div class="section-heading"><h2 id="paper-title"></h2></div><div id="paper-table"></div><div class="paper-notes" id="paper-notes"></div><details class="inventory-details"><summary>数据来源</summary><div id="paper-sources"></div></details></section>
+      </section>
+      <section id="human-view" class="view" hidden>
+        <div class="notice"><span>◇</span><p>T1–3：与模型相同的文字／视频输入 → 整组盲答锁定 → 查看 state、environment 私有材料与机器答案 → 人工 GT。<br>T4：50 条完整生成轨迹，独立五维评分后对照 Claude；缺失评分和不适用单独记录。</p></div>
+        <div class="toolbar"><a class="primary" href="https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site/" target="_blank" rel="noopener">进入统一标注站 ↗</a><label class="secondary">导入参与者导出 JSON<input id="human-import" type="file" accept=".json,application/json" multiple hidden></label><a class="secondary" href="/offline-annotation">恢复旧 Lab 会话</a></div>
+        <p class="subtle">分发原邀请链接，并为不同的人分配相同组别以形成复核；参与者凭恢复码继续。完成后下载本人 JSON，在此导入。导入保留原始回执并去重，不覆盖历史记录。</p>
+        <div id="human-summary" class="stats"></div><p id="human-status" class="subtle" role="status"></p>
+        <section class="panel" id="human-adjudication" hidden><h2>分歧裁决</h2><form id="human-adjudication-form"><label>待裁决题目<select id="adjudication-item"></select></label><div id="adjudication-evidence"></div><label>裁决人编号<input id="adjudicator" required maxlength="40" placeholder="须不同于已有审核人"></label><label>最终决定<select id="adjudication-answer"></select></label><label>裁决依据<textarea id="adjudication-rationale" required maxlength="4000" placeholder="核对完整材料后说明为何选择该答案或剔除题目"></textarea></label><label><input id="adjudication-attest" type="checkbox" required>我已核对题面、私有证据及分歧，本裁决由本人完成。</label><button class="primary" type="submit">保存裁决</button></form></section>
+        <section class="panel"><h2>随题核对 · 场景与 Gate2</h2><p class="subtle">在标注页看题时核对场景、rollout 和环境证据。先锁定方向与释义的独立判断，再开放机器结果；同一场景只填写一次。</p><div id="gate2-human-coverage"></div></section>
+        <section class="panel"><h2>T4 人工与 Claude 对照</h2><div id="human-comparison"></div><p class="subtle">同一轨迹逐维配对；偏差＝人工−Claude。详细 GT、分歧与差值表均可在“论文表格”导出 CSV、Markdown 和 LaTeX。</p></section>
+      </section>
+      <section id="plans-view" class="view" hidden>
+        <div class="toolbar"><label class="search"><span>⌕</span><input id="plan-search" type="search" placeholder="搜索实验、负责人或研究问题" aria-label="搜索实验"></label><select id="plan-category" aria-label="筛选实验分类"><option value="">全部分类</option></select><select id="plan-priority" aria-label="筛选优先级"><option value="">全部优先级</option><option>P0</option><option>P1</option><option>P2</option></select><button id="export-plans" class="secondary">导出 CSV ↓</button></div>
+        <div class="status-tabs" id="plan-tabs" role="group" aria-label="筛选实验状态"></div>
+        <p class="subtle">初始待办由项目文档整理。可编辑负责人、日期、方法、指标和结论，保存后可跨浏览器继续。</p>
+        <div id="plan-list" class="plan-list"></div>
+      </section>
+      <section id="results-view" class="view" hidden>
+        <div class="notice"><span>◈</span><p>每个批次独立统计，失败与未送达媒体保留。指标显示有效样本数 n；不适用项为 N/A。<br><span id="score-note"></span></p></div>
+        <div id="offline-summary" class="stats"></div>
+        <section class="panel"><div class="section-heading"><h2>Gate 2 · 环境有效性实验</h2><a href="/experiments">完整 Gate 信息 ↗</a></div><div id="gate2-results"></div><h3>补测：释义、原句重复与 recent-3</h3><div id="gate2-followup"></div></section>
+        <section class="panel" id="historical-gate2"></section>
+        <div id="run-results"></div>
+      </section>
+      <section id="library-view" class="view" hidden>
+        <section class="panel"><div class="section-heading"><div><span class="eyebrow">SOURCE INVENTORY</span><h2>本轮实验数据索引</h2></div><button id="export-inventory" class="secondary">导出索引 CSV ↓</button></div><p class="run-note">按实验关联原始文件，保留路径、文件大小和 SHA-256。原始数据留在原目录；缺失文件会明确标出。</p><details class="inventory-details"><summary id="inventory-count">展开数据文件</summary><div id="data-inventory"></div></details></section>
+        <div class="toolbar"><label class="search"><span>⌕</span><input id="report-search" type="search" placeholder="搜索报告标题、摘要或文件路径" aria-label="搜索报告"></label><select id="report-category" aria-label="筛选报告分类"><option value="">全部分类</option></select><select id="report-format" aria-label="筛选文件类型"><option value="">全部格式</option><option>MD</option><option>TXT</option><option>JSON</option><option>JSONL</option><option>CSV</option></select><button id="export-all" class="secondary">导出汇总 JSON ↓</button></div>
+        <p class="subtle" id="scope"></p><p class="subtle" id="report-count"></p>
+        <div class="panel library-panel"><div id="report-list"></div></div>
+      </section>
+      <footer><span>SocialFlux · 实验管理台</span><span>记录问题，也记录失败。 <span class="footer-dot">●</span> 数据来自实际项目文件</span></footer>
+    </main>
+  </div>
+  <dialog id="record-dialog" aria-labelledby="record-dialog-title">
+    <form id="record-form">
+      <div class="dialog-heading"><div><p class="eyebrow">EXPERIMENT NOTEBOOK</p><h2 id="record-dialog-title">新建实验</h2></div><button type="button" class="close icon-button" aria-label="关闭">×</button></div>
+      <div class="dialog-content">
+        <p class="subtle" id="record-provenance"></p>
+        <label>实验名称 <span class="required">*</span><input name="title" required maxlength="160" placeholder="给实验一个具体、清晰的名称"></label>
+        <div class="form-grid"><label>研究分类<select name="category" id="edit-category"></select></label><label>状态<select name="status" id="edit-status"></select></label><label>优先级<select name="priority"><option>P0</option><option selected>P1</option><option>P2</option></select></label><label>负责人<input name="owner" maxlength="100" placeholder="待分配"></label><label>计划日期<input name="due_date" type="date"></label></div>
+        <label>研究问题 / 假设<textarea name="hypothesis" rows="2" maxlength="12000" placeholder="这次实验要回答什么问题？"></textarea></label>
+        <label>实验方法 / 对照设置<textarea name="method" rows="3" maxlength="12000" placeholder="记录数据版本、模型、条件、样本量和运行方式"></textarea></label>
+        <label>完成标准<textarea name="acceptance" rows="2" maxlength="12000" placeholder="怎样判断这项实验已经完成？"></textarea></label>
+        <label>结果指标 <small>每行：指标名称 | 数值 | 单位 | 有效样本数 n</small><textarea name="metrics_text" rows="3" placeholder="accuracy | 0.82 | ratio | 100"></textarea></label>
+        <label>进展 / 结论 / 失败原因<textarea name="notes" rows="4" maxlength="12000" placeholder="记录观察、结论和仍需核验的问题"></textarea></label>
+        <label>来源路径 <small>每行一个项目内路径</small><textarea name="sources_text" rows="2" placeholder="reports/experiments/…"></textarea></label>
+        <div id="record-sources" class="source-links"></div>
+        <details id="history-details"><summary>查看修改记录</summary><div id="record-history"></div></details>
+        <p id="save-error" class="error-text" role="alert"></p>
+      </div>
+      <div class="dialog-footer"><span>保存到服务器 · 保留修改记录</span><div><button type="button" class="secondary close">取消</button><button type="submit" class="primary" id="save-record">保存实验</button></div></div>
+    </form>
+  </dialog>
+  <dialog id="source-dialog" aria-labelledby="source-title"><div class="dialog-heading"><div><p class="eyebrow">SOURCE DOCUMENT</p><h2 id="source-title">来源文件</h2></div><button class="close icon-button" aria-label="关闭来源文件">×</button></div><div class="source-meta" id="source-meta"></div><div class="source-content" id="source-content"></div><div class="dialog-footer"><span>原始记录 · 不改写来源</span><button class="secondary" id="download-source">下载原文件 ↓</button></div></dialog>
+  <div id="toast" role="status" hidden></div>
+  <script src="/experiment_hub.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+GPT50 live 多模态接入验收
+
+入口：/gpt50-live，当前网站端口 8000。保留浅绿白底布局。
+
+完成内容
+- 场景详情内嵌播放器：全部／状态表达／语音口型；有声播放、原生音量控制。
+- 不自动播放，不叠加字幕。非语言素材与有台词口型视频明确区分。
+- 同场景精确素材 ID 关联状态事件；口型另核对轨迹 ID、轮次及回复正文。
+- 未绑定素材显示独立预览；触发存在但无对应视频显示待补。
+- 触发证据只读原始 rollout 白名单字段，不使用其他轨迹的历史触发审核，
+  不用翻译后的事件替代原始日志，不向页面传出 video_api_request。
+- 页面自动刷新保留播放器节点和播放位置；切换场景重置播放。
+- 素材加载失败有重试入口，不阻塞对话与 state；保留原审核页并支持同场景跳转。
+- 不调用模型、不新生成媒体、不修改 rollout、policy 输入、状态规则或人工审核记录。
+
+验证
+- 当前 8000 端口真实 Chromium 验收通过：两类现成视频均实际推进播放时间，
+  muted=false / volume=1；自动重绘后仍为同一播放器并继续播放；
+  场景切换、空素材类型、390px 手机宽度无横向溢出、API 503 与恢复、
+  跳转正确审核场景均验证；无 pageerror。
+- 实际网页与新增 CSS/JS 返回 HTTP 200，当前 API 返回原始触发证据。
+- 7 项 live 接口回归与 4 项素材绑定/地址回归通过；现有多模态接口测试通过。
+- 网站全套测试并非全绿：4 个旧目录/旧 Gate1 数据测试仍失败，涉及
+  IA_PIPE_001、IA_PIPE_003、旧 20 场景清单和 /api/gate1-review。
+  禁用新 live loader 后四项依然原样失败；不由新触发字段引起，未为此修改历史数据。
+- 浏览器截图位于 /tmp/emotree-multimodal-desktop.png 和
+  /tmp/emotree-multimodal-mobile.png。测试主机缺中文字体，截图中文为方框；
+  DOM 中文文本及交互断言正常，网页继续使用用户本机中文字体。
+
+剩余限制
+- 部分新轨迹触发所引用的视频尚未生成；旧现成视频不会冒充相应事件。
+- 能播放、存在音轨不等于声音语义或人工审核已通过。
+- 这里只接入可视化审核，不证明生成轨迹时 policy 实际接收过视频。
+
+复验入口
+python -m unittest web.tests.test_live_rollouts -v
+node --test web/tests/test_live_multimodal.cjs
+浏览器验收脚本：web/tests/live_multimodal_browser.cjs
+（需可用 Playwright / Chromium；MULTIMODAL_TEST_URL 可指定当前服务。）

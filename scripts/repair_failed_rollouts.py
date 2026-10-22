@@ -14,23 +14,19 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from environment.factory import ModelEnvironmentFactory
 from evaluation.instance_quality import audit_trajectory
 from evaluation.rollout_gate import audit_rollout, public_judge_packet
+from pipeline.artifacts import write_dialogues
+from pipeline.runtime import build_policy, iter_policy_specs
+from pipeline.scenarios import load_scenario_records, select_scenario_records
 from prompts.loader import render_prompt
 from providers.factory import build_provider
 from providers.structured import complete_json
 from rollout.logger import TrajectoryLogger
 from rollout.manifest import write_manifest
 from rollout.runner import RolloutRunner
-from scripts.run_pipeline import (
-    _policy_from_spec,
-    _policy_specs,
-    _write_dialogues,
-    load_rollout_config,
-    load_scenario_records,
-    select_scenario_records,
-)
-from scripts.run_rollout_quality_judge import (
-    deterministic_judge_sampling,
-    validate as validate_quality_judgment,
+from rollout.configuration import load_rollout_config
+from evaluation.rollout_semantic_review import (
+    deterministic_review_sampling,
+    validate_judgment as validate_quality_judgment,
     validate_model_family,
 )
 
@@ -48,22 +44,22 @@ def _load_bundle(scenario_path):
 
 def _policy_lookup(config):
     result = {}
-    for spec, run_index in _policy_specs(config):
-        policy = _policy_from_spec(spec, run_index)
+    for spec, run_index in iter_policy_specs(config):
+        policy = build_policy(spec, run_index)
         result[policy.policy_id] = (spec, run_index)
     return result
 
 
 def _replacement_policy_lookup(original_config, replacement_config):
     original = []
-    for spec, run_index in _policy_specs(original_config):
+    for spec, run_index in iter_policy_specs(original_config):
         policy_id = spec["policy_id"]
         if spec.get("runs", 1) > 1:
             policy_id = f"{policy_id}__run_{run_index + 1}"
         original.append(policy_id)
     replacement = [
         (spec, run_index)
-        for spec, run_index in _policy_specs(replacement_config)
+        for spec, run_index in iter_policy_specs(replacement_config)
     ]
     if len(original) != len(replacement):
         raise ValueError(
@@ -105,7 +101,7 @@ def _build_quality_judge(path, model_family):
         return complete_json(
             provider,
             [{"role": "user", "content": prompt}],
-            deterministic_judge_sampling(sampling, trajectory_id),
+            deterministic_review_sampling(sampling, trajectory_id),
             lambda value: validate_quality_judgment(
                 value, trajectory_id, {item["turn_id"] for item in trajectory["turns"]}
             ),
@@ -172,7 +168,7 @@ def _generate_clean(
         )
         varied_spec = deepcopy(spec)
         varied_spec["sampling"] = _seed_offset(spec.get("sampling", {}), offset)
-        policy = _policy_from_spec(varied_spec, run_index)
+        policy = build_policy(varied_spec, run_index)
         try:
             trajectory = RolloutRunner(environment_factory).run(
                 policy,
@@ -300,7 +296,7 @@ def repair_scenario(
         })
         repaired.append(replacement)
     if replacements:
-        _write_dialogues(rollout_dir / "dialogues.md", scenario, repaired)
+        write_dialogues(rollout_dir / "dialogues.md", scenario, repaired)
         config_record = deepcopy(manifest.get("config", {}))
         config_record["clean_pool_repair"] = {
             "quality_gate": "four_gate_or_distinct_text_v2",

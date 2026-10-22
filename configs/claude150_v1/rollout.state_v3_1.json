@@ -1,0 +1,83 @@
+{
+  "format": "socialflux_rollout_pool_v1",
+  "pool_stage": "development",
+  "candidate_strategy": "single_first_pass",
+  "model_routes": "model_routes.chat.pool2.json",
+  "model_assignment": {
+    "strategy": "single_model_all_llm_roles",
+    "model": "claude-fable-5",
+    "independent_calls": true
+  },
+  "environment": {
+    "horizon_mode": "natural_max_20",
+    "minimum_natural_turns": 20,
+    "appraisal_prompt_id": "environment_appraisal_v15",
+    "state_calibration_profile": "evidence_independent_hysteretic_v3",
+    "state_transition_standard": "socialflux_state_transition_standard_v3",
+    "state_transition_runtime_revision": "v3.1",
+    "response_prompt_id": "environment_response_v27",
+    "response_validation_profile": "hard_only",
+    "multimodal_trigger_policy": {
+      "profile": "online_multimodal_v2",
+      "threshold_margin": 0,
+      "change_threshold_margin": 0,
+      "cooldown_turns": 2,
+      "crossing_as_threshold": true,
+      "max_events_per_turn": 1,
+      "max_events_per_episode": 5,
+      "max_fires_per_trigger": 1,
+      "global_cooldown_turns": 2,
+      "event_family_cooldown_turns": 3
+    },
+    "provider": {"model_route": "appraisal"},
+    "sampling": {
+      "temperature": 0.2,
+      "top_p": 0.9,
+      "seed": 59100
+    },
+    "response_provider": {"model_route": "response"},
+    "response_sampling": {
+      "temperature": 0.35,
+      "top_p": 0.9,
+      "seed": 59300
+    }
+  },
+  "construction": {
+    "provider": {"model_route": "t2_branch_authoring"},
+    "sampling": {
+      "temperature": 0.3,
+      "top_p": 0.9,
+      "seed": 60100
+    }
+  },
+  "policies": [
+    {
+      "policy_id": "claude_fable5_state_v3_1_61201",
+      "prompt_id": "task_rollout_action_v1",
+      "horizon_mode": "natural_max_20",
+      "minimum_natural_turns": 20,
+      "source_type": "api",
+      "model_family": "claude",
+      "provider": {"model_route": "policy"},
+      "sampling": {
+        "temperature": 0.65,
+        "top_p": 0.92,
+        "seed": 61201
+      },
+      "runs": 1
+    }
+  ],
+  "pilot_limits": {
+    "rollout_turns": 20,
+    "t1": 6,
+    "t2": 2,
+    "t3": 1,
+    "t3_horizon": 5
+  },
+  "t2_pairing": "all",
+  "task_source_selection": {
+    "strategy": "quality_gate_then_task_specific_weighted_ranking",
+    "t1_sources": 1,
+    "model_quota": false
+  }
+}

@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SocialFlux offline choice author record v1",
+  "type": "object",
+  "required": [
+    "instance_id",
+    "benchmark_version",
+    "task",
+    "subtype",
+    "story_id",
+    "pair_id",
+    "modality",
+    "input",
+    "question",
+    "options",
+    "target_spec",
+    "ground_truth",
+    "metadata",
+    "authoring"
+  ],
+  "properties": {
+    "instance_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "benchmark_version": {
+      "const": "socialflux_offline_choice_v1"
+    },
+    "task": {
+      "enum": [
+        "T1",
+        "T2",
+        "T3"
+      ]
+    },
+    "subtype": {
+      "type": "string"
+    },
+    "story_id": {
+      "type": "string"
+    },
+    "pair_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "modality": {
+      "enum": [
+        "text",
+        "text+video"
+      ]
+    },
+    "input": {
+      "type": "object"
+    },
+    "question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "options": {
+      "type": "object",
+      "minProperties": 3,
+      "maxProperties": 6,
+      "propertyNames": {
+        "pattern": "^[A-F]$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "target_spec": {
+      "type": "object",
+      "required": [
+        "target_state_ids",
+        "state_owner",
+        "state_target",
+        "time_scope"
+      ],
+      "properties": {
+        "target_state_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "state_owner": {
+          "type": "string"
+        },
+        "state_target": {
+          "type": "string"
+        },
+        "time_scope": {
+          "type": "string"
+        },
+        "delayed_horizon": {
+          "type": "integer",
+          "minimum": 5,
+          "maximum": 10
+        }
+      }
+    },
+    "ground_truth": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "required": [
+            "acceptable_answers"
+          ],
+          "properties": {
+            "acceptable_answers": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D",
+                  "E",
+                  "F"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "source_trajectory_id"
+      ],
+      "properties": {
+        "source_trajectory_id": {
+          "type": "string"
+        }
+      }
+    },
+    "authoring": {
+      "type": "object",
+      "required": [
+        "answer",
+        "evidence_ids",
+        "option_errors",
+        "option_variable_map",
+        "review_status",
+        "construction_source",
+        "history_dependence",
+        "nonverbal_history_relation"
+      ],
+      "properties": {
+        "answer": {
+          "enum": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F"
+          ]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "option_errors": {
+          "type": "object"
+        },
+        "option_variable_map": {
+          "type": "object"
+        },
+        "review_status": {
+          "enum": [
+            "pending_human_review",
+            "human_approved",
+            "needs_revision"
+          ]
+        }
+      }
+    }
+  },
+  "$comment": "Cross-field invariants, visible-evidence bounds, task subtype and canonical ontology are validated by tasks.offline_choice.validate_item."
+}

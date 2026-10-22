@@ -1,0 +1,88 @@
+.human-list {
+  margin: 6px 0 0;
+  padding-left: 20px;
+}
+
+.human-list li + li {
+  margin-top: 6px;
+}
+
+.human-fields {
+  display: grid;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.human-field {
+  border-left: 2px solid #35586a;
+  padding-left: 9px;
+}
+
+.field-name,
+.family-name {
+  color: #9ab0bd;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: .02em;
+  margin-bottom: 2px;
+}
+
+.context-section {
+  margin-top: 16px;
+  padding-top: 4px;
+  border-top: 1px solid #284252;
+}
+
+.context-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.compact-card {
+  margin: 4px 0 10px;
+}
+
+.compact-card h3 {
+  margin-top: 0;
+}
+
+.score-table {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px 12px;
+  margin: 4px 0 12px;
+}
+
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 7px;
+  border-radius: 5px;
+  background: #122635;
+}
+
+.score-name {
+  overflow-wrap: anywhere;
+}
+
+.score-value {
+  color: #b9fff3;
+}
+
+.context-meta {
+  margin: 10px 0;
+}
+
+.context-meta > div,
+.semantics .meta-grid > div {
+  min-width: 0;
+}
+
+@media (max-width: 800px) {
+  .context-grid,
+  .score-table {
+    grid-template-columns: 1fr;
+  }
+}

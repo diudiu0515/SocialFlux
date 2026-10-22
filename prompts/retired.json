@@ -1,0 +1,203 @@
+{
+  "format": "socialflux_retired_prompt_catalog_v1",
+  "retired_on": "2026-10-10",
+  "reason": "Superseded experiment prompts; current call chain is documented in docs/prompts/RUNTIME_PROMPT_CATALOG.md. Historical metadata remains readable, but these templates are not available for new calls.",
+  "recovery_archive": "archives/prompt-cleanup-2026-10-10/before_cleanup.tar.gz",
+  "prompts": {
+    "environment_appraisal_v13": {
+      "path": "environment_appraisal_v13.md",
+      "sha256": "8328239f29446b45afe783ceebf97cc14cb65f6e28116df3fd2f939c31392573",
+      "version": "v13"
+    },
+    "environment_appraisal_v14": {
+      "path": "environment_appraisal_v14.md",
+      "sha256": "463aacc15ee0deb60121ee6df46c457718b0dc2e6aa8f6982bc1585447a60788",
+      "version": "v14"
+    },
+    "environment_appraisal_v15": {
+      "path": "environment_appraisal_v15.md",
+      "sha256": "2adef472f3edf702406f3daedee146e7b4193321f20ec9c1a4c58cefbc00fb34",
+      "version": "v15"
+    },
+    "environment_response_v26": {
+      "path": "environment_response_v26.md",
+      "sha256": "0b012867d3b642c3526258fe4daba209daad6aeb606da89cb4e3caec69423164",
+      "version": "v26"
+    },
+    "environment_response_v27": {
+      "path": "environment_response_v27.md",
+      "sha256": "e6e722d62fafe85d3bef45f38728c4936798b790637d1b31b8b29309a0b65211",
+      "version": "v27"
+    },
+    "environment_response_v27_decision_continuity": {
+      "path": "environment_response_v27_decision_continuity.md",
+      "sha256": "56cea38079c49017dbd55ab1f9cf4ee33fcf0d8b1f1e4fdfa8540a439d1a4680",
+      "version": "v27-decision-continuity"
+    },
+    "environment_response_v30_semantic_event_driven": {
+      "path": "environment_response_v30_semantic_event_driven.md",
+      "sha256": "9442339c185d08b55559f7f12ceded7e313dfaffba7eb90b5084b4462741e847",
+      "version": "v30-semantic-event-driven"
+    },
+    "environment_response_v29_event_driven": {
+      "path": "environment_response_v29_event_driven.md",
+      "sha256": "a2a3ffa6e7005d67bc3e4adad92b8ac22b737fd612b8a51c96aa945f9ba5e956",
+      "version": "v29-event-driven"
+    },
+    "environment_response_v28": {
+      "path": "environment_response_v28.md",
+      "sha256": "f1ee6352d40b2f8c56243993e1e02ed2d7c65d8942c6cd2aa65fb94e6f622377",
+      "version": "v28"
+    },
+    "online_nonverbal_event_v1": {
+      "path": "online_nonverbal_event_v1.md",
+      "sha256": "e4194d75ea5ce102bad32af39e0495cda5f0a216774a6e925a1f97abc4e5c0e5",
+      "version": "v1"
+    },
+    "online_nonverbal_event_v2": {
+      "path": "online_nonverbal_event_v2.md",
+      "sha256": "bcd2c014b92a9c0832a885e20fa245125bba14ea64df7052a48d4f7d5b74b8e6",
+      "version": "v2"
+    },
+    "talking_head_generation_v1": {
+      "path": "talking_head_generation_v1.md",
+      "sha256": "3d554b5b787b2619fc9977dc1cc4f20b9bf0716aa7250c9b23a8d2690a26364b",
+      "version": "v1"
+    },
+    "talking_head_generation_v2": {
+      "path": "talking_head_generation_v2.md",
+      "sha256": "721e9280df7961a4a541b29663bdb8f1e6e2efbd8564f01fa7d705ba4bfbf402",
+      "version": "v2"
+    },
+    "talking_head_generation_v3_delivery": {
+      "path": "talking_head_generation_v3_delivery.md",
+      "sha256": "c2f4cc9e2130521d8229fd82c8ae66c5a92ac8cdc1cb0c9180ffafa7450cca1b",
+      "version": "v3-delivery"
+    },
+    "video_public_line_compression_v1": {
+      "path": "video_public_line_compression_v1.md",
+      "sha256": "cc9f53abaef407b07911506f64d2b025a7ee94b95e89353d8300578a4b544b0d",
+      "version": "v1"
+    },
+    "environment_appraisal_v16": {
+      "path": "environment_appraisal_v16.md",
+      "sha256": "75c874d600c5f03324ed77c68f5d8519a338cce70a2e53aee22700e786e3cfe0",
+      "version": "v16"
+    },
+    "environment_appraisal_v17": {
+      "path": "environment_appraisal_v17.md",
+      "sha256": "71a9d345642393af0764817e3186f64ff407132774e28a0db38827f3e7bfa437",
+      "version": "v17"
+    },
+    "environment_appraisal_v18": {
+      "path": "environment_appraisal_v18.md",
+      "sha256": "12cffb03e4f64e9b470559f228fbe4ce5f2e9ffac6686c00a78d7d0f2cfea1b5",
+      "version": "v18"
+    },
+    "environment_appraisal_v19": {
+      "path": "environment_appraisal_v19.md",
+      "sha256": "2856d95866c16790b584cdbfb70500031bb9535407ca6240e30cc8685d238e9c",
+      "version": "v19"
+    },
+    "environment_appraisal_v23_feature_consistent_slow_first": {
+      "path": "environment_appraisal_v23_feature_consistent_slow_first.md",
+      "sha256": "ef70948fbb022bb8d7e5ccfdc9765b0fac94b1ee0d776d6be2426b614beba42c",
+      "version": "v23-feature-consistent-slow-first"
+    },
+    "environment_appraisal_v24_balanced_slow_evidence": {
+      "path": "environment_appraisal_v24_balanced_slow_evidence.md",
+      "sha256": "37df5777c95f7e7fdd334da952a1fac608c2659aa03901855b272941a7acac95",
+      "version": "v24-balanced-slow-evidence"
+    },
+    "environment_appraisal_v25_operational_slow_evidence": {
+      "path": "environment_appraisal_v25_operational_slow_evidence.md",
+      "sha256": "b6d957058cf2b281570b23dcb42cdef4f6fd77ffff1081c3d23d543b4cb1f118",
+      "version": "v25-operational-slow-evidence"
+    },
+    "environment_appraisal_v26_bound_slow_evidence": {
+      "path": "environment_appraisal_v26_bound_slow_evidence.md",
+      "sha256": "0b4c467930d6d99c0dbb6413f4a81336ff068788d8a8bcb3ef1eada7e24272bd",
+      "version": "v26-bound-slow-evidence"
+    },
+    "environment_appraisal_v27_memory_bound_slow_evidence": {
+      "path": "environment_appraisal_v27_memory_bound_slow_evidence.md",
+      "sha256": "40cef59718c0a7d5aac68c85096ced5ff7dfee9bf09bdf88a1c17fef1c3c72da",
+      "version": "v27-memory-bound-slow-evidence"
+    },
+    "environment_appraisal_v28_actor_memory_bound_slow_evidence": {
+      "path": "environment_appraisal_v28_actor_memory_bound_slow_evidence.md",
+      "sha256": "ffe4f52a6d362baf59803a9f2bc8752d6e5b07a60d38d7dc353391ccc508962a",
+      "version": "v28-actor-memory-bound-slow-evidence"
+    },
+    "environment_appraisal_v29_concise_actor_memory_slow_evidence": {
+      "path": "environment_appraisal_v29_concise_actor_memory_slow_evidence.md",
+      "sha256": "0cf42c69675d2bce9cdd33738593711efa74ba72150b93e23958a6f3055c0251",
+      "version": "v29-concise-actor-memory-slow-evidence"
+    },
+    "environment_appraisal_v30_scope_aware_actor_memory_slow_evidence": {
+      "path": "environment_appraisal_v30_scope_aware_actor_memory_slow_evidence.md",
+      "sha256": "5b4355cf19a722cb56ca8a53327307240916a3924227b56b6b5a3da299283f3e",
+      "version": "v30-scope-aware-actor-memory-slow-evidence"
+    },
+    "environment_appraisal_v31_scope_novelty_actor_memory_slow_evidence": {
+      "path": "environment_appraisal_v31_scope_novelty_actor_memory_slow_evidence.md",
+      "sha256": "d7134df530e2d1a17181add6b877aee7feb461d8ffc3cf78b072533e4829f1af",
+      "version": "v31-scope-novelty-actor-memory-slow-evidence"
+    },
+    "environment_appraisal_v32_scope_novelty_strength_actor_memory_slow_evidence": {
+      "path": "environment_appraisal_v32_scope_novelty_strength_actor_memory_slow_evidence.md",
+      "sha256": "4611c2e7465a2844178a945b679052fc4ddfb98bbe07137e332686233d325073",
+      "version": "v32-scope-novelty-strength-actor-memory-slow-evidence"
+    },
+    "environment_appraisal_v33_safety_scope_actor_memory_slow_evidence": {
+      "path": "environment_appraisal_v33_safety_scope_actor_memory_slow_evidence.md",
+      "sha256": "383d186d2bda4017b8d95605040ad6eb27c3865bc9e819982ed791336bd19c08",
+      "version": "v33-safety-scope-actor-memory-slow-evidence"
+    },
+    "environment_appraisal_v34_safety_eligibility_actor_memory_slow_evidence": {
+      "path": "environment_appraisal_v34_safety_eligibility_actor_memory_slow_evidence.md",
+      "sha256": "dfb83d8a616bdd270bfaa43eca15a0aef2eb3c3f61ad4d2ebbb63ae09ebd90ed",
+      "version": "v34-safety-eligibility-actor-memory-slow-evidence"
+    },
+    "environment_appraisal_v35_adjacent_variable_recheck_actor_memory_slow_evidence": {
+      "path": "environment_appraisal_v35_adjacent_variable_recheck_actor_memory_slow_evidence.md",
+      "sha256": "d0dad0bc8a4379f425b98569283448ba7b8254b3fcc356468e7993a147eb65ec",
+      "version": "v35-adjacent-variable-recheck-actor-memory-slow-evidence"
+    },
+    "environment_appraisal_v21_slow_candidate_audit": {
+      "path": "environment_appraisal_v21_slow_candidate_audit.md",
+      "sha256": "3236c58e25e4a002e32d6f58aa67922888821598d74f486914541dea864b11ff",
+      "version": "v21-slow-candidate-audit"
+    },
+    "environment_appraisal_v20_slow_evidence_recall": {
+      "path": "environment_appraisal_v20_slow_evidence_recall.md",
+      "sha256": "9dee619a7840e65e7e14e6d5ac0bf93456e161c788d963a78d07f4b3218d867c",
+      "version": "v20-slow-evidence-recall"
+    },
+    "environment_appraisal_v15_environment_owned": {
+      "path": "environment_appraisal_v15_environment_owned.md",
+      "sha256": "d851dc0557f2e50f98bde1b41a0adee4ebc2fa96e5709a8ef944d207e71fef3f",
+      "version": "v15-environment-owned"
+    },
+    "environment_state_appraisal_v2_per_variable": {
+      "path": "environment_state_appraisal_v2_per_variable.md",
+      "sha256": "8fe3728fecb8776a8c689d2afb4bcaff52e8eb8a180677290966d26afbb7109f",
+      "version": "v2-per-variable"
+    },
+    "environment_state_appraisal_v3_variable_evidence_primary": {
+      "path": "environment_state_appraisal_v3_variable_evidence_primary.md",
+      "sha256": "e1d4caa91190e9dfb582b3aca67fb7c65b480e260c9eddc3efbfd372046181b0",
+      "version": "v3-variable-evidence-primary"
+    },
+    "environment_state_appraisal_v4_definition_grounded": {
+      "path": "environment_state_appraisal_v4_definition_grounded.md",
+      "sha256": "ffd2ed1e26783cb18b93cc44a1ca7e0eac3f69541934e8737853c988122f9c68",
+      "version": "v4-definition-grounded-single-correction"
+    },
+    "environment_state_appraisal_v5_immediate_context": {
+      "path": "environment_state_appraisal_v5_immediate_context.md",
+      "sha256": "a083c1ebb84300fee78724521b795cdab7eb873c52bb400028b3bcc9ec8bc30b",
+      "version": "v5-immediate-context"
+    }
+  }
+}

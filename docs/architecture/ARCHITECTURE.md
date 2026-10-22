@@ -1,114 +1,114 @@
 # SocialFlux Architecture
 
-## 总体数据流
+本文说明代码职责、入口与产物边界，公共模块归属更新于 2026-10-21。研究约束以 [DESIGN_CONTRACT](../../DESIGN_CONTRACT.md) 为准，执行顺序见 [Pipeline](PIPELINE.md)，批次状态见 [活跃批次手册](../operations/ACTIVE_BATCH_PIPELINE.md)。
 
-```text
-film/TV analysis request / synthetic brief
-        ↓
-originalized structure extraction / original script
-        ↓
-source quality report → real reviewer approval
-        ↓
-canonical blueprint (no S0/D0)
-        ↓
-candidate S0/D0 + trigger specification → real reviewer freeze
-        ↓
-one canonical StatefulEnvironment
-        ├── natural multi-model / multi-seed rollout
-        ├── T1 natural checkpoints
-        ├── T2 naturally divergent histories + exact shared O*
-        ├── T3 local branches from one real checkpoint
-        └── T4 online free interaction
-        ↓
-nine-criterion acceptance + human annotation
+## 一条数据主线，三个使用出口
+
+```mermaid
+flowchart TD
+    C[Scenario JSON + 批次 manifest] --> R[运行时装配]
+    P[配置 + Prompt + Schema] --> R
+    R --> E[StatefulEnvironment]
+    E --> L[私有 rollout 与事件记录]
+    L --> O[Offline T1–T3 构建]
+    E --> T[T4 在线互动]
+    O --> Q[公开题面 + 作者标注依据]
+    Q --> S[回答解析与评分]
+    T --> S
+    C --> W[只读审核网站]
+    L --> W
+    Q --> W
+    W --> H[浏览器草稿 / 导出人工审核记录]
 ```
 
-## 唯一环境
+Gate 与来源哈希控制数据能否进入正式阶段。图中的开发构建不代表通过了正式 Gate；公开题面、作者依据和人工标签分别保存，模型 state 不能自动变为 human GT。
 
-`ModelEnvironmentFactory` 同时服务离线 rollout 与 T4，每轮严格按以下顺序执行：
+## 模块职责与依赖方向
 
-1. 向 evaluated model 暴露 observable observation。
-2. 接收任意自由文本 action。
-3. 从可观察历史检索 memory；完整原始历史始终是权威记录。
-4. `ModelAppraiser` 私下结合 persona、目标、hidden intention、S_t/D_t 与历史解释 action。
-5. `ModelStateUpdater` 仅根据 appraisal 输出七级 semantic delta；确定性 mapper 将其映射到 0–10，并把边界裁剪后的标签归一到真实数值变化。
-6. `ModelResponseGenerator` 在更新后的状态上生成自然回应。
-7. trigger engine 检测 threshold/crossing/state-change，并只公开安全 expression/media。
-8. logger 保存 private master trajectory；公开 task builder 必须通过 leakage audit。
-
-环境没有 action interpreter、action effects 表、response template 或固定策略 runner。
-
-## 信息边界
-
-| 层 | 可见 | 禁止进入 |
+| 层 | 主要 owner | 职责与边界 |
 |---|---|---|
-| Evaluated policy / T4 | 角色、背景、显式目标、可观察历史、回应、expression、media | hidden intention、S/D、appraisal、delta、阈值、未来 |
-| T1/T2/T3 输入 | 任务所需可观察历史/checkpoint/候选自由文本 | private trajectory fields、作者假设、模型生成答案 |
-| Author-side environment | persona、hidden intention、S/D、相关 observable memory、action | 未来轨迹或预设 action 结果 |
-| Human annotation | 冻结的公开实例、rubric、独立证据要求 | simulator delta 作为 ground truth |
-| Annotation website | scenario、rollout、task 公开题面与研究者诊断视图 | 写入正式文件、伪造签名或维护第二套状态机 |
+| 公共入口 | `pipeline/cli.py` | 命令解析与分发；不实现状态语义或评分 |
+| 批次与实验编排 | `scripts/` | 选择来源、断点恢复、调用领域模块、写 manifest；脚本间仍有已记录的批次依赖 |
+| 运行时装配 | `pipeline/runtime.py`、`environment/factory.py` | 按配置装配 provider、policy、appraiser、response generator |
+| 状态环境 | `environment/env.py` | 单轮生命周期、restore/snapshot、回应、事件与终止；统一维护环境状态 |
+| 判断与数值更新 | `environment/*appraisal*.py`、`state_updater.py`、`calibration.py` | 私有证据判断与确定性数值更新；具体实现由配置决定 |
+| 对话与记忆 | `environment/response_generator.py`、`interaction_ledger.py`、`observation.py` | 生成自然回应、记录事件、构造下一轮公开 observation |
+| 被测行动 | `policies/model_policy.py` | 自由文本行动与行动校验，不能读取环境角色私有 state |
+| 模型传输 | `providers/` | 路由、结构化调用、重试、用量和传输适配；领域模块不直接发送 HTTP |
+| 轨迹与分支 | `rollout/runner.py`、`rollout/counterfactual.py` | 自然轨迹；从同一真实 checkpoint 生成候选行动分支 |
+| 新版离线构建 | `offline/choice_builder.py`、`choice_media.py`、`choice_audit.py` | 复用来源、题目组装、配对素材、可读导出和诊断 |
+| 任务协议 | `tasks/offline_choice.py`、`tasks/T1`–`T4` | 公开投影、输入/输出合同与版本分发；旧概率协议用于已有资产复现 |
+| 评分与 Gate | `evaluation/`、`annotation/` | 答案、证据与错误分析；环境、轨迹和任务质量门；人工审核合同 |
+| 场景与语义 | `scenario_design/`、`schemas/`、`shared/` | 场景修订、结构校验、四维 state 语义 |
+| 公共产物操作 | `shared/artifacts.py` | JSON 原子写入、规范 JSON 内容哈希；不依赖任务或脚本 |
+| 网站 | `web/server.py`、`live_rollouts.py`、`offline_review.py` | 只读读取固定来源并提供审核视图，浏览器保存草稿；不构造第二套环境 |
 
-## 轨迹和局部干预
+`scenario_design/catalog.py` 统一提供场景发现、文档渲染和目录校验，`scripts/scenario_docs.py` 只处理命令参数。`pipeline/runtime.py` 拥有环境装配及 appraisal 路由选择，离线构建不再导入历史续跑脚本。
 
-自然轨迹的多样性来自模型、temperature、seed 和自然历史，不来自策略类别。每条 run 保存 base seed；OpenAI-compatible provider 按 base seed + call index 推进随机流，既可复现又避免每回合重置同一采样。模型族只用于扩大 raw candidate search 和来源审计，不是最终配额。质量门之后，T1 按状态—回应一致性与历史依赖择优，T2 按历史依赖、来源质量和 private-state 分化联合择优，T3 按互动推进、状态—回应一致性及有历史的 checkpoint 择优；一个模型可以零入选，也可以赢得全部任务。T2 从同场景同深度的自然轨迹检索不同历史，再生成一个对双方都合理且字节级共享的 O*，不再强制同来源模型配对。T3 从真实 checkpoint restore 同一 private snapshot，为 2–4 个自由文本行动各执行一次局部 intervention，随后继续使用与源轨迹匹配的同一模型配置。受控 intervention 是实验工具，不是多轮 rollout policy。
+`tasks/T2/runtime.py` 保留 T2 回放、状态比较和请求汇总；provider 调用计数归 `providers/base.py`，三个离线任务的选择题解析归 `tasks/offline_choice.py`。领域模块不能导入 `scripts/`；唯一允许的分发入口是 `pipeline/cli.py`，此边界由测试检查。
 
-## Scenario bundle
+## 环境调用顺序
 
-每个 `scenario_NNN/` 的 JSON 是机器事实源，同名 Markdown 是确定性生成的人类说明，含故事初始化、S0/D0、视频阈值、质量状态与 rollout 位置。每次 rollout 后，同目录 `rollouts/dialogues.md` 逐轮描述完整自然对话，`rollouts/tasks.md` 逐 instance 描述 T1/T2/T3 公开题面和隔离的私有诊断，供人工抽查。JSON 改动后必须运行 `scripts/scenario_docs.py`；`--check` 校验 Markdown 内 SHA-256 与 catalog/coverage matrix。
+```text
+policy 读取公开 observation → 自由文本 action
+→ 私有 appraisal（按配置合并或拆分 state / interaction 判断）
+→ Python 校验、校准与数值更新
+→ 独立的 response generation
+→ ledger / 公开事件 / 非语言触发 / 下一轮 observation
+→ 保存私有日志与可恢复 snapshot
+```
 
-S0/D0 的候选值与真人冻结协议见 [`S0_D0_REVIEW.md`](../protocols/S0_D0_REVIEW.md)。Talking Head 使用 `media/talking_head/manifest.json` 作为媒体事实源：每个 scenario 两条状态触发视频，请求只含公开表演指令，不泄漏 hidden state、阈值或任务答案；生成后由收集器验证视频流、音轨、时长、分辨率和帧率，再将 media ID 回填 scenario。网站通过受限 `/media/<asset_id>` 路由读取清单中的 MP4，不接受任意文件路径。
+当前 GPT50 来源使用的 `UnifiedEnvironmentFactory` 以及其他已版本化 appraiser 仍装配到相同的 `StatefulEnvironment` 生命周期。`ModelEnvironmentFactory` 是通用装配入口；不能把当前全部实验描述为只有一个固定 appraisal prompt 或只有一种 API 传输。
 
-影视来源只允许贡献高层社会机制。`extract-structure` 的结构合同强制记录必须丢弃的表层元素以及原创化要求；后续 source 必须使用新人物、新场域、新事件、新 stakes 和原创语言，不复制台词、角色或标志性情节序列。
+四类动态 state 的内部路径为 `emotion`、`behavioral_disposition`、`relationship`、`consequence_risk`。Persona 是稳定私有信息，Dynamics 是独立的外部互动条件。人物方向、变量定义及证据判断沿用已有合同；整理目录不改变这些语义。
 
-## Prompt 和 schema
+每个批准场景只有一个自然 rollout slot，不做 best-of-N。自然结束与长度门由所选批次规则处理；失败、短轨迹、中断和重试保留为产率及诊断证据，不能通过清理文件消失。
 
-所有固定模型指令只放在 `prompts/`，文件名以 `_vN.md` 结尾。运行时代码通过 `prompts.loader` 加载并校验 manifest hash；`scripts/update_prompt_manifest.py` 是唯一登记命令。模型结构化输出分别由 `schemas/` 合同和 Python validator 约束。完整职责映射见 [`PROMPT_AUDIT.md`](../prompts/PROMPT_AUDIT.md)。
+## 三类离线能力
 
-## Instance 质量
+| 任务 | 输入 | 作者侧依据 |
+|---|---|---|
+| T1 状态理解 | 已发生的历史、明确 checkpoint 或区间 | 源轨迹 state、事件、公开证据及人工判断 |
+| T2 历史依赖 | 共享背景、不同 History A/B、相同 ending | 改写位置、来源哈希、受控回放及人工判断 |
+| T3 后果预测 | 行动前历史、2–4 个候选行动 | 同一 snapshot 与外部条件上的分支；即时为下一次环境回应，延迟 5 轮，必要时最多 10 轮 |
 
-T1/T2/T3 均绑定持有 latent state 的环境角色，而不是输出 action 的 evaluated model。结构审计检查无泄漏、目标 state、历史形状、精确重复、T2 双方角色与 private-state 分化、T3 checkpoint/branch 完整性，并按 source model 与 scenario 双重汇总；轨迹审计另按 scenario 报 action/response 唯一率、简洁性和 latent 边界占比。语义质量采用移除 model/provider/trajectory provenance 的盲化 packet。九项验收自动读取该质量报告；轨迹质量未过时不得标 Full-Trajectory provisionally ready。自动或 LLM 分数均不能替代 human answerability 与标签有效性评审。
+当前场景题库使用 `socialflux_offline_choice_v2`，旧 v1 题库保留复核入口；主回答只需 `{"answer":"B"}`。`public_instance()` 使用白名单产生模型输入，能力标签、state 路径、错项类型、参考答案与未来分支留在作者侧。证据定位单独诊断；组合选项保存变量映射，分维诊断不混入整题成绩。完整定义见[当前选择题协议](../protocols/OFFLINE_T1_T3_CHOICE_V2.md)和[历史 v1 协议](../protocols/OFFLINE_T1_T3_CHOICE_V1.md)。
 
-开发池修复采用事务式 replacement：只有四 Gate 报告中明确 `rejected` 的
-trajectory ID 才进入自动重采样；新候选先过结构门，再由 Qwen 与 GLM
-跨模型族双预筛。候选通过后先写新文件与新 manifest，再把旧文件移动到
-bundle 内的 `rollouts/rejected/` 并记录 old/new ID、原因、尝试次数和 judge
-证据。失败候选逐条写 JSONL，包含人工可见的完整对话，不会静默丢弃。
-历史上的 `t2_pairing_rebalance` 只作为旧开发实验留痕；当前生产构建不再为模型均衡替换轨迹，也不得把来源不均衡伪装成 Gate reject。
+T2 制作阶段可以调用 provider 进行状态与互动回放；offline 指被测模型回答固定材料，不意味着制作阶段没有 API。强制相同 ending 是构造控制，不等于两边的自然性已经通过人工审核。
 
-正式 rollout judge 的采样 seed 由基础 seed 与 trajectory ID 的 SHA-256
-确定，因此同一轨迹在单条、批量或不同排序下得到相同判定。开发筛选的最终
-证据采用 100% Qwen3-32B 主审和 100% GLM 二审；正常正式流程仍可按
-`gate.md` 使用全量主审加确定性分层/争议二审。合并器对 hard reject 取并集、
-对维度分数取均值，并要求证据 ID 与当前活跃 manifest 完全一致。
+## 配置与数据分层
 
-History dependence 的 Full / Recent-k / Critical-event-removed 三个 policy
-条件使用同一模型配置与同一 seed 重新采样；原 rollout action 只作为审计字段，
-不参与受控差异计算。环境侧在相同 S/D 与 action 上只执行 canonical appraisal
-和 state update，因为后续 response 不影响已经得到的解释/delta，且不属于该
-指标。脚本逐条落盘、支持断点续跑和按 trajectory ID 定向复验；证据合并器
-拒绝任何缺失活跃 ID 的结果。
+- **入口配置**：当前 v2 场景题库入口为 `offline/scenario_v2.py`。`configs/offline_choice_dev60.json` 和 `configs/offline_gpt50_t1_t3.json` 保留旧题库来源；对应出题服务为 `offline/choice_pipeline.py` 和 `offline/choice_batch.py`。GPT50、Claude150 和 T4 各有批次配置，见[配置索引](../../configs/README.md)。
+- **通用正式默认值**：`pipeline/constants.py` 仍保留 Fable 基线默认值。不能用该默认值推断 GPT 开发批次的实际模型；本轮未切换配置。
+- **固定指令**：`prompts/manifest.json` 注册可调用模板并校验哈希。已删除 39 份中间实验稿，`retired.json` 只记录其 ID 与原 SHA；[运行时目录](../prompts/RUNTIME_PROMPT_CATALOG.md)区分当前链路和仍有调用方的兼容入口。
+- **结构与语义合同**：`schemas/`、`environment/state_ontology.py`、`shared/STATE_ONTOLOGY_v2.md` 与相应协议共同约束数据；更改须显式版本化。
+- **批次产物**：`data/` 保存场景、私有轨迹、公开题目、视频、调用记录和审核来源。`build/` 同时含可重建检查结果、不可随意丢弃的实验结果和 `web-service` 运行环境，不能整目录当缓存清空。
+- **结论与历史**：`reports/` 保存方法与失败证据，`docs/source-notes/` 保存设计输入，`archives/` 保存不参与默认加载的恢复副本。
 
-## 人工标注工作台
+当前发布的场景题库在 `tasks/examples/offline_scenarios_v2/`，manifest 记录 50 场景、T1/T2/T3 各 100 题，作者侧产物在 `data/offline_scenarios_v2_20261020_main/`。旧 `data/offline_t1_t3_dev60/` 及后续扩展题库作为历史资产保留；实际网页来源由 `web/offline_review.py` 声明，不能把多个版本的题数相加当作当前题库。
 
-`web/` 直接读取 canonical scenario、184 条 rollout 审计库存、`pipeline_v2` task instance 与 Talking Head 资产，并按 Gate 1、Screening Protocol 三态判定/六维/十项 hard reject/协议五问/每场景唯一赢家、Gate 4 T1/T2/T3 专属合同生成可视化表单。人工总清单还显示 Gate 2、Formal GT、holdout、视频和污染审核；没有数据的环节保留 pending，不从界面隐藏。草稿只写入浏览器 `localStorage`，支持 JSON 导出；它不自动修改 scenario、签署 S0/D0 freeze 或生成正式 human GT。部署默认仅绑定 `127.0.0.1:8000`，远程访问通过 SSH 隧道完成，避免向公网暴露完整研究材料。
+## 网站与人工标注
 
-## 验收
+`web/server.py` 的 `PAGE_ROUTES` 统一声明当前页面；`LEGACY_PAGE_ALIASES` 仅保留旧书签映射。实验台、题库、轨迹与标注入口以[网站说明](../../web/README.md)及路由表为准。旧示例页 `task_examples.html` 仍可直接访问，因此其 `styles.css` 继续保留。
 
-当前 gate 固定为九项：State-Update Human Agreement、Persona Sensitivity、Paraphrase Robustness、History Intervention、Local Action Intervention、Neutral-State Stability、Response-State Consistency、Full-Trajectory Plausibility、Seed Robustness。自动结构证据只能标为 pending/evidence_ready/provisionally_ready；需要真人的项目没有评审记录不得标 pass。
+新版题目页默认请求公开题目，按需通过独立 reference 接口获取私有 state、构造来源和未来分支。来源文件须匹配题目记录的 SHA；不传原始 provider 请求、调用日志或环境快照。视频同时检查题目配对、文件哈希和历史位置。
 
-`gate.md` 在九项环境验收之外约束正式数据来源：每场景至少 12 条、至少三种本地模型族、至少一个 20–40B 本地模型、API 不超过 30%、environment/policy 模型分离、六维质量评分、十类 hard reject、post-hoc outcome 去重和人工比较后每场景保留 1 条 canonical trajectory；全部候选与审计证据留在 archive 和网站中。主 Judge 覆盖全池，跨模型族第二 Judge 覆盖分层样本和争议/边缘项；`formal_selected` 的 manifest、轨迹文件与逐条质量 audit 必须 ID 完全一致，并绑定真人 scenario/S0-D0 签名、历史干预证据与双 Judge 合并记录。T2 因定义上需要两段自然历史，可携带一条独立通过 Gate 3 与人工审核的 task-local auxiliary history，但它不计入 scenario 的唯一 canonical rollout，且必须在题目和网站中展示完整 provenance。历史干预在同一 checkpoint 下同时比较 evaluated action 和 environment appraisal/state-delta interpretation。骨干敏感性通过同 checkpoint/action 在两个 environment backbone 下重放并比较 state-delta 方向。Gate 4 使用 T1/T2/T3 各自的实名、时间戳、实例哈希绑定人工清单；正式 GT 始终是三人标注→agreement→真人 adjudication。
+标注草稿保存在浏览器 localStorage，导出绑定题库 SHA、逐题 SHA、标注人、可接受答案、证据、质量判断及是否查看过参考。网站不调用模型、不写正式 GT，也不自动批准来源 Gate。详细操作见[网站说明](../../web/README.md)。
 
-## 架构不变量
+## 维护与清理
 
-- 正常生成不得出现固定 action taxonomy 或 scripted trajectory。
-- 同一 canonical environment 必须用于离线和 T4。
-- T1/T2/T3 必须由自然轨迹派生。
-- T3 干预必须 restore 同一真实 checkpoint。
-- LLM judge 不是 human ground truth。
-- 公开实例不得泄漏 private fields。
-- 未批准 scenario 默认拒绝正式 rollout。
-- 正式 rollout 必须写入隔离的 `data/formal/`，不得复用开发轨迹。
-- 单 Judge、同模型族双 Judge 或缺失历史/骨干证据不能生成 formal_selected。
-- selected manifest、文件或 quality-audit ID 不一致时不得构建任务。
-- 开发池逐轨迹筛选通过不等于正式池合同通过；3 条/场景或少于三模型族时不得标为 formal clean pool。
-- secrets 只来自环境变量，公开 manifest 删除 secret 及环境变量名。
+判断文件是否可删除，应同时检查：代码导入、CLI/网页入口、配置与 prompt manifest、实验/报告引用，以及是否是运行服务或未提交工作。文件名包含 `old`、`candidate`、版本号或 `.orig` 不能单独作为删除理由。
+
+2026-10-21 代码清理把公共能力移到领域模块，合并 33 份相同的原子写入实现，删除 8 个无调用函数及 3 个完成使命的单次脚本。完整清单、冻结目录核验与测试基线见[代码审计](CODE_AUDIT.md)。
+
+2026-10-10 清理：
+
+- 删除已被路由替代的 `web/static/index.html`、`review.html`、`scale150.html`、`scale300_tasks.html`、`t2_dev_review.html` 和专用 `app.js`；旧 URL 保留兼容。
+- 17 个仓库调用方直接导入 `tasks.T2.runtime`，删除无调用方的 `scripts/t2_common.py`。
+- 仅清理源码目录的 Python 生成缓存；不清空 data、build、服务环境或实验记录。
+- 更新网站测试为隔离的临时场景来源，避免依赖已移除的 20 个旧场景；保留公开/私有边界、来源哈希、缺失来源和旧 URL 的检查。
+- 按确认的 prompt 链删除 39 份被替代模板，撤下注册并清理其文本测试；保留模板正文未变。引用旧模板的历史配置会明确报错，不自动换版本。删除依据和恢复记录见 [Prompt 审计](../prompts/PROMPT_AUDIT.md)。
+
+删除前的文件副本、SHA 和清单保存在 `archives/cleanup-2026-10-10/`。`before_cleanup.tar.gz` 同时保存修改前的相关文件；恢复应先核对路径和当前差异，按需提取单个文件，避免覆盖后续工作。验证记录在 `build/architecture_cleanup_20261010/`。
+
+继续保留 `prompts/manifest.json.orig`（冻结批次依赖）、历史配置、实验报告及失败产物；保留共享 CSS 和仍可调用的旧任务协议。已有实验报告的代码哈希描述当时实现，本轮重构不回写旧哈希；新运行应生成新的实现指纹。

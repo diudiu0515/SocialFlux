@@ -1,0 +1,25 @@
+{
+  "format": "socialflux_t2_source_adaptation_config_v2",
+  "model_routes": "configs/model_routes.frontier_api.json",
+  "model_assignment": {
+    "strategy": "single_model_all_llm_roles",
+    "model": "claude-fable-5",
+    "independent_calls": true
+  },
+  "pair_spec_source": "configs/t2_source_adaptation_dev_v1.json",
+  "source_selection": {
+    "minimum_history_turns": 4,
+    "minimum_branch_turns": 2,
+    "allowed_generation_statuses": [
+      "accepted",
+      "short_natural_trajectory",
+      "budget_truncated"
+    ]
+  },
+  "construction": "eligible real rollout A -> one-call complete B history -> formal A/B replay -> exact shared ending -> pair review -> LLM answer -> answer review",
+  "quality_policy": {
+    "low_quality_source": "skip_and_record",
+    "environment_quality_problem": "annotate_by_side_and_turn_do_not_rewrite",
+    "human_review": "pending_until_explicit_human_judgment"
+  }
+}

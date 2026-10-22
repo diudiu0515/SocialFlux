@@ -1,0 +1,17 @@
+{
+  "scenario_manifest": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_gpt50/manifest.json",
+  "environment_config": "configs/gpt50_experiment/rollout.state_observed_evidence_v6_candidate.json",
+  "video_batch_root": "data/gpt50/experiment",
+  "video_manifest": "data/gpt50/experiment/multimodal_delivery_v1/online_multimodal/manifest.json",
+  "workers": 3,
+  "request_budget": 20000,
+  "judge": "claude",
+  "models": [
+    {"id": "gpt", "routes": "configs/gpt50_experiment/model_routes.hybrid.json"},
+    {"id": "claude", "routes": "configs/model_routes.frontier_api.json"},
+    {"id": "deepseek", "routes": "configs/gpt50_experiment/model_routes.hybrid.json", "overrides": {
+      "model": "DeepSeek-V4-Pro", "api_key_env": "AUTODL_API_KEY",
+      "api_key_file": "/root/.config/socialflux/autodl_api_key", "reasoning_effort": null
+    }}
+  ]
+}

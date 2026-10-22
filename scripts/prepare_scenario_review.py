@@ -13,7 +13,7 @@ from evaluation.review_registry import (
     REQUIRED_QUALITY_SCORES,
     file_sha256,
 )
-from scripts.scenario_docs import discover_scenario_paths
+from scenario_design.catalog import discover_scenario_paths
 
 
 def main():
@@ -34,7 +34,9 @@ def main():
             "attestations": {key: False for key in REQUIRED_ATTESTATIONS},
             "quality_scores": {key: None for key in REQUIRED_QUALITY_SCORES},
             "s0_notes": scenario.get("initialization_notes", {}).get("rationale", {}),
-            "d0_notes": scenario.get("initial_dynamics", {}),
+            "initial_dynamics_notes": (
+                "Runtime dynamics seed is machine-validated; it is not a separate human freeze field."
+            ),
             "trigger_notes": scenario.get("initialization_notes", {}).get(
                 "trigger_reachability", []
             ),

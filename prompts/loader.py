@@ -3,9 +3,12 @@
 import hashlib
 import json
 from pathlib import Path
+import re
 
 ROOT = Path(__file__).resolve().parent
 MANIFEST_PATH = ROOT / "manifest.json"
+RETIRED_PATH = ROOT / "retired.json"
+_PLACEHOLDER_PATTERN = re.compile(r"\{\{([A-Za-z0-9_]+)\}\}")
 
 
 def prompt_manifest():
@@ -15,6 +18,13 @@ def prompt_manifest():
 def get_prompt(prompt_id):
     manifest = prompt_manifest()["prompts"]
     if prompt_id not in manifest:
+        retired = json.loads(RETIRED_PATH.read_text(encoding="utf-8"))["prompts"]
+        if prompt_id in retired:
+            raise KeyError(
+                f"retired prompt id: {prompt_id}; use an active configuration. "
+                "Historical reproduction requires the matching archived snapshot; "
+                "see docs/prompts/PROMPT_AUDIT.md. No automatic substitution."
+            )
         raise KeyError(f"unknown prompt id: {prompt_id}")
     entry = manifest[prompt_id]
     path = ROOT / entry["path"]
@@ -33,4 +43,9 @@ def render_prompt(prompt_id, payload=None, **values):
     for key, value in values.items():
         rendered = value if isinstance(value, str) else json.dumps(value, ensure_ascii=False, sort_keys=True)
         content = content.replace("{{" + key + "}}", rendered)
+    unresolved = sorted(set(_PLACEHOLDER_PATTERN.findall(content)))
+    if unresolved:
+        raise ValueError(
+            f"prompt {prompt_id} has unresolved placeholders: {unresolved}"
+        )
     return content

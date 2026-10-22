@@ -10,7 +10,7 @@ from scripts import scenario_sources
 
 
 BASE = json.loads(
-    Path("configs/scenarios/scenario_001/scenario_001.json").read_text(encoding="utf-8")
+    Path("data/gpt50/experiment/scenario/scenarios/scenario_001/scenario_001.json").read_text(encoding="utf-8")
 )
 
 

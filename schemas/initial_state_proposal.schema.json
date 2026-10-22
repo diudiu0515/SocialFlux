@@ -18,10 +18,73 @@
   ],
   "properties": {
     "initial_state": {
-      "type": "object"
+      "type": "object",
+      "required": [
+        "emotion",
+        "behavioral_disposition",
+        "relationship",
+        "consequence_risk"
+      ],
+      "properties": {
+        "emotion": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          }
+        },
+        "behavioral_disposition": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          }
+        },
+        "relationship": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          }
+        },
+        "consequence_risk": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          }
+        }
+      },
+      "additionalProperties": false
     },
     "initial_dynamics": {
-      "type": "object"
+      "type": "object",
+      "minProperties": 2,
+      "maxProperties": 5,
+      "propertyNames": {
+        "enum": [
+          "deadline_pressure",
+          "resource_scarcity",
+          "information_asymmetry",
+          "public_exposure",
+          "negotiation_openness",
+          "coordination_stability",
+          "institutional_constraint"
+        ]
+      },
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 10
+      }
     },
     "observable_expression": {
       "type": "object"
@@ -33,9 +96,7 @@
       "type": "array"
     },
     "max_turns": {
-      "type": "integer",
-      "minimum": 5,
-      "maximum": 30
+      "const": 20
     },
     "t3_delayed_horizon": {
       "type": "integer",

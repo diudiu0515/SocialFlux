@@ -1,0 +1,79 @@
+{
+  "prepared_at": "2026-10-22T16:09:22.419411+08:00",
+  "status": "local_verified_publication_blocked",
+  "project_id": "appgprj_6ad82de6ff188191b48c72ec8787d069",
+  "current_live_version_verified": 12,
+  "live_url": "https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site",
+  "dataset_sha256": "338a2502b00b4146525b96c864debee2d2da35cf9da6c06151169d900b18d9bc",
+  "review_packet_sha256": "bbdda524393a9fd4329e5c7bcc5607ad78ef9345d4065f2be6a496a7fd440d1f",
+  "human_scope": {
+    "offline_items": 400,
+    "current_unique_media": 150,
+    "scenario_reviews": 50,
+    "rollout_review_entries": 50,
+    "partial_rollout_entries": 7,
+    "t4_rating_trajectories": 50,
+    "t4_trigger_reviews": 50,
+    "t4_exact_bound_video_reviews": 47,
+    "t4_missing_video_events": 301,
+    "total_unique_review_tasks": 572,
+    "s1_s2_human_required": false,
+    "caption_in_this_release": false,
+    "human_review": "pending"
+  },
+  "validation": {
+    "site_unit_tests_passed": 25,
+    "python_tests_passed": 37,
+    "typecheck": true,
+    "production_build": true,
+    "browser_end_to_end": {
+      "ok": true,
+      "checks": {
+        "t4": {
+          "trajectories": 5,
+          "tasks": 25,
+          "verifiedVideos": 20,
+          "lockedRatings": true,
+          "recovery": true,
+          "finalExport": true
+        },
+        "offline": {
+          "questions": 40,
+          "uniqueMediaReviews": 15,
+          "requiresAllMedia": true,
+          "videoPlayed": true
+        }
+      },
+      "errors": []
+    },
+    "receipt_import": {
+      "ok": true,
+      "isolated_store": true,
+      "imported": 2,
+      "status_rows": 572
+    },
+    "legacy_text_multimodal_and300_recovery": true,
+    "legacy_t4_single_stage_recovery": true,
+    "production_test_records_written": false,
+    "archive_private_dev_files_absent": true
+  },
+  "archive": {
+    "path": "build/annotation-ready-20261022.tar.gz",
+    "sha256": "e07fc8a073c62c8a06f0b29db447b68cf78c34b3fa553bfbafb434a9d6f911c1",
+    "bytes": 284602681,
+    "entries": 399,
+    "source_manifest": "build/annotation-ready-qa/source_manifest.json"
+  },
+  "assignment_templates": [
+    "reports/experiments/2026-10-22_annotation_assignments_balanced.csv",
+    "reports/experiments/2026-10-22_annotation_assignments_economical.csv"
+  ],
+  "publication_blocker": {
+    "action": "Pass short-lived site repository write credential to the official Sites workflow over hidden stdin",
+    "reason": "Automatic approval review rejected credential handoff to an external-network terminal",
+    "user_approval_required": true,
+    "source_pushed": false,
+    "new_site_version_saved": false,
+    "deployed": false
+  }
+}

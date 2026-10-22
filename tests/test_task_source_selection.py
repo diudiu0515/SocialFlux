@@ -7,6 +7,12 @@ from evaluation.task_source_selection import (
 )
 
 
+TASK_DIMENSIONS = {
+    "dialogue_coherence", "history_dependence", "character_consistency",
+    "state_response_consistency", "interaction_progression", "naturalness",
+}
+
+
 class TaskSourceSelectionTest(unittest.TestCase):
     def test_tasks_rank_independently_without_model_quota(self):
         trajectories = [
@@ -31,6 +37,23 @@ class TaskSourceSelectionTest(unittest.TestCase):
         self.assertFalse(result["model_quota"])
         self.assertEqual(result["t1_source_ids"], ["qwen-a", "qwen-b"])
         self.assertEqual(result["t3_source_ids_ranked"][0], "qwen-b")
+
+    def test_canonical_winner_is_primary_for_t1_and_t3(self):
+        trajectories = [{"trajectory_id": "winner"}, {"trajectory_id": "higher-score"}]
+        low = {name: 0.7 for name in TASK_DIMENSIONS}
+        high = {name: 1.0 for name in TASK_DIMENSIONS}
+        result = select_task_sources(
+            trajectories,
+            [
+                {"trajectory_id": "winner", "passed": True, "scores": low},
+                {"trajectory_id": "higher-score", "passed": True, "scores": high},
+            ],
+            t1_source_count=1,
+            canonical_trajectory_id="winner",
+        )
+        self.assertEqual(result["t1_source_ids"], ["winner"])
+        self.assertEqual(result["t3_source_ids_ranked"][0], "winner")
+        self.assertEqual(result["canonical_trajectory_id"], "winner")
 
     def test_failed_quality_candidate_is_never_ranked(self):
         trajectories = [{"trajectory_id": "good"}, {"trajectory_id": "bad"}]

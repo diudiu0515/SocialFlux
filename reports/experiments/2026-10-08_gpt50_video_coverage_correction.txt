@@ -1,0 +1,25 @@
+GPT50 在线视频覆盖核查与前次说明更正
+
+审核页可播放 53 条已生成在线视频，覆盖 48/50 个场景。
+正式约束并非每场景只有一条视频，而是每个可达事件族都有资产，当前共要求 326 条。
+已完成并校验文件哈希：53/326。
+所有所需事件族视频齐全的场景：1/50，仅 GPT50_001。
+没有任何生成成功视频的场景：GPT50_036、GPT50_038。
+两者的 activated_tension 人物基准视频被供应商以 OutputVideoSensitiveContentDetected.PolicyViolation / copyright restrictions 拒绝；已有重新生成记录也失败。
+尚未生成 271 条，另有上述 2 条失败，总缺口 273 条。
+所有资产人工审核状态仍为 pending。审核页展示 generated_structural_pass 文件，不意味着人工审核通过或所有事件类型已经齐全。
+上一轮误把 reviewed 运行映射中 asset_count=0 解释为没有真实视频；现更正该解释，原 text 机器评分数值不变。
+
+补齐的另一个依赖
+抽查 GPT50_002 已下载基准视频的供应商 URL，返回 HTTP 403。
+查询原供应商任务仍返回 succeeded，但该查询给出的 URL 也返回 403。
+这次只抽查一条，不能据此断言全部 URL 失效。继续生成依赖视频前必须验证引用可读取。
+不删除原失败状态，不把其他场景的视频用于补位，不把部分覆盖标成完整 GPT50 多模态实验。
+
+独立进行的工作
+多模型终局 text 裁判后台任务已启动：复用 GPT 分数，新增 Claude Fable 5 和 DeepSeek V4 Pro 对同一批 43 条完整轨迹评分。
+这是裁判对照，不是三个策略模型重新跑了 50 场景，也不是 text+video 模态收益实验。
+状态：build/t4_gpt50_20261008_multimodel/judges/status.json
+结果：build/t4_gpt50_20261008_multimodel/judges/<model>/
+完成后报告：build/t4_gpt50_20261008_multimodel/judges/report.txt
+视频补齐尚未完成；完整视频实验必须通过全部资产覆盖、审核和真实媒体输入检查。

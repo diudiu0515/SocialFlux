@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {validateAnswers,validateStart,validateRevision} from '../lib/protocol.ts';
+import {digest,recoveryPattern,readCookie} from '../lib/credentials.ts';
+const bundle=JSON.parse(readFileSync(new URL('../data/questions.json',import.meta.url)));
+const questions=bundle.items.map(x=>x.public);
+const answers=Object.fromEntries(questions.map(q=>[q.instance_id,{answer:'A',confidence:'medium',rationale:'依据公开材料。',issue:'none'}]));
+test('the release includes only six public text questions, two per task',()=>{assert.equal(questions.length,6);for(const q of questions){assert.deepEqual(Object.keys(q).sort(),['input','instance_id','modality','options','question']);assert.equal(q.modality,'text');}for(const task of ['T1','T2','T3'])assert.equal(questions.filter(q=>q.instance_id.includes('-'+task+'-')).length,2);assert.doesNotMatch(JSON.stringify(questions),/"(?:author|target_spec|correct_answer|reference_answer|private_state|machine_suggestion)"/);});
+test('a submission must contain a choice and confidence for every assigned item',()=>{assert.deepEqual(validateAnswers(answers,questions,true),answers);const missing=structuredClone(answers);delete missing[questions[0].instance_id];assert.throws(()=>validateAnswers(missing,questions,true));missing[questions[0].instance_id]={...answers[questions[0].instance_id],confidence:''};assert.throws(()=>validateAnswers(missing,questions,true));});
+test('foreign items, invalid choices, hidden fields, and overlong notes are rejected',()=>{assert.throws(()=>validateAnswers({...answers,foreign:{}},questions));for(const change of [{answer:'Z'},{correct_answer:'A'},{rationale:'a'.repeat(2001)},{confidence:'certain'}]){const copy=structuredClone(answers);Object.assign(copy[questions[0].instance_id],change);assert.throws(()=>validateAnswers(copy,questions));}});
+test('start validates consent, alias and exposure; revisions cannot be forged',()=>{assert.deepEqual(validateStart({alias:' r7 ',priorExposure:false,consent:true}),{alias:'r7',priorExposure:false});assert.throws(()=>validateStart({alias:'r7',priorExposure:false}));assert.throws(()=>validateStart({alias:'r7',consent:true}));for(const value of [-1,1.1,'1',null])assert.throws(()=>validateRevision(value));});
+test('credentials are high entropy and only their digest is the database lookup key',async()=>{const code='SF-'+Buffer.alloc(32,42).toString('base64url');assert.ok(recoveryPattern.test(code));assert.equal(await digest(code),createHash('sha256').update(code).digest('hex'));assert.equal(recoveryPattern.test('reviewer-01'),false);assert.equal(readCookie(new Request('https://example.test',{headers:{cookie:'x=1; sf_demo_recovery='+code}}),'sf_demo_recovery'),code);});

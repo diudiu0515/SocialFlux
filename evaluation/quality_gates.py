@@ -9,7 +9,9 @@ from __future__ import annotations
 
 from collections import Counter, defaultdict
 from datetime import datetime
+import hashlib
 import json
+import math
 from pathlib import Path
 
 from evaluation.instance_quality import build_instance_quality_report
@@ -43,6 +45,20 @@ ENVIRONMENT_EVIDENCE = {
     "E4_paraphrase_robustness": "paraphrase_robustness.json",
     "E5_local_counterfactual": "local_counterfactual.json",
     "E6_backbone_sensitivity": "backbone_sensitivity.json",
+    "E7_persona_intervention": "persona_intervention.json",
+    "E8_video_state_consistency": "video_state_consistency.json",
+    "E9_timescale_validity": "timescale_validity.json",
+}
+
+HUMAN_ATTESTED_ENVIRONMENT_EVIDENCE = {
+    "E1_state_transition_agreement",
+    "E2_full_trajectory_plausibility",
+    "E3_history_intervention",
+    "E4_paraphrase_robustness",
+    "E5_local_counterfactual",
+    "E7_persona_intervention",
+    "E8_video_state_consistency",
+    "E9_timescale_validity",
 }
 
 TASK_REVIEW_RATINGS = {
@@ -144,7 +160,7 @@ def audit_scenario_gate(scenario, scenario_path=None, review_registry=None):
         "narrative_provenance": _check("pass", "synthetic-script has no external source requirement"),
         "narrative_originalization": _check("pass", "synthetic-script has no external source requirement"),
         "quality_checklist": _check("pending", "quality_gate checklist has not been human-reviewed"),
-        "human_approval": _check("pending", "quality approval and S0/D0 freeze require a real reviewer"),
+        "human_approval": _check("pending", "quality approval and initial-state freeze require a real reviewer"),
     }
     if source.get("type") == "narrative-derived":
         missing = [key for key in ("work_title", "year", "medium", "related_characters_or_plot_position") if not source.get(key)]
@@ -237,24 +253,24 @@ def _environment_evidence_passes(name, payload):
         return reviewed_at.tzinfo is not None
     if name == "E1_state_transition_agreement":
         passed = (
-            human_record(3)
-            and record.get("annotator_count", 0) >= 3
+            human_record(1)
+            and record.get("annotator_count", 0) >= 1
             and 30 <= record.get("transition_count", 0) <= 50
             and at_least(record.get("agreement"), 0.70)
         )
-        return passed, "requires 3+ named humans, timestamp, 30–50 transitions and agreement >=0.70"
+        return passed, "requires 1 named human, timestamp, 30–50 transitions and agreement >=0.70"
     if name == "E2_full_trajectory_plausibility":
         scores = record.get("scores", {})
         passed = (
-            human_record(3)
-            and record.get("annotator_count", 0) >= 3
+            human_record(1)
+            and record.get("annotator_count", 0) >= 1
             and 15 <= record.get("trajectory_count", 0) <= 20
             and at_least(scores.get("overall"), 4.0)
             and all(at_least(scores.get(key), 3.5) for key in (
                 "persona_consistency", "history_sensitivity", "state_continuity", "response_state_consistency"
             ))
         )
-        return passed, "requires 3+ named humans, timestamp, 15–20 trajectories, overall >=4 and each named dimension >=3.5"
+        return passed, "requires 1 named human, timestamp, 15–20 trajectories, overall >=4 and each named dimension >=3.5"
     if name == "E3_history_intervention":
         passed = (
             record.get("passed") is True
@@ -287,10 +303,51 @@ def _environment_evidence_passes(name, payload):
         passed = (
             payload.get("format") == "socialflux_backbone_sensitivity_v1"
             and record.get("passed") is True
+            and record.get("backbone_activity_passed") is True
             and record.get("matched_checkpoint_count", 0) >= 10
             and len(families) >= 2
         )
-        return passed, "requires 10+ matched checkpoints and two different environment model families"
+        return passed, (
+            "requires 10+ matched checkpoints, two different environment model "
+            "families, and non-degenerate transition activity from both"
+        )
+    if name == "E7_persona_intervention":
+        passed = (
+            record.get("passed") is True
+            and human_record(1)
+            and record.get("matched_checkpoint_count", 0) >= 10
+            and record.get("same_state_history_action") is True
+        )
+        return passed, (
+            "requires a named human and timestamp, 10+ persona-only matched "
+            "checkpoints, and fixed state/history/action"
+        )
+    if name == "E8_video_state_consistency":
+        passed = (
+            record.get("passed") is True
+            and human_record(1)
+            and record.get("matched_node_count", 0) >= 40
+            and record.get("generated_video_count", 0) >= 40
+            and record.get("request_safety_passed") is True
+        )
+        return passed, (
+            "requires 40+ generated important-node videos, one named human, and state-expression consistency attestation"
+        )
+    if name == "E9_timescale_validity":
+        families = record.get("timescale_families", {})
+        passed = (
+            record.get("passed") is True
+            and human_record(1)
+            and record.get("matched_variable_count", 0) >= 10
+            and isinstance(families, dict)
+            and all(families.get(key, 0) >= 1 for key in ("fast", "medium", "slow"))
+            and record.get("direction_consistency", 0) >= 0.70
+            and record.get("non_degenerate") is True
+        )
+        return passed, (
+            "requires a named human, 10+ matched variables, fast/medium/slow coverage, "
+            "direction consistency >=0.70, and non-degenerate timescale evidence"
+        )
     return False, "unknown environment evidence type"
 
 
@@ -302,6 +359,17 @@ def audit_environment_gate(scenarios, evidence_root=None):
         evidence[name] = {"file": filename, "present": value is not None}
         if value is None:
             checks[name] = _check("pending", f"missing independent evidence file {filename}")
+            continue
+        record = value.get("record", value) if isinstance(value, dict) else {}
+        if (
+            name in HUMAN_ATTESTED_ENVIRONMENT_EVIDENCE
+            and isinstance(record, dict)
+            and record.get("human_attestation") is not True
+        ):
+            checks[name] = _check(
+                "pending",
+                "named human attestation is pending; machine evidence cannot substitute for it",
+            )
             continue
         passed, reason = _environment_evidence_passes(name, value)
         checks[name] = _check("pass" if passed else "fail", reason)
@@ -414,8 +482,10 @@ def audit_rollout_gate(
         require_raw_minimum=pool_stage == "raw",
     )
     hard_contract = {
-        "api_fraction_at_most_30_percent": contract["checks"]["api_fraction_at_most_30_percent"],
-        "environment_policy_separated": contract["checks"]["environment_policy_separated"],
+        key: value
+        for key, value in contract["checks"].items()
+        if key.startswith("every_trajectory_")
+        or key == "each_scenario_has_expected_raw_count"
     }
     status = "passed" if contract["passed"] and all(item["passed"] for item in audits) else (
         "rejected" if any(item["status"] == "rejected" for item in audits) or not all(hard_contract.values()) else "pending"
@@ -428,8 +498,8 @@ def audit_rollout_gate(
         row[status_key] += 1
     scenario_rows = dict(by_scenario)
     for row in scenario_rows.values():
-        row["raw_shortfall_to_12"] = (
-            max(0, 12 - row["raw"]) if pool_stage == "raw" else 0
+        row["raw_count_error"] = (
+            abs(1 - row["raw"]) if pool_stage == "raw" else 0
         )
         row["quality_evidence_shortfall"] = row["pending"]
     return {
@@ -442,8 +512,8 @@ def audit_rollout_gate(
         "pool_contract": contract,
         "pool_stage": pool_stage,
         "supplement_needed": {
-            "raw_trajectories_to_12": sum(row["raw_shortfall_to_12"] for row in scenario_rows.values()),
-            "local_model_families_to_3": max(0, 3 - len(contract["local_model_families"])),
+            "raw_count_errors": sum(row["raw_count_error"] for row in scenario_rows.values()),
+            "model_family_quota": False,
             "independent_quality_or_history_reviews": sum(row["quality_evidence_shortfall"] for row in scenario_rows.values()),
         },
     }
@@ -453,6 +523,148 @@ def _read_jsonl(path):
     if path is None or not Path(path).exists():
         return []
     return [json.loads(line) for line in Path(path).read_text(encoding="utf-8").splitlines() if line.strip()]
+
+
+def deterministic_task_review_sample(instances, fraction=0.10, minimum_per_task=2):
+    """Return a stable stratified Gate 4 spot-check sample.
+
+    Selection depends only on task type and instance ID, so both reviewers see
+    exactly the same sample and adding another task type cannot reshuffle the
+    other strata.
+    """
+    if not 0 < fraction <= 1:
+        raise ValueError("task review sample fraction must be in (0, 1]")
+    if minimum_per_task < 1:
+        raise ValueError("minimum_per_task must be positive")
+    grouped = defaultdict(list)
+    for instance in instances:
+        grouped[instance.get("task_type")].append(instance)
+    selected = []
+    for task_type, items in sorted(grouped.items()):
+        count = min(len(items), max(minimum_per_task, math.ceil(len(items) * fraction)))
+        ranked = sorted(items, key=lambda item: hashlib.sha256(
+            f"socialflux-gate4-v2:{task_type}:{item.get('instance_id')}".encode("utf-8")
+        ).hexdigest())
+        selected.extend(ranked[:count])
+    return selected
+
+
+def _read_task_review_payload(path):
+    if path is None or not Path(path).exists():
+        return None
+    text = Path(path).read_text(encoding="utf-8").strip()
+    if not text:
+        return None
+    try:
+        value = json.loads(text)
+    except json.JSONDecodeError:
+        return {
+            "format": "socialflux_gate4_legacy_full_review_v1",
+            "records": [json.loads(line) for line in text.splitlines() if line.strip()],
+        }
+    if isinstance(value, list):
+        return {"format": "socialflux_gate4_legacy_full_review_v1", "records": value}
+    if isinstance(value, dict) and value.get("instance_id") and not value.get("format"):
+        return {"format": "socialflux_gate4_legacy_full_review_v1", "records": [value]}
+    return value
+
+
+def _parse_review_time(review):
+    try:
+        reviewed_at = datetime.fromisoformat(
+            str(review.get("reviewed_at_utc", "")).replace("Z", "+00:00")
+        )
+    except ValueError:
+        return None
+    return reviewed_at if reviewed_at.tzinfo is not None else None
+
+
+def _valid_task_review(review, instance):
+    ratings = review.get("ratings", {})
+    status = review.get("review_status")
+    expected = TASK_REVIEW_RATINGS.get(instance.get("task_type"), set())
+    values_are_boolean = set(ratings) == expected and all(
+        isinstance(value, bool) for value in ratings.values()
+    )
+    status_matches_ratings = (
+        status == "approved" and values_are_boolean and all(ratings.values())
+    ) or (
+        status == "rejected" and values_are_boolean and not all(ratings.values())
+    )
+    return (
+        review.get("human_attestation") is True
+        and bool(str(review.get("reviewer", "")).strip())
+        and _parse_review_time(review) is not None
+        and status_matches_ratings
+    )
+
+
+def _audit_double_task_sample(instances, payload):
+    instances_by_id = {item.get("instance_id"): item for item in instances}
+    sampling = payload.get("sampling", {})
+    fraction = sampling.get("fraction_per_task_type", 0.10)
+    minimum = sampling.get("minimum_per_task_type", 2)
+    expected = deterministic_task_review_sample(instances, fraction, minimum)
+    expected_ids = {item["instance_id"] for item in expected}
+    records = payload.get("records", [])
+    record_ids = {item.get("instance_id") for item in records}
+    packet_valid = (
+        payload.get("format") == "socialflux_gate4_double_audit_v2"
+        and sampling.get("same_sample_for_both_reviewers") is True
+        and expected_ids == record_ids
+        and len(record_ids) == len(records)
+    )
+    pending = []
+    rejected = []
+    approved = []
+    disagreements = []
+    invalid = []
+    for record in records:
+        instance_id = record.get("instance_id")
+        instance = instances_by_id.get(instance_id)
+        if (
+            instance is None
+            or record.get("instance_sha256") != content_sha256(instance)
+        ):
+            invalid.append(instance_id)
+            continue
+        reviews = record.get("reviews", {})
+        left, right = reviews.get("reviewer_a", {}), reviews.get("reviewer_b", {})
+        if not _valid_task_review(left, instance) or not _valid_task_review(right, instance):
+            pending.append(instance_id)
+            continue
+        reviewers = {left.get("reviewer"), right.get("reviewer")}
+        if len(reviewers) != 2:
+            invalid.append(instance_id)
+            continue
+        decisions = {left["review_status"], right["review_status"]}
+        if len(decisions) == 1:
+            (approved if left["review_status"] == "approved" else rejected).append(instance_id)
+            continue
+        disagreements.append(instance_id)
+        adjudication = record.get("adjudication", {})
+        if (
+            not _valid_task_review(adjudication, instance)
+            or adjudication.get("reviewer") in reviewers
+        ):
+            pending.append(instance_id)
+        elif adjudication["review_status"] == "approved":
+            approved.append(instance_id)
+        else:
+            rejected.append(instance_id)
+    complete = packet_valid and not pending and not invalid and len(approved) + len(rejected) == len(expected_ids)
+    return {
+        "packet_valid": packet_valid,
+        "sample_size": len(expected_ids),
+        "sampled_instance_ids": sorted(expected_ids),
+        "approved_instance_ids": sorted(approved),
+        "rejected_instance_ids": sorted(rejected),
+        "disagreement_instance_ids": sorted(disagreements),
+        "pending_instance_ids": sorted(set(pending)),
+        "invalid_instance_ids": sorted(set(invalid)),
+        "complete": complete,
+        "passed": complete and not rejected,
+    }
 
 
 def _read_interventions(root):
@@ -473,12 +685,13 @@ def audit_task_instance_gate(instances, trajectories, interventions=None, human_
         ids = instance.get("metadata", {}).get("source_trajectory_ids") or [instance.get("metadata", {}).get("source_trajectory_id")]
         ids = [item for item in ids if item]
         source_ready.append(bool(ids) and all(item in gate3_passed_ids for item in ids))
-    human_review = _read_jsonl(human_review_path)
+    human_payload = _read_task_review_payload(human_review_path)
+    human_review = (human_payload or {}).get("records", [])
     instance_ids = {item.get("instance_id") for item in instances}
     instances_by_id = {item.get("instance_id"): item for item in instances}
     reviewed_ids = set()
     invalid_reviews = []
-    for item in human_review:
+    for item in human_review if (human_payload or {}).get("format") != "socialflux_gate4_double_audit_v2" else []:
         instance_id = item.get("instance_id")
         instance = instances_by_id.get(instance_id)
         try:
@@ -502,12 +715,42 @@ def audit_task_instance_gate(instances, trajectories, interventions=None, human_
             reviewed_ids.add(instance_id)
         else:
             invalid_reviews.append(instance_id)
+    double_audit = None
+    if (human_payload or {}).get("format") == "socialflux_gate4_double_audit_v2":
+        double_audit = _audit_double_task_sample(instances, human_payload)
+        if double_audit["rejected_instance_ids"]:
+            semantic_status = "fail"
+        elif double_audit["passed"]:
+            semantic_status = "pass"
+        else:
+            semantic_status = "pending"
+        semantic_reason = (
+            "two distinct humans review the same deterministic stratified sample; "
+            "only disagreements require a distinct third adjudicator; "
+            f"sample={double_audit['sample_size']}, pending={double_audit['pending_instance_ids']}, "
+            f"rejected={double_audit['rejected_instance_ids']}, invalid={double_audit['invalid_instance_ids']}"
+        )
+    else:
+        semantic_status = "pass" if human_review and reviewed_ids == instance_ids and not invalid_reviews else "pending"
+        semantic_reason = (
+            "legacy full review requires every candidate to have a named, timestamped, "
+            "hash-bound review; invalid=" + str(invalid_reviews)
+        )
+    structural_status = (
+        "pending" if not structural["instance_count"] else
+        "pass" if structural["structurally_passed"] == structural["instance_count"] else
+        "fail"
+    )
     checks = {
-        "structural_checks": _check("pass" if structural["structurally_passed"] == structural["instance_count"] and structural["instance_count"] else "fail", "all instance contract checks pass"),
+        "structural_checks": _check(
+            structural_status,
+            "task instances have not been generated" if not structural["instance_count"]
+            else "all instance contract checks pass",
+        ),
         "source_trajectory_gate3": _check("pass" if source_ready and all(source_ready) else "pending", "every instance source must pass Gate 3"),
         "independent_or_human_semantic_review": _check(
-            "pass" if human_review and reviewed_ids == instance_ids and not invalid_reviews else "pending",
-            "every candidate needs a named, timestamped, hash-bound blind human review; invalid=" + str(invalid_reviews),
+            semantic_status,
+            semantic_reason,
         ),
     }
     status = _status(checks)
@@ -523,6 +766,7 @@ def audit_task_instance_gate(instances, trajectories, interventions=None, human_
         "task_counts": dict(task_counts),
         "checks": checks,
         "quality_report": structural,
+        "human_review_audit": double_audit,
     }
 
 
@@ -570,5 +814,5 @@ def audit_all_gates(scenarios, trajectories, instances, interventions=None, envi
         "research_ready": all(gate["passed"] for gate in [
             {"passed": gate1_status == "passed"}, gate2, gate3, gate4,
         ]),
-        "human_boundary": "No automated, model, or structural result can replace scenario/S0-D0 approval, environment human validation, blind task review, or formal human GT.",
+        "human_boundary": "No automated, model, or structural result can replace scenario/initial-state approval, environment human validation, blind task review, or formal human GT.",
     }

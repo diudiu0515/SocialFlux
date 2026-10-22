@@ -1,0 +1,144 @@
+{
+  "format": "socialflux_model_routes_v1",
+  "description": "GPT-50 route with automatic failover across both AutoDL protocols and all three private credentials.",
+  "provider_defaults": {
+    "provider": "failover",
+    "model": "gpt-6-astra",
+    "stream": false,
+    "reasoning_effort": "low",
+    "timeout": 180,
+    "candidates": [
+      {
+        "provider": "openai_compatible",
+        "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+        "use_proxy": false,
+        "api_key_env": "AUTODL_GPT_API_KEY",
+        "api_key_file": "/root/.config/socialflux/autodl_gpt_api_key",
+        "model": "gpt-6-astra",
+        "timeout": 600
+      },
+      {
+        "provider": "openai_responses",
+        "endpoint": "https://www.autodl.art/api/v1/responses",
+        "use_proxy": false,
+        "api_key_env": "AUTODL_GPT_API_KEY",
+        "api_key_file": "/root/.config/socialflux/autodl_gpt_api_key",
+        "model": "gpt-6-astra",
+        "timeout": 600
+      },
+      {
+        "provider": "openai_compatible",
+        "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+        "use_proxy": false,
+        "api_key_file": "/root/.config/socialflux/autodl_api_key",
+        "model": "gpt-6-astra",
+        "timeout": 600
+      },
+      {
+        "provider": "openai_responses",
+        "endpoint": "https://www.autodl.art/api/v1/responses",
+        "use_proxy": false,
+        "api_key_file": "/root/.config/socialflux/autodl_api_key",
+        "model": "gpt-6-astra",
+        "timeout": 600
+      },
+      {
+        "provider": "openai_compatible",
+        "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+        "use_proxy": false,
+        "api_key_file": "/root/.config/socialflux/autodl_api_key_2",
+        "model": "gpt-6-astra",
+        "timeout": 600
+      },
+      {
+        "provider": "openai_responses",
+        "endpoint": "https://www.autodl.art/api/v1/responses",
+        "use_proxy": false,
+        "api_key_file": "/root/.config/socialflux/autodl_api_key_2",
+        "model": "gpt-6-astra",
+        "timeout": 600
+      }
+    ],
+    "circuit_failure_threshold": 2,
+    "circuit_cooldown_seconds": 90,
+    "circuit_max_cooldown_seconds": 300,
+    "failover_backoff_base_seconds": 2,
+    "failover_backoff_max_seconds": 15,
+    "failover_backoff_jitter_seconds": 1.5,
+    "max_candidates_per_request": 6
+  },
+  "routes": {
+    "scenario_authoring": {
+      "max_tokens": 2200,
+      "timeout": 240
+    },
+    "scenario_normalization": {
+      "max_tokens": 4000,
+      "timeout": 300
+    },
+    "scenario_initialization": {
+      "max_tokens": 4000,
+      "timeout": 300
+    },
+    "policy": {
+      "max_tokens": 1200,
+      "timeout": 90
+    },
+    "appraisal": {
+      "max_tokens": 3500,
+      "timeout": 150
+    },
+    "response": {
+      "max_tokens": 2600,
+      "timeout": 90
+    },
+    "t2_branch_authoring": {
+      "max_tokens": 5000,
+      "timeout": 240
+    },
+    "t2_spec_authoring": {
+      "max_tokens": 3500,
+      "timeout": 240
+    },
+    "t2_pair_review": {
+      "max_tokens": 3500,
+      "timeout": 180
+    },
+    "t2_answer": {
+      "max_tokens": 5000,
+      "timeout": 240
+    },
+    "t2_answer_review": {
+      "max_tokens": 3500,
+      "timeout": 180
+    },
+    "task_extraction": {
+      "max_tokens": 3500,
+      "timeout": 180
+    },
+    "t1_answer": {
+      "max_tokens": 5000,
+      "timeout": 240
+    },
+    "t3_action_authoring": {
+      "max_tokens": 1800,
+      "timeout": 150
+    },
+    "t3_answer": {
+      "max_tokens": 6500,
+      "timeout": 300
+    },
+    "t4_judge": {
+      "max_tokens": 3500,
+      "timeout": 180
+    },
+    "quality_review": {
+      "max_tokens": 1600,
+      "timeout": 150
+    },
+    "video_translation": {
+      "max_tokens": 500,
+      "timeout": 90
+    }
+  }
+}

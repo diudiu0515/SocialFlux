@@ -9,7 +9,7 @@
         "model": "/root/autodl-tmp/models/Qwen3.5-9B-modelscope"
       },
       "sampling": {
-        "temperature": 0.1,
+        "temperature": 0,
         "seed": 901,
         "max_tokens": 512
       }
@@ -24,7 +24,7 @@
         "max_tokens": 512
       },
       "sampling": {
-        "temperature": 0.1,
+        "temperature": 0,
         "seed": 901,
         "max_tokens": 512
       }

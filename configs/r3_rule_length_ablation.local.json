@@ -1,0 +1,14 @@
+{
+  "format": "socialflux_r3_rule_length_ablation_v1",
+  "source_rollout_config": "configs/rollout_20turn_3candidate_qwen32_environment.local.json",
+  "scenario_ids": ["IA_PIPE_003", "IA_PIPE_019", "IA_PIPE_010"],
+  "max_turns": 20,
+  "natural_closure_min_turns": 4,
+  "runs_per_cell": 1,
+  "conditions": [
+    {"id": "full_fixed20", "validation_profile": "full", "horizon_mode": "fixed_20"},
+    {"id": "full_natural_max20", "validation_profile": "full", "horizon_mode": "natural_max_20"},
+    {"id": "hard_only_fixed20", "validation_profile": "hard_only", "horizon_mode": "fixed_20"},
+    {"id": "hard_only_natural_max20", "validation_profile": "hard_only", "horizon_mode": "natural_max_20"}
+  ]
+}

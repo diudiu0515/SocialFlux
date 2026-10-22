@@ -1,0 +1,19 @@
+{
+  "format": "socialflux_gate4_double_audit_v2",
+  "sampling": {
+    "strategy": "sha256_ranked_stratified_by_task_type_v1",
+    "fraction_per_task_type": 0.1,
+    "minimum_per_task_type": 2,
+    "same_sample_for_both_reviewers": true,
+    "population_count": 0,
+    "sample_count": 0,
+    "sample_counts": {}
+  },
+  "instructions": {
+    "reviewers": "Reviewer A and B independently inspect the same blind packet, then compare with the collapsed machine proposal.",
+    "agreement": "Both approve: accept sampled item. Both reject: send item/family back for repair.",
+    "disagreement": "Only A/B disagreement is routed to a distinct third named adjudicator.",
+    "boundary": "machine_proposal is an audit aid, not formal human ground truth"
+  },
+  "records": []
+}

@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1792552961244,
+      "tag": "0000_bright_prism",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1792566276860,
+      "tag": "0001_bouncy_frightful_four",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1792600661485,
+      "tag": "0002_marvelous_hannibal_king",
+      "breakpoints": true
+    }
+  ]
+}

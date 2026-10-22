@@ -1,0 +1,29 @@
+{
+  "batch_root": "data/gpt50/experiment",
+  "manifest": "build/gpt50_video_completion_20261008_identity2/manifest.json",
+  "model": "doubao-seedance-2-0-260128",
+  "replacement_model": "doubao-seedance-2-0-fast-260128",
+  "replacement_scenarios": [],
+  "key_file": "/root/.config/socialflux/autodl_video_api_key",
+  "reference_urls": "build/gpt50_full_video_20261008/reference_urls.json",
+  "workers": 3,
+  "max_generation_attempts": 320,
+  "maximum_wait_hours": 24,
+  "after_complete_command": [
+    "python",
+    "-u",
+    "scripts/run_t4_multimodal_experiment.py",
+    "--config",
+    "configs/gpt50_experiment/t4_multimodal_experiment.json",
+    "--output",
+    "build/gpt50_full_video_20261008/experiment"
+  ],
+  "reference_policy": "fresh_provider",
+  "publication_manifest": "data/gpt50/experiment/multimodal_delivery_v1/online_multimodal/manifest.json",
+  "pilot_scenarios": [
+    "GPT50_002",
+    "GPT50_036",
+    "GPT50_038"
+  ],
+  "publication_identity_manifest": "data/gpt50/experiment/multimodal_delivery_v1/online_multimodal/identity_manifest.json"
+}

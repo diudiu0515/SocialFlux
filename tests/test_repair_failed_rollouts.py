@@ -81,7 +81,7 @@ class RepairFailedRolloutsTest(unittest.TestCase):
         ]
         config = {
             "environment": {"provider": {}, "sampling": {}},
-            "pilot_limits": {"rollout_turns": 6},
+            "pilot_limits": {"rollout_turns": 20},
         }
         spec = {"policy_id": "policy", "sampling": {}}
         judged = []
@@ -93,7 +93,7 @@ class RepairFailedRolloutsTest(unittest.TestCase):
 
         with (
             patch("scripts.repair_failed_rollouts.ModelEnvironmentFactory"),
-            patch("scripts.repair_failed_rollouts._policy_from_spec", return_value=object()),
+            patch("scripts.repair_failed_rollouts.build_policy", return_value=object()),
             patch("scripts.repair_failed_rollouts.RolloutRunner") as runner_class,
             patch("scripts.repair_failed_rollouts.audit_trajectory", return_value={"passed": True}),
             patch(

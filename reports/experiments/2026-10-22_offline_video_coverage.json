@@ -1,0 +1,476 @@
+{
+  "updated_at": "2026-10-22T00:22:11.041830+08:00",
+  "bank_sha256": "c1d1f3fd60e94e0c09e1b6ecae4187cd3ae98a7b32e836204749d7de559deee8",
+  "scenarios": 50,
+  "video_scenarios": 45,
+  "video_questions": 270,
+  "missing_scenarios": [
+    "GPT50_005",
+    "GPT50_020",
+    "GPT50_034",
+    "GPT50_036",
+    "GPT50_039"
+  ],
+  "english_preview_scenarios": [
+    "GPT50_001",
+    "GPT50_002",
+    "GPT50_003",
+    "GPT50_004",
+    "GPT50_006",
+    "GPT50_008",
+    "GPT50_009"
+  ],
+  "scope": "Registered nonverbal video condition and separate English ending previews. Partial clips are not full dialogue videos; availability is not human approval.",
+  "rows": [
+    {
+      "scenario_id": "GPT50_001",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 1
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 1
+    },
+    {
+      "scenario_id": "GPT50_003",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 1
+    },
+    {
+      "scenario_id": "GPT50_004",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 1
+    },
+    {
+      "scenario_id": "GPT50_005",
+      "questions": 6,
+      "video_questions": 0,
+      "paired_video_files": 0,
+      "video_assignment_available": false,
+      "coverage": "missing",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_006",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 1
+    },
+    {
+      "scenario_id": "GPT50_007",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_008",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 1
+    },
+    {
+      "scenario_id": "GPT50_009",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 1
+    },
+    {
+      "scenario_id": "GPT50_010",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_011",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_012",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_013",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_014",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_015",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_016",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_017",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_018",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_019",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_020",
+      "questions": 6,
+      "video_questions": 0,
+      "paired_video_files": 0,
+      "video_assignment_available": false,
+      "coverage": "missing",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_021",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_022",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_023",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_024",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_025",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_026",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_027",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_028",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_029",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_030",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_031",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_032",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_033",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_034",
+      "questions": 6,
+      "video_questions": 0,
+      "paired_video_files": 0,
+      "video_assignment_available": false,
+      "coverage": "missing",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_035",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_036",
+      "questions": 6,
+      "video_questions": 0,
+      "paired_video_files": 0,
+      "video_assignment_available": false,
+      "coverage": "missing",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_037",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_038",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_039",
+      "questions": 6,
+      "video_questions": 0,
+      "paired_video_files": 0,
+      "video_assignment_available": false,
+      "coverage": "missing",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_040",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_041",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_042",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_043",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_044",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_045",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_046",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_047",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_048",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_049",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    },
+    {
+      "scenario_id": "GPT50_050",
+      "questions": 6,
+      "video_questions": 6,
+      "paired_video_files": 1,
+      "video_assignment_available": true,
+      "coverage": "partial",
+      "english_ending_preview_files": 0
+    }
+  ]
+}

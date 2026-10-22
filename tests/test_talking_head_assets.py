@@ -1,67 +1,93 @@
 import json
 import unittest
-from collections import Counter
 from pathlib import Path
+
+from scripts.prepare_talking_head_assets import prosody_controls
+from web.server import load_media_assets
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MEDIA = ROOT / "media" / "talking_head"
+ARCHIVE = ROOT / "archives" / "legacy_qwen_scale300_20260919" / "raw"
 
 
-class TalkingHeadAssetTest(unittest.TestCase):
-    def setUp(self):
-        self.manifest = json.loads(
-            (MEDIA / "manifest.json").read_text(encoding="utf-8")
-        )
+class TalkingHeadFrameworkTest(unittest.TestCase):
+    def test_legacy_assets_models_and_tools_are_permanently_removed(self):
+        removed_paths = [
+            ROOT / "media" / "talking_head",
+            ROOT / "media" / "task_examples",
+            ROOT / "build" / "talking_head",
+            ROOT / "configs" / "talking_head_voice_profiles.json",
+            ROOT / ".local_models" / "EchoMimicV2",
+            ROOT / ".local_models" / "echomimic-env",
+            ROOT / ".local_models" / "musetalk-env",
+            ROOT / ".local_tools" / "echomimic_v2",
+            ROOT / ".local_tools" / "musetalk",
+            ARCHIVE / "build" / "talking_head",
+            ARCHIVE / "media" / "talking_head",
+            ARCHIVE / "configs" / "talking_head_voice_profiles.json",
+        ]
+        self.assertTrue(all(not path.exists() for path in removed_paths))
+        self.assertEqual(load_media_assets(), [])
 
-    def test_manifest_covers_two_triggers_for_all_scenarios(self):
-        assets = self.manifest["assets"]
-        self.assertEqual(self.manifest["format"], "socialflux_talking_head_assets_v1")
-        self.assertEqual(self.manifest["asset_count"], 40)
-        self.assertEqual(len(assets), 40)
-        self.assertEqual(len({item["asset_id"] for item in assets}), 40)
-        counts = Counter(item["scenario_id"] for item in assets)
-        self.assertEqual(len(counts), 20)
-        self.assertTrue(all(count == 2 for count in counts.values()))
-
-    def test_requests_obey_public_information_boundary(self):
-        expected_keys = {
-            "prompt",
-            "duration_seconds",
-            "continuity_reference",
-            "safety_check",
+    def test_provider_neutral_framework_is_preserved(self):
+        expected_scripts = {
+            "prepare_talking_head_assets.py",
+            "generate_talking_head_musetalk.py",
+            "generate_talking_head_videos.py",
+            "audit_talking_head_av_sync.py",
+            "audit_talking_head_visual_stability.py",
+            "audit_talking_head_release.py",
         }
-        expected_safety = {
-            "contains_private_state": False,
-            "contains_threshold_logic": False,
-            "contains_benchmark_answer": False,
+        scripts = ROOT / "scripts"
+        self.assertTrue(all((scripts / name).is_file() for name in expected_scripts))
+        self.assertTrue((ROOT / "prompts" / "talking_head_generation_v4.md").is_file())
+        self.assertTrue((ROOT / "schemas" / "talking_head_request.schema.json").is_file())
+        self.assertTrue((ROOT / "web" / "static" / "task_examples.html").is_file())
+        self.assertTrue((ROOT / "requirements-video.txt").is_file())
+
+    def test_active_scenarios_do_not_claim_deleted_assets(self):
+        root = ROOT / "data" / "gpt50" / "experiment" / "scenario" / "scenarios"
+        paths = sorted(root.glob("scenario_*/scenario_*.json"))
+        self.assertEqual(len(paths), 50)
+        for path in paths:
+            scenario = json.loads(path.read_text(encoding="utf-8"))
+            media = scenario["media_generation"]
+            self.assertEqual(media["asset_status"], "pending")
+            self.assertEqual(media["stage"], "structured_expression")
+            self.assertTrue(
+                all(trigger.get("media_asset_id") is None for trigger in scenario["video_triggers"])
+            )
+
+    def test_prosody_controls_remain_batch_independent(self):
+        profile = {
+            "base_rate_pct": -2,
+            "base_pitch_hz": 0,
+            "volume_pct": 0,
         }
-        forbidden = (
-            "initial_state",
-            "initial_dynamics",
-            "hidden_intention",
-            "state_delta",
-            "appraisal",
+        urgent = prosody_controls(
+            {"trigger_id": "public_alarm", "observable_expression": {}},
+            profile,
         )
-        for asset in self.manifest["assets"]:
-            request_path = ROOT / asset["request_path"]
-            request = json.loads(request_path.read_text(encoding="utf-8"))
-            self.assertEqual(set(request), expected_keys)
-            self.assertEqual(request["safety_check"], expected_safety)
-            self.assertTrue(3 <= request["duration_seconds"] <= 8)
-            serialized = json.dumps(request, ensure_ascii=False).lower()
-            self.assertFalse(any(field in serialized for field in forbidden))
+        quiet = prosody_controls(
+            {
+                "trigger_id": "hesitant_disclosure",
+                "observable_expression": {"speech_style": "低声，停顿"},
+            },
+            profile,
+        )
+        self.assertEqual(urgent["profile"], "controlled_urgent")
+        self.assertEqual(quiet["profile"], "quiet_reflective")
+        self.assertNotEqual(urgent["rate_pct"], quiet["rate_pct"])
 
-    def test_generated_metadata_is_complete_when_present(self):
-        for asset in self.manifest["assets"]:
-            if asset["status"] != "generated":
-                continue
-            self.assertTrue(asset.get("has_video"))
-            self.assertTrue(asset.get("has_audio"))
-            self.assertEqual(asset.get("width"), 768)
-            self.assertEqual(asset.get("height"), 768)
-            self.assertTrue(asset.get("duration_matches_request"))
-            self.assertEqual(len(asset.get("video_sha256", "")), 64)
-            self.assertTrue(3 <= asset["duration_seconds_actual"] <= 8)
+    def test_current_delivery_prompt_requires_natural_exact_speech(self):
+        prompt = (
+            ROOT / "prompts" / "talking_head_generation_v4.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("responding in the moment rather than reading a script", prompt)
+        self.assertIn("natural coarticulation", prompt)
+        self.assertIn("Avoid a synthetic monotone", prompt)
+        self.assertIn("Do not add, remove, paraphrase, reorder", prompt)
 
 
+if __name__ == "__main__":
+    unittest.main()

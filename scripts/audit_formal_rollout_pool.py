@@ -10,26 +10,24 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from evaluation.rollout_gate import (
-    audit_pool_contract,
-    audit_rollout,
-    content_sha256,
-    select_diverse_trajectories,
-)
+from evaluation.rollout_gate import audit_pool_contract, audit_rollout, content_sha256
 from evaluation.review_registry import load_review_registry
 from evaluation.quality_gates import audit_environment_gate, audit_scenario_gate
+from evaluation.judge_protocol import validate_judge_independence
+from pipeline.constants import SCENARIO_ROOT
+from pipeline.scenarios import load_scenario_records
 from rollout.manifest import write_manifest
-from scripts.run_pipeline import load_scenario_records
 
 
 def load_records(root):
     trajectories = []
     root = Path(root)
-    nested = any((path / "rollouts").is_dir() for path in root.glob("scenario_*"))
+    scenario_dirs = sorted(
+        path for path in root.glob("**/scenario_*") if path.is_dir()
+    )
     rollout_dirs = sorted(
-        path / "rollouts" if nested else path
-        for path in root.glob("scenario_*")
-        if (path / "rollouts" if nested else path).is_dir()
+        path / "rollouts" if (path / "rollouts").is_dir() else path
+        for path in scenario_dirs
     )
     paths = []
     for rollout_dir in rollout_dirs:
@@ -70,20 +68,20 @@ def validate_formal_judgment_bundle(path):
     if path is None or not path.exists():
         return False, "formal pool requires a completed primary/secondary judge merge"
     value = json.loads(path.read_text(encoding="utf-8"))
-    if value.get("format") != "socialflux_dual_judge_merge_v2":
-        return False, "formal judgments must be socialflux_dual_judge_merge_v2 with turn-ID evidence"
+    if value.get("format") not in {
+        "socialflux_dual_judge_merge_v2",
+        "socialflux_dual_judge_merge_v3",
+    }:
+        return False, "formal judgments require a completed evidence-bearing dual-judge merge"
     if value.get("complete") is not True:
         return False, "formal dual-judge bundle is incomplete"
     primary = value.get("primary_judge", {})
     secondary = value.get("secondary_judge", {})
-    if (
-        not primary.get("model")
-        or not secondary.get("model")
-        or primary.get("model") == secondary.get("model")
-        or primary.get("model_family") == secondary.get("model_family")
-    ):
-        return False, "formal judges must use different models and model families"
-    return True, "completed cross-family primary/secondary protocol"
+    try:
+        validate_judge_independence(primary, secondary)
+    except ValueError as exc:
+        return False, str(exc)
+    return True, "completed independent primary/secondary protocol"
 
 
 def assert_formal_scenarios(scenario_records, review_registry):
@@ -102,11 +100,38 @@ def assert_formal_scenarios(scenario_records, review_registry):
             failures.append(f"{scenario['scenario_id']}: {','.join(failed)}")
     if failures:
         raise ValueError(
-            "formal pool blocked: scenario quality/S0-D0 lack valid bound human approval: "
+            "formal pool blocked: scenario quality/initial-state lack valid bound human approval: "
             + "; ".join(failures)
         )
 
 
+def admit_single_trajectory(trajectories, audits):
+    """Admit the sole quality-passing trajectory; never rank or resample."""
+    if len(trajectories) != 1:
+        return {
+            "passed": False,
+            "selected": [],
+            "selected_ids": [],
+            "eligible_count": sum(bool(item.get("passed")) for item in audits),
+            "raw_count": len(trajectories),
+            "strategy": "single_trajectory_pass_fail",
+            "reason": "expected_exactly_one_raw_trajectory",
+        }
+    trajectory = trajectories[0]
+    audit = next(
+        (item for item in audits if item["trajectory_id"] == trajectory["trajectory_id"]),
+        None,
+    )
+    passed = bool(audit and audit.get("passed"))
+    return {
+        "passed": passed,
+        "selected": [trajectory] if passed else [],
+        "selected_ids": [trajectory["trajectory_id"]] if passed else [],
+        "eligible_count": int(passed),
+        "raw_count": 1,
+        "strategy": "single_trajectory_pass_fail",
+        "reason": "quality_passed" if passed else "quality_failed_or_pending",
+    }
 def materialize_selected(root, selected, audits, report):
     root = Path(root)
     root.mkdir(parents=True, exist_ok=True)
@@ -136,15 +161,18 @@ def materialize_selected(root, selected, audits, report):
         )
 
 
-def main():
-    parser = argparse.ArgumentParser()
+def main(argv=None):
+    parser = argparse.ArgumentParser(prog="python -m pipeline gate3")
     parser.add_argument("--raw-root", type=Path, required=True)
+    parser.add_argument(
+        "--scenarios", type=Path, default=SCENARIO_ROOT
+    )
     parser.add_argument("--judgments", type=Path)
     parser.add_argument("--history-evidence", type=Path)
     parser.add_argument(
         "--environment-evidence",
         type=Path,
-        help="Gate 2 E1-E6 evidence directory (required for formal)",
+        help="Gate 2 E1-E8 evidence directory (required for formal)",
     )
     parser.add_argument(
         "--review-registry",
@@ -153,14 +181,14 @@ def main():
     )
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--selected-root", type=Path)
-    parser.add_argument("--stage", choices=("development", "formal"), default="development")
-    parser.add_argument("--minimum", type=int, default=1)
-    parser.add_argument("--maximum", type=int, default=1)
-    args = parser.parse_args()
+    parser.add_argument("--stage", choices=("development", "formal"), default="formal")
+    args = parser.parse_args(argv)
 
-    scenario_records = load_scenario_records("configs/scenarios")
+    scenario_records = load_scenario_records(args.scenarios)
     scenarios = [scenario for _, scenario in scenario_records]
     if args.stage == "formal":
+        if args.selected_root is None:
+            raise ValueError("formal Gate 3 requires --selected-root")
         registry = (
             load_review_registry(args.review_registry)
             if args.review_registry is not None
@@ -192,11 +220,9 @@ def main():
     for trajectory in trajectories:
         grouped[trajectory["scenario_id"]].append(trajectory)
     selections = {
-        scenario_id: select_diverse_trajectories(
+        scenario_id: admit_single_trajectory(
             items,
             [audit for audit in audits if audit["scenario_id"] == scenario_id],
-            args.minimum,
-            args.maximum,
         )
         for scenario_id, items in sorted(grouped.items())
     }
@@ -208,6 +234,7 @@ def main():
     report = {
         "format": "socialflux_formal_rollout_gate_v1",
         "stage": args.stage,
+        "admission_strategy": "single_trajectory_pass_fail",
         "raw_trajectory_count": len(trajectories),
         "passed_quality_count": sum(item["passed"] for item in audits),
         "selected_trajectory_count": sum(len(items) for items in selected.values()),
@@ -241,7 +268,7 @@ def main():
         json.dumps(report, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
-    if args.selected_root and report["research_ready"]:
+    if args.selected_root is not None and report["research_ready"]:
         materialize_selected(args.selected_root, selected, audits, report)
     print(json.dumps({
         "output": str(args.output),

@@ -9,11 +9,17 @@ def _public_turn(turn):
     action_text = turn["policy_action"]["text"]
     observation = deepcopy(turn["observation"])
     observation.pop("history", None)
+    transition = turn.get("segment_transition_after") or {}
     return {
         "turn_id": turn["turn_id"],
+        "segment_id": turn.get("segment_id", "single_interaction"),
+        "segment_turn_id": turn.get("segment_turn_id"),
+        "elapsed_time_before": turn.get("elapsed_time_before", 0),
+        "elapsed_time_after": turn.get("elapsed_time_after", 0),
         "observation": observation,
         "policy_action": {"text": action_text},
         "environment_response": deepcopy(turn["environment_response"]),
+        "public_events_after": deepcopy(transition.get("public_events", [])),
     }
 
 
@@ -55,6 +61,7 @@ def build_t1_checkpoints(trajectory, target_state_ids=None):
                 "source_trajectory_id": trajectory["trajectory_id"],
                 "trajectory_origin": "free_form_model_interaction",
                 "private_state_exposed": False,
+                "public_time_and_event_evidence_included": True,
             },
         })
     return checkpoints
@@ -62,7 +69,16 @@ def build_t1_checkpoints(trajectory, target_state_ids=None):
 
 def _history_signature(trajectory, end_index):
     return [
-        (turn["policy_action"]["text"], turn["environment_response"])
+        (
+            turn["policy_action"]["text"],
+            turn["environment_response"],
+            tuple(
+                event.get("event_id")
+                for event in (turn.get("segment_transition_after") or {}).get(
+                    "public_events", []
+                )
+            ),
+        )
         for turn in trajectory["turns"][: end_index + 1]
     ]
 
@@ -177,6 +193,7 @@ def build_t2_pair(candidate, shared_observation, target_state_ids=None):
             "compatibility_status": "pending_human_validation",
             "private_state_exposed": False,
             "selection_method": "task_specific_quality_plus_private_distance",
+            "public_time_and_event_evidence_included": True,
         },
     }
 
@@ -249,6 +266,9 @@ def build_t3_candidates(checkpoint, candidate_actions, delayed_horizon=5, target
             ).get("character_id"),
             "time_horizons": ["immediate", "delayed"],
             "delayed_horizon": delayed_horizon,
+            "delayed_horizon_max": 10,
+            "delayed_time_reporting": "actual_elapsed_time_and_crossed_event_nodes",
+            "counterfactual_external_control": "frozen_event_plan_and_timeline",
             "continuation_protocol": "free_form_same_model_policy",
             "target_state_ids": list(target_state_ids or []),
             "ground_truth_source": "human_annotation",
@@ -261,5 +281,12 @@ def build_t3_candidates(checkpoint, candidate_actions, delayed_horizon=5, target
             "checkpoint_origin": "free_form_model_interaction",
             "local_intervention": True,
             "private_state_exposed": False,
+            "checkpoint_elapsed_time": checkpoint["observation"].get(
+                "longitudinal_context", {}
+            ).get("time", {}).get("elapsed", 0),
+            "checkpoint_segment_id": checkpoint["observation"].get(
+                "longitudinal_context", {}
+            ).get("segment", {}).get("segment_id", "single_interaction"),
+            "public_time_and_event_evidence_included": True,
         },
     }

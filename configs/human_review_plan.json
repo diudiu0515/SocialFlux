@@ -1,0 +1,35 @@
+{
+  "format": "socialflux_human_review_plan_v1",
+  "current_scenario_count": 20,
+  "scale_target_scenario_count": 150,
+  "gate1": {
+    "reviewers_required": 1,
+    "scope": "all_scenarios",
+    "unit": "scenario_and_frozen_initial_state"
+  },
+  "gate2": {
+    "reviewers_required": 1,
+    "scope": "deterministic_experiment_samples",
+    "unit": "environment_validity_e1_to_e9",
+    "note": "Machine experiments and summaries support E1–E9, including E9 timescale validity; required human attestations cannot be automated."
+  },
+  "gate3": {
+    "primary_reviewers": 1,
+    "secondary_audit_reviewers": 1,
+    "secondary_audit_fraction": 0.2,
+    "scope": "primary_full_review_plus_small_deterministic_audit"
+  },
+  "gate4": {
+    "independent_reviewers": 2,
+    "same_deterministic_sample": true,
+    "sample_fraction_per_task_type": 0.1,
+    "minimum_sample_per_task_type": 2,
+    "disagreement_adjudicators": 1,
+    "scope": "machine_proposed_answers_with_double_blind_spot_check",
+    "note": "Both reviewers receive the same sample. A third named reviewer is required only for disagreements."
+  },
+  "video": {
+    "reviewers_required": 1,
+    "scope": "all_released_talking_head_assets"
+  }
+}

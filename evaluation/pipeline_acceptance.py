@@ -5,14 +5,10 @@ from pathlib import Path
 
 from .environment_validity import (
     local_action_intervention_evidence,
-    seed_coverage,
     trajectory_structure,
 )
-from scripts.scenario_docs import (
-    assert_document_current,
-    assert_manifest_current,
-    discover_scenario_paths,
-)
+from .timescale_validity import build_timescale_review_items
+from scenario_design.catalog import assert_document_current, assert_manifest_current, discover_scenario_paths
 
 
 CRITERIA = (
@@ -24,7 +20,7 @@ CRITERIA = (
     "6. Neutral-State Stability",
     "7. Response-State Consistency",
     "8. Full-Trajectory Plausibility",
-    "9. Seed Robustness",
+    "9. Timescale Validity",
 )
 
 
@@ -36,29 +32,6 @@ def load_scenarios(directory):
         assert_document_current(path)
         scenarios.append(json.loads(path.read_text(encoding="utf-8")))
     return scenarios
-
-
-def load_trajectory_pool(directory):
-    trajectories = []
-    for bundle in sorted(Path(directory).glob("scenario_*/rollouts")):
-        manifest_path = bundle / "manifest.json"
-        if not manifest_path.exists():
-            continue
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        if manifest.get("config", {}).get("origin") != "free_form_model_interaction":
-            continue
-        for trajectory_id in manifest.get("trajectory_ids", []):
-            path = bundle / f"{trajectory_id}.json"
-            if path.exists():
-                trajectories.append(json.loads(path.read_text(encoding="utf-8")))
-    return trajectories
-
-
-def load_local_interventions(output_dir):
-    records = []
-    for path in sorted(Path(output_dir).glob("*/validation/local_action_interventions.json")):
-        records.extend(json.loads(path.read_text(encoding="utf-8")))
-    return records
 
 
 def _pending(criterion, requirement):
@@ -109,12 +82,24 @@ def build_acceptance_report(
         for key, branches in intervention_groups.items()
     ]
     local_ready = bool(local_evidence) and all(item["divergent"] for item in local_evidence)
-    seeds = seed_coverage(trajectories)
+    timescale_items = build_timescale_review_items(trajectories, limit=40)
+    timescale_families = {
+        name: sum(
+            item["expected_timescale_prior"] == name
+            for item in timescale_items
+        )
+        for name in ("fast", "medium", "slow", "context_dependent")
+    }
+    timescale_ready = (
+        len(timescale_items) >= 10
+        and all(timescale_families[name] >= 1 for name in ("fast", "medium", "slow"))
+        and any(item["changed_turn_count"] > 0 for item in timescale_items)
+    )
 
     criteria = [
         _pending(
             CRITERIA[0],
-            "30–50 sampled transitions, three human annotators, direction/plausibility agreement",
+            "30–50 sampled transitions reviewed by one named human for direction/plausibility",
         ),
         _pending(
             CRITERIA[1],
@@ -150,24 +135,29 @@ def build_acceptance_report(
             "structural_checks": structures,
             "quality_checks": trajectory_quality,
             "formal_human_judgment": "pending",
-            "requirement": "15–20 complete natural trajectories reviewed by three annotators",
+            "requirement": "15–20 complete natural trajectories reviewed by one named primary reviewer",
         },
         {
             "criterion": CRITERIA[8],
-            "status": "evidence_ready" if seeds["ready"] else "pending",
-            "seed_coverage": seeds,
+            "status": "evidence_ready" if timescale_ready else "pending",
+            "candidate_variable_count": len(timescale_items),
+            "timescale_families": timescale_families,
+            "review_items": timescale_items,
             "human_judgment": "pending",
-            "requirement": "same model/config across multiple seeds plus qualitative direction comparison",
+            "requirement": (
+                "10+ state variables covering fast/medium/slow priors, with human "
+                "review of context-dependent speed, persistence and reversals"
+            ),
         },
     ]
     return {
-        "format": "socialflux_environment_acceptance_v2",
+        "format": "socialflux_environment_acceptance_v3",
         "scenario_count": len(scenarios),
         "trajectory_count": len(trajectories),
         "trajectory_origin_required": "free_form_model_interaction",
         "criteria": criteria,
         "gate": {
-            "automated_artifacts_ready": trajectory_ready and local_ready and seeds["ready"],
+            "automated_artifacts_ready": trajectory_ready and local_ready and timescale_ready,
             "research_acceptance": all(item["status"] == "passed" for item in criteria),
             "formal_human_pending": [item["criterion"] for item in criteria],
             "deprecated_checks": [

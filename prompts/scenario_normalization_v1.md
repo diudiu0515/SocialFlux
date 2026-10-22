@@ -9,13 +9,18 @@ Extract:
 - relationship and power structure;
 - conflicting goals and information asymmetry;
 - consequential prior events and desired longitudinal dependency;
-- environment persona, explicit goal, private hidden intention, and evaluated-agent role;
-- relevant state-variable families and target state IDs;
+- a stable private environment persona with canonical personality fields, plus explicit goal and private hidden intention;
+- an evaluated-agent role with public identity, role, goal, and its own stable policy-visible persona using the same eight canonical personality fields; the two personas should form a plausible relational pair without copying or exposing the environment agent's hidden intention or private state;
+- `state_contract_version=socialflux_state_v2` and exactly the four state families emotion, behavioral_disposition, relationship, and consequence_risk;
+- 4–8 approved state variables total and target state IDs drawn from them;
 - socially meaningful multimodal event concepts;
 - a nontrivial choice space without prescribing a best path;
-- source-specific temporal structure, practical constraints, ambiguity, and adaptation boundaries that prevent scenarios from feeling interchangeable.
+- source-specific temporal structure, practical constraints, ambiguity, and adaptation boundaries that prevent scenarios from feeling interchangeable;
+- set suggested_horizon to 20 as a maximum budget, not a required dialogue length;
+  design enough genuine interaction capacity for a natural 10–20-turn rollout,
+  while allowing a coherent interaction to end earlier without filler.
 
-Preserve causal uniqueness and do not normalize every source into the same state set, trigger pair, opening, or confrontation pattern. Do not produce S0/D0, numeric trigger thresholds, action effects, response templates, strategy labels, expected deltas, sampling checkpoints, or scripted trajectories. Those belong to later reviewed stages.
+Preserve causal uniqueness and do not normalize every source into the same state set, trigger pair, opening, or confrontation pattern. Do not produce initial numeric values, numeric trigger thresholds, action effects, response templates, strategy labels, expected deltas, sampling checkpoints, or scripted trajectories. Those belong to later reviewed stages.
 
 Internally verify T1/T2/T3/T4 suitability and absence of one universally optimal script. Return JSON only conforming to schemas/scenario_blueprint.schema.json.
 

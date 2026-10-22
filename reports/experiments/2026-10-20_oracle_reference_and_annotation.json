@@ -1,0 +1,1177 @@
+{
+  "published_items_sha256": "c1d1f3fd60e94e0c09e1b6ecae4187cd3ae98a7b32e836204749d7de559deee8",
+  "executed_items": 300,
+  "schema_valid": 300,
+  "bound_state_targets": 300,
+  "t2_replayed_scenes": 50,
+  "independent_private_checks": 300,
+  "public_blind_checks": 300,
+  "machine_unflagged": 162,
+  "machine_flagged": 138,
+  "private_issue_counts": {
+    "private_only": 32,
+    "scope_mismatch": 4,
+    "ambiguous": 11,
+    "state_conflict": 5,
+    "option_cue": 2,
+    "missing_state": 1,
+    "wrong_subject": 1,
+    "branch_overclaim": 5
+  },
+  "public_blind_issue_counts": {
+    "subject_mismatch": 3,
+    "history_independent": 17,
+    "option_cue": 7,
+    "ambiguous": 4,
+    "wrong_form": 3,
+    "unsupported": 1
+  },
+  "changed_target_items": 90,
+  "human_reviewers_required": 2,
+  "gate4_spot_check_sample": [
+    {
+      "instance_id": "SFV2-038-T1-01",
+      "task_type": "T1",
+      "item_sha256": "7bb39998fc3de05b9461c93c17000e1b7525a83bc0d37cf25fb9e6857c25a9ed"
+    },
+    {
+      "instance_id": "SFV2-044-T1-02",
+      "task_type": "T1",
+      "item_sha256": "85739a9f630f7f53fc96ecbd653b333174445b70a13e101349ee88b3f46154ca"
+    },
+    {
+      "instance_id": "SFV2-045-T1-01",
+      "task_type": "T1",
+      "item_sha256": "246012d676a9c1198dbee40b4b1f14ff130f79ed69f9d007f420702702074eb9"
+    },
+    {
+      "instance_id": "SFV2-004-T1-02",
+      "task_type": "T1",
+      "item_sha256": "9ade7c2994c39c71d8e1bd37f0d94809922b18ee7f799bb7b413f6ab50e2b9ed"
+    },
+    {
+      "instance_id": "SFV2-018-T1-01",
+      "task_type": "T1",
+      "item_sha256": "67a0f228d5358094f18a0464218080fce76572657f88bd85ce276d4b12405533"
+    },
+    {
+      "instance_id": "SFV2-029-T1-01",
+      "task_type": "T1",
+      "item_sha256": "23c1bc534ec2deebcd55d74349264284f4001b5ca96e2621a4ac20fa28cd3e92"
+    },
+    {
+      "instance_id": "SFV2-012-T1-01",
+      "task_type": "T1",
+      "item_sha256": "95523f4d41b5f549c726b6d4f0cdd972f2554bb2be7eb847d5c9fd3c293f548d"
+    },
+    {
+      "instance_id": "SFV2-006-T1-01",
+      "task_type": "T1",
+      "item_sha256": "c59003a2dfbb18f61873c7571f1a49d563a80c6553d6f22fe6a3d58f8ea6edec"
+    },
+    {
+      "instance_id": "SFV2-022-T1-02",
+      "task_type": "T1",
+      "item_sha256": "0865f5e9cfbf20125469d7bc7469435b141ddb68ed1bd1896ded9a86d91d24f9"
+    },
+    {
+      "instance_id": "SFV2-039-T1-02",
+      "task_type": "T1",
+      "item_sha256": "68c58a3914f5dda99e035ddde09d714afb6435bc1b87a0b7aec91b054574e7db"
+    },
+    {
+      "instance_id": "SFV2-007-T2-01",
+      "task_type": "T2",
+      "item_sha256": "7b7d8ca9886a07ee71092a1530532e01d85454af576b458dbffa15ab09293ff5"
+    },
+    {
+      "instance_id": "SFV2-013-T2-01",
+      "task_type": "T2",
+      "item_sha256": "f057245eb2c707645fc0278517ae26cd1e67601c7415ed8b8eb27a7c369894e3"
+    },
+    {
+      "instance_id": "SFV2-048-T2-02",
+      "task_type": "T2",
+      "item_sha256": "2f3b194c9721655661422b50a9913968f3c427c9995b61253c4fbe0c57ba8677"
+    },
+    {
+      "instance_id": "SFV2-016-T2-01",
+      "task_type": "T2",
+      "item_sha256": "8ee29e398e3e97399cd249655f50eca957f6b5732eb77b4cfef5fa6e75f6f172"
+    },
+    {
+      "instance_id": "SFV2-041-T2-02",
+      "task_type": "T2",
+      "item_sha256": "404d6bb6e360b566d4ab8ef8865c46cca57368f96d967f5f4a197cfddb36ada8"
+    },
+    {
+      "instance_id": "SFV2-009-T2-02",
+      "task_type": "T2",
+      "item_sha256": "bebf19e73f779625bcfb6c92b87b0d224d75ba91f67c84fcf695710054e2d0a6"
+    },
+    {
+      "instance_id": "SFV2-010-T2-02",
+      "task_type": "T2",
+      "item_sha256": "a6a470560856524014f1ad9bbd2013cdb0c681c495720b0bd6c8486e6098f820"
+    },
+    {
+      "instance_id": "SFV2-039-T2-01",
+      "task_type": "T2",
+      "item_sha256": "77e4975fb3b8c5576d0dd5d6219b031df4a4e62e77ccda128218098c059276f4"
+    },
+    {
+      "instance_id": "SFV2-022-T2-02",
+      "task_type": "T2",
+      "item_sha256": "939b2d24ec2c47bf225205eccee27f33fcaed4d82942473c4b388f217eebf25a"
+    },
+    {
+      "instance_id": "SFV2-006-T2-02",
+      "task_type": "T2",
+      "item_sha256": "c1492adb3925d0095043154fda6bee5965e0f6c21928d32647cdda53f4ca4f8e"
+    },
+    {
+      "instance_id": "SFV2-011-T3-01",
+      "task_type": "T3",
+      "item_sha256": "883a3d4f28764adc390e4965911c764d726056e02506cfe27e7acd9f46b0aefc"
+    },
+    {
+      "instance_id": "SFV2-041-T3-01",
+      "task_type": "T3",
+      "item_sha256": "0133ea74d2814afc7ac21555a8aa73bcd3ea95ab4bdacb82f62b03ac46558d16"
+    },
+    {
+      "instance_id": "SFV2-031-T3-01",
+      "task_type": "T3",
+      "item_sha256": "5121e78401972468d7cd2c403cea84831db11404b9d60fea07bc1634512d7056"
+    },
+    {
+      "instance_id": "SFV2-013-T3-01",
+      "task_type": "T3",
+      "item_sha256": "89086b29256ec3a1c699adedc6c2902039797ad3dd1ee77cc71c6f4e02d88240"
+    },
+    {
+      "instance_id": "SFV2-039-T3-01",
+      "task_type": "T3",
+      "item_sha256": "b302f3a6e10f9168b783bee5d79a7fea729fd3a3348a4f7dd5268ee840115596"
+    },
+    {
+      "instance_id": "SFV2-007-T3-02",
+      "task_type": "T3",
+      "item_sha256": "95b975086293425a06a880fad29a676598e124eff08055da0fca6f4605c37f14"
+    },
+    {
+      "instance_id": "SFV2-021-T3-01",
+      "task_type": "T3",
+      "item_sha256": "3cd955e2807c2bb2448dc053ff338549e6baf3fad3d519a14440e29555af8671"
+    },
+    {
+      "instance_id": "SFV2-004-T3-02",
+      "task_type": "T3",
+      "item_sha256": "1fa6024b07aba45a93f40fa0d4930d128334b2907ed347d7e04e2fe7528e0286"
+    },
+    {
+      "instance_id": "SFV2-035-T3-02",
+      "task_type": "T3",
+      "item_sha256": "99a531722ed2023bcd5ac170130060987a93347d507d793b5b7c34c03115cafe"
+    },
+    {
+      "instance_id": "SFV2-015-T3-01",
+      "task_type": "T3",
+      "item_sha256": "c1163771d1ed6d2c0950666b339292bb25a836ea5361646d68c18c1a99dee927"
+    }
+  ],
+  "human_gt": {
+    "ground_truth_candidates": [],
+    "human_baselines": [],
+    "identity_basis": "self_reported_reviewer_id"
+  },
+  "formal_admitted": 0,
+  "summary": {
+    "format": "socialflux_omniscient_reference_v1",
+    "updated_at": "2026-10-20T14:50:16.768515+00:00",
+    "source_items": 300,
+    "authored_items": 300,
+    "independently_checked_items": 300,
+    "oracle_agreement_items": 197,
+    "public_blind_checked_items": 300,
+    "machine_concern_ids": [
+      "SFV2-001-T1-02",
+      "SFV2-001-T2-01",
+      "SFV2-001-T2-02",
+      "SFV2-003-T3-01",
+      "SFV2-004-T2-01",
+      "SFV2-004-T3-01",
+      "SFV2-005-T1-02",
+      "SFV2-005-T2-01",
+      "SFV2-005-T3-01",
+      "SFV2-006-T2-02",
+      "SFV2-006-T3-01",
+      "SFV2-006-T3-02",
+      "SFV2-007-T1-02",
+      "SFV2-007-T2-01",
+      "SFV2-007-T2-02",
+      "SFV2-007-T3-01",
+      "SFV2-007-T3-02",
+      "SFV2-008-T1-02",
+      "SFV2-008-T3-02",
+      "SFV2-009-T3-02",
+      "SFV2-010-T2-01",
+      "SFV2-010-T2-02",
+      "SFV2-010-T3-01",
+      "SFV2-011-T1-01",
+      "SFV2-011-T1-02",
+      "SFV2-011-T2-01",
+      "SFV2-012-T1-01",
+      "SFV2-012-T2-01",
+      "SFV2-012-T2-02",
+      "SFV2-013-T1-02",
+      "SFV2-013-T2-01",
+      "SFV2-013-T3-02",
+      "SFV2-014-T1-02",
+      "SFV2-014-T2-02",
+      "SFV2-015-T1-02",
+      "SFV2-015-T2-01",
+      "SFV2-015-T2-02",
+      "SFV2-016-T3-02",
+      "SFV2-017-T2-01",
+      "SFV2-017-T3-02",
+      "SFV2-018-T1-02",
+      "SFV2-019-T2-01",
+      "SFV2-019-T3-02",
+      "SFV2-020-T1-02",
+      "SFV2-020-T2-01",
+      "SFV2-020-T3-01",
+      "SFV2-020-T3-02",
+      "SFV2-021-T1-02",
+      "SFV2-021-T2-01",
+      "SFV2-021-T2-02",
+      "SFV2-021-T3-01",
+      "SFV2-021-T3-02",
+      "SFV2-022-T3-01",
+      "SFV2-022-T3-02",
+      "SFV2-023-T2-01",
+      "SFV2-023-T2-02",
+      "SFV2-023-T3-01",
+      "SFV2-023-T3-02",
+      "SFV2-024-T1-01",
+      "SFV2-024-T3-02",
+      "SFV2-025-T1-02",
+      "SFV2-025-T2-01",
+      "SFV2-025-T2-02",
+      "SFV2-025-T3-01",
+      "SFV2-025-T3-02",
+      "SFV2-026-T1-02",
+      "SFV2-026-T2-01",
+      "SFV2-026-T2-02",
+      "SFV2-026-T3-02",
+      "SFV2-027-T2-01",
+      "SFV2-027-T2-02",
+      "SFV2-028-T2-01",
+      "SFV2-028-T2-02",
+      "SFV2-029-T1-02",
+      "SFV2-029-T2-02",
+      "SFV2-029-T3-01",
+      "SFV2-029-T3-02",
+      "SFV2-030-T2-01",
+      "SFV2-030-T2-02",
+      "SFV2-030-T3-01",
+      "SFV2-031-T2-01",
+      "SFV2-031-T2-02",
+      "SFV2-031-T3-01",
+      "SFV2-031-T3-02",
+      "SFV2-032-T3-02",
+      "SFV2-033-T2-02",
+      "SFV2-035-T2-01",
+      "SFV2-035-T2-02",
+      "SFV2-035-T3-01",
+      "SFV2-035-T3-02",
+      "SFV2-036-T2-01",
+      "SFV2-036-T2-02",
+      "SFV2-036-T3-01",
+      "SFV2-036-T3-02",
+      "SFV2-037-T1-01",
+      "SFV2-038-T1-01",
+      "SFV2-038-T3-01",
+      "SFV2-038-T3-02",
+      "SFV2-039-T1-01",
+      "SFV2-039-T2-01",
+      "SFV2-039-T3-01",
+      "SFV2-039-T3-02",
+      "SFV2-040-T1-02",
+      "SFV2-040-T3-01",
+      "SFV2-040-T3-02",
+      "SFV2-041-T2-01",
+      "SFV2-041-T2-02",
+      "SFV2-041-T3-02",
+      "SFV2-042-T1-01",
+      "SFV2-042-T1-02",
+      "SFV2-042-T2-01",
+      "SFV2-043-T1-01",
+      "SFV2-043-T1-02",
+      "SFV2-043-T2-01",
+      "SFV2-043-T2-02",
+      "SFV2-043-T3-01",
+      "SFV2-044-T2-01",
+      "SFV2-044-T2-02",
+      "SFV2-044-T3-02",
+      "SFV2-045-T2-01",
+      "SFV2-045-T3-01",
+      "SFV2-045-T3-02",
+      "SFV2-046-T2-02",
+      "SFV2-046-T3-01",
+      "SFV2-046-T3-02",
+      "SFV2-047-T1-01",
+      "SFV2-047-T2-01",
+      "SFV2-047-T2-02",
+      "SFV2-048-T1-01",
+      "SFV2-048-T2-02",
+      "SFV2-048-T3-02",
+      "SFV2-049-T2-01",
+      "SFV2-049-T2-02",
+      "SFV2-049-T3-01",
+      "SFV2-049-T3-02",
+      "SFV2-050-T2-01",
+      "SFV2-050-T2-02",
+      "SFV2-050-T3-02"
+    ],
+    "t2_replay_groups": 50,
+    "human_verified_items": 0,
+    "formal_admitted_items": 0,
+    "pending_groups": [],
+    "api_calls": 867,
+    "material_amended_items": [
+      "SFV2-044-T2-01",
+      "SFV2-044-T2-02",
+      "SFV2-050-T2-01",
+      "SFV2-050-T2-02"
+    ],
+    "source_state_coverage_verified": true
+  },
+  "manifest": {
+    "format": "socialflux_offline_choice_v2",
+    "item_count": 300,
+    "tasks": {
+      "T1": 100,
+      "T2": 100,
+      "T3": 100
+    },
+    "subtypes": {
+      "T1/evidence_support": 25,
+      "T1/current_state": 26,
+      "T2/history_comparison": 34,
+      "T2/expression_meaning": 27,
+      "T3/action_selection": 50,
+      "T3/consequence_explanation": 50,
+      "T1/state_combination": 23,
+      "T1/interval_change": 26,
+      "T2/history_evidence": 19,
+      "T2/joint_comparison": 20
+    },
+    "task_state_coverage": {
+      "T1/Behavioral Disposition": 64,
+      "T1/Interaction Risk": 2,
+      "T1/Relationship": 40,
+      "T2/Behavioral Disposition": 39,
+      "T2/Emotion": 9,
+      "T2/Interaction Risk": 4,
+      "T2/Relationship": 57,
+      "T3/Behavioral Disposition": 24,
+      "T3/Emotion": 2,
+      "T3/Interaction Risk": 50,
+      "T3/Relationship": 27
+    },
+    "answer_positions": {
+      "A": 75,
+      "B": 75,
+      "C": 75,
+      "D": 75
+    },
+    "scenario_count": 50,
+    "formal_admission": false,
+    "human_review": "pending",
+    "replay_ready_count": 300,
+    "replay_ready_tasks": {
+      "T1": 100,
+      "T2": 100,
+      "T3": 100
+    },
+    "replay_pending_ids": [],
+    "items_sha256": "c1d1f3fd60e94e0c09e1b6ecae4187cd3ae98a7b32e836204749d7de559deee8",
+    "public_sha256": "40b44f28a0ad626b2bea54f114bea121e9644e376f8683d81c7f64e3cc6f522f",
+    "expected_items": 300,
+    "requested_scenarios": 50,
+    "complete": true,
+    "pending_jobs": [],
+    "primary_capabilities": {
+      "situational_evidence_integration": 167,
+      "temporal_dynamics_reasoning": 84,
+      "multidimensional_state_distinction": 49
+    },
+    "design_difficulties": {
+      "ordinary": 230,
+      "hard": 70
+    },
+    "generation_source": {
+      "run": "data/offline_scenarios_v2_20261020_main",
+      "prompt_sha256": "999036a7874e0f2c2efeb288119a770f92cbce4ab9ac7a6df2326234b2184b44"
+    },
+    "blind_reviewed_items": 300,
+    "machine_flagged_ids": [
+      "SFV2-001-T1-02",
+      "SFV2-001-T2-01",
+      "SFV2-001-T2-02",
+      "SFV2-003-T3-01",
+      "SFV2-004-T2-01",
+      "SFV2-004-T3-01",
+      "SFV2-005-T1-02",
+      "SFV2-005-T2-01",
+      "SFV2-005-T3-01",
+      "SFV2-006-T2-02",
+      "SFV2-006-T3-01",
+      "SFV2-006-T3-02",
+      "SFV2-007-T1-02",
+      "SFV2-007-T2-01",
+      "SFV2-007-T2-02",
+      "SFV2-007-T3-01",
+      "SFV2-007-T3-02",
+      "SFV2-008-T1-02",
+      "SFV2-008-T3-02",
+      "SFV2-009-T3-02",
+      "SFV2-010-T2-01",
+      "SFV2-010-T2-02",
+      "SFV2-010-T3-01",
+      "SFV2-011-T1-01",
+      "SFV2-011-T1-02",
+      "SFV2-011-T2-01",
+      "SFV2-012-T1-01",
+      "SFV2-012-T2-01",
+      "SFV2-012-T2-02",
+      "SFV2-013-T1-02",
+      "SFV2-013-T2-01",
+      "SFV2-013-T3-02",
+      "SFV2-014-T1-02",
+      "SFV2-014-T2-02",
+      "SFV2-015-T1-02",
+      "SFV2-015-T2-01",
+      "SFV2-015-T2-02",
+      "SFV2-016-T3-02",
+      "SFV2-017-T2-01",
+      "SFV2-017-T3-02",
+      "SFV2-018-T1-02",
+      "SFV2-019-T2-01",
+      "SFV2-019-T3-02",
+      "SFV2-020-T1-02",
+      "SFV2-020-T2-01",
+      "SFV2-020-T3-01",
+      "SFV2-020-T3-02",
+      "SFV2-021-T1-02",
+      "SFV2-021-T2-01",
+      "SFV2-021-T2-02",
+      "SFV2-021-T3-01",
+      "SFV2-021-T3-02",
+      "SFV2-022-T3-01",
+      "SFV2-022-T3-02",
+      "SFV2-023-T2-01",
+      "SFV2-023-T2-02",
+      "SFV2-023-T3-01",
+      "SFV2-023-T3-02",
+      "SFV2-024-T1-01",
+      "SFV2-024-T3-02",
+      "SFV2-025-T1-02",
+      "SFV2-025-T2-01",
+      "SFV2-025-T2-02",
+      "SFV2-025-T3-01",
+      "SFV2-025-T3-02",
+      "SFV2-026-T1-02",
+      "SFV2-026-T2-01",
+      "SFV2-026-T2-02",
+      "SFV2-026-T3-02",
+      "SFV2-027-T2-01",
+      "SFV2-027-T2-02",
+      "SFV2-028-T2-01",
+      "SFV2-028-T2-02",
+      "SFV2-029-T1-02",
+      "SFV2-029-T2-02",
+      "SFV2-029-T3-01",
+      "SFV2-029-T3-02",
+      "SFV2-030-T2-01",
+      "SFV2-030-T2-02",
+      "SFV2-030-T3-01",
+      "SFV2-031-T2-01",
+      "SFV2-031-T2-02",
+      "SFV2-031-T3-01",
+      "SFV2-031-T3-02",
+      "SFV2-032-T3-02",
+      "SFV2-033-T2-02",
+      "SFV2-035-T2-01",
+      "SFV2-035-T2-02",
+      "SFV2-035-T3-01",
+      "SFV2-035-T3-02",
+      "SFV2-036-T2-01",
+      "SFV2-036-T2-02",
+      "SFV2-036-T3-01",
+      "SFV2-036-T3-02",
+      "SFV2-037-T1-01",
+      "SFV2-038-T1-01",
+      "SFV2-038-T3-01",
+      "SFV2-038-T3-02",
+      "SFV2-039-T1-01",
+      "SFV2-039-T2-01",
+      "SFV2-039-T3-01",
+      "SFV2-039-T3-02",
+      "SFV2-040-T1-02",
+      "SFV2-040-T3-01",
+      "SFV2-040-T3-02",
+      "SFV2-041-T2-01",
+      "SFV2-041-T2-02",
+      "SFV2-041-T3-02",
+      "SFV2-042-T1-01",
+      "SFV2-042-T1-02",
+      "SFV2-042-T2-01",
+      "SFV2-043-T1-01",
+      "SFV2-043-T1-02",
+      "SFV2-043-T2-01",
+      "SFV2-043-T2-02",
+      "SFV2-043-T3-01",
+      "SFV2-044-T2-01",
+      "SFV2-044-T2-02",
+      "SFV2-044-T3-02",
+      "SFV2-045-T2-01",
+      "SFV2-045-T3-01",
+      "SFV2-045-T3-02",
+      "SFV2-046-T2-02",
+      "SFV2-046-T3-01",
+      "SFV2-046-T3-02",
+      "SFV2-047-T1-01",
+      "SFV2-047-T2-01",
+      "SFV2-047-T2-02",
+      "SFV2-048-T1-01",
+      "SFV2-048-T2-02",
+      "SFV2-048-T3-02",
+      "SFV2-049-T2-01",
+      "SFV2-049-T2-02",
+      "SFV2-049-T3-01",
+      "SFV2-049-T3-02",
+      "SFV2-050-T2-01",
+      "SFV2-050-T2-02",
+      "SFV2-050-T3-02"
+    ],
+    "scene_coverage": [
+      {
+        "scenario_id": "GPT50_001",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_002",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_003",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_004",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_005",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_006",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_007",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_008",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_009",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_010",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_011",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_012",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_013",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_014",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_015",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_016",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_017",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_018",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_019",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_020",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_021",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_022",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_023",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_024",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_025",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_026",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_027",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_028",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_029",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_030",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_031",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_032",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_033",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_034",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_035",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_036",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_037",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_038",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_039",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_040",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_041",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_042",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_043",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_044",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_045",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_046",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_047",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_048",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_049",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      },
+      {
+        "scenario_id": "GPT50_050",
+        "tasks": {
+          "T1": 2,
+          "T2": 2,
+          "T3": 2
+        },
+        "total": 6
+      }
+    ],
+    "modality_pairs": 270,
+    "media_missing": 30,
+    "legacy_replaced": 460,
+    "oracle_run": "data/offline_oracle_20261020_complete",
+    "oracle_summary": {
+      "format": "socialflux_omniscient_reference_v1",
+      "updated_at": "2026-10-20T14:50:16.768515+00:00",
+      "source_items": 300,
+      "authored_items": 300,
+      "independently_checked_items": 300,
+      "oracle_agreement_items": 197,
+      "public_blind_checked_items": 300,
+      "machine_concern_ids": [
+        "SFV2-001-T1-02",
+        "SFV2-001-T2-01",
+        "SFV2-001-T2-02",
+        "SFV2-003-T3-01",
+        "SFV2-004-T2-01",
+        "SFV2-004-T3-01",
+        "SFV2-005-T1-02",
+        "SFV2-005-T2-01",
+        "SFV2-005-T3-01",
+        "SFV2-006-T2-02",
+        "SFV2-006-T3-01",
+        "SFV2-006-T3-02",
+        "SFV2-007-T1-02",
+        "SFV2-007-T2-01",
+        "SFV2-007-T2-02",
+        "SFV2-007-T3-01",
+        "SFV2-007-T3-02",
+        "SFV2-008-T1-02",
+        "SFV2-008-T3-02",
+        "SFV2-009-T3-02",
+        "SFV2-010-T2-01",
+        "SFV2-010-T2-02",
+        "SFV2-010-T3-01",
+        "SFV2-011-T1-01",
+        "SFV2-011-T1-02",
+        "SFV2-011-T2-01",
+        "SFV2-012-T1-01",
+        "SFV2-012-T2-01",
+        "SFV2-012-T2-02",
+        "SFV2-013-T1-02",
+        "SFV2-013-T2-01",
+        "SFV2-013-T3-02",
+        "SFV2-014-T1-02",
+        "SFV2-014-T2-02",
+        "SFV2-015-T1-02",
+        "SFV2-015-T2-01",
+        "SFV2-015-T2-02",
+        "SFV2-016-T3-02",
+        "SFV2-017-T2-01",
+        "SFV2-017-T3-02",
+        "SFV2-018-T1-02",
+        "SFV2-019-T2-01",
+        "SFV2-019-T3-02",
+        "SFV2-020-T1-02",
+        "SFV2-020-T2-01",
+        "SFV2-020-T3-01",
+        "SFV2-020-T3-02",
+        "SFV2-021-T1-02",
+        "SFV2-021-T2-01",
+        "SFV2-021-T2-02",
+        "SFV2-021-T3-01",
+        "SFV2-021-T3-02",
+        "SFV2-022-T3-01",
+        "SFV2-022-T3-02",
+        "SFV2-023-T2-01",
+        "SFV2-023-T2-02",
+        "SFV2-023-T3-01",
+        "SFV2-023-T3-02",
+        "SFV2-024-T1-01",
+        "SFV2-024-T3-02",
+        "SFV2-025-T1-02",
+        "SFV2-025-T2-01",
+        "SFV2-025-T2-02",
+        "SFV2-025-T3-01",
+        "SFV2-025-T3-02",
+        "SFV2-026-T1-02",
+        "SFV2-026-T2-01",
+        "SFV2-026-T2-02",
+        "SFV2-026-T3-02",
+        "SFV2-027-T2-01",
+        "SFV2-027-T2-02",
+        "SFV2-028-T2-01",
+        "SFV2-028-T2-02",
+        "SFV2-029-T1-02",
+        "SFV2-029-T2-02",
+        "SFV2-029-T3-01",
+        "SFV2-029-T3-02",
+        "SFV2-030-T2-01",
+        "SFV2-030-T2-02",
+        "SFV2-030-T3-01",
+        "SFV2-031-T2-01",
+        "SFV2-031-T2-02",
+        "SFV2-031-T3-01",
+        "SFV2-031-T3-02",
+        "SFV2-032-T3-02",
+        "SFV2-033-T2-02",
+        "SFV2-035-T2-01",
+        "SFV2-035-T2-02",
+        "SFV2-035-T3-01",
+        "SFV2-035-T3-02",
+        "SFV2-036-T2-01",
+        "SFV2-036-T2-02",
+        "SFV2-036-T3-01",
+        "SFV2-036-T3-02",
+        "SFV2-037-T1-01",
+        "SFV2-038-T1-01",
+        "SFV2-038-T3-01",
+        "SFV2-038-T3-02",
+        "SFV2-039-T1-01",
+        "SFV2-039-T2-01",
+        "SFV2-039-T3-01",
+        "SFV2-039-T3-02",
+        "SFV2-040-T1-02",
+        "SFV2-040-T3-01",
+        "SFV2-040-T3-02",
+        "SFV2-041-T2-01",
+        "SFV2-041-T2-02",
+        "SFV2-041-T3-02",
+        "SFV2-042-T1-01",
+        "SFV2-042-T1-02",
+        "SFV2-042-T2-01",
+        "SFV2-043-T1-01",
+        "SFV2-043-T1-02",
+        "SFV2-043-T2-01",
+        "SFV2-043-T2-02",
+        "SFV2-043-T3-01",
+        "SFV2-044-T2-01",
+        "SFV2-044-T2-02",
+        "SFV2-044-T3-02",
+        "SFV2-045-T2-01",
+        "SFV2-045-T3-01",
+        "SFV2-045-T3-02",
+        "SFV2-046-T2-02",
+        "SFV2-046-T3-01",
+        "SFV2-046-T3-02",
+        "SFV2-047-T1-01",
+        "SFV2-047-T2-01",
+        "SFV2-047-T2-02",
+        "SFV2-048-T1-01",
+        "SFV2-048-T2-02",
+        "SFV2-048-T3-02",
+        "SFV2-049-T2-01",
+        "SFV2-049-T2-02",
+        "SFV2-049-T3-01",
+        "SFV2-049-T3-02",
+        "SFV2-050-T2-01",
+        "SFV2-050-T2-02",
+        "SFV2-050-T3-02"
+      ],
+      "t2_replay_groups": 50,
+      "human_verified_items": 0,
+      "formal_admitted_items": 0,
+      "pending_groups": [],
+      "api_calls": 867,
+      "material_amended_items": [
+        "SFV2-044-T2-01",
+        "SFV2-044-T2-02",
+        "SFV2-050-T2-01",
+        "SFV2-050-T2-02"
+      ],
+      "source_state_coverage_verified": true
+    }
+  }
+}

@@ -1,0 +1,418 @@
+{
+  "created_at": "2026-10-07T08:50:26.211000+00:00",
+  "scope": "current completed rollouts only; interim diagnostics, not Gate2 approval",
+  "progress": {
+    "completed": 7,
+    "running": 3,
+    "queued": 38,
+    "failed": 2,
+    "readable": 10,
+    "history_readable": 12
+  },
+  "completed_reviewed": 7,
+  "state_judgment_counts": {
+    "no_relevant_evidence": 319,
+    "expected_zero_checks": 514,
+    "ordinary_new_evidence": 318,
+    "repeated_evidence_only": 195,
+    "decisive_new_evidence": 10
+  },
+  "responsiveness_at_10": 7,
+  "gate2": {
+    "status": "waiting_for_rollouts",
+    "machine_ready": false,
+    "human_review_required": true,
+    "packets": [
+      {
+        "id": "E1",
+        "items": 0,
+        "status": "尚未生成",
+        "human_attestation": false
+      },
+      {
+        "id": "E2",
+        "items": 0,
+        "status": "尚未生成",
+        "human_attestation": false
+      },
+      {
+        "id": "E9",
+        "items": 0,
+        "status": "尚未生成",
+        "human_attestation": false
+      }
+    ],
+    "error": null,
+    "execution_status": null,
+    "source": "current"
+  },
+  "human_review_status": "pending",
+  "findings": [
+    {
+      "scenario": "all reviewed",
+      "issue": "Relationship scores saturate despite predominantly verbal planning; requires semantic and timescale review."
+    },
+    {
+      "scenario": "GPT50_003",
+      "issue": "Trust 5 to 10 by t6, institutional risk 6 to 0 by t7, reputational risk 7 to 0 by t9 while article review is pending. t4 rationale treats prospective draft delivery as present submission."
+    },
+    {
+      "scenario": "GPT50_004",
+      "issue": "Environment twice describes planned controls/evidence preservation as completed; policy corrects both."
+    },
+    {
+      "scenario": "GPT50_002",
+      "issue": "Response introduces room 216 absent from scenario, without checking availability; farewell at t7 followed by continued t8-t10 discussion."
+    }
+  ],
+  "records": [
+    {
+      "scenario_id": "GPT50_002",
+      "turns": 10,
+      "initial_state": {
+        "emotion": {
+          "anxiety": 7,
+          "frustration": 5,
+          "hope": 4
+        },
+        "behavioral_disposition": {
+          "evidence_seeking": 6,
+          "boundary_assertion": 5,
+          "decision_readiness": 3
+        },
+        "relationship": {
+          "perceived_responsiveness": 4,
+          "role_legitimacy": 6,
+          "trust": 4
+        },
+        "consequence_risk": {
+          "goal_failure_risk": 7,
+          "autonomy_loss_risk": 4,
+          "institutional_harm_risk": 5
+        }
+      },
+      "final_state": {
+        "emotion": {
+          "anxiety": 2,
+          "frustration": 1,
+          "hope": 8
+        },
+        "behavioral_disposition": {
+          "evidence_seeking": 8,
+          "boundary_assertion": 8,
+          "decision_readiness": 10
+        },
+        "relationship": {
+          "perceived_responsiveness": 10,
+          "role_legitimacy": 10,
+          "trust": 6
+        },
+        "consequence_risk": {
+          "goal_failure_risk": 2,
+          "autonomy_loss_risk": 3,
+          "institutional_harm_risk": 3
+        }
+      },
+      "source": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_gpt50_active/01_GPT50_002_gpt/trajectory.json",
+      "sha256": "17867ab1f7697ce28507322cc9cc57c7e78dbb9e97caeb3de6ea8a7994b8864e"
+    },
+    {
+      "scenario_id": "GPT50_003",
+      "turns": 10,
+      "initial_state": {
+        "emotion": {
+          "anxiety": 7,
+          "frustration": 5,
+          "disappointment": 4
+        },
+        "behavioral_disposition": {
+          "evidence_seeking": 8,
+          "boundary_assertion": 6,
+          "cooperation_readiness": 6
+        },
+        "relationship": {
+          "trust": 5,
+          "perceived_responsiveness": 6,
+          "role_legitimacy": 7
+        },
+        "consequence_risk": {
+          "goal_failure_risk": 7,
+          "reputational_harm_risk": 7,
+          "institutional_harm_risk": 6
+        }
+      },
+      "final_state": {
+        "emotion": {
+          "anxiety": 1,
+          "frustration": 2,
+          "disappointment": 4
+        },
+        "behavioral_disposition": {
+          "evidence_seeking": 10,
+          "boundary_assertion": 6,
+          "cooperation_readiness": 10
+        },
+        "relationship": {
+          "trust": 10,
+          "perceived_responsiveness": 10,
+          "role_legitimacy": 10
+        },
+        "consequence_risk": {
+          "goal_failure_risk": 5,
+          "reputational_harm_risk": 0,
+          "institutional_harm_risk": 0
+        }
+      },
+      "source": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_gpt50_active/02_GPT50_003_gpt/trajectory.json",
+      "sha256": "0db5098ab7db31dbec785eeb4267e1dd077c76632399233eebb837f5d1afb8ba"
+    },
+    {
+      "scenario_id": "GPT50_004",
+      "turns": 10,
+      "initial_state": {
+        "emotion": {
+          "anxiety": 7,
+          "guilt": 6,
+          "fear": 5
+        },
+        "behavioral_disposition": {
+          "disclosure_willingness": 4,
+          "evidence_seeking": 7,
+          "boundary_assertion": 3
+        },
+        "relationship": {
+          "perceived_responsiveness": 6,
+          "perceived_fairness": 5,
+          "trust": 7
+        },
+        "consequence_risk": {
+          "institutional_harm_risk": 8,
+          "material_loss_risk": 7,
+          "autonomy_loss_risk": 4
+        }
+      },
+      "final_state": {
+        "emotion": {
+          "anxiety": 4,
+          "guilt": 6,
+          "fear": 5
+        },
+        "behavioral_disposition": {
+          "disclosure_willingness": 4,
+          "evidence_seeking": 7,
+          "boundary_assertion": 3
+        },
+        "relationship": {
+          "perceived_responsiveness": 10,
+          "perceived_fairness": 10,
+          "trust": 10
+        },
+        "consequence_risk": {
+          "institutional_harm_risk": 4,
+          "material_loss_risk": 7,
+          "autonomy_loss_risk": 3
+        }
+      },
+      "source": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_gpt50_active/03_GPT50_004_gpt/trajectory.json",
+      "sha256": "8871ae3587459da4e4df47c08467d50a2e89360684564e5c36eab4e8ffc9608a"
+    },
+    {
+      "scenario_id": "GPT50_005",
+      "turns": 10,
+      "initial_state": {
+        "emotion": {
+          "frustration": 7,
+          "anxiety": 6,
+          "anger": 4
+        },
+        "behavioral_disposition": {
+          "resolve": 8,
+          "evidence_seeking": 5,
+          "disclosure_willingness": 3
+        },
+        "relationship": {
+          "perceived_responsiveness": 3,
+          "perceived_fairness": 4,
+          "role_legitimacy": 5
+        },
+        "consequence_risk": {
+          "goal_failure_risk": 7,
+          "autonomy_loss_risk": 5
+        }
+      },
+      "final_state": {
+        "emotion": {
+          "frustration": 3,
+          "anxiety": 7,
+          "anger": 4
+        },
+        "behavioral_disposition": {
+          "resolve": 8,
+          "evidence_seeking": 5,
+          "disclosure_willingness": 3
+        },
+        "relationship": {
+          "perceived_responsiveness": 10,
+          "perceived_fairness": 10,
+          "role_legitimacy": 10
+        },
+        "consequence_risk": {
+          "goal_failure_risk": 5,
+          "autonomy_loss_risk": 3
+        }
+      },
+      "source": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_gpt50_active/04_GPT50_005_gpt/trajectory.json",
+      "sha256": "4db410448a047b6d72b7182850eb0bd79fc1382f61b4321a6927fb1df68b4354"
+    },
+    {
+      "scenario_id": "GPT50_006",
+      "turns": 10,
+      "initial_state": {
+        "emotion": {
+          "anxiety": 7,
+          "frustration": 5,
+          "guilt": 4
+        },
+        "behavioral_disposition": {
+          "cooperation_readiness": 6,
+          "evidence_seeking": 5,
+          "resolve": 7
+        },
+        "relationship": {
+          "perceived_responsiveness": 4,
+          "perceived_fairness": 5,
+          "role_legitimacy": 6
+        },
+        "consequence_risk": {
+          "goal_failure_risk": 8,
+          "reputational_harm_risk": 6,
+          "institutional_harm_risk": 5
+        }
+      },
+      "final_state": {
+        "emotion": {
+          "anxiety": 10,
+          "frustration": 6,
+          "guilt": 4
+        },
+        "behavioral_disposition": {
+          "cooperation_readiness": 9,
+          "evidence_seeking": 5,
+          "resolve": 7
+        },
+        "relationship": {
+          "perceived_responsiveness": 10,
+          "perceived_fairness": 10,
+          "role_legitimacy": 10
+        },
+        "consequence_risk": {
+          "goal_failure_risk": 10,
+          "reputational_harm_risk": 8,
+          "institutional_harm_risk": 2
+        }
+      },
+      "source": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_gpt50_active/05_GPT50_006_gpt/trajectory.json",
+      "sha256": "e100153b67bf157d35200a08a7091d7afb2f6cc760d0dbf28c7bb8936a824b07"
+    },
+    {
+      "scenario_id": "GPT50_007",
+      "turns": 11,
+      "initial_state": {
+        "emotion": {
+          "anxiety": 7,
+          "frustration": 5,
+          "guilt": 4
+        },
+        "behavioral_disposition": {
+          "evidence_seeking": 3,
+          "resistance_intent": 6,
+          "cooperation_readiness": 5
+        },
+        "relationship": {
+          "perceived_responsiveness": 4,
+          "role_legitimacy": 5,
+          "respect": 6
+        },
+        "consequence_risk": {
+          "goal_failure_risk": 8,
+          "reputational_harm_risk": 7,
+          "relationship_rupture_risk": 5
+        }
+      },
+      "final_state": {
+        "emotion": {
+          "anxiety": 5,
+          "frustration": 0,
+          "guilt": 4
+        },
+        "behavioral_disposition": {
+          "evidence_seeking": 3,
+          "resistance_intent": 6,
+          "cooperation_readiness": 10
+        },
+        "relationship": {
+          "perceived_responsiveness": 10,
+          "role_legitimacy": 10,
+          "respect": 10
+        },
+        "consequence_risk": {
+          "goal_failure_risk": 10,
+          "reputational_harm_risk": 3,
+          "relationship_rupture_risk": 5
+        }
+      },
+      "source": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_gpt50_active/06_GPT50_007_gpt/trajectory.json",
+      "sha256": "925b49149dbab269f1633b913225ff53229348cd95ec12d995e7a5a3f29efd90"
+    },
+    {
+      "scenario_id": "GPT50_008",
+      "turns": 10,
+      "initial_state": {
+        "emotion": {
+          "fear": 6,
+          "frustration": 5,
+          "guilt": 4
+        },
+        "behavioral_disposition": {
+          "disclosure_willingness": 4,
+          "evidence_seeking": 7,
+          "resolve": 7
+        },
+        "relationship": {
+          "perceived_responsiveness": 5,
+          "perceived_fairness": 6,
+          "role_legitimacy": 6
+        },
+        "consequence_risk": {
+          "safety_harm_risk": 8,
+          "institutional_harm_risk": 7,
+          "material_loss_risk": 5
+        }
+      },
+      "final_state": {
+        "emotion": {
+          "fear": 6,
+          "frustration": 0,
+          "guilt": 4
+        },
+        "behavioral_disposition": {
+          "disclosure_willingness": 4,
+          "evidence_seeking": 7,
+          "resolve": 7
+        },
+        "relationship": {
+          "perceived_responsiveness": 10,
+          "perceived_fairness": 10,
+          "role_legitimacy": 10
+        },
+        "consequence_risk": {
+          "safety_harm_risk": 8,
+          "institutional_harm_risk": 3,
+          "material_loss_risk": 4
+        }
+      },
+      "source": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_gpt50_active/07_GPT50_008_gpt/trajectory.json",
+      "sha256": "816a41d17c791259513d18426658c1df762fbf89e57a592ed64c444850387a05"
+    }
+  ]
+}

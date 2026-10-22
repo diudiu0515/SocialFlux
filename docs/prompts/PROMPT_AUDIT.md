@@ -1,62 +1,48 @@
-# SocialFlux Prompt Audit
+# SocialFlux Prompt 审计
 
-审计日期：2026-09-07。范围：`prompts/*.md`、`prompts/manifest.json`、对应 schema 与 Python caller。共保留 24 个版本化 prompt；未登记 Markdown 数为 0。
+2026-10-10 按已确认的调用链删除 39 份被替代的模板，Markdown 注册项从 89
+减少到 50。保留的 50 份正文及两个注入规则文件均未改写。
+实际链路、各模板用途和兼容入口统一见 [运行时目录](RUNTIME_PROMPT_CATALOG.md)。
 
-## Prompt 逐项审计
+## 已删除内容
 
-| Prompt | 层 / 当前职责与调用方 | 输入与隐藏信息权限 | 输出合同 | 发现的问题与本次处理 |
-|---|---|---|---|---|
-| `scenario_script_generation_v1` | author-side；`scenario_sources generate-script` 生成原创新社会剧本 | 只读机制、关系、权力、冲突、信息差 brief；不读 state/task | Markdown narrative | 拆出旧“直接生成 benchmark JSON”，明确不考虑 schema/S0/任务 |
-| `narrative_structure_extraction_v1` | author-side；`scenario_sources extract-structure` 从影视作品提取高层社会机制 | 只读作品标题、媒介与分析请求；不读 state/task | `narrative_structure.schema.json` | 只保留关系、权力、目标与信息差结构；强制丢弃角色、台词、标志性物件、机构及情节序列，并要求原创表层文本 |
-| `scenario_quality_gate_v1` | validation；`scenario_sources quality-check` 在 normalization 前审 source | 只读 source/provenance | `scenario_quality_report.schema.json` | 修正昨日的错误顺序；LLM 只能 pending，真人才能 approved |
-| `scenario_normalization_v1` | author-side；`scenario_sources normalize` | 只读已批准 source 与 quality report | `scenario_blueprint.schema.json` | 不再同时生成 S0/D0、阈值、action effects 或 checkpoint |
-| `initial_state_configuration_v1` | author-side；`scenario_sources initialize` | 读 approved blueprint 与 private design fields | `initial_state_proposal.schema.json` | 从 normalization 分离；输出 candidate，模型不能 human-freeze |
-| `environment_appraisal_v2` | author-side runtime；`ModelAppraiser` | 可读 persona、goal、hidden intention、S/D、observable memory、exact action | inline strict JSON | 从旧单步 transition 拆出解释；禁止分类/关键词 lookup，不更新 state |
-| `state_update_v2` | author-side runtime；`ModelStateUpdater` | 读 previous S/D、已完成 appraisal、observable memory；不直接读 action | inline strict JSON delta | 加入单轮惯性、强变化稀缺与边界校准；caller 将裁剪后的语义标签归一到真实数值变化 |
-| `environment_response_v3` | author-side runtime；`ModelResponseGenerator` | 读 persona/private intent、evaluated role、history、appraisal、updated S/D、action | observable text only | 实测后加入 environment-only 身份锁、单轮长度、无舞台说明与非重复约束 |
-| `memory_retrieval_v2` | author-side optional；`ModelMemoryModule` | 只读 observable history/action | inline memory JSON | 移除 private-state access；校验 ID 均来自历史。默认 runtime 可用等价确定性 retriever |
-| `observable_expression_v1` | author-side media specification；媒体接入协议 | 读 updated private social context | `observable_expression.schema.json` | 从视频生成中拆出可观察表达；禁止一对一刻板编码和私有标签 |
-| `talking_head_generation_v1` | media-side；外部视频 adapter 协议，当前尚未接真实供应商 | 只读安全人物外观、observable response/expression | `talking_head_request.schema.json` | 改为 trigger 后稀疏生成；禁止 latent/threshold/答案泄漏 |
-| `counterfactual_action_generation_v1` | benchmark construction；`ModelCandidateGenerator` | 只读真实 checkpoint 的 public observation | string array，经 caller 转 `{"text": ...}` | 移除策略标签与显然好/坏二分；只生成局部可行动自由文本 |
-| `t2_shared_observation_v3` | benchmark construction；`ModelCandidateGenerator` | 读显式 target/evaluated 身份与两段 public natural histories | inline O* JSON | 实测修复 O* 角色互换；强制由 environment target 发话、双历史兼容且禁止 private provenance 泄漏 |
-| `local_intervention_validation_v1` | author-side validation protocol | 可读真实 checkpoint private experiment packet | `local_intervention_review.schema.json` | controlled 只保留为局部实验，不再驱动多轮策略 |
-| `instance_quality_judge_v2` | validation；`evaluate_instance_quality --judge-provider-config` 对 T1/T2/T3 做盲化质量诊断 | 只读去除 model/provider/trajectory/private state/metadata 后的 participant-visible packet | `instance_quality_judge.schema.json` | 评估 history dependency、证据、社会合理性、非平凡性和可回答性；明确不是 human GT，不能单独宣布模型胜负 |
-| `rollout_quality_judge_v1` | legacy validation；仅用于解释旧开发证据，不再用于新生成 | 只读 state-free 场景参考（背景、角色、显式目标、persona）和 observable action/response/expression；不读 hidden intention、private state、provenance 或阈值 | `rollout_quality_judgment.schema.json` | 固定 gate.md 六维评分与 hard reject；补充 1–5 锚点（4=良好仅轻微瑕疵、3=存在明显实质限制）并要求 rationale 与分数一致；caller 按 trajectory ID 派生确定性 seed，跨模型族二审缺失时不能形成正式合并记录 |
-| `rollout_quality_judge_v2` | production screening；`run_rollout_quality_judge` 与 repair prefilter | 只读 state-free 场景参考和 observable trajectory | `rollout_quality_judgment_v2.schema.json` | 固定 Protocol v1 六维、10 项 hard reject；每个维度强制 1–3 个真实 turn ID，caller 校验引用存在；PASS/REVIEW/REJECT 由确定性代码计算 |
-| `history_dependence_probe_v1` | evaluated-policy-side counterfactual；`run_history_dependence` | policy prompt 只读 full/recent-k/critical-event-removed 三种 public observation；同一脚本另外在 author-side restore 相同 S/D/action 做环境解释重放 | natural-language action only；脚本把 action 差异与 environment appraisal/state-delta 差异写入 `history_dependence_result.schema.json` | 三个 policy 条件改为同配置、同 seed 重新采样，原 rollout action 只留作审计；环境探针只运行 canonical appraisal/state update，不生成不会反向影响 delta 的回复；支持逐条断点与新 ID 定向复验 |
-| `task_t1_v1` | evaluated-agent-side；T1 baseline/evaluation | 只读 public longitudinal instance | `task_t1_output.schema.json` | 移除作者 effects/oracle；证据 ID 必须可见 |
-| `task_t2_v1` | evaluated-agent-side；T2 baseline/evaluation | 只读 A/B history 与相同 O* | `task_t2_output.schema.json` | 明确 O* byte-identical，禁止构建 metadata/private state |
-| `task_t3_v1` | evaluated-agent-side；T3 baseline/evaluation | 只读 public checkpoint、2–4 action、horizon | `task_t3_output.schema.json` | 主任务禁止 oracle state/未来分支；所有 option 同 protocol/horizon |
-| `task_t4_action_v2` | evaluated-agent-side；`ModelPolicy` 用于自然 rollout/T4 | 只读 policy observation | natural-language action only | 实测后加入 evaluated-only 身份锁、1–3 句、语义重复时强制换策略、禁止虚构政策/材料/已完成外部动作；运行时另拒绝 prompt-facing 元叙述、列表输出、换行和超过 180 字的 action |
-| `t4_judge_v1` | validation；T4 judge protocol | 只读 packet 明示的 allowed evidence | `t4_judge_output.schema.json` | 多维评分，不把低冲突当目标；明确 not human GT |
-| `human_annotation_v2` | human-facing validation/GT protocol | 只读冻结 annotation packet；author-side 实验必须显式标识 | packet-supplied schema / overlay | simulator candidate 仅是假设；人类标签、证据、不确定性独立记录 |
+| 类别 | 撤下版本 | 数量 |
+|---|---|---:|
+| Combined appraisal 中间实验 | v13–v21（含 v15 environment-owned）、v23–v35 | 23 |
+| Response 中间实验 | v26、v27、v27 decision-continuity、v28–v30 | 6 |
+| Independent state 中间实验 | v2–v5 | 4 |
+| Online 非语言生成旧版 | v1、v2 | 2 |
+| Talking-head 旧版 | v1、v2、v3 delivery | 3 |
+| 公开台词压缩旧版 | v1 | 1 |
 
-## Conceptual problems 与修复
+完整 ID、原路径和 SHA 保存于 `prompts/retired.json`，其中不保存 prompt 正文。
+`prompts/manifest.json` 只注册仍可调用的模板。loader 区分 retired 与 unknown；
+环境 factory 在创建 provider 前检查实际调用的模板，引用已撤下版本时明确报错。
+不会用新 prompt 冒充旧 prompt，也不会自动从归档加载。
 
-删除了旧版 direct scenario generation、story world、合并 appraisal/update、旧 response、旧 memory、旧 T1/T2/T3/T4、policy action 和 human annotation prompt。同步删除 action interpreter、controlled policy、template response、world benchmark schema 与旧任务合同。[`prompt_check.md`](../source-notes/prompt_check.md) 第 16 节关于 escalation/neutral/repair 三种多轮 policy 的旧建议与更新后的 [`revision.md`](../source-notes/revision.md) 冲突；按较新的 revision，三类固定策略不进入生成 pipeline，只保留真实 checkpoint 上的局部自由文本 intervention。
+同步删除了 16 个只检查这些旧模板措辞的测试方法；历史 state-transition 合同、
+结构校验和旧 provenance 读取测试继续保留。生成入口的质量指纹已移除对已删
+文件的依赖，并纳入当前独立判断模板与注入规则。新指纹不等于旧实验指纹。
 
-所有当前 prompt 已采用 task-first、quality/constraints 居中、output/schema-last。Appraisal → semantic state update → deterministic numeric mapping → response 的顺序已在代码和测试中固定。Source quality → normalization → initial state 的顺序也已在 CLI、schema 和文档中固定。
+## 历史配置与恢复
 
-## Information-boundary audit
+56 份历史配置仍引用已撤下的模板，保留它们是为了说明历史结果如何产生，
+它们现在不能直接发起对应旧模型调用。当前 offline 配置及文档列出的兼容入口
+继续使用保留的模板。不要通过批量替换旧配置中的 ID 来恢复执行。
 
-- Evaluated model 的 T1/T2/T3/T4 prompt 不接收 hidden intention、S/D、appraisal、delta、trigger conditions、future branch 或 source trajectory metadata。
-- Environment appraisal/state/response 是 author-side private caller；response 返回值只允许 observable text。
-- Memory prompt 只能访问 observable history，且 caller 校验 evidence ID。
-- T2 O* 与 T3 action candidate 的 construction caller 只传 public checkpoint/history。
-- Private local intervention 数据不进入 benchmark input，`evaluation.leakage.assert_no_leaks` 在写实例前执行。
-- Talking Head request 只使用 safe observable specification；trigger ID/threshold 保留在 private log。
-- 网站是研究者调试视图，会展示 private state，但不作为 participant context，也不生成第二套环境。
+本地恢复包为 `archives/prompt-cleanup-2026-10-10/before_cleanup.tar.gz`，
+清单为同目录的 `manifest.json`。它们不参与运行时加载，也不提交为第二套 prompt
+源码。修改前的全部模板、注册表、相关代码与文档都在包中；需要历史复现时，应在
+独立工作目录恢复匹配的配置、代码、模板及原始注册表，并核对各自的冻结哈希。
 
-审计结果：代码路径未发现 evaluated-agent hidden-state leakage；真实模型输出仍需运行时 schema validation、抽样人工检查和 release 前 dataset audit。
+当前资料中有 6 份预注册记录绑定了已删除的文件。其 SHA 和历史结果没有回写；
+旧冻结批次不能在清理后的源码上宣称代码未变。恢复包只提供本次清理前的副本，
+不保证该副本就是每个更早实验的完整代码快照。`prompts/manifest.json.orig`
+仍作为已有冻结记录的输入保留，它不是运行时注册表，也不能用于启动新调用。
 
-## Schema 与 caller 修改
+## 验证记录
 
-新增 narrative structure、blueprint、source quality、candidate initial state、T1/T2/T3 输出、instance quality judge、T4 judge、observable expression、Talking Head request 与 local intervention review schemas。更新 canonical scenario/trajectory schema，删除 action effects/action ID 合同。更新 `scenario_sources.py`（含 `extract-structure`）、`environment/appraisal.py`、`environment/state_updater.py`、`environment/response_generator.py`、`environment/memory.py`、`offline/candidate_generation.py`、`policies/model_policy.py` 与 `scripts/run_pipeline.py`。
-
-## 未决设计问题
-
-- 20 个现有 scenario 的 provenance/quality/S0-D0 仍需真人审核，不得自动批准。
-- task 输出概率和为 1 需要运行时 validator；JSON Schema 只能约束单值范围。
-- `observable_expression_v1` 与 `talking_head_generation_v1` 已固定协议，但真实视频 provider、资产存储和人工连续性审核尚未接入。
-- human annotation 的具体字段按 T1/T2/T3 packet supplied schema 冻结；正式标注平台与 adjudication 尚未执行。
-- T4 judge 与人类评分的相关性/一致性尚未建立。
+`build/prompt_cleanup_20261010/` 保存删除计划、逐 ID 引用扫描、受影响历史配置、
+冻结记录影响以及测试结果。检查覆盖：注册表重建、当前统一环境、人物方向绑定、
+旧协议兼容、回放入口、offline 选择题和网站标注。保留模板的 SHA 与清理前逐一
+一致；题库、源 rollout、视频和人工标注没有因本次清理而重建。

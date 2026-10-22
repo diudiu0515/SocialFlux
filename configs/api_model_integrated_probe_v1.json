@@ -1,0 +1,121 @@
+{
+  "format": "socialflux_rollout_pool_v1",
+  "pool_stage": "development",
+  "candidate_strategy": "single_first_pass",
+  "model_routes": "model_routes.frontier_api.json",
+  "environment": {
+    "horizon_mode": "natural_max_20",
+    "appraisal_prompt_id": "environment_appraisal_v11",
+    "response_prompt_id": "environment_response_v25",
+    "response_validation_profile": "hard_only",
+    "provider": {
+      "model_route": "appraisal"
+    },
+    "sampling": {
+      "temperature": 0.2,
+      "top_p": 0.9,
+      "seed": 19100
+    },
+    "response_provider": {
+      "model_route": "response",
+      "overrides": {
+        "model": "Qwen3.8-Max",
+        "enable_thinking": false
+      }
+    },
+    "response_sampling": {
+      "temperature": 0.35,
+      "top_p": 0.9,
+      "seed": 19300
+    }
+  },
+  "construction": {
+    "provider": {
+      "model_route": "t2_branch_authoring"
+    },
+    "sampling": {
+      "temperature": 0.3,
+      "top_p": 0.9,
+      "seed": 19700
+    }
+  },
+  "policies": [
+    {
+      "policy_id": "deepseek_policy_qwen_response_seed_19801",
+      "prompt_id": "task_t4_action_v21",
+      "horizon_mode": "natural_max_20",
+      "source_type": "api",
+      "model_family": "deepseek",
+      "provider": {
+        "model_route": "policy",
+        "overrides": {
+          "model": "DeepSeek-V4-Pro-0813",
+          "enable_thinking": false
+        }
+      },
+      "sampling": {
+        "temperature": 0.65,
+        "top_p": 0.92,
+        "seed": 19801
+      },
+      "runs": 1
+    },
+    {
+      "policy_id": "minimax_policy_qwen_response_seed_19802",
+      "prompt_id": "task_t4_action_v21",
+      "horizon_mode": "natural_max_20",
+      "source_type": "api",
+      "model_family": "minimax",
+      "provider": {
+        "model_route": "policy",
+        "overrides": {
+          "model": "MiniMax-M3",
+          "enable_thinking": false
+        }
+      },
+      "sampling": {
+        "temperature": 0.65,
+        "top_p": 0.92,
+        "seed": 19802
+      },
+      "runs": 1
+    },
+    {
+      "policy_id": "deepseek_policy_deepseek_response_seed_19803",
+      "prompt_id": "task_t4_action_v21",
+      "horizon_mode": "natural_max_20",
+      "source_type": "api",
+      "model_family": "deepseek",
+      "provider": {
+        "model_route": "policy",
+        "overrides": {
+          "model": "DeepSeek-V4-Pro-0813",
+          "enable_thinking": false
+        }
+      },
+      "environment_response_provider_override": {
+        "model": "DeepSeek-V4-Pro-0813",
+        "enable_thinking": false
+      },
+      "sampling": {
+        "temperature": 0.65,
+        "top_p": 0.92,
+        "seed": 19803
+      },
+      "runs": 1
+    }
+  ],
+  "pilot_limits": {
+    "rollout_turns": 20,
+    "t1": 1,
+    "t2": 1,
+    "t3": 1,
+    "t3_horizon": 5
+  },
+  "t2_pairing": "all",
+  "task_source_selection": {
+    "strategy": "quality_gate_then_task_specific_weighted_ranking",
+    "t1_sources": 1,
+    "model_quota": false
+  }
+}

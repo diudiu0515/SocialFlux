@@ -37,8 +37,10 @@ Behavioral Diversity。
     Background / Goal 出现无法由历史解释的严重冲突。
 -   H5 Broken dialogue
     logic：答非所问、引用不存在事件、混淆人物或明显因果断裂。
--   H6 Meaningless premature
-    ending：核心冲突尚未展开且无合理社会原因时突然终止。
+-   H6 Meaningless premature ending：canonical rollout 必须完整包含连续
+    `t1..t20` 并以第20轮 `max_turns` 结束；任何不足20轮、超过20轮、turn ID
+    不连续或提前评分的记录直接 REJECT。合理的关系破裂/撤退仍应在余下轮次中表现其后果，
+    不能用提前停机代替长程轨迹。
 -   H7 Nonsensical state oscillation：state
     在无合理刺激时连续大幅反向变化。
 -   H8 Implementation-induced saturation：大量 state
@@ -107,7 +109,7 @@ Mean Quality Score \>= 3.8
 
 ### REJECT
 
-任一满足： - Any hard reject - History Dependence \<= 2 - Character
+任一满足： - 非完整20轮 - Any hard reject - History Dependence \<= 2 - Character
 Consistency \<= 2 - Naturalness \<= 2 - Mean Quality Score \< 3.0
 
 ### REVIEW
@@ -206,6 +208,9 @@ PASS / REVIEW candidates
 → Exactly One Human-confirmed Canonical Trajectory
 ```
 
+`REJECT` 候选不得参与 winner 排序；如果一个场景的候选全部 REJECT，系统必须返回
+`no_eligible_20_turn_candidate`，不得为了凑数强制挑选 provisional winner。
+
 模型 identity 不进入排序，也不设置模型配额。单场景内无法再保留 outcome diversity，
 因此 behavioral/model-family diversity 改在 20 个场景组成的全局最终池上报告；
 不能用这一点降低单条轨迹的质量门槛。
@@ -229,13 +234,13 @@ failure、strategy change。
 
 ``` text
 same scenario
-same frozen S0 / D0
+same frozen initial state and runtime dynamics seed
 same environment configuration
 different rollout model / seed
 ```
 
 所有模型产生 arbitrary free-form actions。禁止使用 Repair / Neutral /
-Escalation Policy 作为正式数据生成方式。
+Escalation Policy 作为正式数据生成方式。 每个 raw candidate 都必须使用相同的完整20轮预算；模型自行在关系破裂、僵局或部分解决后继续处理后果，只有第20轮后才进入终局筛选。
 
 最终 trajectory pool 同时追求：
 `Quality + History Dependence + Behavioral Diversity + Model-family Diversity`。

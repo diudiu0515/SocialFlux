@@ -1,0 +1,58 @@
+GPT50 / T4 五维 API 实验结果 — 2026-10-08
+
+本次为已有 GPT50 轨迹的回顾性终局机器评分。没有重新运行策略或环境。
+原计划 50 场景 × 2 模态。text 成功评分 43/50；text+video 成功评分 0/50。
+视频组缺少实际送入策略的视频和已完成轨迹，因此没有配对差值或视频收益结论。
+
+维度	text 均值 / 10	有效 n	样本标准差	场景 bootstrap 95% 区间	text+video
+目标达成	6.2093	43	1.3194	[5.8372, 6.6047]	未评测
+状态适应	8.0000	43	0.488	[7.8372, 8.1395]	未评测
+风险管理	8.3488	43	0.7199	[8.1395, 8.5349]	未评测
+恢复	6.6111	18	0.9164	[6.2222, 7]	未评测
+关系结果	7.8837	43	0.4477	[7.7209, 8]	未评测
+
+四个共同维度等权均分：7.6105/10（n=43）。
+Recovery 仅适用 18 条；其余 25 条为 N/A，不填零或满分。
+非空维度均分的样本平均：7.5302/10；该指标混合了四维和五维，作为次要结果。
+五维都适用的子集均分：7.3778，n=18。
+
+样本与调用记录
+状态计数：{'source_unavailable': 57, 'completed': 43}
+实际评分 API 请求：43
+模型：gpt-6-astra；采样：{'temperature': 0.1, 'top_p': 0.9, 'seed': 6401}
+Rubric：t4_five_dimension_anchored_v1；prompt SHA-256：b044cab10ab30c1073f0a555c6de6f8f2f21310d08c9e6fcc0530a925989059f
+每维分档、证据要求及命令见 reports/experiments/2026-10-08_t4_gpt50_scoring_protocol.txt。
+
+成功结果 token usage：{'prompt_tokens': 361424, 'completion_tokens': 43919, 'total_tokens': 405343}；这是 token 计数，未估算收费。
+
+text 未评分场景
+GPT50_001: source_unavailable; structured environment response failed JSON/schema validation after 4 attempts
+GPT50_009: source_unavailable; provider response lacks a text content block
+GPT50_023: source_unavailable; structured environment response failed JSON/schema validation after 4 attempts
+GPT50_033: source_unavailable; structured environment response failed JSON/schema validation after 4 attempts
+GPT50_035: source_unavailable; provider response lacks a text content block
+GPT50_040: source_unavailable; provider response lacks a text content block
+GPT50_050: source_unavailable; 冻结时尚无完整轨迹
+
+按四维共同均分最低的 5 个场景（用于后续人工核查，不是修订分数）
+GPT50_012: {'goal_achievement': 4, 'state_adaptation': 8, 'risk_management': 6, 'recovery': 6, 'relationship_outcome': 8, 'core_four_mean': 6.5, 'available_dimension_mean': 6.4, 'five_dimension_mean': 6.4}
+GPT50_017: {'goal_achievement': 4, 'state_adaptation': 6, 'risk_management': 8, 'recovery': 6, 'relationship_outcome': 8, 'core_four_mean': 6.5, 'available_dimension_mean': 6.4, 'five_dimension_mean': 6.4}
+GPT50_002: {'goal_achievement': 6, 'state_adaptation': 8, 'risk_management': 8, 'recovery': 6, 'relationship_outcome': 6, 'core_four_mean': 7, 'available_dimension_mean': 6.8, 'five_dimension_mean': 6.8}
+GPT50_008: {'goal_achievement': 4, 'state_adaptation': 8, 'risk_management': 8, 'recovery': None, 'relationship_outcome': 8, 'core_four_mean': 7, 'available_dimension_mean': 7, 'five_dimension_mean': None}
+GPT50_020: {'goal_achievement': 4, 'state_adaptation': 8, 'risk_management': 8, 'recovery': None, 'relationship_outcome': 8, 'core_four_mean': 7, 'available_dimension_mean': 7, 'five_dimension_mean': None}
+
+解释限制
+1. 只有已完成轨迹进入评分，失败/未完成场景保留在 50 的分母中；成功子集可能存在选择偏差。
+2. 来源使用 rollout 策略提示、minimum_natural_turns=10，并非标准 T4 action prompt 新生成的在线基准。
+3. 43 条来源轨迹中 40 条在 10 轮结束、2 条在 11 轮、1 条在 12 轮结束；自然结束本身不视为任务成功。
+4. 同一个 GPT 模型作被测策略与独立调用裁判，可能有自偏好；尚未进行人工校准或跨模型一致性验证。
+5. bootstrap 区间只反映本批场景重抽样，不代表裁判误差；不能外推至未观察的真实外部执行。
+6. text_only 裁判不看视频，用于保持结果评分一致；视频感知和 cue-consistent adaptation 仍需真实视频配对实验。
+7. Recovery N/A 的判断也需人工核查，尤其应区分背景挫折与本次可操作修复机会。
+
+产物
+/root/autodl-tmp/emotree/build/t4_gpt50_20261008/run/scores.csv
+/root/autodl-tmp/emotree/build/t4_gpt50_20261008/run/summary.json
+/root/autodl-tmp/emotree/build/t4_gpt50_20261008/run/all_results.json
+/root/autodl-tmp/emotree/build/t4_gpt50_20261008/run/manifest.json
+/root/autodl-tmp/emotree/build/t4_gpt50_20261008/run/five_dimension_scores.png

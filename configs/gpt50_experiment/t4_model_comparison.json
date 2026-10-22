@@ -1,0 +1,30 @@
+{
+  "format": "socialflux_t4_multi_judge_comparison_v1",
+  "base_t4_config": "configs/gpt50_experiment/t4.json",
+  "input_manifest": "build/t4_gpt50_20261008/input_manifest.json",
+  "judges": [
+    {
+      "id": "gpt",
+      "model_routes": "configs/gpt50_experiment/model_routes.hybrid.json",
+      "reuse_run": "build/t4_gpt50_20261008/run"
+    },
+    {
+      "id": "claude",
+      "model_routes": "configs/model_routes.frontier_api.json",
+      "overrides": {"max_transport_attempts": 1, "timeout": 360}
+    },
+    {
+      "id": "deepseek",
+      "model_routes": "configs/gpt50_experiment/model_routes.hybrid.json",
+      "overrides": {
+        "model": "DeepSeek-V4-Pro",
+        "api_key_env": "AUTODL_API_KEY",
+        "api_key_file": "/root/.config/socialflux/autodl_api_key",
+        "reasoning_effort": null,
+        "max_tokens": 5000,
+        "timeout": 360,
+        "max_transport_attempts": 1
+      }
+    }
+  ]
+}

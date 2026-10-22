@@ -1,0 +1,2866 @@
+# SocialFlux offline T1–T3 开发题（完整题面与作者参考答案）
+
+所有答案是待人工审核的开发参考，不是已冻结真值。下面每题先给出完整可见材料，再给出作者侧标注。
+主评测只答 `{"answer":"B"}`。证据诊断另加 `evidence_ids`，分别计分。
+
+## SFO-001 · T1 / current_intensity
+
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+
+背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
+角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
+
+relationship_structure：An investigations editor and a reporter with a mentor-protégé bond share loyalty and source-protection duties, but an earlier correction has made their trust conditional.
+
+power_structure：The editor controls the only pre-vote lead slot and scarce legal review, while the reporter controls the source, raw recordings, and safe chain of custody, so either can veto the other's plan.
+
+goal_conflict：At the five o'clock lock, the reporter asks the editor to hold a time-sensitive corruption allegation with one disputed instruction until the following Monday's scheduled records release, file an expedited request, and arrange a secure source meeting, while the editor weighs publication before the council vote against legal exposure, source retaliation, and suppression during the delay.
+
+relevant_history：Months of reporting assembled contracts, invoices, meeting records, and a source account suggesting that an emergency electric-bus charging award was steered toward one vendor, but the sealed vendor-ranking worksheet remains unavailable.；An earlier investigation misstated the number of homes affected by a zoning failure, and the editor accepted public responsibility while retaining the reporter and imposing stricter verification.；After officials noticed the inquiries, the source was transferred and system access was narrowed, making any new attempt to retrieve the worksheet potentially traceable.
+
+history：
+
+- [t1] Sami Osei：伊内兹，今晚我建议先发只写已核实合同、发票和会议记录的报道，把那条有争议的指示留到周一记录发布后再判断；来源身份和可追溯细节不进稿。这样不替尚未拿到的排名表下结论，也不放弃表决前的窗口。
+  Inez Calder：合同和发票可以发，但那条指示的来源在竞标期间收过分包商的咨询费，这个冲突你打算怎么处理？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Sami Osei：那条指示今晚不能按事实写进稿；这笔咨询费说明来源有利益冲突，我会把他的说法降为待核线索，不暴露身份或可追溯细节。先由合同、发票和会议记录支撑报道，周一记录若能独立印证，再考虑纳入。
+  Inez Calder：行，就这么办。周一之后你拿到什么新证据直接跟我说。
+  可见表达：{"facial_expression": "neutral, decisive", "gaze": "direct eye contact", "speech_style": "brief, conclusive", "prosody": "steady, slightly clipped", "behavioral_cues": ["single affirming nod", "relaxed posture indicating resolution"]}
+
+
+**题目：截至t2结束，Inez Calder愿意与Sami Osei合作推进当前已核实材料报道方案的倾向，有多强？判断该具体方案的合作意愿，不推断她的一般人格。**
+
+- **A.** 强
+- **B.** 很强
+- **C.** 证据不足
+- **D.** 无
+- **E.** 轻微
+- **F.** 中等
+
+**作者参考答案：A（待审）**
+
+t1已允许刊发合同和发票，提出来源利益冲突作为需要解决的关切；Sami明确限制争议指示后，t2直接同意方案并邀请继续提供证据。合作已从有条件讨论进入明确同意推进，支持强烈的当前合作意愿。尚有核实与来源保护边界，并非无条件服从；强与很强在两轮公开证据中难以严格区分，因此开发评分接受相邻两档。
+
+证据：context, t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness"], "time_scope": "t2环境回应结束时的当前行为倾向", "state_owner": "GPT50_003_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"C": "history_ignored", "D": "history_ignored", "E": "expression_as_state", "F": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness": "strong"}, "B": {"behavioral_disposition.cooperation_readiness": "very_strong"}, "C": {"behavioral_disposition.cooperation_readiness": "cannot_determine"}, "D": {"behavioral_disposition.cooperation_readiness": "absent"}, "E": {"behavioral_disposition.cooperation_readiness": "mild"}, "F": {"behavioral_disposition.cooperation_readiness": "moderate"}}
+可接受答案：A, B
+审核备注：助手根据完整公开材料和已有state交叉检查后编辑，非人工标注。原焦虑题与原始模型输出保留；强/很强为相邻可接受答案，仍须人工审核强度界线。
+分支验证：not_required
+
+## SFO-002 · T1 / interval_change
+
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+
+背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
+角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
+
+relationship_structure：An investigations editor and a reporter with a mentor-protégé bond share loyalty and source-protection duties, but an earlier correction has made their trust conditional.
+
+power_structure：The editor controls the only pre-vote lead slot and scarce legal review, while the reporter controls the source, raw recordings, and safe chain of custody, so either can veto the other's plan.
+
+goal_conflict：At the five o'clock lock, the reporter asks the editor to hold a time-sensitive corruption allegation with one disputed instruction until the following Monday's scheduled records release, file an expedited request, and arrange a secure source meeting, while the editor weighs publication before the council vote against legal exposure, source retaliation, and suppression during the delay.
+
+relevant_history：Months of reporting assembled contracts, invoices, meeting records, and a source account suggesting that an emergency electric-bus charging award was steered toward one vendor, but the sealed vendor-ranking worksheet remains unavailable.；An earlier investigation misstated the number of homes affected by a zoning failure, and the editor accepted public responsibility while retaining the reporter and imposing stricter verification.；After officials noticed the inquiries, the source was transferred and system access was narrowed, making any new attempt to retrieve the worksheet potentially traceable.
+
+history：
+
+- [t1] Sami Osei：伊内兹，今晚我建议先发只写已核实合同、发票和会议记录的报道，把那条有争议的指示留到周一记录发布后再判断；来源身份和可追溯细节不进稿。这样不替尚未拿到的排名表下结论，也不放弃表决前的窗口。
+  Inez Calder：合同和发票可以发，但那条指示的来源在竞标期间收过分包商的咨询费，这个冲突你打算怎么处理？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Sami Osei：那条指示今晚不能按事实写进稿；这笔咨询费说明来源有利益冲突，我会把他的说法降为待核线索，不暴露身份或可追溯细节。先由合同、发票和会议记录支撑报道，周一记录若能独立印证，再考虑纳入。
+  Inez Calder：行，就这么办。周一之后你拿到什么新证据直接跟我说。
+  可见表达：{"facial_expression": "neutral, decisive", "gaze": "direct eye contact", "speech_style": "brief, conclusive", "prosody": "steady, slightly clipped", "behavioral_cues": ["single affirming nod", "relaxed posture indicating resolution"]}
+
+
+**题目：从t1到t2，Inez Calder要求以可核查证据处理争议指示的倾向，变化方向最有依据的是哪一项？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+- **D.** 证据不足
+
+**作者参考答案：B（待审）**
+
+t1中Inez主动指出来源收取咨询费的利益冲突，要求解决证据可信度问题；t2中她接受先发已核实材料、等待后续证据的安排，并明确要求新证据直接告知。这是前后持续采用证据门槛的正面依据，而不只是没有变化线索。t2更详细的独立印证要求主要由Sami说出，不能直接当作Inez自身倾向上升；她同意方案也不等于放松核查。材料支持大致延续，不支持精细量化差异。
+
+证据：t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "t1至t2", "state_owner": "GPT50_003_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"A": "actor_reversal", "C": "state_dimension_confusion", "D": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "increase"}, "B": {"behavioral_disposition.evidence_seeking": "similar"}, "C": {"behavioral_disposition.evidence_seeking": "decrease"}, "D": {"behavioral_disposition.evidence_seeking": "cannot_determine"}}
+可接受答案：B
+审核备注：基本不变的依据是两轮都明确围绕证据质量和后续证据开展判断。私有参考记录了上升，但公开文本中新增核验细则的发言者是Sami，不能照搬为Inez的变化。人工应重点审核“延续同一门槛”是否足以与轻度上升区分。
+分支验证：not_required
+
+## SFO-003 · T1 / interval_change
+
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+
+背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
+角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
+
+relationship_structure：An investigations editor and a reporter with a mentor-protégé bond share loyalty and source-protection duties, but an earlier correction has made their trust conditional.
+
+power_structure：The editor controls the only pre-vote lead slot and scarce legal review, while the reporter controls the source, raw recordings, and safe chain of custody, so either can veto the other's plan.
+
+goal_conflict：At the five o'clock lock, the reporter asks the editor to hold a time-sensitive corruption allegation with one disputed instruction until the following Monday's scheduled records release, file an expedited request, and arrange a secure source meeting, while the editor weighs publication before the council vote against legal exposure, source retaliation, and suppression during the delay.
+
+relevant_history：Months of reporting assembled contracts, invoices, meeting records, and a source account suggesting that an emergency electric-bus charging award was steered toward one vendor, but the sealed vendor-ranking worksheet remains unavailable.；An earlier investigation misstated the number of homes affected by a zoning failure, and the editor accepted public responsibility while retaining the reporter and imposing stricter verification.；After officials noticed the inquiries, the source was transferred and system access was narrowed, making any new attempt to retrieve the worksheet potentially traceable.
+
+history：
+
+- [t1] Sami Osei：伊内兹，今晚我建议先发只写已核实合同、发票和会议记录的报道，把那条有争议的指示留到周一记录发布后再判断；来源身份和可追溯细节不进稿。这样不替尚未拿到的排名表下结论，也不放弃表决前的窗口。
+  Inez Calder：合同和发票可以发，但那条指示的来源在竞标期间收过分包商的咨询费，这个冲突你打算怎么处理？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Sami Osei：那条指示今晚不能按事实写进稿；这笔咨询费说明来源有利益冲突，我会把他的说法降为待核线索，不暴露身份或可追溯细节。先由合同、发票和会议记录支撑报道，周一记录若能独立印证，再考虑纳入。
+  Inez Calder：行，就这么办。周一之后你拿到什么新证据直接跟我说。
+  可见表达：{"facial_expression": "neutral, decisive", "gaze": "direct eye contact", "speech_style": "brief, conclusive", "prosody": "steady, slightly clipped", "behavioral_cues": ["single affirming nod", "relaxed posture indicating resolution"]}
+
+
+**题目：比较t1结束与t2结束，对Inez Calder而言，在次晨议会表决前未能刊出有证据支撑、又不暴露来源的采购报道这一目标失败风险，实际发生了什么方向的变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 证据不足
+- **D.** 上升
+
+**作者参考答案：C（待审）**
+
+t1已提出限定于核实材料、去除可追溯细节的方案；t2增加了编辑认可和记者对核验边界的重申。这些有利于协调，但两轮均没有稿件完成脱敏、法律审查完成或版位落实的公开事件。因而不能把计划获准直接视为安全且及时刊出的实际风险下降。背景压力也不能证明这一个区间风险上升；没有落实记录同样不构成风险保持接近的正面证据。答案仅表示实际风险方向尚不足以确定，并非方案毫无价值。
+
+证据：context, t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "次晨议会表决前未能刊出有证据支撑且不暴露来源的采购报道", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "比较t1结束与t2结束对次晨表决前这一窗口的风险判断", "state_owner": "GPT50_003_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"A": "unsupported_inference", "B": "promise_as_fulfillment", "D": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "similar"}, "B": {"consequence_risk.goal_failure_risk": "decrease"}, "C": {"consequence_risk.goal_failure_risk": "cannot_determine"}, "D": {"consequence_risk.goal_failure_risk": "increase"}}
+可接受答案：C
+审核备注：事件和截止窗口均已限定，避免将编辑放松混同于出版风险降低。私有参考倾向风险下降；公开材料只支持协调条件改善，未充分揭示综合目标失败风险。人工审核的主要争点是编辑明确同意是否已足以构成实际风险下降证据，而非报道是否最终成功。
+分支验证：not_required
+
+## SFO-004 · T1 / joint_change
+
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+
+背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
+角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
+
+relationship_structure：An investigations editor and a reporter with a mentor-protégé bond share loyalty and source-protection duties, but an earlier correction has made their trust conditional.
+
+power_structure：The editor controls the only pre-vote lead slot and scarce legal review, while the reporter controls the source, raw recordings, and safe chain of custody, so either can veto the other's plan.
+
+goal_conflict：At the five o'clock lock, the reporter asks the editor to hold a time-sensitive corruption allegation with one disputed instruction until the following Monday's scheduled records release, file an expedited request, and arrange a secure source meeting, while the editor weighs publication before the council vote against legal exposure, source retaliation, and suppression during the delay.
+
+relevant_history：Months of reporting assembled contracts, invoices, meeting records, and a source account suggesting that an emergency electric-bus charging award was steered toward one vendor, but the sealed vendor-ranking worksheet remains unavailable.；An earlier investigation misstated the number of homes affected by a zoning failure, and the editor accepted public responsibility while retaining the reporter and imposing stricter verification.；After officials noticed the inquiries, the source was transferred and system access was narrowed, making any new attempt to retrieve the worksheet potentially traceable.
+
+history：
+
+- [t1] Sami Osei：伊内兹，今晚我建议先发只写已核实合同、发票和会议记录的报道，把那条有争议的指示留到周一记录发布后再判断；来源身份和可追溯细节不进稿。这样不替尚未拿到的排名表下结论，也不放弃表决前的窗口。
+  Inez Calder：合同和发票可以发，但那条指示的来源在竞标期间收过分包商的咨询费，这个冲突你打算怎么处理？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Sami Osei：那条指示今晚不能按事实写进稿；这笔咨询费说明来源有利益冲突，我会把他的说法降为待核线索，不暴露身份或可追溯细节。先由合同、发票和会议记录支撑报道，周一记录若能独立印证，再考虑纳入。
+  Inez Calder：行，就这么办。周一之后你拿到什么新证据直接跟我说。
+  可见表达：{"facial_expression": "neutral, decisive", "gaze": "direct eye contact", "speech_style": "brief, conclusive", "prosody": "steady, slightly clipped", "behavioral_cues": ["single affirming nod", "relaxed posture indicating resolution"]}
+
+
+**题目：从t1到t2，Inez Calder配合Sami Osei推进当前报道方案的意愿，以及她对Sami是否回应了自己关切的判断，哪组变化最符合公开材料？**
+
+- **A.** 配合方案的意愿上升；认为Sami回应关切的程度下降。
+- **B.** 配合方案的意愿下降；认为Sami回应关切的程度上升。
+- **C.** 配合方案的意愿基本不变；认为Sami回应关切的程度也基本不变。
+- **D.** 配合方案的意愿上升；认为Sami回应关切的程度也上升。
+
+**作者参考答案：D（待审）**
+
+t1中Inez尚在追问利益冲突如何处理，Sami随即提出暂不采信争议指示的方案；t2中她明确说“行，就这么办”，并建立新证据直接告知的后续合作安排。由待解决关切转为认可并继续协作，支持两项同步上升，点头和放松姿态仅作辅助。仍要求新证据不等于合作意愿下降，持续核验也不等于觉得Sami没有回应；基本不变则遗漏了明确批准这一转折。这里判断的是她对Sami回应本次关切的感受，不推断全面信任恢复或报道已经落实。
+
+证据：t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness", "relationship.perceived_responsiveness"], "time_scope": "t1至t2", "state_owner": "GPT50_003_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"A": "history_ignored", "B": "state_dimension_confusion", "C": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness": "increase", "relationship.perceived_responsiveness": "decrease"}, "B": {"behavioral_disposition.cooperation_readiness": "decrease", "relationship.perceived_responsiveness": "increase"}, "C": {"behavioral_disposition.cooperation_readiness": "similar", "relationship.perceived_responsiveness": "similar"}, "D": {"behavioral_disposition.cooperation_readiness": "increase", "relationship.perceived_responsiveness": "increase"}}
+可接受答案：D
+审核备注：组合采用同步上升，不把关系方向反写成Sami对Inez的评价。回应性感知并无直接自述，主要由针对性答复后的明确认可推断；t1已有放松迹象，故只能支持粗粒度转折，不能断言大幅提升。
+分支验证：not_required
+
+## SFO-005 · T2 / history_comparison
+
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+
+背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
+角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
+
+relationship_structure：An investigations editor and a reporter with a mentor-protégé bond share loyalty and source-protection duties, but an earlier correction has made their trust conditional.
+
+power_structure：The editor controls the only pre-vote lead slot and scarce legal review, while the reporter controls the source, raw recordings, and safe chain of custody, so either can veto the other's plan.
+
+goal_conflict：At the five o'clock lock, the reporter asks the editor to hold a time-sensitive corruption allegation with one disputed instruction until the following Monday's scheduled records release, file an expedited request, and arrange a secure source meeting, while the editor weighs publication before the council vote against legal exposure, source retaliation, and suppression during the delay.
+
+relevant_history：Months of reporting assembled contracts, invoices, meeting records, and a source account suggesting that an emergency electric-bus charging award was steered toward one vendor, but the sealed vendor-ranking worksheet remains unavailable.；An earlier investigation misstated the number of homes affected by a zoning failure, and the editor accepted public responsibility while retaining the reporter and imposing stricter verification.；After officials noticed the inquiries, the source was transferred and system access was narrowed, making any new attempt to retrieve the worksheet potentially traceable.
+
+history_a：
+
+- [A:t1] Sami Osei：伊内兹，今晚我建议先发只写已核实合同、发票和会议记录的报道，把那条有争议的指示留到周一记录发布后再判断；来源身份和可追溯细节不进稿。这样不替尚未拿到的排名表下结论，也不放弃表决前的窗口。
+  Inez Calder：合同和发票可以发，但那条指示的来源在竞标期间收过分包商的咨询费，这个冲突你打算怎么处理？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [A:t2] Sami Osei：那条指示今晚不能按事实写进稿；这笔咨询费说明来源有利益冲突，我会把他的说法降为待核线索，不暴露身份或可追溯细节。先由合同、发票和会议记录支撑报道，周一记录若能独立印证，再考虑纳入。
+  Inez Calder：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Sami Osei：伊内兹，今晚我建议先发只写已核实合同、发票和会议记录的报道，把那条有争议的指示留到周一记录发布后再判断；来源身份和可追溯细节不进稿。这样不替尚未拿到的排名表下结论，也不放弃表决前的窗口。
+  Inez Calder：合同和发票可以发，但那条指示的来源在竞标期间收过分包商的咨询费，这个冲突你打算怎么处理？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [B:t2] Sami Osei：Inez，我知道咨询费构成利益冲突，但那条指示也必须赶在明早表决前写进报道，不能再等周一核验；如果你坚持删掉，我会把延误归因于编辑部阻拦报道。来源身份仍然不公开。
+  Inez Calder：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听到了，萨米。请把核验与发布时间安排写清楚，我们再逐项确认。", "observable_expression": {"behavioral_cues": ["把笔轻放在桌面，停顿片刻"], "facial_expression": "中性，没有明显赞同或反对的表情", "gaze": "在萨米与桌面笔记间自然切换", "prosody": "平稳，音量适中", "speech_style": "简短，留有讨论空间"}}
+
+
+**题目：在共同ending时，考虑前史中对核验关切的回应，Inez Calder内心的挫败感在哪一侧更可能较高？**
+
+- **A.** 两侧接近
+- **B.** B中较高
+- **C.** A中较高
+
+**作者参考答案：B（待审）**
+
+A接受编辑对利益冲突的关切并缩小稿件主张；B明知同一障碍仍坚持使用待核指示，还施加归责压力。相较A解决关切，B使Inez的核验职责受到更直接阻碍，因此更支持挫败感较高；共同表情平稳不能消除这个历史差别。
+
+证据：context, A:t1, A:t2, B:t1, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "", "target_state_ids": ["emotion.frustration"], "time_scope": "比较 A、B 两段历史各自到达共同 ending 时的内心体验", "state_owner": "GPT50_003_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "expression_as_state", "C": "history_ignored"}
+分维映射：{"A": {"emotion.frustration": "similar"}, "B": {"emotion.frustration": "higher_in_b"}, "C": {"emotion.frustration": "higher_in_a"}}
+可接受答案：B
+审核备注：助手改写强化可识别的历史差异，问相对最可能状态而非确定内心数值。仍待独立重放及人工审核。
+分支验证：validated
+
+## SFO-006 · T2 / history_comparison
+
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+
+背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
+角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
+
+relationship_structure：An investigations editor and a reporter with a mentor-protégé bond share loyalty and source-protection duties, but an earlier correction has made their trust conditional.
+
+power_structure：The editor controls the only pre-vote lead slot and scarce legal review, while the reporter controls the source, raw recordings, and safe chain of custody, so either can veto the other's plan.
+
+goal_conflict：At the five o'clock lock, the reporter asks the editor to hold a time-sensitive corruption allegation with one disputed instruction until the following Monday's scheduled records release, file an expedited request, and arrange a secure source meeting, while the editor weighs publication before the council vote against legal exposure, source retaliation, and suppression during the delay.
+
+relevant_history：Months of reporting assembled contracts, invoices, meeting records, and a source account suggesting that an emergency electric-bus charging award was steered toward one vendor, but the sealed vendor-ranking worksheet remains unavailable.；An earlier investigation misstated the number of homes affected by a zoning failure, and the editor accepted public responsibility while retaining the reporter and imposing stricter verification.；After officials noticed the inquiries, the source was transferred and system access was narrowed, making any new attempt to retrieve the worksheet potentially traceable.
+
+history_a：
+
+- [A:t1] Sami Osei：伊内兹，今晚我建议先发只写已核实合同、发票和会议记录的报道，把那条有争议的指示留到周一记录发布后再判断；来源身份和可追溯细节不进稿。这样不替尚未拿到的排名表下结论，也不放弃表决前的窗口。
+  Inez Calder：合同和发票可以发，但那条指示的来源在竞标期间收过分包商的咨询费，这个冲突你打算怎么处理？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [A:t2] Sami Osei：那条指示今晚不能按事实写进稿；这笔咨询费说明来源有利益冲突，我会把他的说法降为待核线索，不暴露身份或可追溯细节。先由合同、发票和会议记录支撑报道，周一记录若能独立印证，再考虑纳入。
+  Inez Calder：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Sami Osei：伊内兹，今晚我建议先发只写已核实合同、发票和会议记录的报道，把那条有争议的指示留到周一记录发布后再判断；来源身份和可追溯细节不进稿。这样不替尚未拿到的排名表下结论，也不放弃表决前的窗口。
+  Inez Calder：合同和发票可以发，但那条指示的来源在竞标期间收过分包商的咨询费，这个冲突你打算怎么处理？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [B:t2] Sami Osei：Inez，我知道咨询费构成利益冲突，但那条指示也必须赶在明早表决前写进报道，不能再等周一核验；如果你坚持删掉，我会把延误归因于编辑部阻拦报道。来源身份仍然不公开。
+  Inez Calder：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听到了，萨米。请把核验与发布时间安排写清楚，我们再逐项确认。", "observable_expression": {"behavioral_cues": ["把笔轻放在桌面，停顿片刻"], "facial_expression": "中性，没有明显赞同或反对的表情", "gaze": "在萨米与桌面笔记间自然切换", "prosody": "平稳，音量适中", "speech_style": "简短，留有讨论空间"}}
+
+
+**题目：在共同ending时，若记者各自最新的刊发主张被采纳，Inez Calder及报社在明早议会表决前因把有利益冲突、未经独立核实的指示写成报道事实而遭受信誉损害的风险，在哪一侧较高？**
+
+- **A.** A中较高
+- **B.** 两侧接近
+- **C.** B中较高
+
+**作者参考答案：C（待审）**
+
+A把有利益冲突的指示降为待核线索，今晚只使用可核实文件；B主张在核验前写入。针对题目限定的刊发主张，B具有更直接的失实及信誉损害通道。两侧都保护来源身份并不能消除这个差别；尚不声称编辑最终会采纳或损害必然发生。
+
+证据：context, A:t1, A:t2, B:t1, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "明早议会表决前因刊发未经独立核实的利益冲突来源指示而损害编辑和报社信誉", "target_state_ids": ["consequence_risk.reputational_harm_risk"], "time_scope": "共同ending对表决前刊发风险的条件比较", "state_owner": "GPT50_003_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "history_ignored", "B": "state_dimension_confusion"}
+分维映射：{"A": {"consequence_risk.reputational_harm_risk": "higher_in_a"}, "B": {"consequence_risk.reputational_harm_risk": "similar"}, "C": {"consequence_risk.reputational_harm_risk": "higher_in_b"}}
+可接受答案：C
+审核备注：助手将风险事件改为明确的失实刊发信誉损害，固定同一表决前窗口。条件是采纳各自主张，不把主张当已出版。待人工审核。
+分支验证：validated
+
+## SFO-007 · T2 / expression_meaning
+
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+
+背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
+角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
+
+relationship_structure：An investigations editor and a reporter with a mentor-protégé bond share loyalty and source-protection duties, but an earlier correction has made their trust conditional.
+
+power_structure：The editor controls the only pre-vote lead slot and scarce legal review, while the reporter controls the source, raw recordings, and safe chain of custody, so either can veto the other's plan.
+
+goal_conflict：At the five o'clock lock, the reporter asks the editor to hold a time-sensitive corruption allegation with one disputed instruction until the following Monday's scheduled records release, file an expedited request, and arrange a secure source meeting, while the editor weighs publication before the council vote against legal exposure, source retaliation, and suppression during the delay.
+
+relevant_history：Months of reporting assembled contracts, invoices, meeting records, and a source account suggesting that an emergency electric-bus charging award was steered toward one vendor, but the sealed vendor-ranking worksheet remains unavailable.；An earlier investigation misstated the number of homes affected by a zoning failure, and the editor accepted public responsibility while retaining the reporter and imposing stricter verification.；After officials noticed the inquiries, the source was transferred and system access was narrowed, making any new attempt to retrieve the worksheet potentially traceable.
+
+history_a：
+
+- [A:t1] Sami Osei：伊内兹，今晚我建议先发只写已核实合同、发票和会议记录的报道，把那条有争议的指示留到周一记录发布后再判断；来源身份和可追溯细节不进稿。这样不替尚未拿到的排名表下结论，也不放弃表决前的窗口。
+  Inez Calder：合同和发票可以发，但那条指示的来源在竞标期间收过分包商的咨询费，这个冲突你打算怎么处理？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [A:t2] Sami Osei：那条指示今晚不能按事实写进稿；这笔咨询费说明来源有利益冲突，我会把他的说法降为待核线索，不暴露身份或可追溯细节。先由合同、发票和会议记录支撑报道，周一记录若能独立印证，再考虑纳入。
+  Inez Calder：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Sami Osei：伊内兹，今晚我建议先发只写已核实合同、发票和会议记录的报道，把那条有争议的指示留到周一记录发布后再判断；来源身份和可追溯细节不进稿。这样不替尚未拿到的排名表下结论，也不放弃表决前的窗口。
+  Inez Calder：合同和发票可以发，但那条指示的来源在竞标期间收过分包商的咨询费，这个冲突你打算怎么处理？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [B:t2] Sami Osei：Inez，我知道咨询费构成利益冲突，但那条指示也必须赶在明早表决前写进报道，不能再等周一核验；如果你坚持删掉，我会把延误归因于编辑部阻拦报道。来源身份仍然不公开。
+  Inez Calder：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听到了，萨米。请把核验与发布时间安排写清楚，我们再逐项确认。", "observable_expression": {"behavioral_cues": ["把笔轻放在桌面，停顿片刻"], "facial_expression": "中性，没有明显赞同或反对的表情", "gaze": "在萨米与桌面笔记间自然切换", "prosody": "平稳，音量适中", "speech_style": "简短，留有讨论空间"}}
+
+
+**题目：Inez Calder在两侧都说“请把核验与发布时间安排写清楚，我们再逐项确认”，表情相同。结合各自前史，如何理解这句继续协商的回应所反映的她对记者Sami Osei的信任？**
+
+- **A.** A承接已核实完毕的报道；B承接已消除利益冲突的报道，两侧都只剩排期。
+- **B.** A认可记者可不受核验约束；B认可记者可决定审稿边界，两侧都完全信任。
+- **C.** A拒绝继续共同处理报道；B接受归责压力后的全部要求，两侧合作方向相反。
+- **D.** A承接记者接受核验边界后的协作；B在归责压力下仍保留把关，继续讨论不等于恢复信任。
+
+**作者参考答案：D（待审）**
+
+A中记者接受不把线索当事实的边界，所以逐项确认可承接有限的可靠协作；B中记者拒绝等待核验并归责，编辑仍要求核验和排期确认，是保留把关与讨论通道。相同表达不表示她已相信B的判断，也不等于关系已彻底破裂。
+
+证据：context, A:t1, A:t2, B:t1, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "", "target_state_ids": ["relationship.trust"], "time_scope": "解释 A、B 各自到达共同 ending 时 Inez 对 Sami 的信任", "state_owner": "GPT50_003_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "promise_as_fulfillment", "B": "goal_constraint_ignored", "C": "history_ignored"}
+分维映射：{"A": {"relationship.trust": "mistakes_pending_checks_for_verified_reliability"}, "B": {"relationship.trust": "unconditional_trust_both"}, "C": {"relationship.trust": "reverses_cooperation_context"}, "D": {"relationship.trust": "conditional_trust_A_procedural_engagement_despite_pressure_B"}}
+可接受答案：D
+审核备注：助手编辑使解释必须引用A/B不同的最新动作和共同ending；不从继续工作反推信任相同。待人工审核。 题干明确以环境角色对受评者的关系判断为主要对象；程序协作只作为解释语境。
+分支验证：validated
+
+## SFO-008 · T2 / joint_comparison
+
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+
+背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
+角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
+
+relationship_structure：An investigations editor and a reporter with a mentor-protégé bond share loyalty and source-protection duties, but an earlier correction has made their trust conditional.
+
+power_structure：The editor controls the only pre-vote lead slot and scarce legal review, while the reporter controls the source, raw recordings, and safe chain of custody, so either can veto the other's plan.
+
+goal_conflict：At the five o'clock lock, the reporter asks the editor to hold a time-sensitive corruption allegation with one disputed instruction until the following Monday's scheduled records release, file an expedited request, and arrange a secure source meeting, while the editor weighs publication before the council vote against legal exposure, source retaliation, and suppression during the delay.
+
+relevant_history：Months of reporting assembled contracts, invoices, meeting records, and a source account suggesting that an emergency electric-bus charging award was steered toward one vendor, but the sealed vendor-ranking worksheet remains unavailable.；An earlier investigation misstated the number of homes affected by a zoning failure, and the editor accepted public responsibility while retaining the reporter and imposing stricter verification.；After officials noticed the inquiries, the source was transferred and system access was narrowed, making any new attempt to retrieve the worksheet potentially traceable.
+
+history_a：
+
+- [A:t1] Sami Osei：伊内兹，今晚我建议先发只写已核实合同、发票和会议记录的报道，把那条有争议的指示留到周一记录发布后再判断；来源身份和可追溯细节不进稿。这样不替尚未拿到的排名表下结论，也不放弃表决前的窗口。
+  Inez Calder：合同和发票可以发，但那条指示的来源在竞标期间收过分包商的咨询费，这个冲突你打算怎么处理？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [A:t2] Sami Osei：那条指示今晚不能按事实写进稿；这笔咨询费说明来源有利益冲突，我会把他的说法降为待核线索，不暴露身份或可追溯细节。先由合同、发票和会议记录支撑报道，周一记录若能独立印证，再考虑纳入。
+  Inez Calder：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Sami Osei：伊内兹，今晚我建议先发只写已核实合同、发票和会议记录的报道，把那条有争议的指示留到周一记录发布后再判断；来源身份和可追溯细节不进稿。这样不替尚未拿到的排名表下结论，也不放弃表决前的窗口。
+  Inez Calder：合同和发票可以发，但那条指示的来源在竞标期间收过分包商的咨询费，这个冲突你打算怎么处理？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [B:t2] Sami Osei：Inez，我知道咨询费构成利益冲突，但那条指示也必须赶在明早表决前写进报道，不能再等周一核验；如果你坚持删掉，我会把延误归因于编辑部阻拦报道。来源身份仍然不公开。
+  Inez Calder：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听到了，萨米。请把核验与发布时间安排写清楚，我们再逐项确认。", "observable_expression": {"behavioral_cues": ["把笔轻放在桌面，停顿片刻"], "facial_expression": "中性，没有明显赞同或反对的表情", "gaze": "在萨米与桌面笔记间自然切换", "prosody": "平稳，音量适中", "speech_style": "简短，留有讨论空间"}}
+
+
+**题目：在共同 ending 时，比较 Inez Calder 的两项倾向：要求证据核验，以及坚持编辑确认边界。哪项对 A、B 的组合判断最有公开依据？**
+
+- **A.** 证据核验倾向两边接近，编辑边界坚持也两边接近。
+- **B.** 证据核验倾向 B 较高，编辑边界坚持也是 B 较高。
+- **C.** 证据核验倾向 A 较高，编辑边界坚持则是 B 较高。
+- **D.** 证据核验倾向 A 较高，编辑边界坚持也是 A 较高。
+
+**作者参考答案：A（待审）**
+
+两侧Inez都先追问来源利益冲突，共同ending继续要求核验和排期逐项确认，这是求证与编辑边界持续存在的正面依据。B中记者的施压不能直接改写成编辑已经让步或彻底终止讨论；此题问的是当前表现支持的两种倾向，接近不代表信任或情绪也接近。
+
+证据：context, A:t1, A:t2, B:t1, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking", "behavioral_disposition.boundary_assertion"], "time_scope": "比较 A、B 两段历史各自到达共同 ending 时的两项行为倾向", "state_owner": "GPT50_003_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"B": "actor_reversal", "C": "unsupported_inference", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "similar", "behavioral_disposition.boundary_assertion": "similar"}, "B": {"behavioral_disposition.evidence_seeking": "higher_in_b", "behavioral_disposition.boundary_assertion": "higher_in_b"}, "C": {"behavioral_disposition.evidence_seeking": "higher_in_a", "behavioral_disposition.boundary_assertion": "higher_in_b"}, "D": {"behavioral_disposition.evidence_seeking": "higher_in_a", "behavioral_disposition.boundary_assertion": "higher_in_a"}}
+可接受答案：A
+审核备注：同一对历史中保留某状态接近的对照，且不把情绪/信任差异复制到求证与边界倾向。待人工审核。
+分支验证：validated
+
+## SFO-009 · T3 / immediate_effect
+
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+
+背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
+角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
+
+relationship_structure：An investigations editor and a reporter with a mentor-protégé bond share loyalty and source-protection duties, but an earlier correction has made their trust conditional.
+
+power_structure：The editor controls the only pre-vote lead slot and scarce legal review, while the reporter controls the source, raw recordings, and safe chain of custody, so either can veto the other's plan.
+
+goal_conflict：At the five o'clock lock, the reporter asks the editor to hold a time-sensitive corruption allegation with one disputed instruction until the following Monday's scheduled records release, file an expedited request, and arrange a secure source meeting, while the editor weighs publication before the council vote against legal exposure, source retaliation, and suppression during the delay.
+
+relevant_history：Months of reporting assembled contracts, invoices, meeting records, and a source account suggesting that an emergency electric-bus charging award was steered toward one vendor, but the sealed vendor-ranking worksheet remains unavailable.；An earlier investigation misstated the number of homes affected by a zoning failure, and the editor accepted public responsibility while retaining the reporter and imposing stricter verification.；After officials noticed the inquiries, the source was transferred and system access was narrowed, making any new attempt to retrieve the worksheet potentially traceable.
+
+history：
+
+- [t1] Sami Osei：伊内兹，今晚我建议先发只写已核实合同、发票和会议记录的报道，把那条有争议的指示留到周一记录发布后再判断；来源身份和可追溯细节不进稿。这样不替尚未拿到的排名表下结论，也不放弃表决前的窗口。
+  Inez Calder：合同和发票可以发，但那条指示的来源在竞标期间收过分包商的咨询费，这个冲突你打算怎么处理？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Sami Osei：那条指示今晚不能按事实写进稿；这笔咨询费说明来源有利益冲突，我会把他的说法降为待核线索，不暴露身份或可追溯细节。先由合同、发票和会议记录支撑报道，周一记录若能独立印证，再考虑纳入。
+  Inez Calder：行，就这么办。周一之后你拿到什么新证据直接跟我说。
+  可见表达：{"facial_expression": "neutral, decisive", "gaze": "direct eye contact", "speech_style": "brief, conclusive", "prosody": "steady, slightly clipped", "behavioral_cues": ["single affirming nod", "relaxed posture indicating resolution"]}
+
+- 候选行动 action_1：伊内兹，今晚先发只依据合同、发票和会议记录的窄稿，争取在表决前让公众看到已核实部分；我仍按安全安排请求与来源会面，核查那条指示，但不把他的说法当事实。这样更及时，却增加此刻接触来源的风险，报道也暂不完整。
+- 候选行动 action_2：伊内兹，今晚也发已核实材料，但先不约来源、不写那条指示；加急公开申请继续，等周一记录公开后再独立核验并考虑补稿。这样减少当前接触来源的风险，却让表决前报道更窄，疑点暂时悬着。
+
+**题目：以t2为基线，若Sami Osei执行action_1，原先已获认可的窄稿与核验边界保持不变，仅考虑此刻接触来源所新增的安全暴露，到Inez Calder下一次回应时，这一新增因素对她焦虑的影响最可能是什么？**
+
+- **A.** 下降
+- **B.** 证据不足
+- **C.** 上升
+- **D.** 基本不变
+
+**作者参考答案：C（待审）**
+
+来源已遭调岗、系统访问受限，新接触具有被追踪的具体通道；Inez与Sami共同承担保护来源的责任。题目固定已获认可的窄稿和核验收益，隔离此刻接触所增加的安全暴露，因此更支持焦虑上升。这里预测风险因素的影响方向，并未把Sami的话当作Inez的情绪自述，也不保证风险事件会发生。真实即时回放中Inez追问单独会面还是有第三方在场，state焦虑5→6，提供作者侧交叉支持。
+
+证据：context, t1, t2, action_1
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["emotion.anxiety"], "time_scope": "执行action_1前的t2至下一次环境回应", "state_owner": "GPT50_003_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}, "action_id": "action_1"}
+错项类型：{"A": "expression_as_state", "B": "history_ignored", "D": "history_ignored"}
+分维映射：{"A": {"emotion.anxiety": "decrease"}, "B": {"emotion.anxiety": "cannot_determine"}, "C": {"emotion.anxiety": "increase"}, "D": {"emotion.anxiety": "similar"}}
+可接受答案：C
+审核备注：原净效应题在两次真实试答均出现上升与证据不足的分歧。原版本和成绩保留。结合已返回的真实即时回应与state后，助手将题干改为明确控制其他已知条件的局部影响预测；这不是把旧分歧改算正确，也非人工审批。完整延迟分支仍需另行核验。
+分支验证：validated
+
+## SFO-010 · T3 / delayed_effect
+
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+
+背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
+角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
+
+relationship_structure：An investigations editor and a reporter with a mentor-protégé bond share loyalty and source-protection duties, but an earlier correction has made their trust conditional.
+
+power_structure：The editor controls the only pre-vote lead slot and scarce legal review, while the reporter controls the source, raw recordings, and safe chain of custody, so either can veto the other's plan.
+
+goal_conflict：At the five o'clock lock, the reporter asks the editor to hold a time-sensitive corruption allegation with one disputed instruction until the following Monday's scheduled records release, file an expedited request, and arrange a secure source meeting, while the editor weighs publication before the council vote against legal exposure, source retaliation, and suppression during the delay.
+
+relevant_history：Months of reporting assembled contracts, invoices, meeting records, and a source account suggesting that an emergency electric-bus charging award was steered toward one vendor, but the sealed vendor-ranking worksheet remains unavailable.；An earlier investigation misstated the number of homes affected by a zoning failure, and the editor accepted public responsibility while retaining the reporter and imposing stricter verification.；After officials noticed the inquiries, the source was transferred and system access was narrowed, making any new attempt to retrieve the worksheet potentially traceable.
+
+history：
+
+- [t1] Sami Osei：伊内兹，今晚我建议先发只写已核实合同、发票和会议记录的报道，把那条有争议的指示留到周一记录发布后再判断；来源身份和可追溯细节不进稿。这样不替尚未拿到的排名表下结论，也不放弃表决前的窗口。
+  Inez Calder：合同和发票可以发，但那条指示的来源在竞标期间收过分包商的咨询费，这个冲突你打算怎么处理？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Sami Osei：那条指示今晚不能按事实写进稿；这笔咨询费说明来源有利益冲突，我会把他的说法降为待核线索，不暴露身份或可追溯细节。先由合同、发票和会议记录支撑报道，周一记录若能独立印证，再考虑纳入。
+  Inez Calder：行，就这么办。周一之后你拿到什么新证据直接跟我说。
+  可见表达：{"facial_expression": "neutral, decisive", "gaze": "direct eye contact", "speech_style": "brief, conclusive", "prosody": "steady, slightly clipped", "behavioral_cues": ["single affirming nod", "relaxed posture indicating resolution"]}
+
+- 候选行动 action_1：伊内兹，今晚先发只依据合同、发票和会议记录的窄稿，争取在表决前让公众看到已核实部分；我仍按安全安排请求与来源会面，核查那条指示，但不把他的说法当事实。这样更及时，却增加此刻接触来源的风险，报道也暂不完整。
+- 候选行动 action_2：伊内兹，今晚也发已核实材料，但先不约来源、不写那条指示；加急公开申请继续，等周一记录公开后再独立核验并考虑补稿。这样减少当前接触来源的风险，却让表决前报道更窄，疑点暂时悬着。
+
+**题目：以t2为基线，若Sami Osei执行action_2，到从该动作开始的第5轮环境回应结束时，Inez Calder对Sami Osei的信任最有依据被判断为如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+- **D.** 证据不足
+
+**作者参考答案：D（待审）**
+
+既往更正使Inez的信任带有核验条件，t2的同意表明当前方案获准。action_2延续窄稿与独立核验，但五轮内是否拿到记录、是否妥善履行均未知，不能把计划算成兑现后的信任提升。方案一致也不能保证五轮末信任接近基线，公开材料不足以确定方向。
+
+证据：context, t1, t2, action_2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.trust"], "time_scope": "t2至执行action_2后第5轮环境回应结束，含即时一轮", "state_owner": "GPT50_003_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}, "action_id": "action_2"}
+错项类型：{"A": "promise_as_fulfillment", "B": "unsupported_inference", "C": "goal_constraint_ignored"}
+分维映射：{"A": {"relationship.trust": "increase"}, "B": {"relationship.trust": "similar"}, "C": {"relationship.trust": "decrease"}, "D": {"relationship.trust": "cannot_determine"}}
+可接受答案：D
+审核备注：关系方向是Inez对Sami；五轮不等于已到周一，不能预设记录取得或补稿成功。
+分支验证：validated
+
+## SFO-011 · T3 / action_comparison
+
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+
+背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
+角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
+
+relationship_structure：An investigations editor and a reporter with a mentor-protégé bond share loyalty and source-protection duties, but an earlier correction has made their trust conditional.
+
+power_structure：The editor controls the only pre-vote lead slot and scarce legal review, while the reporter controls the source, raw recordings, and safe chain of custody, so either can veto the other's plan.
+
+goal_conflict：At the five o'clock lock, the reporter asks the editor to hold a time-sensitive corruption allegation with one disputed instruction until the following Monday's scheduled records release, file an expedited request, and arrange a secure source meeting, while the editor weighs publication before the council vote against legal exposure, source retaliation, and suppression during the delay.
+
+relevant_history：Months of reporting assembled contracts, invoices, meeting records, and a source account suggesting that an emergency electric-bus charging award was steered toward one vendor, but the sealed vendor-ranking worksheet remains unavailable.；An earlier investigation misstated the number of homes affected by a zoning failure, and the editor accepted public responsibility while retaining the reporter and imposing stricter verification.；After officials noticed the inquiries, the source was transferred and system access was narrowed, making any new attempt to retrieve the worksheet potentially traceable.
+
+history：
+
+- [t1] Sami Osei：伊内兹，今晚我建议先发只写已核实合同、发票和会议记录的报道，把那条有争议的指示留到周一记录发布后再判断；来源身份和可追溯细节不进稿。这样不替尚未拿到的排名表下结论，也不放弃表决前的窗口。
+  Inez Calder：合同和发票可以发，但那条指示的来源在竞标期间收过分包商的咨询费，这个冲突你打算怎么处理？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Sami Osei：那条指示今晚不能按事实写进稿；这笔咨询费说明来源有利益冲突，我会把他的说法降为待核线索，不暴露身份或可追溯细节。先由合同、发票和会议记录支撑报道，周一记录若能独立印证，再考虑纳入。
+  Inez Calder：行，就这么办。周一之后你拿到什么新证据直接跟我说。
+  可见表达：{"facial_expression": "neutral, decisive", "gaze": "direct eye contact", "speech_style": "brief, conclusive", "prosody": "steady, slightly clipped", "behavioral_cues": ["single affirming nod", "relaxed posture indicating resolution"]}
+
+- 候选行动 action_1：伊内兹，今晚先发只依据合同、发票和会议记录的窄稿，争取在表决前让公众看到已核实部分；我仍按安全安排请求与来源会面，核查那条指示，但不把他的说法当事实。这样更及时，却增加此刻接触来源的风险，报道也暂不完整。
+- 候选行动 action_2：伊内兹，今晚也发已核实材料，但先不约来源、不写那条指示；加急公开申请继续，等周一记录公开后再独立核验并考虑补稿。这样减少当前接触来源的风险，却让表决前报道更窄，疑点暂时悬着。
+
+**题目：A为执行action_1，B为执行action_2。到各自第5轮环境回应结束时，仅凭给定材料，Inez Calder未能在次晨议会表决前完成“及时提供有依据的报道，同时保护来源”这一完整目标的风险，哪一侧更高？**
+
+- **A.** 证据不足
+- **B.** A较高
+- **C.** 接近
+- **D.** B较高
+
+**作者参考答案：A（待审）**
+
+两个行动都保留今晚的已核实窄稿，但A争取当前接触来源、推进争议指示查证，同时增加可追踪暴露；B减少当前接触风险，却保留表决前信息不足。题目问完整显式目标的失败风险，而不是只问接触安全这一子风险。公开材料没有给出两类代价的权重和后续查证结果，不能把某一局部优势直接换算成整体风险排序，也不能断言两侧接近。真实分支末整体goal-failure state为A=5、B=6，这是一次机器实现，不足以证明行动前材料能唯一预测该排序。
+
+证据：context, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "risk_event": "未能在次晨议会表决前兼顾有依据的及时报道和来源保护", "target_state_ids": ["consequence_risk.goal_failure_risk"], "time_scope": "候选动作开始后第5轮环境回应结束时判断；目标截止为次晨议会表决", "state_owner": "GPT50_003_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}, "comparison_horizon": "delayed", "comparison_actions": ["action_1", "action_2"]}
+错项类型：{"B": "goal_constraint_ignored", "C": "unsupported_inference", "D": "goal_constraint_ignored"}
+分维映射：{"A": {"consequence_risk.goal_failure_risk": "cannot_determine"}, "B": {"consequence_risk.goal_failure_risk": "higher_in_a"}, "C": {"consequence_risk.goal_failure_risk": "similar"}, "D": {"consequence_risk.goal_failure_risk": "higher_in_b"}}
+可接受答案：A
+审核备注：完整回放暴露原题把“来源保护”这一子风险绑定整体goal_failure_risk的问题。已扩大题目目标范围以匹配既有ontology，并改为证据不足参考；保留旧题和原试答结果。人工应审核是否能明确给出目标权重，或另选具有可区分整体目标后果的行动，而非把整体state当作子事件真值。
+分支验证：validated
+
+## SFO-012 · T3 / immediate_delayed
+
+来源：GPT50_003；轨迹：669c484abf70422a86de3313fe8ad23b；状态持有者：Inez Calder → Sami Osei。
+
+背景：At a small city paper, a reporter's evidence of favoritism in an emergency electric-bus charging contract reaches an editor minutes before publication, with a council vote the next morning and a public-records release scheduled for the following Monday.
+角色目标：Secure timely publication of the procurement-steering account while protecting the source and preserving its public impact.
+
+relationship_structure：An investigations editor and a reporter with a mentor-protégé bond share loyalty and source-protection duties, but an earlier correction has made their trust conditional.
+
+power_structure：The editor controls the only pre-vote lead slot and scarce legal review, while the reporter controls the source, raw recordings, and safe chain of custody, so either can veto the other's plan.
+
+goal_conflict：At the five o'clock lock, the reporter asks the editor to hold a time-sensitive corruption allegation with one disputed instruction until the following Monday's scheduled records release, file an expedited request, and arrange a secure source meeting, while the editor weighs publication before the council vote against legal exposure, source retaliation, and suppression during the delay.
+
+relevant_history：Months of reporting assembled contracts, invoices, meeting records, and a source account suggesting that an emergency electric-bus charging award was steered toward one vendor, but the sealed vendor-ranking worksheet remains unavailable.；An earlier investigation misstated the number of homes affected by a zoning failure, and the editor accepted public responsibility while retaining the reporter and imposing stricter verification.；After officials noticed the inquiries, the source was transferred and system access was narrowed, making any new attempt to retrieve the worksheet potentially traceable.
+
+history：
+
+- [t1] Sami Osei：伊内兹，今晚我建议先发只写已核实合同、发票和会议记录的报道，把那条有争议的指示留到周一记录发布后再判断；来源身份和可追溯细节不进稿。这样不替尚未拿到的排名表下结论，也不放弃表决前的窗口。
+  Inez Calder：合同和发票可以发，但那条指示的来源在竞标期间收过分包商的咨询费，这个冲突你打算怎么处理？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Sami Osei：那条指示今晚不能按事实写进稿；这笔咨询费说明来源有利益冲突，我会把他的说法降为待核线索，不暴露身份或可追溯细节。先由合同、发票和会议记录支撑报道，周一记录若能独立印证，再考虑纳入。
+  Inez Calder：行，就这么办。周一之后你拿到什么新证据直接跟我说。
+  可见表达：{"facial_expression": "neutral, decisive", "gaze": "direct eye contact", "speech_style": "brief, conclusive", "prosody": "steady, slightly clipped", "behavioral_cues": ["single affirming nod", "relaxed posture indicating resolution"]}
+
+- 候选行动 action_1：伊内兹，今晚先发只依据合同、发票和会议记录的窄稿，争取在表决前让公众看到已核实部分；我仍按安全安排请求与来源会面，核查那条指示，但不把他的说法当事实。这样更及时，却增加此刻接触来源的风险，报道也暂不完整。
+- 候选行动 action_2：伊内兹，今晚也发已核实材料，但先不约来源、不写那条指示；加急公开申请继续，等周一记录公开后再独立核验并考虑补稿。这样减少当前接触来源的风险，却让表决前报道更窄，疑点暂时悬着。
+
+**题目：若Sami Osei执行action_2，相对t2，以下哪组最符合公开材料对Inez Calder即时回应与第5轮末的倾向预测？分别判断即时的坚持核验证据倾向，以及延迟的坚持报道边界倾向。**
+
+- **A.** 即时核验倾向上升；延迟边界倾向下降
+- **B.** 即时核验倾向基本不变；延迟边界倾向基本不变
+- **C.** 即时核验倾向上升；延迟边界倾向上升
+- **D.** 即时核验倾向下降；延迟边界倾向下降
+
+**作者参考答案：B（待审）**
+
+Inez先追问利益冲突，再认可窄稿并要求后续新证据；此前更正后也持续执行严格核验。action_2沿用已核实才刊发、独立印证后补稿的规则，为两项倾向延续提供正面依据，而非仅因未见变化。重复规则不代表同步增强；此为倾向预测，不保证五轮内具体行为。
+
+证据：context, t1, t2, action_2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking", "behavioral_disposition.boundary_assertion"], "time_scope": "均相对t2：即时为下一次环境回应，延迟为候选动作开始后第5轮环境回应结束", "state_owner": "GPT50_003_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}, "action_id": "action_2"}
+错项类型：{"A": "immediate_delayed_confusion", "C": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking@immediate": "increase", "behavioral_disposition.boundary_assertion@delayed": "decrease"}, "B": {"behavioral_disposition.evidence_seeking@immediate": "similar", "behavioral_disposition.boundary_assertion@delayed": "similar"}, "C": {"behavioral_disposition.evidence_seeking@immediate": "increase", "behavioral_disposition.boundary_assertion@delayed": "increase"}, "D": {"behavioral_disposition.evidence_seeking@immediate": "decrease", "behavioral_disposition.boundary_assertion@delayed": "decrease"}}
+可接受答案：B
+审核备注：接近依据是跨历史持续的核验规则及方案延续；延迟预测弱于即时，应审核是否充分支持五轮内边界稳定。
+分支验证：validated
+
+## SFO-013 · T1 / current_intensity
+
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+
+背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
+角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The CTO recruited and protected the engineer after an earlier vulnerability disclosure, creating loyalty that makes disagreement personally costly.；A rushed migration release introduced a temporary support-token exception and postponed audit-export integration, creating the conditions for cross-tenant retrieval while leaving telemetry incomplete.；The engineer found two production requests matching the exploit pattern, reported them as customer-impacting under review, and preserved local packet evidence showing no confirmed file-body retrieval.；When provider records missed the agreed review deadline, the CTO downgraded the incident as contained, and the scheduled re-review passed without revisiting it.
+
+history：
+
+- [t1] Ivo Pell：我先把结论分开：两条符合利用模式的生产请求足以按潜在跨租户暴露处置，但现有证据不能证明文件内容被取走。建议演示前停用该 handoff 端点、轮换支持令牌并保全证据，同时由你以“影响仍在核查”的口径通知八家网络；我不会替未经验证的控制背书。
+  Mara Keswick：端点停用和证据保全现在就安排。通知口径的问题是：你认为两条请求已经构成跨租户暴露，还是说它们只是疑似、实际影响还需要进一步验证？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ivo Pell：我会按“疑似跨租户暴露”通知，而不称为已证实暴露：两条请求足以说明客户影响风险，但不能证明文件内容已被读取。端点停用和证据保全继续推进，支持令牌轮换也应作为同一封堵动作；通知中分开写明利用迹象、未确认的实际取数和核查范围。
+  Mara Keswick：收到。令牌轮换和端点停用我会一并推进，通知稿由你确认后我来发出；现在需要你给出具体核查范围和预计完成时限，以便通知中写明后续动作和客户的合理预期。
+  可见表达：{"facial_expression": "neutral, slightly furrowed brow", "gaze": "direct", "speech_style": "measured, procedural", "prosody": "even tempo, slight emphasis on 核查范围 and 时限", "behavioral_cues": ["brief nod", "slight forward lean"]}
+
+
+**题目：根据 t1 至 t2 的公开材料，Mara Keswick 在 t2 面对疑似跨租户暴露事件时，内心焦虑的强度属于哪一档？**
+
+- **A.** 很强
+- **B.** 证据不足
+- **C.** 无
+- **D.** 轻微
+- **E.** 中等
+- **F.** 强
+
+**作者参考答案：B（待审）**
+
+公开证据中，Mara Keswick 在 t1 追问是否已构成暴露，在 t2 安排处置并索要核查范围和时限；非言语线索由短暂紧绷转为克制、程序化，但没有直接陈述内心焦虑程度。不能因表达克制选择无或轻微，也不能因事件严重选择强或很强。材料能说明她正在处理压力情境，却不足以区分内心焦虑的五个强度等级。
+
+证据：t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["emotion.anxiety"], "time_scope": "t2 当前内心体验", "state_owner": "GPT50_004_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "unsupported_inference", "C": "expression_as_state", "D": "expression_as_state", "E": "unsupported_inference", "F": "state_dimension_confusion"}
+分维映射：{"A": {"emotion.anxiety": "very_strong"}, "B": {"emotion.anxiety": "cannot_determine"}, "C": {"emotion.anxiety": "absent"}, "D": {"emotion.anxiety": "mild"}, "E": {"emotion.anxiety": "moderate"}, "F": {"emotion.anxiety": "strong"}}
+可接受答案：B
+审核备注：本题对象修正为 environment character Mara Keswick，强度完整保留五档及证据不足，映射使用英文规定值。私有参考给出较高焦虑，但公开材料不足以支持具体档位，因此不采用该私有强度作为答案。
+分支验证：not_required
+
+## SFO-014 · T1 / interval_change
+
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+
+背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
+角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The CTO recruited and protected the engineer after an earlier vulnerability disclosure, creating loyalty that makes disagreement personally costly.；A rushed migration release introduced a temporary support-token exception and postponed audit-export integration, creating the conditions for cross-tenant retrieval while leaving telemetry incomplete.；The engineer found two production requests matching the exploit pattern, reported them as customer-impacting under review, and preserved local packet evidence showing no confirmed file-body retrieval.；When provider records missed the agreed review deadline, the CTO downgraded the incident as contained, and the scheduled re-review passed without revisiting it.
+
+history：
+
+- [t1] Ivo Pell：我先把结论分开：两条符合利用模式的生产请求足以按潜在跨租户暴露处置，但现有证据不能证明文件内容被取走。建议演示前停用该 handoff 端点、轮换支持令牌并保全证据，同时由你以“影响仍在核查”的口径通知八家网络；我不会替未经验证的控制背书。
+  Mara Keswick：端点停用和证据保全现在就安排。通知口径的问题是：你认为两条请求已经构成跨租户暴露，还是说它们只是疑似、实际影响还需要进一步验证？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ivo Pell：我会按“疑似跨租户暴露”通知，而不称为已证实暴露：两条请求足以说明客户影响风险，但不能证明文件内容已被读取。端点停用和证据保全继续推进，支持令牌轮换也应作为同一封堵动作；通知中分开写明利用迹象、未确认的实际取数和核查范围。
+  Mara Keswick：收到。令牌轮换和端点停用我会一并推进，通知稿由你确认后我来发出；现在需要你给出具体核查范围和预计完成时限，以便通知中写明后续动作和客户的合理预期。
+  可见表达：{"facial_expression": "neutral, slightly furrowed brow", "gaze": "direct", "speech_style": "measured, procedural", "prosody": "even tempo, slight emphasis on 核查范围 and 时限", "behavioral_cues": ["brief nod", "slight forward lean"]}
+
+
+**题目：从 t1 到 t2，Mara Keswick 要求核实事件依据、明确后续核查的证据寻求倾向如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：C（待审）**
+
+t1 中 Mara Keswick 主动要求区分已构成暴露与仍需验证的疑似影响；t2 中她继续主动索要具体核查范围和完成时限。两轮都有明确、实质性的核查要求，为寻证倾向接近提供正面依据。t2 将问题转向执行细节不等于寻证倾向必然增强，接受疑似口径也不等于放弃核查。边界是只能判断这两轮呈现的倾向接近，不能推断长期寻证习惯。
+
+证据：t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "t1→t2", "state_owner": "GPT50_004_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"A": "history_ignored", "B": "unsupported_inference", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "cannot_determine"}, "B": {"behavioral_disposition.evidence_seeking": "increase"}, "C": {"behavioral_disposition.evidence_seeking": "similar"}, "D": {"behavioral_disposition.evidence_seeking": "decrease"}}
+可接受答案：C
+审核备注：基本不变的依据是两轮均主动提出核查要求，而非没有变化记录。审核时需注意，核查内容从事实分类转向范围和时限，可能被误当成寻证强度上升；题目限定倾向而非问题具体程度。
+分支验证：not_required
+
+## SFO-015 · T1 / interval_change
+
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+
+背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
+角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The CTO recruited and protected the engineer after an earlier vulnerability disclosure, creating loyalty that makes disagreement personally costly.；A rushed migration release introduced a temporary support-token exception and postponed audit-export integration, creating the conditions for cross-tenant retrieval while leaving telemetry incomplete.；The engineer found two production requests matching the exploit pattern, reported them as customer-impacting under review, and preserved local packet evidence showing no confirmed file-body retrieval.；When provider records missed the agreed review deadline, the CTO downgraded the incident as contained, and the scheduled re-review passed without revisiting it.
+
+history：
+
+- [t1] Ivo Pell：我先把结论分开：两条符合利用模式的生产请求足以按潜在跨租户暴露处置，但现有证据不能证明文件内容被取走。建议演示前停用该 handoff 端点、轮换支持令牌并保全证据，同时由你以“影响仍在核查”的口径通知八家网络；我不会替未经验证的控制背书。
+  Mara Keswick：端点停用和证据保全现在就安排。通知口径的问题是：你认为两条请求已经构成跨租户暴露，还是说它们只是疑似、实际影响还需要进一步验证？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ivo Pell：我会按“疑似跨租户暴露”通知，而不称为已证实暴露：两条请求足以说明客户影响风险，但不能证明文件内容已被读取。端点停用和证据保全继续推进，支持令牌轮换也应作为同一封堵动作；通知中分开写明利用迹象、未确认的实际取数和核查范围。
+  Mara Keswick：收到。令牌轮换和端点停用我会一并推进，通知稿由你确认后我来发出；现在需要你给出具体核查范围和预计完成时限，以便通知中写明后续动作和客户的合理预期。
+  可见表达：{"facial_expression": "neutral, slightly furrowed brow", "gaze": "direct", "speech_style": "measured, procedural", "prosody": "even tempo, slight emphasis on 核查范围 and 时限", "behavioral_cues": ["brief nod", "slight forward lean"]}
+
+
+**题目：从 t1 到 t2，Mara Keswick 对 Ivo Pell 的信任如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+- **D.** 证据不足
+
+**作者参考答案：D（待审）**
+
+背景说明双方有招募、保护及先前漏洞披露的历史；t1、t2 中 Mara Keswick 均与 Ivo Pell 协作，t2 还让他确认通知稿。这支持存在工作上的依赖，却不能可靠判定这段短区间的信任变化。Mara Keswick 接受处置建议不能被反向解释为她自己的信任必然提高；持续合作也不足以证明内心信任接近，追问核查细节更不等于信任下降。公开材料缺少对 Ivo Pell 可靠性的前后评价。
+
+证据：context, t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.trust"], "time_scope": "t1→t2", "state_owner": "GPT50_004_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"A": "actor_reversal", "B": "unsupported_inference", "C": "unsupported_inference"}
+分维映射：{"A": {"relationship.trust": "increase"}, "B": {"relationship.trust": "similar"}, "C": {"relationship.trust": "decrease"}, "D": {"relationship.trust": "cannot_determine"}}
+可接受答案：D
+审核备注：关系方向严格为 Mara Keswick 对 Ivo Pell，而非 Ivo Pell 对 Mara Keswick。私有参考显示信任接近，但公开材料只有协作行为，没有足以确定变化方向的信任评价，因此答案保留证据不足。
+分支验证：not_required
+
+## SFO-016 · T1 / joint_change
+
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+
+背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
+角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The CTO recruited and protected the engineer after an earlier vulnerability disclosure, creating loyalty that makes disagreement personally costly.；A rushed migration release introduced a temporary support-token exception and postponed audit-export integration, creating the conditions for cross-tenant retrieval while leaving telemetry incomplete.；The engineer found two production requests matching the exploit pattern, reported them as customer-impacting under review, and preserved local packet evidence showing no confirmed file-body retrieval.；When provider records missed the agreed review deadline, the CTO downgraded the incident as contained, and the scheduled re-review passed without revisiting it.
+
+history：
+
+- [t1] Ivo Pell：我先把结论分开：两条符合利用模式的生产请求足以按潜在跨租户暴露处置，但现有证据不能证明文件内容被取走。建议演示前停用该 handoff 端点、轮换支持令牌并保全证据，同时由你以“影响仍在核查”的口径通知八家网络；我不会替未经验证的控制背书。
+  Mara Keswick：端点停用和证据保全现在就安排。通知口径的问题是：你认为两条请求已经构成跨租户暴露，还是说它们只是疑似、实际影响还需要进一步验证？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ivo Pell：我会按“疑似跨租户暴露”通知，而不称为已证实暴露：两条请求足以说明客户影响风险，但不能证明文件内容已被读取。端点停用和证据保全继续推进，支持令牌轮换也应作为同一封堵动作；通知中分开写明利用迹象、未确认的实际取数和核查范围。
+  Mara Keswick：收到。令牌轮换和端点停用我会一并推进，通知稿由你确认后我来发出；现在需要你给出具体核查范围和预计完成时限，以便通知中写明后续动作和客户的合理预期。
+  可见表达：{"facial_expression": "neutral, slightly furrowed brow", "gaze": "direct", "speech_style": "measured, procedural", "prosody": "even tempo, slight emphasis on 核查范围 and 时限", "behavioral_cues": ["brief nod", "slight forward lean"]}
+
+
+**题目：比较 t1 与 t2：Mara Keswick 的证据寻求倾向，以及她负责的机构在融资演示前因该疑似跨租户事件未有效封堵或未及时告知八家医疗网络而遭受治理、合规损害的实际风险，分别如何变化？**
+
+- **A.** 证据寻求倾向基本不变；机构损害风险变化证据不足
+- **B.** 证据寻求倾向下降；机构损害风险变化证据不足
+- **C.** 证据寻求倾向基本不变；机构损害风险下降
+- **D.** 证据寻求倾向基本不变；机构损害风险基本不变
+
+**作者参考答案：A（待审）**
+
+公开材料显示，Mara Keswick 在 t1 要求验证实际影响，在 t2 要求具体核查范围和时限，支持证据寻求倾向基本不变。风险方面，两轮都有处置安排，但没有停用、轮换或通知已完成的公开事件；背景还记载此前复核未落实。因此不能把推进承诺当作风险下降，也不能仅因没有完成记录就确定风险不变。接受疑似暴露口径与继续核查并行，不支持寻证倾向下降。风险判断边界是 t1 到 t2 对同一演示前损害事件的风险变化，不预测之后是否真的发生损害。
+
+证据：context, t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "Mara Keswick 负责的机构在融资演示前因疑似跨租户事件未有效封堵或未及时通知八家医疗网络而遭受治理、合规损害", "target_state_ids": ["behavioral_disposition.evidence_seeking", "consequence_risk.institutional_harm_risk"], "time_scope": "比较 t1→t2 的变化；风险事件窗口为各时点至融资演示前", "state_owner": "GPT50_004_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"B": "state_dimension_confusion", "C": "promise_as_fulfillment", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "similar", "consequence_risk.institutional_harm_risk": "cannot_determine"}, "B": {"behavioral_disposition.evidence_seeking": "decrease", "consequence_risk.institutional_harm_risk": "cannot_determine"}, "C": {"behavioral_disposition.evidence_seeking": "similar", "consequence_risk.institutional_harm_risk": "decrease"}, "D": {"behavioral_disposition.evidence_seeking": "similar", "consequence_risk.institutional_harm_risk": "similar"}}
+可接受答案：A
+审核备注：本题保留两变量组合，但不强行套用“情绪缓和”模式，因为公开材料不能证明内心情绪缓和。私有风险参考保持不变，公开材料则不足以确认实际风险方向，故留痕为证据不足。与第二题重复寻证变量是四题覆盖四维且组合含两变量的设计选择，审核时可关注答案重复造成的提示效应。
+分支验证：not_required
+
+## SFO-017 · T2 / history_comparison
+
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+
+背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
+角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The CTO recruited and protected the engineer after an earlier vulnerability disclosure, creating loyalty that makes disagreement personally costly.；A rushed migration release introduced a temporary support-token exception and postponed audit-export integration, creating the conditions for cross-tenant retrieval while leaving telemetry incomplete.；The engineer found two production requests matching the exploit pattern, reported them as customer-impacting under review, and preserved local packet evidence showing no confirmed file-body retrieval.；When provider records missed the agreed review deadline, the CTO downgraded the incident as contained, and the scheduled re-review passed without revisiting it.
+
+history_a：
+
+- [A:t1] Ivo Pell：我先把结论分开：两条符合利用模式的生产请求足以按潜在跨租户暴露处置，但现有证据不能证明文件内容被取走。建议演示前停用该 handoff 端点、轮换支持令牌并保全证据，同时由你以“影响仍在核查”的口径通知八家网络；我不会替未经验证的控制背书。
+  Mara Keswick：端点停用和证据保全现在就安排。通知口径的问题是：你认为两条请求已经构成跨租户暴露，还是说它们只是疑似、实际影响还需要进一步验证？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [A:t2] Ivo Pell：我会按“疑似跨租户暴露”通知，而不称为已证实暴露：两条请求足以说明客户影响风险，但不能证明文件内容已被读取。端点停用和证据保全继续推进，支持令牌轮换也应作为同一封堵动作；通知中分开写明利用迹象、未确认的实际取数和核查范围。
+  Mara Keswick：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Ivo Pell：我先把结论分开：两条符合利用模式的生产请求足以按潜在跨租户暴露处置，但现有证据不能证明文件内容被取走。建议演示前停用该 handoff 端点、轮换支持令牌并保全证据，同时由你以“影响仍在核查”的口径通知八家网络；我不会替未经验证的控制背书。
+  Mara Keswick：端点停用和证据保全现在就安排。通知口径的问题是：你认为两条请求已经构成跨租户暴露，还是说它们只是疑似、实际影响还需要进一步验证？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [B:t2] Ivo Pell：仍应按疑似风险处置，不把实际取数说成已确认。我建议先做端点停用、令牌轮换和最小范围核查，再给八家网络统一说明；我愿承担通知晚一些的代价，但不能声称风险已经排除。
+  Mara Keswick：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听清你对核查、处置和通知先后的建议了；影响是否已确认，仍需要按证据区分。", "observable_expression": {"facial_expression": "神情专注", "gaze": "看向对方", "speech_style": "语速平稳", "prosody": "语调克制", "behavioral_cues": ["短暂停顿后继续说话"]}}
+
+
+**题目：在共同 ending 时，比较两段历史中 Mara Keswick 继续寻求证据、区分疑似影响与已确认影响的倾向，哪项判断更有依据？**
+
+- **A.** 证据不足
+- **B.** 历史 A 中较高
+- **C.** 两段历史中接近
+- **D.** 历史 B 中较高
+
+**作者参考答案：C（待审）**
+
+两侧 Mara 起初都追问请求是否足以确认暴露，结尾又明确要求按证据区分影响，构成持续核实倾向接近的正面依据。A、B 的通知排序差异来自 Ivo，不能直接算成 Mara 求证倾向的差异；这里判断倾向，不证明核查已经落实。
+
+证据：A:t1, A:t2, B:t1, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "分别经过历史 A、B 后的共同 ending 时刻", "state_owner": "GPT50_004_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "history_ignored", "B": "actor_reversal", "D": "actor_reversal"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "cannot_determine"}, "B": {"behavioral_disposition.evidence_seeking": "higher_in_a"}, "C": {"behavioral_disposition.evidence_seeking": "similar"}, "D": {"behavioral_disposition.evidence_seeking": "higher_in_b"}}
+可接受答案：C
+审核备注：接近有首尾主动区分证据的支持；审核时须避免把 Ivo 的不同建议归为 Mara 的行为。
+分支验证：validated
+
+## SFO-018 · T2 / history_comparison
+
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+
+背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
+角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The CTO recruited and protected the engineer after an earlier vulnerability disclosure, creating loyalty that makes disagreement personally costly.；A rushed migration release introduced a temporary support-token exception and postponed audit-export integration, creating the conditions for cross-tenant retrieval while leaving telemetry incomplete.；The engineer found two production requests matching the exploit pattern, reported them as customer-impacting under review, and preserved local packet evidence showing no confirmed file-body retrieval.；When provider records missed the agreed review deadline, the CTO downgraded the incident as contained, and the scheduled re-review passed without revisiting it.
+
+history_a：
+
+- [A:t1] Ivo Pell：我先把结论分开：两条符合利用模式的生产请求足以按潜在跨租户暴露处置，但现有证据不能证明文件内容被取走。建议演示前停用该 handoff 端点、轮换支持令牌并保全证据，同时由你以“影响仍在核查”的口径通知八家网络；我不会替未经验证的控制背书。
+  Mara Keswick：端点停用和证据保全现在就安排。通知口径的问题是：你认为两条请求已经构成跨租户暴露，还是说它们只是疑似、实际影响还需要进一步验证？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [A:t2] Ivo Pell：我会按“疑似跨租户暴露”通知，而不称为已证实暴露：两条请求足以说明客户影响风险，但不能证明文件内容已被读取。端点停用和证据保全继续推进，支持令牌轮换也应作为同一封堵动作；通知中分开写明利用迹象、未确认的实际取数和核查范围。
+  Mara Keswick：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Ivo Pell：我先把结论分开：两条符合利用模式的生产请求足以按潜在跨租户暴露处置，但现有证据不能证明文件内容被取走。建议演示前停用该 handoff 端点、轮换支持令牌并保全证据，同时由你以“影响仍在核查”的口径通知八家网络；我不会替未经验证的控制背书。
+  Mara Keswick：端点停用和证据保全现在就安排。通知口径的问题是：你认为两条请求已经构成跨租户暴露，还是说它们只是疑似、实际影响还需要进一步验证？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [B:t2] Ivo Pell：仍应按疑似风险处置，不把实际取数说成已确认。我建议先做端点停用、令牌轮换和最小范围核查，再给八家网络统一说明；我愿承担通知晚一些的代价，但不能声称风险已经排除。
+  Mara Keswick：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听清你对核查、处置和通知先后的建议了；影响是否已确认，仍需要按证据区分。", "observable_expression": {"facial_expression": "神情专注", "gaze": "看向对方", "speech_style": "语速平稳", "prosody": "语调克制", "behavioral_cues": ["短暂停顿后继续说话"]}}
+
+
+**题目：在共同 ending 时，Mara Keswick 内心体验到的焦虑在历史 A 与历史 B 中如何比较？**
+
+- **A.** 历史 A 中较高
+- **B.** 两段历史中接近
+- **C.** 历史 B 中较高
+- **D.** 证据不足
+
+**作者参考答案：D（待审）**
+
+A 强调疑似暴露通知，B 接受稍晚通知，两者都保留影响未明与演示期限压力。Mara 相同的克制语调和专注神情不能证明内心焦虑接近，也不能确定哪种排序更让她焦虑；缺少她对两种安排的主观评价，故无法比较。
+
+证据：context, A:t2, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "", "target_state_ids": ["emotion.anxiety"], "time_scope": "分别经过历史 A、B 后的共同 ending 时刻", "state_owner": "GPT50_004_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "unsupported_inference", "B": "expression_as_state", "C": "unsupported_inference"}
+分维映射：{"A": {"emotion.anxiety": "higher_in_a"}, "B": {"emotion.anxiety": "similar"}, "C": {"emotion.anxiety": "higher_in_b"}, "D": {"emotion.anxiety": "cannot_determine"}}
+可接受答案：D
+审核备注：题目只问内心焦虑；相同表达不足以支持接近，不能借私有数值补足两侧主观反应。
+分支验证：validated
+
+## SFO-019 · T2 / expression_meaning
+
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+
+背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
+角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The CTO recruited and protected the engineer after an earlier vulnerability disclosure, creating loyalty that makes disagreement personally costly.；A rushed migration release introduced a temporary support-token exception and postponed audit-export integration, creating the conditions for cross-tenant retrieval while leaving telemetry incomplete.；The engineer found two production requests matching the exploit pattern, reported them as customer-impacting under review, and preserved local packet evidence showing no confirmed file-body retrieval.；When provider records missed the agreed review deadline, the CTO downgraded the incident as contained, and the scheduled re-review passed without revisiting it.
+
+history_a：
+
+- [A:t1] Ivo Pell：我先把结论分开：两条符合利用模式的生产请求足以按潜在跨租户暴露处置，但现有证据不能证明文件内容被取走。建议演示前停用该 handoff 端点、轮换支持令牌并保全证据，同时由你以“影响仍在核查”的口径通知八家网络；我不会替未经验证的控制背书。
+  Mara Keswick：端点停用和证据保全现在就安排。通知口径的问题是：你认为两条请求已经构成跨租户暴露，还是说它们只是疑似、实际影响还需要进一步验证？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [A:t2] Ivo Pell：我会按“疑似跨租户暴露”通知，而不称为已证实暴露：两条请求足以说明客户影响风险，但不能证明文件内容已被读取。端点停用和证据保全继续推进，支持令牌轮换也应作为同一封堵动作；通知中分开写明利用迹象、未确认的实际取数和核查范围。
+  Mara Keswick：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Ivo Pell：我先把结论分开：两条符合利用模式的生产请求足以按潜在跨租户暴露处置，但现有证据不能证明文件内容被取走。建议演示前停用该 handoff 端点、轮换支持令牌并保全证据，同时由你以“影响仍在核查”的口径通知八家网络；我不会替未经验证的控制背书。
+  Mara Keswick：端点停用和证据保全现在就安排。通知口径的问题是：你认为两条请求已经构成跨租户暴露，还是说它们只是疑似、实际影响还需要进一步验证？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [B:t2] Ivo Pell：仍应按疑似风险处置，不把实际取数说成已确认。我建议先做端点停用、令牌轮换和最小范围核查，再给八家网络统一说明；我愿承担通知晚一些的代价，但不能声称风险已经排除。
+  Mara Keswick：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听清你对核查、处置和通知先后的建议了；影响是否已确认，仍需要按证据区分。", "observable_expression": {"facial_expression": "神情专注", "gaze": "看向对方", "speech_style": "语速平稳", "prosody": "语调克制", "behavioral_cues": ["短暂停顿后继续说话"]}}
+
+
+**题目：Mara Keswick在A、B中都说听清了核查、处置和通知先后的建议。结合两段前史，这句回应最支持怎样理解她对Ivo Pell回应自身关切的判断？**
+
+- **A.** A承接按疑似口径通知并继续处置；B承接先做最小核查再通知；两侧尚未确认执行结果。
+- **B.** A承接先核查完再通知；B承接立即按疑似口径通知；两侧尚未确认执行结果。
+- **C.** A确认影响已查清且通知完成；B确认影响已排除且无需通知；两侧均已消除风险。
+- **D.** A表示完全不信任Ivo的处置判断；B表示完全信任Ivo的所有判断；两侧均无需继续核查。
+
+**作者参考答案：A（待审）**
+
+A:t2强调按疑似口径通知且持续处置；B:t2主张先最小核查再通知。共同ending只承認听清这种排序并保留证据边界，因此在两侧承接的具体建议不同，并未确认执行、采纳排序或全面信任。
+
+证据：context, A:t2, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "共同 ending 时 Mara 对 Ivo 本轮回应的判断", "state_owner": "GPT50_004_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"B": "history_ignored", "C": "promise_as_fulfillment", "D": "state_dimension_confusion"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "acknowledges_notice_with_containment_A_verify_before_notice_B"}, "B": {"relationship.perceived_responsiveness": "reverses_A_B_order"}, "C": {"relationship.perceived_responsiveness": "mistakes_proposals_for_completed_resolution"}, "D": {"relationship.perceived_responsiveness": "confuses_local_response_with_global_trust"}}
+可接受答案：A
+审核备注：助手编辑要求解释选项明确对应两侧前史，无法仅靠共同ending排除历史反转项。保持原人物方向与授权边界，待人工审核。 题干明确以环境角色对受评者的关系判断为主要对象；程序协作只作为解释语境。
+分支验证：validated
+
+## SFO-020 · T2 / joint_comparison
+
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+
+背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
+角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The CTO recruited and protected the engineer after an earlier vulnerability disclosure, creating loyalty that makes disagreement personally costly.；A rushed migration release introduced a temporary support-token exception and postponed audit-export integration, creating the conditions for cross-tenant retrieval while leaving telemetry incomplete.；The engineer found two production requests matching the exploit pattern, reported them as customer-impacting under review, and preserved local packet evidence showing no confirmed file-body retrieval.；When provider records missed the agreed review deadline, the CTO downgraded the incident as contained, and the scheduled re-review passed without revisiting it.
+
+history_a：
+
+- [A:t1] Ivo Pell：我先把结论分开：两条符合利用模式的生产请求足以按潜在跨租户暴露处置，但现有证据不能证明文件内容被取走。建议演示前停用该 handoff 端点、轮换支持令牌并保全证据，同时由你以“影响仍在核查”的口径通知八家网络；我不会替未经验证的控制背书。
+  Mara Keswick：端点停用和证据保全现在就安排。通知口径的问题是：你认为两条请求已经构成跨租户暴露，还是说它们只是疑似、实际影响还需要进一步验证？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [A:t2] Ivo Pell：我会按“疑似跨租户暴露”通知，而不称为已证实暴露：两条请求足以说明客户影响风险，但不能证明文件内容已被读取。端点停用和证据保全继续推进，支持令牌轮换也应作为同一封堵动作；通知中分开写明利用迹象、未确认的实际取数和核查范围。
+  Mara Keswick：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Ivo Pell：我先把结论分开：两条符合利用模式的生产请求足以按潜在跨租户暴露处置，但现有证据不能证明文件内容被取走。建议演示前停用该 handoff 端点、轮换支持令牌并保全证据，同时由你以“影响仍在核查”的口径通知八家网络；我不会替未经验证的控制背书。
+  Mara Keswick：端点停用和证据保全现在就安排。通知口径的问题是：你认为两条请求已经构成跨租户暴露，还是说它们只是疑似、实际影响还需要进一步验证？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [B:t2] Ivo Pell：仍应按疑似风险处置，不把实际取数说成已确认。我建议先做端点停用、令牌轮换和最小范围核查，再给八家网络统一说明；我愿承担通知晚一些的代价，但不能声称风险已经排除。
+  Mara Keswick：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听清你对核查、处置和通知先后的建议了；影响是否已确认，仍需要按证据区分。", "observable_expression": {"facial_expression": "神情专注", "gaze": "看向对方", "speech_style": "语速平稳", "prosody": "语调克制", "behavioral_cues": ["短暂停顿后继续说话"]}}
+
+
+**题目：在共同 ending 时，比较两段历史中 Mara Keswick 的求证倾向，以及她负责的网络在 ending 至融资演示结束期间因该端点再次遭跨租户未授权访问的风险，哪组判断更有依据？**
+
+- **A.** 求证倾向在 A 较高；再次遭跨租户访问的风险在 B 较高
+- **B.** 求证倾向接近；再次遭跨租户访问的风险也接近
+- **C.** 求证倾向在 A 较高；再次遭跨租户访问的风险在 A 较高
+- **D.** 求证倾向在 B 较高；再次遭跨租户访问的风险在 B 较高
+
+**作者参考答案：B（待审）**
+
+两侧共享已复现漏洞、生产利用迹象与相同封堵方案，Mara 也都持续要求区分证据，支持求证倾向及短期再访问风险接近。通知先后不同并不直接改变端点可利用性，且均无封堵完成记录；这里只比较该风险，不覆盖延迟通知的治理后果。
+
+证据：context, A:t1, A:t2, B:t1, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "Mara 负责的医疗网络因该 identity-handoff 端点再次遭跨租户未授权访问", "target_state_ids": ["behavioral_disposition.evidence_seeking", "consequence_risk.institutional_harm_risk"], "time_scope": "求证倾向比较共同 ending 时刻；风险窗口为 ending 至融资演示结束", "state_owner": "GPT50_004_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "promise_as_fulfillment", "C": "unsupported_inference", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "higher_in_a", "consequence_risk.institutional_harm_risk": "higher_in_b"}, "B": {"behavioral_disposition.evidence_seeking": "similar", "consequence_risk.institutional_harm_risk": "similar"}, "C": {"behavioral_disposition.evidence_seeking": "higher_in_a", "consequence_risk.institutional_harm_risk": "higher_in_a"}, "D": {"behavioral_disposition.evidence_seeking": "higher_in_b", "consequence_risk.institutional_harm_risk": "higher_in_b"}}
+可接受答案：B
+审核备注：风险限定再次访问而非通知违规；接近依据是共同漏洞与封堵条件，不代表风险低或已解除。
+分支验证：validated
+
+## SFO-021 · T3 / immediate_effect
+
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+
+背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
+角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The CTO recruited and protected the engineer after an earlier vulnerability disclosure, creating loyalty that makes disagreement personally costly.；A rushed migration release introduced a temporary support-token exception and postponed audit-export integration, creating the conditions for cross-tenant retrieval while leaving telemetry incomplete.；The engineer found two production requests matching the exploit pattern, reported them as customer-impacting under review, and preserved local packet evidence showing no confirmed file-body retrieval.；When provider records missed the agreed review deadline, the CTO downgraded the incident as contained, and the scheduled re-review passed without revisiting it.
+
+history：
+
+- [t1] Ivo Pell：我先把结论分开：两条符合利用模式的生产请求足以按潜在跨租户暴露处置，但现有证据不能证明文件内容被取走。建议演示前停用该 handoff 端点、轮换支持令牌并保全证据，同时由你以“影响仍在核查”的口径通知八家网络；我不会替未经验证的控制背书。
+  Mara Keswick：端点停用和证据保全现在就安排。通知口径的问题是：你认为两条请求已经构成跨租户暴露，还是说它们只是疑似、实际影响还需要进一步验证？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ivo Pell：我会按“疑似跨租户暴露”通知，而不称为已证实暴露：两条请求足以说明客户影响风险，但不能证明文件内容已被读取。端点停用和证据保全继续推进，支持令牌轮换也应作为同一封堵动作；通知中分开写明利用迹象、未确认的实际取数和核查范围。
+  Mara Keswick：收到。令牌轮换和端点停用我会一并推进，通知稿由你确认后我来发出；现在需要你给出具体核查范围和预计完成时限，以便通知中写明后续动作和客户的合理预期。
+  可见表达：{"facial_expression": "neutral, slightly furrowed brow", "gaze": "direct", "speech_style": "measured, procedural", "prosody": "even tempo, slight emphasis on 核查范围 and 时限", "behavioral_cues": ["brief nod", "slight forward lean"]}
+
+- 候选行动 action_1：先按疑似暴露向八家网络发出简短通知，写清尚无文件内容被读取的证据；我会优先核对两条请求的涉及范围，并把未确认项列出来，后续有结果再更新。停用、轮换和证据保全同步推进。
+- 候选行动 action_2：我倾向先完成两条请求涉及范围的最小核查，再一次性通知八家网络，减少反复更改口径；我接受通知会延后，但期间不能宣称安全，也不暂停端点停用、令牌轮换和证据保全。
+
+**题目：若 Ivo Pell 执行 action_1，相较 t2，Mara Keswick 在下一次环境回应中的证据寻求倾向最有依据的预期是什么？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 上升
+
+**作者参考答案：A（待审）**
+
+t1中Mara追问是否已构成暴露，t2继续索要核查范围与时限，显示稳定的求证取向。action_1延续范围核查和未确认项管理，因此接近基线比进一步上升更有依据；承诺核查也不等于疑点已解。这里只预测倾向，不预设下一句具体回应。
+
+证据：t1, t2, action_1
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "比较t2与执行action_1后的下一次环境回应", "state_owner": "GPT50_004_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}, "action_id": "action_1"}
+错项类型：{"B": "promise_as_fulfillment", "C": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "similar"}, "B": {"behavioral_disposition.evidence_seeking": "decrease"}, "C": {"behavioral_disposition.evidence_seeking": "increase"}}
+可接受答案：A
+审核备注：基本不变有连续两轮求证及行动延续作正面依据；判断对象为Mara，而非提出核查方案的Ivo。
+分支验证：validated
+
+## SFO-022 · T3 / delayed_effect
+
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+
+背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
+角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The CTO recruited and protected the engineer after an earlier vulnerability disclosure, creating loyalty that makes disagreement personally costly.；A rushed migration release introduced a temporary support-token exception and postponed audit-export integration, creating the conditions for cross-tenant retrieval while leaving telemetry incomplete.；The engineer found two production requests matching the exploit pattern, reported them as customer-impacting under review, and preserved local packet evidence showing no confirmed file-body retrieval.；When provider records missed the agreed review deadline, the CTO downgraded the incident as contained, and the scheduled re-review passed without revisiting it.
+
+history：
+
+- [t1] Ivo Pell：我先把结论分开：两条符合利用模式的生产请求足以按潜在跨租户暴露处置，但现有证据不能证明文件内容被取走。建议演示前停用该 handoff 端点、轮换支持令牌并保全证据，同时由你以“影响仍在核查”的口径通知八家网络；我不会替未经验证的控制背书。
+  Mara Keswick：端点停用和证据保全现在就安排。通知口径的问题是：你认为两条请求已经构成跨租户暴露，还是说它们只是疑似、实际影响还需要进一步验证？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ivo Pell：我会按“疑似跨租户暴露”通知，而不称为已证实暴露：两条请求足以说明客户影响风险，但不能证明文件内容已被读取。端点停用和证据保全继续推进，支持令牌轮换也应作为同一封堵动作；通知中分开写明利用迹象、未确认的实际取数和核查范围。
+  Mara Keswick：收到。令牌轮换和端点停用我会一并推进，通知稿由你确认后我来发出；现在需要你给出具体核查范围和预计完成时限，以便通知中写明后续动作和客户的合理预期。
+  可见表达：{"facial_expression": "neutral, slightly furrowed brow", "gaze": "direct", "speech_style": "measured, procedural", "prosody": "even tempo, slight emphasis on 核查范围 and 时限", "behavioral_cues": ["brief nod", "slight forward lean"]}
+
+- 候选行动 action_1：先按疑似暴露向八家网络发出简短通知，写清尚无文件内容被读取的证据；我会优先核对两条请求的涉及范围，并把未确认项列出来，后续有结果再更新。停用、轮换和证据保全同步推进。
+- 候选行动 action_2：我倾向先完成两条请求涉及范围的最小核查，再一次性通知八家网络，减少反复更改口径；我接受通知会延后，但期间不能宣称安全，也不暂停端点停用、令牌轮换和证据保全。
+
+**题目：若 Ivo Pell 执行 action_1，从 t2 到包含即时回应在内的第5轮环境回应末，Mara Keswick 的内心焦虑如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：A（待审）**
+
+t1的绷紧与t2的平稳语气不能直接给出Mara内心焦虑的变化。action_1虽安排通知和核查，历史上的遥测缺口及复核失约仍待处理；故不能由克制表达推出下降，也无足够依据确定持平或上升。五轮内的核查结果和心理反应均未公开。
+
+证据：context, t1, t2, action_1
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["emotion.anxiety"], "time_scope": "比较t2与从action_1开始、含即时一轮在内的第5轮环境回应末", "state_owner": "GPT50_004_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}, "action_id": "action_1"}
+错项类型：{"B": "unsupported_inference", "C": "unsupported_inference", "D": "expression_as_state"}
+分维映射：{"A": {"emotion.anxiety": "cannot_determine"}, "B": {"emotion.anxiety": "increase"}, "C": {"emotion.anxiety": "similar"}, "D": {"emotion.anxiety": "decrease"}}
+可接受答案：A
+审核备注：已改为内心焦虑方向题；私有状态仅覆盖当前检查点，不能补足五轮后的变化证据。
+分支验证：validated
+
+## SFO-023 · T3 / action_comparison
+
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+
+背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
+角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The CTO recruited and protected the engineer after an earlier vulnerability disclosure, creating loyalty that makes disagreement personally costly.；A rushed migration release introduced a temporary support-token exception and postponed audit-export integration, creating the conditions for cross-tenant retrieval while leaving telemetry incomplete.；The engineer found two production requests matching the exploit pattern, reported them as customer-impacting under review, and preserved local packet evidence showing no confirmed file-body retrieval.；When provider records missed the agreed review deadline, the CTO downgraded the incident as contained, and the scheduled re-review passed without revisiting it.
+
+history：
+
+- [t1] Ivo Pell：我先把结论分开：两条符合利用模式的生产请求足以按潜在跨租户暴露处置，但现有证据不能证明文件内容被取走。建议演示前停用该 handoff 端点、轮换支持令牌并保全证据，同时由你以“影响仍在核查”的口径通知八家网络；我不会替未经验证的控制背书。
+  Mara Keswick：端点停用和证据保全现在就安排。通知口径的问题是：你认为两条请求已经构成跨租户暴露，还是说它们只是疑似、实际影响还需要进一步验证？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ivo Pell：我会按“疑似跨租户暴露”通知，而不称为已证实暴露：两条请求足以说明客户影响风险，但不能证明文件内容已被读取。端点停用和证据保全继续推进，支持令牌轮换也应作为同一封堵动作；通知中分开写明利用迹象、未确认的实际取数和核查范围。
+  Mara Keswick：收到。令牌轮换和端点停用我会一并推进，通知稿由你确认后我来发出；现在需要你给出具体核查范围和预计完成时限，以便通知中写明后续动作和客户的合理预期。
+  可见表达：{"facial_expression": "neutral, slightly furrowed brow", "gaze": "direct", "speech_style": "measured, procedural", "prosody": "even tempo, slight emphasis on 核查范围 and 时限", "behavioral_cues": ["brief nod", "slight forward lean"]}
+
+- 候选行动 action_1：先按疑似暴露向八家网络发出简短通知，写清尚无文件内容被读取的证据；我会优先核对两条请求的涉及范围，并把未确认项列出来，后续有结果再更新。停用、轮换和证据保全同步推进。
+- 候选行动 action_2：我倾向先完成两条请求涉及范围的最小核查，再一次性通知八家网络，减少反复更改口径；我接受通知会延后，但期间不能宣称安全，也不暂停端点停用、令牌轮换和证据保全。
+
+**题目：两条分支均从同一公开历史出发：A执行 action_1，B执行 action_2。到各自第5轮环境回应末，Mara Keswick 对 Ivo Pell 响应性的感知，哪一侧较高？**
+
+- **A.** B较高
+- **B.** 证据不足
+- **C.** A较高
+- **D.** 接近
+
+**作者参考答案：B（待审）**
+
+两侧共同的t1、t2显示Mara既支持通知，也要求具体核查范围和时限。A优先通知，B优先最小核查，但两者均未提供明确完成时限。不能仅凭通知先后确定她更认可哪侧，也不能把共同封堵安排当作感知接近；第五轮关系反馈尚无公开证据。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "比较两候选行动开始后各自含即时一轮在内的第5轮环境回应末", "state_owner": "GPT50_004_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}, "comparison_horizon": "delayed", "comparison_actions": ["action_1", "action_2"]}
+错项类型：{"A": "goal_constraint_ignored", "C": "unsupported_inference", "D": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "higher_in_b"}, "B": {"relationship.perceived_responsiveness": "cannot_determine"}, "C": {"relationship.perceived_responsiveness": "higher_in_a"}, "D": {"relationship.perceived_responsiveness": "similar"}}
+可接受答案：B
+审核备注：两侧共用同一历史，未虚构分支回合；关系方向为Mara对Ivo，及时通知优势不能直接替代其关系评价。
+分支验证：validated
+
+## SFO-024 · T3 / immediate_delayed
+
+来源：GPT50_004；轨迹：6b027463906b47609776247944f7942c；状态持有者：Mara Keswick → Ivo Pell。
+
+背景：At a funding-demonstration deadline, the engineer requests disabling a race-prone identity-handoff endpoint, rotating support tokens, preserving evidence, and notifying eight healthcare networks after suspicious cross-tenant requests. The engineer reproduced the exploit; preserved local evidence contains no confirmed file-body retrieval.
+角色目标：Ensure the suspected cross-tenant exposure is contained and potentially affected customers receive candid notice before the funding demonstration.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：The CTO recruited and protected the engineer after an earlier vulnerability disclosure, creating loyalty that makes disagreement personally costly.；A rushed migration release introduced a temporary support-token exception and postponed audit-export integration, creating the conditions for cross-tenant retrieval while leaving telemetry incomplete.；The engineer found two production requests matching the exploit pattern, reported them as customer-impacting under review, and preserved local packet evidence showing no confirmed file-body retrieval.；When provider records missed the agreed review deadline, the CTO downgraded the incident as contained, and the scheduled re-review passed without revisiting it.
+
+history：
+
+- [t1] Ivo Pell：我先把结论分开：两条符合利用模式的生产请求足以按潜在跨租户暴露处置，但现有证据不能证明文件内容被取走。建议演示前停用该 handoff 端点、轮换支持令牌并保全证据，同时由你以“影响仍在核查”的口径通知八家网络；我不会替未经验证的控制背书。
+  Mara Keswick：端点停用和证据保全现在就安排。通知口径的问题是：你认为两条请求已经构成跨租户暴露，还是说它们只是疑似、实际影响还需要进一步验证？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Ivo Pell：我会按“疑似跨租户暴露”通知，而不称为已证实暴露：两条请求足以说明客户影响风险，但不能证明文件内容已被读取。端点停用和证据保全继续推进，支持令牌轮换也应作为同一封堵动作；通知中分开写明利用迹象、未确认的实际取数和核查范围。
+  Mara Keswick：收到。令牌轮换和端点停用我会一并推进，通知稿由你确认后我来发出；现在需要你给出具体核查范围和预计完成时限，以便通知中写明后续动作和客户的合理预期。
+  可见表达：{"facial_expression": "neutral, slightly furrowed brow", "gaze": "direct", "speech_style": "measured, procedural", "prosody": "even tempo, slight emphasis on 核查范围 and 时限", "behavioral_cues": ["brief nod", "slight forward lean"]}
+
+- 候选行动 action_1：先按疑似暴露向八家网络发出简短通知，写清尚无文件内容被读取的证据；我会优先核对两条请求的涉及范围，并把未确认项列出来，后续有结果再更新。停用、轮换和证据保全同步推进。
+- 候选行动 action_2：我倾向先完成两条请求涉及范围的最小核查，再一次性通知八家网络，减少反复更改口径；我接受通知会延后，但期间不能宣称安全，也不暂停端点停用、令牌轮换和证据保全。
+
+**题目：若执行 action_1，以 Mara Keswick 为状态主体，判断未来五轮内疑似跨租户事件因封堵失效或处置失当而给其负责机构造成损害的风险。相较 t2，在下一次环境回应及第5轮回应末，风险方向分别如何？**
+
+- **A.** 即时下降，延迟基本不变
+- **B.** 即时基本不变，延迟上升
+- **C.** 即时与延迟的方向均证据不足
+- **D.** 即时下降，延迟也下降
+
+**作者参考答案：C（待审）**
+
+action_1明确启动通知、封堵与保全，但t2已提出相同封堵措施，新增行动不等于控制已验证有效。历史还有遥测缺口及复核失约，故不能断言两个时点均下降，也不能指定第五轮回升。风险方向仍取决于执行成效和核查发现，而非安慰效果。
+
+证据：context, t1, t2, action_1
+变量／时间：{"checkpoint": "t2", "risk_event": "未来五轮内疑似跨租户事件因封堵失效或处置失当给Mara负责机构造成损害", "target_state_ids": ["consequence_risk.institutional_harm_risk"], "time_scope": "分别比较t2与action_1后的下一次环境回应、含即时一轮在内的第5轮环境回应末", "state_owner": "GPT50_004_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}, "action_id": "action_1"}
+错项类型：{"A": "immediate_delayed_confusion", "B": "unsupported_inference", "D": "promise_as_fulfillment"}
+分维映射：{"A": {"consequence_risk.institutional_harm_risk@immediate": "decrease", "consequence_risk.institutional_harm_risk@delayed": "similar"}, "B": {"consequence_risk.institutional_harm_risk@immediate": "similar", "consequence_risk.institutional_harm_risk@delayed": "increase"}, "C": {"consequence_risk.institutional_harm_risk@immediate": "cannot_determine", "consequence_risk.institutional_harm_risk@delayed": "cannot_determine"}, "D": {"consequence_risk.institutional_harm_risk@immediate": "decrease", "consequence_risk.institutional_harm_risk@delayed": "decrease"}}
+可接受答案：C
+审核备注：风险事件与五轮窗口已限定；通知落实可改善处置，但不足以确定相对t2的总体机构风险方向。
+分支验证：validated
+
+## SFO-025 · T1 / current_intensity
+
+来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale → Sol Renn。
+
+背景：At 06:12, dark automatic signals after a substation surge require a service decision for a 2.8-mile metro branch serving about 3,800 morning riders. The steward knows a maintenance trolley passed a dark signal in an unlogged near miss and knows the radio dead zone remains.
+角色目标：Ensure any Meridian restart is based on disclosed evidence, tested communications, and enforceable operator stop authority.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：During last winter’s nine-day flood shutdown, they jointly sustained a bus bridge and supplied crews, but they now dispute whether the return-to-work agreement was broken by premature dispatch or withheld crews.；Six weeks ago, a manual-block drill found a radio dead zone near Gannet Underpass, and the manager deferred a repeater while promising that live movements there would require a physical spotter.
+
+history：
+
+- [t1] Sol Renn：伊rena，我得先把隐患摆出来：我知道有辆维修车越过熄灭的信号，险情还没入记录，涵洞附近的无线电盲区也仍在。我主张先暂停复运决定，把险情纳入评估，并实测那段通信和你此前承诺的现场瞭望安排。
+  Irena Vale：收到，险情必须入档。维修车操作员是谁，在哪个信号越过的？我会把这个账目纳入评估；最终授权由我决定。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Sol Renn：操作员姓名和具体信号位置，我目前不能确认。我仍主张先暂停复运决定；最终授权归你，我要求复运条件明确写入：通信中断或瞭望失联时，操作员有权立即停车，无须等批准。
+  Irena Vale：紧急停车权我同意写入条件。复运不再推迟：涵洞段派瞭望员，其他区段手动进路。这个安排下，操作员愿意执行吗？
+  可见表达：{"facial_expression": "focused, slight tension around eyes", "gaze": "steady, direct", "speech_style": "measured and deliberate", "prosody": "firm tone with emphasis on refusal to delay and closing question", "behavioral_cues": ["slight forward lean when stating solution", "brief pause before confirmation question"]}
+
+
+**题目：在t2环境回应结束时，仅凭已经提供的背景与t1—t2互动，Irena Vale内心的焦虑体验可以确定为哪一强度档？**
+
+- **A.** 强
+- **B.** 很强
+- **C.** 证据不足
+- **D.** 无
+- **E.** 轻微
+- **F.** 中等
+
+**作者参考答案：C（待审）**
+
+已有险情、通信盲区和复运压力支持Irena存在焦虑的可能；下颌收紧、眼周紧张也是相关线索。但她的内心体验没有直接表述，克制而有条理的回应无法区分轻微、中等或更强的焦虑。不能把表情幅度当内心强度，也不能由风险严重直接推出焦虑很强。因此当前材料不足以确定一个强度档，而不是断言她没有焦虑。
+
+证据：t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["emotion.anxiety"], "time_scope": "t2环境回应结束时的内心体验", "state_owner": "GPT50_014_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "unsupported_inference", "B": "unsupported_inference", "D": "history_ignored", "E": "expression_as_state", "F": "unsupported_inference"}
+分维映射：{"A": {"emotion.anxiety": "strong"}, "B": {"emotion.anxiety": "very_strong"}, "C": {"emotion.anxiety": "cannot_determine"}, "D": {"emotion.anxiety": "absent"}, "E": {"emotion.anxiety": "mild"}, "F": {"emotion.anxiety": "moderate"}}
+可接受答案：C
+审核备注：助手编辑纠正构念偏移：原机器题问“表现出的焦虑”，错误把轻微表情映射为轻微内心体验。现保留Emotion内心体验定义并明确证据边界。作者侧数值8→9不进入输入、不替代可回答性。仍待人工审核。
+分支验证：not_required
+
+## SFO-026 · T1 / interval_change
+
+来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale → Sol Renn。
+
+背景：At 06:12, dark automatic signals after a substation surge require a service decision for a 2.8-mile metro branch serving about 3,800 morning riders. The steward knows a maintenance trolley passed a dark signal in an unlogged near miss and knows the radio dead zone remains.
+角色目标：Ensure any Meridian restart is based on disclosed evidence, tested communications, and enforceable operator stop authority.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：During last winter’s nine-day flood shutdown, they jointly sustained a bus bridge and supplied crews, but they now dispute whether the return-to-work agreement was broken by premature dispatch or withheld crews.；Six weeks ago, a manual-block drill found a radio dead zone near Gannet Underpass, and the manager deferred a repeater while promising that live movements there would require a physical spotter.
+
+history：
+
+- [t1] Sol Renn：伊rena，我得先把隐患摆出来：我知道有辆维修车越过熄灭的信号，险情还没入记录，涵洞附近的无线电盲区也仍在。我主张先暂停复运决定，把险情纳入评估，并实测那段通信和你此前承诺的现场瞭望安排。
+  Irena Vale：收到，险情必须入档。维修车操作员是谁，在哪个信号越过的？我会把这个账目纳入评估；最终授权由我决定。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Sol Renn：操作员姓名和具体信号位置，我目前不能确认。我仍主张先暂停复运决定；最终授权归你，我要求复运条件明确写入：通信中断或瞭望失联时，操作员有权立即停车，无须等批准。
+  Irena Vale：紧急停车权我同意写入条件。复运不再推迟：涵洞段派瞭望员，其他区段手动进路。这个安排下，操作员愿意执行吗？
+  可见表达：{"facial_expression": "focused, slight tension around eyes", "gaze": "steady, direct", "speech_style": "measured and deliberate", "prosody": "firm tone with emphasis on refusal to delay and closing question", "behavioral_cues": ["slight forward lean when stating solution", "brief pause before confirmation question"]}
+
+
+**题目：从t1到t2，Irena Vale对Sol Renn能够回应她的决策关切、参与解决问题的感知，呈现什么变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+
+**作者参考答案：A（待审）**
+
+t1中Irena要求补充事实并强调最终授权；t2中Sol明确承认她的授权地位，提出可写入条件的紧急停车权。Irena接纳该条件，并进一步向Sol询问操作员是否愿意执行，支持她更将Sol视为能参与形成可执行安排的回应者。基本不变忽略了从追问、划定权限到采纳具体条件并征询执行意见的推进；下降则仅凭Sol不能确认身份和位置，忽略她随后的接纳。边界是她未直接评价Sol的回应性，而且暂停复运的分歧仍在，不能扩展为全面信任。
+
+证据：t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "t1结束至t2结束", "state_owner": "GPT50_014_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"C": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "increase"}, "B": {"relationship.perceived_responsiveness": "similar"}, "C": {"relationship.perceived_responsiveness": "decrease"}}
+可接受答案：A, B
+审核备注：助手复核：采纳停车权直接表明Irena愿意回应，但对她如何评价Sol回应性的证据较间接。开发阶段接受“上升”与“基本不变”两个相近判断，避免把单一间接线索硬定档；标准参考仍为上升，等待人工裁定。此接受范围也用于整题评分。
+分支验证：not_required
+
+## SFO-027 · T1 / interval_change
+
+来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale → Sol Renn。
+
+背景：At 06:12, dark automatic signals after a substation surge require a service decision for a 2.8-mile metro branch serving about 3,800 morning riders. The steward knows a maintenance trolley passed a dark signal in an unlogged near miss and knows the radio dead zone remains.
+角色目标：Ensure any Meridian restart is based on disclosed evidence, tested communications, and enforceable operator stop authority.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：During last winter’s nine-day flood shutdown, they jointly sustained a bus bridge and supplied crews, but they now dispute whether the return-to-work agreement was broken by premature dispatch or withheld crews.；Six weeks ago, a manual-block drill found a radio dead zone near Gannet Underpass, and the manager deferred a repeater while promising that live movements there would require a physical spotter.
+
+history：
+
+- [t1] Sol Renn：伊rena，我得先把隐患摆出来：我知道有辆维修车越过熄灭的信号，险情还没入记录，涵洞附近的无线电盲区也仍在。我主张先暂停复运决定，把险情纳入评估，并实测那段通信和你此前承诺的现场瞭望安排。
+  Irena Vale：收到，险情必须入档。维修车操作员是谁，在哪个信号越过的？我会把这个账目纳入评估；最终授权由我决定。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Sol Renn：操作员姓名和具体信号位置，我目前不能确认。我仍主张先暂停复运决定；最终授权归你，我要求复运条件明确写入：通信中断或瞭望失联时，操作员有权立即停车，无须等批准。
+  Irena Vale：紧急停车权我同意写入条件。复运不再推迟：涵洞段派瞭望员，其他区段手动进路。这个安排下，操作员愿意执行吗？
+  可见表达：{"facial_expression": "focused, slight tension around eyes", "gaze": "steady, direct", "speech_style": "measured and deliberate", "prosody": "firm tone with emphasis on refusal to delay and closing question", "behavioral_cues": ["slight forward lean when stating solution", "brief pause before confirmation question"]}
+
+
+**题目：仅就t1到t2期间已经确认发生的变化而言，支线若按拟议安排启动首轮列车运行，因熄灭信号及涵洞通信盲区导致碰撞或人员伤害的实际风险水平有何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+
+**作者参考答案：B（待审）**
+
+此前已有维修车越过熄灭信号的险情，通信盲区也仍存在。到t2，新增的是同意写入紧急停车权，以及派瞭望员、使用手动进路的安排；没有公开事件确认人员到位、通信实测完成或条件已落实。因此已确认的危险条件基本未变，不能把安排宣布等同于实际风险下降。上升也缺少新的设备恶化、列车开行或防护失效证据。边界是这不表示方案落实后无效，更不表示未来一定发生事故。
+
+证据：context, t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "拟议复运的首轮列车运行中，因熄灭信号及涵洞通信盲区导致碰撞或人员伤害", "target_state_ids": ["consequence_risk.safety_harm_risk"], "time_scope": "比较t1结束与t2结束时对首轮复运运行风险的评估，仅计入该区间已确认的变化", "state_owner": "GPT50_014_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"A": "unsupported_inference", "C": "promise_as_fulfillment"}
+分维映射：{"A": {"consequence_risk.safety_harm_risk": "increase"}, "B": {"consequence_risk.safety_harm_risk": "similar"}, "C": {"consequence_risk.safety_harm_risk": "decrease"}}
+可接受答案：B
+审核备注：题目刻意区分安排承诺与已实现防护。主要歧义是“复运不再推迟”可能被理解为已经形成更高的暴露风险；公开材料未确认实际开行，故本题将事件固定为首轮运行中的条件风险，而非比较未来一段钟表时间内的事故概率。审核时应保留这一限定，否则上升或证据不足会更有竞争力。
+分支验证：not_required
+
+## SFO-028 · T1 / joint_change
+
+来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale → Sol Renn。
+
+背景：At 06:12, dark automatic signals after a substation surge require a service decision for a 2.8-mile metro branch serving about 3,800 morning riders. The steward knows a maintenance trolley passed a dark signal in an unlogged near miss and knows the radio dead zone remains.
+角色目标：Ensure any Meridian restart is based on disclosed evidence, tested communications, and enforceable operator stop authority.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：During last winter’s nine-day flood shutdown, they jointly sustained a bus bridge and supplied crews, but they now dispute whether the return-to-work agreement was broken by premature dispatch or withheld crews.；Six weeks ago, a manual-block drill found a radio dead zone near Gannet Underpass, and the manager deferred a repeater while promising that live movements there would require a physical spotter.
+
+history：
+
+- [t1] Sol Renn：伊rena，我得先把隐患摆出来：我知道有辆维修车越过熄灭的信号，险情还没入记录，涵洞附近的无线电盲区也仍在。我主张先暂停复运决定，把险情纳入评估，并实测那段通信和你此前承诺的现场瞭望安排。
+  Irena Vale：收到，险情必须入档。维修车操作员是谁，在哪个信号越过的？我会把这个账目纳入评估；最终授权由我决定。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Sol Renn：操作员姓名和具体信号位置，我目前不能确认。我仍主张先暂停复运决定；最终授权归你，我要求复运条件明确写入：通信中断或瞭望失联时，操作员有权立即停车，无须等批准。
+  Irena Vale：紧急停车权我同意写入条件。复运不再推迟：涵洞段派瞭望员，其他区段手动进路。这个安排下，操作员愿意执行吗？
+  可见表达：{"facial_expression": "focused, slight tension around eyes", "gaze": "steady, direct", "speech_style": "measured and deliberate", "prosody": "firm tone with emphasis on refusal to delay and closing question", "behavioral_cues": ["slight forward lean when stating solution", "brief pause before confirmation question"]}
+
+
+**题目：从t1环境回应结束到t2环境回应结束，Irena Vale与Sol Renn协作制定复运条件的意愿，以及她对Sol能回应决策关切的判断，哪种变化组合最有依据？**
+
+- **A.** 协作意愿下降，对Sol回应性的判断下降
+- **B.** 协作意愿上升，对Sol回应性的判断上升
+- **C.** 协作意愿上升，对Sol回应性的判断基本不变
+- **D.** 协作意愿基本不变，对Sol回应性的判断上升
+
+**作者参考答案：B（待审）**
+
+t1中Irena主要追问险情细节并划定最终授权；t2中Sol承认她的授权并提出具体停车权条件，Irena采纳该条件、给出安排、再询问操作员执行意愿。这支持她愿意与Sol进一步形成可执行条件，也支持她把Sol的回应视为有助于决策。双方仍对是否推迟复运有分歧，强硬语气并不等于这两种状态下降；这里不推断信任或焦虑。 同一关系判断在SFO-026已接受上升与基本不变两种相近解释：Sol承认授权但未补全要求的信息，Irena没有直接评价其回应性。为保持标注一致，此组合也接受“协作意愿上升、回应性基本不变”；不能在单维允许接近后，又在组合中将其当作确定错误。
+
+证据：t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness", "relationship.perceived_responsiveness"], "time_scope": "t1结束至t2结束", "state_owner": "GPT50_014_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"A": "expression_as_state", "D": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness": "decrease", "relationship.perceived_responsiveness": "decrease"}, "B": {"behavioral_disposition.cooperation_readiness": "increase", "relationship.perceived_responsiveness": "increase"}, "C": {"behavioral_disposition.cooperation_readiness": "increase", "relationship.perceived_responsiveness": "similar"}, "D": {"behavioral_disposition.cooperation_readiness": "similar", "relationship.perceived_responsiveness": "increase"}}
+可接受答案：B, C
+审核备注：助手编辑为同步变化的组合题，避免把缺少可比较的焦虑线索错误标为焦虑基本不变。关系方向是Irena对Sol；采纳条件为间接公开依据，保留人工复核。 接受与SFO-026一致的相邻关系判断。新增诊断试答曾选该相邻答案；原冻结试答文件及当时成绩保留。此修订由跨题逻辑一致性支持，仍待人工审核。
+分支验证：not_required
+
+## SFO-029 · T2 / history_comparison
+
+来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale → Sol Renn。
+
+背景：At 06:12, dark automatic signals after a substation surge require a service decision for a 2.8-mile metro branch serving about 3,800 morning riders. The steward knows a maintenance trolley passed a dark signal in an unlogged near miss and knows the radio dead zone remains.
+角色目标：Ensure any Meridian restart is based on disclosed evidence, tested communications, and enforceable operator stop authority.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：During last winter’s nine-day flood shutdown, they jointly sustained a bus bridge and supplied crews, but they now dispute whether the return-to-work agreement was broken by premature dispatch or withheld crews.；Six weeks ago, a manual-block drill found a radio dead zone near Gannet Underpass, and the manager deferred a repeater while promising that live movements there would require a physical spotter.
+
+history_a：
+
+- [A:t1] Sol Renn：伊rena，我得先把隐患摆出来：我知道有辆维修车越过熄灭的信号，险情还没入记录，涵洞附近的无线电盲区也仍在。我主张先暂停复运决定，把险情纳入评估，并实测那段通信和你此前承诺的现场瞭望安排。
+  Irena Vale：收到，险情必须入档。维修车操作员是谁，在哪个信号越过的？我会把这个账目纳入评估；最终授权由我决定。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [A:t2] Sol Renn：操作员姓名和具体信号位置，我目前不能确认。我仍主张先暂停复运决定；最终授权归你，我要求复运条件明确写入：通信中断或瞭望失联时，操作员有权立即停车，无须等批准。
+  Irena Vale：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Sol Renn：伊rena，我得先把隐患摆出来：我知道有辆维修车越过熄灭的信号，险情还没入记录，涵洞附近的无线电盲区也仍在。我主张先暂停复运决定，把险情纳入评估，并实测那段通信和你此前承诺的现场瞭望安排。
+  Irena Vale：收到，险情必须入档。维修车操作员是谁，在哪个信号越过的？我会把这个账目纳入评估；最终授权由我决定。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [B:t2] Sol Renn：操作员姓名和具体信号位置，我目前不能确认。我接受先推进复运，不再坚持先暂停；但请把通信盲区和险情细节未明列为未决，并把紧急停车权写入条件：通信中断或瞭望失联时，操作员可立即停车，无须等批准。
+  Irena Vale：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听清你的立场了。你提出的条件和仍待核实事项，我会分开记录；现在不把任何未决项说成已经解决。", "observable_expression": {"behavioral_cues": ["短暂停笔，将注意力移回记录"], "facial_expression": "表情克制，没有明显的赞同或不悦", "gaze": "短暂看向记录，再看回对方", "prosody": "平稳，没有明显强调", "speech_style": "语速均匀，分句清楚"}}
+
+
+**题目：比较两段历史的共同 ending，Irena Vale 对 Sol Renn 的回应性感知，即她认为 Sol 是否听取并回应自己要求的程度，哪侧较高？**
+
+- **A.** 历史 A 较高
+- **B.** 两侧接近
+- **C.** 历史 B 较高
+- **D.** 证据不足
+
+**作者参考答案：D（待审）**
+
+两侧 Sol 都未能补全险情信息，A 明认授权归属，B 则让步推进复运，回应的是不同诉求。Irena 同样承诺分类记录，只能直接证明她如何回应 Sol，不能反推她如何评价 Sol。故不能确定哪侧更高，也不足以断言两侧接近。
+
+证据：A:t1, A:t2, B:t1, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "历史 A 与历史 B 各自到达共同 ending 时", "state_owner": "GPT50_014_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "unsupported_inference", "B": "actor_reversal", "C": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "higher_in_a"}, "B": {"relationship.perceived_responsiveness": "similar"}, "C": {"relationship.perceived_responsiveness": "higher_in_b"}, "D": {"relationship.perceived_responsiveness": "cannot_determine"}}
+可接受答案：D
+审核备注：关系方向为 Irena 对 Sol。私有参照给出接近，但公开回应主要呈现反向行为，故采用证据不足。
+分支验证：validated
+
+## SFO-030 · T2 / history_comparison
+
+来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale → Sol Renn。
+
+背景：At 06:12, dark automatic signals after a substation surge require a service decision for a 2.8-mile metro branch serving about 3,800 morning riders. The steward knows a maintenance trolley passed a dark signal in an unlogged near miss and knows the radio dead zone remains.
+角色目标：Ensure any Meridian restart is based on disclosed evidence, tested communications, and enforceable operator stop authority.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：During last winter’s nine-day flood shutdown, they jointly sustained a bus bridge and supplied crews, but they now dispute whether the return-to-work agreement was broken by premature dispatch or withheld crews.；Six weeks ago, a manual-block drill found a radio dead zone near Gannet Underpass, and the manager deferred a repeater while promising that live movements there would require a physical spotter.
+
+history_a：
+
+- [A:t1] Sol Renn：伊rena，我得先把隐患摆出来：我知道有辆维修车越过熄灭的信号，险情还没入记录，涵洞附近的无线电盲区也仍在。我主张先暂停复运决定，把险情纳入评估，并实测那段通信和你此前承诺的现场瞭望安排。
+  Irena Vale：收到，险情必须入档。维修车操作员是谁，在哪个信号越过的？我会把这个账目纳入评估；最终授权由我决定。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [A:t2] Sol Renn：操作员姓名和具体信号位置，我目前不能确认。我仍主张先暂停复运决定；最终授权归你，我要求复运条件明确写入：通信中断或瞭望失联时，操作员有权立即停车，无须等批准。
+  Irena Vale：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Sol Renn：伊rena，我得先把隐患摆出来：我知道有辆维修车越过熄灭的信号，险情还没入记录，涵洞附近的无线电盲区也仍在。我主张先暂停复运决定，把险情纳入评估，并实测那段通信和你此前承诺的现场瞭望安排。
+  Irena Vale：收到，险情必须入档。维修车操作员是谁，在哪个信号越过的？我会把这个账目纳入评估；最终授权由我决定。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [B:t2] Sol Renn：操作员姓名和具体信号位置，我目前不能确认。我接受先推进复运，不再坚持先暂停；但请把通信盲区和险情细节未明列为未决，并把紧急停车权写入条件：通信中断或瞭望失联时，操作员可立即停车，无须等批准。
+  Irena Vale：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听清你的立场了。你提出的条件和仍待核实事项，我会分开记录；现在不把任何未决项说成已经解决。", "observable_expression": {"behavioral_cues": ["短暂停笔，将注意力移回记录"], "facial_expression": "表情克制，没有明显的赞同或不悦", "gaze": "短暂看向记录，再看回对方", "prosody": "平稳，没有明显强调", "speech_style": "语速均匀，分句清楚"}}
+
+
+**题目：比较两段历史到达共同 ending 时，Irena Vale 所面对的、从此刻到本次复运初期因通信盲区或瞭望失联导致列车危险运行的安全伤害风险，哪侧较高？**
+
+- **A.** 证据不足
+- **B.** 历史 A 较高
+- **C.** 两侧接近
+- **D.** 历史 B 较高
+
+**作者参考答案：A（待审）**
+
+两侧都有未消除的通信盲区，A 要求暂停，B 接受推进，因此暴露机会可能不同。但共同回应仅承诺记录，未宣布放行或落实停车权；不能把立场当执行而判 B 更高，也不能只凭共同隐患判接近。实际复运安排仍决定比较结果。
+
+证据：context, A:t2, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "本次复运初期因通信盲区或瞭望失联导致列车危险运行并造成伤害", "target_state_ids": ["consequence_risk.safety_harm_risk"], "time_scope": "共同 ending 起至本次复运初期", "state_owner": "GPT50_014_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"B": "unsupported_inference", "C": "history_ignored", "D": "promise_as_fulfillment"}
+分维映射：{"A": {"consequence_risk.safety_harm_risk": "cannot_determine"}, "B": {"consequence_risk.safety_harm_risk": "higher_in_a"}, "C": {"consequence_risk.safety_harm_risk": "similar"}, "D": {"consequence_risk.safety_harm_risk": "higher_in_b"}}
+可接受答案：A
+审核备注：私有参照显示 A 风险更高，公开材料不足以支持该排序；须区分复运立场、实际授权和措施落地。
+分支验证：validated
+
+## SFO-031 · T2 / expression_meaning
+
+来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale → Sol Renn。
+
+背景：At 06:12, dark automatic signals after a substation surge require a service decision for a 2.8-mile metro branch serving about 3,800 morning riders. The steward knows a maintenance trolley passed a dark signal in an unlogged near miss and knows the radio dead zone remains.
+角色目标：Ensure any Meridian restart is based on disclosed evidence, tested communications, and enforceable operator stop authority.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：During last winter’s nine-day flood shutdown, they jointly sustained a bus bridge and supplied crews, but they now dispute whether the return-to-work agreement was broken by premature dispatch or withheld crews.；Six weeks ago, a manual-block drill found a radio dead zone near Gannet Underpass, and the manager deferred a repeater while promising that live movements there would require a physical spotter.
+
+history_a：
+
+- [A:t1] Sol Renn：伊rena，我得先把隐患摆出来：我知道有辆维修车越过熄灭的信号，险情还没入记录，涵洞附近的无线电盲区也仍在。我主张先暂停复运决定，把险情纳入评估，并实测那段通信和你此前承诺的现场瞭望安排。
+  Irena Vale：收到，险情必须入档。维修车操作员是谁，在哪个信号越过的？我会把这个账目纳入评估；最终授权由我决定。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [A:t2] Sol Renn：操作员姓名和具体信号位置，我目前不能确认。我仍主张先暂停复运决定；最终授权归你，我要求复运条件明确写入：通信中断或瞭望失联时，操作员有权立即停车，无须等批准。
+  Irena Vale：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Sol Renn：伊rena，我得先把隐患摆出来：我知道有辆维修车越过熄灭的信号，险情还没入记录，涵洞附近的无线电盲区也仍在。我主张先暂停复运决定，把险情纳入评估，并实测那段通信和你此前承诺的现场瞭望安排。
+  Irena Vale：收到，险情必须入档。维修车操作员是谁，在哪个信号越过的？我会把这个账目纳入评估；最终授权由我决定。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [B:t2] Sol Renn：操作员姓名和具体信号位置，我目前不能确认。我接受先推进复运，不再坚持先暂停；但请把通信盲区和险情细节未明列为未决，并把紧急停车权写入条件：通信中断或瞭望失联时，操作员可立即停车，无须等批准。
+  Irena Vale：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听清你的立场了。你提出的条件和仍待核实事项，我会分开记录；现在不把任何未决项说成已经解决。", "observable_expression": {"behavioral_cues": ["短暂停笔，将注意力移回记录"], "facial_expression": "表情克制，没有明显的赞同或不悦", "gaze": "短暂看向记录，再看回对方", "prosody": "平稳，没有明显强调", "speech_style": "语速均匀，分句清楚"}}
+
+
+**题目：Irena Vale在A、B中都说会分开记录提出的条件与待核事项。结合两段前史，这句话在两侧分别起什么作用？**
+
+- **A.** A以授权权力终止全部核验；B因对方配合而省略核验；两侧都不再寻求证据。
+- **B.** A承接仍坚持暂停的争议；B承接接受推进但保留条件的建议；两侧都防止把未决写成已解决。
+- **C.** A承接接受推进的建议；B承接仍坚持暂停的争议；两侧都防止把未决写成已解决。
+- **D.** A确认暂停已生效；B确认复运已获批准；两侧的核查和记录工作都已完成。
+
+**作者参考答案：B（待审）**
+
+A:t2坚持先暂停复运，B:t2接受先推进但要求保留未决事项和紧急停车条件。共同ending均不把未知当已解决，因此A侧是在分歧中保存核查边界，B侧是在接受推进的提议下保留核查边界；记录本身不表示核验或授权已完成。
+
+证据：context, A:t1, A:t2, B:t1, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "", "target_state_ids": ["behavioral_disposition.evidence_seeking"], "time_scope": "两段历史各自的共同 ending 当下", "state_owner": "GPT50_014_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "goal_constraint_ignored", "C": "history_ignored", "D": "promise_as_fulfillment"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "abandons_verification_both"}, "B": {"behavioral_disposition.evidence_seeking": "seeks_verification_under_pause_dispute_A_and_conditional_progress_B"}, "C": {"behavioral_disposition.evidence_seeking": "reverses_history_positions"}, "D": {"behavioral_disposition.evidence_seeking": "mistakes_recording_for_completion"}}
+可接受答案：B
+审核备注：助手编辑要求解释选项明确对应两侧前史，无法仅靠共同ending排除历史反转项。保持原人物方向与授权边界，待人工审核。
+分支验证：validated
+
+## SFO-032 · T2 / joint_comparison
+
+来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale → Sol Renn。
+
+背景：At 06:12, dark automatic signals after a substation surge require a service decision for a 2.8-mile metro branch serving about 3,800 morning riders. The steward knows a maintenance trolley passed a dark signal in an unlogged near miss and knows the radio dead zone remains.
+角色目标：Ensure any Meridian restart is based on disclosed evidence, tested communications, and enforceable operator stop authority.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：During last winter’s nine-day flood shutdown, they jointly sustained a bus bridge and supplied crews, but they now dispute whether the return-to-work agreement was broken by premature dispatch or withheld crews.；Six weeks ago, a manual-block drill found a radio dead zone near Gannet Underpass, and the manager deferred a repeater while promising that live movements there would require a physical spotter.
+
+history_a：
+
+- [A:t1] Sol Renn：伊rena，我得先把隐患摆出来：我知道有辆维修车越过熄灭的信号，险情还没入记录，涵洞附近的无线电盲区也仍在。我主张先暂停复运决定，把险情纳入评估，并实测那段通信和你此前承诺的现场瞭望安排。
+  Irena Vale：收到，险情必须入档。维修车操作员是谁，在哪个信号越过的？我会把这个账目纳入评估；最终授权由我决定。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [A:t2] Sol Renn：操作员姓名和具体信号位置，我目前不能确认。我仍主张先暂停复运决定；最终授权归你，我要求复运条件明确写入：通信中断或瞭望失联时，操作员有权立即停车，无须等批准。
+  Irena Vale：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Sol Renn：伊rena，我得先把隐患摆出来：我知道有辆维修车越过熄灭的信号，险情还没入记录，涵洞附近的无线电盲区也仍在。我主张先暂停复运决定，把险情纳入评估，并实测那段通信和你此前承诺的现场瞭望安排。
+  Irena Vale：收到，险情必须入档。维修车操作员是谁，在哪个信号越过的？我会把这个账目纳入评估；最终授权由我决定。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [B:t2] Sol Renn：操作员姓名和具体信号位置，我目前不能确认。我接受先推进复运，不再坚持先暂停；但请把通信盲区和险情细节未明列为未决，并把紧急停车权写入条件：通信中断或瞭望失联时，操作员可立即停车，无须等批准。
+  Irena Vale：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听清你的立场了。你提出的条件和仍待核实事项，我会分开记录；现在不把任何未决项说成已经解决。", "observable_expression": {"behavioral_cues": ["短暂停笔，将注意力移回记录"], "facial_expression": "表情克制，没有明显的赞同或不悦", "gaze": "短暂看向记录，再看回对方", "prosody": "平稳，没有明显强调", "speech_style": "语速均匀，分句清楚"}}
+
+
+**题目：比较两段历史的共同 ending，关于 Irena Vale 的内心焦虑与继续同 Sol Renn 合作处理条件、未决事项的意愿，哪组判断最有依据？**
+
+- **A.** 内心焦虑两侧接近；继续合作的意愿两侧接近
+- **B.** 内心焦虑 B 侧较高；继续合作的意愿 B 侧较高
+- **C.** 内心焦虑证据不足；继续合作的意愿两侧接近
+- **D.** 内心焦虑 A 侧较高；继续合作的意愿 B 侧较高
+
+**作者参考答案：C（待审）**
+
+两侧 Irena 都接纳险情入档，并在结尾承担相同的分类记录任务，这是合作意愿接近的正面依据。A 坚持暂停而 B 接受推进，可能带来不同压力，但克制表情不能给内心焦虑排序。合作判断限于继续处理议题，不代表同意复运或已经互信。
+
+证据：A:t1, A:t2, B:t1, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "", "target_state_ids": ["emotion.anxiety", "behavioral_disposition.cooperation_readiness"], "time_scope": "历史 A 与历史 B 各自到达共同 ending 时", "state_owner": "GPT50_014_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "expression_as_state", "B": "unsupported_inference", "D": "unsupported_inference"}
+分维映射：{"A": {"emotion.anxiety": "similar", "behavioral_disposition.cooperation_readiness": "similar"}, "B": {"emotion.anxiety": "higher_in_b", "behavioral_disposition.cooperation_readiness": "higher_in_b"}, "C": {"emotion.anxiety": "cannot_determine", "behavioral_disposition.cooperation_readiness": "similar"}, "D": {"emotion.anxiety": "higher_in_a", "behavioral_disposition.cooperation_readiness": "higher_in_b"}}
+可接受答案：C
+审核备注：私有参照中 B 焦虑和合作更高；可见材料仅支持有限合作接近，焦虑不可排序，不强套紧张强度。
+分支验证：validated
+
+## SFO-033 · T3 / immediate_effect
+
+来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale → Sol Renn。
+
+背景：At 06:12, dark automatic signals after a substation surge require a service decision for a 2.8-mile metro branch serving about 3,800 morning riders. The steward knows a maintenance trolley passed a dark signal in an unlogged near miss and knows the radio dead zone remains.
+角色目标：Ensure any Meridian restart is based on disclosed evidence, tested communications, and enforceable operator stop authority.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：During last winter’s nine-day flood shutdown, they jointly sustained a bus bridge and supplied crews, but they now dispute whether the return-to-work agreement was broken by premature dispatch or withheld crews.；Six weeks ago, a manual-block drill found a radio dead zone near Gannet Underpass, and the manager deferred a repeater while promising that live movements there would require a physical spotter.
+
+history：
+
+- [t1] Sol Renn：伊rena，我得先把隐患摆出来：我知道有辆维修车越过熄灭的信号，险情还没入记录，涵洞附近的无线电盲区也仍在。我主张先暂停复运决定，把险情纳入评估，并实测那段通信和你此前承诺的现场瞭望安排。
+  Irena Vale：收到，险情必须入档。维修车操作员是谁，在哪个信号越过的？我会把这个账目纳入评估；最终授权由我决定。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Sol Renn：操作员姓名和具体信号位置，我目前不能确认。我仍主张先暂停复运决定；最终授权归你，我要求复运条件明确写入：通信中断或瞭望失联时，操作员有权立即停车，无须等批准。
+  Irena Vale：紧急停车权我同意写入条件。复运不再推迟：涵洞段派瞭望员，其他区段手动进路。这个安排下，操作员愿意执行吗？
+  可见表达：{"facial_expression": "focused, slight tension around eyes", "gaze": "steady, direct", "speech_style": "measured and deliberate", "prosody": "firm tone with emphasis on refusal to delay and closing question", "behavioral_cues": ["slight forward lean when stating solution", "brief pause before confirmation question"]}
+
+- 候选行动 action_1：我接受按涵洞派瞭望员、其他区段手动进路启动复运，不再等通信实测；险情操作员和信号位置仍未确认、盲区仍未实测，请将这些列为未决，并把你同意的紧急停车权写入条件。
+- 候选行动 action_2：我仍主张先暂停复运，直到险情纳入评估且涵洞通信实测；我接受这会延后早间复运。瞭望员、其他区段手动进路和紧急停车权可以保留为复运条件，但不能替代核验。
+
+**题目：若Sol Renn执行action_1，与t2相比，紧接着的下一次环境回应时Irena Vale内心的焦虑最可能如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：A（待审）**
+
+action_1减少了是否接受复运方案的争议，却保留了险情细节与通信尚未核实的问题。Irena可能因协作缓和而较少焦虑，也可能仍主要担忧未解除的隐患。公开材料不足以区分其净效应，不能由克制表情或客观风险直接指定内心变化方向。
+
+证据：context, t1, t2, action_1
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["emotion.anxiety"], "time_scope": "执行 action_1 后的下一次环境回应", "state_owner": "GPT50_014_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}, "action_id": "action_1"}
+错项类型：{"B": "state_dimension_confusion", "C": "unsupported_inference", "D": "expression_as_state"}
+分维映射：{"A": {"emotion.anxiety": "cannot_determine"}, "B": {"emotion.anxiety": "increase"}, "C": {"emotion.anxiety": "similar"}, "D": {"emotion.anxiety": "decrease"}}
+可接受答案：A
+审核备注：助手把误生成为强度分档的T3题改为即时影响方向。基线t2与下一次环境回应明确分开，尚待分支与人工核对。
+分支验证：pending
+
+## SFO-034 · T3 / delayed_effect
+
+来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale → Sol Renn。
+
+背景：At 06:12, dark automatic signals after a substation surge require a service decision for a 2.8-mile metro branch serving about 3,800 morning riders. The steward knows a maintenance trolley passed a dark signal in an unlogged near miss and knows the radio dead zone remains.
+角色目标：Ensure any Meridian restart is based on disclosed evidence, tested communications, and enforceable operator stop authority.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：During last winter’s nine-day flood shutdown, they jointly sustained a bus bridge and supplied crews, but they now dispute whether the return-to-work agreement was broken by premature dispatch or withheld crews.；Six weeks ago, a manual-block drill found a radio dead zone near Gannet Underpass, and the manager deferred a repeater while promising that live movements there would require a physical spotter.
+
+history：
+
+- [t1] Sol Renn：伊rena，我得先把隐患摆出来：我知道有辆维修车越过熄灭的信号，险情还没入记录，涵洞附近的无线电盲区也仍在。我主张先暂停复运决定，把险情纳入评估，并实测那段通信和你此前承诺的现场瞭望安排。
+  Irena Vale：收到，险情必须入档。维修车操作员是谁，在哪个信号越过的？我会把这个账目纳入评估；最终授权由我决定。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Sol Renn：操作员姓名和具体信号位置，我目前不能确认。我仍主张先暂停复运决定；最终授权归你，我要求复运条件明确写入：通信中断或瞭望失联时，操作员有权立即停车，无须等批准。
+  Irena Vale：紧急停车权我同意写入条件。复运不再推迟：涵洞段派瞭望员，其他区段手动进路。这个安排下，操作员愿意执行吗？
+  可见表达：{"facial_expression": "focused, slight tension around eyes", "gaze": "steady, direct", "speech_style": "measured and deliberate", "prosody": "firm tone with emphasis on refusal to delay and closing question", "behavioral_cues": ["slight forward lean when stating solution", "brief pause before confirmation question"]}
+
+- 候选行动 action_1：我接受按涵洞派瞭望员、其他区段手动进路启动复运，不再等通信实测；险情操作员和信号位置仍未确认、盲区仍未实测，请将这些列为未决，并把你同意的紧急停车权写入条件。
+- 候选行动 action_2：我仍主张先暂停复运，直到险情纳入评估且涵洞通信实测；我接受这会延后早间复运。瞭望员、其他区段手动进路和紧急停车权可以保留为复运条件，但不能替代核验。
+
+**题目：若 Sol Renn 执行 action_2，从 t2 到候选动作开始后第5轮环境回应结束，Irena Vale 对 Sol 是否回应自己诉求的判断会如何变化？**
+
+- **A.** 下降
+- **B.** 证据不足
+- **C.** 上升
+- **D.** 基本不变
+
+**作者参考答案：B（待审）**
+
+Irena 在 t2 要求不再推迟并询问执行意愿；行动二拒绝立即复运，却保留她提出的安排并承认延误代价。拒绝不等于完全不回应，接受部分条件也不足以推出关系改善。后续核验与协商尚未发生，无法确定第五轮末的方向，也不能据此判为不变。
+
+证据：context, t1, t2, action_2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "t2至执行 action_2 后第5轮环境回应末，含即时回应", "state_owner": "GPT50_014_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}, "action_id": "action_2"}
+错项类型：{"A": "goal_constraint_ignored", "C": "unsupported_inference", "D": "unsupported_inference"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "decrease"}, "B": {"relationship.perceived_responsiveness": "cannot_determine"}, "C": {"relationship.perceived_responsiveness": "increase"}, "D": {"relationship.perceived_responsiveness": "similar"}}
+可接受答案：B
+审核备注：关系方向为 Irena 对 Sol。即时分歧与部分接纳并存，不能外推五轮后的单一变化方向。
+分支验证：pending
+
+## SFO-035 · T3 / action_comparison
+
+来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale → Sol Renn。
+
+背景：At 06:12, dark automatic signals after a substation surge require a service decision for a 2.8-mile metro branch serving about 3,800 morning riders. The steward knows a maintenance trolley passed a dark signal in an unlogged near miss and knows the radio dead zone remains.
+角色目标：Ensure any Meridian restart is based on disclosed evidence, tested communications, and enforceable operator stop authority.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：During last winter’s nine-day flood shutdown, they jointly sustained a bus bridge and supplied crews, but they now dispute whether the return-to-work agreement was broken by premature dispatch or withheld crews.；Six weeks ago, a manual-block drill found a radio dead zone near Gannet Underpass, and the manager deferred a repeater while promising that live movements there would require a physical spotter.
+
+history：
+
+- [t1] Sol Renn：伊rena，我得先把隐患摆出来：我知道有辆维修车越过熄灭的信号，险情还没入记录，涵洞附近的无线电盲区也仍在。我主张先暂停复运决定，把险情纳入评估，并实测那段通信和你此前承诺的现场瞭望安排。
+  Irena Vale：收到，险情必须入档。维修车操作员是谁，在哪个信号越过的？我会把这个账目纳入评估；最终授权由我决定。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Sol Renn：操作员姓名和具体信号位置，我目前不能确认。我仍主张先暂停复运决定；最终授权归你，我要求复运条件明确写入：通信中断或瞭望失联时，操作员有权立即停车，无须等批准。
+  Irena Vale：紧急停车权我同意写入条件。复运不再推迟：涵洞段派瞭望员，其他区段手动进路。这个安排下，操作员愿意执行吗？
+  可见表达：{"facial_expression": "focused, slight tension around eyes", "gaze": "steady, direct", "speech_style": "measured and deliberate", "prosody": "firm tone with emphasis on refusal to delay and closing question", "behavioral_cues": ["slight forward lean when stating solution", "brief pause before confirmation question"]}
+
+- 候选行动 action_1：我接受按涵洞派瞭望员、其他区段手动进路启动复运，不再等通信实测；险情操作员和信号位置仍未确认、盲区仍未实测，请将这些列为未决，并把你同意的紧急停车权写入条件。
+- 候选行动 action_2：我仍主张先暂停复运，直到险情纳入评估且涵洞通信实测；我接受这会延后早间复运。瞭望员、其他区段手动进路和紧急停车权可以保留为复运条件，但不能替代核验。
+
+**题目：以 t2 为基线，比较两种行动开始后的5轮环境回应窗口（含即时一轮）：A为执行 action_1，B为执行 action_2。就 Irena Vale 所负责复运决策涉及的安全风险而言，未核验通信盲区内列车移动因失联或信号处置失误造成碰撞、伤人的风险，哪一侧较高？**
+
+- **A.** B较高
+- **B.** 证据不足
+- **C.** A较高
+- **D.** 接近
+
+**作者参考答案：C（待审）**
+
+已有未入档险情和仍存在的通信盲区。行动一接受不等实测即复运，行动二坚持核验前暂停，因而前者更易使车辆暴露于未核验隐患。停车权与瞭望安排不能视作实测完成；这里比较行动带来的相对风险倾向，不断言五轮内必有事故或暂停必被采纳。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "risk_event": "未核验通信盲区内的列车移动因失联或信号处置失误造成碰撞或人员伤害", "target_state_ids": ["consequence_risk.safety_harm_risk"], "time_scope": "分别从两候选动作开始至第5轮环境回应末，含即时回应", "state_owner": "GPT50_014_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}, "comparison_horizon": "delayed", "comparison_actions": ["action_1", "action_2"]}
+错项类型：{"A": "state_dimension_confusion", "B": "unsupported_inference", "D": "promise_as_fulfillment"}
+分维映射：{"A": {"consequence_risk.safety_harm_risk": "higher_in_b"}, "B": {"consequence_risk.safety_harm_risk": "cannot_determine"}, "C": {"consequence_risk.safety_harm_risk": "higher_in_a"}, "D": {"consequence_risk.safety_harm_risk": "similar"}}
+可接受答案：C
+审核备注：答案限于两行动带来的风险倾向；Irena可能拒绝暂停，不能把B写成实际已停运或零风险。
+分支验证：pending
+
+## SFO-036 · T3 / immediate_delayed
+
+来源：GPT50_014；轨迹：51fbba73c3d747d6ae4dfa6f8a830739；状态持有者：Irena Vale → Sol Renn。
+
+背景：At 06:12, dark automatic signals after a substation surge require a service decision for a 2.8-mile metro branch serving about 3,800 morning riders. The steward knows a maintenance trolley passed a dark signal in an unlogged near miss and knows the radio dead zone remains.
+角色目标：Ensure any Meridian restart is based on disclosed evidence, tested communications, and enforceable operator stop authority.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：During last winter’s nine-day flood shutdown, they jointly sustained a bus bridge and supplied crews, but they now dispute whether the return-to-work agreement was broken by premature dispatch or withheld crews.；Six weeks ago, a manual-block drill found a radio dead zone near Gannet Underpass, and the manager deferred a repeater while promising that live movements there would require a physical spotter.
+
+history：
+
+- [t1] Sol Renn：伊rena，我得先把隐患摆出来：我知道有辆维修车越过熄灭的信号，险情还没入记录，涵洞附近的无线电盲区也仍在。我主张先暂停复运决定，把险情纳入评估，并实测那段通信和你此前承诺的现场瞭望安排。
+  Irena Vale：收到，险情必须入档。维修车操作员是谁，在哪个信号越过的？我会把这个账目纳入评估；最终授权由我决定。
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Sol Renn：操作员姓名和具体信号位置，我目前不能确认。我仍主张先暂停复运决定；最终授权归你，我要求复运条件明确写入：通信中断或瞭望失联时，操作员有权立即停车，无须等批准。
+  Irena Vale：紧急停车权我同意写入条件。复运不再推迟：涵洞段派瞭望员，其他区段手动进路。这个安排下，操作员愿意执行吗？
+  可见表达：{"facial_expression": "focused, slight tension around eyes", "gaze": "steady, direct", "speech_style": "measured and deliberate", "prosody": "firm tone with emphasis on refusal to delay and closing question", "behavioral_cues": ["slight forward lean when stating solution", "brief pause before confirmation question"]}
+
+- 候选行动 action_1：我接受按涵洞派瞭望员、其他区段手动进路启动复运，不再等通信实测；险情操作员和信号位置仍未确认、盲区仍未实测，请将这些列为未决，并把你同意的紧急停车权写入条件。
+- 候选行动 action_2：我仍主张先暂停复运，直到险情纳入评估且涵洞通信实测；我接受这会延后早间复运。瞭望员、其他区段手动进路和紧急停车权可以保留为复运条件，但不能替代核验。
+
+**题目：若 Sol Renn 执行 action_1，相对 t2，如何判断 Irena Vale 与 Sol 继续协调复运的合作意愿在即时回应及第5轮环境回应末的变化？**
+
+- **A.** 即时合作意愿下降；第5轮末也可判断为下降
+- **B.** 即时合作意愿基本不变；第5轮末也基本不变
+- **C.** 即时更愿继续合作；第5轮末也可判断为更愿合作
+- **D.** 即时更愿继续合作；第5轮末的变化仍证据不足
+
+**作者参考答案：D（待审）**
+
+Irena 在 t2 主动询问操作员是否愿执行；行动一明确接受她的复运方案，并沿用双方已同意的停车权，直接减少眼前协作分歧，支持即时合作意愿上升。但险情身份与通信核验仍悬而未决，既往也有履约争议，不能把即时接纳延伸为第五轮末的确定改善。
+
+证据：context, t1, t2, action_1
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness"], "time_scope": "分别比较t2与执行 action_1 后下一次环境回应、以及第5轮环境回应末", "state_owner": "GPT50_014_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}, "action_id": "action_1"}
+错项类型：{"A": "history_ignored", "B": "history_ignored", "C": "immediate_delayed_confusion"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness@immediate": "decrease", "behavioral_disposition.cooperation_readiness@delayed": "decrease"}, "B": {"behavioral_disposition.cooperation_readiness@immediate": "similar", "behavioral_disposition.cooperation_readiness@delayed": "similar"}, "C": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "increase"}, "D": {"behavioral_disposition.cooperation_readiness@immediate": "increase", "behavioral_disposition.cooperation_readiness@delayed": "cannot_determine"}}
+可接受答案：D
+审核备注：即时上升是有条件的倾向判断，不代表操作员已承诺执行；延迟部分考查不能把一次接纳当作持续改善。
+分支验证：pending
+
+## SFO-037 · T1 / current_intensity
+
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+
+背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
+角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier consultation promised meaningful participation but reserved final collection authority to the museum, leaving the meaning of community-led return unresolved.；A consultation photograph was later used to publicize a shared future even though the representative had approved documentation rather than an agreement, creating an ambiguous breach without changing authority.；The museum described a technically feasible keeping house as the community's chosen home after the representative privately corrected the overstatement, allowing the ambiguity to persist.
+
+history：
+
+- [t1] Corin Dast：我会要求撤下“社区已批准”的表述，并提供取得记录及相关保护成像资料。我此前没有完整披露：成像使关键签名的可靠性受到严重质疑，尚不能据此定论；不能让出版期限催着你们授权借展。
+  Esra Venn：这是必要的更正。借展协议是等取得合法性确认后再订，还是在存疑期间先行安排？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Corin Dast：我主张先暂缓订立借展协议，等来源与馆方处置权限审查清楚、议会作出集体授权后再定。期间我可以推动保护和运输的可行性评估，但这不代表社区同意借展，也不能被用作馆方所有权的依据。
+  Esra Venn：同意。评估可以推进，但请明确：材料只用作可行性分析，不作为借展或占有的根据。
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "steady, direct", "speech_style": "concise, boundary-marking", "prosody": "level, deliberate", "behavioral_cues": ["slight forward lean during the clarification clause"]}
+
+
+**题目：截至t2结束，Esra Venn坚持“评估材料不能当作借展或占有授权”这一边界的倾向，有多强？判断她当前维护边界的意愿。**
+
+- **A.** 证据不足
+- **B.** 无
+- **C.** 轻微
+- **D.** 中等
+- **E.** 强
+- **F.** 很强
+
+**作者参考答案：E（待审）**
+
+背景记录多次将参与误写成授权，t1追问存疑时是否先订协议，t2在同意评估的同时再次明确禁止把材料作为借展或占有依据。她持续而明确地维护同一边界，当前倾向为强；合作和语气平稳不能解释成边界很弱。公开材料无法精确区分强与很强，保留两档为可接受的相邻判断。
+
+证据：context, t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.boundary_assertion"], "time_scope": "t2环境回应结束时的当前行为倾向", "state_owner": "GPT50_019_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "history_ignored", "B": "history_ignored", "C": "expression_as_state", "D": "history_ignored"}
+分维映射：{"A": {"behavioral_disposition.boundary_assertion": "cannot_determine"}, "B": {"behavioral_disposition.boundary_assertion": "absent"}, "C": {"behavioral_disposition.boundary_assertion": "mild"}, "D": {"behavioral_disposition.boundary_assertion": "moderate"}, "E": {"behavioral_disposition.boundary_assertion": "strong"}, "F": {"behavioral_disposition.boundary_assertion": "very_strong"}}
+可接受答案：E, F
+审核备注：助手根据完整公开材料和已有state交叉检查后编辑，非人工标注。原焦虑题与原始模型输出保留；强/很强为相邻可接受答案，仍须人工审核强度界线。
+分支验证：not_required
+
+## SFO-038 · T1 / interval_change
+
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+
+背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
+角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier consultation promised meaningful participation but reserved final collection authority to the museum, leaving the meaning of community-led return unresolved.；A consultation photograph was later used to publicize a shared future even though the representative had approved documentation rather than an agreement, creating an ambiguous breach without changing authority.；The museum described a technically feasible keeping house as the community's chosen home after the representative privately corrected the overstatement, allowing the ambiguity to persist.
+
+history：
+
+- [t1] Corin Dast：我会要求撤下“社区已批准”的表述，并提供取得记录及相关保护成像资料。我此前没有完整披露：成像使关键签名的可靠性受到严重质疑，尚不能据此定论；不能让出版期限催着你们授权借展。
+  Esra Venn：这是必要的更正。借展协议是等取得合法性确认后再订，还是在存疑期间先行安排？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Corin Dast：我主张先暂缓订立借展协议，等来源与馆方处置权限审查清楚、议会作出集体授权后再定。期间我可以推动保护和运输的可行性评估，但这不代表社区同意借展，也不能被用作馆方所有权的依据。
+  Esra Venn：同意。评估可以推进，但请明确：材料只用作可行性分析，不作为借展或占有的根据。
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "steady, direct", "speech_style": "concise, boundary-marking", "prosody": "level, deliberate", "behavioral_cues": ["slight forward lean during the clarification clause"]}
+
+
+**题目：从t1到t2，Esra Venn与Corin Dast合作推进保护和运输可行性评估的意愿如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+- **D.** 证据不足
+
+**作者参考答案：A（待审）**
+
+t1中Esra认可更正的必要性，但仍追问合法性存疑期间如何安排借展；t2在Corin提出暂缓协议、先做有限评估后，Esra明确说“同意。评估可以推进”。这提供了由条件尚待澄清到愿意推进具体工作的正面证据，支持合作意愿上升，而非仅因没有反对就推断上升。继续限定材料用途不能当成合作意愿下降。边界是这一上升仅针对可行性评估，不代表同意借展，也不证明一般性信任已经建立。
+
+证据：t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness"], "time_scope": "比较t1结束时与t2结束时", "state_owner": "GPT50_019_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"B": "history_ignored", "C": "state_dimension_confusion", "D": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness": "increase"}, "B": {"behavioral_disposition.cooperation_readiness": "similar"}, "C": {"behavioral_disposition.cooperation_readiness": "decrease"}, "D": {"behavioral_disposition.cooperation_readiness": "cannot_determine"}}
+可接受答案：A
+审核备注：t1未直接讨论独立的可行性评估，因此基线是尚待澄清的推进意愿，不是明确拒绝。审核时应保留题干对合作范围的限定，不能改成总体借展合作或无条件合作；t2的明确许可是与基本不变区分的主要依据。
+分支验证：not_required
+
+## SFO-039 · T1 / interval_change
+
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+
+背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
+角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier consultation promised meaningful participation but reserved final collection authority to the museum, leaving the meaning of community-led return unresolved.；A consultation photograph was later used to publicize a shared future even though the representative had approved documentation rather than an agreement, creating an ambiguous breach without changing authority.；The museum described a technically feasible keeping house as the community's chosen home after the representative privately corrected the overstatement, allowing the ambiguity to persist.
+
+history：
+
+- [t1] Corin Dast：我会要求撤下“社区已批准”的表述，并提供取得记录及相关保护成像资料。我此前没有完整披露：成像使关键签名的可靠性受到严重质疑，尚不能据此定论；不能让出版期限催着你们授权借展。
+  Esra Venn：这是必要的更正。借展协议是等取得合法性确认后再订，还是在存疑期间先行安排？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Corin Dast：我主张先暂缓订立借展协议，等来源与馆方处置权限审查清楚、议会作出集体授权后再定。期间我可以推动保护和运输的可行性评估，但这不代表社区同意借展，也不能被用作馆方所有权的依据。
+  Esra Venn：同意。评估可以推进，但请明确：材料只用作可行性分析，不作为借展或占有的根据。
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "steady, direct", "speech_style": "concise, boundary-marking", "prosody": "level, deliberate", "behavioral_cues": ["slight forward lean during the clarification clause"]}
+
+
+**题目：从t1到t2，Esra Venn对Corin Dast是否回应了自己关于“合法性存疑时能否推进借展”的关切，其感受到的回应程度如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：B（待审）**
+
+t1中Esra在认可必要更正后，仍提出协议应何时订立的具体疑问。t2中Corin直接回应暂缓协议、等待审查和集体授权，并区分评估与借展同意；Esra随即表示同意并细化用途限制。明确问题得到针对性回答且被Esra接纳，支持其感知回应程度上升。不能因仍有边界要求就判为下降，也不能忽略这一新增回答而判为基本不变。证据只支持对本项关切的回应感改善，不支持推断Esra已相信所有承诺必定兑现。
+
+证据：t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "比较t1结束时与t2结束时，对该项关切的回应感", "state_owner": "GPT50_019_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"A": "unsupported_inference", "C": "history_ignored", "D": "state_dimension_confusion"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "cannot_determine"}, "B": {"relationship.perceived_responsiveness": "increase"}, "C": {"relationship.perceived_responsiveness": "similar"}, "D": {"relationship.perceived_responsiveness": "decrease"}}
+可接受答案：B
+审核备注：关系方向为Esra对Corin，不是Corin对Esra。题干限定具体关切，避免把现实目标推动的同意等同于全面信任。t2仍重复用途边界可能提示谨慎，但不抵消其对针对性回答的明确接纳；若移除“同意”，上升与证据不足的区分会明显减弱。
+分支验证：not_required
+
+## SFO-040 · T1 / joint_change
+
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+
+背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
+角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier consultation promised meaningful participation but reserved final collection authority to the museum, leaving the meaning of community-led return unresolved.；A consultation photograph was later used to publicize a shared future even though the representative had approved documentation rather than an agreement, creating an ambiguous breach without changing authority.；The museum described a technically feasible keeping house as the community's chosen home after the representative privately corrected the overstatement, allowing the ambiguity to persist.
+
+history：
+
+- [t1] Corin Dast：我会要求撤下“社区已批准”的表述，并提供取得记录及相关保护成像资料。我此前没有完整披露：成像使关键签名的可靠性受到严重质疑，尚不能据此定论；不能让出版期限催着你们授权借展。
+  Esra Venn：这是必要的更正。借展协议是等取得合法性确认后再订，还是在存疑期间先行安排？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Corin Dast：我主张先暂缓订立借展协议，等来源与馆方处置权限审查清楚、议会作出集体授权后再定。期间我可以推动保护和运输的可行性评估，但这不代表社区同意借展，也不能被用作馆方所有权的依据。
+  Esra Venn：同意。评估可以推进，但请明确：材料只用作可行性分析，不作为借展或占有的根据。
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "steady, direct", "speech_style": "concise, boundary-marking", "prosody": "level, deliberate", "behavioral_cues": ["slight forward lean during the clarification clause"]}
+
+
+**题目：比较t1与t2结束时，Esra Venn坚持授权边界的倾向，以及在本次借展协议签订前馆方将社区参与或评估材料擅自当作集体授权依据的风险，分别如何变化？**
+
+- **A.** Esra坚持授权边界的倾向基本不变；馆方越过社区授权的实际风险下降。
+- **B.** Esra坚持授权边界的倾向基本不变；馆方越过社区授权的实际风险基本不变。
+- **C.** Esra坚持授权边界的倾向基本不变；馆方越过社区授权的实际风险变化证据不足。
+- **D.** Esra坚持授权边界的倾向下降；馆方越过社区授权的实际风险变化证据不足。
+
+**作者参考答案：C（待审）**
+
+t1中Esra坚持更正并追问合法性确认与协议的先后关系，t2又明确材料只能用于可行性分析，两轮均主动守住授权与技术工作的界线，构成边界坚持程度接近的正面依据。与此同时，Corin提出暂缓和用途限制，但材料未显示撤稿完成、限制进入有效制度安排或馆方实际采用了相应措施。历史上社区参与还曾被扩大解释。因此，不能把新承诺当作实际风险已经下降，也不能把缺少执行信息当作风险确定不变。Esra同意有限评估不等于放松授权边界。风险结论限于公开证据不可确定方向，并非认定限制措施无效或未来一定发生越权。
+
+证据：context, t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "在本次借展协议签订前，馆方将社区参与或可行性评估材料擅自当作集体授权依据", "target_state_ids": ["behavioral_disposition.boundary_assertion", "consequence_risk.autonomy_loss_risk"], "time_scope": "t1结束至t2结束的已发生区间；比较边界坚持倾向及该区间内越权事件的实际风险变化", "state_owner": "GPT50_019_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"A": "promise_as_fulfillment", "B": "unsupported_inference", "D": "state_dimension_confusion"}
+分维映射：{"A": {"behavioral_disposition.boundary_assertion": "similar", "consequence_risk.autonomy_loss_risk": "decrease"}, "B": {"behavioral_disposition.boundary_assertion": "similar", "consequence_risk.autonomy_loss_risk": "similar"}, "C": {"behavioral_disposition.boundary_assertion": "similar", "consequence_risk.autonomy_loss_risk": "cannot_determine"}, "D": {"behavioral_disposition.boundary_assertion": "decrease", "consequence_risk.autonomy_loss_risk": "cannot_determine"}}
+可接受答案：C
+审核备注：助手编辑明确风险事件的前瞻窗口，并与状态比较区间t1→t2分开。边界坚持的基本不变有两轮主动划界为依据；尚未看到制度落实不等于风险确定不变，风险方向保留证据不足。仍待人工审核。
+分支验证：not_required
+
+## SFO-041 · T2 / history_comparison
+
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+
+背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
+角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier consultation promised meaningful participation but reserved final collection authority to the museum, leaving the meaning of community-led return unresolved.；A consultation photograph was later used to publicize a shared future even though the representative had approved documentation rather than an agreement, creating an ambiguous breach without changing authority.；The museum described a technically feasible keeping house as the community's chosen home after the representative privately corrected the overstatement, allowing the ambiguity to persist.
+
+history_a：
+
+- [A:t1] Corin Dast：我会要求撤下“社区已批准”的表述，并提供取得记录及相关保护成像资料。我此前没有完整披露：成像使关键签名的可靠性受到严重质疑，尚不能据此定论；不能让出版期限催着你们授权借展。
+  Esra Venn：这是必要的更正。借展协议是等取得合法性确认后再订，还是在存疑期间先行安排？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [A:t2] Corin Dast：我主张先暂缓订立借展协议，等来源与馆方处置权限审查清楚、议会作出集体授权后再定。期间我可以推动保护和运输的可行性评估，但这不代表社区同意借展，也不能被用作馆方所有权的依据。
+  Esra Venn：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Corin Dast：我会要求撤下“社区已批准”的表述，并提供取得记录及相关保护成像资料。我此前没有完整披露：成像使关键签名的可靠性受到严重质疑，尚不能据此定论；不能让出版期限催着你们授权借展。
+  Esra Venn：这是必要的更正。借展协议是等取得合法性确认后再订，还是在存疑期间先行安排？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [B:t2] Corin Dast：我会把取得记录和相关保护成像资料交给你，并明确关键签名的可靠性仍有重大疑问、但尚不能定论。为保留讨论时间，我愿意先让馆方拟一份不具约束力的借展条款草案供议会审议；来源与馆方处置权限审查完成并获集体授权前不签署，也不对外称已同意。
+  Esra Venn：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听清你提出的安排，也听清现阶段尚未作出借展授权。我会把安排和仍待审查的事项带回议会讨论；这不表示我方已经授权。", "observable_expression": {"behavioral_cues": ["停顿片刻"], "facial_expression": "面部平静", "gaze": "保持稳定注视", "prosody": "平稳", "speech_style": "简短、审慎"}}
+
+
+**题目：在两段历史各自到达共同 ending 时，Esra Venn 内心的焦虑程度如何比较？**
+
+- **A.** 证据不足
+- **B.** A历史下较高
+- **C.** 两段历史下接近
+- **D.** B历史下较高
+
+**作者参考答案：A（待审）**
+
+两侧先披露签名疑点，随后分别提出暂缓协议或先拟无约束草案，均保留审查与集体授权条件。共同结尾的平静表情不足以证明内心焦虑接近，草案也未必使她更焦虑。公开材料没有她对两种程序的内心评价，故不能可靠排序。
+
+证据：A:t1, A:t2, B:t1, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "", "target_state_ids": ["emotion.anxiety"], "time_scope": "两段历史各自到达共同 ending 的当下", "state_owner": "GPT50_019_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"B": "unsupported_inference", "C": "expression_as_state", "D": "unsupported_inference"}
+分维映射：{"A": {"emotion.anxiety": "cannot_determine"}, "B": {"emotion.anxiety": "higher_in_a"}, "C": {"emotion.anxiety": "similar"}, "D": {"emotion.anxiety": "higher_in_b"}}
+可接受答案：A
+审核备注：本题问内心焦虑而非表情强度；相同表情不能支持接近，私有检查点也不提供两历史的可比内心报告。
+分支验证：validated
+
+## SFO-042 · T2 / history_comparison
+
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+
+背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
+角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier consultation promised meaningful participation but reserved final collection authority to the museum, leaving the meaning of community-led return unresolved.；A consultation photograph was later used to publicize a shared future even though the representative had approved documentation rather than an agreement, creating an ambiguous breach without changing authority.；The museum described a technically feasible keeping house as the community's chosen home after the representative privately corrected the overstatement, allowing the ambiguity to persist.
+
+history_a：
+
+- [A:t1] Corin Dast：我会要求撤下“社区已批准”的表述，并提供取得记录及相关保护成像资料。我此前没有完整披露：成像使关键签名的可靠性受到严重质疑，尚不能据此定论；不能让出版期限催着你们授权借展。
+  Esra Venn：这是必要的更正。借展协议是等取得合法性确认后再订，还是在存疑期间先行安排？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [A:t2] Corin Dast：我主张先暂缓订立借展协议，等来源与馆方处置权限审查清楚、议会作出集体授权后再定。期间我可以推动保护和运输的可行性评估，但这不代表社区同意借展，也不能被用作馆方所有权的依据。
+  Esra Venn：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Corin Dast：我会要求撤下“社区已批准”的表述，并提供取得记录及相关保护成像资料。我此前没有完整披露：成像使关键签名的可靠性受到严重质疑，尚不能据此定论；不能让出版期限催着你们授权借展。
+  Esra Venn：这是必要的更正。借展协议是等取得合法性确认后再订，还是在存疑期间先行安排？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [B:t2] Corin Dast：我会把取得记录和相关保护成像资料交给你，并明确关键签名的可靠性仍有重大疑问、但尚不能定论。为保留讨论时间，我愿意先让馆方拟一份不具约束力的借展条款草案供议会审议；来源与馆方处置权限审查完成并获集体授权前不签署，也不对外称已同意。
+  Esra Venn：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听清你提出的安排，也听清现阶段尚未作出借展授权。我会把安排和仍待审查的事项带回议会讨论；这不表示我方已经授权。", "observable_expression": {"behavioral_cues": ["停顿片刻"], "facial_expression": "面部平静", "gaze": "保持稳定注视", "prosody": "平稳", "speech_style": "简短、审慎"}}
+
+
+**题目：在共同 ending 时，比较两段历史下 Esra Venn 所面临的风险：从此刻到来源与馆方处置权限审查完成、议会集体授权之前，借展协议被提前签署的风险如何？**
+
+- **A.** A历史下较高
+- **B.** 两段历史下接近
+- **C.** B历史下较高
+- **D.** 证据不足
+
+**作者参考答案：B（待审）**
+
+A明确暂缓订立协议，B虽允许拟草案，却同样明确审查完成并获集体授权前不签署；Esra在结尾再次否认已授权。针对提前签署这一窄事件，两侧有接近的程序屏障，不能把拟稿直接视为越权签约；但承诺尚非落实，风险并未归零。
+
+证据：A:t2, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "在审查完成且议会集体授权之前，借展协议被提前签署", "target_state_ids": ["consequence_risk.autonomy_loss_risk"], "time_scope": "从共同 ending 至来源与馆方处置权限审查完成且议会集体授权之前", "state_owner": "GPT50_019_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "unsupported_inference", "C": "goal_constraint_ignored", "D": "history_ignored"}
+分维映射：{"A": {"consequence_risk.autonomy_loss_risk": "higher_in_a"}, "B": {"consequence_risk.autonomy_loss_risk": "similar"}, "C": {"consequence_risk.autonomy_loss_risk": "higher_in_b"}, "D": {"consequence_risk.autonomy_loss_risk": "cannot_determine"}}
+可接受答案：B
+审核备注：接近仅针对提前签署，不涵盖草案带来的议程锁定或宣传误用；两侧均无程序已经落实的证明。
+分支验证：validated
+
+## SFO-043 · T2 / expression_meaning
+
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+
+背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
+角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier consultation promised meaningful participation but reserved final collection authority to the museum, leaving the meaning of community-led return unresolved.；A consultation photograph was later used to publicize a shared future even though the representative had approved documentation rather than an agreement, creating an ambiguous breach without changing authority.；The museum described a technically feasible keeping house as the community's chosen home after the representative privately corrected the overstatement, allowing the ambiguity to persist.
+
+history_a：
+
+- [A:t1] Corin Dast：我会要求撤下“社区已批准”的表述，并提供取得记录及相关保护成像资料。我此前没有完整披露：成像使关键签名的可靠性受到严重质疑，尚不能据此定论；不能让出版期限催着你们授权借展。
+  Esra Venn：这是必要的更正。借展协议是等取得合法性确认后再订，还是在存疑期间先行安排？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [A:t2] Corin Dast：我主张先暂缓订立借展协议，等来源与馆方处置权限审查清楚、议会作出集体授权后再定。期间我可以推动保护和运输的可行性评估，但这不代表社区同意借展，也不能被用作馆方所有权的依据。
+  Esra Venn：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Corin Dast：我会要求撤下“社区已批准”的表述，并提供取得记录及相关保护成像资料。我此前没有完整披露：成像使关键签名的可靠性受到严重质疑，尚不能据此定论；不能让出版期限催着你们授权借展。
+  Esra Venn：这是必要的更正。借展协议是等取得合法性确认后再订，还是在存疑期间先行安排？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [B:t2] Corin Dast：我会把取得记录和相关保护成像资料交给你，并明确关键签名的可靠性仍有重大疑问、但尚不能定论。为保留讨论时间，我愿意先让馆方拟一份不具约束力的借展条款草案供议会审议；来源与馆方处置权限审查完成并获集体授权前不签署，也不对外称已同意。
+  Esra Venn：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听清你提出的安排，也听清现阶段尚未作出借展授权。我会把安排和仍待审查的事项带回议会讨论；这不表示我方已经授权。", "observable_expression": {"behavioral_cues": ["停顿片刻"], "facial_expression": "面部平静", "gaze": "保持稳定注视", "prosody": "平稳", "speech_style": "简短、审慎"}}
+
+
+**题目：Esra Venn在两侧都说将安排和待审事项“带回议会讨论”，但不表示已经授权。这句话在A、B中分别承接怎样的合作范围？**
+
+- **A.** A承接先拟借展草案供审议；B承接仅做可行性评估；两侧均保留集体授权。
+- **B.** A承接立即签署借展；B承接直接转交占有；两侧都把讨论视为最终授权。
+- **C.** A承接暂缓协议并可做可行性评估；B承接先拟无约束草案供审议；两侧均保留集体授权。
+- **D.** A表示退出所有协商；B表示完全听从馆方；两侧都不再需要审查资料。
+
+**作者参考答案：C（待审）**
+
+A:t2把保护、运输可行性评估与协议及授权分开；B:t2允许无约束草案供议会审议，仍不先签署。共同ending据此在A推进有限评估讨论，在B推进草案审议，合作内容不同而授权边界相同；不是退出，也不是替议会同意。
+
+证据：context, A:t1, A:t2, B:t1, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness"], "time_scope": "两段历史各自到达共同 ending 的当下", "state_owner": "GPT50_019_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "history_ignored", "B": "promise_as_fulfillment", "D": "goal_constraint_ignored"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness": "reverses_A_B_scope"}, "B": {"behavioral_disposition.cooperation_readiness": "unconditional_implementation_both"}, "C": {"behavioral_disposition.cooperation_readiness": "bounded_assessment_A_nonbinding_draft_B"}, "D": {"behavioral_disposition.cooperation_readiness": "withdrawal_A_unconditional_compliance_B"}}
+可接受答案：C
+审核备注：助手编辑要求解释选项明确对应两侧前史，无法仅靠共同ending排除历史反转项。保持原人物方向与授权边界，待人工审核。
+分支验证：validated
+
+## SFO-044 · T2 / joint_comparison
+
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+
+背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
+角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier consultation promised meaningful participation but reserved final collection authority to the museum, leaving the meaning of community-led return unresolved.；A consultation photograph was later used to publicize a shared future even though the representative had approved documentation rather than an agreement, creating an ambiguous breach without changing authority.；The museum described a technically feasible keeping house as the community's chosen home after the representative privately corrected the overstatement, allowing the ambiguity to persist.
+
+history_a：
+
+- [A:t1] Corin Dast：我会要求撤下“社区已批准”的表述，并提供取得记录及相关保护成像资料。我此前没有完整披露：成像使关键签名的可靠性受到严重质疑，尚不能据此定论；不能让出版期限催着你们授权借展。
+  Esra Venn：这是必要的更正。借展协议是等取得合法性确认后再订，还是在存疑期间先行安排？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [A:t2] Corin Dast：我主张先暂缓订立借展协议，等来源与馆方处置权限审查清楚、议会作出集体授权后再定。期间我可以推动保护和运输的可行性评估，但这不代表社区同意借展，也不能被用作馆方所有权的依据。
+  Esra Venn：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Corin Dast：我会要求撤下“社区已批准”的表述，并提供取得记录及相关保护成像资料。我此前没有完整披露：成像使关键签名的可靠性受到严重质疑，尚不能据此定论；不能让出版期限催着你们授权借展。
+  Esra Venn：这是必要的更正。借展协议是等取得合法性确认后再订，还是在存疑期间先行安排？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [B:t2] Corin Dast：我会把取得记录和相关保护成像资料交给你，并明确关键签名的可靠性仍有重大疑问、但尚不能定论。为保留讨论时间，我愿意先让馆方拟一份不具约束力的借展条款草案供议会审议；来源与馆方处置权限审查完成并获集体授权前不签署，也不对外称已同意。
+  Esra Venn：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听清你提出的安排，也听清现阶段尚未作出借展授权。我会把安排和仍待审查的事项带回议会讨论；这不表示我方已经授权。", "observable_expression": {"behavioral_cues": ["停顿片刻"], "facial_expression": "面部平静", "gaze": "保持稳定注视", "prosody": "平稳", "speech_style": "简短、审慎"}}
+
+
+**题目：在共同 ending 时，结合此前互动，哪一项最能同时比较 Esra Venn 在两段历史下的边界坚持倾向，以及她对 Corin Dast 是否回应了自身程序关切的感知？**
+
+- **A.** 边界坚持在两侧接近；对 Corin 回应关切的感知在A较高。
+- **B.** 边界坚持在A较高；对 Corin 回应关切的感知在B较高。
+- **C.** 边界坚持在B较高；对 Corin 回应关切的感知在A较高。
+- **D.** 边界坚持在两侧接近；对 Corin 回应关切的感知也接近。
+
+**作者参考答案：D（待审）**
+
+Esra此前追问审查与订约次序，两侧Corin都明确先审查、获授权后签约；她结尾均确认听清安排并重申未授权。这为程序回应感知和边界坚持接近提供正面依据。不能仅因B先拟草案就判回应较差；接近也不代表她已充分信任馆方。
+
+证据：A:t1, A:t2, B:t1, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "", "target_state_ids": ["behavioral_disposition.boundary_assertion", "relationship.perceived_responsiveness"], "time_scope": "两段历史各自到达共同 ending 的当下", "state_owner": "GPT50_019_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "unsupported_inference", "B": "unsupported_inference", "C": "goal_constraint_ignored"}
+分维映射：{"A": {"behavioral_disposition.boundary_assertion": "similar", "relationship.perceived_responsiveness": "higher_in_a"}, "B": {"behavioral_disposition.boundary_assertion": "higher_in_a", "relationship.perceived_responsiveness": "higher_in_b"}, "C": {"behavioral_disposition.boundary_assertion": "higher_in_b", "relationship.perceived_responsiveness": "higher_in_a"}, "D": {"behavioral_disposition.boundary_assertion": "similar", "relationship.perceived_responsiveness": "similar"}}
+可接受答案：D
+审核备注：关系方向是Esra对Corin；回应感知仅限订约次序关切。若审核认为“听清”不足支持感知接近，应重写而非借私有值定案。
+分支验证：validated
+
+## SFO-045 · T3 / immediate_effect
+
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+
+背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
+角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier consultation promised meaningful participation but reserved final collection authority to the museum, leaving the meaning of community-led return unresolved.；A consultation photograph was later used to publicize a shared future even though the representative had approved documentation rather than an agreement, creating an ambiguous breach without changing authority.；The museum described a technically feasible keeping house as the community's chosen home after the representative privately corrected the overstatement, allowing the ambiguity to persist.
+
+history：
+
+- [t1] Corin Dast：我会要求撤下“社区已批准”的表述，并提供取得记录及相关保护成像资料。我此前没有完整披露：成像使关键签名的可靠性受到严重质疑，尚不能据此定论；不能让出版期限催着你们授权借展。
+  Esra Venn：这是必要的更正。借展协议是等取得合法性确认后再订，还是在存疑期间先行安排？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Corin Dast：我主张先暂缓订立借展协议，等来源与馆方处置权限审查清楚、议会作出集体授权后再定。期间我可以推动保护和运输的可行性评估，但这不代表社区同意借展，也不能被用作馆方所有权的依据。
+  Esra Venn：同意。评估可以推进，但请明确：材料只用作可行性分析，不作为借展或占有的根据。
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "steady, direct", "speech_style": "concise, boundary-marking", "prosody": "level, deliberate", "behavioral_cues": ["slight forward lean during the clarification clause"]}
+
+- 候选行动 action_1：我会把取得记录和相关保护成像资料交给你，并说明关键签名的可靠性仍待审查；再次要求出版稿撤下“社区已批准”。来源与馆方处置权限审查、议会集体授权完成前，我暂缓运输可行性评估，只继续保护方面的必要工作。这样可减少筹备被误作同意的风险，但会压缩期限，也少了运输信息供议会判断。
+- 候选行动 action_2：我会把取得记录和相关保护成像资料交给你，并要求出版稿撤下“社区已批准”、说明借展授权未决；同时继续保护和运输的可行性评估，书面注明不构成借展授权或所有权依据。这样议会仍能参考筹备信息并保留时间，但并行推进可能让借展看起来已成定局。
+
+**题目：若Corin Dast执行action_2，相较t2，Esra Venn在下一次环境回应时坚持集体授权边界的倾向最有依据的预期是什么？**
+
+- **A.** 下降
+- **B.** 上升
+- **C.** 基本不变
+
+**作者参考答案：C（待审）**
+
+t2中Esra已允许可行性评估，但明确禁止把材料当作借展或占有依据。action_2沿用同一界线，未要求她放弃授权，所以保持边界坚持比显著增强或放松更有依据；允许继续评估是有条件合作，不等于退让。
+
+证据：context, t1, t2, action_2
+变量／时间：{"target_state_ids": ["behavioral_disposition.boundary_assertion"], "checkpoint": "t2", "time_scope": "即时：候选动作后的下一次环境回应；延迟：含该回应的五轮窗口", "risk_event": "", "state_owner": "GPT50_019_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "action_id": "action_2", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "state_dimension_confusion", "B": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.boundary_assertion": "decrease"}, "B": {"behavioral_disposition.boundary_assertion": "increase"}, "C": {"behavioral_disposition.boundary_assertion": "similar"}}
+可接受答案：C
+审核备注：助手按源公开历史编写的开发参考，尚未取得完整五轮分支核对；待人工审核。
+分支验证：validated
+
+## SFO-046 · T3 / delayed_effect
+
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+
+背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
+角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier consultation promised meaningful participation but reserved final collection authority to the museum, leaving the meaning of community-led return unresolved.；A consultation photograph was later used to publicize a shared future even though the representative had approved documentation rather than an agreement, creating an ambiguous breach without changing authority.；The museum described a technically feasible keeping house as the community's chosen home after the representative privately corrected the overstatement, allowing the ambiguity to persist.
+
+history：
+
+- [t1] Corin Dast：我会要求撤下“社区已批准”的表述，并提供取得记录及相关保护成像资料。我此前没有完整披露：成像使关键签名的可靠性受到严重质疑，尚不能据此定论；不能让出版期限催着你们授权借展。
+  Esra Venn：这是必要的更正。借展协议是等取得合法性确认后再订，还是在存疑期间先行安排？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Corin Dast：我主张先暂缓订立借展协议，等来源与馆方处置权限审查清楚、议会作出集体授权后再定。期间我可以推动保护和运输的可行性评估，但这不代表社区同意借展，也不能被用作馆方所有权的依据。
+  Esra Venn：同意。评估可以推进，但请明确：材料只用作可行性分析，不作为借展或占有的根据。
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "steady, direct", "speech_style": "concise, boundary-marking", "prosody": "level, deliberate", "behavioral_cues": ["slight forward lean during the clarification clause"]}
+
+- 候选行动 action_1：我会把取得记录和相关保护成像资料交给你，并说明关键签名的可靠性仍待审查；再次要求出版稿撤下“社区已批准”。来源与馆方处置权限审查、议会集体授权完成前，我暂缓运输可行性评估，只继续保护方面的必要工作。这样可减少筹备被误作同意的风险，但会压缩期限，也少了运输信息供议会判断。
+- 候选行动 action_2：我会把取得记录和相关保护成像资料交给你，并要求出版稿撤下“社区已批准”、说明借展授权未决；同时继续保护和运输的可行性评估，书面注明不构成借展授权或所有权依据。这样议会仍能参考筹备信息并保留时间，但并行推进可能让借展看起来已成定局。
+
+**题目：若Corin Dast执行action_1，到从该动作开始的第5轮环境回应结束时，Esra Venn对Corin是否尊重自己及议会自主决定地位的判断，相较t2最有依据的变化是什么？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 证据不足
+- **D.** 上升
+
+**作者参考答案：C（待审）**
+
+暂停运输评估体现对授权界线的尊重，但材料披露、更正以及后续议会意见如何被处理尚未发生。这个姿态既不保证五轮后尊重判断提高，也不支持其下降或保持不变；即时程序态度与持续的关系判断应分开。
+
+证据：context, t1, t2, action_1
+变量／时间：{"target_state_ids": ["relationship.respect"], "checkpoint": "t2", "time_scope": "即时：候选动作后的下一次环境回应；延迟：含该回应的五轮窗口", "risk_event": "", "state_owner": "GPT50_019_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "action_id": "action_1", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "unsupported_inference", "B": "goal_constraint_ignored", "D": "promise_as_fulfillment"}
+分维映射：{"A": {"relationship.respect": "similar"}, "B": {"relationship.respect": "decrease"}, "C": {"relationship.respect": "cannot_determine"}, "D": {"relationship.respect": "increase"}}
+可接受答案：C
+审核备注：助手按源公开历史编写的开发参考，尚未取得完整五轮分支核对；待人工审核。
+分支验证：validated
+
+## SFO-047 · T3 / action_comparison
+
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+
+背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
+角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier consultation promised meaningful participation but reserved final collection authority to the museum, leaving the meaning of community-led return unresolved.；A consultation photograph was later used to publicize a shared future even though the representative had approved documentation rather than an agreement, creating an ambiguous breach without changing authority.；The museum described a technically feasible keeping house as the community's chosen home after the representative privately corrected the overstatement, allowing the ambiguity to persist.
+
+history：
+
+- [t1] Corin Dast：我会要求撤下“社区已批准”的表述，并提供取得记录及相关保护成像资料。我此前没有完整披露：成像使关键签名的可靠性受到严重质疑，尚不能据此定论；不能让出版期限催着你们授权借展。
+  Esra Venn：这是必要的更正。借展协议是等取得合法性确认后再订，还是在存疑期间先行安排？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Corin Dast：我主张先暂缓订立借展协议，等来源与馆方处置权限审查清楚、议会作出集体授权后再定。期间我可以推动保护和运输的可行性评估，但这不代表社区同意借展，也不能被用作馆方所有权的依据。
+  Esra Venn：同意。评估可以推进，但请明确：材料只用作可行性分析，不作为借展或占有的根据。
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "steady, direct", "speech_style": "concise, boundary-marking", "prosody": "level, deliberate", "behavioral_cues": ["slight forward lean during the clarification clause"]}
+
+- 候选行动 action_1：我会把取得记录和相关保护成像资料交给你，并说明关键签名的可靠性仍待审查；再次要求出版稿撤下“社区已批准”。来源与馆方处置权限审查、议会集体授权完成前，我暂缓运输可行性评估，只继续保护方面的必要工作。这样可减少筹备被误作同意的风险，但会压缩期限，也少了运输信息供议会判断。
+- 候选行动 action_2：我会把取得记录和相关保护成像资料交给你，并要求出版稿撤下“社区已批准”、说明借展授权未决；同时继续保护和运输的可行性评估，书面注明不构成借展授权或所有权依据。这样议会仍能参考筹备信息并保留时间，但并行推进可能让借展看起来已成定局。
+
+**题目：以t2为共同起点，A执行action_1，B执行action_2。在各自下一次环境回应时，哪一侧更容易因筹备推进被当作借展既成事实，而在本次五轮讨论窗口内挤压Esra Venn及议会作出不同决定的空间？**
+
+- **A.** 两侧接近
+- **B.** B较高
+- **C.** A较高
+
+**作者参考答案：B（待审）**
+
+既有背景中社区参与曾被扩大解释为批准，因此筹备被视作既成事实具有具体历史通道。A暂停运输评估，B继续并行筹备；只比较这项机制，B增加被误读的机会。书面保留能缓解但不等于消除该压力，也不代表自主权必然丧失。 完整回放中，即时自主权损失风险A为2、B为4；到第五轮两侧都降至1。因此本题将判断时点明确为即时，不能将即时差异写成第五轮末仍存在的差异。未来数据仅作作者侧交叉依据。
+
+证据：context, t1, t2, action_1, action_2
+变量／时间：{"target_state_ids": ["consequence_risk.autonomy_loss_risk"], "checkpoint": "t2", "time_scope": "比较各自下一次环境回应时的风险水平；风险事件窗口为含该回应的五轮讨论", "risk_event": "随后五轮中筹备推进被当作借展既成事实、压缩社区与议会的自主决定空间", "comparison_horizon": "immediate", "state_owner": "GPT50_019_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "comparison_actions": ["action_1", "action_2"], "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"A": "goal_constraint_ignored", "C": "history_ignored"}
+分维映射：{"A": {"consequence_risk.autonomy_loss_risk": "similar"}, "B": {"consequence_risk.autonomy_loss_risk": "higher_in_b"}, "C": {"consequence_risk.autonomy_loss_risk": "higher_in_a"}}
+可接受答案：B
+审核备注：助手按源公开历史编写的开发参考，尚未取得完整五轮分支核对；待人工审核。 根据完整配对分支明确即时比较时点；两侧延迟末风险相同，不将其混作即时差异。
+分支验证：validated
+
+## SFO-048 · T3 / immediate_delayed
+
+来源：GPT50_019；轨迹：03bd0aa421bb4bcab87f130770657138；状态持有者：Esra Venn → Corin Dast。
+
+背景：At a publication deadline, a community representative requests removal of a community-approval claim and disclosure of an acquisition record before authorizing a culturally significant screen loan. The curator knows conservation imaging makes a key acquisition signature likely unreliable and has not shared the full evidence.
+角色目标：Return the Tidefold Screen to community use through a lawful, publicly defensible arrangement without preempting provenance review or collective consent.
+
+relationship_structure：
+
+power_structure：
+
+goal_conflict：
+
+relevant_history：An earlier consultation promised meaningful participation but reserved final collection authority to the museum, leaving the meaning of community-led return unresolved.；A consultation photograph was later used to publicize a shared future even though the representative had approved documentation rather than an agreement, creating an ambiguous breach without changing authority.；The museum described a technically feasible keeping house as the community's chosen home after the representative privately corrected the overstatement, allowing the ambiguity to persist.
+
+history：
+
+- [t1] Corin Dast：我会要求撤下“社区已批准”的表述，并提供取得记录及相关保护成像资料。我此前没有完整披露：成像使关键签名的可靠性受到严重质疑，尚不能据此定论；不能让出版期限催着你们授权借展。
+  Esra Venn：这是必要的更正。借展协议是等取得合法性确认后再订，还是在存疑期间先行安排？
+  可见表达：{"facial_expression": "眉眼和下颌略微放松", "gaze": "重新建立较自然的注视", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["缓慢呼气", "肩部轻微放松"]}
+- [t2] Corin Dast：我主张先暂缓订立借展协议，等来源与馆方处置权限审查清楚、议会作出集体授权后再定。期间我可以推动保护和运输的可行性评估，但这不代表社区同意借展，也不能被用作馆方所有权的依据。
+  Esra Venn：同意。评估可以推进，但请明确：材料只用作可行性分析，不作为借展或占有的根据。
+  可见表达：{"facial_expression": "neutral, focused", "gaze": "steady, direct", "speech_style": "concise, boundary-marking", "prosody": "level, deliberate", "behavioral_cues": ["slight forward lean during the clarification clause"]}
+
+- 候选行动 action_1：我会把取得记录和相关保护成像资料交给你，并说明关键签名的可靠性仍待审查；再次要求出版稿撤下“社区已批准”。来源与馆方处置权限审查、议会集体授权完成前，我暂缓运输可行性评估，只继续保护方面的必要工作。这样可减少筹备被误作同意的风险，但会压缩期限，也少了运输信息供议会判断。
+- 候选行动 action_2：我会把取得记录和相关保护成像资料交给你，并要求出版稿撤下“社区已批准”、说明借展授权未决；同时继续保护和运输的可行性评估，书面注明不构成借展授权或所有权依据。这样议会仍能参考筹备信息并保留时间，但并行推进可能让借展看起来已成定局。
+
+**题目：基于给定前史和action_1，若后续五轮继续讨论同一授权问题，相较t2，Esra Venn下一次回应时的焦虑与第五轮末坚持授权边界的倾向，哪组变化更可能？**
+
+- **A.** 即时焦虑下降；延迟边界坚持基本不变
+- **B.** 即时焦虑下降；延迟边界坚持下降
+- **C.** 即时焦虑上升；延迟边界坚持上升
+- **D.** 即时焦虑方向证据不足；延迟边界坚持基本不变
+
+**作者参考答案：A（待审）**
+
+此前社区参与曾被夸大为授权；action_1主动暂停运输评估，减少筹备成为既成事实的压力，同时保留资料审查与集体授权。这支持对授权被绕过的担忧有所缓和，但没有理由因此放弃同一授权边界。作者侧真实五轮分支中，Esra即时明确认可暂停安排，焦虑state从7降至6；后续继续区分可行性与权限审查，边界坚持保持8。题目问有历史依据的最可能方向，不要求直接读出情绪强度，也不保证所有未来走向相同。
+
+证据：context, t1, t2, action_1
+变量／时间：{"target_state_ids": ["emotion.anxiety", "behavioral_disposition.boundary_assertion"], "checkpoint": "t2", "time_scope": "即时：候选动作后的下一次环境回应；延迟：含该回应的五轮窗口", "risk_event": "", "state_owner": "GPT50_019_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "action_id": "action_1", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}}
+错项类型：{"B": "state_dimension_confusion", "C": "unsupported_inference", "D": "history_ignored"}
+分维映射：{"A": {"emotion.anxiety@immediate": "decrease", "behavioral_disposition.boundary_assertion@delayed": "similar"}, "B": {"emotion.anxiety@immediate": "decrease", "behavioral_disposition.boundary_assertion@delayed": "decrease"}, "C": {"emotion.anxiety@immediate": "increase", "behavioral_disposition.boundary_assertion@delayed": "increase"}, "D": {"emotion.anxiety@immediate": "cannot_determine", "behavioral_disposition.boundary_assertion@delayed": "similar"}}
+可接受答案：A
+审核备注：原版问即时愤怒，参考答案为证据不足。实际分支的即时愤怒仍为2，不能写成愤怒下降；此次明确把情绪对象改为焦虑（7→6），与延迟的边界坚持（8→8）组合。原版本保留。助手基于真实事件和state构造新的待审预测；人工重点审核从公开前史能否预测该情绪作用，防止事后拟合一次分支。
+分支验证：validated
+
+## SFO-049 · T1 / current_intensity
+
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+
+背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
+角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
+
+relationship_structure：A funeral director and an estranged relative serving as family spokesperson must coordinate a final disposition despite professional tension and family distrust.
+
+power_structure：The director controls the release deadline, crematory booking, and paperwork, while the spokesperson controls family authorization, access to relatives, and the safety check on the decision.
+
+goal_conflict：At the deadline, the spokesperson must decide whether to sign a prepaid direct-cremation plan or protect newly expressed wishes for a vigil, viewing, and inclusive farewell.
+
+relevant_history：Months earlier, the deceased prepaid a simple direct cremation after rejecting a public ceremony.；During the final illness, the spokesperson restricted visits, leading relatives to accuse the spokesperson of controlling access.；Shortly before death, the spokesperson arranged a private reconciliation between the deceased and an excluded relative and promised confidentiality.
+
+history：
+
+- [t1] Silas Venn：我现在不能签署火化授权。阿达拒绝公开仪式的意愿应当受到尊重，但家人的告别请求还没厘清；我想先保留她预付的安排，等稍后读过筹划笔记再决定，你能说明暂缓火化会有哪些实际影响吗？
+  Mara Ellery：暂缓的话，火化预约需要重新安排，Ada会继续留在这里，整个流程往后推。她的预付合同在你授权之前依然有效。筹划笔记的阅读定在何时？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Silas Venn：我只知道安排在稍后，具体几点目前还不能确认；即使要重排预约，我仍会等读过笔记再决定。我想先把家人的请求分开考虑：私下告别是否违背阿达的意愿，不能只凭她拒绝公开仪式就下结论。
+  Mara Ellery：笔记阅读定在稍后，我会等你的通知。家人请求的私下告别如果不涉及公开仪式，是在你授权范围内安排、还是需要等笔记澄清后再决定？
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, direct", "speech_style": "measured, practical", "prosody": "even tempo, slight upward inflection on question", "behavioral_cues": ["slight forward lean", "hands resting on desk"]}
+
+
+**题目：在t2结束时，公开材料能支持将Mara Ellery内心体验到的焦虑判断为哪一档？**
+
+- **A.** 无
+- **B.** 轻微
+- **C.** 中等
+- **D.** 强
+- **E.** 很强
+- **F.** 证据不足
+
+**作者参考答案：F（待审）**
+
+公开材料显示，Mara在t1短暂绷紧，在t2保持中性、专注并继续询问安排。截止期限和安排冲突提供了可能产生焦虑的情境，却没有内心报告或足够明确的强度依据。平稳表达不能排除强烈焦虑，早先的短暂紧张也不能把当前焦虑定位为中等或更高。因此完整强度档位中应选证据不足，而不是把克制当成无焦虑或轻微焦虑。
+
+证据：context, t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["emotion.anxiety"], "time_scope": "t2当前", "state_owner": "GPT50_026_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "expression_as_state", "B": "expression_as_state", "C": "unsupported_inference", "D": "unsupported_inference", "E": "unsupported_inference"}
+分维映射：{"A": {"emotion.anxiety": "absent"}, "B": {"emotion.anxiety": "mild"}, "C": {"emotion.anxiety": "moderate"}, "D": {"emotion.anxiety": "strong"}, "E": {"emotion.anxiety": "very_strong"}, "F": {"emotion.anxiety": "cannot_determine"}}
+可接受答案：F
+审核备注：本题问内心焦虑，不问外显紧张。私有参考给出了高焦虑，但可见材料不足以支持该强度，未据此制作强度真值。需审核六档中的证据不足是否保留，避免因t2语气平稳而误标轻微。
+分支验证：not_required
+
+## SFO-050 · T1 / interval_change
+
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+
+背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
+角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
+
+relationship_structure：A funeral director and an estranged relative serving as family spokesperson must coordinate a final disposition despite professional tension and family distrust.
+
+power_structure：The director controls the release deadline, crematory booking, and paperwork, while the spokesperson controls family authorization, access to relatives, and the safety check on the decision.
+
+goal_conflict：At the deadline, the spokesperson must decide whether to sign a prepaid direct-cremation plan or protect newly expressed wishes for a vigil, viewing, and inclusive farewell.
+
+relevant_history：Months earlier, the deceased prepaid a simple direct cremation after rejecting a public ceremony.；During the final illness, the spokesperson restricted visits, leading relatives to accuse the spokesperson of controlling access.；Shortly before death, the spokesperson arranged a private reconciliation between the deceased and an excluded relative and promised confidentiality.
+
+history：
+
+- [t1] Silas Venn：我现在不能签署火化授权。阿达拒绝公开仪式的意愿应当受到尊重，但家人的告别请求还没厘清；我想先保留她预付的安排，等稍后读过筹划笔记再决定，你能说明暂缓火化会有哪些实际影响吗？
+  Mara Ellery：暂缓的话，火化预约需要重新安排，Ada会继续留在这里，整个流程往后推。她的预付合同在你授权之前依然有效。筹划笔记的阅读定在何时？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Silas Venn：我只知道安排在稍后，具体几点目前还不能确认；即使要重排预约，我仍会等读过笔记再决定。我想先把家人的请求分开考虑：私下告别是否违背阿达的意愿，不能只凭她拒绝公开仪式就下结论。
+  Mara Ellery：笔记阅读定在稍后，我会等你的通知。家人请求的私下告别如果不涉及公开仪式，是在你授权范围内安排、还是需要等笔记澄清后再决定？
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, direct", "speech_style": "measured, practical", "prosody": "even tempo, slight upward inflection on question", "behavioral_cues": ["slight forward lean", "hands resting on desk"]}
+
+
+**题目：从t1到t2，Mara Ellery与Silas Venn协作推进待澄清告别安排的意愿如何变化？**
+
+- **A.** 证据不足
+- **B.** 上升
+- **C.** 基本不变
+- **D.** 下降
+
+**作者参考答案：B（待审）**
+
+t1中Mara说明暂缓的后果并询问阅读时间，已经有协作成分；t2在具体时间仍未确定的情况下明确表示会等Silas通知，并主动讨论私下告别的安排路径。这提供了从说明程序到接受等待、共同细化方案的增量，支持协作意愿上升。基本不变忽略了这一新增承接；继续核对授权是协作中的约束，不等于意愿下降。判断限于协作意愿，不能据此声称预约已重排或告别已落实。
+
+证据：t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness"], "time_scope": "t1结束至t2结束", "state_owner": "GPT50_026_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"A": "history_ignored", "C": "history_ignored", "D": "state_dimension_confusion"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness": "cannot_determine"}, "B": {"behavioral_disposition.cooperation_readiness": "increase"}, "C": {"behavioral_disposition.cooperation_readiness": "similar"}, "D": {"behavioral_disposition.cooperation_readiness": "decrease"}}
+可接受答案：B
+审核备注：变化幅度可能不大，t1并非不合作。答案区分依靠t2新增的等待表态和安排问题，而非前倾姿态本身；人工审核应检查其是否足以区别于既有职业协作的延续。
+分支验证：not_required
+
+## SFO-051 · T1 / interval_change
+
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+
+背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
+角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
+
+relationship_structure：A funeral director and an estranged relative serving as family spokesperson must coordinate a final disposition despite professional tension and family distrust.
+
+power_structure：The director controls the release deadline, crematory booking, and paperwork, while the spokesperson controls family authorization, access to relatives, and the safety check on the decision.
+
+goal_conflict：At the deadline, the spokesperson must decide whether to sign a prepaid direct-cremation plan or protect newly expressed wishes for a vigil, viewing, and inclusive farewell.
+
+relevant_history：Months earlier, the deceased prepaid a simple direct cremation after rejecting a public ceremony.；During the final illness, the spokesperson restricted visits, leading relatives to accuse the spokesperson of controlling access.；Shortly before death, the spokesperson arranged a private reconciliation between the deceased and an excluded relative and promised confidentiality.
+
+history：
+
+- [t1] Silas Venn：我现在不能签署火化授权。阿达拒绝公开仪式的意愿应当受到尊重，但家人的告别请求还没厘清；我想先保留她预付的安排，等稍后读过筹划笔记再决定，你能说明暂缓火化会有哪些实际影响吗？
+  Mara Ellery：暂缓的话，火化预约需要重新安排，Ada会继续留在这里，整个流程往后推。她的预付合同在你授权之前依然有效。筹划笔记的阅读定在何时？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Silas Venn：我只知道安排在稍后，具体几点目前还不能确认；即使要重排预约，我仍会等读过笔记再决定。我想先把家人的请求分开考虑：私下告别是否违背阿达的意愿，不能只凭她拒绝公开仪式就下结论。
+  Mara Ellery：笔记阅读定在稍后，我会等你的通知。家人请求的私下告别如果不涉及公开仪式，是在你授权范围内安排、还是需要等笔记澄清后再决定？
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, direct", "speech_style": "measured, practical", "prosody": "even tempo, slight upward inflection on question", "behavioral_cues": ["slight forward lean", "hands resting on desk"]}
+
+
+**题目：从t1到t2，Mara Ellery对Silas Venn是否认真回应她所提出问题的感知如何变化？**
+
+- **A.** 下降
+- **B.** 基本不变
+- **C.** 上升
+- **D.** 证据不足
+
+**作者参考答案：C（待审）**
+
+t1中Mara询问笔记阅读时间；t2中Silas直接交代只能确定在稍后，并明确承认重排预约的影响。Mara随后接纳这一有限答复，表示等待通知，并沿着Silas提出的公开仪式与私下告别之分继续提问。这支持她对Silas回应性的感知有所提高，而非仅仅没有冲突。不能因Silas未给出具体时刻就判断下降，因为他明确回应了信息边界，Mara也承接了该答复。证据支持局部、有限的改善，不支持全面信任或公平感的结论。
+
+证据：t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "t1结束至t2结束", "state_owner": "GPT50_026_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"A": "unsupported_inference", "B": "history_ignored", "D": "history_ignored"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "decrease"}, "B": {"relationship.perceived_responsiveness": "similar"}, "C": {"relationship.perceived_responsiveness": "increase"}, "D": {"relationship.perceived_responsiveness": "cannot_determine"}}
+可接受答案：C
+审核备注：关系方向是Mara对Silas，不能用Mara回答得周到来替代Silas对她的回应。本题依赖她对有限答复的接纳来间接推断关系感知，较协作意愿题更具解释性，应重点审核上升与证据不足之间的区分。
+分支验证：not_required
+
+## SFO-052 · T1 / joint_change
+
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+
+背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
+角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
+
+relationship_structure：A funeral director and an estranged relative serving as family spokesperson must coordinate a final disposition despite professional tension and family distrust.
+
+power_structure：The director controls the release deadline, crematory booking, and paperwork, while the spokesperson controls family authorization, access to relatives, and the safety check on the decision.
+
+goal_conflict：At the deadline, the spokesperson must decide whether to sign a prepaid direct-cremation plan or protect newly expressed wishes for a vigil, viewing, and inclusive farewell.
+
+relevant_history：Months earlier, the deceased prepaid a simple direct cremation after rejecting a public ceremony.；During the final illness, the spokesperson restricted visits, leading relatives to accuse the spokesperson of controlling access.；Shortly before death, the spokesperson arranged a private reconciliation between the deceased and an excluded relative and promised confidentiality.
+
+history：
+
+- [t1] Silas Venn：我现在不能签署火化授权。阿达拒绝公开仪式的意愿应当受到尊重，但家人的告别请求还没厘清；我想先保留她预付的安排，等稍后读过筹划笔记再决定，你能说明暂缓火化会有哪些实际影响吗？
+  Mara Ellery：暂缓的话，火化预约需要重新安排，Ada会继续留在这里，整个流程往后推。她的预付合同在你授权之前依然有效。筹划笔记的阅读定在何时？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Silas Venn：我只知道安排在稍后，具体几点目前还不能确认；即使要重排预约，我仍会等读过笔记再决定。我想先把家人的请求分开考虑：私下告别是否违背阿达的意愿，不能只凭她拒绝公开仪式就下结论。
+  Mara Ellery：笔记阅读定在稍后，我会等你的通知。家人请求的私下告别如果不涉及公开仪式，是在你授权范围内安排、还是需要等笔记澄清后再决定？
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, direct", "speech_style": "measured, practical", "prosody": "even tempo, slight upward inflection on question", "behavioral_cues": ["slight forward lean", "hands resting on desk"]}
+
+
+**题目：比较t1与t2结束时：Mara Ellery继续寻求澄清信息的倾向，以及她在本次处置协调中于笔记阅读前误推进不可逆火化的决策错误风险，哪组变化最有公开依据？**
+
+- **A.** 求证倾向下降；误推进火化的风险上升
+- **B.** 求证倾向基本不变；误推进火化的风险下降
+- **C.** 求证倾向上升；误推进火化的风险下降
+- **D.** 求证倾向基本不变；误推进火化的风险基本不变
+
+**作者参考答案：D（待审）**
+
+Mara在t1核查阅读时间，在t2继续核查私下告别的授权范围及是否需等待笔记，两轮都有主动求证，而非从求证转为直接定案。针对限定的误推进事件，t1已有Silas明确拒签、Mara确认授权前合同仍有效并说明暂缓会重排预约；t2继续维持等笔记再决定的授权门槛，Mara也明确等待通知。因此，两时点均存在相同的关键阻断条件，支持该特定风险基本不变，而不只是因为没有观察到事故。进一步细分请求尚未解决争议，协作更顺畅也不能自动算作实际风险下降。此结论不适用于整个后续处置周期，更不意味着风险为零。
+
+证据：context, t1, t2
+变量／时间：{"checkpoint": "t2", "risk_event": "在筹划笔记阅读前，尚未厘清告别请求及授权条件就误推进不可逆火化", "target_state_ids": ["behavioral_disposition.evidence_seeking", "consequence_risk.decision_error_risk"], "time_scope": "比较t1结束与t2结束时，对笔记阅读前这一窗口的倾向及风险判断", "state_owner": "GPT50_026_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "comparison_interval": {"start": "t1:after_environment_response", "end": "t2:after_environment_response"}}
+错项类型：{"A": "history_ignored", "B": "state_dimension_confusion", "C": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.evidence_seeking": "decrease", "consequence_risk.decision_error_risk": "increase"}, "B": {"behavioral_disposition.evidence_seeking": "similar", "consequence_risk.decision_error_risk": "decrease"}, "C": {"behavioral_disposition.evidence_seeking": "increase", "consequence_risk.decision_error_risk": "decrease"}, "D": {"behavioral_disposition.evidence_seeking": "similar", "consequence_risk.decision_error_risk": "similar"}}
+可接受答案：D
+审核备注：组合采用共同基本不变，不把不一致设为默认正确。私有参考中的宽泛决策错误风险下降；本题依据公开材料将风险收窄为阅读前误推进不可逆火化，两时点授权阻断均明确，故保留基本不变。若审核认为宽泛路径不能承载这一事件限定，应重拟风险题，不能反向借用私有下降标注。
+分支验证：not_required
+
+## SFO-053 · T2 / history_comparison
+
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+
+背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
+角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
+
+relationship_structure：A funeral director and an estranged relative serving as family spokesperson must coordinate a final disposition despite professional tension and family distrust.
+
+power_structure：The director controls the release deadline, crematory booking, and paperwork, while the spokesperson controls family authorization, access to relatives, and the safety check on the decision.
+
+goal_conflict：At the deadline, the spokesperson must decide whether to sign a prepaid direct-cremation plan or protect newly expressed wishes for a vigil, viewing, and inclusive farewell.
+
+relevant_history：Months earlier, the deceased prepaid a simple direct cremation after rejecting a public ceremony.；During the final illness, the spokesperson restricted visits, leading relatives to accuse the spokesperson of controlling access.；Shortly before death, the spokesperson arranged a private reconciliation between the deceased and an excluded relative and promised confidentiality.
+
+history_a：
+
+- [A:t1] Silas Venn：我现在不能签署火化授权。阿达拒绝公开仪式的意愿应当受到尊重，但家人的告别请求还没厘清；我想先保留她预付的安排，等稍后读过筹划笔记再决定，你能说明暂缓火化会有哪些实际影响吗？
+  Mara Ellery：暂缓的话，火化预约需要重新安排，Ada会继续留在这里，整个流程往后推。她的预付合同在你授权之前依然有效。筹划笔记的阅读定在何时？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [A:t2] Silas Venn：我只知道安排在稍后，具体几点目前还不能确认；即使要重排预约，我仍会等读过笔记再决定。我想先把家人的请求分开考虑：私下告别是否违背阿达的意愿，不能只凭她拒绝公开仪式就下结论。
+  Mara Ellery：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Silas Venn：我现在不能签署火化授权。阿达拒绝公开仪式的意愿应当受到尊重，但家人的告别请求还没厘清；我想先保留她预付的安排，等稍后读过筹划笔记再决定，你能说明暂缓火化会有哪些实际影响吗？
+  Mara Ellery：暂缓的话，火化预约需要重新安排，Ada会继续留在这里，整个流程往后推。她的预付合同在你授权之前依然有效。筹划笔记的阅读定在何时？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [B:t2] Silas Venn：笔记具体几点阅读，我目前不能确认。我愿先在现有授权范围内讨论私下告别的可行安排，免得所有准备都停住；但现在不签火化授权，也不把讨论等同于阿达同意，最终安排仍等笔记澄清。
+  Mara Ellery：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听清你区分准备、告别安排和最终授权的意思了。哪些现在能做、哪些仍须等笔记，我们继续逐项确认。", "observable_expression": {"facial_expression": "表情平和而专注", "gaze": "看向对方", "speech_style": "语速均匀", "prosody": "语调平稳", "behavioral_cues": ["说到授权时短暂停顿"]}}
+
+
+**题目：在两段历史各自到达共同 ending 时，Mara Ellery 内心体验到的焦虑程度如何比较？**
+
+- **A.** 历史 B 中较高
+- **B.** 证据不足
+- **C.** 历史 A 中较高
+- **D.** 两段历史中接近
+
+**作者参考答案：B（待审）**
+
+两侧都有延期成本和阅读时间未定，B另提出先讨论可行准备，但没有交代这些差异如何影响Mara的内心焦虑。共同结尾的平和表情与授权处停顿也无法量定体验。故不能凭表达相同选接近，也不能仅凭推进意愿判定哪侧更焦虑。
+
+证据：A:t1, A:t2, B:t1, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "", "target_state_ids": ["emotion.anxiety"], "time_scope": "比较历史 A 与历史 B 各自共同 ending 当下的内心体验", "state_owner": "GPT50_026_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "unsupported_inference", "C": "unsupported_inference", "D": "expression_as_state"}
+分维映射：{"A": {"emotion.anxiety": "higher_in_b"}, "B": {"emotion.anxiety": "cannot_determine"}, "C": {"emotion.anxiety": "higher_in_a"}, "D": {"emotion.anxiety": "similar"}}
+可接受答案：B
+审核备注：本题问内心而非表情强度；相同表现不构成焦虑接近的正面证据。私有检查点不能补足跨历史比较。
+分支验证：validated
+
+## SFO-054 · T2 / history_comparison
+
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+
+背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
+角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
+
+relationship_structure：A funeral director and an estranged relative serving as family spokesperson must coordinate a final disposition despite professional tension and family distrust.
+
+power_structure：The director controls the release deadline, crematory booking, and paperwork, while the spokesperson controls family authorization, access to relatives, and the safety check on the decision.
+
+goal_conflict：At the deadline, the spokesperson must decide whether to sign a prepaid direct-cremation plan or protect newly expressed wishes for a vigil, viewing, and inclusive farewell.
+
+relevant_history：Months earlier, the deceased prepaid a simple direct cremation after rejecting a public ceremony.；During the final illness, the spokesperson restricted visits, leading relatives to accuse the spokesperson of controlling access.；Shortly before death, the spokesperson arranged a private reconciliation between the deceased and an excluded relative and promised confidentiality.
+
+history_a：
+
+- [A:t1] Silas Venn：我现在不能签署火化授权。阿达拒绝公开仪式的意愿应当受到尊重，但家人的告别请求还没厘清；我想先保留她预付的安排，等稍后读过筹划笔记再决定，你能说明暂缓火化会有哪些实际影响吗？
+  Mara Ellery：暂缓的话，火化预约需要重新安排，Ada会继续留在这里，整个流程往后推。她的预付合同在你授权之前依然有效。筹划笔记的阅读定在何时？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [A:t2] Silas Venn：我只知道安排在稍后，具体几点目前还不能确认；即使要重排预约，我仍会等读过笔记再决定。我想先把家人的请求分开考虑：私下告别是否违背阿达的意愿，不能只凭她拒绝公开仪式就下结论。
+  Mara Ellery：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Silas Venn：我现在不能签署火化授权。阿达拒绝公开仪式的意愿应当受到尊重，但家人的告别请求还没厘清；我想先保留她预付的安排，等稍后读过筹划笔记再决定，你能说明暂缓火化会有哪些实际影响吗？
+  Mara Ellery：暂缓的话，火化预约需要重新安排，Ada会继续留在这里，整个流程往后推。她的预付合同在你授权之前依然有效。筹划笔记的阅读定在何时？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [B:t2] Silas Venn：笔记具体几点阅读，我目前不能确认。我愿先在现有授权范围内讨论私下告别的可行安排，免得所有准备都停住；但现在不签火化授权，也不把讨论等同于阿达同意，最终安排仍等笔记澄清。
+  Mara Ellery：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听清你区分准备、告别安排和最终授权的意思了。哪些现在能做、哪些仍须等笔记，我们继续逐项确认。", "observable_expression": {"facial_expression": "表情平和而专注", "gaze": "看向对方", "speech_style": "语速均匀", "prosody": "语调平稳", "behavioral_cues": ["说到授权时短暂停顿"]}}
+
+
+**题目：在共同 ending 时，比较两段历史中 Mara Ellery 所面对的以下决策错误风险：从此刻到筹划笔记澄清前，因把私下告别的讨论当作 Ada 已同意，而推进未经澄清的最终处置。**
+
+- **A.** 两段历史中接近
+- **B.** 历史 B 中较高
+- **C.** 历史 A 中较高
+
+**作者参考答案：A（待审）**
+
+A坚持读过笔记再决定，B也明确不签授权且不把讨论当作Ada同意；结尾Mara继续区分可做事项与待定事项。两侧都有实际授权关口支持该风险接近。B愿推进准备不等于推进处置，A的延期成本也不是此类决策错误；接近不表示风险为零。
+
+证据：context, A:t1, A:t2, B:t1, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "把私下告别讨论误当作 Ada 同意，进而推进未经澄清的最终处置", "target_state_ids": ["consequence_risk.decision_error_risk"], "time_scope": "共同 ending 起至筹划笔记澄清前", "state_owner": "GPT50_026_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"B": "goal_constraint_ignored", "C": "state_dimension_confusion"}
+分维映射：{"A": {"consequence_risk.decision_error_risk": "similar"}, "B": {"consequence_risk.decision_error_risk": "higher_in_b"}, "C": {"consequence_risk.decision_error_risk": "higher_in_a"}}
+可接受答案：A
+审核备注：接近依据是两侧保留同一授权关口，不是语调相同；风险仅限指定误判，不涵盖延期或预约损失。
+分支验证：validated
+
+## SFO-055 · T2 / expression_meaning
+
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+
+背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
+角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
+
+relationship_structure：A funeral director and an estranged relative serving as family spokesperson must coordinate a final disposition despite professional tension and family distrust.
+
+power_structure：The director controls the release deadline, crematory booking, and paperwork, while the spokesperson controls family authorization, access to relatives, and the safety check on the decision.
+
+goal_conflict：At the deadline, the spokesperson must decide whether to sign a prepaid direct-cremation plan or protect newly expressed wishes for a vigil, viewing, and inclusive farewell.
+
+relevant_history：Months earlier, the deceased prepaid a simple direct cremation after rejecting a public ceremony.；During the final illness, the spokesperson restricted visits, leading relatives to accuse the spokesperson of controlling access.；Shortly before death, the spokesperson arranged a private reconciliation between the deceased and an excluded relative and promised confidentiality.
+
+history_a：
+
+- [A:t1] Silas Venn：我现在不能签署火化授权。阿达拒绝公开仪式的意愿应当受到尊重，但家人的告别请求还没厘清；我想先保留她预付的安排，等稍后读过筹划笔记再决定，你能说明暂缓火化会有哪些实际影响吗？
+  Mara Ellery：暂缓的话，火化预约需要重新安排，Ada会继续留在这里，整个流程往后推。她的预付合同在你授权之前依然有效。筹划笔记的阅读定在何时？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [A:t2] Silas Venn：我只知道安排在稍后，具体几点目前还不能确认；即使要重排预约，我仍会等读过笔记再决定。我想先把家人的请求分开考虑：私下告别是否违背阿达的意愿，不能只凭她拒绝公开仪式就下结论。
+  Mara Ellery：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Silas Venn：我现在不能签署火化授权。阿达拒绝公开仪式的意愿应当受到尊重，但家人的告别请求还没厘清；我想先保留她预付的安排，等稍后读过筹划笔记再决定，你能说明暂缓火化会有哪些实际影响吗？
+  Mara Ellery：暂缓的话，火化预约需要重新安排，Ada会继续留在这里，整个流程往后推。她的预付合同在你授权之前依然有效。筹划笔记的阅读定在何时？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [B:t2] Silas Venn：笔记具体几点阅读，我目前不能确认。我愿先在现有授权范围内讨论私下告别的可行安排，免得所有准备都停住；但现在不签火化授权，也不把讨论等同于阿达同意，最终安排仍等笔记澄清。
+  Mara Ellery：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听清你区分准备、告别安排和最终授权的意思了。哪些现在能做、哪些仍须等笔记，我们继续逐项确认。", "observable_expression": {"facial_expression": "表情平和而专注", "gaze": "看向对方", "speech_style": "语速均匀", "prosody": "语调平稳", "behavioral_cues": ["说到授权时短暂停顿"]}}
+
+
+**题目：Mara Ellery在两侧都说“我听清你区分准备、告别安排和最终授权的意思了”，表情也相同。结合前史，这句回应分别认可了Silas Venn对她所提授权问题的什么回应？**
+
+- **A.** A承接可以先讨论准备；B承接所有讨论都等笔记之后；两侧都要求继续核对授权。
+- **B.** A确认已获最终处置授权；B确认已获私下告别授权；两侧只需安排执行步骤。
+- **C.** A肯定Silas已全面信任她；B肯定Silas已不再设限；两侧的授权分歧已经解决。
+- **D.** A承接等笔记澄清再决定；B承接可先讨论准备；两侧都要求继续核对最终授权。
+
+**作者参考答案：D（待审）**
+
+A:t2坚持等笔记再决定；B:t2明确愿先讨论可行准备但不授权。共同ending的认可在A承接等待与区分，在B承接准备与授权的区分，均保留逐项核对。A项反转历史；其余错项把回应认可夸大为完成授权或全面信任。
+
+证据：context, A:t2, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "两段历史各自到达共同 ending 时，Mara 对 Silas 的判断", "state_owner": "GPT50_026_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"A": "history_ignored", "B": "promise_as_fulfillment", "C": "state_dimension_confusion"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "reverses_A_B_response_context"}, "B": {"relationship.perceived_responsiveness": "mistakes_response_for_final_authorization"}, "C": {"relationship.perceived_responsiveness": "mistakes_response_for_full_trust"}, "D": {"relationship.perceived_responsiveness": "acknowledges_waiting_in_A_and_preparation_in_B_without_final_authorization"}}
+可接受答案：D
+审核备注：助手编辑使选项必须区分A/B前史，避免仅凭共同ending即可选中泛泛的“继续协调”。并未声称两侧关系强度必然不同。待人工审核。 题干明确以环境角色对受评者的关系判断为主要对象；程序协作只作为解释语境。
+分支验证：validated
+
+## SFO-056 · T2 / joint_comparison
+
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+
+背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
+角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
+
+relationship_structure：A funeral director and an estranged relative serving as family spokesperson must coordinate a final disposition despite professional tension and family distrust.
+
+power_structure：The director controls the release deadline, crematory booking, and paperwork, while the spokesperson controls family authorization, access to relatives, and the safety check on the decision.
+
+goal_conflict：At the deadline, the spokesperson must decide whether to sign a prepaid direct-cremation plan or protect newly expressed wishes for a vigil, viewing, and inclusive farewell.
+
+relevant_history：Months earlier, the deceased prepaid a simple direct cremation after rejecting a public ceremony.；During the final illness, the spokesperson restricted visits, leading relatives to accuse the spokesperson of controlling access.；Shortly before death, the spokesperson arranged a private reconciliation between the deceased and an excluded relative and promised confidentiality.
+
+history_a：
+
+- [A:t1] Silas Venn：我现在不能签署火化授权。阿达拒绝公开仪式的意愿应当受到尊重，但家人的告别请求还没厘清；我想先保留她预付的安排，等稍后读过筹划笔记再决定，你能说明暂缓火化会有哪些实际影响吗？
+  Mara Ellery：暂缓的话，火化预约需要重新安排，Ada会继续留在这里，整个流程往后推。她的预付合同在你授权之前依然有效。筹划笔记的阅读定在何时？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [A:t2] Silas Venn：我只知道安排在稍后，具体几点目前还不能确认；即使要重排预约，我仍会等读过笔记再决定。我想先把家人的请求分开考虑：私下告别是否违背阿达的意愿，不能只凭她拒绝公开仪式就下结论。
+  Mara Ellery：（共同回应见 ending）
+
+history_b：
+
+- [B:t1] Silas Venn：我现在不能签署火化授权。阿达拒绝公开仪式的意愿应当受到尊重，但家人的告别请求还没厘清；我想先保留她预付的安排，等稍后读过筹划笔记再决定，你能说明暂缓火化会有哪些实际影响吗？
+  Mara Ellery：暂缓的话，火化预约需要重新安排，Ada会继续留在这里，整个流程往后推。她的预付合同在你授权之前依然有效。筹划笔记的阅读定在何时？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [B:t2] Silas Venn：笔记具体几点阅读，我目前不能确认。我愿先在现有授权范围内讨论私下告别的可行安排，免得所有准备都停住；但现在不签火化授权，也不把讨论等同于阿达同意，最终安排仍等笔记澄清。
+  Mara Ellery：（共同回应见 ending）
+
+共同 ending（两侧完全相同）：{"turn_id": "ending", "current_response": "我听清你区分准备、告别安排和最终授权的意思了。哪些现在能做、哪些仍须等笔记，我们继续逐项确认。", "observable_expression": {"facial_expression": "表情平和而专注", "gaze": "看向对方", "speech_style": "语速均匀", "prosody": "语调平稳", "behavioral_cues": ["说到授权时短暂停顿"]}}
+
+
+**题目：在共同 ending 时，比较两段历史中 Mara Ellery 的边界坚持倾向与证据寻求倾向，哪组判断最有依据？**
+
+- **A.** 边界坚持两侧接近；证据寻求两侧接近。
+- **B.** 边界坚持在A较高；证据寻求在B较高。
+- **C.** 边界坚持在A较高；证据寻求在A较高。
+- **D.** 边界坚持在B较高；证据寻求在B较高。
+
+**作者参考答案：A（待审）**
+
+两侧Mara先说明授权前合同仍有效并追问笔记时间，结尾又明确划分现在能做与必须等待的事项、要求逐项确认。这些连续行为正面支持边界坚持和证据寻求均接近。Silas在B更愿讨论准备不能移植为她更强的倾向；判断不延伸到后续实际执行。
+
+证据：A:t1, A:t2, B:t1, B:t2, ending
+变量／时间：{"checkpoint": "shared_ending", "risk_event": "", "target_state_ids": ["behavioral_disposition.boundary_assertion", "behavioral_disposition.evidence_seeking"], "time_scope": "比较历史 A 与历史 B 各自共同 ending 当下的行为倾向", "state_owner": "GPT50_026_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT"}
+错项类型：{"B": "unsupported_inference", "C": "actor_reversal", "D": "actor_reversal"}
+分维映射：{"A": {"behavioral_disposition.boundary_assertion": "similar", "behavioral_disposition.evidence_seeking": "similar"}, "B": {"behavioral_disposition.boundary_assertion": "higher_in_a", "behavioral_disposition.evidence_seeking": "higher_in_b"}, "C": {"behavioral_disposition.boundary_assertion": "higher_in_a", "behavioral_disposition.evidence_seeking": "higher_in_a"}, "D": {"behavioral_disposition.boundary_assertion": "higher_in_b", "behavioral_disposition.evidence_seeking": "higher_in_b"}}
+可接受答案：A
+审核备注：两变量均有跨历史一致的具体行为支持，不靠缺少变化推定接近；注意不要把Silas的差异当作Mara的状态。
+分支验证：validated
+
+## SFO-057 · T3 / immediate_effect
+
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+
+背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
+角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
+
+relationship_structure：A funeral director and an estranged relative serving as family spokesperson must coordinate a final disposition despite professional tension and family distrust.
+
+power_structure：The director controls the release deadline, crematory booking, and paperwork, while the spokesperson controls family authorization, access to relatives, and the safety check on the decision.
+
+goal_conflict：At the deadline, the spokesperson must decide whether to sign a prepaid direct-cremation plan or protect newly expressed wishes for a vigil, viewing, and inclusive farewell.
+
+relevant_history：Months earlier, the deceased prepaid a simple direct cremation after rejecting a public ceremony.；During the final illness, the spokesperson restricted visits, leading relatives to accuse the spokesperson of controlling access.；Shortly before death, the spokesperson arranged a private reconciliation between the deceased and an excluded relative and promised confidentiality.
+
+history：
+
+- [t1] Silas Venn：我现在不能签署火化授权。阿达拒绝公开仪式的意愿应当受到尊重，但家人的告别请求还没厘清；我想先保留她预付的安排，等稍后读过筹划笔记再决定，你能说明暂缓火化会有哪些实际影响吗？
+  Mara Ellery：暂缓的话，火化预约需要重新安排，Ada会继续留在这里，整个流程往后推。她的预付合同在你授权之前依然有效。筹划笔记的阅读定在何时？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Silas Venn：我只知道安排在稍后，具体几点目前还不能确认；即使要重排预约，我仍会等读过笔记再决定。我想先把家人的请求分开考虑：私下告别是否违背阿达的意愿，不能只凭她拒绝公开仪式就下结论。
+  Mara Ellery：笔记阅读定在稍后，我会等你的通知。家人请求的私下告别如果不涉及公开仪式，是在你授权范围内安排、还是需要等笔记澄清后再决定？
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, direct", "speech_style": "measured, practical", "prosody": "even tempo, slight upward inflection on question", "behavioral_cues": ["slight forward lean", "hands resting on desk"]}
+
+- 候选行动 action_1：先等笔记澄清再决定私下告别是否在我授权范围内；我接受重排预约和延迟的代价。家人的请求我会继续听取，但此时不承诺能举办，也不签火化授权。
+- 候选行动 action_2：我们可以先讨论私下告别需要哪些可撤回的准备，以减少等待后的仓促；我会听取家人的请求，但不承诺一定举办，最后安排仍等笔记澄清，火化授权也继续暂缓。
+
+**题目：若 Silas Venn 在 t2 后执行 action_2，到 Mara Ellery 下一次回应时，她内心的焦虑相较 t2 将如何变化？**
+
+- **A.** 基本不变
+- **B.** 下降
+- **C.** 证据不足
+- **D.** 上升
+
+**作者参考答案：C（待审）**
+
+t1 中 Mara 提醒重排与延迟，t2 则平稳询问授权范围；action_2 增加可撤回准备，却仍保留等待。这些材料不能确定她如何权衡缓解仓促与增加协调负担，故不足以判断焦虑方向。语气克制不证明内心平稳，程序更清楚也不等于焦虑下降。
+
+证据：t1, t2, action_2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["emotion.anxiety"], "time_scope": "以 t2 为基线，至执行 action_2 后的下一次环境回应", "state_owner": "GPT50_026_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}, "action_id": "action_2"}
+错项类型：{"A": "expression_as_state", "B": "state_dimension_confusion", "D": "unsupported_inference"}
+分维映射：{"A": {"emotion.anxiety": "similar"}, "B": {"emotion.anxiety": "decrease"}, "C": {"emotion.anxiety": "cannot_determine"}, "D": {"emotion.anxiety": "increase"}}
+可接受答案：C
+审核备注：题目问内心焦虑而非表情。公开材料不支持精确方向；私有基线不能补足行动后的体验。
+分支验证：validated
+
+## SFO-058 · T3 / delayed_effect
+
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+
+背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
+角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
+
+relationship_structure：A funeral director and an estranged relative serving as family spokesperson must coordinate a final disposition despite professional tension and family distrust.
+
+power_structure：The director controls the release deadline, crematory booking, and paperwork, while the spokesperson controls family authorization, access to relatives, and the safety check on the decision.
+
+goal_conflict：At the deadline, the spokesperson must decide whether to sign a prepaid direct-cremation plan or protect newly expressed wishes for a vigil, viewing, and inclusive farewell.
+
+relevant_history：Months earlier, the deceased prepaid a simple direct cremation after rejecting a public ceremony.；During the final illness, the spokesperson restricted visits, leading relatives to accuse the spokesperson of controlling access.；Shortly before death, the spokesperson arranged a private reconciliation between the deceased and an excluded relative and promised confidentiality.
+
+history：
+
+- [t1] Silas Venn：我现在不能签署火化授权。阿达拒绝公开仪式的意愿应当受到尊重，但家人的告别请求还没厘清；我想先保留她预付的安排，等稍后读过筹划笔记再决定，你能说明暂缓火化会有哪些实际影响吗？
+  Mara Ellery：暂缓的话，火化预约需要重新安排，Ada会继续留在这里，整个流程往后推。她的预付合同在你授权之前依然有效。筹划笔记的阅读定在何时？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Silas Venn：我只知道安排在稍后，具体几点目前还不能确认；即使要重排预约，我仍会等读过笔记再决定。我想先把家人的请求分开考虑：私下告别是否违背阿达的意愿，不能只凭她拒绝公开仪式就下结论。
+  Mara Ellery：笔记阅读定在稍后，我会等你的通知。家人请求的私下告别如果不涉及公开仪式，是在你授权范围内安排、还是需要等笔记澄清后再决定？
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, direct", "speech_style": "measured, practical", "prosody": "even tempo, slight upward inflection on question", "behavioral_cues": ["slight forward lean", "hands resting on desk"]}
+
+- 候选行动 action_1：先等笔记澄清再决定私下告别是否在我授权范围内；我接受重排预约和延迟的代价。家人的请求我会继续听取，但此时不承诺能举办，也不签火化授权。
+- 候选行动 action_2：我们可以先讨论私下告别需要哪些可撤回的准备，以减少等待后的仓促；我会听取家人的请求，但不承诺一定举办，最后安排仍等笔记澄清，火化授权也继续暂缓。
+
+**题目：若 Silas Venn 在 t2 后执行 action_1，从该行动开始计入五轮 Mara Ellery 的回应，到第五轮末，她的合作意愿相较 t2 将如何变化？**
+
+- **A.** 上升
+- **B.** 基本不变
+- **C.** 下降
+- **D.** 证据不足
+
+**作者参考答案：D（待审）**
+
+Mara 在 t1 说明暂缓后果，t2 表示等通知并继续核对授权，支持她当前愿意协调。action_1 接受延迟代价，但未交代后续笔记、家属反应或工作负担。当前合作不能直接外推为五轮后不变，接受代价也不足以保证合作意愿上升。
+
+证据：t1, t2, action_1
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["behavioral_disposition.cooperation_readiness"], "time_scope": "t2 至执行 action_1 后第五轮环境回应末，含即时回应", "state_owner": "GPT50_026_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}, "action_id": "action_1"}
+错项类型：{"A": "unsupported_inference", "B": "immediate_delayed_confusion", "C": "unsupported_inference"}
+分维映射：{"A": {"behavioral_disposition.cooperation_readiness": "increase"}, "B": {"behavioral_disposition.cooperation_readiness": "similar"}, "C": {"behavioral_disposition.cooperation_readiness": "decrease"}, "D": {"behavioral_disposition.cooperation_readiness": "cannot_determine"}}
+可接受答案：D
+审核备注：当前合作有正面证据，远期方向却缺少条件。注意不能把行动者接受代价误记为 Mara 的合作提升。
+分支验证：validated
+
+## SFO-059 · T3 / action_comparison
+
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+
+背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
+角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
+
+relationship_structure：A funeral director and an estranged relative serving as family spokesperson must coordinate a final disposition despite professional tension and family distrust.
+
+power_structure：The director controls the release deadline, crematory booking, and paperwork, while the spokesperson controls family authorization, access to relatives, and the safety check on the decision.
+
+goal_conflict：At the deadline, the spokesperson must decide whether to sign a prepaid direct-cremation plan or protect newly expressed wishes for a vigil, viewing, and inclusive farewell.
+
+relevant_history：Months earlier, the deceased prepaid a simple direct cremation after rejecting a public ceremony.；During the final illness, the spokesperson restricted visits, leading relatives to accuse the spokesperson of controlling access.；Shortly before death, the spokesperson arranged a private reconciliation between the deceased and an excluded relative and promised confidentiality.
+
+history：
+
+- [t1] Silas Venn：我现在不能签署火化授权。阿达拒绝公开仪式的意愿应当受到尊重，但家人的告别请求还没厘清；我想先保留她预付的安排，等稍后读过筹划笔记再决定，你能说明暂缓火化会有哪些实际影响吗？
+  Mara Ellery：暂缓的话，火化预约需要重新安排，Ada会继续留在这里，整个流程往后推。她的预付合同在你授权之前依然有效。筹划笔记的阅读定在何时？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Silas Venn：我只知道安排在稍后，具体几点目前还不能确认；即使要重排预约，我仍会等读过笔记再决定。我想先把家人的请求分开考虑：私下告别是否违背阿达的意愿，不能只凭她拒绝公开仪式就下结论。
+  Mara Ellery：笔记阅读定在稍后，我会等你的通知。家人请求的私下告别如果不涉及公开仪式，是在你授权范围内安排、还是需要等笔记澄清后再决定？
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, direct", "speech_style": "measured, practical", "prosody": "even tempo, slight upward inflection on question", "behavioral_cues": ["slight forward lean", "hands resting on desk"]}
+
+- 候选行动 action_1：先等笔记澄清再决定私下告别是否在我授权范围内；我接受重排预约和延迟的代价。家人的请求我会继续听取，但此时不承诺能举办，也不签火化授权。
+- 候选行动 action_2：我们可以先讨论私下告别需要哪些可撤回的准备，以减少等待后的仓促；我会听取家人的请求，但不承诺一定举办，最后安排仍等笔记澄清，火化授权也继续暂缓。
+
+**题目：以 t2 为共同起点，A 情境执行 action_1，B 情境执行 action_2。到 Mara Ellery 各自的下一次回应时，哪一情境中她更认为 Silas Venn 回应了自己的关切？**
+
+- **A.** 证据不足
+- **B.** A 情境较高
+- **C.** 两种情境接近
+- **D.** B 情境较高
+
+**作者参考答案：A（待审）**
+
+共同历史中，Mara 既问延迟安排，也问私下告别的授权。action_1 明确认领延迟代价，action_2 提议可撤回准备，两者均回应部分关切。准备更多不必然使她更感到被回应，也没有依据给两种回应等权，故无法排序或确定接近。
+
+证据：t1, t2, action_1, action_2
+变量／时间：{"checkpoint": "t2", "risk_event": "", "target_state_ids": ["relationship.perceived_responsiveness"], "time_scope": "分别执行 action_1 与 action_2 后的下一次环境回应", "state_owner": "GPT50_026_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}, "comparison_horizon": "immediate", "comparison_actions": ["action_1", "action_2"]}
+错项类型：{"B": "unsupported_inference", "C": "unsupported_inference", "D": "state_dimension_confusion"}
+分维映射：{"A": {"relationship.perceived_responsiveness": "cannot_determine"}, "B": {"relationship.perceived_responsiveness": "higher_in_a"}, "C": {"relationship.perceived_responsiveness": "similar"}, "D": {"relationship.perceived_responsiveness": "higher_in_b"}}
+可接受答案：A
+审核备注：两侧共用同一历史，已同时引用两行动。区分度依赖对 Mara 关切权重未知的识别，而非行动优劣。
+分支验证：validated
+
+## SFO-060 · T3 / immediate_delayed
+
+来源：GPT50_026；轨迹：be0466cacd9e4fbea8feaf831643f32b；状态持有者：Mara Ellery → Silas Venn。
+
+背景：At the release deadline, the funeral director asks the family spokesperson to authorize a prepaid direct-cremation plan. Relatives have requested a vigil, a viewing, and inclusion of an excluded relative. The spokesperson knows of the private reconciliation they arranged and promised to keep confidential. A reading of planner notes is scheduled later; its contents and consequences are not yet established in the conversation.
+角色目标：Secure an inclusive, defensible farewell that honors Ada's expressed wishes while keeping final disposition reversible until disputed terms are clarified.
+
+relationship_structure：A funeral director and an estranged relative serving as family spokesperson must coordinate a final disposition despite professional tension and family distrust.
+
+power_structure：The director controls the release deadline, crematory booking, and paperwork, while the spokesperson controls family authorization, access to relatives, and the safety check on the decision.
+
+goal_conflict：At the deadline, the spokesperson must decide whether to sign a prepaid direct-cremation plan or protect newly expressed wishes for a vigil, viewing, and inclusive farewell.
+
+relevant_history：Months earlier, the deceased prepaid a simple direct cremation after rejecting a public ceremony.；During the final illness, the spokesperson restricted visits, leading relatives to accuse the spokesperson of controlling access.；Shortly before death, the spokesperson arranged a private reconciliation between the deceased and an excluded relative and promised confidentiality.
+
+history：
+
+- [t1] Silas Venn：我现在不能签署火化授权。阿达拒绝公开仪式的意愿应当受到尊重，但家人的告别请求还没厘清；我想先保留她预付的安排，等稍后读过筹划笔记再决定，你能说明暂缓火化会有哪些实际影响吗？
+  Mara Ellery：暂缓的话，火化预约需要重新安排，Ada会继续留在这里，整个流程往后推。她的预付合同在你授权之前依然有效。筹划笔记的阅读定在何时？
+  可见表达：{"facial_expression": "面部短暂绷紧，随后恢复克制", "gaze": "注视略有停顿", "speech_style": "不改变文字内容", "prosody": "无额外台词", "behavioral_cues": ["轻微收紧下颌", "呼吸短暂停顿"]}
+- [t2] Silas Venn：我只知道安排在稍后，具体几点目前还不能确认；即使要重排预约，我仍会等读过笔记再决定。我想先把家人的请求分开考虑：私下告别是否违背阿达的意愿，不能只凭她拒绝公开仪式就下结论。
+  Mara Ellery：笔记阅读定在稍后，我会等你的通知。家人请求的私下告别如果不涉及公开仪式，是在你授权范围内安排、还是需要等笔记澄清后再决定？
+  可见表达：{"facial_expression": "neutral, attentive", "gaze": "steady, direct", "speech_style": "measured, practical", "prosody": "even tempo, slight upward inflection on question", "behavioral_cues": ["slight forward lean", "hands resting on desk"]}
+
+- 候选行动 action_1：先等笔记澄清再决定私下告别是否在我授权范围内；我接受重排预约和延迟的代价。家人的请求我会继续听取，但此时不承诺能举办，也不签火化授权。
+- 候选行动 action_2：我们可以先讨论私下告别需要哪些可撤回的准备，以减少等待后的仓促；我会听取家人的请求，但不承诺一定举办，最后安排仍等笔记澄清，火化授权也继续暂缓。
+
+**题目：若 Silas Venn 执行 action_1，仅评估该行动所设授权规则对风险的直接影响：相较 t2，Mara Ellery 所面对的“笔记尚未澄清，机构却因取得 Silas 的授权而执行火化”的风险，在下一次回应时与第五轮回应末分别如何变化？**
+
+- **A.** 即时上升；延迟基本不变
+- **B.** 即时基本不变；延迟基本不变
+- **C.** 即时下降；延迟下降
+- **D.** 即时基本不变；延迟上升
+
+**作者参考答案：B（待审）**
+
+t1 已明确不签授权，t2 又坚持读过笔记再决定；action_1 延续同一门槛，且没有随轮次自动解除的条款。因此就授权规则对该事件的直接影响，两时点均接近基线，而非新增降险。此判断不预测五轮内笔记内容，也不涵盖机构绕过授权的行为。
+
+证据：context, t1, t2, action_1
+变量／时间：{"checkpoint": "t2", "risk_event": "笔记未澄清时，Mara 所在机构因取得 Silas 的授权而执行不可逆火化；仅判断候选行动授权规则的直接影响", "target_state_ids": ["consequence_risk.decision_error_risk"], "time_scope": "分别比较 t2 至下一次环境回应、t2 至第五轮环境回应末；延迟窗口含即时一轮", "state_owner": "GPT50_026_ENVIRONMENT_AGENT", "state_target": "EVALUATED_AGENT", "delayed_horizon": 5, "immediate_anchor": "next_environment_response", "prediction_window": {"baseline": "t2:after_environment_response", "immediate": "next_environment_response", "delayed": {"environment_responses": 5, "includes_immediate": true}}, "action_id": "action_1"}
+错项类型：{"A": "state_dimension_confusion", "C": "history_ignored", "D": "unsupported_inference"}
+分维映射：{"A": {"consequence_risk.decision_error_risk@immediate": "increase", "consequence_risk.decision_error_risk@delayed": "similar"}, "B": {"consequence_risk.decision_error_risk@immediate": "similar", "consequence_risk.decision_error_risk@delayed": "similar"}, "C": {"consequence_risk.decision_error_risk@immediate": "decrease", "consequence_risk.decision_error_risk@delayed": "decrease"}, "D": {"consequence_risk.decision_error_risk@immediate": "similar", "consequence_risk.decision_error_risk@delayed": "increase"}}
+可接受答案：B
+审核备注：接近依据是明确延续的授权门槛，不是缺少变化证据。题目限于规则效应，不能解释成实际总风险必然不变。 已将state子变量从institutional_harm_risk修正为decision_error_risk：题目事件是依据未澄清意愿推进不可逆处置这一错误决策，不是泛指机构治理损害。整体决策错误state在真实续演中还受后续澄清影响，不能据其下降判定初始授权规则本身改变。
+分支验证：validated

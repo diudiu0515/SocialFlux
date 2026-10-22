@@ -1,0 +1,30 @@
+{
+  "format": "socialflux_offline_choice_snapshot_v1",
+  "source_bank": "data/offline_gpt50_t1_t3",
+  "status": "complete_pending_human_review",
+  "captured_at_utc": "2026-10-10T21:14:16.665997+00:00",
+  "expected_items": 400,
+  "actual_items": 400,
+  "scenarios": 50,
+  "tasks": {
+    "T1": 200,
+    "T3": 200
+  },
+  "complete": true,
+  "paused_tasks": [
+    "T2"
+  ],
+  "human_review": "pending",
+  "formal_admission": false,
+  "source_hashes": {
+    "items.jsonl": "bae4e73a7b8decc19bfc1d34e84298977be00a55aa44ddb1f4a5018d6fdfc690",
+    "public.jsonl": "5d7a1f31f93f5e1c9c3cabe33f20a7310c927b2dabac74b017ef3d1ccd08fc6d",
+    "examples.md": "9ed4b8444bbfe3b45e574e6d2f156509b4be927351d114a1a01cb30c592f6adb",
+    "manifest.json": "ac6b08311dc049e79023cf4a225f2369d70769b3a658cf35205202c076b0ffd5",
+    "development_audit.json": "2c015feb6ffe6cf4b20279ac4b24e8985202cba13e2fbd81018cddef94145052",
+    "state_reference_crosscheck.json": "18d5b1f9ac207227a80813fb26cf0e3c30a90888ad4867349a1a60cf53b4079e",
+    "pairing_report.json": "29c78e91d02122271db1f1b52539c1b2eac8a12f5cd50550086ffd5f31fd9607",
+    "source_integrity.json": "c954f7744dd104370eccef16c85d6d1bf76bbf74151708ec22774b98a0e51f15"
+  },
+  "runtime_evidence": "Private source files, provider logs and branch checkpoints remain in the local data directory, not in Git."
+}

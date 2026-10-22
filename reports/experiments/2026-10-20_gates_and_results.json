@@ -1,0 +1,3826 @@
+{
+  "generated_at": "2026-10-20T15:03:01.861601+00:00",
+  "gates": [
+    {
+      "id": "Gate 1",
+      "name": "场景质量",
+      "purpose": "社会合理性、双方动机、真实取舍、历史作用与任务适用性；核验冻结的初始状态。",
+      "review_setting": "全场景审核；1 名审核人。",
+      "formal_status": "pending",
+      "reviewer_count": 1,
+      "machine_audit": {
+        "scenario_count": 50,
+        "schema_passed": 50,
+        "formal_passed": 0
+      }
+    },
+    {
+      "id": "Gate 2",
+      "name": "环境有效性",
+      "purpose": "E1–E9：状态更新、整段合理性、历史干预、释义稳健性、局部分支、骨干敏感性、人格干预、视频一致性和变化速度。",
+      "review_setting": "实验提供证据；规定样本仍需人工确认。",
+      "formal_status": "pending",
+      "run_status": "machine_checks_executed",
+      "machine_evidence_ready": false,
+      "source_contract_status": "blocked_natural_10_to_20_contract",
+      "experiments": [
+        {
+          "id": "E1",
+          "name": "状态更新一致性",
+          "status": "pending",
+          "evidence_present": true,
+          "review_items": 40,
+          "human_attestation": false,
+          "raw_partial": null,
+          "machine_record": {
+            "transition_count": 40
+          },
+          "machine_records": 0
+        },
+        {
+          "id": "E2",
+          "name": "完整轨迹合理性",
+          "status": "pending",
+          "evidence_present": true,
+          "review_items": 20,
+          "human_attestation": false,
+          "raw_partial": null,
+          "machine_record": {
+            "trajectory_count": 20
+          },
+          "machine_records": 0
+        },
+        {
+          "id": "E3",
+          "name": "历史干预",
+          "status": "pending",
+          "evidence_present": true,
+          "review_items": 0,
+          "human_attestation": false,
+          "raw_partial": {
+            "records": 46,
+            "screen_passed": 43
+          },
+          "machine_record": {
+            "passed": false,
+            "matched_checkpoint_count": 46,
+            "automatic_screen_passed_count": 43,
+            "machine_coverage_ready": true,
+            "machine_screen_passed": true
+          },
+          "machine_records": 46
+        },
+        {
+          "id": "E4",
+          "name": "释义稳健性",
+          "status": "pending",
+          "evidence_present": true,
+          "review_items": 0,
+          "human_attestation": false,
+          "raw_partial": {
+            "records": 31,
+            "screen_passed": 10
+          },
+          "machine_record": {
+            "passed": false,
+            "pair_count": 31,
+            "direction_consistency": 0.4884,
+            "active_union_direction_agreement": 0.4884,
+            "machine_screen_passed": false
+          },
+          "machine_records": 31
+        },
+        {
+          "id": "E5",
+          "name": "局部反事实",
+          "status": "pending",
+          "evidence_present": true,
+          "review_items": 0,
+          "human_attestation": false,
+          "raw_partial": {
+            "records": 46,
+            "screen_passed": 46
+          },
+          "machine_record": {
+            "passed": false,
+            "checkpoint_count": 46,
+            "automatic_screen_passed_count": 46,
+            "machine_coverage_ready": true,
+            "machine_screen_passed": true
+          },
+          "machine_records": 46
+        },
+        {
+          "id": "E6",
+          "name": "环境骨干敏感性",
+          "status": "fail",
+          "evidence_present": true,
+          "review_items": 0,
+          "human_attestation": false,
+          "raw_partial": null,
+          "machine_record": {
+            "passed": false,
+            "matched_checkpoint_count": 46,
+            "successful_matched_checkpoint_count": 43,
+            "mean_active_union_direction_agreement": 0.4987,
+            "mean_true_sign_reversal_rate": 0.0353,
+            "replay_failure_count": 3,
+            "backbone_activity_passed": true
+          },
+          "machine_records": 46
+        },
+        {
+          "id": "E7",
+          "name": "仅人格干预",
+          "status": "pending",
+          "evidence_present": true,
+          "review_items": 0,
+          "human_attestation": false,
+          "raw_partial": {
+            "records": 45,
+            "screen_passed": 39
+          },
+          "machine_record": {
+            "passed": false,
+            "matched_checkpoint_count": 45,
+            "automatic_screen_passed_count": 39,
+            "machine_coverage_ready": true,
+            "machine_screen_passed": true
+          },
+          "machine_records": 45
+        },
+        {
+          "id": "E8",
+          "name": "视频与状态一致性",
+          "status": "pending",
+          "evidence_present": true,
+          "review_items": 40,
+          "human_attestation": false,
+          "raw_partial": null,
+          "machine_record": {
+            "passed": false,
+            "matched_node_count": 40,
+            "generated_video_count": 40,
+            "machine_reviewed_nodes": 40,
+            "visual_passed_nodes": 3,
+            "machine_screen_passed": false,
+            "llm_review_status": "completed",
+            "audio_semantic_review": "pending_human"
+          },
+          "machine_records": 0
+        },
+        {
+          "id": "E9",
+          "name": "变化速度有效性",
+          "status": "pending",
+          "evidence_present": true,
+          "review_items": 40,
+          "human_attestation": false,
+          "raw_partial": null,
+          "machine_record": {
+            "passed": null,
+            "candidate_variable_count": 40,
+            "matched_variable_count": 0,
+            "direction_consistency": null
+          },
+          "machine_records": 0
+        }
+      ],
+      "raw_intervention_records": 46,
+      "raw_execution_errors": 15,
+      "machine_progress": {
+        "updated_at": "2026-10-20T14:53:52.557700+00:00",
+        "expected_readable_sources": 46,
+        "intervention_groups": 46,
+        "intervention_errors": 15,
+        "subexperiment_counts": {
+          "e3": 46,
+          "e4": 31,
+          "e5": 46,
+          "e7": 45
+        },
+        "backbone_groups": 46,
+        "backbone_errors": 3,
+        "human_review": "pending",
+        "formal_admission": false
+      }
+    },
+    {
+      "id": "Gate 3",
+      "name": "轨迹质量",
+      "purpose": "连贯性、历史依赖、人物一致性、状态与回应一致性、互动推进、自然性；单条轨迹准入。",
+      "review_setting": "主审核覆盖全部，另设 20% 确定性审计样本；不按多条候选择优。",
+      "formal_status": "pending",
+      "machine_reviewed": 46,
+      "machine_decisions": {
+        "approve": 37,
+        "reject": 9
+      },
+      "missing_sources": 4,
+      "human_status": "pending",
+      "audit_fraction": 0.2,
+      "independent_audit": {
+        "expected_audit_count": 17,
+        "reviewed": 17,
+        "decision_counts": {
+          "approve": 10,
+          "reject": 7
+        },
+        "disagreements": [
+          "GPT50_018",
+          "GPT50_024",
+          "GPT50_027",
+          "GPT50_038",
+          "GPT50_042",
+          "GPT50_043",
+          "GPT50_044",
+          "GPT50_047"
+        ]
+      }
+    },
+    {
+      "id": "Gate 4",
+      "name": "任务质量",
+      "purpose": "新版 T1 检查公开证据和状态判断；T2 检查受控历史与共同表达；T3 检查合理行动、比较基准和即时／延迟后果。",
+      "review_setting": "两名独立审核人检查同一每任务 10% 样本（至少 2 题）；只对分歧增加第三人。",
+      "formal_status": "pending",
+      "sample_fraction": 0.1,
+      "reviewers": 2,
+      "oracle_check": {
+        "source_items": 300,
+        "authored_items": 300,
+        "independently_checked_items": 300,
+        "public_blind_checked_items": 300,
+        "oracle_agreement_items": 197,
+        "machine_concern_ids": [
+          "SFV2-001-T1-02",
+          "SFV2-001-T2-01",
+          "SFV2-001-T2-02",
+          "SFV2-003-T3-01",
+          "SFV2-004-T2-01",
+          "SFV2-004-T3-01",
+          "SFV2-005-T1-02",
+          "SFV2-005-T2-01",
+          "SFV2-005-T3-01",
+          "SFV2-006-T2-02",
+          "SFV2-006-T3-01",
+          "SFV2-006-T3-02",
+          "SFV2-007-T1-02",
+          "SFV2-007-T2-01",
+          "SFV2-007-T2-02",
+          "SFV2-007-T3-01",
+          "SFV2-007-T3-02",
+          "SFV2-008-T1-02",
+          "SFV2-008-T3-02",
+          "SFV2-009-T3-02",
+          "SFV2-010-T2-01",
+          "SFV2-010-T2-02",
+          "SFV2-010-T3-01",
+          "SFV2-011-T1-01",
+          "SFV2-011-T1-02",
+          "SFV2-011-T2-01",
+          "SFV2-012-T1-01",
+          "SFV2-012-T2-01",
+          "SFV2-012-T2-02",
+          "SFV2-013-T1-02",
+          "SFV2-013-T2-01",
+          "SFV2-013-T3-02",
+          "SFV2-014-T1-02",
+          "SFV2-014-T2-02",
+          "SFV2-015-T1-02",
+          "SFV2-015-T2-01",
+          "SFV2-015-T2-02",
+          "SFV2-016-T3-02",
+          "SFV2-017-T2-01",
+          "SFV2-017-T3-02",
+          "SFV2-018-T1-02",
+          "SFV2-019-T2-01",
+          "SFV2-019-T3-02",
+          "SFV2-020-T1-02",
+          "SFV2-020-T2-01",
+          "SFV2-020-T3-01",
+          "SFV2-020-T3-02",
+          "SFV2-021-T1-02",
+          "SFV2-021-T2-01",
+          "SFV2-021-T2-02",
+          "SFV2-021-T3-01",
+          "SFV2-021-T3-02",
+          "SFV2-022-T3-01",
+          "SFV2-022-T3-02",
+          "SFV2-023-T2-01",
+          "SFV2-023-T2-02",
+          "SFV2-023-T3-01",
+          "SFV2-023-T3-02",
+          "SFV2-024-T1-01",
+          "SFV2-024-T3-02",
+          "SFV2-025-T1-02",
+          "SFV2-025-T2-01",
+          "SFV2-025-T2-02",
+          "SFV2-025-T3-01",
+          "SFV2-025-T3-02",
+          "SFV2-026-T1-02",
+          "SFV2-026-T2-01",
+          "SFV2-026-T2-02",
+          "SFV2-026-T3-02",
+          "SFV2-027-T2-01",
+          "SFV2-027-T2-02",
+          "SFV2-028-T2-01",
+          "SFV2-028-T2-02",
+          "SFV2-029-T1-02",
+          "SFV2-029-T2-02",
+          "SFV2-029-T3-01",
+          "SFV2-029-T3-02",
+          "SFV2-030-T2-01",
+          "SFV2-030-T2-02",
+          "SFV2-030-T3-01",
+          "SFV2-031-T2-01",
+          "SFV2-031-T2-02",
+          "SFV2-031-T3-01",
+          "SFV2-031-T3-02",
+          "SFV2-032-T3-02",
+          "SFV2-033-T2-02",
+          "SFV2-035-T2-01",
+          "SFV2-035-T2-02",
+          "SFV2-035-T3-01",
+          "SFV2-035-T3-02",
+          "SFV2-036-T2-01",
+          "SFV2-036-T2-02",
+          "SFV2-036-T3-01",
+          "SFV2-036-T3-02",
+          "SFV2-037-T1-01",
+          "SFV2-038-T1-01",
+          "SFV2-038-T3-01",
+          "SFV2-038-T3-02",
+          "SFV2-039-T1-01",
+          "SFV2-039-T2-01",
+          "SFV2-039-T3-01",
+          "SFV2-039-T3-02",
+          "SFV2-040-T1-02",
+          "SFV2-040-T3-01",
+          "SFV2-040-T3-02",
+          "SFV2-041-T2-01",
+          "SFV2-041-T2-02",
+          "SFV2-041-T3-02",
+          "SFV2-042-T1-01",
+          "SFV2-042-T1-02",
+          "SFV2-042-T2-01",
+          "SFV2-043-T1-01",
+          "SFV2-043-T1-02",
+          "SFV2-043-T2-01",
+          "SFV2-043-T2-02",
+          "SFV2-043-T3-01",
+          "SFV2-044-T2-01",
+          "SFV2-044-T2-02",
+          "SFV2-044-T3-02",
+          "SFV2-045-T2-01",
+          "SFV2-045-T3-01",
+          "SFV2-045-T3-02",
+          "SFV2-046-T2-02",
+          "SFV2-046-T3-01",
+          "SFV2-046-T3-02",
+          "SFV2-047-T1-01",
+          "SFV2-047-T2-01",
+          "SFV2-047-T2-02",
+          "SFV2-048-T1-01",
+          "SFV2-048-T2-02",
+          "SFV2-048-T3-02",
+          "SFV2-049-T2-01",
+          "SFV2-049-T2-02",
+          "SFV2-049-T3-01",
+          "SFV2-049-T3-02",
+          "SFV2-050-T2-01",
+          "SFV2-050-T2-02",
+          "SFV2-050-T3-02"
+        ]
+      }
+    }
+  ],
+  "rollouts": {
+    "expected": 50,
+    "counts": {
+      "completed": 43,
+      "running": 0,
+      "queued": 0,
+      "failed": 7,
+      "readable": 46,
+      "history_readable": 50,
+      "gate3_rejected": 9,
+      "gate2_errors": 2
+    },
+    "status": "completed"
+  },
+  "offline": {
+    "item_count": 300,
+    "scenario_count": 50,
+    "tasks": {
+      "T1": 100,
+      "T2": 100,
+      "T3": 100
+    },
+    "blind_reviewed_items": 300,
+    "machine_flagged_ids": [
+      "SFV2-001-T1-02",
+      "SFV2-001-T2-01",
+      "SFV2-001-T2-02",
+      "SFV2-003-T3-01",
+      "SFV2-004-T2-01",
+      "SFV2-004-T3-01",
+      "SFV2-005-T1-02",
+      "SFV2-005-T2-01",
+      "SFV2-005-T3-01",
+      "SFV2-006-T2-02",
+      "SFV2-006-T3-01",
+      "SFV2-006-T3-02",
+      "SFV2-007-T1-02",
+      "SFV2-007-T2-01",
+      "SFV2-007-T2-02",
+      "SFV2-007-T3-01",
+      "SFV2-007-T3-02",
+      "SFV2-008-T1-02",
+      "SFV2-008-T3-02",
+      "SFV2-009-T3-02",
+      "SFV2-010-T2-01",
+      "SFV2-010-T2-02",
+      "SFV2-010-T3-01",
+      "SFV2-011-T1-01",
+      "SFV2-011-T1-02",
+      "SFV2-011-T2-01",
+      "SFV2-012-T1-01",
+      "SFV2-012-T2-01",
+      "SFV2-012-T2-02",
+      "SFV2-013-T1-02",
+      "SFV2-013-T2-01",
+      "SFV2-013-T3-02",
+      "SFV2-014-T1-02",
+      "SFV2-014-T2-02",
+      "SFV2-015-T1-02",
+      "SFV2-015-T2-01",
+      "SFV2-015-T2-02",
+      "SFV2-016-T3-02",
+      "SFV2-017-T2-01",
+      "SFV2-017-T3-02",
+      "SFV2-018-T1-02",
+      "SFV2-019-T2-01",
+      "SFV2-019-T3-02",
+      "SFV2-020-T1-02",
+      "SFV2-020-T2-01",
+      "SFV2-020-T3-01",
+      "SFV2-020-T3-02",
+      "SFV2-021-T1-02",
+      "SFV2-021-T2-01",
+      "SFV2-021-T2-02",
+      "SFV2-021-T3-01",
+      "SFV2-021-T3-02",
+      "SFV2-022-T3-01",
+      "SFV2-022-T3-02",
+      "SFV2-023-T2-01",
+      "SFV2-023-T2-02",
+      "SFV2-023-T3-01",
+      "SFV2-023-T3-02",
+      "SFV2-024-T1-01",
+      "SFV2-024-T3-02",
+      "SFV2-025-T1-02",
+      "SFV2-025-T2-01",
+      "SFV2-025-T2-02",
+      "SFV2-025-T3-01",
+      "SFV2-025-T3-02",
+      "SFV2-026-T1-02",
+      "SFV2-026-T2-01",
+      "SFV2-026-T2-02",
+      "SFV2-026-T3-02",
+      "SFV2-027-T2-01",
+      "SFV2-027-T2-02",
+      "SFV2-028-T2-01",
+      "SFV2-028-T2-02",
+      "SFV2-029-T1-02",
+      "SFV2-029-T2-02",
+      "SFV2-029-T3-01",
+      "SFV2-029-T3-02",
+      "SFV2-030-T2-01",
+      "SFV2-030-T2-02",
+      "SFV2-030-T3-01",
+      "SFV2-031-T2-01",
+      "SFV2-031-T2-02",
+      "SFV2-031-T3-01",
+      "SFV2-031-T3-02",
+      "SFV2-032-T3-02",
+      "SFV2-033-T2-02",
+      "SFV2-035-T2-01",
+      "SFV2-035-T2-02",
+      "SFV2-035-T3-01",
+      "SFV2-035-T3-02",
+      "SFV2-036-T2-01",
+      "SFV2-036-T2-02",
+      "SFV2-036-T3-01",
+      "SFV2-036-T3-02",
+      "SFV2-037-T1-01",
+      "SFV2-038-T1-01",
+      "SFV2-038-T3-01",
+      "SFV2-038-T3-02",
+      "SFV2-039-T1-01",
+      "SFV2-039-T2-01",
+      "SFV2-039-T3-01",
+      "SFV2-039-T3-02",
+      "SFV2-040-T1-02",
+      "SFV2-040-T3-01",
+      "SFV2-040-T3-02",
+      "SFV2-041-T2-01",
+      "SFV2-041-T2-02",
+      "SFV2-041-T3-02",
+      "SFV2-042-T1-01",
+      "SFV2-042-T1-02",
+      "SFV2-042-T2-01",
+      "SFV2-043-T1-01",
+      "SFV2-043-T1-02",
+      "SFV2-043-T2-01",
+      "SFV2-043-T2-02",
+      "SFV2-043-T3-01",
+      "SFV2-044-T2-01",
+      "SFV2-044-T2-02",
+      "SFV2-044-T3-02",
+      "SFV2-045-T2-01",
+      "SFV2-045-T3-01",
+      "SFV2-045-T3-02",
+      "SFV2-046-T2-02",
+      "SFV2-046-T3-01",
+      "SFV2-046-T3-02",
+      "SFV2-047-T1-01",
+      "SFV2-047-T2-01",
+      "SFV2-047-T2-02",
+      "SFV2-048-T1-01",
+      "SFV2-048-T2-02",
+      "SFV2-048-T3-02",
+      "SFV2-049-T2-01",
+      "SFV2-049-T2-02",
+      "SFV2-049-T3-01",
+      "SFV2-049-T3-02",
+      "SFV2-050-T2-01",
+      "SFV2-050-T2-02",
+      "SFV2-050-T3-02"
+    ],
+    "modality_pairs": 270,
+    "design_difficulties": {
+      "ordinary": 230,
+      "hard": 70
+    },
+    "answer_positions": {
+      "A": 75,
+      "B": 75,
+      "C": 75,
+      "D": 75
+    },
+    "formal_admitted": 0,
+    "human_labeled": 0,
+    "t2_replay_pending_scenes": 0,
+    "oracle_progress": {
+      "format": "socialflux_omniscient_reference_v1",
+      "updated_at": "2026-10-20T14:50:16.768515+00:00",
+      "source_items": 300,
+      "authored_items": 300,
+      "independently_checked_items": 300,
+      "oracle_agreement_items": 197,
+      "public_blind_checked_items": 300,
+      "machine_concern_ids": [
+        "SFV2-001-T1-02",
+        "SFV2-001-T2-01",
+        "SFV2-001-T2-02",
+        "SFV2-003-T3-01",
+        "SFV2-004-T2-01",
+        "SFV2-004-T3-01",
+        "SFV2-005-T1-02",
+        "SFV2-005-T2-01",
+        "SFV2-005-T3-01",
+        "SFV2-006-T2-02",
+        "SFV2-006-T3-01",
+        "SFV2-006-T3-02",
+        "SFV2-007-T1-02",
+        "SFV2-007-T2-01",
+        "SFV2-007-T2-02",
+        "SFV2-007-T3-01",
+        "SFV2-007-T3-02",
+        "SFV2-008-T1-02",
+        "SFV2-008-T3-02",
+        "SFV2-009-T3-02",
+        "SFV2-010-T2-01",
+        "SFV2-010-T2-02",
+        "SFV2-010-T3-01",
+        "SFV2-011-T1-01",
+        "SFV2-011-T1-02",
+        "SFV2-011-T2-01",
+        "SFV2-012-T1-01",
+        "SFV2-012-T2-01",
+        "SFV2-012-T2-02",
+        "SFV2-013-T1-02",
+        "SFV2-013-T2-01",
+        "SFV2-013-T3-02",
+        "SFV2-014-T1-02",
+        "SFV2-014-T2-02",
+        "SFV2-015-T1-02",
+        "SFV2-015-T2-01",
+        "SFV2-015-T2-02",
+        "SFV2-016-T3-02",
+        "SFV2-017-T2-01",
+        "SFV2-017-T3-02",
+        "SFV2-018-T1-02",
+        "SFV2-019-T2-01",
+        "SFV2-019-T3-02",
+        "SFV2-020-T1-02",
+        "SFV2-020-T2-01",
+        "SFV2-020-T3-01",
+        "SFV2-020-T3-02",
+        "SFV2-021-T1-02",
+        "SFV2-021-T2-01",
+        "SFV2-021-T2-02",
+        "SFV2-021-T3-01",
+        "SFV2-021-T3-02",
+        "SFV2-022-T3-01",
+        "SFV2-022-T3-02",
+        "SFV2-023-T2-01",
+        "SFV2-023-T2-02",
+        "SFV2-023-T3-01",
+        "SFV2-023-T3-02",
+        "SFV2-024-T1-01",
+        "SFV2-024-T3-02",
+        "SFV2-025-T1-02",
+        "SFV2-025-T2-01",
+        "SFV2-025-T2-02",
+        "SFV2-025-T3-01",
+        "SFV2-025-T3-02",
+        "SFV2-026-T1-02",
+        "SFV2-026-T2-01",
+        "SFV2-026-T2-02",
+        "SFV2-026-T3-02",
+        "SFV2-027-T2-01",
+        "SFV2-027-T2-02",
+        "SFV2-028-T2-01",
+        "SFV2-028-T2-02",
+        "SFV2-029-T1-02",
+        "SFV2-029-T2-02",
+        "SFV2-029-T3-01",
+        "SFV2-029-T3-02",
+        "SFV2-030-T2-01",
+        "SFV2-030-T2-02",
+        "SFV2-030-T3-01",
+        "SFV2-031-T2-01",
+        "SFV2-031-T2-02",
+        "SFV2-031-T3-01",
+        "SFV2-031-T3-02",
+        "SFV2-032-T3-02",
+        "SFV2-033-T2-02",
+        "SFV2-035-T2-01",
+        "SFV2-035-T2-02",
+        "SFV2-035-T3-01",
+        "SFV2-035-T3-02",
+        "SFV2-036-T2-01",
+        "SFV2-036-T2-02",
+        "SFV2-036-T3-01",
+        "SFV2-036-T3-02",
+        "SFV2-037-T1-01",
+        "SFV2-038-T1-01",
+        "SFV2-038-T3-01",
+        "SFV2-038-T3-02",
+        "SFV2-039-T1-01",
+        "SFV2-039-T2-01",
+        "SFV2-039-T3-01",
+        "SFV2-039-T3-02",
+        "SFV2-040-T1-02",
+        "SFV2-040-T3-01",
+        "SFV2-040-T3-02",
+        "SFV2-041-T2-01",
+        "SFV2-041-T2-02",
+        "SFV2-041-T3-02",
+        "SFV2-042-T1-01",
+        "SFV2-042-T1-02",
+        "SFV2-042-T2-01",
+        "SFV2-043-T1-01",
+        "SFV2-043-T1-02",
+        "SFV2-043-T2-01",
+        "SFV2-043-T2-02",
+        "SFV2-043-T3-01",
+        "SFV2-044-T2-01",
+        "SFV2-044-T2-02",
+        "SFV2-044-T3-02",
+        "SFV2-045-T2-01",
+        "SFV2-045-T3-01",
+        "SFV2-045-T3-02",
+        "SFV2-046-T2-02",
+        "SFV2-046-T3-01",
+        "SFV2-046-T3-02",
+        "SFV2-047-T1-01",
+        "SFV2-047-T2-01",
+        "SFV2-047-T2-02",
+        "SFV2-048-T1-01",
+        "SFV2-048-T2-02",
+        "SFV2-048-T3-02",
+        "SFV2-049-T2-01",
+        "SFV2-049-T2-02",
+        "SFV2-049-T3-01",
+        "SFV2-049-T3-02",
+        "SFV2-050-T2-01",
+        "SFV2-050-T2-02",
+        "SFV2-050-T3-02"
+      ],
+      "t2_replay_groups": 50,
+      "human_verified_items": 0,
+      "formal_admitted_items": 0,
+      "api_calls": 867,
+      "material_amended_items": [
+        "SFV2-044-T2-01",
+        "SFV2-044-T2-02",
+        "SFV2-050-T2-01",
+        "SFV2-050-T2-02"
+      ],
+      "source_state_coverage_verified": true
+    },
+    "annotation_url": "/offline-annotation",
+    "interpretation": "出题与盲试答筛查，不是独立模型能力测试；上帝视角机器候选与人工 GT 分开。"
+  },
+  "t4_runs": [
+    {
+      "id": "t4_expanded_api_20261020",
+      "title": "8 模型 × 6 诊断场景 · 2026-10-20",
+      "kind": "diagnostic_run",
+      "reported_status": "running",
+      "process_alive": true,
+      "updated_at": "2026-10-20T23:02:37.941710+08:00",
+      "finished_slots": 92,
+      "planned_slots": 96,
+      "api_requests": 1150,
+      "models": {
+        "gpt": {
+          "status_counts": {
+            "completed": 5,
+            "failed": 7
+          },
+          "conditions": {
+            "text_only": {
+              "n": 2,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 2,
+                  "mean": 8.5,
+                  "sd": 2.1213,
+                  "bootstrap_ci95": [
+                    7,
+                    10
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 2,
+                  "mean": 8,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    7,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 2,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 2,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 3,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 3,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 3,
+                  "mean": 7.3333,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "risk_management": {
+                  "n": 3,
+                  "mean": 7.6667,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 8,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 3,
+                  "mean": 7,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    7,
+                    7
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 7.6,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 2,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 2,
+              "mean": -0.5,
+              "sd": 2.1213,
+              "bootstrap_ci95": [
+                -2,
+                1
+              ]
+            },
+            "state_adaptation": {
+              "n": 2,
+              "mean": -0.5,
+              "sd": 0.7071,
+              "bootstrap_ci95": [
+                -1,
+                0
+              ]
+            },
+            "risk_management": {
+              "n": 2,
+              "mean": -0.5,
+              "sd": 0.7071,
+              "bootstrap_ci95": [
+                -1,
+                0
+              ]
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 2,
+              "mean": -1,
+              "sd": 0.0,
+              "bootstrap_ci95": [
+                -1,
+                -1
+              ]
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        },
+        "claude": {
+          "status_counts": {
+            "failed": 5,
+            "completed": 7
+          },
+          "conditions": {
+            "text_only": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 7.5,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 7,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    5.75,
+                    8
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 6.75,
+                  "sd": 0.5,
+                  "bootstrap_ci95": [
+                    6.25,
+                    7
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 6,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 7,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    7,
+                    7
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 6.6,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 3,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 3,
+                  "mean": 4,
+                  "sd": 3.6056,
+                  "bootstrap_ci95": [
+                    0,
+                    7
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 3,
+                  "mean": 4.6667,
+                  "sd": 3.2146,
+                  "bootstrap_ci95": [
+                    1,
+                    7
+                  ]
+                },
+                "risk_management": {
+                  "n": 3,
+                  "mean": 4.3333,
+                  "sd": 3.0551,
+                  "bootstrap_ci95": [
+                    1,
+                    7
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 3.5,
+                  "sd": 3.5355,
+                  "bootstrap_ci95": [
+                    1,
+                    6
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 3,
+                  "mean": 5.3333,
+                  "sd": 2.8868,
+                  "bootstrap_ci95": [
+                    2,
+                    7
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 3.5,
+                  "sd": 3.5355,
+                  "bootstrap_ci95": [
+                    1,
+                    6
+                  ]
+                }
+              }
+            }
+          },
+          "matched_scenarios": 3,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 3,
+              "mean": -3.3333,
+              "sd": 4.1633,
+              "bootstrap_ci95": [
+                -8,
+                0
+              ]
+            },
+            "state_adaptation": {
+              "n": 3,
+              "mean": -2,
+              "sd": 1.7321,
+              "bootstrap_ci95": [
+                -4,
+                -1
+              ]
+            },
+            "risk_management": {
+              "n": 3,
+              "mean": -2.3333,
+              "sd": 3.2146,
+              "bootstrap_ci95": [
+                -6,
+                0
+              ]
+            },
+            "recovery": {
+              "n": 1,
+              "mean": -5,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 3,
+              "mean": -1.6667,
+              "sd": 2.8868,
+              "bootstrap_ci95": [
+                -5,
+                0
+              ]
+            },
+            "five_dimension_mean": {
+              "n": 1,
+              "mean": -5.6,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        },
+        "qwen": {
+          "status_counts": {
+            "completed": 7,
+            "failed": 5
+          },
+          "conditions": {
+            "text_only": {
+              "n": 3,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 3,
+                  "mean": 8.3333,
+                  "sd": 1.5275,
+                  "bootstrap_ci95": [
+                    7,
+                    10
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 3,
+                  "mean": 8.3333,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    8,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 3,
+                  "mean": 8,
+                  "sd": 1.0,
+                  "bootstrap_ci95": [
+                    7,
+                    9
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 6,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 3,
+                  "mean": 7.3333,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 7,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 7.5,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 8.5,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    8,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 7.25,
+                  "sd": 0.5,
+                  "bootstrap_ci95": [
+                    7,
+                    7.75
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 7,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    6,
+                    8
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 7.25,
+                  "sd": 0.5,
+                  "bootstrap_ci95": [
+                    7,
+                    7.75
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 7.5,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                }
+              }
+            }
+          },
+          "matched_scenarios": 3,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 3,
+              "mean": -1,
+              "sd": 2.0,
+              "bootstrap_ci95": [
+                -3,
+                1
+              ]
+            },
+            "state_adaptation": {
+              "n": 3,
+              "mean": 0,
+              "sd": 1.0,
+              "bootstrap_ci95": [
+                -1,
+                1
+              ]
+            },
+            "risk_management": {
+              "n": 3,
+              "mean": -0.6667,
+              "sd": 1.5275,
+              "bootstrap_ci95": [
+                -2,
+                1
+              ]
+            },
+            "recovery": {
+              "n": 1,
+              "mean": 2,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 3,
+              "mean": 0,
+              "sd": 0.0,
+              "bootstrap_ci95": [
+                0,
+                0
+              ]
+            },
+            "five_dimension_mean": {
+              "n": 1,
+              "mean": 1,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        },
+        "qwen37": {
+          "status_counts": {
+            "unsupported_video_input": 6,
+            "failed": 2,
+            "completed": 4
+          },
+          "conditions": {
+            "text_only": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 7.5,
+                  "sd": 1.0,
+                  "bootstrap_ci95": [
+                    6.5,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 8.25,
+                  "sd": 0.9574,
+                  "bootstrap_ci95": [
+                    7.5,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 7.25,
+                  "sd": 0.9574,
+                  "bootstrap_ci95": [
+                    6.5,
+                    8
+                  ]
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 7.5,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 0,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "state_adaptation": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "risk_management": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 0,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "state_adaptation": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "risk_management": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        },
+        "qwen_vl": {
+          "status_counts": {
+            "failed": 4,
+            "completed": 7
+          },
+          "conditions": {
+            "text_only": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 7,
+                  "sd": 2.0,
+                  "bootstrap_ci95": [
+                    5,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 7.75,
+                  "sd": 1.893,
+                  "bootstrap_ci95": [
+                    6,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 7.25,
+                  "sd": 0.9574,
+                  "bootstrap_ci95": [
+                    6.5,
+                    8
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 5.5,
+                  "sd": 2.1213,
+                  "bootstrap_ci95": [
+                    4,
+                    7
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 7.25,
+                  "sd": 0.9574,
+                  "bootstrap_ci95": [
+                    6.5,
+                    8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 6.4,
+                  "sd": 1.9799,
+                  "bootstrap_ci95": [
+                    5,
+                    7.8
+                  ]
+                }
+              }
+            },
+            "text_video": {
+              "n": 3,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 3,
+                  "mean": 6.3333,
+                  "sd": 1.5275,
+                  "bootstrap_ci95": [
+                    5,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 3,
+                  "mean": 8,
+                  "sd": 1.0,
+                  "bootstrap_ci95": [
+                    7,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 3,
+                  "mean": 6.6667,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    6,
+                    7
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 6.5,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    6,
+                    7
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 3,
+                  "mean": 7,
+                  "sd": 1.0,
+                  "bootstrap_ci95": [
+                    6,
+                    8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 6.6,
+                  "sd": 0.8485,
+                  "bootstrap_ci95": [
+                    6,
+                    7.2
+                  ]
+                }
+              }
+            }
+          },
+          "matched_scenarios": 3,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 3,
+              "mean": -0.3333,
+              "sd": 3.7859,
+              "bootstrap_ci95": [
+                -3,
+                4
+              ]
+            },
+            "state_adaptation": {
+              "n": 3,
+              "mean": 0.3333,
+              "sd": 3.2146,
+              "bootstrap_ci95": [
+                -2,
+                4
+              ]
+            },
+            "risk_management": {
+              "n": 3,
+              "mean": -0.3333,
+              "sd": 1.1547,
+              "bootstrap_ci95": [
+                -1,
+                1
+              ]
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 3,
+              "mean": 0,
+              "sd": 1.7321,
+              "bootstrap_ci95": [
+                -2,
+                1
+              ]
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        },
+        "kimi": {
+          "status_counts": {
+            "failed": 6,
+            "completed": 5
+          },
+          "conditions": {
+            "text_only": {
+              "n": 3,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 3,
+                  "mean": 8.3333,
+                  "sd": 1.5275,
+                  "bootstrap_ci95": [
+                    7,
+                    10
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 3,
+                  "mean": 8,
+                  "sd": 1.0,
+                  "bootstrap_ci95": [
+                    7,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 3,
+                  "mean": 7.6667,
+                  "sd": 1.1547,
+                  "bootstrap_ci95": [
+                    7,
+                    9
+                  ]
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 3,
+                  "mean": 7.6667,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 2,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 2,
+                  "mean": 9,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    8,
+                    10
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 2,
+                  "mean": 9,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    9,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 2,
+                  "mean": 9,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    8,
+                    10
+                  ]
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 2,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 2,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 2,
+              "mean": 1.5,
+              "sd": 0.7071,
+              "bootstrap_ci95": [
+                1,
+                2
+              ]
+            },
+            "state_adaptation": {
+              "n": 2,
+              "mean": 1.5,
+              "sd": 0.7071,
+              "bootstrap_ci95": [
+                1,
+                2
+              ]
+            },
+            "risk_management": {
+              "n": 2,
+              "mean": 2,
+              "sd": 1.4142,
+              "bootstrap_ci95": [
+                1,
+                3
+              ]
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 2,
+              "mean": 0.5,
+              "sd": 0.7071,
+              "bootstrap_ci95": [
+                0,
+                1
+              ]
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        },
+        "glm": {
+          "status_counts": {
+            "failed": 4,
+            "unsupported_video_input": 6,
+            "completed": 1
+          },
+          "conditions": {
+            "text_only": {
+              "n": 1,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 1,
+                  "mean": 8,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "state_adaptation": {
+                  "n": 1,
+                  "mean": 9,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "risk_management": {
+                  "n": 1,
+                  "mean": 7,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 1,
+                  "mean": 7,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 0,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "state_adaptation": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "risk_management": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 0,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "state_adaptation": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "risk_management": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        },
+        "deepseek_flash": {
+          "status_counts": {
+            "failed": 3,
+            "completed": 8
+          },
+          "conditions": {
+            "text_only": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 7.75,
+                  "sd": 0.5,
+                  "bootstrap_ci95": [
+                    7.25,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 7,
+                  "sd": 0.8165,
+                  "bootstrap_ci95": [
+                    6.25,
+                    7.75
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 7.5,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 7.75,
+                  "sd": 0.5,
+                  "bootstrap_ci95": [
+                    7.25,
+                    8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 7.8,
+                  "sd": 0.2828,
+                  "bootstrap_ci95": [
+                    7.6,
+                    8
+                  ]
+                }
+              }
+            },
+            "text_video": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 8,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    7,
+                    9.25
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 8,
+                  "sd": 0.8165,
+                  "bootstrap_ci95": [
+                    7.25,
+                    8.75
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 7.75,
+                  "sd": 0.9574,
+                  "bootstrap_ci95": [
+                    7,
+                    8.5
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 8,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 7.25,
+                  "sd": 0.5,
+                  "bootstrap_ci95": [
+                    7,
+                    7.75
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 7.4,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 3,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 3,
+              "mean": 0.3333,
+              "sd": 1.5275,
+              "bootstrap_ci95": [
+                -1,
+                2
+              ]
+            },
+            "state_adaptation": {
+              "n": 3,
+              "mean": 0,
+              "sd": 1.0,
+              "bootstrap_ci95": [
+                -1,
+                1
+              ]
+            },
+            "risk_management": {
+              "n": 3,
+              "mean": 1,
+              "sd": 1.0,
+              "bootstrap_ci95": [
+                0,
+                2
+              ]
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 3,
+              "mean": -0.3333,
+              "sd": 0.5774,
+              "bootstrap_ci95": [
+                -1,
+                0
+              ]
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        }
+      },
+      "note": "固定 6 个失败诊断场景，不代表 50 场景总体；视频传输随模型能力使用原生视频或帧，不支持的条件单列。"
+    },
+    {
+      "id": "t4_gpt33_parallel_20261020",
+      "title": "33 场景并行续跑 · 2026-10-20",
+      "kind": "current",
+      "reported_status": "completed_with_recorded_outcomes",
+      "process_alive": false,
+      "updated_at": "2026-10-20T19:52:14.375487+08:00",
+      "finished_slots": 198,
+      "planned_slots": 198,
+      "api_requests": 2017,
+      "models": {
+        "gpt": {
+          "status_counts": {
+            "failed": 39,
+            "completed": 24,
+            "completed_without_video_exposure": 3
+          },
+          "conditions": {
+            "text_only": {
+              "n": 13,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 13,
+                  "mean": 7.6923,
+                  "sd": 0.8549,
+                  "bootstrap_ci95": [
+                    7.2308,
+                    8.1538
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 13,
+                  "mean": 8.0769,
+                  "sd": 0.6405,
+                  "bootstrap_ci95": [
+                    7.7692,
+                    8.3846
+                  ]
+                },
+                "risk_management": {
+                  "n": 13,
+                  "mean": 8,
+                  "sd": 0.8165,
+                  "bootstrap_ci95": [
+                    7.5385,
+                    8.3846
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 7,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 13,
+                  "mean": 7.6923,
+                  "sd": 0.6304,
+                  "bootstrap_ci95": [
+                    7.3846,
+                    8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 7.6,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 11,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 11,
+                  "mean": 7.7273,
+                  "sd": 0.6467,
+                  "bootstrap_ci95": [
+                    7.3636,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 11,
+                  "mean": 8.1818,
+                  "sd": 0.7508,
+                  "bootstrap_ci95": [
+                    7.7273,
+                    8.6364
+                  ]
+                },
+                "risk_management": {
+                  "n": 11,
+                  "mean": 7.9091,
+                  "sd": 0.7006,
+                  "bootstrap_ci95": [
+                    7.5455,
+                    8.2727
+                  ]
+                },
+                "recovery": {
+                  "n": 3,
+                  "mean": 4.6667,
+                  "sd": 4.0415,
+                  "bootstrap_ci95": [
+                    0,
+                    7
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 11,
+                  "mean": 7.9091,
+                  "sd": 0.5394,
+                  "bootstrap_ci95": [
+                    7.6364,
+                    8.1818
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 3,
+                  "mean": 7.1333,
+                  "sd": 0.5033,
+                  "bootstrap_ci95": [
+                    6.6,
+                    7.6
+                  ]
+                }
+              }
+            }
+          },
+          "matched_scenarios": 6,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 6,
+              "mean": 0.3333,
+              "sd": 0.8165,
+              "bootstrap_ci95": [
+                0,
+                1
+              ]
+            },
+            "state_adaptation": {
+              "n": 6,
+              "mean": 0.5,
+              "sd": 0.8367,
+              "bootstrap_ci95": [
+                0,
+                1.1667
+              ]
+            },
+            "risk_management": {
+              "n": 6,
+              "mean": 0.3333,
+              "sd": 0.5164,
+              "bootstrap_ci95": [
+                0,
+                0.6667
+              ]
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 6,
+              "mean": 0.3333,
+              "sd": 0.8165,
+              "bootstrap_ci95": [
+                -0.3333,
+                0.8333
+              ]
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        },
+        "claude": {
+          "status_counts": {
+            "completed": 32,
+            "failed": 30,
+            "completed_without_video_exposure": 4
+          },
+          "conditions": {
+            "text_only": {
+              "n": 19,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 19,
+                  "mean": 7.4737,
+                  "sd": 1.3486,
+                  "bootstrap_ci95": [
+                    6.7895,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 19,
+                  "mean": 7.7895,
+                  "sd": 1.1822,
+                  "bootstrap_ci95": [
+                    7.2105,
+                    8.2632
+                  ]
+                },
+                "risk_management": {
+                  "n": 19,
+                  "mean": 7.2632,
+                  "sd": 1.0457,
+                  "bootstrap_ci95": [
+                    6.7895,
+                    7.6842
+                  ]
+                },
+                "recovery": {
+                  "n": 4,
+                  "mean": 7.5,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 19,
+                  "mean": 7.6842,
+                  "sd": 0.5824,
+                  "bootstrap_ci95": [
+                    7.4211,
+                    7.8947
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 4,
+                  "mean": 7.6,
+                  "sd": 0.2828,
+                  "bootstrap_ci95": [
+                    7.4,
+                    7.85
+                  ]
+                }
+              }
+            },
+            "text_video": {
+              "n": 13,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 13,
+                  "mean": 7.3846,
+                  "sd": 0.7679,
+                  "bootstrap_ci95": [
+                    6.9231,
+                    7.7692
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 13,
+                  "mean": 7,
+                  "sd": 1.5275,
+                  "bootstrap_ci95": [
+                    6.1538,
+                    7.7692
+                  ]
+                },
+                "risk_management": {
+                  "n": 13,
+                  "mean": 7,
+                  "sd": 1.2247,
+                  "bootstrap_ci95": [
+                    6.3077,
+                    7.5385
+                  ]
+                },
+                "recovery": {
+                  "n": 5,
+                  "mean": 6.6,
+                  "sd": 1.1402,
+                  "bootstrap_ci95": [
+                    5.8,
+                    7.4
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 13,
+                  "mean": 7.2308,
+                  "sd": 0.5991,
+                  "bootstrap_ci95": [
+                    6.9231,
+                    7.5385
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 5,
+                  "mean": 7.08,
+                  "sd": 0.687,
+                  "bootstrap_ci95": [
+                    6.56,
+                    7.68
+                  ]
+                }
+              }
+            }
+          },
+          "matched_scenarios": 8,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 8,
+              "mean": 0.25,
+              "sd": 1.8323,
+              "bootstrap_ci95": [
+                -0.875,
+                1.5
+              ]
+            },
+            "state_adaptation": {
+              "n": 8,
+              "mean": -0.5,
+              "sd": 2.2678,
+              "bootstrap_ci95": [
+                -1.875,
+                0.875
+              ]
+            },
+            "risk_management": {
+              "n": 8,
+              "mean": -0.25,
+              "sd": 1.9821,
+              "bootstrap_ci95": [
+                -1.25,
+                1
+              ]
+            },
+            "recovery": {
+              "n": 1,
+              "mean": 0,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 8,
+              "mean": -0.625,
+              "sd": 0.744,
+              "bootstrap_ci95": [
+                -1,
+                -0.125
+              ]
+            },
+            "five_dimension_mean": {
+              "n": 1,
+              "mean": 0.4,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        },
+        "deepseek": {
+          "status_counts": {
+            "unsupported_video_input": 33,
+            "failed": 19,
+            "completed": 14
+          },
+          "conditions": {
+            "text_only": {
+              "n": 14,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 14,
+                  "mean": 7.9286,
+                  "sd": 1.2688,
+                  "bootstrap_ci95": [
+                    7.2143,
+                    8.5
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 14,
+                  "mean": 8.5,
+                  "sd": 0.7596,
+                  "bootstrap_ci95": [
+                    8.1429,
+                    8.8571
+                  ]
+                },
+                "risk_management": {
+                  "n": 14,
+                  "mean": 8.0714,
+                  "sd": 0.9169,
+                  "bootstrap_ci95": [
+                    7.6429,
+                    8.5
+                  ]
+                },
+                "recovery": {
+                  "n": 5,
+                  "mean": 7,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    6.4,
+                    7.6
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 14,
+                  "mean": 7.9286,
+                  "sd": 0.2673,
+                  "bootstrap_ci95": [
+                    7.7857,
+                    8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 5,
+                  "mean": 7.56,
+                  "sd": 0.7403,
+                  "bootstrap_ci95": [
+                    7.08,
+                    8.2
+                  ]
+                }
+              }
+            },
+            "text_video": {
+              "n": 0,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "state_adaptation": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "risk_management": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 0,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "state_adaptation": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "risk_management": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        }
+      },
+      "note": "视频条件使用 4 个带时间戳的视频帧，不含音频；未送达视频与不支持视频单列。"
+    },
+    {
+      "id": "t4_gpt39_continuation_20261020",
+      "title": "39 场景续跑 · 2026-10-20（含移交槽位）",
+      "kind": "separate_run",
+      "reported_status": "completed_with_recorded_outcomes",
+      "process_alive": false,
+      "updated_at": "2026-10-20T15:13:11.477948+08:00",
+      "finished_slots": 234,
+      "planned_slots": 234,
+      "api_requests": 604,
+      "models": {
+        "gpt": {
+          "status_counts": {
+            "completed": 8,
+            "failed": 4,
+            "delegated_to_run": 66
+          },
+          "conditions": {
+            "text_only": {
+              "n": 3,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 3,
+                  "mean": 7,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    7,
+                    7
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 3,
+                  "mean": 7.3333,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "risk_management": {
+                  "n": 3,
+                  "mean": 6.6667,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    6,
+                    7
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 6,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 3,
+                  "mean": 7.6667,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 6.6,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 5,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 5,
+                  "mean": 8.4,
+                  "sd": 0.8944,
+                  "bootstrap_ci95": [
+                    8,
+                    9.2
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 5,
+                  "mean": 8.2,
+                  "sd": 0.8367,
+                  "bootstrap_ci95": [
+                    7.6,
+                    8.8
+                  ]
+                },
+                "risk_management": {
+                  "n": 5,
+                  "mean": 7.8,
+                  "sd": 0.8367,
+                  "bootstrap_ci95": [
+                    7.2,
+                    8.4
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 8,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    7,
+                    9
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 5,
+                  "mean": 7.8,
+                  "sd": 0.4472,
+                  "bootstrap_ci95": [
+                    7.4,
+                    8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 8.0,
+                  "sd": 0.5657,
+                  "bootstrap_ci95": [
+                    7.6,
+                    8.4
+                  ]
+                }
+              }
+            }
+          },
+          "matched_scenarios": 3,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 3,
+              "mean": 1.6667,
+              "sd": 1.1547,
+              "bootstrap_ci95": [
+                1,
+                3
+              ]
+            },
+            "state_adaptation": {
+              "n": 3,
+              "mean": 1,
+              "sd": 1.0,
+              "bootstrap_ci95": [
+                0,
+                2
+              ]
+            },
+            "risk_management": {
+              "n": 3,
+              "mean": 1.3333,
+              "sd": 0.5774,
+              "bootstrap_ci95": [
+                1,
+                2
+              ]
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 3,
+              "mean": 0,
+              "sd": 0.0,
+              "bootstrap_ci95": [
+                0,
+                0
+              ]
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        },
+        "claude": {
+          "status_counts": {
+            "completed": 10,
+            "failed": 2,
+            "delegated_to_run": 66
+          },
+          "conditions": {
+            "text_only": {
+              "n": 5,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 5,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 5,
+                  "mean": 8.2,
+                  "sd": 0.8367,
+                  "bootstrap_ci95": [
+                    7.6,
+                    8.8
+                  ]
+                },
+                "risk_management": {
+                  "n": 5,
+                  "mean": 8.2,
+                  "sd": 0.4472,
+                  "bootstrap_ci95": [
+                    8,
+                    8.6
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 8,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 5,
+                  "mean": 7.6,
+                  "sd": 0.5477,
+                  "bootstrap_ci95": [
+                    7.2,
+                    8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 8.2,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 5,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 5,
+                  "mean": 5.4,
+                  "sd": 3.4351,
+                  "bootstrap_ci95": [
+                    2.4,
+                    7.8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 5,
+                  "mean": 6,
+                  "sd": 3.5355,
+                  "bootstrap_ci95": [
+                    3,
+                    8.2
+                  ]
+                },
+                "risk_management": {
+                  "n": 5,
+                  "mean": 5.8,
+                  "sd": 3.3466,
+                  "bootstrap_ci95": [
+                    2.8,
+                    7.8
+                  ]
+                },
+                "recovery": {
+                  "n": 3,
+                  "mean": 7,
+                  "sd": 1.0,
+                  "bootstrap_ci95": [
+                    6,
+                    8
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 5,
+                  "mean": 6,
+                  "sd": 3.3912,
+                  "bootstrap_ci95": [
+                    3,
+                    7.8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 3,
+                  "mean": 7.1333,
+                  "sd": 1.222,
+                  "bootstrap_ci95": [
+                    5.8,
+                    8.2
+                  ]
+                }
+              }
+            }
+          },
+          "matched_scenarios": 4,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 4,
+              "mean": -3,
+              "sd": 3.8297,
+              "bootstrap_ci95": [
+                -6,
+                0
+              ]
+            },
+            "state_adaptation": {
+              "n": 4,
+              "mean": -2.5,
+              "sd": 4.2032,
+              "bootstrap_ci95": [
+                -6.25,
+                0.75
+              ]
+            },
+            "risk_management": {
+              "n": 4,
+              "mean": -2.5,
+              "sd": 3.7859,
+              "bootstrap_ci95": [
+                -6,
+                0
+              ]
+            },
+            "recovery": {
+              "n": 1,
+              "mean": -2,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 4,
+              "mean": -2.25,
+              "sd": 3.9476,
+              "bootstrap_ci95": [
+                -6.25,
+                0.5
+              ]
+            },
+            "five_dimension_mean": {
+              "n": 1,
+              "mean": -2.4,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        },
+        "deepseek": {
+          "status_counts": {
+            "unsupported_video_input": 6,
+            "completed": 4,
+            "failed": 2,
+            "delegated_to_run": 66
+          },
+          "conditions": {
+            "text_only": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 8.5,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    8,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 8,
+                  "sd": 0.8165,
+                  "bootstrap_ci95": [
+                    7.25,
+                    8.75
+                  ]
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 0,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "state_adaptation": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "risk_management": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 0,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "state_adaptation": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "risk_management": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        }
+      },
+      "note": "移交槽位不等于完成轨迹；各 run 分开统计，不跨 run 拼接配对。"
+    },
+    {
+      "id": "t4_gpt41_paired_20261020",
+      "title": "41 场景首批尝试 · 2026-10-20",
+      "kind": "stopped_run",
+      "reported_status": "stopped_health_gate",
+      "process_alive": false,
+      "updated_at": "2026-10-20T03:14:46.596538+08:00",
+      "finished_slots": 12,
+      "planned_slots": 246,
+      "api_requests": 86,
+      "models": {
+        "gpt": {
+          "status_counts": {
+            "failed": 2,
+            "completed": 1,
+            "completed_without_video_exposure": 1
+          },
+          "conditions": {
+            "text_only": {
+              "n": 0,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "state_adaptation": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "risk_management": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 1,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 1,
+                  "mean": 9,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "state_adaptation": {
+                  "n": 1,
+                  "mean": 9,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "risk_management": {
+                  "n": 1,
+                  "mean": 8,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 1,
+                  "mean": 8,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 0,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "state_adaptation": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "risk_management": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        },
+        "claude": {
+          "status_counts": {
+            "completed": 3,
+            "failed": 1
+          },
+          "conditions": {
+            "text_only": {
+              "n": 2,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 2,
+                  "mean": 9,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    8,
+                    10
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 2,
+                  "mean": 7.5,
+                  "sd": 2.1213,
+                  "bootstrap_ci95": [
+                    6,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 2,
+                  "mean": 8,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    7,
+                    9
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 7,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 2,
+                  "mean": 7.5,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 7,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 1,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 1,
+                  "mean": 10,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "state_adaptation": {
+                  "n": 1,
+                  "mean": 9,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "risk_management": {
+                  "n": 1,
+                  "mean": 8,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 8,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 1,
+                  "mean": 7,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 8.4,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 1,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 1,
+              "mean": 2,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "state_adaptation": {
+              "n": 1,
+              "mean": 3,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "risk_management": {
+              "n": 1,
+              "mean": 1,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "recovery": {
+              "n": 1,
+              "mean": 1,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 1,
+              "mean": 0,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "five_dimension_mean": {
+              "n": 1,
+              "mean": 1.4,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        },
+        "deepseek": {
+          "status_counts": {
+            "failed": 1,
+            "unsupported_video_input": 2,
+            "completed": 1
+          },
+          "conditions": {
+            "text_only": {
+              "n": 1,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 1,
+                  "mean": 8,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "state_adaptation": {
+                  "n": 1,
+                  "mean": 6,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "risk_management": {
+                  "n": 1,
+                  "mean": 7,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 7,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 1,
+                  "mean": 7,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 7,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 0,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "state_adaptation": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "risk_management": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 0,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "state_adaptation": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "risk_management": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        }
+      },
+      "note": "视频条件使用 4 个带时间戳的视频帧，不含音频；未送达视频与不支持视频单列。"
+    },
+    {
+      "id": "t4_gpt50_20261008",
+      "title": "原 GPT 轨迹终局评分 · 2026-10-08",
+      "kind": "historical_scoring",
+      "reported_status": "historical_complete",
+      "process_alive": false,
+      "updated_at": null,
+      "finished_slots": null,
+      "planned_slots": null,
+      "api_requests": 43,
+      "models": {
+        "gpt_source": {
+          "status_counts": {
+            "source_unavailable": 57,
+            "completed": 43
+          },
+          "conditions": {
+            "text_only": {
+              "n": 43,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 43,
+                  "mean": 6.2093,
+                  "sd": 1.3194,
+                  "bootstrap_ci95": [
+                    5.8372,
+                    6.6047
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 43,
+                  "mean": 8,
+                  "sd": 0.488,
+                  "bootstrap_ci95": [
+                    7.8372,
+                    8.1395
+                  ]
+                },
+                "risk_management": {
+                  "n": 43,
+                  "mean": 8.3488,
+                  "sd": 0.7199,
+                  "bootstrap_ci95": [
+                    8.1395,
+                    8.5349
+                  ]
+                },
+                "recovery": {
+                  "n": 18,
+                  "mean": 6.6111,
+                  "sd": 0.9164,
+                  "bootstrap_ci95": [
+                    6.2222,
+                    7
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 43,
+                  "mean": 7.8837,
+                  "sd": 0.4477,
+                  "bootstrap_ci95": [
+                    7.7209,
+                    8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 18,
+                  "mean": 7.3778,
+                  "sd": 0.6856,
+                  "bootstrap_ci95": [
+                    7.0889,
+                    7.6778
+                  ]
+                }
+              }
+            },
+            "text_video": {
+              "n": 0,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "state_adaptation": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "risk_management": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 0,
+          "paired_differences": {
+            "goal_achievement": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "state_adaptation": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "risk_management": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "relationship_outcome": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null
+            }
+          },
+          "human_validation_status": "not_human_validated"
+        }
+      },
+      "note": "单一 GPT 策略轨迹的历史终局评分；不属于新多策略配对成绩。"
+    }
+  ],
+  "historical_gate2": {
+    "date": "2026-09-26",
+    "status": "incomplete_not_passed",
+    "note": "旧批次实验；不得作为当前环境配置的通过证明。",
+    "checks": {
+      "E1": {
+        "records": 100
+      },
+      "E2": {
+        "records": 50
+      },
+      "E3": {
+        "records": 49,
+        "automatic_pass": 32,
+        "automatic_fail": 17
+      },
+      "E4": {
+        "records": 49,
+        "direction_consistency": 0.919
+      },
+      "E5": {
+        "records": 49,
+        "automatic_pass": 40,
+        "automatic_fail": 9
+      },
+      "E6": {
+        "records": 50,
+        "direction_agreement": 0.7817,
+        "replay_failure_count": 7
+      },
+      "E7": {
+        "records": 49,
+        "automatic_pass": 47,
+        "automatic_fail": 2
+      },
+      "E8": {
+        "effective_preliminary_visual_pass": 5
+      },
+      "E9": {
+        "candidates": 200,
+        "human_matches": 0,
+        "direction_consistency": null
+      }
+    }
+  },
+  "score_note": "五维各 0–10 原始整数；恢复无机会为 N/A。展示保留两位小数。五维均分只计五维均适用的轨迹；每项显示 n。配对差值仅用同 run、同场景、同模型且视频实际送达的完整配对。机器评分尚未经人工校准。",
+  "sources": [
+    {
+      "path": "configs/human_review_plan.json",
+      "sha256": "76dc7952797c6690099e53fb2977255b7ffd24e15f3b2a3148e9ff401113b834"
+    },
+    {
+      "path": "data/gate2_machine_20261020_complete/gate2/manifest.json",
+      "sha256": "cf1841855d4497a2cdd9fe3f9deac8baa298520f7191428883e8340530a348d8"
+    },
+    {
+      "path": "data/gate2_machine_20261020_complete/progress.json",
+      "sha256": "64e22ecb98d40f5d2cfc107ae66e5c38eb466f86b545dcb52af6c813bf7cf87e"
+    },
+    {
+      "path": "data/gate2_machine_20261020_complete/gate2/experiments/environment_interventions.json",
+      "sha256": "620562d9474847e145f1bfcb6577d6ce73106a4cd5b7528c6129db0cf4b3b4af"
+    },
+    {
+      "path": "data/gate2_machine_20261020_complete/gate2/state_transition_agreement.json",
+      "sha256": "cfca5e19597fe7349bd8c9b02de642210a9584c3e0f5eb40f2863e2efc40b6b4"
+    },
+    {
+      "path": "data/gate2_machine_20261020_complete/gate2/trajectory_plausibility.json",
+      "sha256": "85cd1b7faaf47932e503e12535efcd062c08a561632284c0b27f6c1fed5aa410"
+    },
+    {
+      "path": "data/gate2_machine_20261020_complete/gate2/history_intervention.json",
+      "sha256": "8c4cc6d83a43069060e032697e65372588b33ec37bb04a019987dc019b91ee59"
+    },
+    {
+      "path": "data/gate2_machine_20261020_complete/gate2/paraphrase_robustness.json",
+      "sha256": "01a6ecd296b92e7d45497c67e99f75ba8bf4f2be512e0f64b9acc4eceb64cc8e"
+    },
+    {
+      "path": "data/gate2_machine_20261020_complete/gate2/local_counterfactual.json",
+      "sha256": "24bbffcea8ff7a2bba442c50eb6b9b034cb228ee06733892a546cb65c0c91fb6"
+    },
+    {
+      "path": "data/gate2_machine_20261020_complete/gate2/backbone_sensitivity.json",
+      "sha256": "36d6c792fa0196d65c2109526a6f0e1799a7042f2f086e45cc8efedf553a8a32"
+    },
+    {
+      "path": "data/gate2_machine_20261020_complete/gate2/persona_intervention.json",
+      "sha256": "842ee676953712eb6404084162e60d7c27ce9f308d765bcf62df2b02f36187b2"
+    },
+    {
+      "path": "data/gate_media_machine_20261020/video_state_consistency.json",
+      "sha256": "18a0150e2605887c2c18db03c627d39d6b12dde6ce6a5f7249fd8496d9a51540"
+    },
+    {
+      "path": "data/gate2_machine_20261020_complete/gate2/timescale_validity.json",
+      "sha256": "f75a8da6c38185f5e1848677b901c4e0cff56600c3125c7aa9e062d5ce6c6d1b"
+    },
+    {
+      "path": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_gpt50_active/gate3_followup/gate3/model_reviews.json",
+      "sha256": "8b528216c7c9bdb377c04580218839a6548954871ef8b15849fd9a3e248dec25"
+    },
+    {
+      "path": "data/gate_media_machine_20261020/gate1.json",
+      "sha256": "ddc2eb293e6faee43aa7c6a4a03bd979b7351dcafdb8e94dffab828e2be3d941"
+    },
+    {
+      "path": "data/gate3_machine_20261020/progress.json",
+      "sha256": "252f7d91d17aa5f07dc86c0561369e97bd322d25bdb2ecc191e176b797df1bbc"
+    },
+    {
+      "path": "data/offline_oracle_20261020_complete/progress.json",
+      "sha256": "78e5c42725a3322eeb75619163cdede0999e1ccda29d9330bc54792e29e2429b"
+    },
+    {
+      "path": "tasks/examples/offline_scenarios_v2/manifest.json",
+      "sha256": "9c523030fdb71018781dc406320474b7fd86e67d27c5c2d8559d84be23e1f6fe"
+    },
+    {
+      "path": "build/t4_expanded_api_20261020/run/summary.json",
+      "sha256": "37592d7d846a470224db77874deab6844f1f2d0e2b077d56362ef6d1119b4af5"
+    },
+    {
+      "path": "build/t4_expanded_api_20261020/run/status.json",
+      "sha256": "221d879b3aca1624dc96e3f504b074fa3ea026b2e649686b92498f49be1a7b71"
+    },
+    {
+      "path": "build/t4_gpt33_parallel_20261020/run/summary.json",
+      "sha256": "55881a0b670bb006ddb48eed52a59fa81a1eb0a90557bdc27f39384a61d86ff1"
+    },
+    {
+      "path": "build/t4_gpt33_parallel_20261020/run/status.json",
+      "sha256": "5e63b2cf048ba9cd6b086289f44de1578f75cea40b5ba50dd8a3687e97fd2353"
+    },
+    {
+      "path": "build/t4_gpt33_parallel_20261020/run/process.json",
+      "sha256": "d277b0af3438e6d32ac4d9d24c0fef815d70165c59696931f86e2fcc4bcca806"
+    },
+    {
+      "path": "build/t4_gpt39_continuation_20261020/run/summary.json",
+      "sha256": "d61842cc9286a50a06f864347c9d2b854f0411144c032beac7410ee3c5434f26"
+    },
+    {
+      "path": "build/t4_gpt39_continuation_20261020/run/status.json",
+      "sha256": "2d7f8f2c08c4352ddbb8ae3e68688cbd98dd6048aabdab3d4d60322c2e64192a"
+    },
+    {
+      "path": "build/t4_gpt39_continuation_20261020/run/process.json",
+      "sha256": "0f7dce7c6cfeceb4ef7abdfde37eabe42c1f30ac75245760eeccc57cd7223ad1"
+    },
+    {
+      "path": "build/t4_gpt41_paired_20261020/run/summary.json",
+      "sha256": "9a01741a2411add99d93c04837c7f351366ae4ff86f3b4546cf30288b750b93b"
+    },
+    {
+      "path": "build/t4_gpt41_paired_20261020/run/status.json",
+      "sha256": "2a13d18cbfe5e718813bdf62095f81fc578473865b948867f15506c69bd79883"
+    },
+    {
+      "path": "build/t4_gpt41_paired_20261020/run/process.json",
+      "sha256": "0ef5c5917bbcc3f12bede22505c84a8b00583870b59bd791a8ef195a62a4b5cf"
+    },
+    {
+      "path": "build/t4_gpt50_20261008/run/summary.json",
+      "sha256": "67f4540ff476391ed9503864efaebf2ea37cec391bc531c9666420e285c56dbc"
+    },
+    {
+      "path": "reports/experiments/2026-09-26_gpt50_gate2_record.json",
+      "sha256": "ba5c9c24429b69b62db10cf5bb4e53d6d1ea3bd1a8607a388984415c1bd64817"
+    }
+  ],
+  "read_errors": []
+}

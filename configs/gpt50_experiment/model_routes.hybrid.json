@@ -1,0 +1,64 @@
+{
+  "format": "socialflux_model_routes_v1",
+  "description": "Development audit: GPT-6 Astra policy/tasks under the Claude Fable reference environment.",
+  "provider_defaults": {
+    "provider": "openai_compatible",
+    "endpoint": "https://www.autodl.art/api/v1/chat/completions",
+    "use_proxy": false,
+    "api_key_env": "AUTODL_GPT_API_KEY",
+    "api_key_file": "/root/.config/socialflux/autodl_gpt_api_key",
+    "model": "gpt-6-astra",
+    "stream": false,
+    "reasoning_effort": "low",
+    "timeout": 360
+  },
+  "routes": {
+    "policy": {
+      "max_tokens": 1200,
+      "timeout": 240
+    },
+    "appraisal": {
+      "provider": "anthropic",
+      "endpoint": "https://www.autodl.art/api/v1/anthropic/v1/messages",
+      "auth_scheme": "bearer",
+      "api_key_env": "AUTODL_API_KEY",
+      "api_key_file": "/root/.config/socialflux/autodl_api_key",
+      "model": "claude-fable-5",
+      "reasoning_effort": null,
+      "max_tokens": 3500,
+      "timeout": 240,
+      "max_transport_attempts": 4,
+      "retry_backoff_seconds": 5
+    },
+    "response": {
+      "provider": "anthropic",
+      "endpoint": "https://www.autodl.art/api/v1/anthropic/v1/messages",
+      "auth_scheme": "bearer",
+      "api_key_env": "AUTODL_API_KEY",
+      "api_key_file": "/root/.config/socialflux/autodl_api_key",
+      "model": "claude-fable-5",
+      "reasoning_effort": null,
+      "max_tokens": 2600,
+      "timeout": 240,
+      "max_transport_attempts": 4,
+      "retry_backoff_seconds": 5
+    },
+    "t2_branch_authoring": {
+      "max_tokens": 5000,
+      "timeout": 360
+    },
+    "scenario_authoring": {"max_tokens": 2200},
+    "scenario_normalization": {"max_tokens": 900},
+    "scenario_initialization": {"max_tokens": 900},
+    "t2_spec_authoring": {"max_tokens": 3500},
+    "t2_pair_review": {"max_tokens": 3500},
+    "t2_answer": {"max_tokens": 5000},
+    "t2_answer_review": {"max_tokens": 3500},
+    "task_extraction": {"max_tokens": 3500},
+    "t1_answer": {"max_tokens": 5000},
+    "t3_action_authoring": {"max_tokens": 1800},
+    "t3_answer": {"max_tokens": 6500},
+    "t4_judge": {"max_tokens": 3500},
+    "quality_review": {"max_tokens": 1600}
+  }
+}

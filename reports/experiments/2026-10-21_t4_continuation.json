@@ -1,0 +1,5224 @@
+{
+  "updated_at": "2026-10-21T11:29:31.823958+08:00",
+  "runs": {
+    "original_diagnostic": {
+      "status": {
+        "status": "completed_with_recorded_outcomes",
+        "updated_at": "2026-10-20T23:10:21.091827+08:00",
+        "finished": 96,
+        "planned": 96,
+        "api_requests": 1197
+      },
+      "summary": {
+        "gpt": {
+          "status_counts": {
+            "completed": 5,
+            "failed": 7
+          },
+          "conditions": {
+            "text_only": {
+              "n": 2,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 2,
+                  "mean": 8.5,
+                  "sd": 2.1213,
+                  "bootstrap_ci95": [
+                    7,
+                    10
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 2,
+                  "mean": 8,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    7,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 2,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 2,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 2,
+                  "mean": 8.125,
+                  "sd": 0.8839,
+                  "bootstrap_ci95": [
+                    7.5,
+                    8.75
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 2,
+                  "mean": 8.125,
+                  "sd": 0.8839,
+                  "bootstrap_ci95": [
+                    7.5,
+                    8.75
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 3,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 3,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 3,
+                  "mean": 7.3333,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "risk_management": {
+                  "n": 3,
+                  "mean": 7.6667,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 8,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 3,
+                  "mean": 7,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    7,
+                    7
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 3,
+                  "mean": 7.5,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    7.5,
+                    7.5
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 3,
+                  "mean": 7.5333,
+                  "sd": 0.0577,
+                  "bootstrap_ci95": [
+                    7.5,
+                    7.6
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 7.6,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 2,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 2,
+              "mean": -0.5,
+              "sd": 2.1213,
+              "bootstrap_ci95": [
+                -2,
+                1
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 1
+            },
+            "state_adaptation": {
+              "n": 2,
+              "mean": -0.5,
+              "sd": 0.7071,
+              "bootstrap_ci95": [
+                -1,
+                0
+              ],
+              "win": 0,
+              "tie": 1,
+              "loss": 1
+            },
+            "risk_management": {
+              "n": 2,
+              "mean": -0.5,
+              "sd": 0.7071,
+              "bootstrap_ci95": [
+                -1,
+                0
+              ],
+              "win": 0,
+              "tie": 1,
+              "loss": 1
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "relationship_outcome": {
+              "n": 2,
+              "mean": -1,
+              "sd": 0.0,
+              "bootstrap_ci95": [
+                -1,
+                -1
+              ],
+              "win": 0,
+              "tie": 0,
+              "loss": 2
+            },
+            "core_four_mean": {
+              "n": 2,
+              "mean": -0.625,
+              "sd": 0.8839,
+              "bootstrap_ci95": [
+                -1.25,
+                0.0
+              ],
+              "win": 0,
+              "tie": 1,
+              "loss": 1
+            },
+            "available_dimension_mean": {
+              "n": 2,
+              "mean": -0.575,
+              "sd": 0.8132,
+              "bootstrap_ci95": [
+                -1.15,
+                0.0
+              ],
+              "win": 0,
+              "tie": 1,
+              "loss": 1
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            }
+          },
+          "api_request_count": 144,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        },
+        "claude": {
+          "status_counts": {
+            "failed": 5,
+            "completed": 7
+          },
+          "conditions": {
+            "text_only": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 7.5,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 7,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    5.75,
+                    8
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 6.75,
+                  "sd": 0.5,
+                  "bootstrap_ci95": [
+                    6.25,
+                    7
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 6,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 7,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    7,
+                    7
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 4,
+                  "mean": 7.0625,
+                  "sd": 0.3146,
+                  "bootstrap_ci95": [
+                    6.8125,
+                    7.375
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 4,
+                  "mean": 7.025,
+                  "sd": 0.3686,
+                  "bootstrap_ci95": [
+                    6.7,
+                    7.375
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 6.6,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 3,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 3,
+                  "mean": 4,
+                  "sd": 3.6056,
+                  "bootstrap_ci95": [
+                    0,
+                    7
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 3,
+                  "mean": 4.6667,
+                  "sd": 3.2146,
+                  "bootstrap_ci95": [
+                    1,
+                    7
+                  ]
+                },
+                "risk_management": {
+                  "n": 3,
+                  "mean": 4.3333,
+                  "sd": 3.0551,
+                  "bootstrap_ci95": [
+                    1,
+                    7
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 3.5,
+                  "sd": 3.5355,
+                  "bootstrap_ci95": [
+                    1,
+                    6
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 3,
+                  "mean": 5.3333,
+                  "sd": 2.8868,
+                  "bootstrap_ci95": [
+                    2,
+                    7
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 3,
+                  "mean": 4.5833,
+                  "sd": 3.1258,
+                  "bootstrap_ci95": [
+                    1,
+                    6.75
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 3,
+                  "mean": 4.5833,
+                  "sd": 3.1258,
+                  "bootstrap_ci95": [
+                    1,
+                    6.75
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 3.5,
+                  "sd": 3.5355,
+                  "bootstrap_ci95": [
+                    1,
+                    6
+                  ]
+                }
+              }
+            }
+          },
+          "matched_scenarios": 3,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 3,
+              "mean": -3.3333,
+              "sd": 4.1633,
+              "bootstrap_ci95": [
+                -8,
+                0
+              ],
+              "win": 0,
+              "tie": 1,
+              "loss": 2
+            },
+            "state_adaptation": {
+              "n": 3,
+              "mean": -2,
+              "sd": 1.7321,
+              "bootstrap_ci95": [
+                -4,
+                -1
+              ],
+              "win": 0,
+              "tie": 0,
+              "loss": 3
+            },
+            "risk_management": {
+              "n": 3,
+              "mean": -2.3333,
+              "sd": 3.2146,
+              "bootstrap_ci95": [
+                -6,
+                0
+              ],
+              "win": 0,
+              "tie": 1,
+              "loss": 2
+            },
+            "recovery": {
+              "n": 1,
+              "mean": -5,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 1
+            },
+            "relationship_outcome": {
+              "n": 3,
+              "mean": -1.6667,
+              "sd": 2.8868,
+              "bootstrap_ci95": [
+                -5,
+                0
+              ],
+              "win": 0,
+              "tie": 2,
+              "loss": 1
+            },
+            "core_four_mean": {
+              "n": 3,
+              "mean": -2.3333,
+              "sd": 2.9826,
+              "bootstrap_ci95": [
+                -5.75,
+                -0.25
+              ],
+              "win": 0,
+              "tie": 0,
+              "loss": 3
+            },
+            "available_dimension_mean": {
+              "n": 3,
+              "mean": -2.2833,
+              "sd": 2.8967,
+              "bootstrap_ci95": [
+                -5.6,
+                -0.25
+              ],
+              "win": 0,
+              "tie": 0,
+              "loss": 3
+            },
+            "five_dimension_mean": {
+              "n": 1,
+              "mean": -5.6,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 1
+            }
+          },
+          "api_request_count": 205,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        },
+        "qwen": {
+          "status_counts": {
+            "completed": 7,
+            "failed": 5
+          },
+          "conditions": {
+            "text_only": {
+              "n": 3,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 3,
+                  "mean": 8.3333,
+                  "sd": 1.5275,
+                  "bootstrap_ci95": [
+                    7,
+                    10
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 3,
+                  "mean": 8.3333,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    8,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 3,
+                  "mean": 8,
+                  "sd": 1.0,
+                  "bootstrap_ci95": [
+                    7,
+                    9
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 6,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 3,
+                  "mean": 7.3333,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 3,
+                  "mean": 8.0,
+                  "sd": 0.75,
+                  "bootstrap_ci95": [
+                    7.25,
+                    8.75
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 3,
+                  "mean": 7.9167,
+                  "sd": 0.878,
+                  "bootstrap_ci95": [
+                    7,
+                    8.75
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 7,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 7.5,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 8.5,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    8,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 7.25,
+                  "sd": 0.5,
+                  "bootstrap_ci95": [
+                    7,
+                    7.75
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 7,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    6,
+                    8
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 7.25,
+                  "sd": 0.5,
+                  "bootstrap_ci95": [
+                    7,
+                    7.75
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 4,
+                  "mean": 7.625,
+                  "sd": 0.3227,
+                  "bootstrap_ci95": [
+                    7.375,
+                    7.875
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 4,
+                  "mean": 7.5625,
+                  "sd": 0.427,
+                  "bootstrap_ci95": [
+                    7.1875,
+                    7.875
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 7.5,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                }
+              }
+            }
+          },
+          "matched_scenarios": 3,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 3,
+              "mean": -1,
+              "sd": 2.0,
+              "bootstrap_ci95": [
+                -3,
+                1
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 2
+            },
+            "state_adaptation": {
+              "n": 3,
+              "mean": 0,
+              "sd": 1.0,
+              "bootstrap_ci95": [
+                -1,
+                1
+              ],
+              "win": 1,
+              "tie": 1,
+              "loss": 1
+            },
+            "risk_management": {
+              "n": 3,
+              "mean": -0.6667,
+              "sd": 1.5275,
+              "bootstrap_ci95": [
+                -2,
+                1
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 2
+            },
+            "recovery": {
+              "n": 1,
+              "mean": 2,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 1,
+              "tie": 0,
+              "loss": 0
+            },
+            "relationship_outcome": {
+              "n": 3,
+              "mean": 0,
+              "sd": 0.0,
+              "bootstrap_ci95": [
+                0,
+                0
+              ],
+              "win": 0,
+              "tie": 3,
+              "loss": 0
+            },
+            "core_four_mean": {
+              "n": 3,
+              "mean": -0.4167,
+              "sd": 1.0408,
+              "bootstrap_ci95": [
+                -1.25,
+                0.75
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 2
+            },
+            "available_dimension_mean": {
+              "n": 3,
+              "mean": -0.4167,
+              "sd": 1.2332,
+              "bootstrap_ci95": [
+                -1.25,
+                1
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 2
+            },
+            "five_dimension_mean": {
+              "n": 1,
+              "mean": 1,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 1,
+              "tie": 0,
+              "loss": 0
+            }
+          },
+          "api_request_count": 150,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        },
+        "qwen37": {
+          "status_counts": {
+            "unsupported_video_input": 6,
+            "failed": 2,
+            "completed": 4
+          },
+          "conditions": {
+            "text_only": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 7.5,
+                  "sd": 1.0,
+                  "bootstrap_ci95": [
+                    6.5,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 8.25,
+                  "sd": 0.9574,
+                  "bootstrap_ci95": [
+                    7.5,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 7.25,
+                  "sd": 0.9574,
+                  "bootstrap_ci95": [
+                    6.5,
+                    8
+                  ]
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 7.5,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 4,
+                  "mean": 7.625,
+                  "sd": 0.7773,
+                  "bootstrap_ci95": [
+                    6.875,
+                    8.125
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 4,
+                  "mean": 7.625,
+                  "sd": 0.7773,
+                  "bootstrap_ci95": [
+                    6.875,
+                    8.125
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 0,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "state_adaptation": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "risk_management": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "core_four_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "available_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 0,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "state_adaptation": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "risk_management": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "relationship_outcome": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "core_four_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "available_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            }
+          },
+          "api_request_count": 112,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        },
+        "qwen_vl": {
+          "status_counts": {
+            "failed": 4,
+            "completed": 8
+          },
+          "conditions": {
+            "text_only": {
+              "n": 5,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 5,
+                  "mean": 7.6,
+                  "sd": 2.1909,
+                  "bootstrap_ci95": [
+                    5.6,
+                    9.2
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 5,
+                  "mean": 8,
+                  "sd": 1.7321,
+                  "bootstrap_ci95": [
+                    6.4,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 5,
+                  "mean": 7.6,
+                  "sd": 1.1402,
+                  "bootstrap_ci95": [
+                    6.6,
+                    8.4
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 5.5,
+                  "sd": 2.1213,
+                  "bootstrap_ci95": [
+                    4,
+                    7
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 5,
+                  "mean": 7.4,
+                  "sd": 0.8944,
+                  "bootstrap_ci95": [
+                    6.6,
+                    8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 5,
+                  "mean": 7.65,
+                  "sd": 1.4098,
+                  "bootstrap_ci95": [
+                    6.35,
+                    8.6
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 5,
+                  "mean": 7.56,
+                  "sd": 1.506,
+                  "bootstrap_ci95": [
+                    6.2,
+                    8.56
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 6.4,
+                  "sd": 1.9799,
+                  "bootstrap_ci95": [
+                    5,
+                    7.8
+                  ]
+                }
+              }
+            },
+            "text_video": {
+              "n": 3,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 3,
+                  "mean": 6.3333,
+                  "sd": 1.5275,
+                  "bootstrap_ci95": [
+                    5,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 3,
+                  "mean": 8,
+                  "sd": 1.0,
+                  "bootstrap_ci95": [
+                    7,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 3,
+                  "mean": 6.6667,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    6,
+                    7
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 6.5,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    6,
+                    7
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 3,
+                  "mean": 7,
+                  "sd": 1.0,
+                  "bootstrap_ci95": [
+                    6,
+                    8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 3,
+                  "mean": 7.0,
+                  "sd": 0.9014,
+                  "bootstrap_ci95": [
+                    6,
+                    7.75
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 3,
+                  "mean": 6.9833,
+                  "sd": 0.8949,
+                  "bootstrap_ci95": [
+                    6,
+                    7.75
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 6.6,
+                  "sd": 0.8485,
+                  "bootstrap_ci95": [
+                    6,
+                    7.2
+                  ]
+                }
+              }
+            }
+          },
+          "matched_scenarios": 3,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 3,
+              "mean": -0.3333,
+              "sd": 3.7859,
+              "bootstrap_ci95": [
+                -3,
+                4
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 2
+            },
+            "state_adaptation": {
+              "n": 3,
+              "mean": 0.3333,
+              "sd": 3.2146,
+              "bootstrap_ci95": [
+                -2,
+                4
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 2
+            },
+            "risk_management": {
+              "n": 3,
+              "mean": -0.3333,
+              "sd": 1.1547,
+              "bootstrap_ci95": [
+                -1,
+                1
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 2
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "relationship_outcome": {
+              "n": 3,
+              "mean": 0,
+              "sd": 1.7321,
+              "bootstrap_ci95": [
+                -2,
+                1
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 1
+            },
+            "core_four_mean": {
+              "n": 3,
+              "mean": -0.0833,
+              "sd": 2.3229,
+              "bootstrap_ci95": [
+                -2,
+                2.5
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 2
+            },
+            "available_dimension_mean": {
+              "n": 3,
+              "mean": -0.0167,
+              "sd": 2.47,
+              "bootstrap_ci95": [
+                -2,
+                2.75
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 2
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            }
+          },
+          "api_request_count": 197,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        },
+        "kimi": {
+          "status_counts": {
+            "failed": 6,
+            "completed": 6
+          },
+          "conditions": {
+            "text_only": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 8.75,
+                  "sd": 1.5,
+                  "bootstrap_ci95": [
+                    7.5,
+                    10
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 8.25,
+                  "sd": 0.9574,
+                  "bootstrap_ci95": [
+                    7.5,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 8.25,
+                  "sd": 1.5,
+                  "bootstrap_ci95": [
+                    7,
+                    9.5
+                  ]
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 8,
+                  "sd": 0.8165,
+                  "bootstrap_ci95": [
+                    7.25,
+                    8.75
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 4,
+                  "mean": 8.3125,
+                  "sd": 1.1434,
+                  "bootstrap_ci95": [
+                    7.375,
+                    9.25
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 4,
+                  "mean": 8.3125,
+                  "sd": 1.1434,
+                  "bootstrap_ci95": [
+                    7.375,
+                    9.25
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 2,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 2,
+                  "mean": 9,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    8,
+                    10
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 2,
+                  "mean": 9,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    9,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 2,
+                  "mean": 9,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    8,
+                    10
+                  ]
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 2,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 2,
+                  "mean": 8.75,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    8.25,
+                    9.25
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 2,
+                  "mean": 8.75,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    8.25,
+                    9.25
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 2,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 2,
+              "mean": 1.5,
+              "sd": 0.7071,
+              "bootstrap_ci95": [
+                1,
+                2
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 0
+            },
+            "state_adaptation": {
+              "n": 2,
+              "mean": 1.5,
+              "sd": 0.7071,
+              "bootstrap_ci95": [
+                1,
+                2
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 0
+            },
+            "risk_management": {
+              "n": 2,
+              "mean": 2,
+              "sd": 1.4142,
+              "bootstrap_ci95": [
+                1,
+                3
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 0
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "relationship_outcome": {
+              "n": 2,
+              "mean": 0.5,
+              "sd": 0.7071,
+              "bootstrap_ci95": [
+                0,
+                1
+              ],
+              "win": 1,
+              "tie": 1,
+              "loss": 0
+            },
+            "core_four_mean": {
+              "n": 2,
+              "mean": 1.375,
+              "sd": 0.1768,
+              "bootstrap_ci95": [
+                1.25,
+                1.5
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 0
+            },
+            "available_dimension_mean": {
+              "n": 2,
+              "mean": 1.375,
+              "sd": 0.1768,
+              "bootstrap_ci95": [
+                1.25,
+                1.5
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 0
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            }
+          },
+          "api_request_count": 140,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        },
+        "glm": {
+          "status_counts": {
+            "failed": 4,
+            "unsupported_video_input": 6,
+            "completed": 2
+          },
+          "conditions": {
+            "text_only": {
+              "n": 2,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 2,
+                  "mean": 9,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    8,
+                    10
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 2,
+                  "mean": 9,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    9,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 2,
+                  "mean": 8.5,
+                  "sd": 2.1213,
+                  "bootstrap_ci95": [
+                    7,
+                    10
+                  ]
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 2,
+                  "mean": 7.5,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 2,
+                  "mean": 8.5,
+                  "sd": 1.0607,
+                  "bootstrap_ci95": [
+                    7.75,
+                    9.25
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 2,
+                  "mean": 8.5,
+                  "sd": 1.0607,
+                  "bootstrap_ci95": [
+                    7.75,
+                    9.25
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 0,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "state_adaptation": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "risk_management": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "core_four_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "available_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 0,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "state_adaptation": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "risk_management": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "relationship_outcome": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "core_four_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "available_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            }
+          },
+          "api_request_count": 61,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        },
+        "deepseek_flash": {
+          "status_counts": {
+            "failed": 3,
+            "completed": 9
+          },
+          "conditions": {
+            "text_only": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 7.75,
+                  "sd": 0.5,
+                  "bootstrap_ci95": [
+                    7.25,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 7,
+                  "sd": 0.8165,
+                  "bootstrap_ci95": [
+                    6.25,
+                    7.75
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 7.5,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 7.75,
+                  "sd": 0.5,
+                  "bootstrap_ci95": [
+                    7.25,
+                    8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 4,
+                  "mean": 7.625,
+                  "sd": 0.433,
+                  "bootstrap_ci95": [
+                    7.1875,
+                    7.9375
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 4,
+                  "mean": 7.5875,
+                  "sd": 0.425,
+                  "bootstrap_ci95": [
+                    7.1875,
+                    7.9
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 7.8,
+                  "sd": 0.2828,
+                  "bootstrap_ci95": [
+                    7.6,
+                    8
+                  ]
+                }
+              }
+            },
+            "text_video": {
+              "n": 5,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 5,
+                  "mean": 8,
+                  "sd": 1.2247,
+                  "bootstrap_ci95": [
+                    7.2,
+                    9
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 5,
+                  "mean": 8,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    7.4,
+                    8.6
+                  ]
+                },
+                "risk_management": {
+                  "n": 5,
+                  "mean": 7.8,
+                  "sd": 0.8367,
+                  "bootstrap_ci95": [
+                    7.2,
+                    8.4
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 8,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 5,
+                  "mean": 7.4,
+                  "sd": 0.5477,
+                  "bootstrap_ci95": [
+                    7,
+                    7.8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 5,
+                  "mean": 7.8,
+                  "sd": 0.7786,
+                  "bootstrap_ci95": [
+                    7.25,
+                    8.45
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 5,
+                  "mean": 7.83,
+                  "sd": 0.7547,
+                  "bootstrap_ci95": [
+                    7.28,
+                    8.48
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 7.4,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 3,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 3,
+              "mean": 0.3333,
+              "sd": 1.5275,
+              "bootstrap_ci95": [
+                -1,
+                2
+              ],
+              "win": 1,
+              "tie": 1,
+              "loss": 1
+            },
+            "state_adaptation": {
+              "n": 3,
+              "mean": 0,
+              "sd": 1.0,
+              "bootstrap_ci95": [
+                -1,
+                1
+              ],
+              "win": 1,
+              "tie": 1,
+              "loss": 1
+            },
+            "risk_management": {
+              "n": 3,
+              "mean": 1,
+              "sd": 1.0,
+              "bootstrap_ci95": [
+                0,
+                2
+              ],
+              "win": 2,
+              "tie": 1,
+              "loss": 0
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "relationship_outcome": {
+              "n": 3,
+              "mean": -0.3333,
+              "sd": 0.5774,
+              "bootstrap_ci95": [
+                -1,
+                0
+              ],
+              "win": 0,
+              "tie": 2,
+              "loss": 1
+            },
+            "core_four_mean": {
+              "n": 3,
+              "mean": 0.25,
+              "sd": 1.0,
+              "bootstrap_ci95": [
+                -0.75,
+                1.25
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 1
+            },
+            "available_dimension_mean": {
+              "n": 3,
+              "mean": 0.35,
+              "sd": 1.0759,
+              "bootstrap_ci95": [
+                -0.75,
+                1.4
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 1
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            }
+          },
+          "api_request_count": 170,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        }
+      },
+      "budget": {
+        "request_count": 1197,
+        "limit": 2200
+      }
+    },
+    "transport_recovery": {
+      "status": {
+        "status": "completed_with_recorded_outcomes",
+        "updated_at": "2026-10-21T11:00:02.745747+08:00",
+        "finished": 25,
+        "planned": 25,
+        "inherited_slots": 96,
+        "api_requests": 337,
+        "source_api_requests": 1197,
+        "outcomes": {
+          "GPT50_002/claude/text_video": {
+            "started_at": "2026-10-21T10:16:01.657205+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"The service is busy. Please retry later.\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:18:12.681710+08:00",
+            "replayed_calls": 7,
+            "new_api_requests": 6
+          },
+          "GPT50_002/claude/text_only": {
+            "started_at": "2026-10-21T10:16:01.648109+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"The service is busy. Please retry later.\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:19:13.132819+08:00",
+            "replayed_calls": 2,
+            "new_api_requests": 13
+          },
+          "GPT50_002/qwen_vl/text_video": {
+            "started_at": "2026-10-21T10:19:13.150514+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"The service is busy. Please retry later.\", \"type\": \"upstream_error\"}",
+            "status": "failed",
+            "error": "unsupported consequential claim(s): 这是他们能掌控的唯一确定性",
+            "finished_at": "2026-10-21T10:19:38.631740+08:00",
+            "replayed_calls": 7,
+            "new_api_requests": 4
+          },
+          "GPT50_002/qwen_vl/text_only": {
+            "started_at": "2026-10-21T10:18:12.695941+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"The service is busy. Please retry later.\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:21:34.510040+08:00",
+            "replayed_calls": 2,
+            "new_api_requests": 12
+          },
+          "GPT50_002/glm/text_only": {
+            "started_at": "2026-10-21T10:21:34.568679+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"The service is busy. Please retry later.\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:22:27.842457+08:00",
+            "replayed_calls": 5,
+            "new_api_requests": 4
+          },
+          "GPT50_002/kimi/text_video": {
+            "started_at": "2026-10-21T10:19:38.637149+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"The service is busy. Please retry later.\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:23:27.609933+08:00",
+            "replayed_calls": 1,
+            "new_api_requests": 16
+          },
+          "GPT50_002/deepseek_flash/text_video": {
+            "started_at": "2026-10-21T10:22:27.854712+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"The service is busy. Please retry later.\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:27:33.692583+08:00",
+            "replayed_calls": 2,
+            "new_api_requests": 22
+          },
+          "GPT50_002/qwen37/text_only": {
+            "started_at": "2026-10-21T10:23:27.633417+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"Request could not be completed\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:28:19.172615+08:00",
+            "replayed_calls": 2,
+            "new_api_requests": 19
+          },
+          "GPT50_014/gpt/text_video": {
+            "started_at": "2026-10-21T10:27:33.740285+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"The service is busy. Please retry later.\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:31:41.020524+08:00",
+            "replayed_calls": 5,
+            "new_api_requests": 16
+          },
+          "GPT50_014/gpt/text_only": {
+            "started_at": "2026-10-21T10:28:19.190090+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"The service is busy. Please retry later.\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:33:04.341372+08:00",
+            "replayed_calls": 4,
+            "new_api_requests": 27
+          },
+          "GPT50_014/claude/text_only": {
+            "started_at": "2026-10-21T10:33:04.404409+08:00",
+            "source_status": "failed",
+            "source_error": "Unterminated string starting at: line 1 column 216 (char 215)",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:36:44.327340+08:00",
+            "replayed_calls": 21,
+            "new_api_requests": 12
+          },
+          "GPT50_014/claude/text_video": {
+            "started_at": "2026-10-21T10:31:41.038807+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"The service is busy. Please retry later.\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:36:45.557314+08:00",
+            "replayed_calls": 7,
+            "new_api_requests": 14
+          },
+          "GPT50_014/qwen/text_video": {
+            "started_at": "2026-10-21T10:36:44.401577+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"Request could not be completed\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:40:49.143891+08:00",
+            "replayed_calls": 7,
+            "new_api_requests": 12
+          },
+          "GPT50_014/kimi/text_only": {
+            "started_at": "2026-10-21T10:36:45.929896+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"Request could not be completed\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:41:26.836199+08:00",
+            "replayed_calls": 6,
+            "new_api_requests": 17
+          },
+          "GPT50_019/gpt/text_video": {
+            "started_at": "2026-10-21T10:41:26.852528+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"Request could not be completed\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:42:36.456466+08:00",
+            "replayed_calls": 8,
+            "new_api_requests": 3
+          },
+          "GPT50_014/deepseek_flash/text_only": {
+            "started_at": "2026-10-21T10:40:49.261097+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"Request could not be completed\", \"type\": \"upstream_error\"}",
+            "status": "failed",
+            "error": "T4 judgment 62d7e8b1b6634e6a8670dac7b315e827 failed JSON/schema validation after 2 attempts",
+            "finished_at": "2026-10-21T10:42:44.957620+08:00",
+            "replayed_calls": 20,
+            "new_api_requests": 7
+          },
+          "GPT50_019/kimi/text_video": {
+            "started_at": "2026-10-21T10:42:45.024212+08:00",
+            "source_status": "failed",
+            "source_error": "The read operation timed out",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:46:05.725169+08:00",
+            "replayed_calls": 15,
+            "new_api_requests": 17
+          },
+          "GPT50_024/gpt/text_only": {
+            "started_at": "2026-10-21T10:46:05.781270+08:00",
+            "source_status": "failed",
+            "source_error": "Unterminated string starting at: line 1 column 172 (char 171)",
+            "status": "failed",
+            "error": "provider stream error: {\"message\": \"The service is busy. Please retry later.\", \"type\": \"upstream_error\"}",
+            "finished_at": "2026-10-21T10:46:59.240263+08:00",
+            "replayed_calls": 7,
+            "new_api_requests": 5
+          },
+          "GPT50_019/qwen37/text_only": {
+            "started_at": "2026-10-21T10:42:36.492657+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"Request could not be completed\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:47:56.811140+08:00",
+            "replayed_calls": 13,
+            "new_api_requests": 20
+          },
+          "GPT50_024/qwen/text_only": {
+            "started_at": "2026-10-21T10:46:59.257744+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"The service is busy. Please retry later.\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:48:13.013481+08:00",
+            "replayed_calls": 6,
+            "new_api_requests": 5
+          },
+          "GPT50_026/glm/text_only": {
+            "started_at": "2026-10-21T10:47:56.833600+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"The service is busy. Please retry later.\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:52:37.777766+08:00",
+            "replayed_calls": 2,
+            "new_api_requests": 15
+          },
+          "GPT50_031/gpt/text_only": {
+            "started_at": "2026-10-21T10:48:13.026591+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"Request could not be completed\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:52:40.994156+08:00",
+            "replayed_calls": 0,
+            "new_api_requests": 17
+          },
+          "GPT50_031/qwen_vl/text_video": {
+            "started_at": "2026-10-21T10:52:41.009389+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"Request could not be completed\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:54:55.170250+08:00",
+            "replayed_calls": 2,
+            "new_api_requests": 8
+          },
+          "GPT50_031/deepseek_flash/text_only": {
+            "started_at": "2026-10-21T10:54:55.181285+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"Request could not be completed\", \"type\": \"upstream_error\"}",
+            "status": "failed",
+            "error": "T4 judgment 6e12df08563b4ffd901254ec7d04297d failed JSON/schema validation after 2 attempts",
+            "finished_at": "2026-10-21T10:57:32.262429+08:00",
+            "replayed_calls": 3,
+            "new_api_requests": 10
+          },
+          "GPT50_031/gpt/text_video": {
+            "started_at": "2026-10-21T10:52:37.789388+08:00",
+            "source_status": "failed",
+            "source_error": "provider stream error: {\"message\": \"Request could not be completed\", \"type\": \"upstream_error\"}",
+            "status": "completed",
+            "finished_at": "2026-10-21T10:59:59.658442+08:00",
+            "replayed_calls": 0,
+            "new_api_requests": 36
+          }
+        },
+        "dry_run": false
+      },
+      "summary": {
+        "gpt": {
+          "status_counts": {
+            "completed": 10,
+            "failed": 2
+          },
+          "conditions": {
+            "text_only": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 8.25,
+                  "sd": 1.2583,
+                  "bootstrap_ci95": [
+                    7.25,
+                    9.5
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 8.25,
+                  "sd": 0.9574,
+                  "bootstrap_ci95": [
+                    7.5,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 7,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 7.75,
+                  "sd": 0.5,
+                  "bootstrap_ci95": [
+                    7.25,
+                    8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 4,
+                  "mean": 8.0625,
+                  "sd": 0.5154,
+                  "bootstrap_ci95": [
+                    7.625,
+                    8.5625
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 4,
+                  "mean": 8.0125,
+                  "sd": 0.5329,
+                  "bootstrap_ci95": [
+                    7.625,
+                    8.5125
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 7.8,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 6,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 6,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 6,
+                  "mean": 8,
+                  "sd": 0.8944,
+                  "bootstrap_ci95": [
+                    7.3333,
+                    8.6667
+                  ]
+                },
+                "risk_management": {
+                  "n": 6,
+                  "mean": 8,
+                  "sd": 0.6325,
+                  "bootstrap_ci95": [
+                    7.5,
+                    8.5
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 8,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 6,
+                  "mean": 7.5,
+                  "sd": 0.5477,
+                  "bootstrap_ci95": [
+                    7.1667,
+                    7.8333
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 6,
+                  "mean": 7.875,
+                  "sd": 0.4402,
+                  "bootstrap_ci95": [
+                    7.5833,
+                    8.1667
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 6,
+                  "mean": 7.8917,
+                  "sd": 0.4248,
+                  "bootstrap_ci95": [
+                    7.6,
+                    8.1833
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 7.6,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 4,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 4,
+              "mean": -0.25,
+              "sd": 1.2583,
+              "bootstrap_ci95": [
+                -1.5,
+                0.75
+              ],
+              "win": 1,
+              "tie": 2,
+              "loss": 1
+            },
+            "state_adaptation": {
+              "n": 4,
+              "mean": -0.25,
+              "sd": 0.5,
+              "bootstrap_ci95": [
+                -0.75,
+                0
+              ],
+              "win": 0,
+              "tie": 3,
+              "loss": 1
+            },
+            "risk_management": {
+              "n": 4,
+              "mean": -0.25,
+              "sd": 0.5,
+              "bootstrap_ci95": [
+                -0.75,
+                0
+              ],
+              "win": 0,
+              "tie": 3,
+              "loss": 1
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "relationship_outcome": {
+              "n": 4,
+              "mean": -0.25,
+              "sd": 0.9574,
+              "bootstrap_ci95": [
+                -1,
+                0.5
+              ],
+              "win": 1,
+              "tie": 1,
+              "loss": 2
+            },
+            "core_four_mean": {
+              "n": 4,
+              "mean": -0.25,
+              "sd": 0.677,
+              "bootstrap_ci95": [
+                -0.9375,
+                0.1875
+              ],
+              "win": 1,
+              "tie": 2,
+              "loss": 1
+            },
+            "available_dimension_mean": {
+              "n": 4,
+              "mean": -0.175,
+              "sd": 0.6837,
+              "bootstrap_ci95": [
+                -0.8625,
+                0.3375
+              ],
+              "win": 1,
+              "tie": 2,
+              "loss": 1
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            }
+          },
+          "api_request_count": 144,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        },
+        "claude": {
+          "status_counts": {
+            "completed": 11,
+            "failed": 1
+          },
+          "conditions": {
+            "text_only": {
+              "n": 6,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 6,
+                  "mean": 7.6667,
+                  "sd": 0.5164,
+                  "bootstrap_ci95": [
+                    7.3333,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 6,
+                  "mean": 7.3333,
+                  "sd": 1.2111,
+                  "bootstrap_ci95": [
+                    6.3333,
+                    8
+                  ]
+                },
+                "risk_management": {
+                  "n": 6,
+                  "mean": 7,
+                  "sd": 0.6325,
+                  "bootstrap_ci95": [
+                    6.5,
+                    7.5
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 7,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    6,
+                    8
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 6,
+                  "mean": 7.3333,
+                  "sd": 0.5164,
+                  "bootstrap_ci95": [
+                    7,
+                    7.6667
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 6,
+                  "mean": 7.3333,
+                  "sd": 0.4916,
+                  "bootstrap_ci95": [
+                    7.0,
+                    7.6667
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 6,
+                  "mean": 7.3083,
+                  "sd": 0.5295,
+                  "bootstrap_ci95": [
+                    6.925,
+                    7.6667
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 7.3,
+                  "sd": 0.9899,
+                  "bootstrap_ci95": [
+                    6.6,
+                    8
+                  ]
+                }
+              }
+            },
+            "text_video": {
+              "n": 5,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 5,
+                  "mean": 5.6,
+                  "sd": 3.3615,
+                  "bootstrap_ci95": [
+                    2.6,
+                    7.8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 5,
+                  "mean": 6,
+                  "sd": 3.0,
+                  "bootstrap_ci95": [
+                    3.4,
+                    8
+                  ]
+                },
+                "risk_management": {
+                  "n": 5,
+                  "mean": 5.6,
+                  "sd": 2.7928,
+                  "bootstrap_ci95": [
+                    3.2,
+                    7.4
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 3.5,
+                  "sd": 3.5355,
+                  "bootstrap_ci95": [
+                    1,
+                    6
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 5,
+                  "mean": 6.2,
+                  "sd": 2.3875,
+                  "bootstrap_ci95": [
+                    4,
+                    7.6
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 5,
+                  "mean": 5.85,
+                  "sd": 2.8317,
+                  "bootstrap_ci95": [
+                    3.4,
+                    7.6
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 5,
+                  "mean": 5.85,
+                  "sd": 2.8317,
+                  "bootstrap_ci95": [
+                    3.4,
+                    7.6
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 3.5,
+                  "sd": 3.5355,
+                  "bootstrap_ci95": [
+                    1,
+                    6
+                  ]
+                }
+              }
+            }
+          },
+          "matched_scenarios": 5,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 5,
+              "mean": -2,
+              "sd": 3.4641,
+              "bootstrap_ci95": [
+                -5.2,
+                0
+              ],
+              "win": 0,
+              "tie": 3,
+              "loss": 2
+            },
+            "state_adaptation": {
+              "n": 5,
+              "mean": -1.2,
+              "sd": 1.7889,
+              "bootstrap_ci95": [
+                -2.8,
+                0.2
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 4
+            },
+            "risk_management": {
+              "n": 5,
+              "mean": -1.4,
+              "sd": 2.6077,
+              "bootstrap_ci95": [
+                -3.8,
+                0
+              ],
+              "win": 0,
+              "tie": 3,
+              "loss": 2
+            },
+            "recovery": {
+              "n": 1,
+              "mean": -5,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 1
+            },
+            "relationship_outcome": {
+              "n": 5,
+              "mean": -1.2,
+              "sd": 2.1679,
+              "bootstrap_ci95": [
+                -3.2,
+                0
+              ],
+              "win": 0,
+              "tie": 3,
+              "loss": 2
+            },
+            "core_four_mean": {
+              "n": 5,
+              "mean": -1.45,
+              "sd": 2.4457,
+              "bootstrap_ci95": [
+                -3.65,
+                -0.1
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 4
+            },
+            "available_dimension_mean": {
+              "n": 5,
+              "mean": -1.42,
+              "sd": 2.3798,
+              "bootstrap_ci95": [
+                -3.56,
+                -0.1
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 4
+            },
+            "five_dimension_mean": {
+              "n": 1,
+              "mean": -5.6,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 1
+            }
+          },
+          "api_request_count": 205,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        },
+        "qwen": {
+          "status_counts": {
+            "completed": 9,
+            "failed": 3
+          },
+          "conditions": {
+            "text_only": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 8.25,
+                  "sd": 1.2583,
+                  "bootstrap_ci95": [
+                    7.25,
+                    9.5
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 8.5,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    8,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 8,
+                  "sd": 0.8165,
+                  "bootstrap_ci95": [
+                    7.25,
+                    8.75
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 6,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 7.5,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 4,
+                  "mean": 8.0625,
+                  "sd": 0.625,
+                  "bootstrap_ci95": [
+                    7.5,
+                    8.5625
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 4,
+                  "mean": 8.0,
+                  "sd": 0.736,
+                  "bootstrap_ci95": [
+                    7.3125,
+                    8.5625
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 7,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 5,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 5,
+                  "mean": 7.6,
+                  "sd": 0.5477,
+                  "bootstrap_ci95": [
+                    7.2,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 5,
+                  "mean": 8.2,
+                  "sd": 0.8367,
+                  "bootstrap_ci95": [
+                    7.6,
+                    8.8
+                  ]
+                },
+                "risk_management": {
+                  "n": 5,
+                  "mean": 7.2,
+                  "sd": 0.4472,
+                  "bootstrap_ci95": [
+                    7,
+                    7.6
+                  ]
+                },
+                "recovery": {
+                  "n": 3,
+                  "mean": 6.6667,
+                  "sd": 1.1547,
+                  "bootstrap_ci95": [
+                    6,
+                    8
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 5,
+                  "mean": 7.4,
+                  "sd": 0.5477,
+                  "bootstrap_ci95": [
+                    7,
+                    7.8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 5,
+                  "mean": 7.6,
+                  "sd": 0.285,
+                  "bootstrap_ci95": [
+                    7.4,
+                    7.8
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 5,
+                  "mean": 7.49,
+                  "sd": 0.4037,
+                  "bootstrap_ci95": [
+                    7.18,
+                    7.8
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 3,
+                  "mean": 7.4,
+                  "sd": 0.5292,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                }
+              }
+            }
+          },
+          "matched_scenarios": 3,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 3,
+              "mean": -1,
+              "sd": 2.0,
+              "bootstrap_ci95": [
+                -3,
+                1
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 2
+            },
+            "state_adaptation": {
+              "n": 3,
+              "mean": 0,
+              "sd": 1.0,
+              "bootstrap_ci95": [
+                -1,
+                1
+              ],
+              "win": 1,
+              "tie": 1,
+              "loss": 1
+            },
+            "risk_management": {
+              "n": 3,
+              "mean": -0.6667,
+              "sd": 1.5275,
+              "bootstrap_ci95": [
+                -2,
+                1
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 2
+            },
+            "recovery": {
+              "n": 1,
+              "mean": 2,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 1,
+              "tie": 0,
+              "loss": 0
+            },
+            "relationship_outcome": {
+              "n": 3,
+              "mean": 0,
+              "sd": 0.0,
+              "bootstrap_ci95": [
+                0,
+                0
+              ],
+              "win": 0,
+              "tie": 3,
+              "loss": 0
+            },
+            "core_four_mean": {
+              "n": 3,
+              "mean": -0.4167,
+              "sd": 1.0408,
+              "bootstrap_ci95": [
+                -1.25,
+                0.75
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 2
+            },
+            "available_dimension_mean": {
+              "n": 3,
+              "mean": -0.4167,
+              "sd": 1.2332,
+              "bootstrap_ci95": [
+                -1.25,
+                1
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 2
+            },
+            "five_dimension_mean": {
+              "n": 1,
+              "mean": 1,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 1,
+              "tie": 0,
+              "loss": 0
+            }
+          },
+          "api_request_count": 150,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        },
+        "qwen37": {
+          "status_counts": {
+            "unsupported_video_input": 6,
+            "completed": 6
+          },
+          "conditions": {
+            "text_only": {
+              "n": 6,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 6,
+                  "mean": 7.5,
+                  "sd": 0.8367,
+                  "bootstrap_ci95": [
+                    6.8333,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 6,
+                  "mean": 8.3333,
+                  "sd": 0.8165,
+                  "bootstrap_ci95": [
+                    7.6667,
+                    8.8333
+                  ]
+                },
+                "risk_management": {
+                  "n": 6,
+                  "mean": 7.3333,
+                  "sd": 0.8165,
+                  "bootstrap_ci95": [
+                    6.6667,
+                    7.8333
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 7.5,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 6,
+                  "mean": 7.5,
+                  "sd": 0.5477,
+                  "bootstrap_ci95": [
+                    7.1667,
+                    7.8333
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 6,
+                  "mean": 7.6667,
+                  "sd": 0.6258,
+                  "bootstrap_ci95": [
+                    7.1667,
+                    8.0417
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 6,
+                  "mean": 7.65,
+                  "sd": 0.6325,
+                  "bootstrap_ci95": [
+                    7.1583,
+                    8.0417
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 7.7,
+                  "sd": 0.4243,
+                  "bootstrap_ci95": [
+                    7.4,
+                    8
+                  ]
+                }
+              }
+            },
+            "text_video": {
+              "n": 0,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "state_adaptation": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "risk_management": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "core_four_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "available_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 0,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "state_adaptation": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "risk_management": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "relationship_outcome": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "core_four_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "available_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            }
+          },
+          "api_request_count": 112,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        },
+        "qwen_vl": {
+          "status_counts": {
+            "completed": 10,
+            "failed": 2
+          },
+          "conditions": {
+            "text_only": {
+              "n": 6,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 6,
+                  "mean": 7.8333,
+                  "sd": 2.0412,
+                  "bootstrap_ci95": [
+                    6.1667,
+                    9
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 6,
+                  "mean": 7.8333,
+                  "sd": 1.6021,
+                  "bootstrap_ci95": [
+                    6.6667,
+                    8.8333
+                  ]
+                },
+                "risk_management": {
+                  "n": 6,
+                  "mean": 7.6667,
+                  "sd": 1.0328,
+                  "bootstrap_ci95": [
+                    6.8333,
+                    8.3333
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 5.5,
+                  "sd": 2.1213,
+                  "bootstrap_ci95": [
+                    4,
+                    7
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 6,
+                  "mean": 7.3333,
+                  "sd": 0.8165,
+                  "bootstrap_ci95": [
+                    6.6667,
+                    7.8333
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 6,
+                  "mean": 7.6667,
+                  "sd": 1.2616,
+                  "bootstrap_ci95": [
+                    6.625,
+                    8.3333
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 6,
+                  "mean": 7.5917,
+                  "sd": 1.3492,
+                  "bootstrap_ci95": [
+                    6.4667,
+                    8.3333
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 6.4,
+                  "sd": 1.9799,
+                  "bootstrap_ci95": [
+                    5,
+                    7.8
+                  ]
+                }
+              }
+            },
+            "text_video": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 6.75,
+                  "sd": 1.5,
+                  "bootstrap_ci95": [
+                    5.5,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 8.25,
+                  "sd": 0.9574,
+                  "bootstrap_ci95": [
+                    7.5,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 7.25,
+                  "sd": 1.2583,
+                  "bootstrap_ci95": [
+                    6.25,
+                    8.5
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 6.5,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    6,
+                    7
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 7.25,
+                  "sd": 0.9574,
+                  "bootstrap_ci95": [
+                    6.5,
+                    8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 4,
+                  "mean": 7.375,
+                  "sd": 1.0508,
+                  "bootstrap_ci95": [
+                    6.4375,
+                    8.1875
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 4,
+                  "mean": 7.3625,
+                  "sd": 1.0531,
+                  "bootstrap_ci95": [
+                    6.4375,
+                    8.175
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 6.6,
+                  "sd": 0.8485,
+                  "bootstrap_ci95": [
+                    6,
+                    7.2
+                  ]
+                }
+              }
+            }
+          },
+          "matched_scenarios": 4,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 4,
+              "mean": -0.75,
+              "sd": 3.2016,
+              "bootstrap_ci95": [
+                -2.75,
+                2.5
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 3
+            },
+            "state_adaptation": {
+              "n": 4,
+              "mean": 0.25,
+              "sd": 2.63,
+              "bootstrap_ci95": [
+                -1.5,
+                2.75
+              ],
+              "win": 1,
+              "tie": 1,
+              "loss": 2
+            },
+            "risk_management": {
+              "n": 4,
+              "mean": -0.25,
+              "sd": 0.9574,
+              "bootstrap_ci95": [
+                -1,
+                0.5
+              ],
+              "win": 1,
+              "tie": 1,
+              "loss": 2
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "relationship_outcome": {
+              "n": 4,
+              "mean": 0,
+              "sd": 1.4142,
+              "bootstrap_ci95": [
+                -1.25,
+                1
+              ],
+              "win": 2,
+              "tie": 1,
+              "loss": 1
+            },
+            "core_four_mean": {
+              "n": 4,
+              "mean": -0.1875,
+              "sd": 1.908,
+              "bootstrap_ci95": [
+                -1.625,
+                1.6875
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 3
+            },
+            "available_dimension_mean": {
+              "n": 4,
+              "mean": -0.1375,
+              "sd": 2.0312,
+              "bootstrap_ci95": [
+                -1.625,
+                1.8625
+              ],
+              "win": 1,
+              "tie": 0,
+              "loss": 3
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            }
+          },
+          "api_request_count": 197,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        },
+        "kimi": {
+          "status_counts": {
+            "completed": 9,
+            "failed": 3
+          },
+          "conditions": {
+            "text_only": {
+              "n": 5,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 5,
+                  "mean": 8.6,
+                  "sd": 1.3416,
+                  "bootstrap_ci95": [
+                    7.6,
+                    9.6
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 5,
+                  "mean": 8.4,
+                  "sd": 0.8944,
+                  "bootstrap_ci95": [
+                    7.6,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 5,
+                  "mean": 8.2,
+                  "sd": 1.3038,
+                  "bootstrap_ci95": [
+                    7.2,
+                    9.2
+                  ]
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 5,
+                  "mean": 8,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    7.4,
+                    8.6
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 5,
+                  "mean": 8.3,
+                  "sd": 0.9906,
+                  "bootstrap_ci95": [
+                    7.55,
+                    9.05
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 5,
+                  "mean": 8.3,
+                  "sd": 0.9906,
+                  "bootstrap_ci95": [
+                    7.55,
+                    9.05
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 8.5,
+                  "sd": 1.0,
+                  "bootstrap_ci95": [
+                    8,
+                    9.5
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 8.75,
+                  "sd": 0.5,
+                  "bootstrap_ci95": [
+                    8.25,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 8.5,
+                  "sd": 1.0,
+                  "bootstrap_ci95": [
+                    8,
+                    9.5
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 7.5,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 4,
+                  "mean": 8.4375,
+                  "sd": 0.5543,
+                  "bootstrap_ci95": [
+                    8.0625,
+                    9.0
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 4,
+                  "mean": 8.375,
+                  "sd": 0.6171,
+                  "bootstrap_ci95": [
+                    7.9125,
+                    8.9875
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 8.0,
+                  "sd": 0.2828,
+                  "bootstrap_ci95": [
+                    7.8,
+                    8.2
+                  ]
+                }
+              }
+            }
+          },
+          "matched_scenarios": 3,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 3,
+              "mean": 0.3333,
+              "sd": 2.0817,
+              "bootstrap_ci95": [
+                -2,
+                2
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 1
+            },
+            "state_adaptation": {
+              "n": 3,
+              "mean": 0.6667,
+              "sd": 1.5275,
+              "bootstrap_ci95": [
+                -1,
+                2
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 1
+            },
+            "risk_management": {
+              "n": 3,
+              "mean": 1,
+              "sd": 2.0,
+              "bootstrap_ci95": [
+                -1,
+                3
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 1
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "relationship_outcome": {
+              "n": 3,
+              "mean": 0.3333,
+              "sd": 0.5774,
+              "bootstrap_ci95": [
+                0,
+                1
+              ],
+              "win": 1,
+              "tie": 2,
+              "loss": 0
+            },
+            "core_four_mean": {
+              "n": 3,
+              "mean": 0.5833,
+              "sd": 1.3769,
+              "bootstrap_ci95": [
+                -1,
+                1.5
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 1
+            },
+            "available_dimension_mean": {
+              "n": 3,
+              "mean": 0.5167,
+              "sd": 1.4919,
+              "bootstrap_ci95": [
+                -1.2,
+                1.5
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 1
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            }
+          },
+          "api_request_count": 140,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        },
+        "glm": {
+          "status_counts": {
+            "completed": 4,
+            "unsupported_video_input": 6,
+            "failed": 2
+          },
+          "conditions": {
+            "text_only": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 8.5,
+                  "sd": 1.0,
+                  "bootstrap_ci95": [
+                    8,
+                    9.5
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 8.5,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    8,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 7.75,
+                  "sd": 1.5,
+                  "bootstrap_ci95": [
+                    7,
+                    9.25
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 8,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 7.25,
+                  "sd": 0.5,
+                  "bootstrap_ci95": [
+                    7,
+                    7.75
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 4,
+                  "mean": 8.0,
+                  "sd": 0.8416,
+                  "bootstrap_ci95": [
+                    7.5,
+                    8.8125
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 4,
+                  "mean": 8.025,
+                  "sd": 0.8231,
+                  "bootstrap_ci95": [
+                    7.55,
+                    8.8375
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 7.6,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 0,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "state_adaptation": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "risk_management": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "recovery": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "core_four_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "available_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "five_dimension_mean": {
+                  "n": 0,
+                  "mean": null,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 0,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "state_adaptation": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "risk_management": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "relationship_outcome": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "core_four_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "available_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            }
+          },
+          "api_request_count": 61,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        },
+        "deepseek_flash": {
+          "status_counts": {
+            "completed": 10,
+            "failed": 2
+          },
+          "conditions": {
+            "text_only": {
+              "n": 4,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 4,
+                  "mean": 7.75,
+                  "sd": 0.5,
+                  "bootstrap_ci95": [
+                    7.25,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 4,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "risk_management": {
+                  "n": 4,
+                  "mean": 7,
+                  "sd": 0.8165,
+                  "bootstrap_ci95": [
+                    6.25,
+                    7.75
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 7.5,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 4,
+                  "mean": 7.75,
+                  "sd": 0.5,
+                  "bootstrap_ci95": [
+                    7.25,
+                    8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 4,
+                  "mean": 7.625,
+                  "sd": 0.433,
+                  "bootstrap_ci95": [
+                    7.1875,
+                    7.9375
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 4,
+                  "mean": 7.5875,
+                  "sd": 0.425,
+                  "bootstrap_ci95": [
+                    7.1875,
+                    7.9
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 7.8,
+                  "sd": 0.2828,
+                  "bootstrap_ci95": [
+                    7.6,
+                    8
+                  ]
+                }
+              }
+            },
+            "text_video": {
+              "n": 6,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 6,
+                  "mean": 8,
+                  "sd": 1.0954,
+                  "bootstrap_ci95": [
+                    7.3333,
+                    8.8333
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 6,
+                  "mean": 8,
+                  "sd": 0.6325,
+                  "bootstrap_ci95": [
+                    7.5,
+                    8.5
+                  ]
+                },
+                "risk_management": {
+                  "n": 6,
+                  "mean": 7.8333,
+                  "sd": 0.7528,
+                  "bootstrap_ci95": [
+                    7.3333,
+                    8.3333
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 6,
+                  "mean": 7.3333,
+                  "sd": 0.5164,
+                  "bootstrap_ci95": [
+                    7,
+                    7.6667
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 6,
+                  "mean": 7.7917,
+                  "sd": 0.6967,
+                  "bootstrap_ci95": [
+                    7.3333,
+                    8.3333
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 6,
+                  "mean": 7.825,
+                  "sd": 0.6751,
+                  "bootstrap_ci95": [
+                    7.3667,
+                    8.3583
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 7.6,
+                  "sd": 0.2828,
+                  "bootstrap_ci95": [
+                    7.4,
+                    7.8
+                  ]
+                }
+              }
+            }
+          },
+          "matched_scenarios": 4,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 4,
+              "mean": 0.25,
+              "sd": 1.2583,
+              "bootstrap_ci95": [
+                -0.75,
+                1.5
+              ],
+              "win": 1,
+              "tie": 2,
+              "loss": 1
+            },
+            "state_adaptation": {
+              "n": 4,
+              "mean": 0,
+              "sd": 0.8165,
+              "bootstrap_ci95": [
+                -0.75,
+                0.75
+              ],
+              "win": 1,
+              "tie": 2,
+              "loss": 1
+            },
+            "risk_management": {
+              "n": 4,
+              "mean": 0.75,
+              "sd": 0.9574,
+              "bootstrap_ci95": [
+                0,
+                1.5
+              ],
+              "win": 2,
+              "tie": 2,
+              "loss": 0
+            },
+            "recovery": {
+              "n": 1,
+              "mean": 0,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 1,
+              "loss": 0
+            },
+            "relationship_outcome": {
+              "n": 4,
+              "mean": -0.5,
+              "sd": 0.5774,
+              "bootstrap_ci95": [
+                -1,
+                0
+              ],
+              "win": 0,
+              "tie": 2,
+              "loss": 2
+            },
+            "core_four_mean": {
+              "n": 4,
+              "mean": 0.125,
+              "sd": 0.8539,
+              "bootstrap_ci95": [
+                -0.5,
+                0.875
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 2
+            },
+            "available_dimension_mean": {
+              "n": 4,
+              "mean": 0.2125,
+              "sd": 0.9205,
+              "bootstrap_ci95": [
+                -0.475,
+                1.0
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 2
+            },
+            "five_dimension_mean": {
+              "n": 1,
+              "mean": -0.2,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 1
+            }
+          },
+          "api_request_count": 170,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        }
+      },
+      "budget": {
+        "request_count": 337,
+        "limit": 1500
+      }
+    },
+    "full41": {
+      "status": {
+        "status": "running",
+        "updated_at": "2026-10-21T11:29:06.984456+08:00",
+        "finished": 11,
+        "planned": 164,
+        "api_requests": 258,
+        "models": {
+          "gpt": {
+            "status_counts": {
+              "completed": 6
+            },
+            "conditions": {
+              "text_only": {
+                "n": 3,
+                "metrics": {
+                  "goal_achievement": {
+                    "n": 3,
+                    "mean": 8,
+                    "sd": 0.0,
+                    "bootstrap_ci95": [
+                      8,
+                      8
+                    ]
+                  },
+                  "state_adaptation": {
+                    "n": 3,
+                    "mean": 8.3333,
+                    "sd": 0.5774,
+                    "bootstrap_ci95": [
+                      8,
+                      9
+                    ]
+                  },
+                  "risk_management": {
+                    "n": 3,
+                    "mean": 7.6667,
+                    "sd": 0.5774,
+                    "bootstrap_ci95": [
+                      7,
+                      8
+                    ]
+                  },
+                  "recovery": {
+                    "n": 1,
+                    "mean": 9,
+                    "sd": null,
+                    "bootstrap_ci95": null
+                  },
+                  "relationship_outcome": {
+                    "n": 3,
+                    "mean": 8,
+                    "sd": 0.0,
+                    "bootstrap_ci95": [
+                      8,
+                      8
+                    ]
+                  },
+                  "core_four_mean": {
+                    "n": 3,
+                    "mean": 8.0,
+                    "sd": 0.25,
+                    "bootstrap_ci95": [
+                      7.75,
+                      8.25
+                    ]
+                  },
+                  "available_dimension_mean": {
+                    "n": 3,
+                    "mean": 8.05,
+                    "sd": 0.3279,
+                    "bootstrap_ci95": [
+                      7.75,
+                      8.4
+                    ]
+                  },
+                  "five_dimension_mean": {
+                    "n": 1,
+                    "mean": 8.4,
+                    "sd": null,
+                    "bootstrap_ci95": null
+                  }
+                }
+              },
+              "text_video": {
+                "n": 3,
+                "metrics": {
+                  "goal_achievement": {
+                    "n": 3,
+                    "mean": 7,
+                    "sd": 3.6056,
+                    "bootstrap_ci95": [
+                      3,
+                      10
+                    ]
+                  },
+                  "state_adaptation": {
+                    "n": 3,
+                    "mean": 7.6667,
+                    "sd": 2.3094,
+                    "bootstrap_ci95": [
+                      5,
+                      9
+                    ]
+                  },
+                  "risk_management": {
+                    "n": 3,
+                    "mean": 7.6667,
+                    "sd": 0.5774,
+                    "bootstrap_ci95": [
+                      7,
+                      8
+                    ]
+                  },
+                  "recovery": {
+                    "n": 1,
+                    "mean": 8,
+                    "sd": null,
+                    "bootstrap_ci95": null
+                  },
+                  "relationship_outcome": {
+                    "n": 3,
+                    "mean": 6.6667,
+                    "sd": 0.5774,
+                    "bootstrap_ci95": [
+                      6,
+                      7
+                    ]
+                  },
+                  "core_four_mean": {
+                    "n": 3,
+                    "mean": 7.25,
+                    "sd": 1.75,
+                    "bootstrap_ci95": [
+                      5.25,
+                      8.5
+                    ]
+                  },
+                  "available_dimension_mean": {
+                    "n": 3,
+                    "mean": 7.25,
+                    "sd": 1.75,
+                    "bootstrap_ci95": [
+                      5.25,
+                      8.5
+                    ]
+                  },
+                  "five_dimension_mean": {
+                    "n": 1,
+                    "mean": 8,
+                    "sd": null,
+                    "bootstrap_ci95": null
+                  }
+                }
+              }
+            },
+            "matched_scenarios": 3,
+            "paired_text_video_minus_text": {
+              "goal_achievement": {
+                "n": 3,
+                "mean": -1,
+                "sd": 3.6056,
+                "bootstrap_ci95": [
+                  -5,
+                  2
+                ],
+                "win": 1,
+                "tie": 1,
+                "loss": 1
+              },
+              "state_adaptation": {
+                "n": 3,
+                "mean": -0.6667,
+                "sd": 2.0817,
+                "bootstrap_ci95": [
+                  -3,
+                  1
+                ],
+                "win": 1,
+                "tie": 1,
+                "loss": 1
+              },
+              "risk_management": {
+                "n": 3,
+                "mean": 0,
+                "sd": 1.0,
+                "bootstrap_ci95": [
+                  -1,
+                  1
+                ],
+                "win": 1,
+                "tie": 1,
+                "loss": 1
+              },
+              "recovery": {
+                "n": 0,
+                "mean": null,
+                "sd": null,
+                "bootstrap_ci95": null,
+                "win": 0,
+                "tie": 0,
+                "loss": 0
+              },
+              "relationship_outcome": {
+                "n": 3,
+                "mean": -1.3333,
+                "sd": 0.5774,
+                "bootstrap_ci95": [
+                  -2,
+                  -1
+                ],
+                "win": 0,
+                "tie": 0,
+                "loss": 3
+              },
+              "core_four_mean": {
+                "n": 3,
+                "mean": -0.75,
+                "sd": 1.7321,
+                "bootstrap_ci95": [
+                  -2.75,
+                  0.25
+                ],
+                "win": 2,
+                "tie": 0,
+                "loss": 1
+              },
+              "available_dimension_mean": {
+                "n": 3,
+                "mean": -0.8,
+                "sd": 1.6904,
+                "bootstrap_ci95": [
+                  -2.75,
+                  0.25
+                ],
+                "win": 2,
+                "tie": 0,
+                "loss": 1
+              },
+              "five_dimension_mean": {
+                "n": 0,
+                "mean": null,
+                "sd": null,
+                "bootstrap_ci95": null,
+                "win": 0,
+                "tie": 0,
+                "loss": 0
+              }
+            },
+            "api_request_count": 126,
+            "human_validation_status": "not_human_validated",
+            "limitations": [
+              "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+              "Single automatic judge; no human calibration or independent-model validation.",
+              "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+              "No modality effect can be estimated without actual matched text_video trajectories."
+            ]
+          },
+          "claude": {
+            "status_counts": {
+              "failed": 1,
+              "completed": 4
+            },
+            "conditions": {
+              "text_only": {
+                "n": 2,
+                "metrics": {
+                  "goal_achievement": {
+                    "n": 2,
+                    "mean": 5.5,
+                    "sd": 3.5355,
+                    "bootstrap_ci95": [
+                      3,
+                      8
+                    ]
+                  },
+                  "state_adaptation": {
+                    "n": 2,
+                    "mean": 8,
+                    "sd": 1.4142,
+                    "bootstrap_ci95": [
+                      7,
+                      9
+                    ]
+                  },
+                  "risk_management": {
+                    "n": 2,
+                    "mean": 6.5,
+                    "sd": 2.1213,
+                    "bootstrap_ci95": [
+                      5,
+                      8
+                    ]
+                  },
+                  "recovery": {
+                    "n": 2,
+                    "mean": 6.5,
+                    "sd": 2.1213,
+                    "bootstrap_ci95": [
+                      5,
+                      8
+                    ]
+                  },
+                  "relationship_outcome": {
+                    "n": 2,
+                    "mean": 7.5,
+                    "sd": 0.7071,
+                    "bootstrap_ci95": [
+                      7,
+                      8
+                    ]
+                  },
+                  "core_four_mean": {
+                    "n": 2,
+                    "mean": 6.875,
+                    "sd": 1.9445,
+                    "bootstrap_ci95": [
+                      5.5,
+                      8.25
+                    ]
+                  },
+                  "available_dimension_mean": {
+                    "n": 2,
+                    "mean": 6.8,
+                    "sd": 1.9799,
+                    "bootstrap_ci95": [
+                      5.4,
+                      8.2
+                    ]
+                  },
+                  "five_dimension_mean": {
+                    "n": 2,
+                    "mean": 6.8,
+                    "sd": 1.9799,
+                    "bootstrap_ci95": [
+                      5.4,
+                      8.2
+                    ]
+                  }
+                }
+              },
+              "text_video": {
+                "n": 2,
+                "metrics": {
+                  "goal_achievement": {
+                    "n": 2,
+                    "mean": 7.5,
+                    "sd": 0.7071,
+                    "bootstrap_ci95": [
+                      7,
+                      8
+                    ]
+                  },
+                  "state_adaptation": {
+                    "n": 2,
+                    "mean": 8,
+                    "sd": 0.0,
+                    "bootstrap_ci95": [
+                      8,
+                      8
+                    ]
+                  },
+                  "risk_management": {
+                    "n": 2,
+                    "mean": 6.5,
+                    "sd": 0.7071,
+                    "bootstrap_ci95": [
+                      6,
+                      7
+                    ]
+                  },
+                  "recovery": {
+                    "n": 1,
+                    "mean": 7,
+                    "sd": null,
+                    "bootstrap_ci95": null
+                  },
+                  "relationship_outcome": {
+                    "n": 2,
+                    "mean": 8,
+                    "sd": 0.0,
+                    "bootstrap_ci95": [
+                      8,
+                      8
+                    ]
+                  },
+                  "core_four_mean": {
+                    "n": 2,
+                    "mean": 7.5,
+                    "sd": 0.3536,
+                    "bootstrap_ci95": [
+                      7.25,
+                      7.75
+                    ]
+                  },
+                  "available_dimension_mean": {
+                    "n": 2,
+                    "mean": 7.475,
+                    "sd": 0.3889,
+                    "bootstrap_ci95": [
+                      7.2,
+                      7.75
+                    ]
+                  },
+                  "five_dimension_mean": {
+                    "n": 1,
+                    "mean": 7.2,
+                    "sd": null,
+                    "bootstrap_ci95": null
+                  }
+                }
+              }
+            },
+            "matched_scenarios": 1,
+            "paired_text_video_minus_text": {
+              "goal_achievement": {
+                "n": 1,
+                "mean": -1,
+                "sd": null,
+                "bootstrap_ci95": null,
+                "win": 0,
+                "tie": 0,
+                "loss": 1
+              },
+              "state_adaptation": {
+                "n": 1,
+                "mean": -1,
+                "sd": null,
+                "bootstrap_ci95": null,
+                "win": 0,
+                "tie": 0,
+                "loss": 1
+              },
+              "risk_management": {
+                "n": 1,
+                "mean": -2,
+                "sd": null,
+                "bootstrap_ci95": null,
+                "win": 0,
+                "tie": 0,
+                "loss": 1
+              },
+              "recovery": {
+                "n": 1,
+                "mean": -1,
+                "sd": null,
+                "bootstrap_ci95": null,
+                "win": 0,
+                "tie": 0,
+                "loss": 1
+              },
+              "relationship_outcome": {
+                "n": 1,
+                "mean": 0,
+                "sd": null,
+                "bootstrap_ci95": null,
+                "win": 0,
+                "tie": 1,
+                "loss": 0
+              },
+              "core_four_mean": {
+                "n": 1,
+                "mean": -1.0,
+                "sd": null,
+                "bootstrap_ci95": null,
+                "win": 0,
+                "tie": 0,
+                "loss": 1
+              },
+              "available_dimension_mean": {
+                "n": 1,
+                "mean": -1.0,
+                "sd": null,
+                "bootstrap_ci95": null,
+                "win": 0,
+                "tie": 0,
+                "loss": 1
+              },
+              "five_dimension_mean": {
+                "n": 1,
+                "mean": -1.0,
+                "sd": null,
+                "bootstrap_ci95": null,
+                "win": 0,
+                "tie": 0,
+                "loss": 1
+              }
+            },
+            "api_request_count": 96,
+            "human_validation_status": "not_human_validated",
+            "limitations": [
+              "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+              "Single automatic judge; no human calibration or independent-model validation.",
+              "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+              "No modality effect can be estimated without actual matched text_video trajectories."
+            ]
+          }
+        }
+      },
+      "summary": {
+        "gpt": {
+          "status_counts": {
+            "completed": 6
+          },
+          "conditions": {
+            "text_only": {
+              "n": 3,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 3,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 3,
+                  "mean": 8.3333,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    8,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 3,
+                  "mean": 7.6667,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 9,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 3,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 3,
+                  "mean": 8.0,
+                  "sd": 0.25,
+                  "bootstrap_ci95": [
+                    7.75,
+                    8.25
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 3,
+                  "mean": 8.05,
+                  "sd": 0.3279,
+                  "bootstrap_ci95": [
+                    7.75,
+                    8.4
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 8.4,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            },
+            "text_video": {
+              "n": 3,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 3,
+                  "mean": 7,
+                  "sd": 3.6056,
+                  "bootstrap_ci95": [
+                    3,
+                    10
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 3,
+                  "mean": 7.6667,
+                  "sd": 2.3094,
+                  "bootstrap_ci95": [
+                    5,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 3,
+                  "mean": 7.6667,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 8,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 3,
+                  "mean": 6.6667,
+                  "sd": 0.5774,
+                  "bootstrap_ci95": [
+                    6,
+                    7
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 3,
+                  "mean": 7.25,
+                  "sd": 1.75,
+                  "bootstrap_ci95": [
+                    5.25,
+                    8.5
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 3,
+                  "mean": 7.25,
+                  "sd": 1.75,
+                  "bootstrap_ci95": [
+                    5.25,
+                    8.5
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 8,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 3,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 3,
+              "mean": -1,
+              "sd": 3.6056,
+              "bootstrap_ci95": [
+                -5,
+                2
+              ],
+              "win": 1,
+              "tie": 1,
+              "loss": 1
+            },
+            "state_adaptation": {
+              "n": 3,
+              "mean": -0.6667,
+              "sd": 2.0817,
+              "bootstrap_ci95": [
+                -3,
+                1
+              ],
+              "win": 1,
+              "tie": 1,
+              "loss": 1
+            },
+            "risk_management": {
+              "n": 3,
+              "mean": 0,
+              "sd": 1.0,
+              "bootstrap_ci95": [
+                -1,
+                1
+              ],
+              "win": 1,
+              "tie": 1,
+              "loss": 1
+            },
+            "recovery": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            },
+            "relationship_outcome": {
+              "n": 3,
+              "mean": -1.3333,
+              "sd": 0.5774,
+              "bootstrap_ci95": [
+                -2,
+                -1
+              ],
+              "win": 0,
+              "tie": 0,
+              "loss": 3
+            },
+            "core_four_mean": {
+              "n": 3,
+              "mean": -0.75,
+              "sd": 1.7321,
+              "bootstrap_ci95": [
+                -2.75,
+                0.25
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 1
+            },
+            "available_dimension_mean": {
+              "n": 3,
+              "mean": -0.8,
+              "sd": 1.6904,
+              "bootstrap_ci95": [
+                -2.75,
+                0.25
+              ],
+              "win": 2,
+              "tie": 0,
+              "loss": 1
+            },
+            "five_dimension_mean": {
+              "n": 0,
+              "mean": null,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 0
+            }
+          },
+          "api_request_count": 126,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        },
+        "claude": {
+          "status_counts": {
+            "failed": 1,
+            "completed": 4
+          },
+          "conditions": {
+            "text_only": {
+              "n": 2,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 2,
+                  "mean": 5.5,
+                  "sd": 3.5355,
+                  "bootstrap_ci95": [
+                    3,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 2,
+                  "mean": 8,
+                  "sd": 1.4142,
+                  "bootstrap_ci95": [
+                    7,
+                    9
+                  ]
+                },
+                "risk_management": {
+                  "n": 2,
+                  "mean": 6.5,
+                  "sd": 2.1213,
+                  "bootstrap_ci95": [
+                    5,
+                    8
+                  ]
+                },
+                "recovery": {
+                  "n": 2,
+                  "mean": 6.5,
+                  "sd": 2.1213,
+                  "bootstrap_ci95": [
+                    5,
+                    8
+                  ]
+                },
+                "relationship_outcome": {
+                  "n": 2,
+                  "mean": 7.5,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 2,
+                  "mean": 6.875,
+                  "sd": 1.9445,
+                  "bootstrap_ci95": [
+                    5.5,
+                    8.25
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 2,
+                  "mean": 6.8,
+                  "sd": 1.9799,
+                  "bootstrap_ci95": [
+                    5.4,
+                    8.2
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 2,
+                  "mean": 6.8,
+                  "sd": 1.9799,
+                  "bootstrap_ci95": [
+                    5.4,
+                    8.2
+                  ]
+                }
+              }
+            },
+            "text_video": {
+              "n": 2,
+              "metrics": {
+                "goal_achievement": {
+                  "n": 2,
+                  "mean": 7.5,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    7,
+                    8
+                  ]
+                },
+                "state_adaptation": {
+                  "n": 2,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "risk_management": {
+                  "n": 2,
+                  "mean": 6.5,
+                  "sd": 0.7071,
+                  "bootstrap_ci95": [
+                    6,
+                    7
+                  ]
+                },
+                "recovery": {
+                  "n": 1,
+                  "mean": 7,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                },
+                "relationship_outcome": {
+                  "n": 2,
+                  "mean": 8,
+                  "sd": 0.0,
+                  "bootstrap_ci95": [
+                    8,
+                    8
+                  ]
+                },
+                "core_four_mean": {
+                  "n": 2,
+                  "mean": 7.5,
+                  "sd": 0.3536,
+                  "bootstrap_ci95": [
+                    7.25,
+                    7.75
+                  ]
+                },
+                "available_dimension_mean": {
+                  "n": 2,
+                  "mean": 7.475,
+                  "sd": 0.3889,
+                  "bootstrap_ci95": [
+                    7.2,
+                    7.75
+                  ]
+                },
+                "five_dimension_mean": {
+                  "n": 1,
+                  "mean": 7.2,
+                  "sd": null,
+                  "bootstrap_ci95": null
+                }
+              }
+            }
+          },
+          "matched_scenarios": 1,
+          "paired_text_video_minus_text": {
+            "goal_achievement": {
+              "n": 1,
+              "mean": -1,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 1
+            },
+            "state_adaptation": {
+              "n": 1,
+              "mean": -1,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 1
+            },
+            "risk_management": {
+              "n": 1,
+              "mean": -2,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 1
+            },
+            "recovery": {
+              "n": 1,
+              "mean": -1,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 1
+            },
+            "relationship_outcome": {
+              "n": 1,
+              "mean": 0,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 1,
+              "loss": 0
+            },
+            "core_four_mean": {
+              "n": 1,
+              "mean": -1.0,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 1
+            },
+            "available_dimension_mean": {
+              "n": 1,
+              "mean": -1.0,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 1
+            },
+            "five_dimension_mean": {
+              "n": 1,
+              "mean": -1.0,
+              "sd": null,
+              "bootstrap_ci95": null,
+              "win": 0,
+              "tie": 0,
+              "loss": 1
+            }
+          },
+          "api_request_count": 96,
+          "human_validation_status": "not_human_validated",
+          "limitations": [
+            "Retrospective terminal scoring; source policy prompt and horizon remain unchanged.",
+            "Single automatic judge; no human calibration or independent-model validation.",
+            "Bootstrap intervals describe sampled scenarios, not judge reliability.",
+            "No modality effect can be estimated without actual matched text_video trajectories."
+          ]
+        }
+      },
+      "budget": {
+        "request_count": 264,
+        "limit": 10000
+      }
+    }
+  },
+  "interpretation": "Recovery inherits original completed episodes, not new independent samples. Full41 is a separate revised-protocol cohort; do not pool with historical33. All machine scores are exploratory; Gate and human validation remain pending."
+}

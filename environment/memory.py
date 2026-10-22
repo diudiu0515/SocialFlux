@@ -10,6 +10,10 @@ def _tokens(text):
     return set(re.findall(r"[\w\u4e00-\u9fff]+", str(text).lower()))
 
 
+def _evidence_id(item):
+    return item.get("evidence_id") or f"t{item['turn_id']}"
+
+
 class MemoryModule:
     """Dependency-free observable retrieval used when no model retriever is configured."""
 
@@ -29,7 +33,7 @@ class MemoryModule:
         selected.sort(key=lambda item: item.get("turn_id", 0))
         return {
             "relevant_turn_ids": list(dict.fromkeys(
-                f"t{x['turn_id']}" for x in selected
+                _evidence_id(x) for x in selected
             )),
             "memory_summary": " ".join(
                 f"{x.get('role', 'unknown')}: {x.get('text', '')}" for x in selected
@@ -61,7 +65,7 @@ class ModelMemoryModule:
         required = {"relevant_turn_ids", "memory_summary", "important_unresolved_events"}
         if set(result) != required:
             raise ValueError("model memory module returned an invalid memory object")
-        available = {f"t{item['turn_id']}" for item in history}
+        available = {_evidence_id(item) for item in history}
         if not set(result["relevant_turn_ids"]) <= available:
             raise ValueError("memory module referenced unavailable history")
         return result

@@ -11,7 +11,7 @@ SocialFlux 的 offline T1/T2/T3 数据必须来自 **同一个 online stateful e
 ```text
 Scenario
 ↓
-Frozen S0 / D0
+Frozen initial state and machine-validated runtime dynamics seed
 ↓
 Stateful Environment
 ↓
@@ -28,111 +28,40 @@ T1 / T2 / T3
 
 ## 2. Rollout Model Strategy
 
-为降低 API 成本，正式 rollout 采用：
-
-```text
-Open-source / locally deployed models
-作为主要 trajectory generators
-
-+
-
-少量强 API models
-作为补充 trajectory generators
-```
-
-目标不是让最强模型生成“最好看的对话”，而是获得：
-
-```text
-Raw candidate search coverage（可来自多个 model family）
-→ Quality Gate
-→ Behavioral Diversity
-→ Task-specific utility
-```
+当前正式主线由 `claude-fable-5` 承担场景、policy、environment 与任务构建，
+但每个语义 role 都是独立请求。GPT-50 只用于在 scale 前做端到端设计审计；
+它不自动并入 Claude 主数据。
 
 ---
 
-## 3. Recommended Rollout Pool
+## 3. Model provenance
 
-### Main Local Rollout Models
-
-优先选择当前能力较强、适合多轮 instruction-following 的开源模型，例如：
-
-```text
-Qwen 20–30B class instruct model
-GLM open-weight model where compute permits
-DeepSeek open-weight instruct model where compute permits
-other strong 20–40B open models
-```
-
-在现有 4 × 48GB GPU 条件下，优先使用能够稳定部署的 20–30B 级模型。
-
-不强求所有模型都使用最大规模版本。
+模型名称、route hash、sampling、seed、请求次数和失败状态都必须记录，
+但不得用 model family quota 或多个 seed 搜索更好看的轨迹。
 
 ---
 
-## 4. API Models as Supplementary Rollout Sources
+## 4. Cross-model audit
 
-API 不作为主要数据来源。
-
-只选择少量不同 family 的强模型，例如：
-
-```text
-Qwen flagship API
-GLM flagship API
-Kimi flagship API
-DeepSeek flagship API
-```
-
-用途：
-
-```text
-增加 trajectory diversity
-验证 local model trajectory distribution 是否过窄
-补充复杂 social interaction cases
-```
-
-建议 API trajectory 只占最终 trajectory pool 的：
-
-```text
-20%–30%
-```
-
-其余主要由开源模型生成。
+其他强模型可作为独立 judge、漏洞复核或消融实验，但不通过补抽扩大每场景的
+rollout 数量。跨模型结果必须与主数据隔离并标明用途。
 
 ---
 
 ## 5. Rollout Sampling
 
-每个 scenario 首先生成多个自由 rollout：
+每个 Gate-1-approved scenario 只生成一条自由 rollout：
 
 ```text
-Local Model A × multiple seeds
-Local Model B × multiple seeds
-Local Model C × multiple seeds
-
-+
-optional API Model × 1–2 runs
+one frozen scenario × one policy slot × one seed
 ```
 
-不要每个 scenario 只生成一条 trajectory。
-
-也不要简单保留最高分 trajectory。
-
-最终选择目标：
-
-```text
-High Quality
-+
-Non-duplicate
-+
-Behaviorally Diverse
-```
-
-模型家族只作为 raw search coverage 与审计字段，不是最终入选配额。不得为了“每个模型都入选”压过更适合当前 scenario 或当前任务的高质量 trajectory。
+技术重试可以处理 transport 或 schema 故障，但不能生成可供择优的替代轨迹。
+唯一轨迹失败时，该场景在当前批次失败，并计入原始分母。
 
 ---
 
-## 6. Quality + Diversity Selection
+## 6. Quality admission
 
 所有 raw trajectories 先通过 Rollout Quality Gate。
 
@@ -162,26 +91,10 @@ future-information leakage
 unusable trajectory
 ```
 
-通过后，再做 diversity filtering。
-
-不要：
-
-```text
-12 trajectories
-→ 不经三态筛选、证据审计和人工比较
-→ 直接按单一总分留下 1 条
-```
-
-而应该：
-
-```text
-12 trajectories
-→ Quality Gate
-→ 去重与协议人工审核
-→ 每场景保留 1 条经人工确认的 canonical trajectory
-```
-
-唯一 canonical 轨迹形成后，T1/T2/T3 必须分别验证源适配度；T2 可额外绑定一条同样通过 Gate 3 与人工审核的 task-local auxiliary history（不计入 canonical rollout 主池）。T1/T2/T3 必须分别选源，而不是共享一个总分 winner：T1 优先 state–response consistency 与 history dependence；T2 同时考虑 history dependence、轨迹质量和 state divergence；T3 优先 interaction progression、state–response consistency 与有充分历史的 checkpoint。模型名称不进入任务分数，只保留为 provenance 和并列时审计信息。
+Gate 3 对唯一轨迹做 pass/fail：全部质量与证据条件通过才 materialize 为
+canonical trajectory；不进行去重排名、seed 比较或 winner selection。T1/T2/T3
+只从通过的唯一轨迹构建。T2 的 B history 和 T3 的局部分支是任务内受控干预，
+不算额外 natural rollout。
 
 ---
 
@@ -233,18 +146,9 @@ Critical Event Removed
 
 ## 9. Development vs Final Rollout
 
-当前已有 Qwen development rollouts 可以继续用于：
+旧 development rollouts 已移出活跃目录并单独归档。它们只能用于可追溯的历史方法审计，不得被 pipeline 自动发现，也不得进入当前或 final benchmark。
 
-```text
-pipeline debugging
-builder testing
-schema testing
-quality-gate development
-```
-
-但最终 benchmark 应重新生成 heterogeneous trajectory pool。
-
-Development rollout 不自动进入 final benchmark。
+新的 development batch 必须使用独立 manifest/output root；development rollout 不自动进入 final benchmark。
 
 ---
 
@@ -306,70 +210,76 @@ Second Judge on stratified subset / disagreement cases
 
 ## 12. Formal Ground Truth
 
-Automatic judge 只用于：
+Automatic/model output 用于：
 
 ```text
 filtering
 quality control
 compatibility checking
+machine label proposal
 ```
 
-Formal T1/T2/T3 GT 仍然采用：
+Formal T1/T2/T3 label release 采用：
 
 ```text
-Human Annotation
+Machine Proposal
 ↓
-Agreement
+Two Humans Review the Same Deterministic 10% Sample
 ↓
-Adjudication
+Agreement / Disagreement-only Adjudication
 ↓
 Formal GT
 ```
 
+两名 reviewer 必须独立且检查完全相同的样本；一致 reject 触发修复，只有
+分歧时使用不同的第三名 reviewer。Machine proposal 不得伪装成人工标签。
+
 ---
 
-## 13. Recommended Cost-Controlled Production Plan
+## 13. Scale plan
 
 第一阶段：
 
 ```text
-20 scenarios
+50 GPT-authored scenarios
 ×
-2–3 local rollout models
+1 rollout
 ×
-3 seeds
+all T1/T2/T3/T4 stages and multi-model audit
 ```
 
 检查：
 
 ```text
 quality pass rate
-trajectory diversity
+scenario coverage and trajectory yield
 history dependence
 rollout length
 state stability
+task yield, leakage and judge disagreement
 ```
 
-确认 pipeline 后再扩到完整 scenario pool。
+人工复核漏洞报告并冻结设计后，再启动最多 200 个 Claude 主场景；每场景仍只
+生成一条 rollout。旧 Scale300 已归档，不作为 compatibility baseline。
 
 正式阶段：
 
 ```text
-Majority:
-local open-source rollout
+Primary:
+Claude-authored scenarios and Claude single rollouts
 
-Minority:
-strong API rollout
+Audit:
+GPT design-probe artifacts kept separate
 ```
 
 最终保留：
 
 ```text
-quality-filtered
-+
-diversity-filtered
+quality-admitted
 +
 history-dependent
++
+fully provenance-bound
 ```
 
 trajectory pool。

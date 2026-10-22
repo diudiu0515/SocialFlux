@@ -3,31 +3,223 @@
 import argparse
 import base64
 import hmac
+import hashlib
 import json
+import math
 from pathlib import Path
 import shutil
 import sys
-from urllib.parse import unquote, urlparse
+from urllib.parse import unquote, urlparse, parse_qs
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+CODE_ROOT = Path(__file__).resolve().parents[1]
+if str(CODE_ROOT) not in sys.path:
+    sys.path.insert(0, str(CODE_ROOT))
 
+from web.runtime_paths import DATA_ROOT as ROOT
+
+from environment.observation import (
+    PRIVATE_AUTHOR_FIELDS,
+    PUBLIC_OBSERVATION_FIELDS,
+    build_initial_policy_observation,
+)
+from environment.online_multimodal import build_online_multimodal_profile
 from evaluation.quality_gates import SCENARIO_CHECKS, TASK_REVIEW_RATINGS
-from evaluation.rollout_gate import HARD_REJECT_REASONS, QUALITY_DIMENSIONS
-from scripts.scenario_docs import discover_scenario_paths
+from evaluation.rollout_gate import (
+    HARD_REJECT_REASONS, QUALITY_DIMENSIONS, infer_observed_outcome,
+)
+from policies.model_policy import ModelPolicy
+from prompts.loader import get_prompt
+from schemas.validate import validate_scenario
+from scenario_design.catalog import discover_scenario_paths
+from web.live_rollouts import load_live
+from web.offline_review import load_review as load_offline_review, talking_video_target, load_talking_preview
+from web.experiment_status import load_experiment_status
+from web.annotation_sessions import dispatch as annotation_action
+from web.human_gt import import_receipt, adjudicate
+from web.experiment_hub import (
+    load_hub, save_record as save_experiment_record, history as experiment_history,
+    source_document as experiment_document, ConflictError,
+)
+from shared.artifacts import canonical_json_sha256 as _scenario_fingerprint
 
 SCENARIO_DIR = ROOT / "configs" / "scenarios"
-PIPELINE_DIR = ROOT / "build" / "pipeline_v2"
+PIPELINE_DIR = ROOT / "build" / "pipeline_20turn_selected"
 ACCEPTANCE_DIR = ROOT / "build" / "acceptance_v2"
 STATIC_DIR = Path(__file__).resolve().parent / "static"
+# One page registry owns both current entries and old bookmark compatibility.
+# Retired HTML/JS implementations are not needed to serve these aliases.
+PAGE_ROUTES = {
+    "/lab": "/experiment_hub.html", "/lab/": "/experiment_hub.html",
+    "/offline-annotation": "/offline_annotation.html", "/offline-annotation/": "/offline_annotation.html",
+    "/experiments": "/experiments.html", "/experiments/": "/experiments.html",
+    "/": "/gpt50_gate1.html", "": "/gpt50_gate1.html",
+    "/gpt50": "/gpt50_gate1.html", "/gpt50/": "/gpt50_gate1.html",
+    "/gpt50-live": "/gpt50_live.html", "/gpt50-live/": "/gpt50_live.html",
+    "/multimodal": "/multimodal_review.html", "/multimodal/": "/multimodal_review.html",
+    "/state-annotation": "/state_annotation.html", "/state-annotation/": "/state_annotation.html",
+    "/offline-demo": "/offline_review.html", "/offline-demo/": "/offline_review.html",
+    "/offline-review": "/offline_review.html", "/offline-review/": "/offline_review.html",
+    "/offline-talking-preview": "/offline_talking_preview.html",
+    "/offline-talking-preview/": "/offline_talking_preview.html",
+}
+LEGACY_PAGE_ALIASES = {
+    path: "/gpt50_gate1.html" for path in (
+        "/index.html", "/review.html", "/scale150.html",
+        "/scale300_tasks.html", "/t2_dev_review.html",
+    )
+}
 MEDIA_MANIFEST = ROOT / "media" / "talking_head" / "manifest.json"
-SCREENING_REPORT = ROOT / "build" / "rollout_screening_v1" / "screening_report.json"
+SCREENING_REPORT = ROOT / "build" / "screening_report.json"
+LONG_ROLLOUT_ROOT = ROOT / "build" / "rollouts"
+# Historical model outputs are archived outside the active data path. New batches
+# should be added explicitly through their own manifest instead of implicit globbing.
+ROLLOUT_REVIEW_ROOTS = ()
 SCENARIO_REVIEW_TEMPLATE = ROOT / "reviews" / "scenario_review_template.json"
 ENVIRONMENT_REVIEW_TEMPLATE = ROOT / "reviews" / "environment_evidence_template.json"
 FORMAL_ENVIRONMENT_DIR = ROOT / "data" / "formal" / "environment"
-
+HUMAN_REVIEW_PLAN = ROOT / "configs" / "human_review_plan.json"
+HUMAN_REVIEW_WORKSPACE = ROOT / "build" / "human_review_workspace.json"
+TASK_REVIEW_SAMPLE = ROOT / "reviews" / "task_review_sample_template.json"
+MACHINE_TASK_PROPOSALS = ROOT / "build" / "machine_task_proposals.json"
+TASK_EXAMPLES = ROOT / "build" / "task_examples_v1" / "examples.json"
+TASK_EXAMPLE_MEDIA_ROOT = ROOT / "media" / "task_examples"
+QUALITY_GATE_REPORT = ROOT / "build" / "quality_gates" / "report.json"
+R3_DIAGNOSTIC_REVIEW = (
+    ROOT / "data" / "formal" / "environment" / "r3_current_diagnostic_review.json"
+)
+STATE_HUMAN_ANNOTATION_PACKET = (
+    ROOT
+    / "data/gpt50/experiment/state_v3_validation"
+    / "human_annotation_round1/packet.json"
+)
+SCALE20_PILOT_REVIEW = ROOT / "build" / "scale20_v1" / "pilot_review.json"
+SCALE20_FULL20_REVIEW = ROOT / "build" / "scale20_v1" / "full20_human_review.json"
+SCALE20_V2_REVIEW = ROOT / "build" / "scale20_v2" / "review.json"
+SCALE150_MATRIX = ROOT / "configs" / "scale300_v1" / "design_matrix.json"
+GPT50_SCENARIO_ROOTS = (
+    ROOT / "data" / "gpt50" / "experiment" / "scenario" / "scenarios",
+    ROOT / "data" / "gpt50" / "scenario" / "scenarios",
+    ROOT / "data" / "gpt50" / "scenarios",
+)
+GPT50_EXPECTED_SCENARIO_COUNT = 50
+GPT50_MIN_GATE3_TURNS = 10
+GPT50_ROLLOUT_ROOT = ROOT / "data" / "gpt50" / "experiment" / "rollouts"
+GPT50_GATE2_ROOT = ROOT / "data" / "gpt50" / "experiment" / "gate2"
+GPT50_ONLINE_MULTIMODAL_ROOT = (
+    ROOT / "data" / "gpt50" / "experiment" / "online_multimodal"
+)
+GPT50_ONLINE_MULTIMODAL_ASSET_ROOT = GPT50_ONLINE_MULTIMODAL_ROOT / "assets"
+GPT50_ONLINE_MULTIMODAL_REVIEW_ASSET_ROOT = (
+    GPT50_ONLINE_MULTIMODAL_ROOT / "review_assets"
+)
+GPT50_ONLINE_MULTIMODAL_TRIGGERABILITY = (
+    ROOT
+    / "reports"
+    / "experiments"
+    / "2026-09-30_online_multimodal_triggerability_v1.json"
+)
+MULTIMODAL_DELIVERY_BATCHES = {
+    "gpt": {
+        "label": "GPT50",
+        "batch_root": ROOT / "data" / "gpt50" / "experiment",
+        "scenario_root": (
+            ROOT
+            / "data"
+            / "gpt50"
+            / "experiment"
+            / "scenario"
+            / "scenarios_state_v3"
+        ),
+        "online_root": (
+            ROOT
+            / "data"
+            / "gpt50"
+            / "experiment"
+            / "multimodal_delivery_v1"
+            / "online_multimodal"
+        ),
+        "talking_root": (
+            ROOT
+            / "data"
+            / "gpt50"
+            / "experiment"
+            / "multimodal_delivery_v1"
+            / "talking_head_v4_pilot"
+        ),
+        "expected_scenario_count": 50,
+        "triggerability": GPT50_ONLINE_MULTIMODAL_TRIGGERABILITY,
+    },
+    "claude": {
+        "label": "Claude150",
+        "batch_root": ROOT / "data" / "claude150_v1",
+        "scenario_root": (
+            ROOT / "data" / "claude150_v1" / "scenarios_state_v3"
+        ),
+        "online_root": (
+            ROOT
+            / "data"
+            / "claude150_v1"
+            / "multimodal_delivery_v1"
+            / "online_multimodal"
+        ),
+        "talking_root": (
+            ROOT
+            / "data"
+            / "claude150_v1"
+            / "multimodal_delivery_v1"
+            / "talking_head"
+        ),
+        "expected_scenario_count": 150,
+        "triggerability": None,
+    },
+}
+ONLINE_EVENT_FAMILY_LABELS = {
+    "activated_tension": "紧张激活",
+    "cautious_relief": "谨慎缓和",
+    "easing_tension": "压力减退",
+    "firm_boundary": "坚定边界",
+    "guarded_withdrawal": "防御退缩",
+    "open_engagement": "开放投入",
+    "risk_concern": "风险担忧",
+}
+ONLINE_MULTIMODAL_REVIEW_CHECKS = (
+    "identity_matches_anchor",
+    "family_cue_alignment",
+    "audio_track_present",
+    "family_audio_cue_alignment",
+    "no_speech_or_mouthing",
+    "no_visible_text_or_branding",
+    "subtle_natural_motion",
+    "natural_synchronized_audio",
+)
+TALKING_HEAD_REVIEW_CHECKS = (
+    "identity_matches_anchor",
+    "exact_spoken_line",
+    "lip_sync_and_speech_naturalness",
+    "voice_delivery_naturalness",
+    "expression_matches_state",
+    "factual_consistency",
+    "no_private_state_leakage",
+    "no_visible_text_or_branding",
+)
+GPT50_GATE2_EXPERIMENTS = (
+    ("E1", "state_transition_agreement.json", "状态转移方向一致性", "review_items"),
+    ("E2", "trajectory_plausibility.json", "完整轨迹合理性", "review_items"),
+    ("E3", "history_intervention.json", "历史干预敏感性", "records"),
+    ("E4", "paraphrase_robustness.json", "释义鲁棒性", "records"),
+    ("E5", "local_counterfactual.json", "局部反事实区分度", "records"),
+    ("E6", "backbone_sensitivity.json", "双 backbone 敏感性", "records"),
+    ("E7", "persona_intervention.json", "Persona 干预敏感性", "records"),
+    ("E8", "video_state_consistency.json", "视频状态一致性", "review_items"),
+    ("E9", "timescale_validity.json", "状态时间尺度有效性", "review_items"),
+)
+SCALE150_MODEL_REVIEW_FILES = ()
+SCALE300_AUTOMATIC_GATE_AUDIT = ROOT / "build" / "scale300_v1" / "automatic_gate_audit.json"
+# Switch to build/scale300_tasks only after its summary covers all 300 ordinals.
+SCALE300_TASK_ROOT = ROOT / "build" / "scale300_tasks_v3"
+T2_EXPRESSION_DEV_ROOT = ROOT / "build" / "t2_expression_dev_v1"
+SCALE150_ROLLOUT_ROOTS = ()
 
 def credentials_match(header, username, password):
     """Validate an HTTP Basic Authorization header without timing leaks."""
@@ -59,6 +251,1146 @@ def read_jsonl(path):
     ]
 
 
+def load_r3_diagnostic_review():
+    """Load current R3 evidence without treating it as formal acceptance."""
+    return read_json(R3_DIAGNOSTIC_REVIEW, {}) or {}
+
+
+def load_state_human_annotation_packet():
+    """Expose the frozen blind packet without injecting model answers."""
+    return read_json(STATE_HUMAN_ANNOTATION_PACKET, {}) or {
+        "format": "socialflux_state_human_annotation_round_v1",
+        "status": "not_generated",
+        "records": [],
+    }
+
+
+def _active_gpt50_scenario_root():
+    """Select one GPT experiment batch without mixing checkpoints or versions."""
+    for root in GPT50_SCENARIO_ROOTS:
+        if discover_scenario_paths(root):
+            return root
+    return GPT50_SCENARIO_ROOTS[0]
+
+
+def _display_path(path):
+    try:
+        return str(Path(path).relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
+def load_gpt50_rollout_progress():
+    """Expose the resumable GPT rollout batch without implying human approval."""
+    progress_path = GPT50_ROLLOUT_ROOT / "progress.json"
+    progress = read_json(progress_path, {}) or {}
+    if not progress:
+        return {
+            "available": False,
+            "status": "not_started",
+            "completed_count": 0,
+            "retained_count": 0,
+            "short_trajectory_count": 0,
+            "expected_count": GPT50_EXPECTED_SCENARIO_COUNT,
+            "pending_count": GPT50_EXPECTED_SCENARIO_COUNT,
+            "reviewable_count": 0,
+            "without_readable_rollout_count": GPT50_EXPECTED_SCENARIO_COUNT,
+            "without_accepted_rollout_count": GPT50_EXPECTED_SCENARIO_COUNT,
+            "attempt_count": 0,
+            "attempt_status_counts": {},
+            "updated_at_utc": None,
+            "progress_path": _display_path(progress_path),
+            "by_scenario": {},
+            "recent_errors": [],
+        }
+    completed = progress.get("completed_slots") or {}
+    by_scenario = {}
+    for record in completed.values():
+        scenario_id = record.get("scenario_id")
+        if not scenario_id:
+            continue
+        turn_count = int(record.get("turn_count") or 0)
+        machine_precheck_passed = record.get(
+            "machine_precheck_passed"
+        ) is True
+        gate3_candidate = (
+            machine_precheck_passed
+            and turn_count >= GPT50_MIN_GATE3_TURNS
+        )
+        if gate3_candidate:
+            rollout_status = "completed"
+        elif turn_count < GPT50_MIN_GATE3_TURNS:
+            rollout_status = "short_trajectory"
+        else:
+            rollout_status = "retained_for_review"
+        by_scenario[scenario_id] = {
+            "status": rollout_status,
+            "turn_count": turn_count,
+            "accepted_at_utc": record.get("accepted_at_utc"),
+            "admission": record.get("admission"),
+            "machine_precheck_passed": machine_precheck_passed,
+            "gate3_candidate": gate3_candidate,
+            "artifact_available": True,
+        }
+    accepted_scenario_ids = set(by_scenario)
+    attempts = progress.get("attempts") or []
+    for attempt in attempts:
+        status = attempt.get("status", "unknown")
+        scenario_id = attempt.get("scenario_id")
+        if not scenario_id or scenario_id in accepted_scenario_ids:
+            continue
+        summary = _gpt50_attempt_summary(attempt)
+        previous = by_scenario.get(scenario_id) or {}
+        attempt_turns = summary.get("turn_count")
+        readable_attempt = bool(
+            (
+                attempt.get("trajectory_file")
+                or attempt.get("partial_trajectory_file")
+            )
+            and isinstance(attempt_turns, int)
+            and attempt_turns > 0
+        )
+        previous_turns = previous.get("turn_count")
+        best_turns = max(
+            [
+                value for value in (previous_turns, attempt_turns)
+                if isinstance(value, int)
+            ],
+            default=None,
+        )
+        by_scenario[scenario_id] = {
+            "status": status,
+            "turn_count": best_turns,
+            "latest_attempt_turn_count": attempt_turns,
+            "machine_precheck_passed": False,
+            "gate3_candidate": False,
+            "artifact_available": (
+                previous.get("artifact_available") is True
+                or readable_attempt
+            ),
+        }
+    latest_attempts = {}
+    for attempt in attempts:
+        identity = attempt.get("slot_id") or attempt.get("scenario_id")
+        if identity:
+            latest_attempts[identity] = attempt
+    status_counts = {}
+    for attempt in latest_attempts.values():
+        status = attempt.get("status", "unknown")
+        status_counts[status] = status_counts.get(status, 0) + 1
+    expected = progress.get(
+        "expected_slot_count", GPT50_EXPECTED_SCENARIO_COUNT
+    )
+    retained_count = len(completed)
+    completed_count = sum(
+        item["gate3_candidate"] for item in by_scenario.values()
+    )
+    short_trajectory_count = sum(
+        item["status"] == "short_trajectory"
+        for item in by_scenario.values()
+    )
+    reviewable_count = sum(
+        item.get("artifact_available") is True
+        for item in by_scenario.values()
+    )
+    recent_errors = [
+        {
+            "scenario_id": attempt.get("scenario_id"),
+            "error_type": attempt.get("error_type"),
+            "error": str(attempt.get("error", ""))[:300],
+            "finished_at_utc": attempt.get("finished_at_utc"),
+        }
+        for attempt in latest_attempts.values()
+        if attempt.get("status") == "generation_error"
+    ][-5:]
+    raw_status = progress.get("status", "unknown")
+    display_status = (
+        "regenerating"
+        if raw_status == "incomplete_requeued_short_trajectories"
+        else raw_status
+    )
+    return {
+        "available": True,
+        "status": display_status,
+        "raw_status": raw_status,
+        "completed_count": completed_count,
+        "retained_count": retained_count,
+        "short_trajectory_count": short_trajectory_count,
+        "expected_count": expected,
+        "pending_count": max(0, expected - len(by_scenario)),
+        "reviewable_count": reviewable_count,
+        "without_readable_rollout_count": max(0, expected - reviewable_count),
+        "without_accepted_rollout_count": max(0, expected - retained_count),
+        "attempt_count": len(attempts),
+        "attempt_status_counts": status_counts,
+        "updated_at_utc": progress.get("updated_at_utc"),
+        "progress_path": _display_path(progress_path),
+        "by_scenario": by_scenario,
+        "recent_errors": recent_errors,
+        "human_review_required": True,
+    }
+
+
+def _gpt50_scenario_records():
+    root = _active_gpt50_scenario_root()
+    records = []
+    errors = []
+    seen = set()
+    for path in discover_scenario_paths(root):
+        try:
+            scenario = read_json(path, {}) or {}
+            scenario_id = scenario.get("scenario_id")
+            if not scenario_id:
+                raise ValueError("scenario_id is missing")
+            if scenario_id in seen:
+                raise ValueError(f"duplicate scenario_id: {scenario_id}")
+            seen.add(scenario_id)
+            try:
+                validate_scenario(scenario)
+                schema_status = "valid"
+                schema_error = ""
+            except (TypeError, ValueError) as exc:
+                schema_status = "invalid"
+                schema_error = str(exc)
+            records.append((path, scenario, schema_status, schema_error))
+        except (OSError, TypeError, ValueError, json.JSONDecodeError) as exc:
+            errors.append({
+                "artifact_path": _display_path(path),
+                "error": str(exc),
+            })
+    return root, records, errors
+
+
+def _gpt50_gate2_item_status(experiment_id, item):
+    if item.get("error") or item.get("replay_errors"):
+        return "machine_error"
+    automatic = item.get("automatic_screen_passed")
+    if isinstance(automatic, bool):
+        return "machine_pass" if automatic else "machine_fail"
+    if experiment_id == "E6":
+        comparison = item.get("comparison") or {}
+        if comparison:
+            passed = (
+                comparison.get("exact_direction_agreement", 0) >= 0.50
+                and comparison.get("true_sign_reversal_rate", 1) <= 0.40
+                and not comparison.get("replay_failed")
+            )
+            return "machine_pass" if passed else "machine_fail"
+    return "pending_human"
+
+
+def load_gpt50_gate2(scenario_id=None):
+    """Expose Gate 2 evidence without turning sampling absence into rejection."""
+    manifest = read_json(GPT50_GATE2_ROOT / "manifest.json", {}) or {}
+    intervention_progress = read_json(
+        GPT50_GATE2_ROOT / "experiments" / "environment_interventions.json",
+        {},
+    ) or {}
+    progress_records = intervention_progress.get("records") or []
+    experiments = []
+    by_scenario = {}
+    for experiment_id, filename, label, items_key in GPT50_GATE2_EXPERIMENTS:
+        payload = read_json(GPT50_GATE2_ROOT / filename, {}) or {}
+        raw_items = payload.get(items_key) or []
+        if not raw_items and experiment_id in {"E3", "E4", "E5", "E7"}:
+            progress_key = experiment_id.lower()
+            raw_items = []
+            for progress_item in progress_records:
+                common = {
+                    "scenario_id": progress_item.get("scenario_id"),
+                    "source_trajectory_id": progress_item.get(
+                        "source_trajectory_id"
+                    ),
+                    "checkpoint_turn_id": progress_item.get(
+                        "checkpoint_turn_id"
+                    ),
+                }
+                if progress_item.get(progress_key):
+                    raw_items.append({
+                        **common,
+                        **progress_item[progress_key],
+                        "evidence_stage": "in_progress_checkpoint",
+                    })
+                elif progress_item.get("error"):
+                    raw_items.append({
+                        **common,
+                        "error": progress_item["error"],
+                        "evidence_stage": "in_progress_error",
+                    })
+        enriched = []
+        counts = {}
+        for raw in raw_items:
+            item = dict(raw)
+            status = _gpt50_gate2_item_status(experiment_id, item)
+            item["gate2_screen_status"] = status
+            counts[status] = counts.get(status, 0) + 1
+            item_scenario_id = item.get("scenario_id")
+            if item_scenario_id:
+                overview = by_scenario.setdefault(item_scenario_id, {
+                    "evidence_item_count": 0,
+                    "experiment_ids": [],
+                    "status_counts": {},
+                })
+                overview["evidence_item_count"] += 1
+                if experiment_id not in overview["experiment_ids"]:
+                    overview["experiment_ids"].append(experiment_id)
+                overview["status_counts"][status] = (
+                    overview["status_counts"].get(status, 0) + 1
+                )
+            if scenario_id is None or item_scenario_id == scenario_id:
+                enriched.append(item)
+        record = payload.get("record", payload) if payload else {}
+        experiments.append({
+            "experiment_id": experiment_id,
+            "label": label,
+            "filename": filename,
+            "available": bool(payload),
+            "batch_record": record,
+            "item_count": len(raw_items),
+            "status_counts": counts,
+            "items": enriched if scenario_id is not None else [],
+        })
+    for item_scenario_id, overview in by_scenario.items():
+        counts = overview["status_counts"]
+        if counts.get("machine_error"):
+            status = "machine_error"
+        elif counts.get("machine_fail"):
+            status = "machine_flagged"
+        elif counts.get("pending_human"):
+            status = "pending_human_review"
+        elif counts.get("machine_pass"):
+            status = "machine_screen_passed"
+        else:
+            status = "not_sampled"
+        overview["status"] = status
+        overview["sampled_experiment_count"] = len(overview["experiment_ids"])
+    selected_overview = by_scenario.get(scenario_id, {
+        "status": "not_sampled",
+        "evidence_item_count": 0,
+        "sampled_experiment_count": 0,
+        "experiment_ids": [],
+        "status_counts": {},
+    }) if scenario_id is not None else None
+    return {
+        "format": "socialflux_gpt50_gate2_review_v1",
+        "gate": "gate_2_environment_validity",
+        "scope": "batch_environment_validity_with_sampled_scenario_evidence",
+        "deletion_policy": "retain_all_and_label",
+        "manifest": manifest,
+        "machine_progress": {
+            "target_scenario_count": 50,
+            "completed_scenario_count": len(progress_records),
+            "successful_scenario_count": sum(
+                not item.get("error") for item in progress_records
+            ),
+            "error_scenario_count": sum(
+                bool(item.get("error")) for item in progress_records
+            ),
+            "last_scenario_id": (
+                progress_records[-1].get("scenario_id")
+                if progress_records else None
+            ),
+        },
+        "experiments": experiments,
+        "by_scenario": by_scenario if scenario_id is None else {},
+        "scenario_overview": selected_overview,
+        "human_review_required": True,
+        "warning": (
+            "Gate 2 是 batch-level Environment validity；未抽中不等于失败，"
+            "机器标记也不等于人工结论。"
+        ),
+    }
+
+
+def load_gpt50_review():
+    """Expose the active GPT authoring batch for real, hash-bound Gate 1 review."""
+    root, records, errors = _gpt50_scenario_records()
+    run_manifest = read_json(root.parent / "run_manifest.json", {}) or {}
+    rollout = load_gpt50_rollout_progress()
+    gate2 = load_gpt50_gate2()
+    candidates = []
+    for ordinal, (path, scenario, schema_status, schema_error) in enumerate(records, 1):
+        design = scenario.get("narrative_design", {})
+        candidates.append({
+            "ordinal": ordinal,
+            "scenario_id": scenario.get("scenario_id"),
+            "title": scenario.get("title", ""),
+            "mechanism": scenario.get("mechanism", ""),
+            "relationship_structure": design.get("relationship_structure", ""),
+            "source_type": scenario.get("source", {}).get("type", ""),
+            "construction_status": scenario.get("construction_status", {}),
+            "schema_status": schema_status,
+            "schema_error": schema_error,
+            "scenario_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            "artifact_path": _display_path(path),
+            "rollout": rollout["by_scenario"].get(
+                scenario.get("scenario_id"),
+                {"status": "pending", "turn_count": None},
+            ),
+            "gate2": gate2["by_scenario"].get(
+                scenario.get("scenario_id"),
+                {
+                    "status": "not_sampled",
+                    "evidence_item_count": 0,
+                    "sampled_experiment_count": 0,
+                    "experiment_ids": [],
+                    "status_counts": {},
+                },
+            ),
+        })
+    scenario_count = len(candidates)
+    schema_valid_count = sum(
+        item["schema_status"] == "valid" for item in candidates
+    )
+    if scenario_count == 0:
+        batch_status = "missing_formal_batch"
+        review_blocker = (
+            "正式 GPT50 批次尚未生成；smoke scenario 不会进入人工审核队列。"
+        )
+    elif scenario_count < GPT50_EXPECTED_SCENARIO_COUNT:
+        batch_status = "formal_batch_incomplete"
+        review_blocker = (
+            f"正式 GPT50 批次生成中：{scenario_count} / "
+            f"{GPT50_EXPECTED_SCENARIO_COUNT}。"
+        )
+    elif scenario_count > GPT50_EXPECTED_SCENARIO_COUNT:
+        batch_status = "formal_batch_overfilled"
+        review_blocker = (
+            f"正式批次包含 {scenario_count} 条，超过预期 "
+            f"{GPT50_EXPECTED_SCENARIO_COUNT} 条；请先核对批次边界。"
+        )
+    elif schema_valid_count != scenario_count or errors:
+        batch_status = "formal_batch_invalid"
+        review_blocker = "正式批次存在 schema 或加载错误，请修复后再冻结 Gate 1。"
+    else:
+        batch_status = "ready_for_human_gate1"
+        review_blocker = ""
+    return {
+        "format": "socialflux_gpt50_gate1_review_v1",
+        "batch": "gpt50_pipeline_design_audit",
+        "batch_status": batch_status,
+        "expected_scenario_count": GPT50_EXPECTED_SCENARIO_COUNT,
+        "review_ready": batch_status == "ready_for_human_gate1",
+        "review_blocker": review_blocker,
+        "authoring_model": run_manifest.get("authoring_model", run_manifest.get("model", "unknown")),
+        "authoring_status": run_manifest.get("status", "not_started"),
+        "active_scenario_root": _display_path(root),
+        "scenario_count": scenario_count,
+        "schema_valid_count": schema_valid_count,
+        "rollout": rollout,
+        "gate2": {
+            key: value for key, value in gate2.items()
+            if key != "by_scenario"
+        },
+        "candidates": candidates,
+        "load_errors": errors,
+        "human_review_warning": (
+            "机器 schema/quality 检查不构成 Gate 1。只有实名人工审核、完整评分、"
+            "initial state 确认和导出的 hash-bound 记录才能冻结场景。"
+        ),
+    }
+
+
+def _gpt50_trajectory_path(scenario_dir, attempt):
+    """Resolve one current attempt artifact without mixing old review archives."""
+    names = [
+        attempt.get("trajectory_file"),
+        attempt.get("partial_trajectory_file"),
+    ]
+    for name in names:
+        if not name:
+            continue
+        for parent in (
+            scenario_dir,
+            scenario_dir / "rejected",
+            scenario_dir / "budget_truncated",
+            scenario_dir / "short_trajectories",
+        ):
+            target = parent / name
+            if target.is_file():
+                return target
+    return None
+
+
+def _gpt50_attempt_summary(item):
+    precheck = item.get("precheck") or {}
+    structural = precheck.get("structural") or {}
+    checks = structural.get("checks") or {}
+    return {
+        "status": item.get("status"),
+        "attempt": item.get("attempt"),
+        "technical_retry": item.get("technical_retry") is True,
+        "error_type": item.get("error_type"),
+        "error": str(item.get("error", ""))[:500],
+        "finished_at_utc": item.get("finished_at_utc"),
+        "completed_turns_before_error": item.get(
+            "completed_turns_before_error"
+        ),
+        "trajectory_id": item.get("trajectory_id"),
+        "trajectory_file": item.get("trajectory_file"),
+        "partial_trajectory_file": item.get("partial_trajectory_file"),
+        "candidate_classification": precheck.get("candidate_classification"),
+        "hard_reject_reasons": precheck.get("hard_reject_reasons") or [],
+        "false_checks": [key for key, passed in checks.items() if not passed],
+        "turn_count": (
+            structural.get("turn_count")
+            if isinstance(structural.get("turn_count"), int)
+            else item.get("completed_turns_before_error")
+        ),
+    }
+
+
+def load_gpt50_rollout(scenario_id):
+    """Load accepted or rejected GPT dialogue for human inspection."""
+    progress = read_json(GPT50_ROLLOUT_ROOT / "progress.json", {}) or {}
+    raw_attempts = [
+        item for item in progress.get("attempts", [])
+        if item.get("scenario_id") == scenario_id
+    ]
+    attempts = [_gpt50_attempt_summary(item) for item in raw_attempts]
+    completed = next(
+        (
+            item
+            for item in (progress.get("completed_slots") or {}).values()
+            if item.get("scenario_id") == scenario_id
+        ),
+        None,
+    )
+    scenario_record = next(
+        (
+            item
+            for item in _gpt50_scenario_records()[1]
+            if item[1].get("scenario_id") == scenario_id
+        ),
+        None,
+    )
+    if scenario_record is None:
+        return {
+            "status": "artifact_missing",
+            "scenario_id": scenario_id,
+            "record": completed,
+            "attempts": attempts[-5:],
+            "human_review": "pending",
+        }
+    directory = scenario_record[0].parent.name
+    scenario_dir = GPT50_ROLLOUT_ROOT / directory
+    selected_attempt = None
+    trajectory_path = None
+    artifact_kind = None
+    if completed is not None:
+        trajectory_path = scenario_dir / completed["trajectory_file"]
+        artifact_kind = "accepted"
+        selected_attempt = next(
+            (
+                item for item in reversed(raw_attempts)
+                if item.get("trajectory_id") == completed.get("trajectory_id")
+            ),
+            None,
+        )
+    else:
+        artifact_candidates = []
+        for attempt_index, item in enumerate(raw_attempts):
+            candidate = _gpt50_trajectory_path(scenario_dir, item)
+            if candidate is None:
+                continue
+            summary = _gpt50_attempt_summary(item)
+            turn_count = summary.get("turn_count")
+            if not isinstance(turn_count, int):
+                candidate_value = read_json(candidate, {}) or {}
+                turn_count = len(candidate_value.get("turns", []))
+            artifact_candidates.append(
+                (turn_count, attempt_index, item, candidate)
+            )
+        if artifact_candidates:
+            _, _, selected_attempt, trajectory_path = max(
+                artifact_candidates,
+                key=lambda value: (value[0], value[1]),
+            )
+            artifact_kind = "rejected_or_partial"
+    latest_attempt = raw_attempts[-1] if raw_attempts else None
+    if trajectory_path is None or not trajectory_path.is_file():
+        latest_status = (
+            latest_attempt.get("status") if latest_attempt else "pending"
+        )
+        return {
+            "status": latest_status,
+            "scenario_id": scenario_id,
+            "record": completed,
+            "attempts": attempts[-5:],
+            "quality_warning": (
+                "当前尝试没有形成可展示的完整 rollout 对话。"
+                if latest_attempt else "当前场景尚未开始 rollout。"
+            ),
+            "human_review": "pending",
+        }
+    trajectory = read_json(trajectory_path, {}) or {}
+    if not trajectory:
+        return {
+            "status": "artifact_missing",
+            "scenario_id": scenario_id,
+            "record": completed,
+            "artifact_path": _display_path(trajectory_path),
+            "attempts": attempts[-5:],
+            "human_review": "pending",
+        }
+    turns = []
+    for turn in trajectory.get("turns", []):
+        action = turn.get("policy_action") or {}
+        turns.append({
+            "turn_id": turn.get("turn_id"),
+            "policy_action": action.get("text", ""),
+            "environment_response": turn.get("environment_response", ""),
+            "social_act": (turn.get("appraisal") or {}).get("social_act"),
+            "speaker_intent": (turn.get("appraisal") or {}).get(
+                "speaker_intent"
+            ),
+            "state_delta": turn.get("state_delta", {}),
+            "dynamics_delta": turn.get("dynamics_delta", {}),
+            "trigger_events": turn.get("trigger_events", []),
+        })
+    machine_precheck_passed = bool(
+        completed
+        and completed.get("machine_precheck_passed") is True
+    )
+    gate3_candidate = (
+        machine_precheck_passed
+        and len(turns) >= GPT50_MIN_GATE3_TURNS
+    )
+    selected_summary = (
+        _gpt50_attempt_summary(selected_attempt)
+        if selected_attempt else {}
+    )
+    selected_status = (
+        selected_attempt.get("status") if selected_attempt else None
+    )
+    if not turns:
+        rollout_status = selected_status or "artifact_missing"
+        quality_warning = (
+            "技术失败留下了空检查点，但没有形成任何可展示的对话回合。"
+        )
+    elif gate3_candidate:
+        rollout_status = "completed"
+        quality_warning = ""
+    elif selected_status == "generation_error":
+        rollout_status = selected_status
+        quality_warning = (
+            f"技术生成在完成 {len(turns)} 轮后中断；以下只是 partial "
+            "对话，保留供诊断，不是完整候选。"
+        )
+    elif selected_attempt:
+        rollout_status = selected_status or "retained_for_review"
+        quality_warning = (
+            "该对话已生成但机器质量门未通过；页面保留完整内容供人工诊断，"
+            "不能视为 Gate 3 候选。"
+        )
+    elif len(turns) < GPT50_MIN_GATE3_TURNS:
+        rollout_status = "short_trajectory"
+        quality_warning = "该对话不足 10 turn，只能作为失败证据。"
+    else:
+        rollout_status = "retained_for_review"
+        quality_warning = "该对话需要人工诊断，尚未进入 Gate 3。"
+    return {
+        "status": rollout_status,
+        "scenario_id": scenario_id,
+        "trajectory_id": trajectory.get("trajectory_id"),
+        "policy_id": trajectory.get("policy_id"),
+        "policy_prompt_id": (
+            trajectory.get("policy_provenance") or {}
+        ).get("prompt_id"),
+        "minimum_natural_turns": (
+            trajectory.get("policy_provenance") or {}
+        ).get("minimum_natural_turns"),
+        "turn_count": len(turns),
+        "turns": turns,
+        "machine_precheck_passed": machine_precheck_passed,
+        "gate3_candidate": gate3_candidate,
+        "quality_warning": quality_warning,
+        "ending": trajectory.get("ending", {}),
+        "record": completed,
+        "artifact_kind": artifact_kind,
+        "machine_review": selected_summary,
+        "artifact_path": _display_path(trajectory_path),
+        "attempts": attempts[-5:],
+        "human_review": "pending",
+    }
+
+
+def load_gpt50_scenario(scenario_id):
+    root, records, _ = _gpt50_scenario_records()
+    record = next(
+        (item for item in records if item[1].get("scenario_id") == scenario_id),
+        None,
+    )
+    if record is None:
+        return None
+    path, scenario, schema_status, schema_error = record
+    quality_path = root.parent / "source_quality.json"
+    document_path = path.with_suffix(".md")
+    return {
+        "scenario": scenario,
+        "scenario_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+        "artifact_path": _display_path(path),
+        "schema_status": schema_status,
+        "schema_error": schema_error,
+        "source_quality": read_json(quality_path, {}) or {},
+        "authoring_run": read_json(root.parent / "run_manifest.json", {}) or {},
+        "documentation": (
+            document_path.read_text(encoding="utf-8")
+            if document_path.is_file() else ""
+        ),
+        "rollout": load_gpt50_rollout(scenario_id),
+        "gate2": load_gpt50_gate2(scenario_id),
+        "human_review": "pending",
+    }
+
+
+def load_scale20_pilot_review():
+    """Load the bounded Scale20 pilot and attach each immutable trajectory artifact."""
+    review = read_json(SCALE20_PILOT_REVIEW, {}) or {}
+    enriched = []
+    for candidate in review.get("candidates", []):
+        item = dict(candidate)
+        relative = Path(item.get("artifact_path", ""))
+        target = (ROOT / relative).resolve()
+        if ROOT in target.parents and target.is_file():
+            trajectory = read_json(target, {}) or {}
+            trajectory["screening"] = {
+                "automatic_decision": "REJECT",
+                "candidate_classification": item.get("classification", "diagnostic"),
+                "source_root": "scale20_v1_bounded_pilot",
+                "human_review_reasons": [
+                    issue.get("issue", "") for issue in item.get("issues", [])
+                ],
+            }
+            trajectory["diagnostic_review"] = {
+                "review_type": "model_semantic_review",
+                "status": item.get("model_semantic_review", "pending"),
+                "human_review": item.get("human_review", "pending"),
+                "issues": item.get("issues", []),
+            }
+            item["trajectory"] = trajectory
+        else:
+            item["trajectory_error"] = "artifact_missing_or_outside_workspace"
+        enriched.append(item)
+    return {**review, "candidates": enriched}
+
+
+def load_scale20_full20_review():
+    """Load all 20 one-attempt trajectories for human review."""
+    review = read_json(SCALE20_FULL20_REVIEW, {}) or {}
+    enriched = []
+    for candidate in review.get("candidates", []):
+        item = dict(candidate)
+        relative = Path(item.get("artifact_path", ""))
+        target = (ROOT / relative).resolve()
+        if ROOT in target.parents and target.is_file():
+            trajectory = read_json(target, {}) or {}
+            semantic = item.get("model_semantic_review", {})
+            semantic_label = semantic.get("label", "pending") if isinstance(semantic, dict) else str(semantic)
+            semantic_note = semantic.get("note", "") if isinstance(semantic, dict) else ""
+            machine_decision = "PASS" if item.get("generation_status") == "accepted" else "REVIEW"
+            trajectory["screening"] = {
+                "automatic_decision": machine_decision,
+                "candidate_classification": item.get("generation_status", "diagnostic"),
+                "source_root": "scale20_v1_full20_one_attempt",
+                "human_review_reasons": [semantic_note] if semantic_note else [],
+            }
+            trajectory["diagnostic_review"] = {
+                "review_type": "model_semantic_review",
+                "status": semantic_label,
+                "human_review": item.get("human_review", "pending"),
+                "issues": [semantic_note] if semantic_note else [],
+            }
+            item["trajectory"] = trajectory
+        else:
+            item["trajectory_error"] = "artifact_missing_or_outside_workspace"
+        enriched.append(item)
+    return {**review, "candidates": enriched}
+
+
+def load_scale20_combined_review():
+    """Keep v1 full20 evidence and append clearly versioned v2 pilots."""
+    review = load_scale20_full20_review()
+    v2 = read_json(SCALE20_V2_REVIEW, {}) or {}
+    enriched = []
+    for candidate in v2.get("candidates", []):
+        item = dict(candidate)
+        target = (ROOT / Path(item.get("artifact_path", ""))).resolve()
+        if ROOT in target.parents and target.is_file():
+            trajectory = read_json(target, {}) or {}
+            semantic = item.get("model_semantic_review", {})
+            trajectory["screening"] = {
+                "automatic_decision": "REVIEW",
+                "candidate_classification": item.get("generation_status", "diagnostic"),
+                "source_root": "scale20_v2_representative_pilot",
+                "human_review_reasons": [semantic.get("note", "")],
+            }
+            trajectory["diagnostic_review"] = {
+                "review_type": "model_semantic_review",
+                "status": semantic.get("label", "pending"),
+                "human_review": item.get("human_review", "pending"),
+                "issues": item.get("issues", []),
+            }
+            item["trajectory"] = trajectory
+        else:
+            item["trajectory_error"] = "artifact_missing_or_outside_workspace"
+        enriched.append(item)
+    return {
+        **review,
+        "candidates": review.get("candidates", []),
+        "v2_candidates": enriched,
+        "v2_revision": {key: value for key, value in v2.items() if key != "candidates"},
+    }
+
+
+
+def load_scale150_review():
+    """Return a compact, live Scale200 index without embedding trajectory bodies."""
+    matrix = read_json(SCALE150_MATRIX, {}) or {}
+    automatic_gate_records = {
+        item.get("scenario_id"): item
+        for item in (read_json(SCALE300_AUTOMATIC_GATE_AUDIT, {}) or {}).get("records", [])
+        if item.get("scenario_id")
+    }
+    attempts = {}
+    semantic_reviews = {}
+    for review_path in SCALE150_MODEL_REVIEW_FILES:
+        semantic_reviews.update({
+            item.get("trajectory_id"): item
+            for item in (read_json(review_path, {}) or {}).get("records", [])
+            if item.get("trajectory_id")
+        })
+    shard_status = {}
+    for stack_name, rollout_root in SCALE150_ROLLOUT_ROOTS:
+        for shard in range(1, 5):
+            progress_path = rollout_root / f"shard{shard}" / "progress.json"
+            progress = read_json(progress_path, {}) or {}
+            shard_status[f"{stack_name}.shard{shard}"] = {
+                "status": progress.get("status", "not_started"),
+                "attempt_count": len(progress.get("attempts", [])),
+                "accepted_count": progress.get("completed_slot_count", 0),
+                "expected_count": progress.get("expected_slot_count", 0),
+                "quality_summary": progress.get("quality_summary", {}),
+            }
+            for attempt in progress.get("attempts", []):
+                attempts.setdefault(attempt.get("scenario_id"), []).append(
+                    (stack_name, rollout_root, shard, attempt)
+                )
+    candidates = []
+    status_counts = {}
+    generated_count = 0
+    for row in matrix.get("scenarios", []):
+        item = {
+            "scenario_id": row["scenario_id"],
+            "ordinal": row.get("ordinal"),
+            "title": row.get("title"),
+            "relationship_category": row.get("relationship_category"),
+            "conflict_structure": row.get("conflict_structure"),
+            "source_type": row.get("source_type"),
+            "source_work": row.get("source_work"),
+            "configuration_status": row.get("configuration_status"),
+            "generation_status": "pending_generation",
+            "human_review": "pending",
+            "automatic_gate_audit": automatic_gate_records.get(row["scenario_id"], {}),
+            "gate_status": {
+                "gate1": "pending_human_review",
+                "gate2": "pending_or_machine_evidence_only",
+                "gate3": "pending_rollout_semantic_review",
+                "gate4": "not_constructed",
+            },
+        }
+        scenario_path = (
+            SCALE150_MATRIX.parent / "scenarios"
+            / f"scenario_{int(row['ordinal']):03d}"
+            / f"scenario_{int(row['ordinal']):03d}.json"
+        )
+        current_scenario = read_json(scenario_path, {}) or {}
+        current_fingerprint = hashlib.sha256(json.dumps(
+            current_scenario, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")).hexdigest()
+        item["scenario_fingerprint"] = current_fingerprint
+        attempt_history = attempts.get(row["scenario_id"], [])
+        item["attempt_history_count"] = len(attempt_history)
+        item["stale_attempt_count"] = sum(
+            record[3].get("scenario_fingerprint") != current_fingerprint
+            for record in attempt_history
+        )
+        record = next(
+            (
+                value for value in reversed(attempt_history)
+                if value[3].get("scenario_fingerprint") == current_fingerprint
+            ),
+            None,
+        )
+        if record:
+            stack_name, rollout_root, shard, attempt = record
+            status = attempt.get("status", "unknown")
+            item["generation_status"] = status
+            item["scenario_version_matches_current"] = (
+                attempt.get("scenario_fingerprint") == current_fingerprint
+            )
+            if not item["scenario_version_matches_current"]:
+                item["gate_status"]["gate3"] = "stale_scenario_version_regeneration_required"
+            item["trajectory_id"] = (
+                attempt.get("trajectory_id") or attempt.get("partial_trajectory_id")
+            )
+            item["turn_count"] = (
+                attempt.get("completed_turns_before_error")
+                or (attempt.get("precheck", {}).get("structural", {}).get("turn_count"))
+                or 0
+            )
+            item["ending"] = attempt.get("precheck", {}).get("structural", {}).get("ending")
+            item["machine_precheck"] = attempt.get("precheck")
+            scenario_dir = (
+                rollout_root / f"shard{shard}"
+                / f"scenario_{int(row['ordinal']):03d}"
+            )
+            filename = (
+                attempt.get("partial_trajectory_file")
+                if status == "generation_error"
+                else attempt.get("trajectory_file")
+            )
+            if filename:
+                subdirectory = {
+                    "generation_error": "rejected",
+                    "short_natural_trajectory": "short_trajectories",
+                    "budget_truncated": "budget_truncated",
+                    "machine_rejected": "rejected",
+                }.get(status, "")
+                target = scenario_dir / subdirectory / filename
+                if target.is_file():
+                    item["artifact_path"] = str(target.relative_to(ROOT))
+            item["model_stack"] = stack_name
+            item["model_semantic_review"] = semantic_reviews.get(
+                item.get("trajectory_id"), {"decision": "pending"}
+            )
+            if item["model_semantic_review"].get("decision") == "reject":
+                item["gate_status"]["gate3"] = "model_semantic_reject_human_pending"
+            generated_count += 1
+        status_counts[item["generation_status"]] = (
+            status_counts.get(item["generation_status"], 0) + 1
+        )
+        candidates.append(item)
+    return {
+        "format": "socialflux_scale300_live_review_v1",
+        "configuration_version": "scale300_v1",
+        "scenario_count": matrix.get("scenario_count", 0),
+        "source_counts": matrix.get("source_counts", {}),
+        "design_contract": matrix.get("design_contract", {}),
+        "generated_scenario_count": generated_count,
+        "pending_scenario_count": max(0, matrix.get("scenario_count", 0) - generated_count),
+        "generation_status_counts": status_counts,
+        "shards": shard_status,
+        "candidates": candidates,
+        "human_review_warning": "模型与机器检查不是人工验收；短轨迹、截断和失败样本均保留。",
+    }
+
+
+def load_scale150_scenario(scenario_id):
+    """Load one exact Scale200 scenario for Gate 1 review."""
+    matrix = read_json(SCALE150_MATRIX, {}) or {}
+    row = next(
+        (
+            item for item in matrix.get("scenarios", [])
+            if item.get("scenario_id") == scenario_id
+        ),
+        None,
+    )
+    if row is None:
+        return None
+    ordinal = int(row.get("ordinal", 0))
+    target = (
+        SCALE150_MATRIX.parent / "scenarios" / f"scenario_{ordinal:03d}"
+        / f"scenario_{ordinal:03d}.json"
+    ).resolve()
+    if ROOT not in target.parents or not target.is_file():
+        return None
+    scenario = read_json(target, {}) or {}
+    if scenario.get("scenario_id") != scenario_id:
+        return None
+    return {
+        "matrix_record": row,
+        "scenario": scenario,
+        "artifact_path": str(target.relative_to(ROOT)),
+        "scenario_sha256": hashlib.sha256(target.read_bytes()).hexdigest(),
+        "human_review": "pending",
+    }
+
+
+def load_scale150_trajectory(trajectory_id):
+    review = load_scale150_review()
+    candidate = next(
+        (
+            item for item in review.get("candidates", [])
+            if item.get("trajectory_id") == trajectory_id
+        ),
+        None,
+    )
+    if not candidate or not candidate.get("artifact_path"):
+        return None
+    target = (ROOT / candidate["artifact_path"]).resolve()
+    if ROOT not in target.parents or not target.is_file():
+        return None
+    trajectory = read_json(target, {}) or {}
+    trajectory["screening"] = {
+        "automatic_decision": (
+            "PASS" if candidate.get("generation_status") == "accepted" else "REVIEW"
+        ),
+        "candidate_classification": candidate.get("generation_status"),
+        "source_root": candidate.get("model_stack", "scale150_v1"),
+        "human_review_reasons": [],
+    }
+    semantic_review = candidate.get("model_semantic_review", {"decision": "pending"})
+    trajectory["diagnostic_review"] = {
+        "review_type": "model_semantic_review_not_human",
+        "status": semantic_review.get("decision", "pending"),
+        "issues": semantic_review.get("issues", []),
+        "summary": semantic_review.get("summary", ""),
+        "human_review": "pending",
+    }
+    return {"candidate": candidate, "trajectory": trajectory}
+
+
+def load_scale300_task_review():
+    """Return live, compact T1-T4 construction status for all Scale300 scenarios."""
+    review = load_scale150_review()
+    progress_by_scenario = {}
+    answer_counts = {name: 0 for name in ("T1", "T2", "T3", "T4")}
+    for target in sorted(SCALE300_TASK_ROOT.glob("scenario_*.json")):
+        package = read_json(target, {}) or {}
+        scenario_id = package.get("scenario_id")
+        if not scenario_id:
+            continue
+        tasks = package.get("tasks", {})
+        for name in answer_counts:
+            answer_counts[name] += int(bool((tasks.get(name) or {}).get("llm_answer")))
+        progress_by_scenario[scenario_id] = {
+            "status": package.get("status", "pending"),
+            "turn_count": package.get("turn_count"),
+            "task_statuses": package.get("task_statuses", {}),
+            "source_quality": package.get("source_quality", {}),
+            "request_accounting": package.get("request_accounting", {}),
+        }
+    candidates = []
+    semantic_counts = {}
+    for candidate in review.get("candidates", []):
+        item = {
+            key: candidate.get(key)
+            for key in (
+                "scenario_id", "ordinal", "title", "relationship_category",
+                "conflict_structure", "generation_status", "turn_count",
+                "trajectory_id", "artifact_path", "model_semantic_review",
+            )
+        }
+        item["task_construction"] = progress_by_scenario.get(
+            candidate.get("scenario_id"), {"status": "pending"}
+        )
+        semantic_decision = (candidate.get("model_semantic_review") or {}).get(
+            "decision", "pending"
+        )
+        semantic_counts[semantic_decision] = (
+            semantic_counts.get(semantic_decision, 0) + 1
+        )
+        candidates.append(item)
+    task_summary = read_json(SCALE300_TASK_ROOT / "summary.json", {}) or {}
+    task_summary["answer_counts"] = answer_counts
+    automatic_gate_summary = (read_json(SCALE300_AUTOMATIC_GATE_AUDIT, {}) or {}).get("summary", {})
+    return {
+        "format": "socialflux_scale300_task_review_live_v1",
+        "background": read_json(SCALE300_TASK_ROOT / "background_status.json", {}) or {},
+        "summary": task_summary,
+        "processed": len(progress_by_scenario),
+        "total_scenarios": len(candidates),
+        "shards": [],
+        "candidates": candidates,
+        "big_progress": {
+            "configured": review.get("scenario_count", 0),
+            "rollouts_generated": review.get("generated_scenario_count", 0),
+            "rollout_status_counts": review.get("generation_status_counts", {}),
+            "model_semantic_review_counts": semantic_counts,
+            "automatic_gate_summary": automatic_gate_summary,
+            "strict_machine_and_model_gate3_pass_human_pending": sum(
+                candidate.get("generation_status") == "accepted"
+                and (candidate.get("model_semantic_review") or {}).get("decision") == "approve"
+                for candidate in review.get("candidates", [])
+            ),
+            "human_ground_truth_completed": task_summary.get(
+                "human_ground_truth_completed", 0
+            ),
+        },
+        "annotation_notice": (
+            "LLM answers are review aids, not ground truth. T2 controlled pairs and "
+            "T3 branches remain pending human/branch validation where marked."
+        ),
+    }
+
+
+def load_scale300_task_package(scenario_id):
+    """Load one generated task package without allowing arbitrary path access."""
+    review = load_scale150_review()
+    candidate = next(
+        (item for item in review.get("candidates", []) if item.get("scenario_id") == scenario_id),
+        None,
+    )
+    if not candidate:
+        return None
+    ordinal = int(candidate.get("ordinal", 0))
+    target = (SCALE300_TASK_ROOT / f"scenario_{ordinal:03d}.json").resolve()
+    if SCALE300_TASK_ROOT.resolve() not in target.parents or not target.is_file():
+        return {
+            "scenario_id": scenario_id,
+            "ordinal": ordinal,
+            "status": "pending",
+            "human_review": "pending",
+        }
+    payload = read_json(target, {}) or {}
+    payload["artifact_path"] = str(target.relative_to(ROOT))
+    return payload
+
+
+
+def _r3_diagnostic_trajectory(scenario_id):
+    review = load_r3_diagnostic_review()
+    candidate = review.get("human_review_candidate", {})
+    if candidate.get("scenario_id") != scenario_id:
+        return None
+    relative = Path(candidate.get("artifact_path", ""))
+    target = (ROOT / relative).resolve()
+    if ROOT not in target.parents or not target.is_file():
+        return None
+    trajectory = read_json(target, {}) or {}
+    if not trajectory.get("turns"):
+        return None
+    trajectory["diagnostic_review"] = candidate
+    trajectory["screening"] = {
+        "automatic_decision": "REJECT",
+        "scores": {},
+        "source_stage": "r3_diagnostic_rejected_evidence",
+        "observed_outcome": infer_observed_outcome(trajectory),
+        "judge_rationale": candidate.get("known_issue", ""),
+        "hard_failures": ["unusable_trajectory"],
+        "missing_evidence": list(QUALITY_DIMENSIONS),
+        "protocol_contract_warnings": [
+            "predates_current_quality_version",
+            "diagnostic_human_feedback_only",
+            "cannot_be_promoted_to_formal_pool",
+        ],
+        "provisional_selected": False,
+        "human_review_required": True,
+        "human_review_reasons": [
+            "请判断 t11–t17 是不可接受的车轱辘话，还是自然的必要确认。",
+            "请逐轮核对提案、承诺、付款、请求的说话人和 action_owner。",
+            "该轨迹在 t20 前因旧 closure validator 失败；既非自然结束，也非达到上限。",
+        ],
+        "precheck": {
+            "quality_version": candidate.get("quality_version"),
+            "classification": candidate.get("classification"),
+            "fixed_since_candidate": candidate.get("fixed_since_candidate", []),
+        },
+    }
+    return trajectory
+
+
 def annotation_contract():
     return {
         "format": "socialflux_annotation_ui_v1",
@@ -69,11 +1401,11 @@ def annotation_contract():
             "maximum": 5,
             "dimensions": [
                 "social_plausibility",
+                "character_coherence",
                 "tradeoff_quality",
                 "history_necessity",
-                "strategy_space",
-                "motivation_coherence",
-                "surface_originality",
+                "interaction_richness",
+                "t1_t4_suitability",
             ],
         },
         "rollout_quality_dimensions": list(QUALITY_DIMENSIONS),
@@ -91,6 +1423,14 @@ def annotation_contract():
         "task_review_ratings": {
             task_type: sorted(ratings)
             for task_type, ratings in TASK_REVIEW_RATINGS.items()
+        },
+        "human_review_plan": read_json(HUMAN_REVIEW_PLAN, {}) or {},
+        "gate4_review": {
+            "format": "socialflux_gate4_double_audit_v2",
+            "same_deterministic_sample": True,
+            "independent_reviewers": 2,
+            "third_reviewer_only_for_disagreement": True,
+            "machine_proposal_is_ground_truth": False,
         },
         "task_label_contracts": {
             "T1_state_tracking": {"value_scale": [0, 10], "requires_evidence": True},
@@ -115,6 +1455,15 @@ def load_scenario_records():
     return [(path, read_json(path)) for path in discover_scenario_paths(SCENARIO_DIR)]
 
 
+def scenario_review_packet(scenario_id):
+    registry = read_json(SCENARIO_REVIEW_TEMPLATE, {}) or {}
+    return next(
+        (item for item in registry.get("records", [])
+         if item.get("scenario_id") == scenario_id),
+        None,
+    )
+
+
 def load_scenarios():
     return [scenario for _, scenario in load_scenario_records()]
 
@@ -124,8 +1473,457 @@ def load_media_assets():
     return manifest.get("assets", [])
 
 
+def _online_multimodal_prompt_cue(request):
+    lines = [
+        line.strip()
+        for line in str(request.get("prompt", "")).splitlines()
+        if line.strip()
+    ]
+    for index, line in enumerate(lines):
+        if line.startswith("Camera and lighting:") and index + 1 < len(lines):
+            return lines[index + 1]
+    return ""
+
+
+def load_online_multimodal_review(batch=None):
+    """Expose generated online videos as a bounded browser review packet."""
+    legacy = batch is None
+    if legacy:
+        batch = "legacy_gpt"
+        batch_config = {
+            "label": "GPT50 legacy",
+            "batch_root": ROOT / "data" / "gpt50" / "experiment",
+            "scenario_root": _active_gpt50_scenario_root(),
+            "online_root": GPT50_ONLINE_MULTIMODAL_ROOT,
+            "expected_scenario_count": 50,
+            "triggerability": GPT50_ONLINE_MULTIMODAL_TRIGGERABILITY,
+        }
+    elif batch not in MULTIMODAL_DELIVERY_BATCHES:
+        raise ValueError(f"unknown multimodal delivery batch: {batch}")
+    else:
+        batch_config = MULTIMODAL_DELIVERY_BATCHES[batch]
+    batch_root = batch_config["batch_root"]
+    online_root = batch_config["online_root"]
+    asset_root = online_root / "assets"
+    review_asset_root = online_root / "review_assets"
+    manifest = read_json(online_root / "manifest.json", {}) or {}
+    review = read_json(online_root / "asset_review.json", {}) or {}
+    review_by_id = {
+        item.get("request_id"): item
+        for item in review.get("items", [])
+        if item.get("request_id")
+    }
+    scenario_by_id = {
+        scenario.get("scenario_id"): scenario
+        for path in discover_scenario_paths(batch_config["scenario_root"])
+        for scenario in [read_json(path, {}) or {}]
+        if scenario.get("scenario_id")
+    }
+    triggerability_path = batch_config["triggerability"]
+    triggerability = (
+        read_json(triggerability_path, {}) or {}
+        if triggerability_path is not None
+        else {}
+    )
+    triggerability_by_id = {
+        item.get("scenario_id"): item
+        for item in triggerability.get("records", [])
+        if item.get("scenario_id")
+    }
+    profiles_by_id = {
+        scenario_id: build_online_multimodal_profile(scenario)
+        for scenario_id, scenario in scenario_by_id.items()
+    }
+    grouped = {}
+    status_counts = {}
+    for record in manifest.get("requests", []):
+        if record.get("status") != "generated_structural_pass":
+            continue
+        target = (batch_root / Path(record.get("video_file", ""))).resolve()
+        resolved_asset_root = asset_root.resolve()
+        if (
+            target.parent != resolved_asset_root
+            or target.suffix.lower() != ".mp4"
+        ):
+            continue
+        if not target.is_file():
+            continue
+        request = read_json(
+            batch_root / Path(record.get("request_file", "")),
+            {},
+        ) or {}
+        review_item = review_by_id.get(record.get("request_id"), {})
+        human_status = review_item.get("human_status", "pending")
+        status_counts[human_status] = status_counts.get(human_status, 0) + 1
+        checksum = record.get("video_sha256") or hashlib.sha256(
+            target.read_bytes()
+        ).hexdigest()
+        review_target = (
+            review_asset_root / target.name
+        ).resolve()
+        review_root = review_asset_root.resolve()
+        playback_target = target
+        playback_prefix = (
+            "/online-video/" if legacy else f"/online-video/{batch}/"
+        )
+        playback_checksum = checksum
+        if review_target.parent == review_root and review_target.is_file():
+            playback_target = review_target
+            playback_prefix = (
+                "/online-review-video/"
+                if legacy
+                else f"/online-review-video/{batch}/"
+            )
+            playback_checksum = hashlib.sha256(
+                review_target.read_bytes()
+            ).hexdigest()
+        scenario_id = record.get("scenario_id")
+        scenario = scenario_by_id.get(scenario_id, {})
+        profile = profiles_by_id.get(scenario_id, {})
+        scenario_triggerability = triggerability_by_id.get(scenario_id, {})
+        family = record.get("event_family")
+        trigger_conditions = [
+            {
+                "trigger_id": trigger.get("trigger_id"),
+                "priority": trigger.get("priority"),
+                "trigger_mode": trigger.get("trigger_mode"),
+                "source_state_family": trigger.get("source_state_family"),
+                "source_state_variable": trigger.get("source_state_variable"),
+                "source_direction": trigger.get("source_direction"),
+                "conditions": trigger.get("conditions", {}),
+            }
+            for trigger in profile.get("triggers", [])
+            if trigger.get("event_family") == family
+        ]
+        observed_events = [
+            event
+            for event in scenario_triggerability.get("events", [])
+            if event.get("event_family") == family
+        ]
+        triggerability_keys = (
+            "trajectory_turns", "evaluable_turns", "event_count",
+            "distinct_event_family_count", "distinct_state_family_count",
+            "eligible_turn_count", "eligible_turn_fraction",
+            "fire_given_eligible_turn_fraction", "first_fire_turn",
+            "near_miss_turn_count", "minimum_unmet_distance",
+            "triggerability_tier", "blocked_reason_counts", "events",
+            "skipped_turns",
+        )
+        scenario_triggerability_compact = (
+            {
+                key: scenario_triggerability.get(key)
+                for key in triggerability_keys
+            }
+            if scenario_triggerability else None
+        )
+        group = grouped.setdefault(scenario_id, {
+            "scenario_id": scenario_id,
+            "title": scenario.get("title", ""),
+            "background": scenario.get("background", ""),
+            "environment_character": (
+                (scenario.get("environment_agent") or {})
+                .get("persona", {})
+                .get("name", "")
+            ),
+            "triggerability": scenario_triggerability_compact,
+            "assets": [],
+        })
+        group["assets"].append({
+            "asset_type": "online_nonverbal",
+            "lane_label": "状态触发素材 · 无台词",
+            "spoken_content": False,
+            "request_id": record.get("request_id"),
+            "scenario_id": scenario_id,
+            "media_asset_id": record.get("media_asset_id"),
+            "event_family": record.get("event_family"),
+            "event_family_label": ONLINE_EVENT_FAMILY_LABELS.get(
+                record.get("event_family"), record.get("event_family")
+            ),
+            "dependency_phase": record.get("dependency_phase"),
+            "is_anchor": record.get("dependency_phase") == 0,
+            "trigger_conditions": trigger_conditions,
+            "observed_trigger_events": observed_events,
+            "expected_cue": _online_multimodal_prompt_cue(request),
+            "expected_audio": (request.get("audio") or {}).get("direction", ""),
+            "identity": request.get("identity", {}),
+            "url": (
+                f"{playback_prefix}{playback_target.name}"
+                f"?v={playback_checksum[:12]}"
+            ),
+            "video_sha256": checksum,
+            "playback_sha256": playback_checksum,
+            "review_loudness_normalized": playback_target == review_target,
+            "video_bytes": record.get("video_bytes", target.stat().st_size),
+            "structural_metadata": record.get("structural_metadata", {}),
+            "human_status": human_status,
+            "checks": review_item.get("checks", {}),
+            "notes": review_item.get("notes", ""),
+            "check_keys": list(ONLINE_MULTIMODAL_REVIEW_CHECKS),
+        })
+    talking_root = batch_config.get("talking_root")
+    talking_manifest = (
+        read_json(talking_root / "manifest.json", {}) or {}
+        if talking_root is not None else {}
+    )
+    talking_review = (
+        read_json(talking_root / "asset_review.json", {}) or {}
+        if talking_root is not None else {}
+    )
+    talking_review_by_id = {
+        item.get("request_id"): item
+        for item in talking_review.get("items", [])
+        if item.get("request_id")
+    }
+    talking_asset_root = (
+        (talking_root / "assets").resolve()
+        if talking_root is not None else None
+    )
+    for record in talking_manifest.get("requests", []):
+        if record.get("status") != "generated_structural_pass":
+            continue
+        target = (batch_root / Path(record.get("video_file", ""))).resolve()
+        if (
+            talking_asset_root is None
+            or target.parent != talking_asset_root
+            or target.suffix.lower() != ".mp4"
+            or not target.is_file()
+        ):
+            continue
+        scenario_id = record.get("scenario_id")
+        scenario = scenario_by_id.get(scenario_id, {})
+        request = read_json(
+            batch_root / Path(record.get("request_file", "")), {}
+        ) or {}
+        expression = record.get("observable_expression") or {}
+        cue_parts = [
+            expression.get("facial_expression"),
+            expression.get("gaze"),
+            expression.get("speech_style"),
+            expression.get("prosody"),
+            "; ".join(expression.get("behavioral_cues") or []),
+        ]
+        review_item = talking_review_by_id.get(record.get("request_id"), {})
+        human_status = review_item.get("human_status", "pending")
+        status_counts[human_status] = status_counts.get(human_status, 0) + 1
+        checksum = record.get("video_sha256") or hashlib.sha256(
+            target.read_bytes()
+        ).hexdigest()
+        group = grouped.setdefault(scenario_id, {
+            "scenario_id": scenario_id,
+            "title": scenario.get("title", ""),
+            "background": scenario.get("background", ""),
+            "environment_character": (
+                (scenario.get("environment_agent") or {})
+                .get("persona", {})
+                .get("name", "")
+            ),
+            "triggerability": triggerability_by_id.get(scenario_id),
+            "assets": [],
+        })
+        group["assets"].append({
+            "asset_type": "talking_head",
+            "lane_label": "响应口型视频 · 有语音",
+            "spoken_content": True,
+            "request_id": record.get("request_id"),
+            "scenario_id": scenario_id,
+            "trajectory_id": record.get("trajectory_id"),
+            "turn_id": record.get("turn_id"),
+            "importance_score": record.get("importance_score"),
+            "importance_reasons": record.get("importance_reasons", []),
+            "prompt_id": record.get(
+                "prompt_id", talking_manifest.get("prompt_id")
+            ),
+            "media_asset_id": record.get("request_id"),
+            "event_family": "talking_head",
+            "event_family_label": f"口型台词 · {record.get('turn_id', '')}",
+            "dependency_phase": None,
+            "is_anchor": False,
+            "trigger_conditions": [],
+            "observed_trigger_events": [],
+            "expected_cue": " · ".join(
+                str(value).strip() for value in cue_parts if value
+            ),
+            "expected_audio": record.get("public_response", ""),
+            "source_public_response": record.get(
+                "source_public_response", ""
+            ),
+            "identity": request.get("identity", {}),
+            "url": (
+                f"/talking-video/{batch}/{target.name}?v={checksum[:12]}"
+            ),
+            "video_sha256": checksum,
+            "playback_sha256": checksum,
+            "review_loudness_normalized": False,
+            "video_bytes": record.get("video_bytes", target.stat().st_size),
+            "structural_metadata": record.get("structural_metadata", {}),
+            "human_status": human_status,
+            "checks": review_item.get("checks", {}),
+            "notes": review_item.get("notes", ""),
+            "check_keys": list(TALKING_HEAD_REVIEW_CHECKS),
+        })
+    scenarios = sorted(grouped.values(), key=lambda item: item["scenario_id"])
+    for scenario in scenarios:
+        scenario["assets"].sort(key=lambda item: (
+            0 if item["is_anchor"] else 1,
+            0 if item.get("asset_type") == "online_nonverbal" else 1,
+            item["event_family"],
+            item["request_id"],
+        ))
+        scenario["asset_count"] = len(scenario["assets"])
+    active_scenario_ids = {item["scenario_id"] for item in scenarios}
+    expected_scenario_ids = set(scenario_by_id)
+    missing_scenario_ids = sorted(expected_scenario_ids - active_scenario_ids)
+    return {
+        "format": "socialflux_online_multimodal_browser_review_v1",
+        "batch": batch,
+        "batch_label": batch_config["label"],
+        "profile": manifest.get("profile"),
+        "asset_version": manifest.get("asset_version"),
+        "scenario_count": len(scenarios),
+        "expected_scenario_count": batch_config["expected_scenario_count"],
+        "missing_scenario_ids": missing_scenario_ids,
+        "asset_count": sum(item["asset_count"] for item in scenarios),
+        "online_asset_count": sum(
+            asset.get("asset_type") == "online_nonverbal"
+            for item in scenarios for asset in item["assets"]
+        ),
+        "talking_head_asset_count": sum(
+            asset.get("asset_type") == "talking_head"
+            for item in scenarios for asset in item["assets"]
+        ),
+        "structurally_passed_count": sum(
+            item["asset_count"] for item in scenarios
+        ),
+        "human_status_counts": status_counts,
+        "triggerability": {
+            "available": bool(triggerability.get("records")),
+            "format": triggerability.get("format"),
+            "evaluated_scenario_count": triggerability.get(
+                "evaluated_scenario_count", 0
+            ),
+            "audit_scope": triggerability.get("audit_scope"),
+            "model_calls": triggerability.get("model_calls"),
+            "state_snapshots_reused": triggerability.get(
+                "state_snapshots_reused"
+            ),
+            "policy": triggerability.get("policy", {}),
+            "tier_definition": triggerability.get("tier_definition", {}),
+            "summary": triggerability.get("summary", {}),
+            "warning": (
+                "触发难度来自保存状态轨迹的反事实重放；它不改写 response，"
+                "也不证明被测模型对状态变化具有单独因果控制。"
+            ),
+        },
+        "requirements": review.get("requirements", {}),
+        "check_keys": list(ONLINE_MULTIMODAL_REVIEW_CHECKS),
+        "talking_head_check_keys": list(TALKING_HEAD_REVIEW_CHECKS),
+        "scenarios": scenarios,
+        "storage": "browser_local_draft",
+        "human_review_required": True,
+    }
+
+
+def load_task_examples():
+    """Load T1–T3 review examples without promoting machine answers to GT."""
+    packet = read_json(TASK_EXAMPLES, {}) or {}
+    examples = []
+    for source in packet.get("examples", []):
+        item = dict(source)
+        media = dict(item.get("media", {}))
+        target = (ROOT / Path(media.get("path", ""))).resolve()
+        media_root = TASK_EXAMPLE_MEDIA_ROOT.resolve()
+        if media_root in target.parents and target.is_file():
+            checksum = hashlib.sha256(target.read_bytes()).hexdigest()
+            media.update({"status": "generated", "video_sha256": checksum,
+                          "url": f"/task-media/{target.name}?v={checksum[:12]}"})
+        elif ((ROOT / "media" / "talking_head" / "assets").resolve() in target.parents
+              and target.is_file()):
+            checksum = hashlib.sha256(target.read_bytes()).hexdigest()
+            manifest_record = next(
+                (record for record in load_media_assets()
+                 if record.get("asset_id") == media.get("asset_id")),
+                {},
+            )
+
+            media.update({"status": "generated", "video_sha256": checksum,
+                          "quality_status": manifest_record.get("quality_status"),
+                          "quality_checks": manifest_record.get("quality_checks", {})})
+        elif media.get("shown_to_model"):
+            media["status"] = "pending_generation"
+        item["media"] = media
+        examples.append(item)
+    return {**packet, "examples": examples}
+
+
+def load_t2_expression_dev():
+    """Load bounded T2 pairs with program, model, and Codex reviews separated."""
+    review_packet = read_json(
+        T2_EXPRESSION_DEV_ROOT / "codex_semantic_reviews.json", {}
+    ) or {}
+    reviews = {
+        item.get("scenario_id"): item
+        for item in review_packet.get("records", [])
+    }
+    pairs = []
+    for path in sorted(T2_EXPRESSION_DEV_ROOT.glob("pair_*.json")):
+        pair = read_json(path, {}) or {}
+        pair["codex_semantic_review"] = reviews.get(pair.get("scenario_id"), {})
+        pairs.append(pair)
+    codex_counts = {}
+    for pair in pairs:
+        decision = pair["codex_semantic_review"].get("decision", "pending")
+        codex_counts[decision] = codex_counts.get(decision, 0) + 1
+    return {
+        "format": "socialflux_t2_expression_human_review_v1",
+        "summary": read_json(T2_EXPRESSION_DEV_ROOT / "summary.json", {}) or {},
+        "pairs": pairs,
+        "codex_semantic_review_counts": codex_counts,
+        "human_review": "pending",
+        "media_status": "not_generated",
+    }
+
+
 def load_screening_report():
     return read_json(SCREENING_REPORT, {}) or {}
+
+
+def load_long_rollout_progress():
+    return read_json(LONG_ROLLOUT_ROOT / "progress.json", {}) or {}
+
+
+def long_rollout_summary(scenario_id=None):
+    progress = load_long_rollout_progress()
+    completed = list(progress.get("completed_slots", {}).values())
+    attempts = progress.get("attempts", [])
+    if scenario_id:
+        completed = [item for item in completed if item.get("scenario_id") == scenario_id]
+        attempts = [item for item in attempts if item.get("scenario_id") == scenario_id]
+        expected = (
+            progress.get("expected_slot_count", 0) // max(len(load_scenarios()), 1)
+            if progress else 0
+        )
+    else:
+        expected = progress.get("expected_slot_count", 0)
+    return {
+        "status": progress.get("status") or (
+            "in_progress" if progress else "not_started"
+        ),
+        "required_turns": progress.get("required_turns", 20),
+        "expected_slot_count": expected,
+        "completed_slot_count": len(completed),
+        "visible_attempt_count": sum(
+            bool(item.get("trajectory_file") or item.get("partial_trajectory_file"))
+            for item in attempts
+        ),
+        "machine_rejected_attempt_count": sum(
+            str(item.get("status", "")).endswith("rejected") for item in attempts
+        ),
+        "generation_error_count": sum(
+            item.get("status") == "generation_error" for item in attempts
+        ),
+        "updated_at_utc": progress.get("updated_at_utc", ""),
+        "evidence_status": "development_raw_pending_judge_history_and_human_review",
+    }
 
 
 def _review_file_status(path):
@@ -139,6 +1937,19 @@ def _review_file_status(path):
     }
 
 
+def human_review_workspace():
+    value = read_json(HUMAN_REVIEW_WORKSPACE, {}) or {}
+    if value.get("format") != "socialflux_human_review_workspace_v1":
+        return {
+            "format": "socialflux_human_review_workspace_v1",
+            "staffing_plan": read_json(HUMAN_REVIEW_PLAN, {}) or {},
+            "gate2": {},
+            "gate4": read_json(TASK_REVIEW_SAMPLE, {}) or {},
+            "warning": "Run scripts/prepare_human_review_workspace.py to materialize review packets.",
+        }
+    return value
+
+
 def manual_review_catalog():
     """Expose every human-facing stage, including not-yet-generated packets."""
     screening = load_screening_report()
@@ -146,29 +1957,52 @@ def manual_review_catalog():
     scenario_records = (read_json(SCENARIO_REVIEW_TEMPLATE, {}) or {}).get("records", [])
     media_count = len(load_media_assets())
     task_count = sum(len(load_instances(item["scenario_id"])) for item in load_scenarios())
+    workspace = human_review_workspace()
+    task_sample = workspace.get("gate4", {}).get("sampling", {}).get("sample_count", 0)
+    gate3_primary = workspace.get("gate3", {}).get("primary_count", summary.get("active_candidate_count", 0))
+    gate3_secondary = workspace.get("gate3", {}).get("secondary_audit_count", 0)
     environment_files = {
         name: _review_file_status(FORMAL_ENVIRONMENT_DIR / name)
         for name in (
             "state_transition_agreement.json", "trajectory_plausibility.json",
             "history_intervention.json", "paraphrase_robustness.json",
             "local_counterfactual.json", "backbone_sensitivity.json",
+            "persona_intervention.json", "video_state_consistency.json",
+            "timescale_validity.json",
         )
     }
+    long_summary = long_rollout_summary()
+    quality_report = read_json(QUALITY_GATE_REPORT, {}) or {}
+    quality_status = {
+        key: value.get("status", "pending")
+        for key, value in quality_report.get("gates", {}).items()
+    }
+    gate3_required = long_summary.get("expected_slot_count", 0)
+    gate4_plan = workspace.get("staffing_plan", {}).get("gate4", {})
+    gate4_target = 3 * max(
+        gate4_plan.get("minimum_sample_per_task_type", 2),
+        math.ceil(len(scenario_records) * gate4_plan.get("sample_fraction_per_task_type", 0.1)),
+    )
     categories = [
-        ["gate1_scenario", "Gate 1 · Scenario 与 S0/D0 冻结", len(scenario_records), 20,
-         "pending_human", "人物、冲突、state、D0、视频阈值、来源原创化及姓名/时间/哈希。", "Scenario 情节"],
-        ["gate2_environment", "Gate 2 · Environment Validity",
-         sum(value["exists"] for value in environment_files.values()), 6,
-         "pending_evidence", "E1–E5 真人实验；E6 是双 backbone 模型实验。", "本页证据状态"],
+        ["long_rollout_generation", "最多20轮自然结束候选池",
+         long_summary["visible_attempt_count"], long_summary["expected_slot_count"],
+         long_summary["status"], "每个 approved scenario 只生成 1 条自然 rollout；失败计入产率，不补抽。", "Rollout筛选"],
+        ["scale20_pilot", "历史 Scale20 审核框架",
+         0, 0, "archived",
+         "旧模型 rollout 已归档；页面和标注合同保留，等待新批次 manifest。", "历史人审"],
+        ["gate1_scenario", "Gate 1 · Scenario 与 initial state 冻结", len(scenario_records), len(scenario_records),
+         quality_status.get("gate_1_scenario_quality", "pending"), "人物、冲突、initial state、视频阈值、来源原创化及姓名/时间/哈希；runtime dynamics seed 仅做机器校验。", "Scenario 情节"],
+        ["gate2_environment", "Gate 2 · Environment Validity（1 人实验复核）",
+         sum(value["exists"] for value in environment_files.values()), 9,
+         quality_status.get("gate_2_environment_validity", "pending"), "E1/E2 为确定性抽样；E3/E4/E5/E7 自动干预后由 1 人复核；E6 双 backbone；E8 视频状态一致性；E9 timescale validity。", "人审工作台 · Gate 2"],
         ["gate3_rollout", "Gate 3 · Rollout Screening",
-         summary.get("human_review_queue_count", 0), summary.get("human_review_queue_count", 0),
-         "pending_human", "PASS/REVIEW/REJECT 审计、turn-ID 证据与每场景三选一比较。", "Rollout 筛选"],
-        ["gate4_tasks", "Gate 4 · Task 1/2/3 逐题审核", task_count, task_count,
-         "development_packets_only", "公开题面、来源、专属检查、人工标签和证据句；当前仍是开发包。", "Task 标注"],
-        ["formal_gt", "Formal GT · 三人盲标与仲裁", 0, task_count * 3,
-         "blocked_by_formal_tasks", "每个正式 task 三人独立盲标，分歧再具名仲裁。", "正式 Task 包生成后"],
-        ["media", "Talking Head · 视频人工审核", media_count, media_count,
-         "pending_human", "表情—状态、人物连续性、语音自然度和多模态信息效用。", "Scenario 情节"],
+         gate3_primary, gate3_required,
+         quality_status.get("gate_3_rollout_quality", "pending"), f"主审优先看 {gate3_primary} 条 active candidates；第二人确定性 audit {gate3_secondary} 条。Archive 同步可见，人工可复核，但不会被自动伪装成通过。", "Rollout 筛选 + 人审工作台 audit 清单"],
+        ["gate4_tasks", "Gate 4 · 两人同样本独立抽查", task_sample, gate4_target,
+         quality_status.get("gate_4_task_instance_quality", "pending"), f"当前 {task_count} 个机器建议答案；目标按 task type 确定性抽取 {gate4_target} 个。两人看同一批，分歧才交第三人。", "人审工作台 · Gate 4"],
+        ["media", "Talking Head · 可选媒体审核", media_count, media_count,
+         "no_active_assets" if media_count == 0 else "pending_human",
+         "旧素材与本地引擎已永久删除；接入外部 API 并生成新批次后，再审核人物连续性、语音自然度和多模态信息效用。", "Scenario 情节"],
         ["filter_holdout", "筛选器校准与 Holdout", 0, 1,
          "pending_split_and_labels", "检查误收/误拒、人机一致性；holdout 通过后才 freeze。", "本页协议"],
         ["dataset_audit", "原创性、污染与公开信息泄漏", 20, 20,
@@ -182,6 +2016,10 @@ def manual_review_catalog():
         ],
         "environment_files": environment_files,
         "screening_summary": summary,
+        "long_rollout_generation": long_summary,
+        "staffing_plan": workspace.get("staffing_plan", {}),
+        "model_stack": workspace.get("model_stack", {}),
+        "r3_current_diagnostic_review": load_r3_diagnostic_review(),
         "protocol_document": (ROOT / "docs" / "protocols" / "SocialFlux_Rollout_Screening_Protocol_v1.md").read_text(encoding="utf-8"),
         "warning": "未生成、未实名签署或仅有开发数据的项目明确保持 pending。",
     }
@@ -199,7 +2037,30 @@ def _scenario_record(scenario_id):
 
 
 def load_instances(scenario_id):
-    return read_jsonl(PIPELINE_DIR / scenario_id / "offline" / "instances.jsonl")
+    proposals = {
+        item.get("instance_id"): item.get("proposal")
+        for item in (read_json(MACHINE_TASK_PROPOSALS, {}) or {}).get("records", [])
+    }
+    interventions = read_json(
+        PIPELINE_DIR / scenario_id / "validation" / "local_action_interventions.json",
+        [],
+    ) or []
+    by_checkpoint = {}
+    for branch in interventions:
+        key = (branch.get("source_trajectory_id"), branch.get("checkpoint_turn_id"))
+        by_checkpoint.setdefault(key, []).append(branch)
+    records = []
+    for item in read_jsonl(PIPELINE_DIR / scenario_id / "offline" / "instances.jsonl"):
+        metadata = item.get("metadata", {})
+        key = (metadata.get("source_trajectory_id"), metadata.get("checkpoint_turn_id"))
+        records.append({
+            **item,
+            "machine_proposal": proposals.get(item.get("instance_id"), {
+                "status": "not_generated"
+            }),
+            "counterfactual_diagnostics": by_checkpoint.get(key, []),
+        })
+    return records
 
 def _pipeline_summary(scenario_id):
     return read_json(PIPELINE_DIR / scenario_id / "pipeline_manifest.json", {}) or {}
@@ -208,15 +2069,8 @@ def _pipeline_summary(scenario_id):
 def scenario_summary(scenario, source_path):
     pipeline = _pipeline_summary(scenario["scenario_id"])
     bundle = source_path.parent
-    rollout_manifest = read_json(bundle / "rollouts" / "manifest.json", {}) or {}
-    local_rollout_ready = (
-        rollout_manifest.get("config", {}).get("origin")
-        == "free_form_model_interaction"
-    )
-    trajectory_count = pipeline.get(
-        "trajectory_count",
-        rollout_manifest.get("trajectory_count", 0) if local_rollout_ready else 0,
-    )
+    active_rollouts = long_rollout_summary(scenario["scenario_id"])["completed_slot_count"]
+    trajectory_count = pipeline.get("trajectory_count", active_rollouts)
     screening = load_screening_report().get("scenarios", {}).get(scenario["scenario_id"], {})
     return {
         "scenario_id": scenario["scenario_id"],
@@ -238,10 +2092,7 @@ def scenario_summary(scenario, source_path):
             "t1": pipeline.get("t1", 0),
             "t2": pipeline.get("t2", 0),
             "t3": pipeline.get("t3", 0),
-            "available": (
-                pipeline.get("trajectory_origin") == "free_form_model_interaction"
-                or local_rollout_ready
-            ),
+            "available": bool(pipeline),
         },
         "screening": {
             "candidate_count": screening.get("candidate_count", trajectory_count),
@@ -262,7 +2113,7 @@ def acceptance_report():
     })
 
 
-def load_rollouts(scenario_id):
+def _legacy_rollouts(scenario_id):
     screening_records = [
         item for item in load_screening_report().get("records", [])
         if item.get("scenario_id") == scenario_id and item.get("human_review_required")
@@ -294,7 +2145,113 @@ def load_rollouts(scenario_id):
     for trajectory_id in manifest.get("trajectory_ids", []):
         trajectory = read_json(rollout_dir / f"{trajectory_id}.json")
         if trajectory:
+            trajectory.setdefault("screening", {
+                "automatic_decision": "UNSCREENED",
+                "candidate_classification": "legacy_manifest_candidate",
+                "human_review_required": True,
+                "human_review_reasons": [
+                    "Legacy free-form rollout has no bound screening record."
+                ],
+            })
             rollouts.append(trajectory)
+    return rollouts
+
+
+def load_long_rollouts(scenario_id):
+    record = _scenario_record(scenario_id)
+    if record is None:
+        return []
+    current_scenario_fingerprint = _scenario_fingerprint(record[1])
+    rollouts = []
+    seen = set()
+    for rollout_root in ROLLOUT_REVIEW_ROOTS:
+        scenario_dir = rollout_root / record[0].parent.name
+        progress = read_json(rollout_root / "progress.json", {}) or {}
+        attempts = {}
+        for item in progress.get("attempts", []):
+            if item.get("scenario_id") != scenario_id:
+                continue
+            for key in ("trajectory_id", "partial_trajectory_id"):
+                trajectory_id = item.get(key)
+                if trajectory_id:
+                    attempts[trajectory_id] = item
+        paths = sorted(scenario_dir.glob("*.json"))
+        for archive in ("short_trajectories", "budget_truncated", "rejected"):
+            paths += sorted((scenario_dir / archive).glob("*.json"))
+        for path in paths:
+            if path.name == "manifest.json":
+                continue
+            trajectory = read_json(path)
+            trajectory_id = (trajectory or {}).get("trajectory_id")
+            if not trajectory or not trajectory.get("turns") or trajectory_id in seen:
+                continue
+            seen.add(trajectory_id)
+            trajectory["scenario_version_matches_current"] = (
+                trajectory.get("scenario_fingerprint")
+                == current_scenario_fingerprint
+            )
+            attempt = attempts.get(trajectory_id, {})
+            classification = attempt.get("status") or {
+                "short_trajectories": "short_natural_trajectory",
+                "budget_truncated": "budget_truncated",
+                "rejected": "machine_rejected",
+            }.get(path.parent.name, "unknown")
+            accepted = classification == "accepted" and path.parent == scenario_dir
+            source_stage = {
+                "accepted": "newrequest_main_candidate_10_to_20",
+                "short_natural_trajectory": "newrequest_short_natural_archive",
+                "budget_truncated": "newrequest_budget_truncated_archive",
+                "generation_error": "newrequest_partial_generation_error",
+            }.get(classification, "newrequest_machine_rejected_attempt")
+            rationale = {
+                "accepted": "10–20 turn natural-ending machine precheck passed; semantic and human review pending.",
+                "short_natural_trajectory": "Conversation ended naturally before turn 10; retained for review, not padded.",
+                "budget_truncated": "Generation reached the 20-turn budget without a natural ending.",
+                "generation_error": "A complete partial trajectory was retained before generation stopped.",
+            }.get(classification, "Generation attempt failed a hard machine check.")
+            precheck = attempt.get("precheck", {})
+            hard = precheck.get("hard_reject_reasons", [])
+            trajectory["screening"] = {
+                "automatic_decision": "PENDING" if accepted else "REVIEW",
+                "scores": {},
+                "mean_quality_score": None,
+                "source_stage": source_stage,
+                "source_root": str(rollout_root.relative_to(ROOT)),
+                "candidate_classification": classification,
+                "observed_outcome": infer_observed_outcome(trajectory),
+                "turn_evidence": {"judge_turn_evidence_complete": False},
+                "judge_rationale": rationale,
+                "hard_failures": hard,
+                "missing_evidence": list(QUALITY_DIMENSIONS),
+                "protocol_contract_warnings": [
+                    "pending_rollout_judge_v2", "pending_history_dependence",
+                    "pending_human_comparative_review",
+                ],
+                "provisional_selected": False,
+                "human_review_required": True,
+                "human_review_reasons": [
+                    "Raw candidate is visible for semantic and human review; machine status is not human acceptance."
+                ],
+                "generation_attempt": attempt.get("attempt"),
+                "precheck": precheck,
+            }
+            rollouts.append(trajectory)
+    return rollouts
+
+
+def load_rollouts(scenario_id):
+    if load_long_rollout_progress():
+        rollouts = load_long_rollouts(scenario_id)
+    else:
+        rollouts = _legacy_rollouts(scenario_id)
+    diagnostic = _r3_diagnostic_trajectory(scenario_id)
+    if diagnostic and not any(
+        item.get("trajectory_id") == diagnostic.get("trajectory_id") for item in rollouts
+    ):
+        if any(item.get("scenario_version_matches_current") for item in rollouts):
+            rollouts.append(diagnostic)
+        else:
+            rollouts.insert(0, diagnostic)
     return rollouts
 
 
@@ -303,12 +2260,36 @@ def scenario_detail(scenario_id):
     if record is None:
         return None
     source_path, scenario = record
-    dialogue_path = source_path.parent / "rollouts" / "dialogues.md"
-    task_review_path = source_path.parent / "rollouts" / "tasks.md"
+    active_bundle = LONG_ROLLOUT_ROOT / source_path.parent.name
+    dialogue_path = active_bundle / "dialogues.md"
+    task_review_path = PIPELINE_DIR / scenario_id / "tasks.md"
     screening = load_screening_report()
+    initial_observation = build_initial_policy_observation(scenario)
+    prompt_id = "task_t4_action_v21"
+    # Reuse the real policy renderer so role-card/turn-brief placeholders cannot
+    # drift from the runtime. Building a request does not call a provider.
+    preview_messages, _ = ModelPolicy(
+        "web-prompt-preview", provider=None, prompt_id=prompt_id,
+    )._build_request(initial_observation)
+    model_contract = {
+        "prompt_id": prompt_id,
+        "horizon_turns": 20,
+        "role_card": scenario["evaluated_agent_role"],
+        "public_observation_fields": list(PUBLIC_OBSERVATION_FIELDS),
+        "private_author_fields_excluded": list(PRIVATE_AUTHOR_FIELDS),
+        "initial_observation": initial_observation,
+        "prompt_template": get_prompt(prompt_id),
+        "rendered_initial_prompt": preview_messages[-1]["content"],
+        "boundary_note": (
+            "网页向研究者展示 persona/hidden intention/initial state/runtime dynamics seed；这些作者侧私有信息"
+            "不会进入被测模型 observation。"
+        ),
+    }
     return {
         "summary": scenario_summary(scenario, source_path),
+        "evaluated_model_contract": model_contract,
         "scenario": scenario,
+        "gate1_review_packet": scenario_review_packet(scenario_id),
         "documentation": source_path.with_suffix(".md").read_text(encoding="utf-8"),
         "rollout_dialogues": (
             dialogue_path.read_text(encoding="utf-8")
@@ -328,6 +2309,7 @@ def scenario_detail(scenario_id):
             "task_source_selection", {}
         ),
         "screening": screening.get("scenarios", {}).get(scenario_id, {}),
+        "long_rollout_generation": long_rollout_summary(scenario_id),
         "media_assets": [
             {
                 **asset,
@@ -341,17 +2323,81 @@ def scenario_detail(scenario_id):
         ],
     }
 
-
-def api_payload(path):
+def api_payload(path, *, offline_bank=None):
     parts = [unquote(part) for part in path.strip("/").split("/") if part]
+    if parts == ["api", "lab"]:
+        return load_hub()
+    if len(parts) == 4 and parts[:2] == ["api", "lab"] and parts[3] == "history":
+        return {"events": experiment_history(parts[2])}
+    if parts == ["api", "experiment-status"]:
+        return load_experiment_status()
+    if parts == ["api", "offline-review"]:
+        return load_offline_review(bank_id=offline_bank)
+    if parts == ["api", "offline-talking-preview"]:
+        return load_talking_preview()
+    if len(parts) == 3 and parts[:2] == ["api", "offline-review"]:
+        return load_offline_review(parts[2],bank_id=offline_bank)
+    if len(parts) == 4 and parts[:2] == ["api", "offline-review"] and parts[3] == "reference":
+        return load_offline_review(parts[2], reference=True,bank_id=offline_bank)
+    if parts == ["api", "gpt50-live"]:
+        return load_live()
+    if len(parts) == 3 and parts[:2] == ["api", "gpt50-live"]:
+        return load_live(parts[2])
+    # GPT50 is the active workbench. Resolve it before loading the unrelated
+    # legacy scenario catalog so rollout polling stays lightweight.
+    if parts == ["api", "gpt50-review"]:
+        return load_gpt50_review()
+    if parts == ["api", "gpt50-rollout"]:
+        return load_gpt50_rollout_progress()
+    if parts == ["api", "online-multimodal-review"]:
+        return load_online_multimodal_review()
+    if parts == ["api", "state-annotation"]:
+        return load_state_human_annotation_packet()
+    if (
+        len(parts) == 3
+        and parts[:2] == ["api", "online-multimodal-review"]
+    ):
+        return load_online_multimodal_review(parts[2])
+    if len(parts) == 3 and parts[:2] == ["api", "gpt50-rollout"]:
+        return load_gpt50_rollout(parts[2])
+    if len(parts) == 3 and parts[:2] == ["api", "gpt50-scenario"]:
+        return load_gpt50_scenario(parts[2])
     records = load_scenario_records()
     catalog = read_json(SCENARIO_DIR / "manifest.json", {}) or {}
     if parts == ["api", "health"]:
-        return {"ok": True, "scenario_count": len(records), "pipeline_version": "v2", "site_mode": "annotation_workbench"}
+        return {"ok": True, "scenario_count": len(records), "pipeline_version": "20turn-selected-v1", "site_mode": "annotation_workbench"}
     if parts == ["api", "annotation-contract"]:
         return annotation_contract()
+    if parts == ["api", "task-examples"]:
+        return load_task_examples()
+    if parts == ["api", "t2-expression-dev"]:
+        return load_t2_expression_dev()
+    if parts == ["api", "gate1-review"]:
+        return read_json(SCENARIO_REVIEW_TEMPLATE, {}) or {}
     if parts == ["api", "manual-review"]:
         return manual_review_catalog()
+    if parts == ["api", "scale20-pilot"]:
+        return load_scale20_pilot_review()
+    if parts == ["api", "scale20-review"]:
+        return load_scale20_combined_review()
+    if parts == ["api", "gpt50-review"]:
+        return load_gpt50_review()
+    if parts == ["api", "gpt50-rollout"]:
+        return load_gpt50_rollout_progress()
+    if len(parts) == 3 and parts[:2] == ["api", "gpt50-scenario"]:
+        return load_gpt50_scenario(parts[2])
+    if parts == ["api", "scale150-review"]:
+        return load_scale150_review()
+    if parts == ["api", "scale300-tasks"]:
+        return load_scale300_task_review()
+    if len(parts) == 3 and parts[:2] == ["api", "scale300-task"]:
+        return load_scale300_task_package(parts[2])
+    if len(parts) == 3 and parts[:2] == ["api", "scale150-scenario"]:
+        return load_scale150_scenario(parts[2])
+    if len(parts) == 3 and parts[:2] == ["api", "scale150-trajectory"]:
+        return load_scale150_trajectory(parts[2])
+    if parts == ["api", "review-workspace"]:
+        return human_review_workspace()
     if parts == ["api", "summary"]:
         return {
             "scenario_count": len(records),
@@ -359,8 +2405,19 @@ def api_payload(path):
             "scenarios": [scenario_summary(scenario, path) for path, scenario in records],
             "pipeline_manifest": read_json(PIPELINE_DIR / "manifest.json", {}) or {},
             "acceptance": acceptance_report(),
+            "quality_gates": read_json(QUALITY_GATE_REPORT, {}) or {},
             "screening": load_screening_report().get("summary", {}),
+            "long_rollout_generation": long_rollout_summary(),
             "manual_review": manual_review_catalog(),
+            "review_workspace": human_review_workspace(),
+            "scale20_pilot": {
+                key: value for key, value in load_scale20_pilot_review().items()
+                if key in {"status", "quality_version", "configuration_summary", "generation_summary", "request_budget", "task_availability"}
+            },
+            "scale20_review": {
+                key: value for key, value in load_scale20_full20_review().items()
+                if key in {"status", "quality_version", "generated_scenario_count", "selected_trajectory_count", "total_turns", "generation_status_counts", "model_semantic_review_counts", "actual_request_counts"}
+            },
         }
     if parts == ["api", "scenarios"]:
         return {
@@ -377,9 +2434,16 @@ def api_payload(path):
 class App(SimpleHTTPRequestHandler):
     auth_username = None
     auth_password = None
+    public_origin = None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(STATIC_DIR), **kwargs)
+
+    def end_headers(self):
+        static_path = urlparse(self.path).path
+        if static_path.endswith((".html", ".js", ".css")):
+            self.send_header("Cache-Control", "no-store")
+        super().end_headers()
 
     def send_json(self, payload, status=200):
         body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
@@ -406,10 +2470,177 @@ class App(SimpleHTTPRequestHandler):
         self.end_headers()
         return False
 
+    def do_POST(self):
+        if not self.authenticate():
+            return
+        parsed = urlparse(self.path)
+        is_human_import = parsed.path == '/api/lab/human-import'
+        is_human_adjudicate = parsed.path == '/api/lab/human-adjudicate'
+        is_lab = parsed.path == "/api/lab/records" or is_human_import or is_human_adjudicate
+        if not is_lab and not parsed.path.startswith("/api/offline-annotation/"):
+            self.send_json({"error": "not found"}, 404)
+            return
+        origin = self.headers.get("Origin")
+        if origin and origin != self.public_origin and urlparse(origin).netloc != self.headers.get("Host"):
+            self.send_json({"error": "跨站提交未被允许"}, 403)
+            return
+        if is_lab and (
+            self.headers.get_content_type() != "application/json"
+            or self.headers.get("Sec-Fetch-Site") == "cross-site"
+        ):
+            self.send_json({"error": "实验记录只接受同源 JSON 提交"}, 403)
+            return
+        try:
+            length = int(self.headers.get("Content-Length", "0"))
+            if not 0 < length <= (1_000_000 if is_human_import else 100_000):
+                raise ValueError("提交内容为空或过长")
+            payload = json.loads(self.rfile.read(length))
+            if not isinstance(payload, dict):
+                raise ValueError("提交格式无效")
+            if is_human_import:
+                result = import_receipt(payload)
+            elif is_human_adjudicate:
+                result = adjudicate(payload)
+            elif is_lab:
+                result = save_experiment_record(payload)
+            else:
+                action = parsed.path.removeprefix("/api/offline-annotation/")
+                result = annotation_action(action, payload)
+            self.send_json(result, 200)
+        except ConflictError as exc:
+            self.send_json({"error": str(exc)}, 409)
+        except (ValueError, KeyError, TypeError) as exc:
+            self.send_json({"error": str(exc)}, 400)
+
     def do_GET(self):
         if not self.authenticate():
             return
         parsed = urlparse(self.path)
+        if parsed.path == "/api/lab/source":
+            relative = parse_qs(parsed.query).get("path", [""])[0]
+            try:
+                payload = experiment_document(relative)
+                self.send_json(payload or {"error": "未收录此来源文件"}, 200 if payload else 404)
+            except OSError:
+                self.send_json({"error": "文件暂不可读，请稍后重试"}, 503)
+            return
+        if parsed.path.startswith((
+            "/online-video/", "/online-review-video/", "/talking-video/", "/offline-talking-video/"
+        )):
+            offline_talking = parsed.path.startswith("/offline-talking-video/")
+            talking_head = parsed.path.startswith("/talking-video/")
+            review_copy = parsed.path.startswith("/online-review-video/")
+            prefix = (
+                "/offline-talking-video/" if offline_talking else "/talking-video/"
+                if talking_head
+                else "/online-review-video/"
+                if review_copy
+                else "/online-video/"
+            )
+            relative = unquote(parsed.path.removeprefix(prefix))
+            batch_name, separator, batch_filename = relative.partition("/")
+            if offline_talking:
+                target = talking_video_target(batch_name, batch_filename) if separator else None
+                if target is None:
+                    self.send_error(404, "offline talking-head video not found")
+                    return
+                asset_root, filename = target.parent.resolve(), target.name
+            elif talking_head:
+                if not separator or batch_name not in MULTIMODAL_DELIVERY_BATCHES:
+                    self.send_error(404, "talking-head video not found")
+                    return
+                talking_root = MULTIMODAL_DELIVERY_BATCHES[batch_name].get(
+                    "talking_root"
+                )
+                if talking_root is None:
+                    self.send_error(404, "talking-head video not found")
+                    return
+                asset_root = (talking_root / "assets").resolve()
+                filename = batch_filename
+            elif separator and batch_name in MULTIMODAL_DELIVERY_BATCHES:
+                online_root = MULTIMODAL_DELIVERY_BATCHES[batch_name][
+                    "online_root"
+                ]
+                asset_root = (
+                    online_root / (
+                        "review_assets" if review_copy else "assets"
+                    )
+                ).resolve()
+                filename = batch_filename
+            else:
+                asset_root = (
+                    GPT50_ONLINE_MULTIMODAL_REVIEW_ASSET_ROOT
+                    if review_copy
+                    else GPT50_ONLINE_MULTIMODAL_ASSET_ROOT
+                ).resolve()
+                filename = relative
+            target = (asset_root / filename).resolve()
+            if (
+                target.parent != asset_root
+                or target.suffix.lower() != ".mp4"
+                or not target.is_file()
+            ):
+                self.send_error(
+                    404,
+                    "talking-head video not found"
+                    if talking_head else "online multimodal video not found",
+                )
+                return
+            size = target.stat().st_size
+            start, end = 0, size - 1
+            range_header = self.headers.get("Range", "")
+            partial = False
+            if range_header.startswith("bytes=") and "," not in range_header:
+                try:
+                    left, right = range_header[6:].split("-", 1)
+                    if left:
+                        start = int(left)
+                        end = int(right) if right else end
+                    elif right:
+                        length = int(right)
+                        start = max(0, size - length)
+                    partial = 0 <= start <= end < size
+                except (TypeError, ValueError):
+                    partial = False
+            if not partial:
+                start, end = 0, size - 1
+            self.send_response(206 if partial else 200)
+            self.send_header("Content-Type", "video/mp4")
+            self.send_header("Accept-Ranges", "bytes")
+            self.send_header("Content-Length", str(end - start + 1))
+            if partial:
+                self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
+            self.send_header("Cache-Control", "public, max-age=3600")
+            self.end_headers()
+            with target.open("rb") as stream:
+                stream.seek(start)
+                remaining = end - start + 1
+                while remaining:
+                    chunk = stream.read(min(1024 * 1024, remaining))
+                    if not chunk:
+                        break
+                    self.wfile.write(chunk)
+                    remaining -= len(chunk)
+            return
+        if parsed.path.startswith("/task-media/"):
+            filename = unquote(parsed.path.removeprefix("/task-media/"))
+            target = (TASK_EXAMPLE_MEDIA_ROOT / filename).resolve()
+            media_root = TASK_EXAMPLE_MEDIA_ROOT.resolve()
+            if (
+                target.parent != media_root
+                or target.suffix.lower() != ".mp4"
+                or not target.is_file()
+            ):
+                self.send_error(404, "task media not found")
+                return
+            self.send_response(200)
+            self.send_header("Content-Type", "video/mp4")
+            self.send_header("Content-Length", str(target.stat().st_size))
+            self.send_header("Cache-Control", "public, max-age=3600")
+            self.end_headers()
+            with target.open("rb") as stream:
+                shutil.copyfileobj(stream, self.wfile)
+            return
         if parsed.path.startswith("/media/"):
             asset_id = unquote(parsed.path.removeprefix("/media/"))
             asset = next(
@@ -433,12 +2664,11 @@ class App(SimpleHTTPRequestHandler):
                 shutil.copyfileobj(stream, self.wfile)
             return
         if parsed.path.startswith("/api/"):
-            payload = api_payload(parsed.path)
+            payload = api_payload(parsed.path,offline_bank=parse_qs(parsed.query).get('bank',[None])[0])
             self.send_json(payload if payload is not None else {"error": "not found"},
                            200 if payload is not None else 404)
             return
-        if parsed.path in ("/", ""):
-            self.path = "/index.html"
+        self.path = PAGE_ROUTES.get(parsed.path, LEGACY_PAGE_ALIASES.get(parsed.path, self.path))
         super().do_GET()
 
     def log_message(self, format, *args):
@@ -451,7 +2681,14 @@ def main():
     parser.add_argument("--port", type=int, default=8000)
     parser.add_argument("--username", default="socialflux")
     parser.add_argument("--password-file", type=Path)
+    parser.add_argument("--public-origin", help="Exact HTTPS origin used by the trusted reverse proxy")
     args = parser.parse_args()
+    if args.public_origin:
+        public = urlparse(args.public_origin)
+        if (public.scheme != "https" or not public.hostname or public.username or public.password
+                or public.path or public.params or public.query or public.fragment):
+            parser.error("--public-origin must be an HTTPS origin without a path or credentials")
+        App.public_origin = args.public_origin
     if args.password_file:
         password = args.password_file.read_text(encoding="utf-8").strip()
         if not password:

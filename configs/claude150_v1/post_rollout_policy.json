@@ -1,0 +1,22 @@
+{
+  "format": "socialflux_claude150_post_rollout_policy_v1",
+  "batch": "claude150_v1",
+  "human_stage_policy": "skip_all",
+  "requested_by_user": true,
+  "human_stages": {
+    "gate1_scenario_review": "skipped_by_user",
+    "gate2_E1_state_transition_agreement": "skipped_by_user",
+    "gate2_E2_trajectory_plausibility": "skipped_by_user",
+    "gate2_E8_video_state_consistency_review": "skipped_by_user",
+    "gate2_E9_timescale_validity_review": "skipped_by_user",
+    "gate3_rollout_review": "skipped_by_user",
+    "gate4_task_review": "skipped_by_user"
+  },
+  "machine_policy": {
+    "continue_machine_generation_and_experiments": true,
+    "retain_all_machine_pass_fail_error_artifacts": true,
+    "do_not_treat_skipped_human_review_as_pass": true,
+    "human_attestation": false
+  },
+  "execution_note": "After Claude150 rollout completion, do not wait for or fabricate human labels; mark human-only stages skipped and continue only explicitly requested machine stages."
+}

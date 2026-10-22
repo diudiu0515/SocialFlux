@@ -16,7 +16,7 @@ Focus only on narrative quality:
 - vary domain, relationship, temporal structure, stakes, and opening conditions instead of reusing a generic confrontation template;
 - allow ambiguity, mixed motives, delayed disclosure, silence, practical constraints, and asymmetric options where the mechanism supports them.
 
-Do not mention JSON schema, latent state variables, S0/D0, video thresholds, benchmark tasks, or sampling. Return a coherent narrative script in Markdown.
+Do not mention JSON schema, latent state variables, initial numeric values, video thresholds, benchmark tasks, or sampling. Return a coherent narrative script in Markdown.
 
 Construction brief:
 {{payload_json}}

@@ -1,0 +1,63 @@
+{
+  "language": "en",
+  "scope": "seven_scenes_one_complete_dialogue_sample_each",
+  "translations": [
+    {
+      "scenario_id": "GPT50_001",
+      "source_text": "I've noted what you just told me. Are you still waiting for placement confirmation from the receiving hospital, or have they explicitly refused?",
+      "text": "I've noted what you just told me. Are you still waiting for placement confirmation from the receiving hospital, or have they explicitly refused?",
+      "duration_seconds": 13,
+      "expression": "Focused, with a steady expression and even, slightly brisk but neutral delivery. Briefly pause after finishing a note, then wait for the answer.",
+      "provenance": "Faithful English localization of the controlled shared ending; the preceding dialogue establishes that the nurse is awaiting the hospital's placement decision."
+    },
+    {
+      "scenario_id": "GPT50_002",
+      "source_text": "I understand. We can go on to check the details of the arrangements.",
+      "text": "I understand. We can go on to check the details of the arrangements.",
+      "duration_seconds": 8,
+      "expression": "Calm and attentive, with an even tone. Briefly pause and look toward the listener, placing the notebook on the desk.",
+      "provenance": "Faithful English localization of the controlled shared ending."
+    },
+    {
+      "scenario_id": "GPT50_003",
+      "source_text": "I hear you, Sami. Please put the verification and publication schedule in writing, then we can confirm each point.",
+      "text": "I hear you, Sami. Please put the verification and publication schedule in writing, then we can confirm each point.",
+      "duration_seconds": 11,
+      "expression": "Neutral expression without clear approval or disapproval. Even, moderate volume, with room for discussion. Set the pen down gently and pause; glance naturally between the listener and notes.",
+      "provenance": "Faithful English localization of the controlled shared ending."
+    },
+    {
+      "scenario_id": "GPT50_004",
+      "source_text": "I've heard your proposed order for verification, action, and notification. We still need to distinguish whether the impact is confirmed, based on the evidence.",
+      "text": "I've heard your proposed order for verification, action, and notification. We still need to distinguish whether the impact is confirmed, based on the evidence.",
+      "duration_seconds": 13,
+      "expression": "Attentive, looking toward the listener, speaking steadily in a restrained tone. Continue after a short pause.",
+      "provenance": "Faithful English localization of the controlled shared ending; retains the distinction between confirmed and unconfirmed impact."
+    },
+    {
+      "scenario_id": "GPT50_006",
+      "source_text": "Can we get both households' written confirmations before ten? If so, I'll prepare the publication process immediately.",
+      "text": "Can we get both households' written confirmations before ten? If so, I'll prepare the publication process immediately.",
+      "duration_seconds": 10,
+      "expression": "Focused and attentive. Even-paced delivery with practical urgency. Lean slightly forward with a task-oriented posture.",
+      "english_source_path": "data/gpt50/experiment/state_v3_validation/v323_state_judgment_primary/unified_current_trust_v1_gpt50_active/05_GPT50_006_gpt/english/trajectory.json",
+      "provenance": "Verbatim reuse of the corresponding English trajectory response, turn 2."
+    },
+    {
+      "scenario_id": "GPT50_008",
+      "source_text": "Okay, let's discuss the timeline and payment installments next. Once we have the written assessment and clear verification arrangements, we can work out the details.",
+      "text": "Okay, let's discuss the timeline and payment installments next. Once we have the written assessment and clear verification arrangements, we can work out the details.",
+      "duration_seconds": 14,
+      "expression": "Calm and focused, at an even pace in a neutral tone. Maintain a professional seated posture and briefly glance at the agenda.",
+      "provenance": "Faithful English localization of the controlled shared ending; payment installments do not imply phased construction."
+    },
+    {
+      "scenario_id": "GPT50_009",
+      "source_text": "Understood. Once you provide the stock levels and usage, I'll confirm loading and receiving arrangements with the team before departure, so each clinic's batch is clearly identified and traceable.",
+      "text": "Understood. Once you provide the stock levels and usage, I'll confirm loading and receiving arrangements with the team before departure, so each clinic's batch is clearly identified and traceable.",
+      "duration_seconds": 15,
+      "expression": "Calm and attentive, with steady, matter-of-fact delivery. Maintain direct eye contact toward the listener and an open posture.",
+      "provenance": "Faithful English localization of the controlled shared ending."
+    }
+  ]
+}

@@ -11,8 +11,8 @@ from schemas.validate import QUALITY_CHECKS
 REQUIRED_ATTESTATIONS = (
     "variables_relevant",
     "values_justified",
-    "no_policy_effect_baked_in",
     "initial_triggers_inactive",
+    "no_policy_effect_baked_in",
     "multiple_future_paths_possible",
     "shared_across_models_and_seeds",
 )

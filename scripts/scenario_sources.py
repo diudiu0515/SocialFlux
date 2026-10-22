@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from prompts.loader import render_prompt
 from providers.factory import build_provider
+from providers.model_routes import ModelRoutes
 from schemas.validate import (
     validate_blueprint,
     validate_initial_state_proposal,
@@ -20,8 +21,12 @@ from schemas.validate import (
 )
 
 
-def _provider(path):
-    return build_provider(json.loads(Path(path).read_text(encoding="utf-8")))
+DEFAULT_MODEL_ROUTES = Path("configs/model_routes.frontier_api.json")
+
+
+def _provider(args, route_name):
+    routes = ModelRoutes.load(args.model_routes).require([route_name])
+    return build_provider(routes.provider_config(route_name))
 
 
 def _complete(provider, prompt_id, payload, sampling):
@@ -38,7 +43,7 @@ def _write(path, content):
 
 def generate_script(args):
     brief = json.loads(args.input.read_text(encoding="utf-8"))
-    text = _complete(_provider(args.provider_config), "scenario_script_generation_v1", brief, {
+    text = _complete(_provider(args, "scenario_authoring"), "scenario_script_generation_v1", brief, {
         "temperature": args.temperature,
         "seed": args.seed,
     })
@@ -54,7 +59,7 @@ def extract_structure(args):
     if not str(request["title"]).strip() or request["medium"] not in ("film", "television"):
         raise ValueError("source request requires a title and film/television medium")
     structure = json.loads(_complete(
-        _provider(args.provider_config),
+        _provider(args, "scenario_authoring"),
         "narrative_structure_extraction_v1",
         request,
         {"temperature": args.temperature, "seed": args.seed},
@@ -75,7 +80,7 @@ def quality_check(args):
         "source_material": args.input.read_text(encoding="utf-8"),
     }
     report = json.loads(_complete(
-        _provider(args.provider_config),
+        _provider(args, "quality_review"),
         "scenario_quality_gate_v1",
         payload,
         {"temperature": 0, "seed": args.seed},
@@ -100,7 +105,7 @@ def normalize(args):
         "approved_source": args.input.read_text(encoding="utf-8"),
     }
     blueprint = json.loads(_complete(
-        _provider(args.provider_config),
+        _provider(args, "scenario_normalization"),
         "scenario_normalization_v1",
         payload,
         {"temperature": args.temperature, "seed": args.seed},
@@ -115,7 +120,7 @@ def initialize(args):
     blueprint = json.loads(args.input.read_text(encoding="utf-8"))
     validate_blueprint(blueprint)
     proposal = json.loads(_complete(
-        _provider(args.provider_config),
+        _provider(args, "scenario_initialization"),
         "initial_state_configuration_v1",
         blueprint,
         {"temperature": args.temperature, "seed": args.seed},
@@ -179,7 +184,7 @@ def main():
 
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--input", type=Path, required=True)
-    common.add_argument("--provider-config", type=Path, required=True)
+    common.add_argument("--model-routes", type=Path, default=DEFAULT_MODEL_ROUTES)
     common.add_argument("--output", type=Path, required=True)
     common.add_argument("--temperature", type=float, default=0.7)
     common.add_argument("--seed", type=int, default=0)

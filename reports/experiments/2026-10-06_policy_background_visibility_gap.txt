@@ -1,0 +1,18 @@
+准备 scale 时发现的独立问题：policy 背景正文仍泄漏环境私有信息
+
+本地复现，不需要新模型请求；没有修改当前冻结的验证代码和输入。
+
+场景：data/gpt50/experiment/scenario/scenarios_state_v3/scenario_003/scenario_003.json
+构造：environment.observation.build_initial_policy_observation(scenario)
+policy 角色：Reporter investigating municipal procurement at the Harrow Street Ledger
+环境角色：Investigations editor and direct supervisor at the Harrow Street Ledger
+
+policy 实际可见的 public_situation.relevant_history 包含：
+Before the deadline, counsel found that the source had accepted off-hours consulting fees from a subcontractor during the bidding period, a conflict the editor has not yet disclosed to the reporter.
+
+问题：同一句明确说明编辑尚未告知记者，但记者的输入已经包含这一事实。
+原因定位：build_policy_observation() 直接采用 build_public_situation(scenario)，后者复制 narrative_design.relevant_history 并仅过滤部分未来结果，没有执行按角色区分的事实可见性检查。
+
+该问题独立于本轮 state-only 固定集的两处漏识别。不能宣称它已经导致了那两例错误，也不能用 state 识别正确替代 policy 信息隔离检查。
+当前结论：新增私有 appraisal_context 没有进入 policy 输入，不等于背景里的私有事实已被隔离。尚未修复此项；不应启动完整批量 rollout。
+后续修复应在 policy 可见性边界处理，保留环境角色合法可知的私有事实，不能为了消除泄漏而一并从环境 appraisal 删除。

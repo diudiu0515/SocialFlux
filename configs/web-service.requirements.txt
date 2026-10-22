@@ -1,0 +1,4 @@
+# Isolated website process manager; do not change the model execution environment.
+supervisor==4.2.5
+# Supervisor 4.2.5 imports pkg_resources, removed by newer setuptools releases.
+setuptools<81
