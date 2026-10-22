@@ -4,7 +4,7 @@ from functools import lru_cache
 import json
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+from web.runtime_paths import DATA_ROOT as ROOT
 RELEASE = ROOT / 'data/gate2_annotation_20261022/release.json'
 
 

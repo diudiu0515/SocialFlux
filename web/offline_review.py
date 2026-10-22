@@ -17,7 +17,7 @@ from urllib.parse import quote
 from environment.state_ontology import STATE_VARIABLE_ONTOLOGY
 from tasks.offline_choice import FAMILIES, public_instance, visible_evidence
 
-ROOT = Path(__file__).resolve().parents[1]
+from web.runtime_paths import DATA_ROOT as ROOT
 BANK = ROOT / "data/offline_t1_t3_dev60"
 _bank_override = ContextVar('offline_review_bank',default=None)
 BANK_PATHS = {'dev60':'data/offline_t1_t3_dev60','gpt50-t1-t3':'data/offline_gpt50_t1_t3','design-v2':'tasks/examples/offline_design_v2', 'scenarios-v2':'tasks/examples/offline_scenarios_v2', 'annotation400-en':'data/offline_annotation400_en_20261022'}
