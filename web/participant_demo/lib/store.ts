@@ -5,7 +5,7 @@ import { demoSessions } from "../db/schema";
 import legacy from "../data/questions.json";
 import multimedia from "../data/multimodal.json";
 import { type Answers, type MediaReviews, type Question, type ReviewAsset, InputError, validateAnswers, validateMediaReviews, validateRevision, validateStart } from "./protocol";
-import {research, researchFor, researchVersions, researchCatalog, researchReleaseInfo, assignmentFor, researchQuestions, researchTrajectories, researchMaterial, researchEvidence, researchHashes, researchExport, type Assignment} from './research';
+import {research, researchFor, researchVersions, researchCatalog, researchReleaseInfo, assignmentFor, sceneAssignment, researchQuestions, researchTrajectories, researchMaterial, researchEvidence, researchHashes, researchExport, type Assignment} from './research';
 import {transition, type Workflow} from './research-protocol';
 export {researchCatalog};
 
@@ -32,7 +32,7 @@ export function payload(row: Session | undefined) {
   if (row && researchVersions.includes(row.datasetSha256)) {
     const frozen = researchFor(row.datasetSha256);
     const assignment = JSON.parse(row.assignmentJson) as Assignment, workflow = JSON.parse(row.workflowJson) as Workflow;
-    return {session: present(row), research: researchMaterial(assignment, workflow, frozen), questions: researchQuestions(assignment, frozen),
+    return {session: present(row), research: researchMaterial(assignment, workflow, frozen), questions: researchQuestions(sceneAssignment(assignment, workflow), frozen),
       ...(assignment.track !== 't4' ? {releaseInfo: researchReleaseInfo(frozen.dataset_sha256, frozen.items.length, assignment.item_ids.length)} : {}),
       dataset: {sha256: frozen.dataset_sha256, release: frozen.release, count: assignment.item_ids.length, kind: 'research'}};
   }
@@ -54,7 +54,8 @@ export async function start(userId: string, data: Record<string, unknown>) {
   })) exclusions.push('prior_or_repeated_scene_exposure');
   await getDb().insert(demoSessions).values({id: crypto.randomUUID(), userId,
     datasetSha256: research.dataset_sha256, release: research.release, ...clean, createdAt: time, updatedAt: time,
-    assignmentJson: JSON.stringify(assignment), workflowJson: JSON.stringify({phase: 'blind', baselineEligible: !exclusions.length, exclusions, gate2: {packet_sha256: gate2Hash, answers: {}}}),
+    assignmentJson: JSON.stringify(assignment), workflowJson: JSON.stringify({phase: 'blind', baselineEligible: !exclusions.length, exclusions, gate2: {packet_sha256: gate2Hash, answers: {}},
+      ...(assignment.track !== 't4' ? {sceneSequence: {version: 1, index: 0, completed: {}, scenes: assignment.scene_ids.map(id => ({id, itemIds: research.items.filter(x => x.scene_id === id && assignment.item_ids.includes(x.id)).map(x => x.id)}))}} : {})}),
     itemHashesJson: JSON.stringify(researchHashes(assignment)),
     mediaHashesJson: JSON.stringify(Object.fromEntries(research.items.filter(x => assignment.item_ids.includes(x.id)).map(x => [x.id, assignment.track === 'offline_video' ? x.media : []]))),
   }).onConflictDoNothing().run();
@@ -71,7 +72,7 @@ export async function save(userId: string, data: Record<string, unknown>, comple
   if (researchVersions.includes(previous.datasetSha256)) {
     const frozen = researchFor(previous.datasetSha256);
     const assignment = JSON.parse(previous.assignmentJson) as Assignment, workflow = JSON.parse(previous.workflowJson) as Workflow;
-    if (action === 'lock' && workflow.phase === 'gt' && JSON.stringify(data.answers) === JSON.stringify(workflow.blind)) return payload(previous);
+    if (!workflow.sceneSequence && action === 'lock' && workflow.phase === 'gt' && JSON.stringify(data.answers) === JSON.stringify(workflow.blind)) return payload(previous);
     if (action === 'submit' && workflow.phase === 't4_review' && data.revision === previous.revision - 1
         && JSON.stringify(data.ratings) === JSON.stringify(workflow.ratings)
         && (!data.gate2Answers || Object.keys(data.gate2Answers as object).length === 0)) return payload(previous);
@@ -102,10 +103,29 @@ export async function save(userId: string, data: Record<string, unknown>, comple
   throw new ConflictError("另一页面更新了这份标注。请刷新以读取最新进度，当前页面的输入仍保留在此设备。");
 }
 export function exportRecord(row: Session) {
-  if (researchVersions.includes(row.datasetSha256)) return {format: 'socialflux_human_gt_v1', release: row.release,
+  if (researchVersions.includes(row.datasetSha256)) {
+    const workflow = JSON.parse(row.workflowJson) as Workflow;
+    const assignment = JSON.parse(row.assignmentJson) as Assignment;
+    const mediaHashes = JSON.parse(row.mediaHashesJson) as Record<string, unknown>;
+    const exported = researchExport(assignment, workflow, researchFor(row.datasetSha256));
+    // Media rows contain full dialogue and playable URLs. In-progress downloads
+    // may include completed/current scenes, but must not reveal future scenes.
+    if (workflow.sceneSequence && workflow.phase !== 'complete') {
+      const visibleScenes = workflow.sceneSequence.scenes.slice(0, workflow.sceneSequence.index + 1);
+      const visibleIds = new Set(visibleScenes.flatMap(scene => scene.itemIds));
+      for (const id of Object.keys(mediaHashes)) if (!visibleIds.has(id)) delete mediaHashes[id];
+      // Media review IDs themselves contain the video SHA, which otherwise
+      // allows a future /media/<SHA>.mp4 URL to be reconstructed.
+      if (exported.gate2_human_review) {
+        const visibleTasks = new Set(gate2Tasks(visibleScenes.map(scene => scene.id), workflow.gate2, assignment.track).map(task => task.id));
+        exported.gate2_human_review.task_hashes = Object.fromEntries(Object.entries(exported.gate2_human_review.task_hashes).filter(([id]) => visibleTasks.has(id)));
+      }
+    }
+    return {format: 'socialflux_human_gt_v1', release: row.release,
     receipt_id: row.id, reviewer_alias: row.alias, dataset_sha256: row.datasetSha256, item_hashes: JSON.parse(row.itemHashesJson),
-    media_hashes: JSON.parse(row.mediaHashesJson), status: row.status, revision: row.revision, created_at: row.createdAt, submitted_at: row.submittedAt,
-    prior_exposure: row.priorExposure, ...researchExport(JSON.parse(row.assignmentJson), JSON.parse(row.workflowJson), researchFor(row.datasetSha256))};
+    media_hashes: mediaHashes, status: row.status, revision: row.revision, created_at: row.createdAt, submitted_at: row.submittedAt,
+    prior_exposure: row.priorExposure, ...exported};
+  }
   const multimodal = !!bundleFor(row.datasetSha256).videos;
   return {format: multimodal ? "socialflux_multimodal_review_v1" : "socialflux_public_demo_annotation_v1",
     release: row.release, receipt_id: row.id, reviewer_alias: row.alias, dataset_sha256: row.datasetSha256,

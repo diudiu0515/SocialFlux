@@ -6,7 +6,56 @@ export type Dimension = typeof dimensions[number];
 export type Rating = {score: number | null; evidence_turn_ids: string[]; rationale: string; insufficient_evidence: boolean};
 export type Ratings = Record<string, Record<Dimension, Rating>>;
 export type GT = Record<string, {answer: string | null; acceptable_answers: string[]; decision: 'usable' | 'revise' | 'reject'; rationale: string}>;
-export type Workflow = {phase: 'blind' | 'gate2' | 'gt' | 't4_review' | 'complete'; gate2?: Gate2Workflow; blind?: Answers; blindLockedAt?: string; gt?: GT; ratings?: Ratings; ratingsLockedAt?: string; attestedAt?: string; baselineEligible: boolean; exclusions: string[]};
+export type SceneSequence = {version: 1; scenes: {id: string; itemIds: string[]}[]; index: number; completed: Record<string, {blindLockedAt: string; independentLockedAt?: string; submittedAt: string}>};
+export type Workflow = {phase: 'blind' | 'gate2' | 'gt' | 't4_review' | 'complete'; sceneSequence?: SceneSequence; gate2?: Gate2Workflow; blind?: Answers; blindLockedAt?: string; gt?: GT; ratings?: Ratings; ratingsLockedAt?: string; attestedAt?: string; baselineEligible: boolean; exclusions: string[]};
+
+export function activeScene(workflow: Workflow) {
+  return workflow.sceneSequence?.scenes[workflow.sceneSequence.index];
+}
+function subset<T>(values: Record<string, T> | undefined, ids: string[]): Record<string, T> {
+  return Object.fromEntries(Object.entries(values || {}).filter(([id]) => ids.includes(id)));
+}
+function sameValue(a: unknown, b: unknown): boolean {
+  const canonical = (value: unknown) => JSON.stringify(value, (_key, v) => v && typeof v === 'object' && !Array.isArray(v) ? Object.fromEntries(Object.entries(v).sort(([a], [b]) => a.localeCompare(b))) : v);
+  return canonical(a) === canonical(b);
+}
+// Only the current scene can change. Prior scenes remain immutable; future
+// scene answers and reviews are rejected even if a caller bypasses the UI.
+function sceneInput(value: unknown, ids: string[], stored: Record<string, unknown>, field: string) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new InputError(`${field}格式无效。`);
+  for (const [id, row] of Object.entries(value)) {
+    if (!ids.includes(id) && (!Object.hasOwn(stored, id) || !sameValue(row, stored[id]))) throw new InputError('请先完成当前场景；已锁定场景不能修改，后续场景尚未开放。');
+  }
+  return subset(value as Record<string, unknown>, ids);
+}
+function transitionScene(workflow: Workflow, action: string, data: Record<string, unknown>, questions: Question[], now: string, reviewTasks: ReviewTask[]) {
+  const scene = activeScene(workflow);
+  if (!scene || data.sceneId !== scene.id) throw new InputError('场景已变化，请恢复当前进度后继续。');
+  const tasks = reviewTasks.filter(t => t.scene_id === scene.id), taskIds = tasks.map(t => t.id);
+  const input = {...data,
+    answers: sceneInput(data.answers || {}, scene.itemIds, workflow.blind || {}, '答案'),
+    gt: sceneInput(data.gt || {}, scene.itemIds, workflow.gt || {}, 'GT'),
+    gate2Answers: sceneInput(data.gate2Answers || {}, taskIds, workflow.gate2?.answers || {}, '审核'),
+  };
+  // Ignore neither newly forged nor changed blind answers after their lock.
+  if (workflow.phase !== 'blind' && Object.entries(input.answers).some(([id, row]) => !sameValue(row, workflow.blind?.[id]))) throw new InputError('本场景盲答已经锁定，不能修改。');
+  const scoped: Workflow = {...workflow, sceneSequence: undefined, blind: subset(workflow.blind, scene.itemIds), gt: subset(workflow.gt, scene.itemIds),
+    ...(workflow.gate2 ? {gate2: {...workflow.gate2, answers: subset(workflow.gate2.answers, taskIds)}} : {})};
+  const result = transition(scoped, action, input, questions.filter(q => scene.itemIds.includes(q.instance_id)), [], now, tasks);
+  const next: Workflow = {...result.workflow, sceneSequence: structuredClone(workflow.sceneSequence!),
+    blind: {...workflow.blind, ...result.workflow.blind}, gt: {...workflow.gt, ...result.workflow.gt},
+    ...(result.workflow.gate2 ? {gate2: {...result.workflow.gate2, answers: {...workflow.gate2?.answers, ...result.workflow.gate2.answers}}} : {})};
+  const answers = {...workflow.blind, ...result.answers};
+  if (next.phase === 'complete') {
+    next.sceneSequence!.completed[scene.id] = {blindLockedAt: next.blindLockedAt!, independentLockedAt: next.gate2?.independentLockedAt, submittedAt: now};
+    next.sceneSequence!.index += 1;
+    if (activeScene(next)) {
+      next.phase = 'blind'; delete next.blindLockedAt; delete next.attestedAt;
+      if (next.gate2) delete next.gate2.independentLockedAt;
+    }
+  }
+  return {workflow: next, answers};
+}
 
 export function validateGT(value: unknown, questions: Question[], complete: boolean): GT {
   if (!value || typeof value !== 'object' || Array.isArray(value)) throw new InputError('GT 格式无效。');
@@ -50,8 +99,9 @@ export function validateRatings(value: unknown, items: {id: string; turn_ids: st
   return clean;
 }
 
-export function transition(workflow: Workflow, action: string, data: Record<string, unknown>, questions: Question[], trajectories: {id: string; turn_ids: string[]}[], now: string, reviewTasks: ReviewTask[] = []) {
+export function transition(workflow: Workflow, action: string, data: Record<string, unknown>, questions: Question[], trajectories: {id: string; turn_ids: string[]}[], now: string, reviewTasks: ReviewTask[] = []): {workflow: Workflow; answers: Answers} {
   if (workflow.phase === 'complete') throw new InputError('已提交并锁定。');
+  if (workflow.sceneSequence) return transitionScene(workflow, action, data, questions, now, reviewTasks);
   const next = structuredClone(workflow);
   const t4 = trajectories.length > 0;
   if (!['draft', 'lock', 'gate2-lock', 'submit'].includes(action) || (action === 'gate2-lock' && workflow.phase !== 'gate2')) throw new InputError('当前阶段不支持此操作。');

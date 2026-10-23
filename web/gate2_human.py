@@ -4,7 +4,7 @@ from functools import lru_cache
 import json
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+from web.runtime_paths import DATA_ROOT as ROOT
 RELEASE = ROOT / 'data/gate2_annotation_20261022/release.json'
 
 
@@ -15,6 +15,28 @@ def frozen_packet(path, mtime):
 
 def read_packet(path):
     return frozen_packet(str(path), path.stat().st_mtime_ns)
+
+
+def receipt_packet(dataset_sha256, packet_sha256):
+    """Resolve legacy archives or an explicitly registered candidate packet."""
+    if (not isinstance(packet_sha256, str) or len(packet_sha256) != 64
+            or any(c not in '0123456789abcdef' for c in packet_sha256)):
+        raise ValueError('环境核对版本哈希无效')
+    if RELEASE.exists():
+        current = read_packet(RELEASE)
+        if packet_sha256 == current['sha256'] and dataset_sha256 == current['dataset_sha256']:
+            return current
+    archive = RELEASE.parent / 'versions' / (packet_sha256 + '.json')
+    if archive.exists():
+        data = read_packet(archive)
+        if packet_sha256 == data['sha256'] and dataset_sha256 == data['dataset_sha256']:
+            return data
+    # Deferred import avoids a cycle: human_gt owns the explicit file registry.
+    from web.human_gt import candidate_gate2_packet
+    candidate = candidate_gate2_packet(dataset_sha256, packet_sha256)
+    if candidate is not None:
+        return candidate
+    raise ValueError('环境核对版本未冻结，或与标注数据版本不匹配')
 
 
 def assigned_tasks(data, assignment):
@@ -67,17 +89,7 @@ def validate_gate2(value):
         return
     if not isinstance(state, dict) or not isinstance(exported, dict):
         raise ValueError('环境核对记录格式无效')
-    data = read_packet(RELEASE)
-    if state.get('packet_sha256') != data['sha256']:
-        digest = state.get('packet_sha256', '')
-        if not isinstance(digest, str) or len(digest) != 64 or any(c not in '0123456789abcdef' for c in digest):
-            raise ValueError('环境核对版本哈希无效')
-        archive = RELEASE.parent / 'versions' / (digest + '.json')
-        if not archive.exists():
-            raise ValueError('环境核对版本未冻结')
-        data = read_packet(archive)
-    if state.get('packet_sha256') != data['sha256'] or value['dataset_sha256'] != data['dataset_sha256']:
-        raise ValueError('环境核对与冻结材料版本不匹配')
+    data = receipt_packet(value['dataset_sha256'], state.get('packet_sha256'))
     tasks = assigned_tasks(data, value['assignment'])
     answers = state.get('answers')
     if not isinstance(answers, dict) or not set(answers) <= tasks.keys():
@@ -117,14 +129,16 @@ def validate_gate2(value):
                 raise ValueError(issue)
 
 
-def gate2_coverage(receipts):
-    if not RELEASE.exists():
-        return None
-    data = read_packet(RELEASE)
+def gate2_coverage(receipts, data=None):
+    if data is None:
+        if not RELEASE.exists():
+            return None
+        data = read_packet(RELEASE)
     tasks = {t['id']: t for t in data['tasks']}
     groups = defaultdict(lambda: defaultdict(list))
     for record in receipts:
-        if (record.get('status') != 'submitted' or record.get('import_conflict')
+        if (record.get('dataset_sha256') != data['dataset_sha256']
+                or record.get('status') != 'submitted' or record.get('import_conflict')
                 or record.get('workflow', {}).get('phase') != 'complete' or not record['workflow'].get('attestedAt')):
             continue
         review = record.get('gate2_human_review')

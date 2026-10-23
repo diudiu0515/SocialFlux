@@ -1,0 +1,48 @@
+{
+  "format": "socialflux_checkpoint_annotation_integration_v1",
+  "date": "2026-10-23",
+  "dataset_sha256": "4859edec0ed4a00e5ee98b908b44efc930f7a1b56e774fa50c6ec34aa75ef854",
+  "gate2_sha256": "3be0b7a12e695461f7771529a0da866cdf8cbb71726fad9231c337c0d2adf7ec",
+  "questions": 400,
+  "scenes": 50,
+  "videos": 150,
+  "video_seconds_each": 4.6,
+  "human_quality_status": "pending",
+  "formal_admission": false,
+  "deployment_status": "pending",
+  "public_url": "https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site",
+  "preserved_scene_sequence": true,
+  "github_pages": {
+    "url": "https://diudiu0515.github.io/SocialFlux/",
+    "http_status": 404,
+    "workflow_run": "https://github.com/diudiu0515/SocialFlux/actions/runs/39791714292",
+    "conclusion": "skipped",
+    "missing": "independent backend / LAB_BACKEND_URL"
+  },
+  "qa": {
+    "legacy_workflow": {
+      "report": "build/annotation-checkpoint-integration-20261023/browser/result.json",
+      "sha256": "f85e1454cd25c9189a5a6c6777b633b6cd78faa0bd03b19f2e03ab9fb04c1e5e",
+      "passed": true,
+      "local_only": true
+    },
+    "scene_sequence": {
+      "report": "build/annotation-checkpoint-integration-20261023/browser-scene-sequence/result.json",
+      "sha256": "dcbaf9be43b7b1d7a1039217b848f1cc7dd95598ad1612c61a6a0733e843ecaf",
+      "passed": true,
+      "local_only": true
+    },
+    "receipt_import": {
+      "report": "build/annotation-checkpoint-integration-20261023/browser-scene-sequence/receipt-import-validation.json",
+      "sha256": "20d8675f3de32ead9a2d8c40e93801f7ff741037975355f5b9ca67cfae9f57ed",
+      "passed": true,
+      "local_only": true
+    }
+  },
+  "production_test_records_written": 0,
+  "publication_notes": [
+    "Short checkpoint speech retains the full dialogue in the question.",
+    "Old sessions retain their original media and Gate2 versions.",
+    "Incomplete sequential exports hide future media and media task hashes."
+  ]
+}

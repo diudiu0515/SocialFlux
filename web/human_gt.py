@@ -12,12 +12,14 @@ from evaluation.t4_evaluation import T4_DIMENSIONS, validate_t4_judgment
 from web.experiment_tables import make_table
 from web.gate2_human import validate_gate2, gate2_coverage
 
-ROOT = Path(__file__).resolve().parents[1]
+from web.runtime_paths import DATA_ROOT as ROOT
 STORE = ROOT / 'data/human_gt_20261022/participant_exports'
 RELEASE = ROOT / 'data/human_gt_20261022/release.json'
 ANNOTATION400_RELEASE = ROOT / 'data/offline_annotation400_en_20261022/release.json'
 ANNOTATION400_FIRST_RELEASE = ROOT / 'data/offline_annotation400_en_20261022/release.first-media.json'
 MEDIA_HISTORY = ROOT / 'web/participant_demo/data/research-media-history.json'
+CANDIDATE_RELEASE_REGISTRY = ROOT / 'data/human_gt_20261022/candidate-releases.json'
+CANDIDATE_REGISTRY_FORMAT = 'socialflux_human_release_registry_v1'
 SITE = 'https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site/'
 NAMES = dict(zip(T4_DIMENSIONS, ['目标达成', '状态适应', '风险管理', '恢复', '关系结果']))
 
@@ -27,9 +29,88 @@ def frozen_release(path, mtime):
     return json.loads(Path(path).read_text())
 
 
-def release():
+def legacy_release():
     path = ANNOTATION400_RELEASE if RELEASE == ROOT / 'data/human_gt_20261022/release.json' and ANNOTATION400_RELEASE.exists() else RELEASE
     return frozen_release(str(path), path.stat().st_mtime_ns)
+
+
+def release():
+    """A registered candidate becomes current only through explicit activation."""
+    legacy = legacy_release()
+    active = _candidate_registry().get('active_dataset_sha256')
+    if active is None or active == legacy['dataset_sha256']:
+        return legacy
+    if not isinstance(active, str) or not re.fullmatch(r'[0-9a-f]{64}', active):
+        raise ValueError('激活标注数据版本哈希无效')
+    for _, candidate in registered_candidate_releases():
+        if candidate['dataset_sha256'] == active:
+            return candidate
+    raise ValueError('激活标注版本未显式注册')
+
+
+def _candidate_registry():
+    if not CANDIDATE_RELEASE_REGISTRY.exists():
+        return {'format': CANDIDATE_REGISTRY_FORMAT, 'releases': []}
+    registry = json.loads(CANDIDATE_RELEASE_REGISTRY.read_text())
+    if (not isinstance(registry, dict) or registry.get('format') != CANDIDATE_REGISTRY_FORMAT
+            or not isinstance(registry.get('releases'), list)):
+        raise ValueError('候选标注版本注册表格式无效')
+    return registry
+
+
+def _registered_file(entry, field):
+    """Read only explicitly registered, byte-pinned JSON inside the data root."""
+    relative = entry.get(field + '_path')
+    expected = entry.get(field + '_sha256')
+    if (not isinstance(relative, str) or not relative
+            or not isinstance(expected, str) or not re.fullmatch(r'[0-9a-f]{64}', expected)):
+        raise ValueError('候选注册缺少文件路径或 SHA256')
+    path = (ROOT / relative).resolve()
+    if not path.is_relative_to((ROOT / 'data').resolve()) or path.suffix != '.json':
+        raise ValueError('候选文件必须位于研究 data 目录内')
+    raw = path.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != expected:
+        raise ValueError('候选注册文件 SHA256 不匹配：' + path.name)
+    data = json.loads(raw)
+    if not isinstance(data, dict) or data.get('dataset_sha256') != entry['dataset_sha256']:
+        raise ValueError('候选注册数据版本不匹配')
+    return data
+
+
+def registered_candidate_releases():
+    """Registration permits receipt validation; it never promotes a release."""
+    registry = _candidate_registry()
+    result, seen = [], set()
+    for entry in registry['releases']:
+        if not isinstance(entry, dict) or not re.fullmatch(r'[0-9a-f]{64}', str(entry.get('dataset_sha256', ''))):
+            raise ValueError('候选注册数据哈希无效')
+        ident = entry['dataset_sha256']
+        if ident in seen:
+            raise ValueError('候选注册重复数据版本')
+        seen.add(ident)
+        data = _registered_file(entry, 'release')
+        if not all(isinstance(data.get(key), list) for key in ('items', 'assignments', 't4')):
+            raise ValueError('候选标注版本缺少题目、分配或轨迹清单')
+        if bool(entry.get('gate2_release_path')) != bool(entry.get('gate2_release_sha256')):
+            raise ValueError('候选 Gate2 注册须同时提供路径和文件 SHA256')
+        result.append((entry, data))
+    return result
+
+
+def candidate_gate2_packet(dataset_sha256, packet_sha256=None):
+    """Resolve a candidate Gate2 packet without writing to production archives."""
+    for entry, _ in registered_candidate_releases():
+        if entry['dataset_sha256'] != dataset_sha256:
+            continue
+        if not entry.get('gate2_release_path'):
+            return None
+        data = _registered_file(entry, 'gate2_release')
+        if (not re.fullmatch(r'[0-9a-f]{64}', str(data.get('sha256', '')))
+                or not isinstance(data.get('tasks'), list)
+                or packet_sha256 is not None and data['sha256'] != packet_sha256):
+            raise ValueError('候选环境核对与注册材料版本不匹配')
+        return data
+    return None
 
 
 def media_snapshot_releases(current):
@@ -56,10 +137,12 @@ def media_snapshot_releases(current):
 
 
 def receipt_release(dataset_sha256):
-    current = release()
+    # Legacy receipts remain independently readable after candidate activation,
+    # including when a candidate's registration needs repair.
+    current = legacy_release()
     if dataset_sha256 == current['dataset_sha256']:
         return current
-    for path in (RELEASE,ANNOTATION400_FIRST_RELEASE):
+    for path in (RELEASE, ANNOTATION400_RELEASE, ANNOTATION400_FIRST_RELEASE):
         if not path.exists():continue
         previous = frozen_release(str(path), path.stat().st_mtime_ns)
         if dataset_sha256 == previous['dataset_sha256']:
@@ -67,6 +150,9 @@ def receipt_release(dataset_sha256):
     for previous in media_snapshot_releases(current):
         if dataset_sha256 == previous['dataset_sha256']:
             return previous
+    for _, candidate in registered_candidate_releases():
+        if dataset_sha256 == candidate['dataset_sha256']:
+            return candidate
     raise ValueError('标注版本不在已冻结批次中，请保留原文件并核对版本')
 
 
@@ -175,19 +261,20 @@ def consensus(labels):
 def adjudicate(value):
     if not isinstance(value, dict) or value.get('human_attestation') is not True:
         raise ValueError('须由裁决人确认已核对题面、私有证据和分歧')
-    item = next((x for x in release()['items'] if x['id'] == value.get('instance_id')), None)
+    data = receipt_release(value['dataset_sha256']) if value.get('dataset_sha256') else release()
+    item = next((x for x in data['items'] if x['id'] == value.get('instance_id')), None)
     if item is None or value.get('item_sha256') != item['item_sha256']:
         raise ValueError('裁决题目版本不匹配')
     who = str(value.get('reviewer', '')).strip()
     reason = str(value.get('rationale', '')).strip()
-    pending = next((x for x in load_human_gt()['disputes'] if x['instance_id'] == item['id']), None)
+    pending = next((x for x in load_human_gt(data['dataset_sha256'])['disputes'] if x['instance_id'] == item['id']), None)
     if not pending or who in pending['reviewers'] or not 1 <= len(who) <= 40:
         raise ValueError('只有待裁决题可提交，裁决人须不同于已有审核人')
     if not reason or len(reason) > 4000:
         raise ValueError('请填写不超过 4000 字的裁决依据')
     if value.get('decision') not in ('usable', 'reject') or (value['decision'] == 'usable' and value.get('answer') not in item['public_text']['options']):
         raise ValueError('请选择最终答案或剔除题目')
-    clean = {'instance_id': item['id'], 'item_sha256': item['item_sha256'], 'reviewer': who, 'rationale': reason,
+    clean = {'dataset_sha256': data['dataset_sha256'], 'instance_id': item['id'], 'item_sha256': item['item_sha256'], 'reviewer': who, 'rationale': reason,
              'answer': value.get('answer') if value['decision'] == 'usable' else None, 'decision': value['decision'],
              'human_attestation': True, 'reviewers_at_decision': pending['reviewers']}
     raw = json.dumps(clean, ensure_ascii=False, sort_keys=True).encode()
@@ -222,30 +309,43 @@ def claude_results(data, directory):
     return machine, rows, dict(counts)
 
 
-def load_human_gt():
+def load_human_gt(dataset_sha256=None):
     if not RELEASE.exists():
         return {'site': SITE, 'tables': [], 'sessions': 0, 'error': '标注批次尚未准备'}
-    data = release()
+    current = release()
+    data = receipt_release(dataset_sha256) if dataset_sha256 is not None else current
     receipts, errors = {}, []
+    try:
+        candidates = registered_candidate_releases()
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        candidates = []
+        errors.append('候选注册不可用：' + str(exc))
+    candidate_versions = {entry['dataset_sha256'] for entry, _ in candidates}
+    is_candidate = data['dataset_sha256'] in candidate_versions
     for path in sorted(STORE.glob('*.json')):
         try:
             value = validate_receipt(json.loads(path.read_text()))
-            previous = receipts.get(value['receipt_id'])
+            key = (value['dataset_sha256'], value['receipt_id'])
+            previous = receipts.get(key)
             if previous is None or value['revision'] > previous['revision']:
-                receipts[value['receipt_id']] = value
+                receipts[key] = value
             elif value['revision'] == previous['revision'] and value != previous:
-                errors.append('同版本回执冲突：' + value['receipt_id'])
-                receipts[value['receipt_id']]['import_conflict'] = True
-        except (ValueError, KeyError, TypeError) as exc:
+                errors.append('同版本回执冲突：' + value['receipt_id'] + ' / ' + value['dataset_sha256'][:12])
+                receipts[key]['import_conflict'] = True
+        except (OSError, ValueError, KeyError, TypeError) as exc:
             errors.append(path.name + ': ' + str(exc))
     compatible_versions={data['dataset_sha256']}
-    compatible_versions.update(previous['dataset_sha256'] for previous in media_snapshot_releases(data))
-    if ANNOTATION400_FIRST_RELEASE.exists():
-        first=frozen_release(str(ANNOTATION400_FIRST_RELEASE),ANNOTATION400_FIRST_RELEASE.stat().st_mtime_ns)
-        if first.get('source_bank_sha256')==data.get('source_bank_sha256'):
-            compatible_versions.add(first['dataset_sha256'])
-    submitted = [v for v in receipts.values() if v['status'] == 'submitted' and v.get('workflow', {}).get('phase') == 'complete'
-                 and (v['dataset_sha256'] in compatible_versions or v['assignment']['track'] == 't4')
+    if not is_candidate:
+        compatible_versions.update(previous['dataset_sha256'] for previous in media_snapshot_releases(data))
+        if ANNOTATION400_FIRST_RELEASE.exists():
+            first=frozen_release(str(ANNOTATION400_FIRST_RELEASE),ANNOTATION400_FIRST_RELEASE.stat().st_mtime_ns)
+            if first.get('source_bank_sha256')==data.get('source_bank_sha256'):
+                compatible_versions.add(first['dataset_sha256'])
+        compatible_versions -= candidate_versions
+    selected_receipts = [v for v in receipts.values()
+                         if v['dataset_sha256'] in compatible_versions
+                         or not is_candidate and v['dataset_sha256'] not in candidate_versions and v['assignment']['track'] == 't4']
+    submitted = [v for v in selected_receipts if v['status'] == 'submitted' and v.get('workflow', {}).get('phase') == 'complete'
                  and v['workflow'].get('attestedAt') and not v.get('import_conflict')]
     by_item = defaultdict(lambda: defaultdict(list))
     ratings = defaultdict(lambda: defaultdict(list))
@@ -267,7 +367,9 @@ def load_human_gt():
     adjudications = defaultdict(list)
     for path in (STORE / 'adjudications').glob('*.json'):
         row = json.loads(path.read_text())
-        if row.get('human_attestation'):
+        matching_dataset = (row.get('dataset_sha256') == data['dataset_sha256']
+                            or not is_candidate and not row.get('dataset_sha256'))
+        if row.get('human_attestation') and matching_dataset:
             adjudications[(row['instance_id'], row['item_sha256'])].append(row)
     def resolve(key, group, excluding=None):
         results = [x for x in adjudications[key] if x['reviewer'] != excluding and x['reviewer'] not in group]
@@ -282,7 +384,7 @@ def load_human_gt():
         answer, status = resolve((item['id'], item['item_sha256']), group)
         gt_rows.append([item['id'], item['task'], len(group), answer or '—', status])
         if status == '待裁决':
-            disputes.append({'instance_id': item['id'], 'item_sha256': item['item_sha256'], 'reviewers': sorted(group),
+            disputes.append({'dataset_sha256': data['dataset_sha256'], 'instance_id': item['id'], 'item_sha256': item['item_sha256'], 'reviewers': sorted(group),
                              'question': item['public_text']['question'], 'options': item['public_text']['options'], 'judgments': group})
     baseline = defaultdict(lambda: {'n': 0, 'correct': 0, 'people': set()})
     blind_by_reviewer = defaultdict(list)
@@ -340,7 +442,15 @@ def load_human_gt():
       make_table('human-t4-judge-status', 'T4 固定样本 Claude 评分覆盖与失败', ['场景', '来源', '状态', '本次请求数', '未纳入原因'], judge_rows,
         ['50 条样本保持冻结；失败不换样、不填零，原始输出与原因保留。', '本次补评每条最多 2 次调用，仅空响应或传输异常按原输入重试；不为提高通过率重采样。',
          '恢复不适用仍须引用 1–3 个代表性轮次；遗漏引用不满足原始评分协议，整条暂不纳入校准。'], sources)]
-    gate2 = gate2_coverage(receipts.values())
+    if is_candidate:
+        try:
+            packet = candidate_gate2_packet(data['dataset_sha256'])
+            gate2 = gate2_coverage(selected_receipts, data=packet) if packet is not None else None
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            gate2 = None
+            errors.append('候选环境核对注册不可用：' + str(exc))
+    else:
+        gate2 = gate2_coverage(selected_receipts)
     if gate2:
         tables.append(make_table('gate2-human-coverage', 'Gate2 随题人工核对覆盖', ['类型', '冻结任务', '已审核任务', '不同人有效判断', '无法判断', '同人重复冲突', '方向/等价/尺度一致率'], gate2['rows'],
             ['同一任务只填一次；E1 方向与 E4 等价性先锁定，之后开放私有材料及其他核对。音视频质量按唯一媒体审核；T4 先锁定评分，再核对触发与视频。', '只计最终提交、材料哈希匹配的记录；按任务和匿名编号去重，冲突重复排除。E1/E4 排除自报既往接触及重复场景。自报编号仍需研究者核实身份。',
@@ -349,7 +459,30 @@ def load_human_gt():
             ['至少两人已核对只表示覆盖，不代表素材合格或实验通过；需结合原始判断与依据决定修订、剔除或准入。',
              '分歧、无法判断及同人冲突须复核。旧版本仅在逐任务材料哈希相同时计入当前任务；旧记录不会补出新增审核。'],
             ['data/gate2_annotation_20261022/release.json', 'data/human_gt_20261022/participant_exports']))
-    return {'gate2': gate2, 'site': SITE, 'release': data['release'], 'sessions': len(receipts), 'submitted': len(submitted), 'sampling': data['sampling'],
+    legacy = legacy_release()
+    cohort_data = {legacy['dataset_sha256']: legacy, current['dataset_sha256']: current, data['dataset_sha256']: data}
+    cohort_data.update({candidate['dataset_sha256']: candidate for _, candidate in candidates})
+    for record in receipts.values():
+        if record['dataset_sha256'] not in cohort_data:
+            cohort_data[record['dataset_sha256']] = receipt_release(record['dataset_sha256'])
+    cohorts = []
+    for ident, cohort in cohort_data.items():
+        records = [r for r in receipts.values() if r['dataset_sha256'] == ident]
+        cohorts.append({'dataset_sha256': ident, 'release': cohort['release'],
+                        'registered_candidate': ident in candidate_versions, 'current': ident == current['dataset_sha256'],
+                        'selected': ident == data['dataset_sha256'], 'sessions': len(records),
+                        'submitted': sum(r['status'] == 'submitted' and r['workflow']['phase'] == 'complete'
+                                         and bool(r['workflow'].get('attestedAt')) and not r.get('import_conflict') for r in records)})
+    tables.insert(0, make_table('human-release-cohorts', '标注版本与独立统计范围',
+        ['版本', '数据 SHA256', '范围', '已导入会话', '最终提交'],
+        [[c['release'], c['dataset_sha256'], '当前（显式激活）' if c['current'] and c['registered_candidate'] else '当前' if c['current'] else
+          '候选（独立统计）' if c['registered_candidate'] else '历史',
+          c['sessions'], c['submitted']] for c in cohorts],
+        ['候选注册仅允许核验回执，不表示上线或已取得人工结果；零记录不生成 GT 或基线。',
+         '下列表格的选择版本：' + data['dataset_sha256'] + '。短片候选与旧版的盲答、GT、T4及裁决分别统计；文字相同也不自动跨候选合并。'], sources))
+    return {'gate2': gate2, 'site': SITE, 'release': data['release'], 'dataset_sha256': data['dataset_sha256'],
+        'current_dataset_sha256': current['dataset_sha256'], 'registered_candidate': is_candidate, 'dataset_cohorts': cohorts,
+        'sessions': len(selected_receipts), 'total_sessions': len(receipts), 'submitted': len(submitted), 'sampling': data['sampling'],
         'claude_available': sum(x is not None for x in machine.values()), 'claude_status': judge_counts,
         'gt_consensus': sum(x[-1] in ('共识 GT', '裁决 GT') for x in gt_rows),
         'gt_disputed': len(disputes), 'disputes': disputes, 'tables': tables, 'errors': errors}

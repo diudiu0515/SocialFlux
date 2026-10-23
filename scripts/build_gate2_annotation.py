@@ -186,19 +186,32 @@ def add_current_media(research, site, add):
         packet = item.get('public_video') or item['public_text']
         for media in item.get('media', []):
             sha = media['sha256']
+            checkpoint = media.get('spoken_scope') == 'checkpoint_sentence'
+            full_response = media.get('full_public_response') if checkpoint else media.get('spoken_text')
+            if checkpoint and (not isinstance(full_response, str) or not full_response
+                    or not isinstance(media.get('source_quote'), str) or not media['source_quote']
+                    or media['source_quote'] not in full_response or not media.get('node_id')
+                    or not isinstance(media.get('spoken_text'), str) or not media['spoken_text']):
+                raise ValueError('Invalid checkpoint public source binding: ' + sha)
             entry = assets.setdefault(sha, dict(scene_id=item['scene_id'], media=media,
                 context=packet.get('input', {}).get('context'),
                 target_character=packet.get('input', {}).get('target_character'), bindings=[], public_turns=[]))
-            if entry['scene_id'] != item['scene_id'] or entry['media'].get('spoken_text') != media.get('spoken_text'):
+            binding_fields = ['spoken_text', 'spoken_scope', 'full_public_response', 'source_quote', 'node_id']
+            if entry['scene_id'] != item['scene_id'] or any(entry['media'].get(k) != media.get(k) for k in binding_fields):
                 raise ValueError('Conflicting current-media binding: ' + sha)
             entry['bindings'].append(dict(item_id=item['id'], evidence_ids=media.get('evidence_ids', [])))
             # Match dialogue as well as turn labels: T2 A/B histories share labels.
+            matched_ids = set()
             for turn in public_turns(packet):
-                if turn.get('environment_character', turn.get('environment_response', turn.get('current_response'))) == media.get('spoken_text'):
+                if (turn.get('environment_character', turn.get('environment_response', turn.get('current_response'))) == full_response
+                        and (not checkpoint or turn['turn_id'] in media.get('evidence_ids', []))):
+                    matched_ids.add(turn['turn_id'])
                     projected = select(turn, ['turn_id', 'evaluated_agent', 'environment_character',
                         'environment_response', 'current_response', 'observable_expression', 'public_events'])
                     if projected not in entry['public_turns']:
                         entry['public_turns'].append(projected)
+            if checkpoint and (not matched_ids or matched_ids != set(media.get('evidence_ids', []))):
+                raise ValueError('Checkpoint full response/turn mismatch: ' + sha)
     for sha, entry in sorted(assets.items(), key=lambda pair: (pair[1]['scene_id'], pair[0])):
         media, sid = entry['media'], entry['scene_id']
         if not media.get('spoken_text') or not entry['public_turns']:
@@ -211,7 +224,8 @@ def add_current_media(research, site, add):
                  asset_id=media['asset_id'], spoken_text=media['spoken_text'],
                  context=entry['context'], target_character=entry['target_character'],
                  public_turns=entry['public_turns'], bindings=entry['bindings'], identity_reference_clips=peers,
-                 **select(media, ['duration_seconds', 'speech_language', 'spec_sha256', 'method'])),
+                 **select(media, ['duration_seconds', 'speech_language', 'spec_sha256', 'method',
+                                  'spoken_scope', 'full_public_response', 'source_quote', 'node_id'])),
             quality_questions(), video=video, tracks=['offline_video'])
     return dict(expected_assets=len(assets), review_tasks=len(assets),
                 scene_count=len({e['scene_id'] for e in assets.values()}),
