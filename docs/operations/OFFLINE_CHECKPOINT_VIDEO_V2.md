@@ -12,6 +12,7 @@
 - `offline/revision_motion.py`：短片专用非循环动作曲线；明确线索控制表情或注视，没有公开线索时不增加情绪动作。001-t1 的短暂紧张幅度经过单帧对照校准，其他角色不共用其放大系数。
 - `scripts/package_checkpoint_revision.py`：制作可离线查看的 HTML 和 MP4 预览包，内嵌公开材料，无 API、登录、外部字体或服务器依赖。
 - `scripts/export_checkpoint_annotation.py`：向独立站点副本导出新的 400 题媒体版本及对应 Gate2 媒体审核；不写原冻结题库和审核目录，不自动部署或激活。
+- `scripts/build_research_storage.py`：从站点当前冻结输入生成去重旧版本和压缩历史映射，精确校验展开结果；只改变运行时存储，不修改原始文件或 dataset SHA。
 - `data/offline_checkpoint_annotation_20261023/`：本地新版 `release.json`、`gate2-release.json`、覆盖统计及旧素材 SHA 保留记录；这些制作侧数据不进入 GitHub。
 
 旧题库、角色图、模型权重和原始媒体是本地依赖，按原素材清单恢复；GitHub 源码不内嵌这些文件。脚本不会自动下载模型或调用收费生成 API。
@@ -40,11 +41,30 @@ python -m unittest tests.test_checkpoint_annotation_export tests.test_checkpoint
 
 本轮将原 v15 的三份 `data/` 站点输入保存在上述 `frozen-v15-source` 目录。发布后重建必须显式选择这一冻结长片输入，不能把已切换为短片的当前站点当作原版来源。该目录不提交 GitHub，应随冻结材料备份恢复。
 
+每次导出、替换当前数据或合并到另一站点副本后，**必须在实际将要构建的副本运行存储生成器，再执行 build**：
+
+```bash
+python scripts/build_research_storage.py \
+  --site build/annotation-checkpoint-integration-20261023/site \
+  --audit build/annotation-checkpoint-integration-20261023/research-storage-roundtrip-audit.json
+npm --prefix build/annotation-checkpoint-integration-20261023/site run build
+```
+
+将示例 `--site` 换成实际最终发布副本路径。生成器写出 `data/research-previous-delta-server.json` 和 `data/research-media-history-server.json`；旧完整版本中的 619 个相同证据 blob 及 `t4`、`rubric`、`sampling` 从当前版本复用，历史媒体数组使用 gzip 存储。生成后展开的完整对象须与原件逐项一致；原 `research-server.json`、`research-20261022-v1-server.json` 和 `research-media-history.json` 均保留原字节。运行时只读取派生文件和当前版本，按 base dataset SHA 拒绝过期派生文件，不会静默混用版本。Python 仅用于发布前生成，不进入 Sites 运行时依赖。更换根目录的数据后也须针对 `web/participant_demo` 重新生成，不能跨不同 base 直接复制派生文件。
+
 研究者回执汇总使用本地 `data/human_gt_20261022/candidate-releases.json` 显式登记 dataset SHA、release 文件路径与文件 SHA，以及 Gate2 文件路径与文件 SHA。登记只允许识别该版本回执；只有设置 `active_dataset_sha256` 才会切换 Lab 当前统计视图，移除该字段即可回到原版本。无效或变化的激活材料会报错，旧回执仍按旧版本校验。新旧版本的 GT、视频基线、Gate2 票数和裁决独立统计，不因题目文字或个别任务 SHA 相同而合并。注册表和实际回执不提交 GitHub。
 
 正式 400 题采集页面是 `web/participant_demo`，其运行依赖标注 API、持久化数据库以及服务器端冻结材料。旧 Lab `/offline-annotation` 只保留历史会话恢复。仓库的 GitHub Actions `lab-pages.yml` 仅构建 Lab 静态门户，链接和数据请求转到 `LAB_BACKEND_URL`；没有可访问后端时，仅配置 Actions 或 Pages 不能提供完整标注功能，也不会自动托管 150 条视频或发布参与者站点。
 
 `tests/scene-sequence.test.mjs` 检查逐场景锁定、后续场景写入拒绝和已完成判断不可改写。`tests/checkpoint-integration-browser.cjs` 保留为旧整组候选流程的回归，初始 40 题断言不适用于逐场景会话；新版浏览器检查使用 `tests/checkpoint-scene-sequence-browser.cjs`。浏览器写入测试仅使用隔离本地数据库，测试记录不是人工审核结果。
+
+## 正式发布包的媒体范围
+
+正式打包必须以已托管的最新站点源码为基线，合并本轮代码和新媒体，并保留其 `data/offline-dispatch-assets.json` 排除清单。不要把全量本地 `public/media` 复制回发布目录：本地保存了 33 个尚未托管、留待 online 派发的 `review-*.mp4` 别名副本，共 54,306,821 字节，原 offline 包已明确排除。
+
+这 33 个精确 URL 仅用于 T4 视频审核及其人物参考片段，不被当前或历史 offline 任务引用。部分内容 SHA 与 E8 相同，但 E8 使用另一个已发布文件名，必须保留这些实际播放文件。此次打包保留原已托管 277 个媒体，再加入 150 条新短片，共 **427 个 MP4**；原 277 个文件逐一与远端基线 Git blob 核对，150 条新片逐一与新版媒体 SHA 核对，字节均未改变。历史审核版本和回执绑定不随排除副本而改写。精确核验记录位于本地 `build/annotation-checkpoint-integration-20261023/offline-asset-scope-audit.json`。
+
+当前原生发布链路同时限制压缩 archive 与解包后文件总量，二者均须低于 **256 MiB（268,435,456 字节）**。媒体范围修正后的首个 archive 虽为 262,562,266 字节（约 250.4 MiB），解包后仍达 273,382,412 字节，尚不满足上限，因此进一步采用上述运行时数据去重。生成器报告的是输入文件体积节省，不能替代实际产物测量；每次正式打包必须重新核对压缩大小与 tar 成员解包总大小。原始冻结输入继续留在源码目录，构建只将实际导入的派生数据纳入运行产物。上传成功不等于部署成功，本轮发布状态继续等待正式回执确认。
 
 ## 本地生成
 

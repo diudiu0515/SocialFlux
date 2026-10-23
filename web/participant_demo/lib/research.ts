@@ -2,9 +2,10 @@ import {gate2Material, gate2Export, gate2DatasetHash} from './gate2';
 // Server-only: this module is imported exclusively by API/store modules.
 import {gunzipSync} from 'node:zlib';
 import compressed from '../data/research-server.json';
-import previousCompressed from '../data/research-20261022-v1-server.json';
+import previousDeltaCompressed from '../data/research-previous-delta-server.json';
 import firstMediaSnapshot from '../data/research-annotation400-first-overlay.json';
-import mediaHistory from '../data/research-media-history.json';
+import mediaHistoryCompressed from '../data/research-media-history-server.json';
+import {restoreResearchDelta, unpackStored} from './research-storage';
 import {restoreMediaSnapshot, type MediaSnapshot} from './research-snapshots';
 import calibration from '../data/claude-calibration-server.json';
 import {InputError, type Question} from './protocol';
@@ -17,9 +18,9 @@ type Trajectory = {id: string; packet: Record<string, any>; packet_sha256: strin
 type Research = {
   release: string; dataset_sha256: string; source_bank_sha256: string; items: Item[]; t4: Trajectory[];
   assignments: Assignment[]; rubric: unknown; sampling: Record<string, unknown>; private: Record<string, string>; evidence_blobs: Record<string, string>};
-const unpack = (value: {gzip_base64: string}): Research => JSON.parse(gunzipSync(Buffer.from(value.gzip_base64, 'base64')).toString());
-export const research = unpack(compressed);
-const previousResearch = unpack(previousCompressed);
+export const research = unpackStored<Research>(compressed);
+const previousResearch = restoreResearchDelta(research, unpackStored(previousDeltaCompressed));
+const mediaHistory = unpackStored<MediaSnapshot[]>(mediaHistoryCompressed);
 const releases = new Map([previousResearch, research].map(value => [value.dataset_sha256, value]));
 // Every published media batch keeps its original assignments and assets.
 // Question and private evidence hashes remain frozen across these overlays.
