@@ -1,5 +1,6 @@
 """Export the /lab research matrix and source inventory; no model requests."""
 import csv
+from collections import Counter
 from datetime import datetime
 import io
 import json
@@ -8,7 +9,7 @@ from zoneinfo import ZoneInfo
 from web.experiment_catalog import REPORT, load_matrix
 from web.experiment_hub import ROOT, records
 from web.experiment_status import load_experiment_status
-from web.experiment_tables import build_paper_tables
+from web.experiment_tables import build_paper_tables, make_table
 from web.experiment_protocols import GATE2_RELATION
 from web.human_gt import load_human_gt
 
@@ -77,13 +78,43 @@ def publish():
         r"\begin{document}" + "\n" + ("\n" + r"\clearpage" + "\n").join(t["exports"]["latex"] for t in tables) + "\n" + r"\end{document}" + "\n")
     for table in tables:
         outputs[paper_base / (table["id"] + ".csv")] = table["exports"]["csv"]
+    s0 = live.get('s0_ablation')
+    if s0:
+        s0_base = base.with_name('2026-10-22_gate2_supplement_continuation')
+        pair_rows = []
+        for condition, label in [('dynamic_repeat', '同输入重复基线'), ('replaced_s0', 'S1 替换 S0'),
+                                 ('fixed_s0_no_update_prompt', 'S2 固定 S0 并移除更新')]:
+            pair = s0.get('pairs', {}).get(condition, {})
+            pair_rows.append([label, pair.get('n', 0), *[
+                f'{pair["metrics"][key]:.4f}' if pair.get('metrics', {}).get(key) is not None else 'N/A'
+                for key in ('state_delta_mae', 'state_level_mae', 'response_text_distance')]])
+        paired = make_table('s0-latest-pairs', '完整场景配对结果',
+            ['对照', '有效配对 n', '更新量 MAE', '状态值 MAE', '回复文本距离'], pair_rows,
+            ['三项均与动态基线比较；各自配对分母不同，不直接相减。文本距离不是质量分。'],
+            [f'data/{s0["run_id"]}/summary.json'])
+        coverage = next((t for t in tables if t['id'] == 's0-current-coverage'), None)
+        failures = dict(Counter(r.get('error_type', 'unknown') for r in s0.get('failures', [])))
+        outputs[s0_base.with_suffix('.md')] = '\n'.join([
+            '# Gate2 S1/S2 补充消融续跑', '', f'汇总更新时间（北京时间）：{stamp}。', '',
+            f"当前机器状态：`{s0.get('status')}`；运行进程存活：`{s0.get('process_alive')}`；累计保存条件轮次 {s0.get('saved_turns', 0)}。", '',
+            '同一冻结 30 场景、四条件共 120 个条件任务。成功前缀不计完整配对；全部历史失败保留。S1/S2 共用动态基线，不计作 60 个独立场景。', '',
+            coverage['exports']['markdown'] if coverage else '', paired['exports']['markdown'],
+            '失败类型：' + '；'.join(f'{k} {v}' for k, v in failures.items()) + '。', '',
+            '本轮采用机器统计，不纳入人工标注任务。固定原始历史、行动和 ledger；生成回复不回填历史，不能当作自由 T4 结果，也不替代 Gate2 E1–E9 正式验证。', '',
+            '[完整论文结果及执行后修订记录](2026-10-21_paper_tables.md) · [当前汇总 JSON](2026-10-22_gate2_supplement_continuation.json)', ''])
+        outputs[s0_base.with_suffix('.json')] = json.dumps(dict(generated_at=stamp,
+            **{key: s0.get(key) for key in ('run_id', 'updated_at', 'status', 'process_alive', 'target_scenarios',
+                'execution_counts', 'pairs', 'saved_turns', 'frozen_checked_turns', 'reliable_continuation', 'failures')},
+            failure_counts=failures, human_review_scope='machine_statistics_only_not_an_annotation_task'),
+            ensure_ascii=False, indent=2) + '\n'
     for path, content in outputs.items():
         path.parent.mkdir(parents=True, exist_ok=True)
         temporary = path.with_suffix(path.suffix + ".tmp")
         temporary.write_text(content, encoding="utf-8")
         temporary.replace(path)
     return dict(experiments=len(experiments), sources=len(matrix["inventory"]), paper_tables=len(tables),
-                files=[str(path.relative_to(ROOT)) for path in outputs], read_errors=matrix["read_errors"])
+                files=[str(path.relative_to(ROOT)) for path in outputs],
+                read_errors=matrix["read_errors"] + live["read_errors"])
 
 
 if __name__ == "__main__":

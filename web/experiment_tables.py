@@ -119,7 +119,7 @@ def dataset_tables(live):
         tables.append(make_table('offline-counts', 'Offline 题量与文字／视频材料配对',
             ['任务', 'Scenario 数', '普通（简单）', 'Hard', '难度未标注', '总题量', 'Text / Text+Video 材料对'], task_rows,
             [stamp, '一题两个模态仍计一道题；配对要求同一题目编号同时有唯一 text 与 text+video 条目，且配对清单绑定当前题库哈希。',
-             ('英文标注版只开放语音与口型检查通过的完整场景；人工媒体核对仍待完成。' if offline.get('release') else '材料对不表示模型已作答或媒体覆盖完整。') + '当前配对清单覆盖：' +
+             '材料配对表示当前清单已绑定素材；语音、口型、表达质量及人工媒体核对需另看对应版本的检查记录。当前配对清单覆盖：' +
              '；'.join(f'{k}={v}' for k, v in offline.get('media_coverage', {}).items()) + '。',
              'Hard 是设计标签；不是已经测得的低正确率。'], sources))
     runs = [run for run in live.get('t4_runs', []) if run.get('kind') != 'historical_scoring']
@@ -345,24 +345,25 @@ def build_paper_tables(live, matrix):
          "固定原始历史、行动和 ledger，逐轮累积各条件状态；回复不回填历史，属于 Gate2 机制回放，不能当成自由 T4 成绩。S1 为数值多维 ±2 联合扰动，D0 不变。",
          "S2 同时固定 S0/D0、移除 state appraisal/校准器及交互输入 update_policy，按组合消融解释。文本距离只描述措辞差异，不是质量分或因果有效性通过率。",
          "UnsupportedConsequentialClaim 表示模型将固定动作中的某项事实判断为缺少依据；各条件分别计入失败。基线也出现的拒绝，不能直接归因于冻结状态。",
-         "各指标先按场景内所有轮次求均值，再按完整场景求均值；与重复基线配对数不一致时，不直接相减。人工判读仍为待完成。Caption 须在同场景、模型、媒体节点重新配对。"] +
+         "各指标先按场景内所有轮次求均值，再按完整场景求均值；与重复基线配对数不一致时，不直接相减。本轮 S1/S2 采用机器统计，不纳入人工任务；不替代 Gate2 正式验证。Caption 须在同场景、模型、媒体节点重新配对。"] +
         (["初始化修订 v2：在同一队列内把数值 S0 扰动限定于 [1,9]，12 个场景的拟干预值改变；仅重置尚无模型调用的初始化错误，其他既有模型失败保留。已有有效替换输出须与修正规则初值完全相同方可沿用。首个未完成场景四条件单轮全部通过才续跑；连续 3 个新条件失败则停止提交。" + str(run['bounds_recovery'])] if run.get('bounds_recovery') else []) +
         (["空响应类型兼容恢复：新异常类型此前漏识别，只补尚未用掉的原定一次恢复；原进程退出后串行执行，等待 8 秒，保留实际 wire seed。仅补失败轮次，不把成功前缀算作完整配对。" + str(run['empty_error_compat'])] if run.get('empty_error_compat') else []) +
         (["2026-10-22 凌晨续跑历史（已停止）：原30场景首轮检查通过，后续预算未覆盖每轮而失败。原记录：" + str(run['supplement_continuation'])] if run.get('supplement_continuation') else []) +
         (["2026-10-22 逐请求恢复修订：每轮 GPT 输出预算32768、回复16384，确认截断时该请求最多加倍一次；空响应/传输各最多恢复两次，同一请求与种子。原始失败留档，恢复执行故障，语义/结构化校验失败保留。先跑完整场景；单条件失败后继续队列。属于执行后修订，非原始预注册。" + str(run['reliable_continuation'])] if run.get('reliable_continuation') else []),
         ["web/experiment_catalog.py", "scripts/run_s0_mechanism_ablation.py"] +
         ([f"data/{run['run_id']}/summary.json", f"data/{run['run_id']}/manifest.json"] if run else [])))
-    offline_rows = []
+    offline_rows, offline_sources = [], []
     for r in matrix.get("experiments", []):
         if "task" in r:
             e = r["evidence"]
+            offline_sources.extend(p for p in r.get('sources', []) if not p.startswith('reports/'))
             offline_rows.append([r["task"], e.get("items", "N/A"), e.get("media_pairs") if e.get("media_pairs") is not None else "N/A",
                 e.get("missing_media") if e.get("missing_media") is not None else "N/A", "N/A", "N/A", "N/A", "未登记独立能力评测"])
     tables.append(make_table("offline-results", "T1–T3 材料覆盖与独立评测结果位置",
         ["任务", "文字题数", "媒体配对数", "缺媒体", "text 准确率", "text+video 准确率", "配对差值", "状态"], offline_rows,
         ["配对材料数不是已完成模型调用数。出题盲试答及机器参考答案检查不计为独立能力成绩。",
-         "T2 当前媒体覆盖共同前史，共同 ending 仍为文字。"],
-        ["tasks/examples/offline_scenarios_v2/manifest.json", "tasks/examples/offline_scenarios_v2/pairing_report.json"]))
+         "按当前题库逐题绑定的媒体范围解释；旧开发题库的回放与覆盖统计不移作本批结果。"],
+        list(dict.fromkeys(offline_sources))))
     for run in live.get("t4_runs", []):
         accounting = run.get("execution_accounting", [])
         if accounting:

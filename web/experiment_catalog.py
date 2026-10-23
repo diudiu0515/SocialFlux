@@ -18,7 +18,7 @@ def definitions():
             group="主实验", conditions=["text_only", "text_video"], target="当前新版题库，按同题配对",
             hypothesis=f"比较 {task} 在文字和文字＋视频条件下的表现。",
             method="同题干、选项、模型与采样设置；按题目版本及媒体 SHA 绑定两条件。按任务、模型和条件分别统计。"
-                   + ("T2 当前视频仅覆盖共同前史，共同 ending 仍为文字，需单列覆盖限制。" if task == "T2" else ""),
+                   + ("T2 的共同表达及媒体覆盖范围按对应题库版本核验，不沿用旧版覆盖结论。" if task == "T2" else ""),
             acceptance="独立评测调用、答案来源、有效配对 n、失败和缺媒体分母齐全；报告准确率及同题差值。机器候选与人工 GT 分开。",
             next_step="冻结评测模型与题库版本，补齐人工 GT 后执行独立 text / text+video 评测。",
             sources=[REPORT, f"{BANK}/manifest.json", f"{BANK}/items.jsonl", f"{BANK}/pairing_report.json",
@@ -125,8 +125,13 @@ def load_matrix(root, live, records):
         inventory[relative] = row
         return row
 
+    inventory_counts = (live or {}).get("dataset_counts")
+    current = (inventory_counts or {}).get("offline") or {}
+    bank = current.get("bank_path", BANK)
+    if inventory_counts is not None:
+        errors.extend(inventory_counts.get("read_errors", []))
     pairing = {}
-    pair_source = register(f"{BANK}/pairing_report.json")
+    pair_source = register(f"{bank}/pairing_report.json")
     if pair_source["status"] == "available":
         try:
             pairing = json.loads((root / pair_source["path"]).read_text())
@@ -135,7 +140,7 @@ def load_matrix(root, live, records):
         except (OSError, ValueError) as exc:
             errors.append({"path": pair_source["path"], "error": type(exc).__name__})
             pairing = {}
-    items_source = register(f"{BANK}/items.jsonl")
+    items_source = register(f"{bank}/items.jsonl")
     pairing_current = bool(pairing.get("items_sha256") and pairing["items_sha256"] == items_source["sha256"])
     offline = (live or {}).get("offline", {})
     gates = {e["id"]: e for g in (live or {}).get("gates", []) if g["id"] == "Gate 2" for e in g.get("experiments", [])}
@@ -147,17 +152,38 @@ def load_matrix(root, live, records):
         paths = list(row["sources"])
         if "task" in row:
             task = row["task"]
-            count = offline.get("tasks", {}).get(task)
-            paired = pairing.get("paired_by_task", {}).get(task, 0) if pairing_current else None
-            row.update(evidence_status="materials_ready" if count else "unavailable",
+            if inventory_counts is not None:
+                task_counts = current.get("tasks", {}).get(task, {})
+                count = task_counts.get("total")
+                paired = task_counts.get("pairs") if pairing_current else None
+                paths = [REPORT] + [f"{bank}/{name}" for name in
+                    ("manifest.json", "items.jsonl", "pairing_report.json", "paired.items.jsonl")]
+            else:
+                count = offline.get("tasks", {}).get(task)
+                paired = pairing.get("paired_by_task", {}).get(task, 0) if pairing_current else None
+            row.update(evidence_status="materials_ready" if count is not None and paired is not None else "unavailable",
                        evidence_summary=f"题库 {count if count is not None else 'N/A'} 题；有效媒体配对 {paired if paired is not None else '待重新绑定'}；独立能力评测待登记。",
                        evidence=dict(items=count, media_pairs=paired, missing_media=(count-paired) if count is not None and paired is not None else None,
-                                     pairing_current=pairing_current, independent_evaluation_registered=False))
+                                     bank_path=bank, release=current.get('release'),
+                                     pairing_current=pairing_current and paired is not None, independent_evaluation_registered=False))
         elif row["id"] == "study-t4":
             runs = (live or {}).get("t4_runs", [])
             row.update(evidence_status="results_available" if runs else "unavailable",
                        evidence_summary=f"已登记 {len(runs)} 个 run；各自保留模型、条件、有效配对与失败分母。",
                        run_ids=[r["id"] for r in runs])
+            latest = next((r for r in runs if r.get('kind') == 'persistent_pair_recovery'), None)
+            if latest:
+                counts = [m.get('status_counts', {}) for m in latest.get('models', {}).values()]
+                completed = sum(c.get('completed', 0) for c in counts)
+                failed = sum(c.get('failed', 0) for c in counts)
+                labels = {'needs_repair': '待修复后续跑', 'all_pairs_complete': '配对已补齐',
+                          'request_budget_exhausted': '请求额度已用完'}
+                state = '运行中' if latest.get('process_alive') else labels.get(latest.get('reported_status'), '当前未运行')
+                pairs = '；'.join(f"{model} 有效配对 {values.get('matched_scenarios', 0)}" for model, values in latest.get('models', {}).items())
+                row['evidence_summary'] += (f" 最新补齐批次：成功 {completed}/{latest.get('planned_slots', 'N/A')}，失败 {failed}；{pairs}；{state}。")
+                row['evidence'] = dict(latest_run_id=latest['id'], completed=completed, failed=failed,
+                    planned=latest.get('planned_slots'), process_alive=latest.get('process_alive', False),
+                    reported_status=latest.get('reported_status'))
             paths += [f"build/{r['id']}/run/{name}" for r in runs
                       for name in (("summary.json", "all_results.json", "manifest.json") if r.get("kind") == "historical_scoring"
                                    else ("summary.json", "results.json", "status.json"))]
@@ -173,6 +199,10 @@ def load_matrix(root, live, records):
                 result = followup.get('comparisons', {}).get(condition, {})
                 row['evidence_summary'] += (f"；独立补测 {followup.get('recorded', 0)}/46 场景已记录，"
                     f"{condition} 有效配对 {result.get('pairs', 0)}；状态 {followup.get('status')}（详见补测表）")
+                if result.get('direction_agreement') is not None:
+                    row['evidence_summary'] += f"；补测活跃方向一致率 {result['direction_agreement']:.2%}"
+                    if row['gate_id'] == 'E4':
+                        row['evidence_summary'] += f"（要求 ≥{followup.get('threshold', .8):.0%}；人工等价核验待完成）"
                 row['run_ids'].append(followup['run_id'])
                 row['next_step'] = '在 annotation 页完成场景与环境核对；补测和旧批次分别保留，人工核验前不标记正式通过。'
                 paths += [f"data/{followup['run_id']}/summary.json", f"data/{followup['run_id']}/manifest.json"]

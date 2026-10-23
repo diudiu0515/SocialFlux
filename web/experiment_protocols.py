@@ -61,7 +61,7 @@ GATE2_RELATION = ("Gate2 包含环境的因果干预、稳健性检验和机制�
 S0_STATUS_LABELS = {
     "waiting_provider_authorization": "已准备，待外发授权", "pilot_running": "真实调用试跑中",
     "stopped_pilot_failed": "试跑失败，已停止", "running": "真实补测进行中",
-    "finished": "机器执行完成，待人工判读", "finished_with_failures": "机器执行结束，含失败",
+    "finished": "机器执行完成", "finished_with_failures": "机器执行结束，含失败",
     "interrupted": "进程已退出，结果未完成",
     "stopped_diagnostics": "补测已暂停，故障排查中",
 }

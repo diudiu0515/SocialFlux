@@ -17,11 +17,14 @@ def main():
     c=data['rollouts']['counts'];g2=data['gates'][1];g3=data['gates'][2];o=data['offline']
     g1=data['gates'][0].get('machine_audit',{});secondary=g3.get('independent_audit',{})
     oracle=o.get('oracle_progress',{})
+    current=data.get('dataset_counts',{}).get('offline') or {}
+    current_tasks=' / '.join(str(current.get('tasks',{}).get(task,{}).get('total','N/A')) for task in ('T1','T2','T3'))
     lines+=['',f"当前 GPT50：完整 {c['completed']}，失败 {c['failed']}，有正文 {c['readable']}/50。Gate3 模型全审 {g3['machine_reviewed']} 条：{g3['machine_decisions']}；不是人工批准。",
         '',f"Gate1 当前场景结构检查 {g1.get('schema_passed',0)}/{g1.get('scenario_count',50)}；正式通过 {g1.get('formal_passed',0)}，人工冻结尚待完成。",
         '',f"Gate3 第二模型独立审计 {secondary.get('reviewed',0)}/{secondary.get('expected_audit_count',0)}：{secondary.get('decision_counts',{})}；与主审分歧 {len(secondary.get('disagreements') or [])} 条。抽样为固定 20% 加全部拒绝及边界项；分歧不自动取较高分。",
         '',f"Gate2 当前作业状态 `{g2['run_status']}`；来源合同 `{g2['source_contract_status']}`。当前干预组 {g2['raw_intervention_records']} 条、最新仍有执行错误 {g2['raw_execution_errors']} 条。E1/E2/E9 人工包为 40/20/40 项，尚未签署；历史失败与续跑缓存命中均保留。2026-09-26 旧批次结果独立展示，不能转移到当前环境。",
-        '',f"新版离线题库：{o['scenario_count']} 场景、{o['item_count']} 题，T1/T2/T3 各 100；当前题面盲试答覆盖 {o['blind_reviewed_items']}，机器剩余问题标记 {len(o['machine_flagged_ids'])}。{o['modality_pairs']} 对文字／视频条件；{o['t2_replay_pending_scenes']} 组 T2 待受控状态回放；人工真值 {o['human_labeled']}、正式准入 {o['formal_admitted']}。出题筛查不作为独立模型能力成绩。",
+        '',f"当前离线题库：{current.get('scenarios','N/A')} 场景、{current.get('total','N/A')} 题；T1/T2/T3：{current_tasks}；文字／视频材料配对 {current.get('pairs','N/A')}。来源 `{current.get('bank_path','N/A')}`；独立模型能力评测尚未登记。材料配对不代表媒体质量或人工审核通过。",
+        '',f"旧 v2 开发题库单列：{o['scenario_count']} 场景、{o['item_count']} 题；题面盲试答覆盖 {o['blind_reviewed_items']}，机器问题标记 {len(o['machine_flagged_ids'])}；文字／视频配对 {o['modality_pairs']}；T2 待回放 {o['t2_replay_pending_scenes']} 场景。此批人工真值 {o['human_labeled']}、正式准入 {o['formal_admitted']}，不移作当前题库结果。",
         '',data['score_note'],'',
         '每个 run 分开记录；`delegated_to_run` 是移交槽位，不是完成轨迹。不把跨 run 单边结果凑成配对。']
     lines+=['','## 当前 Gate 2 机器记录','','| 实验 | 执行/覆盖 | 机器结果 | 人工状态 |','|---|---|---|---|']
@@ -45,7 +48,7 @@ def main():
         '',
         '主要未通过项：E4 活跃变量方向一致率 48.84%，低于 80%；E6 有效 43 组的一致率 49.87%，低于 70%，且存在 3 组回放失败；E8 40 个固定节点只有 3 个通过全部可见检查，音频语义尚未评估。视频按完全相同的渲染输入核对兼容性，整体场景版本不同的重新绑定仍待人工确认。E1/E2/E9 的机器工作是生成并绑定人工证据包，不产生伪造的人工一致率。']
     if oracle:
-        lines+=['','## 上帝视角答案与人类采集','',
+        lines+=['','## 旧 v2 开发题库的答案筛查记录','',
             f"冻结批次：已产出 {oracle.get('authored_items',0)}/300；独立私有证据核验 {oracle.get('independently_checked_items',0)}/300；公开材料盲答 {oracle.get('public_blind_checked_items',0)}/300。私有核验与候选答案一致且无私有核验问题 {oracle.get('oracle_agreement_items',0)}；综合机器争议题 {len(oracle.get('machine_concern_ids',[]))}。这些是出题质量检查，不是模型能力准确率。",
             '',"每题候选包含实际状态/受控回放绑定、私有证据解释和独立检查。题库中的 `ground_truth` 仍为人工标签字段，不把机器一致写成人工通过。",
             '',"采集入口 `/offline-annotation`：全部分配盲答锁定 → 全部私有证据独立初判 → 机器建议 → 最终人工审核。原盲答与两次 GT 判断分别保存；计算某人的基线时排除本人的 GT，缺其他两人的一致标签时准确率为 N/A。"]
