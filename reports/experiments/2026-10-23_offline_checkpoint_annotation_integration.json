@@ -9,7 +9,7 @@
   "video_seconds_each": 4.6,
   "human_quality_status": "pending",
   "formal_admission": false,
-  "deployment_status": "pending",
+  "deployment_status": "succeeded",
   "public_url": "https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site",
   "preserved_scene_sequence": true,
   "github_pages": {
@@ -37,12 +37,199 @@
       "sha256": "20d8675f3de32ead9a2d8c40e93801f7ff741037975355f5b9ca67cfae9f57ed",
       "passed": true,
       "local_only": true
+    },
+    "final_packed_release": {
+      "report": "build/annotation-checkpoint-integration-20261023/browser-packed-release/result.json",
+      "sha256": "56e77f96023fe4a7b863e754152fe0d59a84b55e6acff4dd8e0488bf09a6b0aa",
+      "passed": true,
+      "checks_passed": 6,
+      "local_only": true,
+      "url": "http://127.0.0.1:8135",
+      "full_short_video_plays": 3,
+      "old_v15_recovery_passed": true,
+      "future_media_and_task_hashes_hidden": true,
+      "completed_at": "2026-10-23T04:40:46.419Z",
+      "storage_validation": {
+        "tests_passed": 7,
+        "suites": [
+          "tests/research-storage.test.mjs",
+          "tests/research-snapshots.test.mjs"
+        ],
+        "previous_dataset_sha256": "6dffb119b7295ea192bb8fc047d6e90df624df44b44108f9bb391e4b1b958184",
+        "history_snapshots": 5,
+        "full_objects_roundtrip": true,
+        "cross_version_mutation_isolated": true,
+        "source_sha256": {
+          "lib/research.ts": "087d3ec9a91886e4bb5a379bcbd16e270a78ddfaa6c7a60918662771be80262e",
+          "lib/research-storage.ts": "cd1431317cd5a62b2432a4713397928559de20a07389546d81ab342e47e63169",
+          "lib/store.ts": "02d5f7e51555046157d63fb8f1b0d6f7ca12a6ce48b970b451a7524e437dc645"
+        }
+      }
     }
   },
   "production_test_records_written": 0,
   "publication_notes": [
     "Short checkpoint speech retains the full dialogue in the question.",
     "Old sessions retain their original media and Gate2 versions.",
-    "Incomplete sequential exports hide future media and media task hashes."
-  ]
+    "Incomplete sequential exports hide future media and media task hashes.",
+    "Version 17 failed and is retained only in publication_attempts; it is not the current successful release.",
+    "The final native archive passes both compressed and expanded 256 MiB limits. Sites v18 deployed successfully and fresh public read-only checks passed.",
+    "The 427-video offline package preserves all 277 hosted baseline files and 150 new clips; 33 previously excluded unpublished T4 aliases remain excluded.",
+    "Runtime storage derivatives reconstruct frozen previous releases and media history exactly without changing dataset or media hashes.",
+    "Human quality review and formal admission remain pending; 7 frame-sampled clips still require focused expression review."
+  ],
+  "github_source_commit": "a058080e502669ef97ed7cda6332c5c4570c1c9b",
+  "sites_source_commit": "ba5b42658a35dea0b64615b0d39dc5bb5cbf3522",
+  "sites_version": 18,
+  "sites_version_id": "appgprj_6ad82de6ff188191b48c72ec8787d069~appgver_4667078cd0708191ba451de9f47547e5",
+  "sites_deployment_id": "appgdep_6adae70918808191ab725abadb5a3629",
+  "build_mode": "native_archive_from_verified_source",
+  "archive_upload_limit_bytes": 268435456,
+  "publication_attempts": [
+    {
+      "sites_version": 17,
+      "sites_version_id": "appgprj_6ad82de6ff188191b48c72ec8787d069~appgver_2e4b7a78c7288191bb4fef7cc3a30458",
+      "sites_deployment_id": "appgdep_6adae00747f881918a7a1e15c8b2dc5f",
+      "sites_source_commit": "1dbc2a068f560fef4834323e67d3a34fe9df600a",
+      "build_mode": "remote_build_from_verified_source",
+      "status": "failed",
+      "superseded_by": "sites_v18",
+      "success_claimed": false
+    },
+    {
+      "sites_version": 18,
+      "sites_version_id": "appgprj_6ad82de6ff188191b48c72ec8787d069~appgver_4667078cd0708191ba451de9f47547e5",
+      "sites_deployment_id": "appgdep_6adae70918808191ab725abadb5a3629",
+      "sites_source_commit": "ba5b42658a35dea0b64615b0d39dc5bb5cbf3522",
+      "build_mode": "native_archive_from_verified_source",
+      "status": "succeeded",
+      "deployed_at": "2026-10-23T04:48:30.352242+00:00"
+    }
+  ],
+  "updated_at": "2026-10-23T04:56:41.087339+00:00",
+  "publication_state": "published",
+  "published": true,
+  "final_archive": {
+    "report": "build/annotation-checkpoint-integration-20261023/final-archive-audit.json",
+    "sha256": "91c074aace916dbe1f274c56c773e9d0110804283e09a32e806f49ff94b0a2d9",
+    "archive_bytes": 259301651,
+    "expanded_file_bytes": 267557380,
+    "limit_bytes": 268435456,
+    "files": 495,
+    "media_files": 427,
+    "archive_sha256": "7dfa67d8bd056e1161c54035c967397e6f0df15b75ba66f471ea08208bf6dc98",
+    "compressed_limit_passed": true,
+    "expanded_limit_passed": true,
+    "compressed_headroom_bytes": 9133805,
+    "expanded_headroom_bytes": 878076,
+    "archive_save_status": "succeeded",
+    "deployment_status": "succeeded",
+    "server_normalized_archive": {
+      "stored_bytes": 267950080,
+      "files": 495,
+      "content_sha256": "555d72637881319e3ff30c6071e24e917cb7bde67d82cd65f697860d058cacdd",
+      "note": "Server-normalized archive; local archive measurements and SHA above remain unchanged."
+    }
+  },
+  "storage_audit": {
+    "report": "build/annotation-checkpoint-integration-20261023/research-storage-roundtrip-audit.json",
+    "sha256": "086b784366c15cf33b1a4c5cd92ff4d25df8fbc2ffc37c1e407dc6208d62b556",
+    "previous_and_history_exact_roundtrip": true,
+    "frozen_source_inputs_unchanged": true,
+    "shared_evidence_blobs": 619,
+    "shared_fields": [
+      "rubric",
+      "t4",
+      "sampling"
+    ],
+    "runtime_tests_passed": 7,
+    "cross_version_mutation_isolated": true
+  },
+  "asset_scope_audit": {
+    "report": "build/annotation-checkpoint-integration-20261023/offline-asset-scope-audit.json",
+    "sha256": "b9cea494cc9bbfdef656d74fc98e6f9b789572ca368458af62255b4ae31e2ef2",
+    "old_published_files": 277,
+    "old_published_files_byte_equal": 277,
+    "new_checkpoint_files": 150,
+    "new_checkpoint_files_sha_equal": 150,
+    "final_mp4_files": 427,
+    "E8_published_aliases_retained": 11,
+    "old_receipt_and_review_bindings_rewritten": false,
+    "safe_to_exclude_from_offline_package": true,
+    "conclusion": "Restore the existing hosted offline exclusion list. The excluded URLs occur only in deferred T4 review tasks; they were absent from the hosted baseline. No previously playable offline or historical file is removed.",
+    "excluded_unpublished_t4_aliases": 33,
+    "excluded_bytes": 54306821,
+    "all_offline_versions_exact_excluded_url_references": 0
+  },
+  "public_verification": {
+    "report": "build/annotation-checkpoint-integration-20261023/public-deployed-checkpoint.json",
+    "sha256": "ed325bfd6da1ee93d07d00323afa38ac5979bed01a684c57913ed048faea66d1",
+    "status": "passed",
+    "passed": true,
+    "latest_candidate_verified_publicly": true,
+    "completed_at": "2026-10-23T04:50:04.490Z",
+    "anonymous_document_and_status_http": 200,
+    "catalog": {
+      "scenes": 50,
+      "questions": 400,
+      "media": 150,
+      "assignment_count": 20
+    },
+    "full_short_video_plays": 1,
+    "short_sample_seconds": 4.6,
+    "short_sample_exact_sha256": true,
+    "old_sample_http": 200,
+    "old_sample_exact_sha256": true,
+    "old_sample_seconds": 31.16,
+    "old_sample_fully_played": false,
+    "mobile_widths_without_overflow": [
+      320,
+      390
+    ],
+    "production_test_records_written": 0,
+    "production_sessions_claimed": 0,
+    "public_production_recovery_tested": false,
+    "scope": "Fresh unauthenticated GET/HEAD checks; no invitation or task claim. Complete workflow and old-session recovery were tested only in isolated local databases. One automatic Cloudflare challenge POST was blocked by the read-only browser route."
+  },
+  "deployed_at": "2026-10-23T04:48:30.352242+00:00",
+  "native_publication_receipt": {
+    "report": "build/annotation-checkpoint-integration-20261023/native-publication-result.json",
+    "sha256": "e09cd1f1daf3a8173835565df1491753c48c97a74378037ead98295e195b4ce3"
+  },
+  "local_activation": {
+    "report": "build/annotation-checkpoint-integration-20261023/local-release-activation.json",
+    "sha256": "727946b47f1e3eec75da1006604360f2dc86c975ce2914af943ded2c454ab438",
+    "active_dataset_sha256": "4859edec0ed4a00e5ee98b908b44efc930f7a1b56e774fa50c6ec34aa75ef854",
+    "gate2_resolved": true,
+    "published_data_files_identical": [
+      "data/research-server.json",
+      "data/research-media-history.json",
+      "data/gate2-review-server.json",
+      "data/research-previous-delta-server.json",
+      "data/research-media-history-server.json"
+    ],
+    "whole_root_source_equality_claimed": false,
+    "additional_local_catalog_metadata_preserved": true,
+    "note": "Root research.ts has additional local catalog metadata; it was preserved. Published source is identified separately by sites_source_commit; no whole-source equivalence is claimed."
+  },
+  "dispatch_plans": {
+    "files": [
+      {
+        "path": "reports/experiments/2026-10-23_offline_annotation_assignments_balanced.csv",
+        "sha256": "ff844fcc5998190c651224aaea93102f95cfb857f438bd8f60511073ac3aa29b",
+        "assignments": 40,
+        "reviewer_aliases_assigned": 0
+      },
+      {
+        "path": "reports/experiments/2026-10-23_offline_annotation_assignments_economical.csv",
+        "sha256": "a7aebe59a4534c9da2b205dd113c6360093b8dd98349aec266c225d7e4373327",
+        "assignments": 30,
+        "reviewer_aliases_assigned": 0
+      }
+    ],
+    "validated_against_current_release": true,
+    "validation": "Parent verified all 70 template rows against new release using web.gate2_human.assigned_tasks: assignment, scene sets, item counts, GT counts, all review counts, stage counts and current media counts match. Copies change only dataset and review-packet hashes.",
+    "old_templates_preserved": true,
+    "invitations_sent": false
+  }
 }

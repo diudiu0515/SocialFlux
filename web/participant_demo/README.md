@@ -1,6 +1,16 @@
 # SocialFlux 人工标注与 GT
 
-本轮先保存源码到 GitHub，暂不重新部署。当前视频的口型和表情自然度已收到负面反馈，列为待返修；既有机器筛查与技术验收不代表视频质量已获人工通过。以下 v15 记录是此前发布历史，后续视频修订需保留旧哈希并重新复核。
+**Sites v18 已于 `2026-10-23T04:48:30.352242+00:00` 发布成功。** 已发布源码为 `ba5b42658a35dea0b64615b0d39dc5bb5cbf3522`，部署为 `appgdep_6adae70918808191ab725abadb5a3629`。公网匿名页面与状态 API 返回 200，50 场景／400 题／150 媒体／20 个 offline 分组；1 条 4.6 秒新片完整播放并解码音频，1 条旧 31.16 秒样本下载 SHA 与元数据通过，320／390 像素手机无溢出。公网未领取任务或写生产记录，旧会话恢复及完整逐场景流程由隔离本地检查覆盖。详见 [发布报告](../../reports/experiments/2026-10-23_offline_checkpoint_annotation_integration.json)。
+
+使用已绑定当前版本的 [均衡 40 个分配](../../reports/experiments/2026-10-23_offline_annotation_assignments_balanced.csv) 或 [节省 30 个分配](../../reports/experiments/2026-10-23_offline_annotation_assignments_economical.csv)。研究者仍需填写实际匿名编号、截止时间及回执位置；分配数不是人数，同场景槽位必须由不同实际参与者承担。[派发指南](../../docs/operations/ANNOTATION_DEMO.md#2026-10-23-offline-派发指南) 说明独立覆盖、回收和第三人裁决。人工观感审核及正式 Gate 仍未完成，7 条神情重点复核不能视为通过。
+
+当前新版保留 400 道完整文字题，150 段视频各 4.6 秒，只朗读一句 checkpoint。每组 5 场景、40 题，按当前场景的 8 题盲答锁定 → 独立环境判断锁定 → GT 与已分配审核 → 下一场景推进。进行中导出不包含尚未解锁场景的媒体与审核哈希。使用原完整邀请链接领取任务；旧会话按原冻结材料恢复。
+
+当前实现与运行说明以[短片接入指南](../../docs/operations/OFFLINE_CHECKPOINT_VIDEO_V2.md)和[派发指南](../../docs/operations/ANNOTATION_DEMO.md)为准。
+
+## 2026-10-22 历史记录（v15）
+
+以下保留旧版材料与整组流程说明；旧派发表、release 和流程不用于新版派发。
 
 2026-10-22 **offline 入口与审核流程已发布为 Sites v15，并通过实际外网检查**。新任务仅提供 `offline_text`、`offline_video`；Online／T4 后续单独处理，不纳入本轮分配、进度或完成条件。旧会话继续按恢复码与原冻结流程恢复。[标注站点](https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site) 可公开访问，无需 ChatGPT 账户；开始任务仍需原完整 `#invite` 链接。保存匿名编号和个人恢复码后可换设备继续。
 
