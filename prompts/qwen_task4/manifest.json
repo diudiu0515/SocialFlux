@@ -1,0 +1,33 @@
+{
+  "profile": "qwen_task4_thinking_v1",
+  "kind": "opt_in_prompt_supplements",
+  "prompts": {
+    "state": {
+      "path": "prompts/qwen_task4/state_contract_v1.txt",
+      "sha256": "4bcc23caa70af6254ce9c71474e5ff689aa2c8d5b76d69efa2373cec6c0e8920"
+    },
+    "interaction": {
+      "path": "prompts/qwen_task4/interaction_contract_v1.txt",
+      "sha256": "85e0c9c9d79060966d731b7a410143f7f4992c10f48a3a4e8db2419212167a74"
+    },
+    "response": {
+      "path": "prompts/qwen_task4/response_contract_v1.txt",
+      "sha256": "c10601de6c29f2915b67233b90e575f3cad6bcab1178836b3eee8679b76bad62"
+    }
+  },
+  "base_sha256": {
+    "prompts/environment_state_appraisal_v6_observed_evidence.md": "4017f16c77e949bc6a7e3198f3d14dd84668552bb2c957d3524be5ce6335739d",
+    "prompts/environment_interaction_appraisal_v1.md": "19292b98a9bdb259ed3fe7b9d0fde8eb502ba115a767afec6caaca6e610aeeaf",
+    "prompts/environment_response_v31_contrastive_event_driven.md": "2f10034b53910485a6cfa428dcfb66c8987f60b9653dc0a16d8d0d43e228a614",
+    "prompts/state_actor_binding_v1.txt": "163dde3716b5b0ff5112af27f91ee69b10ec8c331460ccc75210f1461895933a",
+    "prompts/interaction_schema_bound_v1.txt": "90b65e0d7b8e51b2968386f2b1dcc020900c155d5d2fd4d9a9ff0e872b269e66",
+    "configs/state_trust_current_evidence_v1.json": "2106ff9032e9e8978288ca14bd90e8821f41f321f60a0cf43d9b10f21165f5de",
+    "environment/independent_appraisal.py": "94441303282a36c9a95e08372cdb5f41fd727eacae71da70bcd0a7f736763ba8",
+    "environment/unified_appraisal.py": "dfd94178700779186c0cccda5d6c751ff2638dda8f9db0fb3669449cf4ed670c",
+    "environment/actor_bound_appraisal.py": "df5192eff32b8c9317489d1a4752aabb9058d1e25fb83ac5f61852abf69dab0e",
+    "environment/response_validation.py": "660bc3a52e48d1684783459043f4da5713d02c159059b7909d47e40a367b58e3",
+    "environment/ledger_events.py": "3a291a9ce6dce7f31bcff02cba955c298b139e7c29898f0ae05771722a5edeba",
+    "environment/interaction_wire_schema.py": "4293f08860d4994caa21b3a0d23938d5f5099458e452b7c5eac6b569bf75f360",
+    "environment/qwen_task4_contract.py": "3f8e7a03c75ecab00ab594bad6d1cf3dc2b9c683abcadfd21c16051b8190849d"
+  }
+}

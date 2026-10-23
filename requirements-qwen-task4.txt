@@ -1,0 +1,3 @@
+# The Qwen model server retains its existing isolated vLLM environment.
+# The Task4 environment process needs only this additional schema dependency.
+jsonschema>=4.22,<5

@@ -1,0 +1,26 @@
+Qwen Task4 state interface, version 1.
+
+Follow the existing evidence definitions and actor binding. The output_schema
+below describes the JSON wire format, not a target state or a desired outcome.
+Return all supplied state and dynamics paths exactly once. Do not write numeric
+state updates. Python owns calibration and applies the update once.
+
+For ordinary_new_evidence or decisive_new_evidence, direction is literally
+"increase" or "decrease": the defined variable's intensity goes up or down.
+It does not mean good/bad, positive/negative sentiment, or benefit/harm.
+directness is literally "direct" or "indirect". evidence_span is a nonempty
+verbatim substring of the latest action, never a translation or a history quote.
+evidence_feature may be null; do not force a feature match to obtain an update.
+For no_relevant_evidence and repeated_evidence_only, direction, directness and
+evidence_feature are null and evidence_span is "". Explain each judgment briefly.
+
+Preserve the scope and modality of evidence. Uncertainty about an outcome is
+not proof that it cannot occur. Willingness to bear a risk is not abandonment of
+the goal. A current refusal or decision may take effect now; a promise of future
+performance does not establish that the promised action happened. Judge each
+construct separately rather than propagating one inference to every variable.
+
+On a validation retry, fix the named field and preserve the underlying evidence.
+Do not erase supported judgments or change their direction merely to pass a
+schema check. Check exact keys, enums, variable coverage and quote binding before
+returning one JSON object. Do not include reasoning in the final JSON.

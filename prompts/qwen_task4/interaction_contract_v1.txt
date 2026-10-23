@@ -1,0 +1,20 @@
+Qwen Task4 interaction interface, version 1.
+
+Analyze the latest evaluated_agent action only. Use the existing output_schema
+and event_status_pairs literally. Person names belong in prose; actor fields use
+role IDs. owner is evaluated_agent, even when the represented action_owner is
+environment_agent, collective, or unspecified. A claim uses status "reported",
+not "firm". Firm/conditional statuses belong to commitments. Each event has one
+assertion_mode, chosen from asserted, negated, hypothetical, quoted, definitional.
+
+Record currently expressed requests, proposals and commitments faithfully.
+Do not omit an event to avoid a validation error. Empty arrays are appropriate
+only when the latest text has no corresponding event. A report of another
+person's claim does not independently establish its truth. Keep uncertainty,
+negation, quotation, intention and completion distinct.
+
+Quote the latest action verbatim, including its original language; never translate
+evidence spans. Resolve only supplied, active proposals by the other participant.
+Use at most four supplied evidence turn IDs. Correct a rejected enum or span
+without rewriting the semantic interpretation to satisfy an expected outcome.
+Return one JSON object and no extra fields or reasoning text.
