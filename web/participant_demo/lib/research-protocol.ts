@@ -1,3 +1,4 @@
+import {transitionScenarioFlow, type ScenarioFlow, type FlowTask} from './scenario-flow.ts';
 import {validateReview, type ReviewTask, type Gate2Workflow} from './gate2-protocol.ts';
 import {InputError, validateAnswers, type Answers, type Question} from './protocol.ts';
 
@@ -7,7 +8,7 @@ export type Rating = {score: number | null; evidence_turn_ids: string[]; rationa
 export type Ratings = Record<string, Record<Dimension, Rating>>;
 export type GT = Record<string, {answer: string | null; acceptable_answers: string[]; decision: 'usable' | 'revise' | 'reject'; rationale: string}>;
 export type SceneSequence = {version: 1; scenes: {id: string; itemIds: string[]}[]; index: number; completed: Record<string, {blindLockedAt: string; independentLockedAt?: string; submittedAt: string}>};
-export type Workflow = {phase: 'blind' | 'gate2' | 'gt' | 't4_review' | 'complete'; sceneSequence?: SceneSequence; gate2?: Gate2Workflow; blind?: Answers; blindLockedAt?: string; gt?: GT; ratings?: Ratings; ratingsLockedAt?: string; attestedAt?: string; baselineEligible: boolean; exclusions: string[]};
+export type Workflow = {scenarioFlow?: ScenarioFlow; phase: 'blind' | 'gate2' | 'gt' | 't4_review' | 'complete'; sceneSequence?: SceneSequence; gate2?: Gate2Workflow; blind?: Answers; blindLockedAt?: string; gt?: GT; ratings?: Ratings; ratingsLockedAt?: string; attestedAt?: string; baselineEligible: boolean; exclusions: string[]};
 
 export function activeScene(workflow: Workflow) {
   return workflow.sceneSequence?.scenes[workflow.sceneSequence.index];
@@ -101,6 +102,7 @@ export function validateRatings(value: unknown, items: {id: string; turn_ids: st
 
 export function transition(workflow: Workflow, action: string, data: Record<string, unknown>, questions: Question[], trajectories: {id: string; turn_ids: string[]}[], now: string, reviewTasks: ReviewTask[] = []): {workflow: Workflow; answers: Answers} {
   if (workflow.phase === 'complete') throw new InputError('已提交并锁定。');
+  if (workflow.scenarioFlow) return transitionScenarioFlow(workflow, action, data, questions, now, reviewTasks as FlowTask[]);
   if (workflow.sceneSequence) return transitionScene(workflow, action, data, questions, now, reviewTasks);
   const next = structuredClone(workflow);
   const t4 = trajectories.length > 0;

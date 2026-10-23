@@ -4,81 +4,27 @@ from __future__ import annotations
 
 import hashlib
 import json
-
+from pathlib import Path
 from prompts.loader import render_prompt
 
 from .online_multimodal import ONLINE_EVENT_FAMILIES
+from .state_performance import FAMILY, online_prompt, fresh_performance_prompt
 
 
-ONLINE_NONVERBAL_PROMPT_ID = "online_nonverbal_event_v3"
+ONLINE_NONVERBAL_PROMPT_ID = "online_nonverbal_state_performance_v4"
 ONLINE_ASSET_REQUEST_FORMAT = "socialflux_online_nonverbal_video_request_v1"
 
-_FAMILY_DIRECTIONS = {
-    "activated_tension": (
-        "Clearly draw the eyebrows together, set the jaw with closed lips, raise "
-        "both shoulders visibly, and hold a fixed forward gaze for one full second."
-    ),
-    "easing_tension": (
-        "Begin visibly tense, then recline the upper body backward by about twenty "
-        "centimeters, interlace both hands behind the head with elbows fully visible, "
-        "close both eyes during one long exhale, and hold this relaxed posture."
-    ),
-    "open_engagement": (
-        "Lean the upper body forward by about fifteen centimeters, establish direct "
-        "eye contact, raise one open hand beside the face, wave it side-to-side two "
-        "clear times, then lower the hand and give one natural nod."
-    ),
-    "guarded_withdrawal": (
-        "Turn the head and upper torso about forty-five degrees to one side, break "
-        "eye contact completely, and hold that visibly withdrawn pose for two seconds."
-    ),
-    "firm_boundary": (
-        "Straighten fully, square both shoulders, fold both forearms firmly across "
-        "the chest, keep the chin level, and hold a steady direct gaze with a "
-        "closed jaw for two seconds."
-    ),
-    "risk_concern": (
-        "Remain facing forward, then recoil backward by about fifteen centimeters "
-        "while quickly raising both open hands beside the lower cheeks; widen the "
-        "eyes, raise the eyebrows high, and freeze in this alert pose for two seconds."
-    ),
-    "cautious_relief": (
-        "Briefly sweep one hand across the forehead, lower that hand fully, drop "
-        "both shoulders visibly, then show a closed-mouth half-smile and finish "
-        "with one gentle nod."
-    ),
-}
 
-_FAMILY_AUDIO_DIRECTIONS = {
-    "activated_tension": (
-        "one short nasal inhale with a faint clothing-tension rustle, then quiet "
-        "held breathing; no words or voiced syllables"
-    ),
-    "easing_tension": (
-        "one clearly audible slow unvoiced exhale synchronized with reclining and "
-        "placing both hands behind the head; no words or voiced syllables"
-    ),
-    "open_engagement": (
-        "a soft chair-and-clothing shift during the forward lean, followed by calm "
-        "quiet breathing; no hum, words, or voiced syllables"
-    ),
-    "guarded_withdrawal": (
-        "one brief fabric rustle and soft chair creak synchronized with the turn "
-        "away, followed by quiet room tone; no words or voiced syllables"
-    ),
-    "firm_boundary": (
-        "one soft chair-settling sound as the posture straightens, then steady quiet "
-        "breathing; no hum, words, or voiced syllables"
-    ),
-    "risk_concern": (
-        "one sharp involuntary unvoiced inhale synchronized with the recoil, plus a "
-        "brief clothing rustle; no scream, words, or voiced syllables"
-    ),
-    "cautious_relief": (
-        "one audible unvoiced relieved exhale with a soft sleeve rustle during the "
-        "forehead sweep; no hum, words, or voiced syllables"
-    ),
-}
+def active_online_manifest(root):
+    """Explicit activation; historical task IDs never silently change files."""
+    root = Path(root).resolve()
+    config_path = root / 'configs/online_multimodal_assets.json'
+    config = json.loads(config_path.read_text()) if config_path.exists() else {}
+    selected = config.get('active_manifest', 'data/gpt50/experiment/multimodal_delivery_v1/online_multimodal/manifest.json')
+    path = (root / selected).resolve()
+    if not path.is_relative_to(root / 'data/gpt50/experiment') or path.name != 'manifest.json':
+        raise ValueError('Invalid active online asset manifest')
+    return path
 
 _AGE = (
     "late twenties",
@@ -175,30 +121,14 @@ def online_asset_prompt(
     event_family,
     *,
     preserve_reference_motion=False,
+    duration_seconds=4,
+    identity_override=None,
 ):
     if event_family not in ONLINE_EVENT_FAMILIES:
         raise ValueError(f"unknown online event family: {event_family}")
-    identity = online_identity_spec(scenario)
-    return render_prompt(
-        ONLINE_NONVERBAL_PROMPT_ID,
-        character_name=identity["character_name"],
-        character_role=identity["character_role"],
-        appearance=identity["appearance"],
-        wardrobe=identity["wardrobe"],
-        background=identity["background"],
-        camera=identity["camera"],
-        reference_instruction=(
-            "Use the reference video as the approved visual performance: preserve "
-            "its identity, framing, target movement, and timing closely while "
-            "adding the required synchronized nonverbal audio."
-            if preserve_reference_motion
-            else "If a reference video is supplied, use it for identity, wardrobe, "
-            "background, and camera continuity, but perform the target movement "
-            "specified below clearly."
-        ),
-        family_direction=_FAMILY_DIRECTIONS[event_family],
-        audio_direction=_FAMILY_AUDIO_DIRECTIONS[event_family],
-    ).strip()
+    identity = identity_override or online_identity_spec(scenario)
+    return render_prompt(ONLINE_NONVERBAL_PROMPT_ID,
+                         performance_direction=online_prompt(identity, event_family, duration_seconds)).strip()
 
 
 def build_online_asset_request(
@@ -208,6 +138,7 @@ def build_online_asset_request(
     duration_seconds=4,
     reference_video_file=None,
     preserve_reference_motion=False,
+    identity_override=None,
 ):
     duration = float(duration_seconds)
     if not 4 <= duration <= 15:
@@ -216,25 +147,27 @@ def build_online_asset_request(
         reference_video_file = str(reference_video_file).strip()
         if not reference_video_file:
             raise ValueError("reference_video_file cannot be empty")
-    return {
+    request = {
         "format": ONLINE_ASSET_REQUEST_FORMAT,
         "prompt_id": ONLINE_NONVERBAL_PROMPT_ID,
         "prompt": online_asset_prompt(
             scenario,
             event_family,
             preserve_reference_motion=preserve_reference_motion,
+            duration_seconds=duration,
+            identity_override=identity_override,
         ),
         "duration_seconds": duration,
         "generate_audio": True,
         "ratio": "16:9",
         "scenario_id": scenario.get("scenario_id"),
         "event_family": event_family,
-        "identity": online_identity_spec(scenario),
+        "identity": identity_override or online_identity_spec(scenario),
         "reference_video_file": reference_video_file,
         "audio": {
             "required": True,
             "mode": "synchronized_response_neutral_nonverbal",
-            "direction": _FAMILY_AUDIO_DIRECTIONS[event_family],
+            "direction": FAMILY[event_family]['audio'],
             "spoken_content": False,
         },
         "safety_check": {
@@ -245,3 +178,6 @@ def build_online_asset_request(
             "contains_benchmark_answer": False,
         },
     }
+    if reference_video_file and not preserve_reference_motion:
+        request['prompt'] = fresh_performance_prompt(request['prompt'], duration=duration, event_family=event_family)
+    return request

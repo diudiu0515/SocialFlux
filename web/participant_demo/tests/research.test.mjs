@@ -39,6 +39,8 @@ test('sample is fixed at 50 with explicit availability and 38/12 source strata',
 test('all 50 scenes have 3/2/3 English questions and available audio/video pairs are complete',()=>{
  assert.equal(data.items.filter(x=>x.media.length).length,data.media_readiness.complete_items);assert.equal(data.items.length,400);
  assert.equal(new Set(data.items.map(x=>x.id)).size,400);
+ assert.equal(data.items.filter(x=>x.public_video).length,300);
+ assert.equal(new Set(data.items.flatMap(x=>x.media.map(v=>v.sha256))).size,100);
  assert.equal(new Set(data.items.map(x=>x.scene_id)).size,50);
  assert.deepEqual(data.task_difficulty,{T1:{ordinary:90,hard:60},T2:{ordinary:60,hard:40},T3:{ordinary:90,hard:60}});
  for(const scene of new Set(data.items.map(x=>x.scene_id))){
@@ -56,24 +58,21 @@ test('all 50 scenes have 3/2/3 English questions and available audio/video pairs
    if(video.spoken_scope==='checkpoint_sentence'){
     assert.ok(video.full_public_response && video.source_quote);
     assert.ok(video.full_public_response.includes(video.source_quote));
-    assert.ok(video.duration_seconds>=4 && video.duration_seconds<=5);
+    assert.ok(video.duration_seconds>=4 && video.duration_seconds<=5.2);
     assert.equal(item.coverage.full_reply_text_preserved,true);
     assert.equal(item.coverage.complete_spoken_response,false);
     const input=item.public_text.input;
     const turns=[...(input.history||[]),...(input.history_a||[]),...(input.history_b||[]),...(input.shared_ending?[input.shared_ending]:[])];
     assert.ok(turns.some(t=>(t.environment_character||t.environment_response||t.current_response)===video.full_public_response));
-    assert.equal(video.human_review,'pending');
+    assert.ok(['pending','approved_pilot'].includes(video.human_review));
    }
   }
-  if(item.task==='T2'&&item.public_video){
-   const ending=item.media.filter(v=>v.evidence_ids.includes('ending'));
-   assert.equal(ending.length,1);assert.equal(ending[0].spoken_scope==='checkpoint_sentence'?ending[0].full_public_response:ending[0].spoken_text,item.public_text.input.shared_ending.current_response);
-  }
+  if(item.task==='T2'){assert.equal(item.public_video,null);assert.deepEqual(item.media,[]);}
  }
  for(const mode of ['offline_text','offline_video']){
   const groups=data.assignments.filter(x=>x.track===mode);
   assert.ok(groups.every(g=>g.scene_ids.length<=5&&g.item_ids.length===8*g.scene_ids.length));
-  assert.equal(new Set(groups.flatMap(g=>g.item_ids)).size,mode==='offline_text'?400:data.items.filter(x=>x.public_video).length);
+  assert.equal(new Set(groups.flatMap(g=>g.item_ids)).size,400);
   if(mode==='offline_text')assert.equal(groups.length,10);
  }
 });

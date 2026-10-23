@@ -15,6 +15,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from environment.state_ontology import STATE_VARIABLE_ONTOLOGY
+from environment.online_video_assets import active_online_manifest
 from tasks.offline_choice import FAMILIES, public_instance, visible_evidence
 
 from web.runtime_paths import DATA_ROOT as ROOT
@@ -25,7 +26,7 @@ BANK_PATHS = {'dev60':'data/offline_t1_t3_dev60','gpt50-t1-t3':'data/offline_gpt
 
 def bank_path():
     return _bank_override.get() or BANK
-VIDEO_ROOT = ROOT / "data/gpt50/experiment/multimodal_delivery_v1/online_multimodal/assets"
+VIDEO_ROOT = active_online_manifest(ROOT).parent / 'assets'
 
 
 def digest(data):

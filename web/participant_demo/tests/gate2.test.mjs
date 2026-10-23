@@ -51,9 +51,9 @@ test('review packets keep independent evidence separate and bind exact video byt
  const research = JSON.parse(gunzipSync(Buffer.from(JSON.parse(readFileSync(new URL('../data/research-server.json', import.meta.url))).gzip_base64, 'base64')));
  assert.equal(bundle.dataset_sha256, research.dataset_sha256);
  assert.ok(registry.versions.every(b => registryBundle(registry, b.sha256).tasks.every(t => t.sha256 && t.questions.length)));
- assert.equal(bundle.tasks.length,572);
- assert.equal(bundle.tasks.filter(t=>reviewApplies(t,'offline_text')||reviewApplies(t,'offline_video')).length,475);
- assert.equal(bundle.tasks.filter(t=>t.kind==='media-quality').length,150);
+ assert.equal(bundle.tasks.length,535);
+ assert.equal(bundle.tasks.filter(t=>reviewApplies(t,'offline_text')||reviewApplies(t,'offline_video')).length,425);
+ assert.equal(bundle.tasks.filter(t=>t.kind==='media-quality').length,100);
  assert.equal(bundle.tasks.filter(t=>t.kind==='E1').length,40);
  assert.equal(bundle.tasks.filter(t=>t.kind==='E2').length,20);
  assert.equal(bundle.tasks.filter(t=>t.kind==='E8').length,40);
@@ -112,9 +112,10 @@ test('pooled registry references every task directly and shares objects across f
 });
 
 test('deduplicated registry stays within measured startup decompression budget', () => {
- // Measured v1 was 43,968,759 bytes; v2 is 10,882,333 bytes. Allow about 20% growth.
+ // Measured after 100 Offline / 326 Online replacement: 13,812,667 bytes.
+ // New media versions retain every historical packet; cap growth to 5% of this release.
  assert.equal(registry.format,'socialflux_gate2_registry_v2');
- assert.ok(rawRegistry.byteLength<=13_100_000,`Registry inflated to ${rawRegistry.byteLength} bytes`);
+ assert.ok(rawRegistry.byteLength<=14_500_000,`Registry inflated to ${rawRegistry.byteLength} bytes`);
  assert.ok(rawRegistry.byteLength<43_968_759*0.35,'Deduplication must reduce decompressed data by at least 65%');
 });
 

@@ -76,7 +76,7 @@ async function run() {
   const code = 'SF-' + randomBytes(32).toString('base64url');
   let response = await post(context, 'start', {assignmentId: assignment.id, alias: 'qa-sequence-short-' + randomBytes(8).toString('hex'), recoveryCode: code, consent: true, priorExposure: false});
   assert.equal(response.status, 200, JSON.stringify(response.data)); let state = response.data;
-  assert.equal(state.dataset.sha256, data.dataset_sha256); assert.equal(state.dataset.release, 'annotation400-checkpoint-20261023-v2');
+  assert.equal(state.dataset.sha256, data.dataset_sha256); assert.equal(state.dataset.release, 'annotation400-seedance-state-20261023-v3');
   const initial = structuredClone(state), first = state.research.items[0], future = state.session.workflow.sceneSequence.scenes[1].itemIds[0];
   let page = await pageFor(context);
   await checked('first scene 8 questions, future materials absent from entire status and export', async () => {
@@ -89,7 +89,7 @@ async function run() {
     assert.doesNotMatch(JSON.stringify(state.research), /"(?:initial_state|private_character|oracle_reference|state_before)"/);
     return scope;
   });
-  await checked('current 8 full prompts, checkpoint captions, 3 complete plays and shared T2 ending', async () => {
+  await checked('current 8 full prompts, checkpoint captions, 2 complete plays and text-only T2', async () => {
     const played = new Set();
     for (const id of state.research.assignment.item_ids) {
       const item = state.research.items.find(x => x.id === id);
@@ -104,15 +104,15 @@ async function run() {
         const result = await video.evaluate(async v => {v.currentTime = 0; v.muted = false; await v.play(); await new Promise((resolve, reject) => {
           const deadline = setTimeout(() => reject(new Error('Video end timeout')), 10000); v.addEventListener('ended', () => {clearTimeout(deadline); resolve();}, {once: true});
         }); return {duration: v.duration, currentTime: v.currentTime, ended: v.ended, audioBytes: v.webkitAudioDecodedByteCount || 0, audioTracks: v.audioTracks?.length || 0, frames: v.getVideoPlaybackQuality().totalVideoFrames};});
-        assert.ok(Math.abs(result.duration - 4.6) < .08); assert.ok(result.ended && result.frames > 0 && (result.audioBytes > 0 || result.audioTracks > 0));
+        assert.ok(result.duration >= 4.9 && result.duration <= 5.2); assert.ok(result.ended && result.frames > 0 && (result.audioBytes > 0 || result.audioTracks > 0));
         const file = await context.request.get(url + media.url); assert.equal(file.status(), 200); assert.equal(sha(await file.body()), media.sha256);
         played.add(media.sha256); report.videos.push({nodeId: media.node_id, sha256: media.sha256, ...result});
       }
     }
-    assert.equal(played.size, 3);
+    assert.equal(played.size, 2);
     const t2 = state.research.items.filter(x => x.task === 'T2'); assert.equal(t2.length, 2);
-    const endings = t2.map(x => x.media.filter(v => v.evidence_ids.includes('ending'))); assert.ok(endings.every(x => x.length === 1)); assert.equal(endings[0][0].sha256, endings[1][0].sha256);
-    return {prompts: 8, fullPlaysWithAudio: 3, sharedT2Ending: true};
+    assert.ok(t2.every(x => x.media.length === 0 && x.public.modality === 'text'));
+    return {prompts: 8, fullPlaysWithAudio: 2, textOnlyT2: true};
   });
   await page.getByRole('navigation', {name: '场景内任务', exact: true}).getByRole('button').first().click();
   await page.locator('label.option').filter({has: page.locator('input[value="B"]')}).click(); await page.getByLabel('把握程度', {exact: true}).selectOption('high');
@@ -120,16 +120,16 @@ async function run() {
   await page.waitForFunction(() => document.querySelector('.save-status')?.textContent === '进度已保存');
   state = await get(context, 'status'); assert.equal(state.session.answers[first.id].answer, 'B');
   state = await unlock(context, state); await page.reload({waitUntil: 'networkidle'});
-  await checked('locked current-scene feedback, 3 media audits and mobile layout', async () => {
+  await checked('locked current-scene feedback, 2 media audits and mobile layout', async () => {
     const scope = await assertScope(context, state); assert.equal(scope.exportedMediaRows, 8);
     assert.equal((await post(context, 'evidence', {instanceId: future})).status, 400);
     await page.locator('.scene-answer-feedback strong').nth(1).waitFor(); assert.equal(await page.locator('.scene-answer-summary tbody tr').count(), 8);
-    const mediaTasks = state.research.gate2Tasks.filter(x => x.kind === 'media-quality'); assert.equal(mediaTasks.length, 3);
+    const mediaTasks = state.research.gate2Tasks.filter(x => x.kind === 'media-quality'); assert.equal(mediaTasks.length, 2);
     for (const task of mediaTasks) {const asset = initial.research.items.flatMap(x => x.media).find(x => x.sha256 === task.video.sha256); assert.ok(asset); assert.equal(task.evidence.spoken_text, asset.spoken_text); assert.equal(task.evidence.full_public_response, asset.full_public_response);}
     for (const width of [390, 320]) {await page.setViewportSize({width, height: 844}); assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)); await page.screenshot({path: path.join(out, 'scene-gt-' + width + '.png'), fullPage: false});}
     await page.setViewportSize({width: 1440, height: 1000});
     assert.equal((await post(context, 'submit', body(state, {gt: {}, gate2Answers: {}, attestation: true}))).status, 400);
-    return {referenceAnswers: 8, mediaAudits: 3, widths: [390, 320], ...scope};
+    return {referenceAnswers: 8, mediaAudits: 2, widths: [390, 320], ...scope};
   });
   state = await finish(context, state); await page.reload({waitUntil: 'networkidle'});
   await checked('next scene relocks feedback, retains immutable first scene and exports 16 visible rows', async () => {
@@ -141,25 +141,26 @@ async function run() {
     await page.close(); const recovered = await browser.newContext(); response = await post(recovered, 'recover', {alias: state.session.alias, recoveryCode: code}); assert.equal(response.status, 200); await context.close(); context = recovered; state = response.data;
     assert.equal(state.session.workflow.sceneSequence.index, 1); return {...scope, recovery: true};
   });
-  await checked('five scenes complete with 40 frozen answers and all 15 media only in final export', async () => {
+  await checked('five scenes complete with 40 frozen answers and all 10 media only in final export', async () => {
     while (state.session.status !== 'submitted') {await assertScope(context, state); state = await unlock(context, state); await assertScope(context, state); state = await finish(context, state);}
     const exported = await get(context, 'export'); assert.equal(exported.dataset_sha256, data.dataset_sha256);
     assert.equal(state.session.workflow.sceneSequence.index, 5); assert.equal(Object.keys(exported.workflow.sceneSequence.completed).length, 5);
     assert.equal(Object.keys(exported.blind_responses).length, 40); assert.equal(Object.keys(exported.machine_assisted_gt).length, 40);
-    assert.deepEqual(exported.media_hashes, Object.fromEntries(assigned.map(x => [x.id, x.media]))); assert.equal(new Set(Object.values(exported.media_hashes).flat().map(x => x.sha256)).size, 15);
+    assert.deepEqual(exported.media_hashes, Object.fromEntries(assigned.map(x => [x.id, x.media]))); assert.equal(new Set(Object.values(exported.media_hashes).flat().map(x => x.sha256)).size, 10);
     fs.writeFileSync(path.join(out, 'new-release-export.json'), JSON.stringify(exported, null, 2));
-    assert.equal((await post(context, 'draft', {})).status, 409); return {datasetSha256: exported.dataset_sha256, completedScenes: 5, blindAnswers: 40, mediaRows: 40, uniqueMedia: 15};
+    assert.equal((await post(context, 'draft', {})).status, 409); return {datasetSha256: exported.dataset_sha256, completedScenes: 5, blindAnswers: 40, mediaRows: 40, uniqueMedia: 10};
   });
-  await checked('old v15 without sceneSequence still restores all 40 questions and frozen long media', async () => {
+  await checked('old v15 restores all records while retired videos are explicitly marked', async () => {
     const fixture = read(path.join(out, 'legacy-v15-fixture.json')), oldContext = await browser.newContext();
     response = await post(oldContext, 'recover', {alias: fixture.alias, recoveryCode: fixture.recoveryCode}); assert.equal(response.status, 200); const old = response.data;
     assert.equal(old.dataset.sha256, fixture.datasetSha256); assert.equal(old.session.workflow.sceneSequence, undefined); assert.equal(old.research.items.length, 40);
     assert.deepEqual(Object.fromEntries(old.research.items.map(x => [x.id, x.media])), fixture.mediaHashes);
     const oldPage = await pageFor(oldContext); assert.equal(await oldPage.locator('.scene-sequence').count(), 0); assert.equal(await oldPage.locator('.checkpoint-caption').count(), 0);
-    const video = oldPage.locator('.video-panel video').first(); await video.evaluate(async v => {if (v.readyState < 1) await new Promise(resolve => v.addEventListener('loadedmetadata', resolve, {once: true}));});
-    const duration = await video.evaluate(v => v.duration); assert.ok(duration > 5);
+    assert.equal(await oldPage.locator('.video-panel video').count(), 0);
+    assert.ok((await oldPage.locator('.video-panel').innerText()).includes('旧版视频已清理'));
+    assert.ok((await oldPage.locator('.release-notice').innerText()).includes('原题目和标注记录仍保留'));
     const exported = await get(oldContext, 'export'); assert.deepEqual(exported.media_hashes, fixture.mediaHashes); assert.deepEqual(exported.gate2_human_review.task_hashes, fixture.taskHashes);
-    fs.writeFileSync(path.join(out, 'legacy-v15-export.json'), JSON.stringify(exported, null, 2)); await oldContext.close(); return {questions: 40, oldDuration: duration, datasetSha256: fixture.datasetSha256};
+    fs.writeFileSync(path.join(out, 'legacy-v15-export.json'), JSON.stringify(exported, null, 2)); await oldContext.close(); return {questions: 40, retiredMediaExplicit: true, datasetSha256: fixture.datasetSha256};
   });
   assert.deepEqual(report.pageErrors, []); report.passed = true;
 }

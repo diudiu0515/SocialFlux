@@ -24,6 +24,7 @@ from environment.observation import (
     build_initial_policy_observation,
 )
 from environment.online_multimodal import build_online_multimodal_profile
+from environment.online_video_assets import active_online_manifest
 from evaluation.quality_gates import SCENARIO_CHECKS, TASK_REVIEW_RATINGS
 from evaluation.rollout_gate import (
     HARD_REJECT_REASONS, QUALITY_DIMENSIONS, infer_observed_outcome,
@@ -131,22 +132,9 @@ MULTIMODAL_DELIVERY_BATCHES = {
             / "scenario"
             / "scenarios_state_v3"
         ),
-        "online_root": (
-            ROOT
-            / "data"
-            / "gpt50"
-            / "experiment"
-            / "multimodal_delivery_v1"
-            / "online_multimodal"
-        ),
-        "talking_root": (
-            ROOT
-            / "data"
-            / "gpt50"
-            / "experiment"
-            / "multimodal_delivery_v1"
-            / "talking_head_v4_pilot"
-        ),
+        "online_root": active_online_manifest(ROOT).parent,
+        # Native Offline media now live in the annotation release; retire the old pilot.
+        "talking_root": None,
         "expected_scenario_count": 50,
         "triggerability": GPT50_ONLINE_MULTIMODAL_TRIGGERABILITY,
     },

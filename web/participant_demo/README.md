@@ -1,50 +1,55 @@
 # SocialFlux 人工标注站
 
-当前入口：[SocialFlux 标注站](https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site)。使用原 Sites 项目和持久化 D1；参与者保存答案不依赖 AutoDL。GitHub 保存源码，GitHub Pages 尚未启用，不把待发布地址当作可用站点。
+## 逐场景标注流程 v2
 
-**Sites v18 已于 `2026-10-23T04:48:30.352242+00:00` 发布成功。** 已发布源码为 `ba5b42658a35dea0b64615b0d39dc5bb5cbf3522`，部署为 `appgdep_6adae70918808191ab725abadb5a3629`。公网匿名页面与状态 API 返回 200，50 场景／400 题／150 媒体／20 个 offline 分组；1 条 4.6 秒新片完整播放并解码音频，1 条旧 31.16 秒样本下载 SHA 与元数据通过，320／390 像素手机无溢出。公网未领取任务或写生产记录，旧会话恢复及完整逐场景流程由隔离本地检查覆盖。详见 [发布报告](../../reports/experiments/2026-10-23_offline_checkpoint_annotation_integration.json)。
+沿用已发布的逐场景流程 v2，本次将绑定的视频更新为原生 Seedance state 素材。
 
-使用已绑定当前版本的 [均衡 40 个分配](../../reports/experiments/2026-10-23_offline_annotation_assignments_balanced.csv) 或 [节省 30 个分配](../../reports/experiments/2026-10-23_offline_annotation_assignments_economical.csv)。研究者仍需填写实际匿名编号、截止时间及回执位置；分配数不是人数，同场景槽位必须由不同实际参与者承担。[派发指南](../../docs/operations/ANNOTATION_DEMO.md#2026-10-23-offline-派发指南) 说明独立覆盖、回收和第三人裁决。人工观感审核及正式 Gate 仍未完成，7 条神情重点复核不能视为通过。
+新领取的 offline 任务依次完成：公开背景与角色卡 → 逐轮公开对话 → 题目视频 → 8 道首次作答（T1/T2/T3 = 3/2/3）→ 机器答案对照与最终答案 → 逐轮 state 审核 → 下一场景。已有恢复码保留原流程。
 
-## 当前材料与流程
+每一步由服务端校验并锁定，原始答案与最终答案分别保存。机器答案合理性须逐题选择；全部 8 题锁定后可查看机器答案、私有证据与所有已提供 state。state 以更新前、变化量、更新后的表格展示，每轮及初始状态都须判断；未完成不能进入下一场景。公开对话审核只使用各题公开历史，A/B 差异保留，不提前展示私有 state 或未来分支。同一视频复用时审核一次，允许不影响判断的轻微瑕疵。
 
-当前短片 release 为 `annotation400-checkpoint-20261023-v2`，dataset SHA 为 `4859edec0ed4a00e5ee98b908b44efc930f7a1b56e774fa50c6ec34aa75ef854`。50 个场景、400 道英文题，每场景 T1/T2/T3 为 3/2/3。150 段题目视频均为 4.6 秒，每段只朗读一句 checkpoint；完整对白保留在文字题面。短句并不声称覆盖完整对白。机器筛查不代表人工质量通过。
+GPT50_001/009/023/033 仅有 3 轮同源记录，035/040/050 分别有 6/4/5 轮。页面明确提示不完整，并要求确认缺失部分无法审核；不得用其他轨迹替代或补造。其余 43 个场景提供 10–12 轮。新流程审核导出在 `scenario_human_review`，版本和阶段锁定保留在 `workflow.scenarioFlow`；历史 `gate2_human_review` 不冒充新流程审核。
 
-每组 5 场景、40 题，按冻结顺序进行：当前场景 8 道盲答全部锁定 → 独立环境判断锁定 → 查看本场景机器候选及私有证据、完成 GT 和已分配审核 → 提交后进入下一场景。400 道题均有机器候选，但不直接当作正确答案。后续场景内容和写入受服务端限制，已锁定判断不可覆盖。
+验证：`node --test tests/scenario-flow.test.mjs tests/scene-sequence.test.mjs tests/research.test.mjs tests/gate2.test.mjs`。浏览器：`tests/scenario-flow-browser.cjs`，仅允许隔离本地地址和数据库。
 
-进行中导出只包含已完成及当前场景的媒体绑定和审核任务哈希，完成整组后导出全部 40 题。格式仍为 `socialflux_human_gt_v1`，可由 Lab 导入；新旧版本分别统计，不能沿用旧视频的人工通过记录。
+入口：[SocialFlux 标注站](https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site)。沿用原 Sites 项目和持久化 D1；参与者保存答案不依赖 AutoDL。GitHub 保存源码，GitHub Pages 尚未启用。
 
-页面保留场景进度、当前题目导航和实际作答／核对表。重复核对侧栏和当前场景的禁用导航已删除。Lab 主入口跳到同一标注站；`/offline-annotation` 仅供旧任务恢复，不再新建长视频任务。
+本源码对应 `annotation400-seedance-state-20261023-v3`。视频流程见 [State 视频说明](../../docs/operations/SEEDANCE_STATE_VIDEOS.md)。
 
-## 邀请、保存与旧记录
+## 材料与作答流程
 
-公开访问无需平台账户；领取任务仍使用研究者的完整 `#invite` 链接。邀请验证后移入 HttpOnly cookie，并从地址栏移除。匿名编号与个人恢复码用于跨设备恢复；恢复码含 256 位随机数，服务器以 SHA-256 摘要查询。不得将真实邀请或恢复码提交 Git。
+50 场景、400 道英文题，每场景 T1/T2/T3 为 3/2/3。全部 300 道 T1/T3 使用 100 段约 5 秒的原生 Seedance 视频，同一历史节点供多道题复用；100 道 T2 只使用文字。短片只朗读对应 checkpoint 短句，完整对白保留在题面。Online 使用 326 段约 4 秒的新版素材，原素材 ID、事件类别和触发条件保持不变。
 
-答案自动保存到 `demo_sessions`，revision 冲突返回 409，保留客户端草稿。既有六题、综合审核、300／400 题以及 T4 会话按原冻结版本恢复。旧长片任务会明确提示，并提供“保存并进入新版入口”；保留旧恢复码后可另开新版，原答案不转填。首次独立作答的接触排除保持有效。
+每组 5 场景、40 题，按固定顺序进行：公开背景与角色审核 → 逐轮公开对话审核 → 视频审核 → 当前场景 8 题作答并锁定 → 查看机器答案与显式 state、修订最终答案并判断机器答案合理性 → 逐轮 state 审核 → 提交后进入下一场景。不能任意选择场景；后续场景的证据与答案由服务端隔离。机器候选答案不等同于人工确认的正确答案。
 
-新任务只开放 offline 文字和音视频条件，T4 不在本轮新分配中。历史 T4 评分、媒体及恢复支持保留。参与者只能下载本人的记录；所有者可通过 Sites 数据库工具读取汇总，没有公开的全量导出接口。
+进行中导出只包含已完成及当前场景的媒体绑定和审核任务哈希，完成整组后导出全部 40 题。格式仍为 `socialflux_human_gt_v1`，Lab 可导入；新旧媒体版本分别统计，不沿用旧片的人工通过记录。机器语音、口型和文件检查也不代表人工自然度审核通过。
 
-## 源码结构与本地构建
+Lab 主标注入口指向同一站点。`/lab#human` 提供回执导入与裁决；`/offline-annotation` 仅保留旧任务恢复。
 
-- `app/demo.tsx`：邀请、领取和恢复入口；`app/research-workspace.tsx`：逐场景作答与核对。
-- `lib/research-protocol.ts`：阶段转换和锁定；`lib/store.ts`：持久化、版本与并发控制。
-- `lib/research.ts`、`lib/gate2.ts`：冻结材料及阶段可见范围；`lib/research-storage.ts`：还原去重历史输入。
-- `data/*server.json`、媒体历史映射及 `public/media/`：从同一冻结备份恢复。GitHub 不包含私有证据、视频、真实回执或数据库，仅克隆源码不能构建完整站点。
+## 保存与旧记录
 
-Node >= 22.13。保留 `.openai/hosting.json` 的原 project ID、DB 绑定和 Vinext 集成。安装依赖后，在研究仓库根目录运行存储生成器，再进入站点构建：
+公开页面无需平台账户；领取任务使用研究者原完整 `#invite` 链接。邀请验证后进入 HttpOnly cookie，并从地址栏移除。答案自动保存到 D1 的 `demo_sessions`；匿名编号与个人恢复码支持跨设备恢复。revision 冲突返回 409，保留客户端草稿。不得把真实邀请、恢复码或参与者记录提交 Git。
 
-```sh
-python scripts/build_research_storage.py --site web/participant_demo --audit build/research-storage-audit.json
-cd web/participant_demo
-npm run build
-```
+旧题目、标注和恢复码保留。按用户要求清理的旧视频由页面明确标为已退役，不将新片冒充旧证据。旧会话点击“保存并进入新版入口”可另开新版任务；原答案不自动转填。导出旧记录仍可用，接触排除保持有效。
 
-首次创建隔离本地数据库时，依次执行 `drizzle/0000_bright_prism.sql`、`0001_bouncy_frightful_four.sql`、`0002_marvelous_hannibal_king.sql`，使用 Wrangler `d1 execute DB --local`。数据库已存在时只应用未执行的迁移。`DEMO_INVITE_SHA256` 通过忽略的本地环境文件配置；生产使用原 Sites secret。`npm start -- --port 8012` 启动本地站点。
+新任务继续开放 offline 文字和视频两种条件；T2 在视频组中也只有文字。历史 T4 记录按原版本恢复，当前不新增 T4 派发。参与者只可下载本人记录。
 
-## 验证与发布
+## 源码与构建
 
-类型检查：`node node_modules/typescript/bin/tsc --noEmit`。场景锁定与旧版本恢复：`node --test tests/scene-sequence.test.mjs tests/research-storage.test.mjs tests/research-snapshots.test.mjs`。浏览器回归使用 `tests/checkpoint-scene-sequence-browser.cjs`，必须指定隔离本地地址和数据库，不向生产写入测试标注。
+- `app/demo.tsx`、`app/research-workspace.tsx`：入口和逐场景作答。
+- `lib/research-protocol.ts`、`lib/store.ts`：阶段锁定、持久化与版本恢复。
+- `lib/research.ts`、`lib/gate2.ts`：冻结材料及阶段可见范围。
+- `app/media-video.tsx`、`data/retired-media.json`：旧视频退役提示。
+- `data/*server.json`、历史媒体映射及 `public/media/`：从同一冻结备份恢复。GitHub 不包含私有证据、视频、回执和数据库，仅克隆源码不能构建完整标注站。
 
-通过 Sites source helper 同步精确源码并打包，保存版本后部署；必须看到成功回执才可宣称上线。压缩 archive、解包后的全部文件以及 tar 本身体积均须低于 256 MiB。发布包保留 277 个历史媒体及 150 个短片，共 427 个 MP4；不把本地 33 个未派发 T4 别名副本复制回来。删除历史媒体前须确认所有恢复版本的实际 URL 引用。
+Node >= 22.13。保留 `.openai/hosting.json` 原 project ID、DB 绑定和 Vinext 集成。研究仓库生成完整材料后，在站点目录构建。发布必须使用 Sites source helper 同步源码并打包。
 
-当前发布回执见 `build/short-video-publication-20261023.json`；历史流程与部署记录见 `docs/operations/ANNOTATION_DEMO.md`。历史文字描述不代表当前线上版本。
+首次创建隔离本地数据库时，按顺序执行 `drizzle/0000_bright_prism.sql`、`0001_bouncy_frightful_four.sql`、`0002_marvelous_hannibal_king.sql`，Wrangler 必须使用 `d1 execute DB --local`。已有库只应用尚未执行的迁移。`DEMO_INVITE_SHA256` 使用被忽略的本地环境文件，生产沿用原 Sites secret。
+
+## 验证
+
+类型检查：`node node_modules/typescript/bin/tsc --noEmit`。
+
+场景锁定与版本恢复：`node --test tests/scene-sequence.test.mjs tests/research-storage.test.mjs tests/research-snapshots.test.mjs tests/research.test.mjs`。
+
+完整浏览器回归：`tests/scenario-flow-browser.cjs`、`tests/legacy-flow-recovery-browser.cjs`，只连接隔离本地地址和数据库，不向生产写测试标注。最终包只保留当前 100 段 Offline 与 326 段 Online；历史题目和回执版本映射保留。发布压缩包、解包文件和 tar 均须低于 256 MiB。

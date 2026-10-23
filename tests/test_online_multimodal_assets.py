@@ -48,14 +48,14 @@ class OnlineMultimodalAssetTest(unittest.TestCase):
         )
         self.assertTrue(request["generate_audio"])
         self.assertTrue(request["prompt"].isascii())
-        self.assertIn("does not speak", request["prompt"])
-        self.assertIn("Audio is required", request["prompt"])
+        self.assertIn("There is no speech", request["prompt"])
+        self.assertIn("synchronized nonverbal audio", request["prompt"])
         self.assertTrue(request["audio"]["required"])
         self.assertFalse(request["audio"]["spoken_content"])
         self.assertIn(scenario["environment_agent"]["persona"]["name"], request["prompt"])
         self.assertFalse(any(request["safety_check"].values()))
 
-    def test_event_families_use_distinct_medium_intensity_v3_cues(self):
+    def test_event_families_use_distinct_connected_performances(self):
         scenario = first_scenarios(1)[0]
         families = build_online_multimodal_profile(scenario)["event_families"]
         prompts = {
@@ -63,15 +63,13 @@ class OnlineMultimodalAssetTest(unittest.TestCase):
             for family in families
         }
         self.assertEqual(len(prompts), len(set(prompts.values())))
-        self.assertTrue(all(
-            "unmistakably different" in prompt for prompt in prompts.values()
-        ))
-        weak_phrases = ("slightly", "only a few centimeters", "eases only slightly")
-        self.assertTrue(all(
-            phrase not in prompt
-            for prompt in prompts.values()
-            for phrase in weak_phrases
-        ))
+        self.assertTrue(all(len(prompt.split()) >= 600 for prompt in prompts.values()))
+        self.assertIn('not agreement', prompts['open_engagement'])
+        self.assertIn('pressure vanished', prompts['activated_tension'])
+        self.assertIn('every practical problem', prompts['easing_tension'])
+        for prompt in prompts.values():
+            self.assertNotIn('forty-five degrees', prompt)
+            self.assertNotIn('fifteen centimeters', prompt)
 
 
     def test_triggerability_audit_separates_hits_cooldown_and_dimensions(self):

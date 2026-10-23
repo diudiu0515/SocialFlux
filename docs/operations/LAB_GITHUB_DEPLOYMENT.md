@@ -1,7 +1,12 @@
-# Lab 的 GitHub 联动后端
+# 已停用：AutoDL 上的 GitHub 联动后端
+
+2026-10-23：用户明确要求网站不得托管在 AutoDL。本方案已停用，不能再作为生产部署说明执行。
+`socialflux-lab-public` 已停止，Supervisor 配置已禁用自动启动和自动重启。
+后续网站更新应使用已有独立站点 https://socialflux-experiment-lab.junqiao24.chatgpt.site ，
+详见 [独立托管说明](LAB_INDEPENDENT_HOSTING.md)。下文仅保留旧实现供追溯。
 
 Lab 保留 Python 后端、实时读取、计划编辑、回执导入、裁决、视频和论文表格导出。
-GitHub 分支 `lab-backend-deploy-20261022` 保存发布代码；AutoDL 当前服务器运行后端。
+GitHub 分支 `lab-backend-deploy-20261022` 保存旧发布代码；旧 AutoDL 公网后端已停止。
 这不是 GitHub Pages 静态快照。服务器关机后网站也会停止。
 
 ## 运行与更新
@@ -18,16 +23,13 @@ GitHub 分支 `lab-backend-deploy-20261022` 保存发布代码；AutoDL 当前�
 `web/runtime_paths.py` 统一解析此设置；不设置时维持原本行为。
 更新数据不需要推送 GitHub，网页仍每 30 秒读取服务器上的最新结果。
 
-在已配置环境中启动或查看：
+仅查看已停用服务状态（不要启动）：
 
 ```bash
-mkdir -p build/lab-deployment
-build/web-service/venv/bin/python -m supervisor.supervisord -c configs/lab.supervisord.conf
 build/web-service/venv/bin/python -m supervisor.supervisorctl -c configs/lab.supervisord.conf status
 ```
 
-Supervisor 在进程退出时自动重启；整台实例重启后需再次运行启动命令。
-管理脚本本身如有变化，需在服务器更新脚本并重启该 Supervisor program。
+Supervisor 自动启动与自动重启均已禁用；不得因旧脚本或 GitHub 分支有更新而恢复此服务。
 
 ## 登录与验证
 

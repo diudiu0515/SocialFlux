@@ -2,6 +2,16 @@
 
 本文件是当前活跃批次的唯一流程说明。旧 Qwen / Scale300 数据不参与任何阶段。
 
+2026-10-23 视频更新：用户已授权完成全部 Online / Offline 原生 Seedance 素材替换。T1/T3 使用 100 段共用历史节点短片，T2 为文字；326 个 Online 素材位的触发规则不变。当前入口见 [State 视频流程](SEEDANCE_STATE_VIDEOS.md)，完成和发布状态以回执为准。旧本地 TTS / LivePortrait 合成流程退役。
+
+2026-10-22 Claude50 预算恢复：原预算 50 次尝试全部在首次 state 转换前失败，其中 49 个 appraisal 阶段失败、1 个 policy 阶段失败。用户随后授权仅提高 appraisal 输出预算至 state 16000 / interaction 8000；49 个复用已保存成功调用继续，CF150_051 留在 hard。state 规则、更新幅度、速度、S0、policy 采样和 Fable 回应配置保持一致。入口是冻结的 `build/unified_gpt50_matched_claude50_20261022_appraisal_budget_recovery/runtime/scripts/recover_unified_claude50_budget.py`；见[预算恢复报告](../../reports/experiments/2026-10-22_claude50_appraisal_budget_recovery.md)。新旧尝试不叠加独立样本量。
+
+2026-10-22 Claude50 新统一批次：用户明确要求全部运行配置与 GPT50 一致。固定来源分层抽样 50 个（15 narrative-derived / 35 synthetic-script），新 S0 保持不变；GPT-6 Astra policy 与两个 appraisal、Claude Fable response、v3.2.24/v7、英文、3 并发、10–20 轮自然结束。每场景一次，失败保留至 hard，未抽中的 100 个直接登记为 task4 待执行。源场景、参数和 583 份完整运行文件均已冻结；实际执行使用 `build/unified_gpt50_matched_claude50_20261022/runtime/scripts/run_unified_claude50.py`。这次授权取代旧“不得自动扩展 Claude”限制，但不意味着旧人工签字已通过。当前分组入口为 `data/claude150_v1/current_unified_allocation.json`，详细进度见[新批次报告](../../reports/experiments/2026-10-22_claude50_gpt_matched.md)。
+
+2026-10-22 Claude 动态证据更新：139/150 是历史主清单的完整对话数，不是当前 state 版本的合格数。原生试验、固定回应回放和当前统一运行的逐场景核验已单列，见[动态证据核验与附录结果](../../reports/experiments/2026-10-22_claude_dynamic_evidence.md)。正确性与动态覆盖分别统计，不再把“未出现慢变化／未覆盖四族”直接判作状态更新错误；原始失败及跨版本重复尝试全部保留。
+
+2026-10-22 语言更新：当前 GPT50 场景、`unified_current_trust_v1_gpt50_active` 的 rollout 正文及 `tasks/examples/offline_scenarios_v2` 的 300 道 T1–T3 题已统一英文。当前正文不再保留中文引用或重复文本导出；旧运行日志、历史题库和冻结标注包独立保留。下文 2026-10-07 的原文／译文并存说明是当时的流程记录。迁移、引用对齐和视频绑定核验见 `data/english_migration_20261022/release_report.json`；英文翻译不自动获得人工审核通过状态。
+
 ## Offline T1–T3 开发题与网站（2026-10-10）
 
 新增固定 50 场景的 T1/T3 扩展入口，T2 暂停新增。配置

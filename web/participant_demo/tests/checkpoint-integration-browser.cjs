@@ -1,6 +1,4 @@
-/* Legacy batch-workflow candidate QA (8133). For current sceneSequence use
- * checkpoint-scene-sequence-browser.cjs (8134). --prepare-legacy-fixture writes
- * compatible SQL only and never executes it. No production requests. */
+/* Local candidate QA only. --prepare-legacy-fixture writes SQL, never executes it. */
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');

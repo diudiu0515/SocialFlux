@@ -1,3 +1,4 @@
+import {scenarioFlowTasks} from './scenario-material';
 import {gate2Hash, gate2Tasks} from './gate2';
 import { and, eq, inArray } from "drizzle-orm";
 import { getDb } from "../db";
@@ -7,6 +8,7 @@ import multimedia from "../data/multimodal.json";
 import { type Answers, type MediaReviews, type Question, type ReviewAsset, InputError, validateAnswers, validateMediaReviews, validateRevision, validateStart } from "./protocol";
 import {research, researchFor, researchVersions, researchCatalog, researchReleaseInfo, assignmentFor, sceneAssignment, researchQuestions, researchTrajectories, researchMaterial, researchEvidence, researchHashes, researchExport, type Assignment} from './research';
 import {transition, type Workflow} from './research-protocol';
+import {mediaRetired} from './retired-media';
 export {researchCatalog};
 
 type Bundle = {dataset_sha256: string; release: string; items: {public: Question; item_sha256: string}[]; videos?: ReviewAsset[]; scenes?: unknown[]};
@@ -38,7 +40,8 @@ export function payload(row: Session | undefined) {
   }
   const bundle = bundleFor(row?.datasetSha256 || currentBundle.dataset_sha256);
   return {session: present(row), questions: bundle.items.map(item => item.public), videos: bundle.videos || [], scenes: bundle.scenes || [],
-    releaseInfo: researchReleaseInfo(bundle.dataset_sha256, bundle.items.length, bundle.items.length),
+    releaseInfo: {...researchReleaseInfo(bundle.dataset_sha256, bundle.items.length, bundle.items.length),
+      currentMediaRetired: bundle.videos?.some(video => typeof video.url === 'string' && mediaRetired(video.url)) || false},
     dataset: {sha256: bundle.dataset_sha256, release: bundle.release, count: bundle.items.length,
       kind: bundle.videos ? "multimodal_review" : "text", videoCount: bundle.videos?.length || 0}};
 }
@@ -54,8 +57,8 @@ export async function start(userId: string, data: Record<string, unknown>) {
   })) exclusions.push('prior_or_repeated_scene_exposure');
   await getDb().insert(demoSessions).values({id: crypto.randomUUID(), userId,
     datasetSha256: research.dataset_sha256, release: research.release, ...clean, createdAt: time, updatedAt: time,
-    assignmentJson: JSON.stringify(assignment), workflowJson: JSON.stringify({phase: 'blind', baselineEligible: !exclusions.length, exclusions, gate2: {packet_sha256: gate2Hash, answers: {}},
-      ...(assignment.track !== 't4' ? {sceneSequence: {version: 1, index: 0, completed: {}, scenes: assignment.scene_ids.map(id => ({id, itemIds: research.items.filter(x => x.scene_id === id && assignment.item_ids.includes(x.id)).map(x => x.id)}))}} : {})}),
+    assignmentJson: JSON.stringify(assignment), workflowJson: JSON.stringify({phase: 'blind', baselineEligible: !exclusions.length, exclusions, ...(assignment.track === 't4' ? {gate2: {packet_sha256: gate2Hash, answers: {}}} : {}),
+      ...(assignment.track !== 't4' ? {scenarioFlow: {version: 2, sourcePacketSha256: gate2Hash, step: 'scenario', reviews: {}, machineVerdicts: {}, locks: {}}, sceneSequence: {version: 1, index: 0, completed: {}, scenes: assignment.scene_ids.map(id => ({id, itemIds: research.items.filter(x => x.scene_id === id && assignment.item_ids.includes(x.id)).map(x => x.id)}))}} : {})}),
     itemHashesJson: JSON.stringify(researchHashes(assignment)),
     mediaHashesJson: JSON.stringify(Object.fromEntries(research.items.filter(x => assignment.item_ids.includes(x.id)).map(x => [x.id, assignment.track === 'offline_video' ? x.media : []]))),
   }).onConflictDoNothing().run();
@@ -77,7 +80,7 @@ export async function save(userId: string, data: Record<string, unknown>, comple
         && JSON.stringify(data.ratings) === JSON.stringify(workflow.ratings)
         && (!data.gate2Answers || Object.keys(data.gate2Answers as object).length === 0)) return payload(previous);
     const revision = validateRevision(data.revision), time = new Date().toISOString();
-    const next = transition(workflow, action, data, researchQuestions(assignment, frozen), researchTrajectories(assignment, frozen).map(x => ({id: x.id, turn_ids: x.packet.observable_trajectory.map((t: {turn_id: string}) => t.turn_id)})), time, gate2Tasks(assignment.scene_ids, workflow.gate2, assignment.track));
+    const next = transition(workflow, action, data, researchQuestions(assignment, frozen), researchTrajectories(assignment, frozen).map(x => ({id: x.id, turn_ids: x.packet.observable_trajectory.map((t: {turn_id: string}) => t.turn_id)})), time, workflow.scenarioFlow ? scenarioFlowTasks(sceneAssignment(assignment, workflow), workflow, frozen) : gate2Tasks(assignment.scene_ids, workflow.gate2, assignment.track));
     const serialized = JSON.stringify(next.workflow), answers = JSON.stringify(next.answers);
     const result = await getDb().update(demoSessions).set({workflowJson: serialized, draftJson: answers, revision: revision + 1, updatedAt: time,
       ...(next.workflow.phase === 'complete' ? {status: 'submitted', submittedAt: time} : {})})
@@ -107,7 +110,9 @@ export function exportRecord(row: Session) {
     const workflow = JSON.parse(row.workflowJson) as Workflow;
     const assignment = JSON.parse(row.assignmentJson) as Assignment;
     const mediaHashes = JSON.parse(row.mediaHashesJson) as Record<string, unknown>;
-    const exported = researchExport(assignment, workflow, researchFor(row.datasetSha256));
+    const visibleAssignment = workflow.sceneSequence && workflow.phase !== 'complete' ? {...assignment, scene_ids: workflow.sceneSequence.scenes.slice(0, workflow.sceneSequence.index + 1).map(s => s.id)} : assignment;
+    const exported = researchExport(visibleAssignment, workflow, researchFor(row.datasetSha256));
+    exported.assignment = assignment;
     // Media rows contain full dialogue and playable URLs. In-progress downloads
     // may include completed/current scenes, but must not reveal future scenes.
     if (workflow.sceneSequence && workflow.phase !== 'complete') {

@@ -300,6 +300,11 @@
       "path": "environment_paraphrase_equivalence_v1.md",
       "sha256": "5bb93e67c99b398a3b7ee7bceb742ebadb3f1047a31bc8911562cc2b6238f8aa",
       "version": "v1"
+    },
+    "online_nonverbal_state_performance_v4": {
+      "path": "online_nonverbal_state_performance_v4.txt",
+      "sha256": "4e173e0381f797d709cb0cadb6a661969ac657b5ae4a3e99e0b901d043f6ad1b",
+      "version": "v4"
     }
   }
 }
