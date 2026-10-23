@@ -271,3 +271,5 @@ Sites v18 于 `2026-10-23T04:48:30.352242+00:00` 返回 `succeeded`，源码 `ba
 当前 release 为 `annotation400-checkpoint-20261023-v2`，150 段题目视频逐文件实测均为 4.6 秒。完整题面保留，逐场景流程继续有效。旧恢复码仍加载原始材料，页面明确标为旧长视频任务；保存后可返回新版入口。重复核对侧栏、重复场景导航与旧 Lab 新建入口已删除，Lab 只保留旧记录恢复。记录、新旧视频及审核版本分别保留；新材料没有继承旧视频的人工通过结论。
 
 本地测试覆盖 150 条视频哈希与时长、5 场景40题、保存恢复、阶段隔离、导出、旧长片恢复、320/390像素布局及旧Lab恢复。相关 Python 回归44项通过。发布回执：`build/short-video-publication-20261023.json`；浏览器回执：`build/short-video-browser-qa-20261023.json`。GitHub源码分支：`annotation-short-video-20261023`。
+
+发布后只读浏览器检查：主页 200；公开 catalog 返回新版 release、checkpoint 和 400 题；首、中、末三个场景题目视频均完整播放 4.6 秒、115 帧，文件 SHA 与发布清单一致，未写入生产标注。回执：`build/short-video-live-check-20261023.json`。

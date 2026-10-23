@@ -32,5 +32,42 @@
     "min_seconds": 4.6,
     "max_seconds": 4.6
   },
-  "browser_qa": "/tmp/socialflux-short-qa/result.json"
+  "browser_qa": "/tmp/socialflux-short-qa/result.json",
+  "live_check": {
+    "readOnly": true,
+    "productionWrites": 0,
+    "errors": [],
+    "clips": [
+      {
+        "url": "/media/51d70e502125413233f7c16e2dc05f03233540088d9c321e4807c9a6d2f4587f.mp4",
+        "sha256": "51d70e502125413233f7c16e2dc05f03233540088d9c321e4807c9a6d2f4587f",
+        "duration": 4.6,
+        "ended": true,
+        "frames": 115
+      },
+      {
+        "url": "/media/b263e06ce78a3b5d52ed1df6d19ca2d136aceae5da658971942d26aa7b05c5d0.mp4",
+        "sha256": "b263e06ce78a3b5d52ed1df6d19ca2d136aceae5da658971942d26aa7b05c5d0",
+        "duration": 4.6,
+        "ended": true,
+        "frames": 115
+      },
+      {
+        "url": "/media/da818cea3fcde752ff8b91a841fcf3d80b5c7f222fec2abc7274b9ea04ff2d95.mp4",
+        "sha256": "da818cea3fcde752ff8b91a841fcf3d80b5c7f222fec2abc7274b9ea04ff2d95",
+        "duration": 4.6,
+        "ended": true,
+        "frames": 115
+      }
+    ],
+    "homeStatus": 200,
+    "catalog": {
+      "release": "annotation400-checkpoint-20261023-v2",
+      "videoFormat": "checkpoint",
+      "textCount": 400
+    },
+    "passed": true
+  },
+  "github_branch": "annotation-short-video-20261023",
+  "github_implementation_commit": "c4021b3"
 }
