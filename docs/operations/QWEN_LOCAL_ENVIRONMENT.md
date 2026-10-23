@@ -153,3 +153,48 @@ response 阶段。其他重试原因包括遗漏字段或 dynamics 判断、证�
 的一致性，再在新运行目录复测。此次只是助手审查和开发诊断，完成率不是
 语义正确率，也不构成对 thinking 模式能力或正式 benchmark 准入的结论。
 评测后 Qwen 服务健康检查仍返回 HTTP 200。
+
+## 2026-10-24 思考模式诊断
+
+本次复用了上一轮冻结的案例、prompt、schema 和环境更新逻辑，分别在独立目录
+测试默认强思考及中等思考。原计划的 15 例对照**没有跑完**：默认强思考先遇到
+预算耗尽，中等思考完成同一场景的两个 checkpoint 与一个中性输入后，因确认了
+输出合同缺口而收尾。未运行案例和中断请求均保留在统计中，未替换失败样本。
+详见[思考模式诊断报告](../../reports/analysis/2026-10-24_qwen_thinking_environment_prompt_diagnostic.json)。
+
+| 配置 | 已得到结果的案例 | 完整流程完成 | 主要观察 |
+| --- | --- | --- | --- |
+| 默认 xhigh，沿用原预算 | 3 | 0 | state 的 6000 token 全用于思考，没有最终 JSON |
+| 默认 xhigh，state 上限增至 12000 | 1 | 0 | 12000 token 仍全用于思考 |
+| medium，采用官方建议的采样参数 | 3 | 1 | 0 例首次通过；2 例耗尽结构化重试 |
+
+第一轮另有一个在途案例在停止过程中收尾，其 2 次请求单列为中断记录。
+三轮环境请求共 26 次，加上两个连通检查共 28 次。中等思考这一轮使用
+16 次请求，包含 8 次额外重试、10 次被拒绝的结构化输出，无输出截断，
+实际运行约 51 分 10 秒；剩余 12 例未运行。唯一完成的案例耗时 897.3 秒。
+同样三个输入在此前非思考模式下均完成，但两轮的采样与预算不同，不能把
+差异仅归因于思考开关，也不能从一个场景推断模型整体能力。
+
+已确认的输出合同缺口是：
+
+- [state prompt](../../prompts/environment_state_appraisal_v6_observed_evidence.md)
+  要求提供 `direction`，却没有声明非空值必须为 `increase/decrease`，示例只有
+  `null`；[validator](../../environment/independent_appraisal.py) 则严格要求这两个值。
+- `GPT50_006_t6` 三次返回 `positive/negative`，每次收到的反馈只是
+  `state_judgments new evidence needs a direction`，没有字段实际值和合法取值。
+  三次均未修正，耗时约 21 分 47 秒，没有进入回复阶段。
+
+语义上，`GPT50_006_t2` 的最终回复正确记录了追问，没有复现上一轮清空
+互动记录的问题；但 `GPT50_006_t6` 的被拒绝草稿仍把“不能承诺十一点前批准”
+加强为“该时间窗口已确定不可能”。中性案例的四次回复尝试分别因表达意图过长、
+JSON 语法、表达意图过长和回复义务一致性被拒绝。拒绝的草稿不是已完成环境轮次。
+这些结论来自助手审查，不是人工正确率或正式准入结果。
+
+下一步应先从统一 schema 明确输出字段与枚举，并让纠错反馈给出字段路径、
+实际值和允许值，不要静默把 `positive/negative` 转换为数值方向。
+另外，当前 vLLM 的
+[独立思考预算](https://docs.vllm.ai/en/stable/features/reasoning_outputs/#thinking-budget-control)
+已通过小型连通检查：设置 `thinking_token_budget=32` 后实际思考 31 token，
+随后输出正确 JSON；该参数尚未在 environment 案例上评估。
+补齐合同并冻结新的配置后，再完成全量对照。此次没有修改生产 prompt、validator
+或默认非思考配置；Qwen 服务继续运行，健康检查返回 HTTP 200。

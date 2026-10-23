@@ -1,0 +1,641 @@
+{
+  "version": "qwen_thinking_environment_prompt_diagnostic_v1",
+  "generated_at_utc": "2026-10-23T16:27:56.812781+00:00",
+  "verdict": "开启思考没有自动解决现有问题。默认强思考先遇到输出预算耗尽；中等思考在同一场景的三个输入上完成一例、失败两例。已确认 state prompt 未声明方向枚举，而 validator 与重试反馈要求不对称；另有事实确定性强化。先修复输出合同及字段级纠错，再做完整模型对照，不能据本次诊断判定 Qwen 整体能力。",
+  "model": "Qwen/Qwen3.8-Flash-Next-FP8",
+  "formal_admission": false,
+  "human_review": false,
+  "planned_full_comparison_completed": false,
+  "scope": {
+    "planned_cases": 15,
+    "planned_scenarios": 6,
+    "medium_profile_attempted_cases": 3,
+    "medium_profile_scenarios": 1,
+    "medium_profile_unattempted_cases": 12,
+    "failed_cases_replaced": false,
+    "prompts_modified": false,
+    "runtime_validation_modified": false,
+    "sampling_and_budgets_changed_between_independent_runs": true
+  },
+  "runs": [
+    {
+      "directory": "build/qwen_deployment/prompt_eval_thinking_paired",
+      "manifest_sha256": "196dcec01b3ec2385922aa147938b221ad179168bf33cf2ef5275dcb36ee65a1",
+      "results_sha256": "46756f721cfeef30d5fea148d75162721ddde757ef648725f0b1ab69c3876df3",
+      "status": "stopped_after_budget_diagnostic",
+      "stop_reason": "Three consecutive checkpoints, including a neutral control, used the entire 6000-token state budget for reasoning without final content. Stop this equal-budget diagnostic and create a separate larger-budget run; do not interpret these as semantic failures.",
+      "summary": {
+        "planned_cases": 15,
+        "attempted_to_outcome": 3,
+        "completed": 0,
+        "failed": 3,
+        "first_pass_count": 0,
+        "interrupted_cases": 1,
+        "unattempted_cases": 11,
+        "requests_in_completed_attempts": 6,
+        "total_physical_requests_including_interrupted": 8,
+        "additional_structured_retry_calls": 0,
+        "structured_rejections": 0,
+        "output_truncations": 6,
+        "unrecorded_response_requests": 0,
+        "wall_seconds": 1776.946
+      },
+      "configuration": {
+        "provider": {
+          "provider": "local_vllm",
+          "model": "Qwen/Qwen3.8-Flash-Next-FP8",
+          "endpoint": "http://127.0.0.1:8010/v1/chat/completions",
+          "use_proxy": false,
+          "timeout": 600,
+          "max_transport_attempts": 1,
+          "max_tokens": 8192,
+          "chat_template_kwargs": {
+            "enable_thinking": true
+          }
+        },
+        "state_sampling": {
+          "temperature": 0.0,
+          "top_p": 0.9,
+          "seed": 46100,
+          "max_tokens": 6000
+        },
+        "interaction_sampling": {
+          "temperature": 0.0,
+          "top_p": 0.9,
+          "seed": 46101,
+          "max_tokens": 3500
+        },
+        "response_sampling": {
+          "temperature": 0.35,
+          "top_p": 0.9,
+          "seed": 46300
+        }
+      },
+      "stage_accounting": {
+        "state": {
+          "physical_requests": 4,
+          "prompt_tokens": 47664,
+          "completion_tokens": 24000,
+          "reasoning_tokens": 24000,
+          "finish_reasons": {
+            "length": 4
+          }
+        },
+        "interaction": {
+          "physical_requests": 4,
+          "prompt_tokens": 44377,
+          "completion_tokens": 12150,
+          "reasoning_tokens": 11207,
+          "finish_reasons": {
+            "stop": 2,
+            "length": 2
+          }
+        },
+        "response": {
+          "physical_requests": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "reasoning_tokens": 0,
+          "finish_reasons": {}
+        }
+      },
+      "cases": [
+        {
+          "case_id": "GPT50_006_t2",
+          "kind": "matched_checkpoint",
+          "status": "failed",
+          "first_pass": false,
+          "seconds": 439.319,
+          "request_count": 2,
+          "error_type": "IncompleteModelOutputError",
+          "error": "provider response was truncated: length",
+          "response": null,
+          "artifacts": "build/qwen_deployment/prompt_eval_thinking_paired/GPT50_006_t2"
+        },
+        {
+          "case_id": "GPT50_006_t6",
+          "kind": "matched_checkpoint",
+          "status": "failed",
+          "first_pass": false,
+          "seconds": 445.122,
+          "request_count": 2,
+          "error_type": "IncompleteModelOutputError",
+          "error": "provider response was truncated: length",
+          "response": null,
+          "artifacts": "build/qwen_deployment/prompt_eval_thinking_paired/GPT50_006_t6"
+        },
+        {
+          "case_id": "GPT50_006_t6_neutral",
+          "kind": "neutral_control",
+          "status": "failed",
+          "first_pass": false,
+          "seconds": 445.985,
+          "request_count": 2,
+          "error_type": "IncompleteModelOutputError",
+          "error": "provider response was truncated: length",
+          "response": null,
+          "artifacts": "build/qwen_deployment/prompt_eval_thinking_paired/GPT50_006_t6_neutral"
+        }
+      ],
+      "structured_rejections": [],
+      "runtime_hashes_preserved": true
+    },
+    {
+      "directory": "build/qwen_deployment/prompt_eval_thinking_budget12k",
+      "manifest_sha256": "b81e3bbe0e772c11ebcf1bfac4c48effcaf051b26078433d9d0c9f6b7f83053d",
+      "results_sha256": "542a2959958737e2573567c5af3e8b0a16e89a004ca363e9bdc1fd4dfa157ba7",
+      "status": "stopped_after_budget_diagnostic",
+      "stop_reason": "Even the enlarged state budget truncated the first diagnostic case; stop at this case boundary before more identical-budget requests and evaluate explicit reasoning settings separately.",
+      "summary": {
+        "planned_cases": 15,
+        "attempted_to_outcome": 1,
+        "completed": 0,
+        "failed": 1,
+        "first_pass_count": 0,
+        "interrupted_cases": 0,
+        "unattempted_cases": 14,
+        "requests_in_completed_attempts": 2,
+        "total_physical_requests_including_interrupted": 2,
+        "additional_structured_retry_calls": 0,
+        "structured_rejections": 0,
+        "output_truncations": 1,
+        "unrecorded_response_requests": 0,
+        "wall_seconds": 876.666
+      },
+      "configuration": {
+        "provider": {
+          "provider": "local_vllm",
+          "model": "Qwen/Qwen3.8-Flash-Next-FP8",
+          "endpoint": "http://127.0.0.1:8010/v1/chat/completions",
+          "use_proxy": false,
+          "timeout": 1200,
+          "max_transport_attempts": 1,
+          "max_tokens": 8192,
+          "chat_template_kwargs": {
+            "enable_thinking": true
+          }
+        },
+        "state_sampling": {
+          "temperature": 0.0,
+          "top_p": 0.9,
+          "seed": 46100,
+          "max_tokens": 12000
+        },
+        "interaction_sampling": {
+          "temperature": 0.0,
+          "top_p": 0.9,
+          "seed": 46101,
+          "max_tokens": 8192
+        },
+        "response_sampling": {
+          "temperature": 0.35,
+          "top_p": 0.9,
+          "seed": 46300
+        }
+      },
+      "stage_accounting": {
+        "state": {
+          "physical_requests": 1,
+          "prompt_tokens": 9040,
+          "completion_tokens": 12000,
+          "reasoning_tokens": 12000,
+          "finish_reasons": {
+            "length": 1
+          }
+        },
+        "interaction": {
+          "physical_requests": 1,
+          "prompt_tokens": 8224,
+          "completion_tokens": 4179,
+          "reasoning_tokens": 3517,
+          "finish_reasons": {
+            "stop": 1
+          }
+        },
+        "response": {
+          "physical_requests": 0,
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "reasoning_tokens": 0,
+          "finish_reasons": {}
+        }
+      },
+      "cases": [
+        {
+          "case_id": "GPT50_006_t2",
+          "kind": "matched_checkpoint",
+          "status": "failed",
+          "first_pass": false,
+          "seconds": 875.94,
+          "request_count": 2,
+          "error_type": "IncompleteModelOutputError",
+          "error": "provider response was truncated: length",
+          "response": null,
+          "artifacts": "build/qwen_deployment/prompt_eval_thinking_budget12k/GPT50_006_t2"
+        }
+      ],
+      "structured_rejections": [],
+      "runtime_hashes_preserved": true
+    },
+    {
+      "directory": "build/qwen_deployment/prompt_eval_thinking_medium",
+      "manifest_sha256": "da1d1c5f7cf4378ef1092d9256c53e80c99aa3d932304374737d65c25a17b764",
+      "results_sha256": "5ef3878afc043f1a198bfc76a32bb784526ab1a3c74e854e47dce6e17aed281e",
+      "status": "stopped_after_interface_diagnostic",
+      "stop_reason": "Actual frozen state prompt omits allowed non-null direction enum values and correction feedback omits them too. Persistent positive/negative failure is an interface-contract defect, so stop after the in-flight neutral case and retain a three-case diagnostic rather than present this as a complete model-capability comparison.",
+      "summary": {
+        "planned_cases": 15,
+        "attempted_to_outcome": 3,
+        "completed": 1,
+        "failed": 2,
+        "first_pass_count": 0,
+        "interrupted_cases": 0,
+        "unattempted_cases": 12,
+        "requests_in_completed_attempts": 16,
+        "total_physical_requests_including_interrupted": 16,
+        "additional_structured_retry_calls": 8,
+        "structured_rejections": 10,
+        "output_truncations": 0,
+        "unrecorded_response_requests": 0,
+        "wall_seconds": 3070.443
+      },
+      "configuration": {
+        "provider": {
+          "provider": "local_vllm",
+          "model": "Qwen/Qwen3.8-Flash-Next-FP8",
+          "endpoint": "http://127.0.0.1:8010/v1/chat/completions",
+          "use_proxy": false,
+          "timeout": 1200,
+          "max_transport_attempts": 1,
+          "max_tokens": 8192,
+          "chat_template_kwargs": {
+            "enable_thinking": true,
+            "reasoning_effort": "medium"
+          }
+        },
+        "state_sampling": {
+          "temperature": 1.0,
+          "top_p": 0.95,
+          "seed": 46100,
+          "max_tokens": 12000,
+          "top_k": 20,
+          "min_p": 0.0,
+          "presence_penalty": 0.0,
+          "repetition_penalty": 1.0
+        },
+        "interaction_sampling": {
+          "temperature": 1.0,
+          "top_p": 0.95,
+          "seed": 46101,
+          "max_tokens": 8192,
+          "top_k": 20,
+          "min_p": 0.0,
+          "presence_penalty": 0.0,
+          "repetition_penalty": 1.0
+        },
+        "response_sampling": {
+          "temperature": 1.0,
+          "top_p": 0.95,
+          "seed": 46300,
+          "top_k": 20,
+          "min_p": 0.0,
+          "presence_penalty": 0.0,
+          "repetition_penalty": 1.0
+        }
+      },
+      "stage_accounting": {
+        "state": {
+          "physical_requests": 6,
+          "prompt_tokens": 83085,
+          "completion_tokens": 32580,
+          "reasoning_tokens": 17303,
+          "finish_reasons": {
+            "stop": 6
+          }
+        },
+        "interaction": {
+          "physical_requests": 4,
+          "prompt_tokens": 43834,
+          "completion_tokens": 7876,
+          "reasoning_tokens": 5627,
+          "finish_reasons": {
+            "stop": 4
+          }
+        },
+        "response": {
+          "physical_requests": 6,
+          "prompt_tokens": 42725,
+          "completion_tokens": 9507,
+          "reasoning_tokens": 7707,
+          "finish_reasons": {
+            "stop": 6
+          }
+        }
+      },
+      "cases": [
+        {
+          "case_id": "GPT50_006_t2",
+          "kind": "matched_checkpoint",
+          "status": "completed",
+          "first_pass": false,
+          "seconds": 897.3,
+          "request_count": 6,
+          "error_type": null,
+          "error": null,
+          "response": "两件事分开走，我同意。今晚要凑齐两户的书面确认，你那边能直接联系到他们，还是需要我这边把定稿送过去？",
+          "artifacts": "build/qwen_deployment/prompt_eval_thinking_medium/GPT50_006_t2"
+        },
+        {
+          "case_id": "GPT50_006_t6",
+          "kind": "matched_checkpoint",
+          "status": "failed",
+          "first_pass": false,
+          "seconds": 1307.142,
+          "request_count": 4,
+          "error_type": "StructuredOutputError",
+          "error": "state appraiser failed JSON/schema validation after 3 attempts",
+          "response": null,
+          "artifacts": "build/qwen_deployment/prompt_eval_thinking_medium/GPT50_006_t6"
+        },
+        {
+          "case_id": "GPT50_006_t6_neutral",
+          "kind": "neutral_control",
+          "status": "failed",
+          "first_pass": false,
+          "seconds": 865.904,
+          "request_count": 6,
+          "error_type": "StructuredOutputError",
+          "error": "structured environment response failed JSON/schema validation after 4 attempts",
+          "response": null,
+          "artifacts": "build/qwen_deployment/prompt_eval_thinking_medium/GPT50_006_t6_neutral"
+        }
+      ],
+      "structured_rejections": [
+        {
+          "case_id": "GPT50_006_t2",
+          "stage": "state",
+          "attempt": 1,
+          "reason": "each dynamics_judgments item must contain exactly ['direction', 'directness', 'evidence_feature', 'evidence_span', 'judgment', 'rationale', 'variable']"
+        },
+        {
+          "case_id": "GPT50_006_t2",
+          "stage": "interaction",
+          "attempt": 1,
+          "reason": "$.appraisal.ledger_events[1].status: allowed for claim=['reported']"
+        },
+        {
+          "case_id": "GPT50_006_t2",
+          "stage": "response",
+          "attempt": 1,
+          "reason": "expression_intent must be a concise non-empty string"
+        },
+        {
+          "case_id": "GPT50_006_t6",
+          "stage": "state",
+          "attempt": 1,
+          "reason": "state_judgments new evidence needs a direction"
+        },
+        {
+          "case_id": "GPT50_006_t6",
+          "stage": "state",
+          "attempt": 2,
+          "reason": "state_judgments new evidence needs a direction"
+        },
+        {
+          "case_id": "GPT50_006_t6",
+          "stage": "state",
+          "attempt": 3,
+          "reason": "state_judgments new evidence needs a direction"
+        },
+        {
+          "case_id": "GPT50_006_t6_neutral",
+          "stage": "response",
+          "attempt": 1,
+          "reason": "expression_intent must be a concise non-empty string"
+        },
+        {
+          "case_id": "GPT50_006_t6_neutral",
+          "stage": "response",
+          "attempt": 2,
+          "reason": "Expecting ',' delimiter: line 1 column 65 (char 64)"
+        },
+        {
+          "case_id": "GPT50_006_t6_neutral",
+          "stage": "response",
+          "attempt": 3,
+          "reason": "expression_intent must be a concise non-empty string"
+        },
+        {
+          "case_id": "GPT50_006_t6_neutral",
+          "stage": "response",
+          "attempt": 4,
+          "reason": "reply_obligation and asserted request events disagree"
+        }
+      ],
+      "runtime_hashes_preserved": true
+    }
+  ],
+  "same_three_case_comparison": [
+    {
+      "case_id": "GPT50_006_t2",
+      "non_thinking": {
+        "status": "completed",
+        "first_pass": false,
+        "request_count": 4,
+        "seconds": 197.696
+      },
+      "thinking_medium": {
+        "status": "completed",
+        "first_pass": false,
+        "request_count": 6,
+        "seconds": 897.3
+      }
+    },
+    {
+      "case_id": "GPT50_006_t6",
+      "non_thinking": {
+        "status": "completed",
+        "first_pass": true,
+        "request_count": 3,
+        "seconds": 186.205
+      },
+      "thinking_medium": {
+        "status": "failed",
+        "first_pass": false,
+        "request_count": 4,
+        "seconds": 1307.142
+      }
+    },
+    {
+      "case_id": "GPT50_006_t6_neutral",
+      "non_thinking": {
+        "status": "completed",
+        "first_pass": false,
+        "request_count": 7,
+        "seconds": 400.889
+      },
+      "thinking_medium": {
+        "status": "failed",
+        "first_pass": false,
+        "request_count": 6,
+        "seconds": 865.904
+      }
+    }
+  ],
+  "baseline_full_report": "reports/analysis/2026-10-23_qwen_environment_prompt_diagnostic.json",
+  "assistant_review": {
+    "reviewer": "assistant",
+    "human_review": false,
+    "formal_admission": false,
+    "scope": "Incremental semantic review; not a human correctness score.",
+    "cases": [
+      {
+        "case_id": "GPT50_006_t2",
+        "review_status": "reviewed",
+        "response_language": "Chinese",
+        "findings": [
+          {
+            "category": "prior_ledger_omission",
+            "assessment": "not_reproduced_in_final_response",
+            "evidence": "Final response asks how to contact the households; matching request event and evaluated_agent reply_obligation are present."
+          },
+          {
+            "category": "consent_and_authorization",
+            "assessment": "boundary_preserved",
+            "evidence": "Response accepts separate processes, seeks household confirmation, and does not claim authorization has been obtained."
+          },
+          {
+            "category": "state_update_breadth",
+            "assessment": "requires_review",
+            "evidence": "Ten nonzero state dimensions versus five in non-thinking baseline, and four dynamics changes versus two. Broad interpretation alone is not proof of error; source-model agreement is not correctness."
+          }
+        ],
+        "structured_rejections": [
+          {
+            "stage": "state",
+            "reason": "dynamics_judgments item missing exact required fields"
+          },
+          {
+            "stage": "interaction",
+            "reason": "claim status must be reported"
+          },
+          {
+            "stage": "response",
+            "reason": "expression_intent exceeds concise constraint"
+          }
+        ],
+        "latency_seconds": 897.3,
+        "requests": 6
+      },
+      {
+        "case_id": "GPT50_006_t6",
+        "review_status": "reviewed_failed_case",
+        "response_language": null,
+        "findings": [
+          {
+            "category": "direction_enum",
+            "assessment": "persistent_failure",
+            "evidence": "All three state attempts used positive/negative, failing increase/decrease validation. No response stage ran."
+          },
+          {
+            "category": "uncertainty_strengthening",
+            "assessment": "persists_in_rejected_appraisal",
+            "evidence": "The action says cannot promise approval before eleven. Draft judgments describe confirmed impossibility and a firmly closed path. This is a stronger certainty than the action warrants. Not a completed state update or public response."
+          }
+        ],
+        "latency_seconds": 1307.142,
+        "requests": 4
+      },
+      {
+        "case_id": "GPT50_006_t6_neutral",
+        "review_status": "reviewed_failed_case",
+        "response_language": null,
+        "findings": [
+          {
+            "category": "response_structural_validation",
+            "assessment": "persistent_failure",
+            "evidence": "State and interaction appraisals finished; response exhausted all four attempts: expression_intent too long, malformed JSON, expression_intent too long, then reply-obligation/request-event mismatch."
+          },
+          {
+            "category": "claim_span_alignment",
+            "assessment": "error_in_rejected_draft",
+            "evidence": "Last rejected draft includes consequential claim span 今晚的匹配资金我认了, which does not occur in response_text."
+          },
+          {
+            "category": "unprompted_concession",
+            "assessment": "requires_semantic_review",
+            "evidence": "Rejected drafts withdraw publication preparation and treat the before-eleven path as unavailable after a neutral listening input. These were not accepted public responses; surrounding history must be considered before assigning a correctness label."
+          }
+        ],
+        "latency_seconds": 865.904,
+        "requests": 6
+      }
+    ],
+    "reviewed_case_count": 3,
+    "completed_response_count": 1,
+    "complete_for_attempted_cases": true
+  },
+  "confirmed_interface_defect": {
+    "owner_prompt": "prompts/environment_state_appraisal_v6_observed_evidence.md:30",
+    "owner_validator": "environment/independent_appraisal.py:89",
+    "owner_retry_feedback": "providers/structured.py:197",
+    "current_source_matches_frozen": true,
+    "required_non_null_values": [
+      "increase",
+      "decrease"
+    ],
+    "actual_rejected_values": [
+      "positive",
+      "negative"
+    ],
+    "state_prompt_declares_allowed_values": false,
+    "state_prompt_example_direction": null,
+    "retry_feedback_declares_allowed_values": false,
+    "actual_retry_feedback": "Runtime schema validation rejected that JSON: state_judgments new evidence needs a direction. Return a corrected JSON object only, using exactly the required keys and no extra fields. This is revision attempt 2; do not repeat the rejected content unchanged. ",
+    "rejected_attempts_in_GPT50_006_t6": 3,
+    "inference": "The prompt/validator contract is underspecified. Thinking alone does not supply an unambiguous missing enum; this failure is not a pure reasoning-capability measurement."
+  },
+  "independent_thinking_budget_smoke": {
+    "artifact": "build/qwen_deployment/thinking_budget_smoke.json",
+    "requested_thinking_tokens": 32,
+    "actual_reasoning_tokens": 31,
+    "finish_reason": "stop",
+    "final_json": {
+      "result": 391
+    },
+    "verified_on_environment_cases": false,
+    "documentation": "https://docs.vllm.ai/en/stable/features/reasoning_outputs/#thinking-budget-control"
+  },
+  "accounting": {
+    "environment_physical_requests": 26,
+    "smoke_requests": 2,
+    "total_new_physical_requests": 28,
+    "smoke_included_in_case_scores": false
+  },
+  "sources": {
+    "recommended_sampling": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next-FP8#best-practices",
+    "local_model_template": "build/qwen_deployment/models/Qwen3.8-Flash-Next-FP8/chat_template.jinja"
+  },
+  "limitations": [
+    "This is an early-stopped development diagnostic, not the planned full 15-case comparison.",
+    "The medium profile has different sampling and output budgets from the non-thinking baseline; its differences cannot be attributed solely to enabling thinking.",
+    "Only one medium-profile response was accepted. Rejected appraisal/response drafts are not completed environment turns.",
+    "Assistant semantic review is not human ground truth, and source-model direction agreement is not accuracy.",
+    "Normal provider audits in the two initial profiles retain reasoning-token counts but not full reasoning text. The medium profile adds only full-response audit retention; request behavior and validation code are unchanged.",
+    "The medium profile overlapped a 3.43-second arithmetic smoke request during its second case; timings are diagnostic observations, not an isolated hardware performance benchmark.",
+    "No prompt or validator repair was applied during these tests. No upper bound on Qwen thinking capability is established."
+  ],
+  "next_steps": [
+    "Define the full state output contract, including direction and directness enums, from a shared schema used by prompts and validation.",
+    "Return the field path, actual invalid value and allowed values in correction feedback; do not silently map positive/negative into numeric directions.",
+    "Evaluate a separately frozen profile with an explicit thinking_token_budget to reserve capacity for final JSON; the budget feature is verified only by a small smoke request so far.",
+    "After interface repair, rerun all 15 cases and review uncertainty, role ownership and reply-ledger coverage alongside completion and latency."
+  ],
+  "service_after_test": {
+    "health_http_status": 200,
+    "model_id_verified": true,
+    "endpoint": "http://127.0.0.1:8010/v1",
+    "server_restarted_during_tests": false,
+    "default_deployment_config_changed": false
+  }
+}
