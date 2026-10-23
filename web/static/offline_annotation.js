@@ -256,18 +256,6 @@ async function setup() {
     } catch (error) { say(error.message); }
   };
   try {
-    const catalog = await api("catalog");
-    const ready = catalog.scenes.filter(row => row.video_available), missing = catalog.scenes.filter(row => !row.video_available);
-    $("videoCoverage").textContent = `${ready.length}/${catalog.scenes.length} 个场景有配对视频，共 ${ready.reduce((sum,row) => sum + row.questions, 0)} 题。` + (missing.length ? `暂不分配的视频缺失场景：${missing.map(row => row.scene).join("、")}。` : "");
-    $("startForm").querySelector("button").disabled = !ready.length;
-    $("startForm").onsubmit = async event => {
-      event.preventDefault(); const button = event.submitter; button.disabled = true;
-      try {
-        const value = await api("start", {reviewer: $("participant").value,
-          prior_exposure: $("priorExposure").value === "yes", modality: "text+video"});
-        await enter(value);
-      } catch (error) { say(error.message); button.disabled = false; }
-    };
     const previous = storedSessions(); $("resumeCard").hidden = !previous.length;
     previous.forEach(row => {
       const button = node("button", "resume-button", `${row.reviewer} · ${row.count} 题 · ${row.created}`);

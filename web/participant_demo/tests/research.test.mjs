@@ -53,10 +53,21 @@ test('all 50 scenes have 3/2/3 English questions and available audio/video pairs
   for(const video of item.media){
    assert.equal(video.audio_required,true);assert.equal(video.speech_language,'en');assert.ok(video.spoken_text);
    assert.match(video.url,new RegExp(video.sha256+'\\.mp4$'));
+   if(video.spoken_scope==='checkpoint_sentence'){
+    assert.ok(video.full_public_response && video.source_quote);
+    assert.ok(video.full_public_response.includes(video.source_quote));
+    assert.ok(video.duration_seconds>=4 && video.duration_seconds<=5);
+    assert.equal(item.coverage.full_reply_text_preserved,true);
+    assert.equal(item.coverage.complete_spoken_response,false);
+    const input=item.public_text.input;
+    const turns=[...(input.history||[]),...(input.history_a||[]),...(input.history_b||[]),...(input.shared_ending?[input.shared_ending]:[])];
+    assert.ok(turns.some(t=>(t.environment_character||t.environment_response||t.current_response)===video.full_public_response));
+    assert.equal(video.human_review,'pending');
+   }
   }
   if(item.task==='T2'&&item.public_video){
    const ending=item.media.filter(v=>v.evidence_ids.includes('ending'));
-   assert.equal(ending.length,1);assert.equal(ending[0].spoken_text,item.public_text.input.shared_ending.current_response);
+   assert.equal(ending.length,1);assert.equal(ending[0].spoken_scope==='checkpoint_sentence'?ending[0].full_public_response:ending[0].spoken_text,item.public_text.input.shared_ending.current_response);
   }
  }
  for(const mode of ['offline_text','offline_video']){

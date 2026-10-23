@@ -1,0 +1,36 @@
+{
+  "project_id": "appgprj_6ad82de6ff188191b48c72ec8787d069",
+  "version": 19,
+  "version_id": "appgprj_6ad82de6ff188191b48c72ec8787d069~appgver_96955f7446f0819181b908672211e6b6",
+  "source_commit": "6f6c4283d33d149d77e1070e7c6a4a7afb0dbcf4",
+  "deployment": {
+    "id": "appgdep_6adae9c4ed3c8191b61a6ef1f549e6de",
+    "project_id": "appgprj_6ad82de6ff188191b48c72ec8787d069",
+    "title": "SocialFlux · 标注体验",
+    "version_id": "appgprj_6ad82de6ff188191b48c72ec8787d069~appgver_96955f7446f0819181b908672211e6b6",
+    "type": "publish",
+    "status": "succeeded",
+    "url": "https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site",
+    "has_mcp": false,
+    "screenshot_asset_pointer": null,
+    "provider_deployment_id": "site---6ad82de6ff188191b48c72ec8787d069",
+    "failure_message": null,
+    "env_set_revision": 1,
+    "updated_at": "2026-10-23T05:00:09.930839+00:00"
+  },
+  "archive": {
+    "archive_format": "tar",
+    "sediment_file_id": "file_00000000607081fb941586cdce23a057",
+    "content_hash": "sha256:e6bb0002d6a37cd337865e468bc8ef44e28ccf2ceebc03d71bdf4b5cab9ee8f0",
+    "size_bytes": 267939840,
+    "file_count": 495
+  },
+  "dataset_sha256": "4859edec0ed4a00e5ee98b908b44efc930f7a1b56e774fa50c6ec34aa75ef854",
+  "release": "annotation400-checkpoint-20261023-v2",
+  "local_video_check": {
+    "clips": 150,
+    "min_seconds": 4.6,
+    "max_seconds": 4.6
+  },
+  "browser_qa": "/tmp/socialflux-short-qa/result.json"
+}
