@@ -84,6 +84,49 @@ class AnnotationSessionTests(unittest.TestCase):
             self.call("final", token, item["instance_id"], answer=answer, rationale="人工核验。",
                       human_attestation=True)
 
+    def test_scene_sequence_blocks_skip_and_unlocks_only_after_scene_review(self):
+        later = deepcopy(self.items[0])
+        later.update(instance_id="scene-two-question", story_id="GPT50_002")
+        self.items.append(later)
+        value = sessions.dispatch("start", {"reviewer": "sequential", "prior_exposure": False, "modality": "text"})
+        token = value["token"]
+        self.assertEqual(value["active_scene"], "GPT50_001")
+        for action in ("item", "blind", "evidence", "machine", "final"):
+            with self.assertRaisesRegex(ValueError, "当前场景"):
+                self.call(action, token, later["instance_id"], answer="A")
+        for item in self.items[:2]:
+            self.call("blind", token, item["instance_id"], answer="A")
+        self.assertEqual(self.call("status", token)["stage"], "private_review")
+        for item in self.items[:2]:
+            self.call("evidence", token, item["instance_id"])
+            self.call("private", token, item["instance_id"], answer="B", rationale="private evidence")
+        self.call("machine", token)
+        for item in self.items[:2]:
+            self.call("final", token, item["instance_id"], answer="B", rationale="reviewed", human_attestation=True)
+        resumed = self.call("status", token)
+        self.assertEqual(resumed["active_scene"], "GPT50_002")
+        self.assertEqual(resumed["stage"], "blind")
+        with self.assertRaises(ValueError):
+            self.call("evidence", token, later["instance_id"])
+        # Evidence from scene one must not block blind answers to scene two.
+        self.call("blind", token, later["instance_id"], answer="C")
+        self.call("evidence", token, later["instance_id"])
+        self.call("private", token, later["instance_id"], answer="C", rationale="independent")
+        self.call("machine", token, later["instance_id"])
+        final = self.call("final", token, later["instance_id"], answer="C", rationale="reviewed", human_attestation=True)
+        self.assertEqual(final["stage"], "complete")
+        exported = self.call("export", token)
+        self.assertEqual(exported["blind_responses"][self.items[0]["instance_id"]]["answer"], "A")
+        self.assertEqual(exported["machine_assisted_final_judgments"][self.items[0]["instance_id"]]["answer"], "B")
+        self.assertEqual(len(exported["scene_progress"]), 2)
+
+    def test_cannot_choose_a_later_scene_when_starting(self):
+        later = deepcopy(self.items[0])
+        later.update(instance_id="scene-two-question", story_id="GPT50_002")
+        self.items.append(later)
+        with self.assertRaisesRegex(ValueError, "固定顺序"):
+            sessions.dispatch("start", {"reviewer": "skip", "prior_exposure": False, "modality": "text", "scenes": ["GPT50_002"]})
+
     def test_no_reference_before_whole_assignment_blind_completion(self):
         token = self.start()
         for action in ("evidence", "private", "machine", "final"):

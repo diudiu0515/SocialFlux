@@ -2,8 +2,8 @@
 const $ = id => document.getElementById(id);
 const selectedBank = new URLSearchParams(location.search).get("bank") || "scenarios-v2";
 const phases = {
-  blind: ["1 · 独立盲答", "本次全部题目提交后，才开放私有证据。答案一经提交即锁定。"],
-  private_review: ["2 · 私有证据与独立 GT 初判", "查看相关完整对话、实际私有状态和分支，独立判断答案。全部初判提交后才开放机器建议。"],
+  blind: ["1 · 独立盲答", "本场景全部题目提交后，才开放私有证据。答案一经提交即锁定。"],
+  private_review: ["2 · 私有证据与独立 GT 初判", "查看相关完整对话、实际私有状态和分支，独立判断答案。本场景全部初判提交后开放机器建议；完成审核后才能进入下一场景。"],
   machine_review: ["3 · 机器建议与最终人工审核", "对照自己的独立初判检查机器建议，提交最终审核；盲答和初判均保持原样。"],
   complete: ["本次任务已完成", "记录已保存到服务器。标准答案须经过不同标注人的独立复核；争议题保留待裁决。"],
 };
@@ -51,18 +51,29 @@ function remember() {
   localStorage.setItem("socialflux-human-sessions", JSON.stringify(rows));
 }
 function renderNavigation() {
-  const [title, description] = phases[session.stage];
+  const [title, sceneDescription] = phases[session.stage];
+  const description = !session.sequential && session.stage === "blind"
+    ? "本次全部题目提交后，才开放私有证据。答案一经提交即锁定。"
+    : !session.sequential && session.stage === "private_review"
+      ? "查看相关完整对话、实际私有状态和分支，独立判断答案。全部初判提交后才开放机器建议。"
+      : sceneDescription;
   $("phaseTitle").textContent = title; $("phaseDescription").textContent = description;
   $("baselineNotice").textContent = session.baseline_eligible
     ? "本次记录符合首次盲答的流程条件；评分仍需独立 GT。"
     : "本次含重复作答或先前信息接触记录，仅参与审核，不计入首次盲答基线。";
-  $("assignmentCount").textContent = `${session.counts.total} 题`;
+  $("assignmentCount").textContent = session.active_scene ? `${session.active_scene} · ${session.scenes.find(x => x.scene === session.active_scene).total} 题` : `${session.counts.total} 题`;
   $("sessionProgress").textContent = `盲答 ${session.counts.blind} · 独立初判 ${session.counts.private} · 最终审核 ${session.counts.final}`;
   $("sessionCondition").textContent = session.modality === "text+video"
     ? "本次输入：文字＋视频。请结合题面和对应视频作答；同一会话保持相同输入条件。"
     : "这是此前领取的文字任务，原答案和输入条件已保留。新的视频任务可从“回到任务选择”领取。";
   $("sessionNav").replaceChildren();
+  if (session.sequential) {
+    const summary = node("div", "scene-sequence");
+    (session.scenes || []).forEach((row, index) => summary.append(node("p", row.scene === session.active_scene ? "active" : "muted", `${index + 1}. ${row.scene} · ${row.stage === "complete" ? "已完成并锁定" : row.scene === session.active_scene ? "当前场景" : "未解锁"}`)));
+    $("sessionNav").append(summary);
+  }
   session.items.forEach((row, index) => {
+    if (session.sequential && session.active_scene && row.scene !== session.active_scene) return;
     const done = session.stage === "blind" ? row.blind_submitted : session.stage === "private_review" ? row.private_submitted : row.final_submitted;
     const button = node("button", "item-button" + (row.instance_id === current ? " active" : ""));
     button.dataset.id = row.instance_id;
@@ -72,7 +83,8 @@ function renderNavigation() {
 }
 function nextPending() {
   const key = session.stage === "blind" ? "blind_submitted" : session.stage === "private_review" ? "private_submitted" : "final_submitted";
-  return session.items.find(x => !x[key])?.instance_id || session.items[0].instance_id;
+  const items = session.items.filter(x => !session.sequential || !session.active_scene || x.scene === session.active_scene);
+  return items.find(x => !x[key])?.instance_id || items[0].instance_id;
 }
 async function enter(value) {
   session = value; token = session.token; remember();
@@ -224,7 +236,7 @@ async function openItem(identity) {
           const result = await api("machine", {instance_id: identity});
           if (current !== identity || !machine.isConnected) return;
           const author = result.authoring;
-          machine.append(node("h3", "", `机器候选：${author.answer}`), display(author.oracle_reference || {"公开材料参考依据": author.rationale}),
+          machine.append(node("h3", "", `机器候选：${author.answer} · ${question.options[author.answer] || ""}`), display(author.oracle_reference || {"公开材料参考依据": author.rationale}),
             node("p", "muted", "机器一致不等于人工 GT；发现证据冲突请标记修改或退回。"));
         } catch (error) { say(error.message); reveal.disabled = false; }
       };
@@ -245,16 +257,13 @@ async function setup() {
   };
   try {
     const catalog = await api("catalog");
-    $("assignmentScene").replaceChildren(node("option", "", "请选择场景")); $("assignmentScene").firstChild.value = "";
     const ready = catalog.scenes.filter(row => row.video_available), missing = catalog.scenes.filter(row => !row.video_available);
-    catalog.scenes.forEach(row => { const option = node("option", "", `${row.scene} · ${row.questions} 题 · ${row.video_available ? "有视频" : "缺少配对视频"}`); option.value = row.scene; option.disabled = !row.video_available; $("assignmentScene").append(option); });
-    const all = node("option", "", `全部 ${ready.length} 个有视频场景（全部盲答完成后统一解锁）`); all.value = "all"; all.disabled = !ready.length; $("assignmentScene").append(all);
     $("videoCoverage").textContent = `${ready.length}/${catalog.scenes.length} 个场景有配对视频，共 ${ready.reduce((sum,row) => sum + row.questions, 0)} 题。` + (missing.length ? `暂不分配的视频缺失场景：${missing.map(row => row.scene).join("、")}。` : "");
+    $("startForm").querySelector("button").disabled = !ready.length;
     $("startForm").onsubmit = async event => {
       event.preventDefault(); const button = event.submitter; button.disabled = true;
       try {
-        const scene = $("assignmentScene").value;
-        const value = await api("start", {reviewer: $("participant").value, scenes: scene === "all" ? ready.map(x => x.scene) : [scene],
+        const value = await api("start", {reviewer: $("participant").value,
           prior_exposure: $("priorExposure").value === "yes", modality: "text+video"});
         await enter(value);
       } catch (error) { say(error.message); button.disabled = false; }

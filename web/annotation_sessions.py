@@ -65,6 +65,18 @@ def event(session, action, **payload):
     session["events"].append({"at": now(), "action": action, **payload})
 
 
+def scene_progress(session):
+    rows = []
+    for scene in dict.fromkeys(x["story_id"] for x in session["items"]):
+        ids = [x["instance_id"] for x in session["items"] if x["story_id"] == scene]
+        blind, independent, final = (sum(identity in session[key] for identity in ids)
+                                     for key in ("blind", "private_judgments", "final_judgments"))
+        stage = ("complete" if final == len(ids) else "machine_review" if independent == len(ids)
+                 else "private_review" if blind == len(ids) else "blind")
+        rows.append({"scene": scene, "total": len(ids), "blind": blind, "private": independent, "final": final, "stage": stage})
+    return rows
+
+
 def status(session):
     total = len(session["items"])
     blind = len(session["blind"])
@@ -72,8 +84,15 @@ def status(session):
     final = len(session["final_judgments"])
     stage = ("complete" if final == total else "machine_review" if independent == total
              else "private_review" if blind == total else "blind")
+    progress = scene_progress(session)
+    sequential = session.get("workflow") == "scene-sequence-v1"
+    active = next((row for row in progress if row["stage"] != "complete"), None)
+    if sequential:
+        stage = active["stage"] if active else "complete"
     return {"token": session["token"], "reviewer": session["reviewer"], "bank": session["bank"],
             "bank_sha256": session["bank_sha256"], "stage": stage, "modality": session["modality"],
+            "sequential": sequential, "scenes": progress,
+            "active_scene": active["scene"] if sequential and active else None,
             "items": [{"instance_id": x["instance_id"], "scene": x["story_id"],
                        "blind_submitted": x["instance_id"] in session["blind"],
                        "evidence_opened": x["instance_id"] in session["evidence_opened"],
@@ -96,13 +115,17 @@ def start(payload):
         raise ValueError("展示条件无效")
     bank = payload.get("bank", "scenarios-v2")
     items, bank_sha = current_items(bank)
-    scenes = payload.get("scenes", [])
-    if not isinstance(scenes, list) or not scenes or len(scenes) != len(set(scenes)):
-        raise ValueError("请选择完整场景")
-    if not set(scenes) <= {x["story_id"] for x in items}:
-        raise ValueError("场景不存在")
-    selected = [x for x in items if x["story_id"] in scenes]
-    video_inputs = bound_video_materials(selected, bank) if modality == 'text+video' else {}
+    all_video = bound_video_materials(items, bank) if modality == 'text+video' else {}
+    scenes = sorted({x["story_id"] for x in items})
+    if all_video:
+        scenes = [scene for scene in scenes if all(all_video[x['instance_id']]['ready'] for x in items if x['story_id'] == scene)]
+    if not scenes:
+        raise ValueError("当前场景缺少与当前题目版本匹配的视频，暂无可分配任务")
+    requested = payload.get("scenes")
+    if requested is not None and requested != scenes:
+        raise ValueError("场景由系统按固定顺序分配，不能选择或跳过场景；缺少与当前题目版本匹配的视频的场景暂不分配")
+    selected = [x for scene in scenes for x in items if x["story_id"] == scene]
+    video_inputs = {x['instance_id']: all_video[x['instance_id']] for x in selected} if all_video else {}
     missing = [x['instance_id'] for x in selected if video_inputs and not video_inputs[x['instance_id']]['ready']]
     if missing:
         raise ValueError("所选场景缺少与当前题目版本匹配的视频，不能按视频条件分配：" + '、'.join(missing))
@@ -119,7 +142,7 @@ def start(payload):
             exclusions.append("prior_same_scene_private_exposure:" + prior["token"][:12])
     token = secrets.token_hex(32)
     session = {"format": "socialflux_human_annotation_session_v1", "token": token, "created_at": now(),
-               "reviewer": reviewer, "bank": bank, "bank_sha256": bank_sha, "modality": modality,
+               "reviewer": reviewer, "bank": bank, "bank_sha256": bank_sha, "modality": modality, "workflow": "scene-sequence-v1",
                "video_inputs": video_inputs,
                "items": selected, "blind": {}, "private_judgments": {}, "final_judgments": {},
                "evidence_opened": {}, "machine_opened": {}, "events": [],
@@ -207,6 +230,7 @@ def export_session(session):
             "media_hashes": media_hashes(session),
             "public_input_hashes": {key: item_digest(value['public']) for key,value in session.get('video_inputs',{}).items()},
             "events": deepcopy(session["events"]),
+            "workflow": session.get("workflow", "assignment-stages-v1"), "scene_progress": scene_progress(session),
             "formal_ground_truth": False,
             "scoring_rule": "Exclude this participant's GT and require two other independent agreeing reviewers; unresolved accuracy is null."}
 
@@ -224,6 +248,13 @@ def dispatch(action, payload):
             return export_session(session)
         item = selected_item(session, payload.get("instance_id"))
         identity = item["instance_id"]
+        sequential = session.get("workflow") == "scene-sequence-v1"
+        if sequential:
+            active = status(session)["active_scene"]
+            if active and item["story_id"] != active:
+                raise ValueError("请先完成当前场景，不能跳转到其他场景")
+        scoped = [x for x in session["items"] if not sequential or x["story_id"] == item["story_id"]]
+        scope_ids = {x["instance_id"] for x in scoped}
         if action == "item":
             # Exact evaluated input: no capability, difficulty, author or source ratings.
             material = video_material(session, identity)
@@ -236,7 +267,7 @@ def dispatch(action, payload):
         if action == "blind":
             if identity in session["blind"]:
                 raise ValueError("盲答已提交并锁定，不能覆盖")
-            if session["evidence_opened"]:
+            if scope_ids.intersection(session["evidence_opened"]):
                 raise ValueError("已查看私有证据，不能再提交盲答")
             video_material(session, identity)
             row = judgment(payload, item, rationale_required=False)
@@ -245,8 +276,8 @@ def dispatch(action, payload):
             session["blind"][identity] = row
             event(session, "blind_submitted", instance_id=identity)
         elif action == "evidence":
-            if len(session["blind"]) != len(session["items"]):
-                raise ValueError("须先完成本次分配的全部盲答，防止同场景泄漏")
+            if not scope_ids <= session["blind"].keys():
+                raise ValueError("须先完成本场景的全部盲答，防止同场景泄漏" if sequential else "须先完成本次分配的全部盲答，防止同场景泄漏")
             session["evidence_opened"].setdefault(identity, now())
             event(session, "private_evidence_opened", instance_id=identity)
             result = private_evidence(item, session["bank_sha256"])
@@ -257,19 +288,19 @@ def dispatch(action, payload):
                 raise ValueError("请先查看私有证据")
             if identity in session["private_judgments"]:
                 raise ValueError("独立 GT 初判已锁定；修改请记入最终审核")
-            if session["machine_opened"]:
+            if scope_ids.intersection(session["machine_opened"]):
                 raise ValueError("已查看机器建议，不能再补写独立 GT 初判")
             session["private_judgments"][identity] = judgment(payload, item, rationale_required=True)
             event(session, "private_judgment_submitted", instance_id=identity)
         elif action == "machine":
-            if len(session["private_judgments"]) != len(session["items"]):
+            if not scope_ids <= session["private_judgments"].keys():
                 raise ValueError("须先完成全部私有证据独立初判，再开放机器建议")
             session["machine_opened"].setdefault(identity, now())
             event(session, "machine_suggestion_opened", instance_id=identity)
             save(session_path(session["token"]), session)
             return {"authoring": deepcopy(item["authoring"]), "ground_truth": deepcopy(item.get("ground_truth"))}
         elif action == "final":
-            if len(session["private_judgments"]) != len(session["items"]):
+            if not scope_ids <= session["private_judgments"].keys():
                 raise ValueError("请先完成全部独立 GT 初判")
             if identity in session["final_judgments"]:
                 raise ValueError("最终审核已提交；如需更正，请保留原记录并另行复核")

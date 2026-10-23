@@ -5,7 +5,7 @@ import { demoSessions } from "../db/schema";
 import legacy from "../data/questions.json";
 import multimedia from "../data/multimodal.json";
 import { type Answers, type MediaReviews, type Question, type ReviewAsset, InputError, validateAnswers, validateMediaReviews, validateRevision, validateStart } from "./protocol";
-import {research, researchFor, researchVersions, researchCatalog, researchReleaseInfo, assignmentFor, researchQuestions, researchTrajectories, researchMaterial, researchEvidence, researchHashes, researchExport, type Assignment} from './research';
+import {research, researchFor, researchVersions, researchCatalog, researchReleaseInfo, assignmentFor, sceneAssignment, researchQuestions, researchTrajectories, researchMaterial, researchEvidence, researchHashes, researchExport, type Assignment} from './research';
 import {transition, type Workflow} from './research-protocol';
 export {researchCatalog};
 
@@ -32,7 +32,7 @@ export function payload(row: Session | undefined) {
   if (row && researchVersions.includes(row.datasetSha256)) {
     const frozen = researchFor(row.datasetSha256);
     const assignment = JSON.parse(row.assignmentJson) as Assignment, workflow = JSON.parse(row.workflowJson) as Workflow;
-    return {session: present(row), research: researchMaterial(assignment, workflow, frozen), questions: researchQuestions(assignment, frozen),
+    return {session: present(row), research: researchMaterial(assignment, workflow, frozen), questions: researchQuestions(sceneAssignment(assignment, workflow), frozen),
       ...(assignment.track !== 't4' ? {releaseInfo: researchReleaseInfo(frozen.dataset_sha256, frozen.items.length, assignment.item_ids.length)} : {}),
       dataset: {sha256: frozen.dataset_sha256, release: frozen.release, count: assignment.item_ids.length, kind: 'research'}};
   }
@@ -54,7 +54,8 @@ export async function start(userId: string, data: Record<string, unknown>) {
   })) exclusions.push('prior_or_repeated_scene_exposure');
   await getDb().insert(demoSessions).values({id: crypto.randomUUID(), userId,
     datasetSha256: research.dataset_sha256, release: research.release, ...clean, createdAt: time, updatedAt: time,
-    assignmentJson: JSON.stringify(assignment), workflowJson: JSON.stringify({phase: 'blind', baselineEligible: !exclusions.length, exclusions, gate2: {packet_sha256: gate2Hash, answers: {}}}),
+    assignmentJson: JSON.stringify(assignment), workflowJson: JSON.stringify({phase: 'blind', baselineEligible: !exclusions.length, exclusions, gate2: {packet_sha256: gate2Hash, answers: {}},
+      ...(assignment.track !== 't4' ? {sceneSequence: {version: 1, index: 0, completed: {}, scenes: assignment.scene_ids.map(id => ({id, itemIds: research.items.filter(x => x.scene_id === id && assignment.item_ids.includes(x.id)).map(x => x.id)}))}} : {})}),
     itemHashesJson: JSON.stringify(researchHashes(assignment)),
     mediaHashesJson: JSON.stringify(Object.fromEntries(research.items.filter(x => assignment.item_ids.includes(x.id)).map(x => [x.id, assignment.track === 'offline_video' ? x.media : []]))),
   }).onConflictDoNothing().run();
@@ -71,7 +72,7 @@ export async function save(userId: string, data: Record<string, unknown>, comple
   if (researchVersions.includes(previous.datasetSha256)) {
     const frozen = researchFor(previous.datasetSha256);
     const assignment = JSON.parse(previous.assignmentJson) as Assignment, workflow = JSON.parse(previous.workflowJson) as Workflow;
-    if (action === 'lock' && workflow.phase === 'gt' && JSON.stringify(data.answers) === JSON.stringify(workflow.blind)) return payload(previous);
+    if (!workflow.sceneSequence && action === 'lock' && workflow.phase === 'gt' && JSON.stringify(data.answers) === JSON.stringify(workflow.blind)) return payload(previous);
     if (action === 'submit' && workflow.phase === 't4_review' && data.revision === previous.revision - 1
         && JSON.stringify(data.ratings) === JSON.stringify(workflow.ratings)
         && (!data.gate2Answers || Object.keys(data.gate2Answers as object).length === 0)) return payload(previous);

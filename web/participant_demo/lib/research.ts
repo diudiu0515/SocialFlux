@@ -8,7 +8,7 @@ import mediaHistory from '../data/research-media-history.json';
 import {restoreMediaSnapshot, type MediaSnapshot} from './research-snapshots';
 import calibration from '../data/claude-calibration-server.json';
 import {InputError, type Question} from './protocol';
-import {dimensions, type Workflow} from './research-protocol';
+import {activeScene, dimensions, type Workflow} from './research-protocol';
 
 export type Assignment = {id: string; track: string; label: string; scene_ids: string[]; item_ids: string[]};
 type Item = {id: string; scene_id: string; task: string; item_sha256: string; public_text: Question; public_video: Question | null; media: {asset_id: string; sha256: string; url: string; evidence_ids: string[]}[]; coverage: unknown};
@@ -71,18 +71,27 @@ export function researchQuestions(a: Assignment, data = research) {
 export function researchTrajectories(a: Assignment, data = research) {
   return data.t4.filter(x => a.item_ids.includes(x.id));
 }
+export function sceneAssignment(a: Assignment, workflow: Workflow): Assignment {
+  const scene = activeScene(workflow);
+  return scene ? {...a, scene_ids: [scene.id], item_ids: scene.itemIds} : a;
+}
 export function researchMaterial(a: Assignment, workflow: Workflow, data = research) {
   if (a.track === 't4') return {assignment: a, rubric: data.rubric,
     gate2Tasks: gate2Material(a.scene_ids, workflow.gate2, workflow.phase, a.track),
     trajectories: researchTrajectories(a, data).map(x => ({id: x.id, packet: x.packet, packet_sha256: x.packet_sha256,
       ...(workflow.phase === 'complete' ? {machine: x.machine, policy_condition: x.policy_condition, policy_model: x.policy_model} : {})})), items: []};
-  return {assignment: a, gate2Tasks: gate2Material(a.scene_ids, workflow.gate2, workflow.phase, a.track), items: data.items.filter(x => a.item_ids.includes(x.id)).map(x => ({id: x.id, scene_id: x.scene_id, task: x.task,
+  a = sceneAssignment(a, workflow);
+  const referenceAnswers = workflow.sceneSequence && workflow.phase === 'gt' && workflow.blindLockedAt
+    ? a.item_ids.map(id => ({id, answer: JSON.parse(gunzipSync(Buffer.from(data.private[id], 'base64')).toString()).machine?.answer || null})) : [];
+  return {assignment: a, referenceAnswers, gate2Tasks: gate2Material(a.scene_ids, workflow.gate2, workflow.phase, a.track), items: data.items.filter(x => a.item_ids.includes(x.id)).map(x => ({id: x.id, scene_id: x.scene_id, task: x.task,
     public: a.track === 'offline_video' ? x.public_video : x.public_text,
     media: a.track === 'offline_video' ? x.media : [], coverage: a.track === 'offline_video' ? x.coverage : null})), trajectories: []};
 }
 export function researchEvidence(a: Assignment, workflow: Workflow, id: unknown, data = research) {
   if (typeof id !== 'string' || !a.item_ids.includes(id)) throw new InputError('题目不在本组任务中。');
-  if (a.track === 't4' || !['gt', 'complete'].includes(workflow.phase) || !workflow.blindLockedAt) throw new InputError('先完成并锁定本组全部盲答，才能查看私有材料和机器答案。');
+  const scene = activeScene(workflow);
+  if (scene && !scene.itemIds.includes(id)) throw new InputError('请先完成当前场景；其他场景的答案尚未开放。');
+  if (a.track === 't4' || !['gt', 'complete'].includes(workflow.phase) || !workflow.blindLockedAt) throw new InputError(workflow.sceneSequence ? '先锁定本场景全部盲答和独立环境判断，才能查看答案与私有材料。' : '先完成并锁定本组全部盲答，才能查看私有材料和机器答案。');
   const value = JSON.parse(gunzipSync(Buffer.from(data.private[id], 'base64')).toString());
   for (const [key, field] of Object.entries(value.evidence) as [string, any][]) {
     if (field?.$ref) value.evidence[key] = JSON.parse(gunzipSync(Buffer.from(data.evidence_blobs[field.$ref], 'base64')).toString());

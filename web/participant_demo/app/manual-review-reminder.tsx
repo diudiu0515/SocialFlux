@@ -1,8 +1,8 @@
 import {ClipboardCheck} from 'lucide-react';
 
-type Props = {t4: boolean; phase: string; hasGate2: boolean};
+type Props = {t4: boolean; phase: string; hasGate2: boolean; sequential?: boolean};
 
-export default function ManualReviewReminder({t4, phase, hasGate2}: Props) {
+export default function ManualReviewReminder({t4, phase, hasGate2, sequential}: Props) {
   const gate2 = [
     ['Scenario 是否合理', '角色动机、背景约束与初始状态是否自洽。'],
     ['Rollout 是否合理', '对话与角色行为是否连贯；状态变化、行动后果与时间尺度是否合理。'],
@@ -23,7 +23,7 @@ export default function ManualReviewReminder({t4, phase, hasGate2}: Props) {
   const note = t4
     ? phase === 'complete' ? '人工记录已锁定，可下载本人标注。' : phase === 't4_review' ? '在主面板逐项填写审核表；全部完成后统一提交并查看机器评分对照。' : hasGate2 ? '先完成并锁定整组五维评分，之后开放触发与视频审核表。机器评分在最终提交后开放。' : '使用公开文字独立完成五维评分；提交后查看机器评分对照。'
     : phase === 'blind'
-      ? '先完成整组盲答；场景、rollout 与私有证据解锁后再核对。'
+      ? sequential ? '先完成当前场景全部盲答；锁定后核对答案与证据，再进入下一场景。' : '先完成整组盲答；场景、rollout 与私有证据解锁后再核对。'
       : phase === 'gate2'
         ? '先独立判断状态方向与释义，锁定后再看机器结果及完整场景、rollout。'
         : hasGate2

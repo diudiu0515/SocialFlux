@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>SocialFlux · 人类盲答与 GT</title>
   <link rel="stylesheet" href="/offline_review.css?v=2">
-  <link rel="stylesheet" href="/offline_annotation.css?v=2">
+  <link rel="stylesheet" href="/offline_annotation.css?v=3">
 </head>
 <body>
   <header class="topbar">
@@ -16,14 +16,13 @@
   <main id="setup" class="annotation-setup">
     <section class="card">
       <h2>先独立作答，再制作标准答案</h2>
-      <p>每次分配包含所选场景的全部题目。先完成并锁定全部盲答，再查看私有证据；独立 GT 初判全部提交后，才开放机器建议。</p>
+      <p>场景由系统固定排序。先完成当前场景全部盲答并锁定，再核对私有证据与机器候选；当前场景全部审核完成后，才进入下一场景。</p>
       <p class="muted">新任务使用文字＋视频，与题库的视频条件绑定相同材料。请观看对应片段并结合完整题面作答。后续审核不会覆盖盲答；人类分数需要其他标注人的独立 GT。</p>
       <p id="videoCoverage" class="muted">正在核对有视频的场景…</p>
       <form id="startForm">
         <div class="field-grid">
           <label>标注人 ID<input id="participant" required maxlength="100" autocomplete="username" placeholder="使用固定的匿名 ID"></label>
-          <label>本次场景<select id="assignmentScene" required><option value="">正在载入…</option></select></label>
-          <label>此前是否看过所选场景的答案或私有信息？<select id="priorExposure" required><option value="">请选择</option><option value="no">未看过</option><option value="yes">看过（仍可参与 GT 审核）</option></select></label>
+          <label>此前是否看过本题库的答案或私有信息？<select id="priorExposure" required><option value="">请选择</option><option value="no">未看过</option><option value="yes">看过（仍可参与 GT 审核）</option></select></label>
         </div>
         <p class="muted">标注人身份由本人声明。请保持同一 ID；重复作答或已接触私有信息的记录会保留，但不计入首次盲答基线。</p>
         <button class="primary" type="submit">开始本次任务</button>
@@ -42,6 +41,6 @@
       <div id="annotationWorkspace" aria-busy="false"></div>
     </main>
   </div>
-  <script src="/offline_annotation.js?v=2"></script>
+  <script src="/offline_annotation.js?v=3"></script>
 </body>
 </html>
