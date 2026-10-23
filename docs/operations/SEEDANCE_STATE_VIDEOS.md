@@ -1,5 +1,7 @@
 # State 驱动的原生 Seedance 视频
 
+已于 2026-10-23 发布至 [标注站](https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site)，Sites v21；[独立 Lab](https://socialflux-experiment-lab.junqiao24.chatgpt.site) 的标注入口指向同站点。持久化记录使用原 D1，不依赖 AutoDL。
+
 范围：50 场景，Offline 100 段历史节点短片覆盖全部 300 道 T1/T3，100 道 T2 保留文字。同一节点供多道题复用。每个场景仍为 3/2/3 共 8 题，整场盲答锁定后开放答案与 state，完成核对才进入下一场景。
 
 素材目录的 `t1` / `t2` 表示历史第 1 / 2 轮，与题型 `T1` / `T2` 不同；题型 T2 不绑定任何视频。

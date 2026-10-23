@@ -14,7 +14,7 @@ GPT50_001/009/023/033 仅有 3 轮同源记录，035/040/050 分别有 6/4/5 轮
 
 入口：[SocialFlux 标注站](https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site)。沿用原 Sites 项目和持久化 D1；参与者保存答案不依赖 AutoDL。GitHub 保存源码，GitHub Pages 尚未启用。
 
-本源码对应 `annotation400-seedance-state-20261023-v3`。视频流程见 [State 视频说明](../../docs/operations/SEEDANCE_STATE_VIDEOS.md)。
+`annotation400-seedance-state-20261023-v3` 已随 Sites v21 发布，沿用原站点和 D1。视频流程见 [State 视频说明](../../docs/operations/SEEDANCE_STATE_VIDEOS.md)。
 
 ## 材料与作答流程
 

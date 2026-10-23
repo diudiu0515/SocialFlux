@@ -1,0 +1,107 @@
+{
+  "completed_at": "2026-10-23T15:17:54.946462+00:00",
+  "release": "annotation400-seedance-state-20261023-v3",
+  "dataset_sha256": "614330f4455e0942714a1361cf28aa3b7be64e766fefecc5b145ed2997caebc9",
+  "annotation": {
+    "project_id": "appgprj_6ad82de6ff188191b48c72ec8787d069",
+    "version_id": "appgprj_6ad82de6ff188191b48c72ec8787d069~appgver_a417aff9d54481919a8681883a783795",
+    "version_number": 21,
+    "id": "appgdep_6adb76bd8dc48191b4b1b21aa39e7a53",
+    "status": "succeeded",
+    "url": "https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site",
+    "commit_sha": "825ef5ddc46056f63cbed336e49279184cdcbd5a"
+  },
+  "lab": {
+    "id": "appgdep_6adb651f9f6481919786c2df9036abe6",
+    "status": "succeeded",
+    "url": "https://socialflux-experiment-lab.junqiao24.chatgpt.site",
+    "version_id": "appgprj_6acdd14e43dc81919897c86163918baf~appgver_216c742c21808191b6165608bf2faa41"
+  },
+  "offline": {
+    "scenes": 50,
+    "questions": 400,
+    "video_questions_t1_t3": 300,
+    "unique_videos": 100,
+    "text_only_t2": 100,
+    "native_duration_seconds": 5.088
+  },
+  "online": {
+    "assets": 326,
+    "native_duration_seconds": 4.096,
+    "trigger_bindings_unchanged": true,
+    "trigger_settings_unchanged": true,
+    "trigger_code_sha256": "7bd6716c38cfc0212dddae0d806ac69a53df68110ae34816792a71dcab3f6ef4",
+    "manifest_sha256": "648d938dbcca19d5d8cd4b518396b55fedfa030a6bf7c9a454376bf911e1548a"
+  },
+  "verification": {
+    "python_tests": 40,
+    "site_unit_tests": 30,
+    "full_scene_flow": true,
+    "old_session_recovery": true,
+    "autosave_and_cross_device_recovery": true,
+    "mobile_widths": [
+      320,
+      390
+    ],
+    "deployed_videos_available": 426,
+    "live_playback": [
+      {
+        "sha256": "671804a778d6dccfb5b7920a52076b0dcb70b2f5cc43d847e01de4936d1f7882",
+        "duration": 5.088,
+        "width": 1280,
+        "height": 720,
+        "ended": true,
+        "muted": false
+      },
+      {
+        "sha256": "260212ad832af188a5a080e8b8767ca50e66b2f1165ce3fc3aa9711d9a4ae067",
+        "duration": 4.096,
+        "width": 1280,
+        "height": 720,
+        "ended": true,
+        "muted": false
+      }
+    ],
+    "production_test_annotations_written": false,
+    "original_question_hashes_unchanged": true,
+    "formal_human_expression_review": "pending except approved pilot"
+  },
+  "cleanup": {
+    "categories": [
+      {
+        "category": "models",
+        "bytes": 2367708923,
+        "files": null
+      },
+      {
+        "category": "render-models",
+        "bytes": 6154033543,
+        "files": null
+      },
+      {
+        "category": "old-media",
+        "bytes": 8097683634,
+        "files": 56907
+      },
+      {
+        "category": "intermediates",
+        "bytes": 2202997879,
+        "files": 6453
+      }
+    ],
+    "total_bytes": 18822423979,
+    "preserved": [
+      "current 426 native/web pairs",
+      "question and provenance JSON",
+      "annotations and recovery records",
+      "current native input references",
+      "ASR and SyncNet verification dependencies"
+    ]
+  },
+  "hosting": {
+    "depends_on_autodl": false,
+    "annotations": "existing Sites D1 database",
+    "public_autodl_service": "retired and disabled"
+  },
+  "publication_transport": "All source media synchronized in four bounded batches. Local artifact upload timed out; the same complete source tree was successfully built and deployed remotely."
+}
