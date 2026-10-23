@@ -1,12 +1,13 @@
 import json
 from pathlib import Path
 import unittest
+import tempfile
 from unittest.mock import patch
 from types import SimpleNamespace
 
 from scripts.evaluate_environment_prompt import environment_config, summarize
 from scripts.serve_qwen_local import command
-from scripts.deploy_qwen_local import available_gpus
+from scripts.deploy_qwen_local import available_gpus, main as deploy_main
 from scripts.install_qwen_runtime import compatible_wheel
 from packaging.tags import Tag
 
@@ -14,6 +15,27 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class EnvironmentPromptDiagnosticTests(unittest.TestCase):
+    def test_deploy_only_does_not_run_prepared_diagnostic(self):
+        deployment = json.loads((ROOT / 'configs/qwen_local_deployment.json').read_text())
+        responses = [{'data': [{'id': deployment['model']}]},
+                     {'choices': [{'message': {'content': '{"status":"ok"}'}, 'finish_reason': 'stop'}]}]
+        with tempfile.TemporaryDirectory() as temporary, \
+                patch('scripts.deploy_qwen_local.WORK', Path(temporary)), \
+                patch('sys.argv', ['deploy_qwen_local.py', '--deploy-only']), \
+                patch('scripts.deploy_qwen_local.install'), \
+                patch('scripts.deploy_qwen_local.download'), \
+                patch('scripts.deploy_qwen_local.available_gpus', return_value=(True, [])), \
+                patch('scripts.deploy_qwen_local.api', side_effect=responses), \
+                patch('scripts.deploy_qwen_local.run') as run:
+            deploy_main()
+            state = json.loads((Path(temporary) / 'status.json').read_text())
+            self.assertTrue(state['ready'])
+            self.assertFalse(state['diagnostic_requested'])
+            self.assertFalse(state['diagnostic_completed'])
+            self.assertIsNone(state['evaluation'])
+            self.assertEqual(run.call_count, 1)
+            self.assertEqual(run.call_args.args[0][0], str(Path(temporary) / 'venv/bin/supervisord'))
+
     def test_all_environment_stages_are_local_and_current_prompts_are_kept(self):
         deployment = json.loads((ROOT / 'configs/qwen_local_deployment.json').read_text())
         original = json.loads((ROOT / deployment['environment_source_config']).read_text())['environment']

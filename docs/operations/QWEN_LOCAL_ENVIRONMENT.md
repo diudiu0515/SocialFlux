@@ -20,6 +20,25 @@
 所有权重、依赖、请求和诊断保存在被 Git 排除的 `build/qwen_deployment/`。
 服务仅监听 `127.0.0.1:8010`，采用 OpenAI-compatible chat-completions 协议。
 
+## 2026-10-23 部署验收
+
+北京时间 20:33:31，`--deploy-only` 部署完成。vLLM 0.32.0 / PyTorch
+2.13.0+cu130 在四张 RTX 4090 上加载成功，权重占用每卡约 31.84GiB，
+上下文上限 32768 tokens；CPU 保存 offload 的 n-gram embedding。
+本次以 `--language-model-only` 启动，用于文字环境交互，未启用图像/视频输入。
+
+`/health` 和 `/v1/models` 返回 HTTP 200，模型 ID 与配置一致；一次实际
+chat-completions 请求生成 `{"status":"ok"}`，6 个输出 token，
+`finish_reason=stop`。回执保存在 `build/qwen_deployment/smoke.json`。
+独立 Supervisor 状态为 RUNNING，服务可在部署脚本退出后继续运行。
+这只确认服务可用，不构成能力、吞吐或 prompt 质量评估。
+
+依用户要求，本轮未运行 environment prompt 测试：状态记录
+`ready=true`、`diagnostic_requested=false`、`diagnostic_completed=false`。
+后续调用使用 base URL `http://127.0.0.1:8010/v1`、模型 ID
+`Qwen/Qwen3.8-Flash-Next-FP8`；如需关闭思考，在请求中传
+`chat_template_kwargs={"enable_thinking":false}`。
+
 ## 启动与检查
 
 依赖使用独立环境 `build/qwen_deployment/venv`，版本固定为 vLLM 0.32.0。
@@ -37,9 +56,14 @@ curl --fail http://127.0.0.1:8010/v1/models
 持久服务使用独立的 [Supervisor 配置](../../configs/qwen.supervisord.conf)：
 
 ```bash
-supervisord -c configs/qwen.supervisord.conf
-supervisorctl -c configs/qwen.supervisord.conf status
+build/qwen_deployment/venv/bin/supervisord -c configs/qwen.supervisord.conf
+build/qwen_deployment/venv/bin/supervisorctl -c configs/qwen.supervisord.conf status
 ```
+
+只部署、不运行 environment prompt 诊断时，使用
+`python scripts/deploy_qwen_local.py --deploy-only`。此模式只做模型身份和一次
+实际生成检查，成功后记录 `ready=true`、`diagnostic_requested=false`，不会读取
+或执行已准备的 15 个诊断样本。服务管理程序和模型均使用独立环境。
 
 此次后台部署由 `scripts/deploy_qwen_local.py` 串联下载、依赖、服务、
 真实生成检查与已准备的诊断。阶段及异常写入

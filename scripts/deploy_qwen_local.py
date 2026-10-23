@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Finish the local Qwen download, launch its service, and run prepared checks.
+"""Deploy local Qwen, optionally running an explicitly selected diagnostic.
 
 Long-running deployment state is written atomically to status.json. Never marks
 the deployment ready before a real generation, or the diagnostic completed
@@ -104,18 +104,21 @@ def available_gpus(config):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--evaluation', type=Path, required=True)
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument('--evaluation', type=Path)
+    mode.add_argument('--deploy-only', action='store_true', help='Stop after a real smoke generation; do not evaluate prompts')
     parser.add_argument('--install-pid', type=int)
     args = parser.parse_args()
     WORK.mkdir(parents=True, exist_ok=True)
     lock = (WORK / 'deployment.lock').open('w')
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     config = json.loads((ROOT / 'configs/qwen_local_deployment.json').read_text())
-    evaluation = args.evaluation.resolve()
-    manifest = json.loads((evaluation / 'manifest.json').read_text())
-    if manifest['deployment'] != config:
+    evaluation = args.evaluation.resolve() if args.evaluation else None
+    manifest = json.loads((evaluation / 'manifest.json').read_text()) if evaluation else None
+    if manifest and manifest['deployment'] != config:
         raise ValueError('Prepared diagnostic and deployment configuration differ')
-    state = {'pid': os.getpid(), 'model': config['model'], 'evaluation': str(evaluation),
+    state = {'pid': os.getpid(), 'model': config['model'], 'evaluation': str(evaluation) if evaluation else None,
+             'diagnostic_requested': bool(evaluation),
              'ready': False, 'diagnostic_completed': False}
     def update(stage, **fields):
         state.update(stage=stage, updated_at_utc=datetime.now(timezone.utc).isoformat(), **fields)
@@ -145,7 +148,7 @@ def main():
         update('starting_server')
         if json.loads((ROOT / 'configs/qwen_local_deployment.json').read_text()) != config:
             raise ValueError('Deployment configuration changed while downloading')
-        run(['supervisord', '-c', 'configs/qwen.supervisord.conf'], 'service_start.log', timeout=30)
+        run([str(WORK / 'venv/bin/supervisord'), '-c', 'configs/qwen.supervisord.conf'], 'service_start.log', timeout=30)
         deadline = time.monotonic() + 3600
         while time.monotonic() < deadline:
             try:
@@ -154,6 +157,11 @@ def main():
                     raise ValueError('Unexpected model identity at local endpoint')
                 break
             except (OSError, ValueError, KeyError):
+                status = subprocess.run([str(WORK / 'venv/bin/supervisorctl'), '-c',
+                    'configs/qwen.supervisord.conf', 'status', 'socialflux-qwen'],
+                    capture_output=True, text=True, timeout=10)
+                if any(word in status.stdout.split() for word in ('FATAL', 'STOPPED', 'EXITED')):
+                    raise RuntimeError('Qwen server stopped during startup: ' + status.stdout.strip())
                 time.sleep(15)
         else:
             raise TimeoutError('Qwen service did not become healthy within one hour; inspect server.log')
@@ -165,6 +173,9 @@ def main():
         content = smoke['choices'][0]['message']['content'].strip()
         if json.loads(content) != {'status': 'ok'} or smoke['choices'][0]['finish_reason'] != 'stop':
             raise ValueError('Local model smoke generation failed')
+        if args.deploy_only:
+            update('ready', ready=True)
+            return
         update('running_prompt_diagnostic', ready=True)
         runtime = Path(manifest['frozen_runtime'])
         run([sys.executable, str(runtime / 'scripts/evaluate_environment_prompt.py'),
@@ -176,6 +187,8 @@ def main():
     except Exception as exc:
         update('failed', error_type=type(exc).__name__, error=str(exc))
         raise
+    finally:
+        lock.close()
 
 
 if __name__ == '__main__':
