@@ -100,3 +100,30 @@ Python 内部的 Task4 rollout 可直接把 `QwenTask4EnvironmentFactory(scenari
 传给现有 `RolloutRunner`。需要逐步交互时使用 `QwenTask4Session(factory, output)`；
 `step(text, expected_turn_id=...)` 与 HTTP 的返回合同相同。不要把 canonical
 `environment.step()` 的第二个返回值（private turn log）交给被测 policy。
+
+## 2026-10-24 部署验收
+
+冻结实例为 `build/qwen_task4/run_20261024_v1`，包含 287 个运行文件和 50 个开发场景。
+29 项相关测试通过；305 个已有相关文件的 hash 均保持不变，原有 Git 暂存内容也保留。
+模型 API 与独立 Task4 API 均已启动。
+
+两例真实验收来自同一个开发场景：HTTP 初始交互耗时 387.088 秒，历史失败 checkpoint
+耗时 372.548 秒。两例都完成，state 和 response 均首次通过，interaction 共出现
+3 次被拒输出，总计 9 次物理模型请求。实际思考 token 用量均在配置上限内。
+两例整个 step 均不是 first-pass；未跑完整 15 例对照或 20 轮评测。
+
+语义质量尚未通过验收：一例引入未经输入支持的口头同意前提；另一例仍把“接受错失
+资金的风险/不能保证批准”加强为“最终拒绝/路径完全关闭”。也观察到事件类型和
+行为归属问题。结构化通过不能作为 RL 正确性奖励；此版本只说明工程接入与已知
+direction 枚举问题的复测完成。完整计数和限制见
+[部署验收记录](../../reports/analysis/2026-10-24_qwen_task4_deployment.json)。
+
+## E6 环境迁移验证衔接
+
+本任务同时为[环境有效性六维协议](../protocols/ENVIRONMENT_VALIDATION_V1.md)的新版 E6 提供 Qwen 环境迁移证据。复用本任务的冻结配置、场景和 episode，不另起一套环境生成；Qwen 承担 appraisal 与 response，而不是只充当被测 policy。
+
+评估侧读取 run manifest、配置/prompt/schema 哈希、评估场景清单、episode ID、公开轨迹及作者侧状态/ledger/请求记录，统计完整执行、首次通过、重试、失败、耗时、不变量与结束类型，并按 E1/E2/E9 的标准核查语义和轨迹质量。只读作者侧证据不能进入被测 policy 的 observation。
+
+当前 catalog 的 50 个场景不等于完成的测试集；训练、调试与独立评估划分需绑定到运行清单。已有 prompt 诊断和修复案例属于开发集。复用另一侧预先冻结的评估划分，至少覆盖 10 个独立评估场景；完整轨迹人工审核按 E2 的 15–20 条要求准备。每个指标保留计划、成功、失败和不适用分母。
+
+迁移不要求 Qwen 逐维复制源模型的状态方向；检查相同机制下的执行与语义质量。补充提示、采样、思考预算和结束规则的差异都需报告。文字接口不提供多模态泛化或 RL 收益证据；`reward=null` 仍表示奖励未配置。旧 E6 的结果和验证器格式保留，新迁移产物接入正式评分前保持 `formal_admission=false`。

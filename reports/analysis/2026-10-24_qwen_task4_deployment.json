@@ -1,0 +1,261 @@
+{
+  "profile": "qwen_task4_thinking_v1",
+  "status": "deployed_development_only",
+  "recorded_at_utc": "2026-10-23T17:13:37.451110+00:00",
+  "implementation_commit": "e289ed7",
+  "model": "Qwen/Qwen3.8-Flash-Next-FP8",
+  "model_weight_revision": "236dfdf285828023ca3bcd3f37366c58a3469b13",
+  "model_api": "http://127.0.0.1:8010/v1",
+  "environment_api": "http://127.0.0.1:8011",
+  "observation_condition": "text_only",
+  "config": "configs/qwen_task4/environment.json",
+  "prompt_manifest": "prompts/qwen_task4/manifest.json",
+  "frozen_run": "build/qwen_task4/run_20261024_v1",
+  "frozen_runtime_files": 287,
+  "frozen_scenarios": 50,
+  "existing_file_isolation": {
+    "checked_files": 305,
+    "changed_files": [],
+    "prior_staged_diff_preserved": true
+  },
+  "tests": {
+    "command": "python -m unittest tests.test_qwen_task4 tests.test_environment_prompt_diagnostic tests.test_independent_appraisal tests.test_structured_retry tests.test_unified_appraisal -v",
+    "passed": 29,
+    "failed": 0
+  },
+  "api_boundary_checks": {
+    "checks": [
+      {
+        "check": "stale_turn",
+        "http_status": 409,
+        "body": {
+          "error": "episode_inactive_or_stale_turn"
+        }
+      },
+      {
+        "check": "unknown_scenario",
+        "http_status": 400,
+        "body": {
+          "error": "unknown_scenario"
+        }
+      },
+      {
+        "check": "reject_client_private_state",
+        "http_status": 400,
+        "body": {
+          "error": "unknown_scenario"
+        }
+      }
+    ],
+    "turn_id_after": 1,
+    "reward": null
+  },
+  "smoke_summary": {
+    "attempted": 2,
+    "completed": 2,
+    "failed": 0,
+    "first_pass_count": 0,
+    "state_first_pass_count": 2,
+    "request_count": 9,
+    "rejected_candidate_count": 3,
+    "seconds_total": 759.636,
+    "interpretation": "Two selected steps from one development scenario. This verifies integration and the previously observed enum failure only, not representative semantic quality, full episodes or full 15-case comparative performance."
+  },
+  "cases": [
+    {
+      "case_id": "api_GPT50_006_t1",
+      "status": "completed",
+      "seconds": 387.088,
+      "request_count": 5,
+      "stages": {
+        "state": {
+          "requests": 1,
+          "rejected_candidates": [],
+          "requests_detail": [
+            {
+              "finish_reason": "stop",
+              "prompt_tokens": 9076,
+              "completion_tokens": 3940,
+              "reasoning_tokens": 1535,
+              "thinking_token_budget": 1536,
+              "max_tokens": 6000
+            }
+          ]
+        },
+        "interaction": {
+          "requests": 3,
+          "rejected_candidates": [
+            {
+              "attempt": 1,
+              "reason": "$: keys must be exactly ['appraisal', 'evidence_turn_ids']"
+            },
+            {
+              "attempt": 2,
+              "reason": "$: keys must be exactly ['appraisal', 'evidence_turn_ids']"
+            }
+          ],
+          "requests_detail": [
+            {
+              "finish_reason": "stop",
+              "prompt_tokens": 8059,
+              "completion_tokens": 771,
+              "reasoning_tokens": 767,
+              "thinking_token_budget": 768,
+              "max_tokens": 3500
+            },
+            {
+              "finish_reason": "stop",
+              "prompt_tokens": 8190,
+              "completion_tokens": 771,
+              "reasoning_tokens": 767,
+              "thinking_token_budget": 768,
+              "max_tokens": 3500
+            },
+            {
+              "finish_reason": "stop",
+              "prompt_tokens": 8190,
+              "completion_tokens": 983,
+              "reasoning_tokens": 234,
+              "thinking_token_budget": 768,
+              "max_tokens": 3500
+            }
+          ]
+        },
+        "response": {
+          "requests": 1,
+          "rejected_candidates": [],
+          "requests_detail": [
+            {
+              "finish_reason": "stop",
+              "prompt_tokens": 7540,
+              "completion_tokens": 1221,
+              "reasoning_tokens": 767,
+              "thinking_token_budget": 768,
+              "max_tokens": 4096
+            }
+          ]
+        }
+      },
+      "state_appraisal_first_pass": true,
+      "response_first_pass": true,
+      "state_direction_values": [
+        "decrease",
+        "increase"
+      ],
+      "private_artifact_directory": "build/qwen_task4/run_20261024_v1/episodes/c713920c25134a11be4d7fb3d380a181",
+      "formal_admission": false,
+      "human_review_status": "pending"
+    },
+    {
+      "case_id": "GPT50_006_t6",
+      "status": "completed",
+      "seconds": 372.548,
+      "request_count": 4,
+      "stages": {
+        "state": {
+          "requests": 1,
+          "rejected_candidates": [],
+          "requests_detail": [
+            {
+              "finish_reason": "stop",
+              "prompt_tokens": 15585,
+              "completion_tokens": 3782,
+              "reasoning_tokens": 1535,
+              "thinking_token_budget": 1536,
+              "max_tokens": 6000
+            }
+          ]
+        },
+        "interaction": {
+          "requests": 2,
+          "rejected_candidates": [
+            {
+              "attempt": 1,
+              "reason": "Expecting value: line 1 column 1 (char 0)"
+            }
+          ],
+          "requests_detail": [
+            {
+              "finish_reason": "stop",
+              "prompt_tokens": 14589,
+              "completion_tokens": 1488,
+              "reasoning_tokens": 767,
+              "thinking_token_budget": 768,
+              "max_tokens": 3500
+            },
+            {
+              "finish_reason": "stop",
+              "prompt_tokens": 15431,
+              "completion_tokens": 824,
+              "reasoning_tokens": 271,
+              "thinking_token_budget": 768,
+              "max_tokens": 3500
+            }
+          ]
+        },
+        "response": {
+          "requests": 1,
+          "rejected_candidates": [],
+          "requests_detail": [
+            {
+              "finish_reason": "stop",
+              "prompt_tokens": 9389,
+              "completion_tokens": 1241,
+              "reasoning_tokens": 767,
+              "thinking_token_budget": 768,
+              "max_tokens": 4096
+            }
+          ]
+        }
+      },
+      "state_appraisal_first_pass": true,
+      "response_first_pass": true,
+      "state_direction_values": [
+        "decrease",
+        "increase"
+      ],
+      "private_artifact_directory": "build/qwen_task4/run_20261024_v1/checkpoint_episodes/3bf160b95aa848fcbf5b5f970cbfb4ed",
+      "formal_admission": false,
+      "human_review_status": "pending"
+    }
+  ],
+  "assistant_review": {
+    "reviewer_type": "coding_assistant",
+    "human_validation": false,
+    "findings": [
+      {
+        "case_id": "api_GPT50_006_t1",
+        "issue": "Response presupposes prior oral household consent not established in the supplied public record; conditional proposal wording does not justify the embedded factual presupposition.",
+        "status": "requires_semantic_correction"
+      },
+      {
+        "case_id": "api_GPT50_006_t1",
+        "issue": "Interaction labels a refusal as a request; one response self-owned boundary has evaluated_agent as action_owner. Structurally accepted actor/event values do not establish correct attribution.",
+        "status": "requires_semantic_review"
+      },
+      {
+        "case_id": "GPT50_006_t6",
+        "issue": "State rationales convert acceptance of risk and inability to promise approval into a final refusal and closure of every remaining path. The response also strengthens this uncertain outcome.",
+        "status": "requires_semantic_correction"
+      },
+      {
+        "scope": "interaction stage",
+        "issue": "Three rejected outputs across two steps: two were only an opening brace and one had prose before JSON. Their reasoning usage reached 767 of 768 tokens. A budget-cutoff effect is plausible but not established by a controlled comparison.",
+        "status": "requires_reliability_calibration"
+      }
+    ]
+  },
+  "rl_readiness": {
+    "public_step_interface": true,
+    "canonical_state_update_reused": true,
+    "private_logs_excluded_from_client": true,
+    "termination_truncation_failure_distinct": true,
+    "reward_status": "unconfigured",
+    "reward_value": null,
+    "training_started": false,
+    "training_split_defined": false,
+    "formal_training_quality_validated": false
+  },
+  "formal_admission": false,
+  "human_review_status": "pending"
+}
