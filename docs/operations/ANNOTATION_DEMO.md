@@ -247,4 +247,4 @@ Sites v15 已发布；研究者还需填写实际匿名编号、北京时间截�
 
 验证：线上站点 30 项既有测试、3 项新流程测试、类型检查和生产构建通过；隔离 D1 浏览器完成 5 场景／40 题，验证自动保存、答案总览、未来场景接口拒绝、锁定不可覆盖、刷新／跨设备恢复、音视频材料和手机布局。实际导出回执通过现有 Lab 导入校验。Lab 的 12 项后端测试及完整浏览器检查通过；测试记录只写入临时目录／本地 D1。
 
-站点精确源码提交：`ad1657a3b42989f56aa79e0b01ec0d471e0838fa`。发布正在进行，最终版本及状态以本段后续回执为准。GitHub 同步分支：`annotation-scene-sequence-20261023`；GitHub Pages 本身尚未启用。
+站点精确源码提交：`ad1657a3b42989f56aa79e0b01ec0d471e0838fa`。Sites v16 已发布成功，状态 `succeeded`；部署 ID `appgdep_6adad8bac1f0819180a201ed403677d0`，平台返回时间 `2026-10-23T03:47:24.047774+00:00`。沿用原公开网址、邀请配置和 D1，environment revision 1。完整回执：`build/scene-sequence-publication-20261023.json`。GitHub 同步分支：`annotation-scene-sequence-20261023`；GitHub Pages 本身尚未启用。
