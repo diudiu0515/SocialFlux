@@ -1,0 +1,1084 @@
+{
+  "version": "qwen_environment_prompt_diagnostic_report_v1",
+  "generated_at_utc": "2026-10-23T13:54:16.562989+00:00",
+  "verdict": "可执行完整环境流程，但当前非思考模式下的 prompt 与校验尚不稳定，不建议直接用于正式人机交互。优先处理结构化输出约束、互动事件覆盖和事实确定性，再在独立运行目录复测。",
+  "model": "Qwen/Qwen3.8-Flash-Next-FP8",
+  "thinking_enabled": false,
+  "runtime": {
+    "vllm_version": "0.32.0",
+    "tensor_parallel_size": 4,
+    "max_model_len": 32768,
+    "enforce_eager": true,
+    "engram_cpu_offload": true
+  },
+  "sample": {
+    "scenario_count": 6,
+    "matched_checkpoints": 12,
+    "neutral_controls": 3,
+    "selection": "Frozen before Qwen inference; no failed sample replacement",
+    "runtime_files_verified": 276
+  },
+  "prompts": {
+    "state_appraisal_prompt_id": "environment_state_appraisal_v6_observed_evidence",
+    "interaction_appraisal_prompt_id": "environment_interaction_appraisal_v1",
+    "response_prompt_id": "environment_response_v31_contrastive_event_driven",
+    "state_calibration_profile": "state_judgment_primary_hysteretic_v7"
+  },
+  "started_at_utc": "2026-10-23T12:47:21.818085+00:00",
+  "finished_at_utc": "2026-10-23T13:50:46.926591+00:00",
+  "wall_seconds": 3805.109,
+  "automatic_summary": {
+    "attempted": 15,
+    "completed": 14,
+    "failed": 1,
+    "first_pass_count": 5,
+    "request_count": 61,
+    "completion_rate": 0.9333333333333333,
+    "median_seconds": 208.974,
+    "max_seconds": 400.889,
+    "matched_success_count": 11,
+    "active_union_dimensions": 109,
+    "source_model_active_direction_agreement": 0.5045844036697248,
+    "source_model_active_sign_reversal_rate": 0.04587431192660551,
+    "neutral_controls": [
+      {
+        "case_id": "GPT50_006_t6_neutral",
+        "status": "completed",
+        "changed_state_variables": {
+          "behavioral_disposition.cooperation_readiness": 1
+        }
+      },
+      {
+        "case_id": "GPT50_003_t6_neutral",
+        "status": "completed",
+        "changed_state_variables": {}
+      },
+      {
+        "case_id": "GPT50_012_t7_neutral",
+        "status": "completed",
+        "changed_state_variables": {}
+      }
+    ],
+    "human_correctness_measured": false,
+    "formal_admission": false
+  },
+  "first_pass_rate": 0.3333333333333333,
+  "successful_after_retry": 9,
+  "all_attempt_latency_seconds": {
+    "median": 217.901,
+    "maximum": 409.363
+  },
+  "stage_accounting": {
+    "state": {
+      "requests": 22,
+      "transport_failures": 0,
+      "retry_calls": 7,
+      "request_seconds": 3174.468,
+      "prompt_tokens": 299644,
+      "completion_tokens": 42598
+    },
+    "interaction": {
+      "requests": 16,
+      "transport_failures": 0,
+      "retry_calls": 1,
+      "request_seconds": 775.555,
+      "prompt_tokens": 189137,
+      "completion_tokens": 9647
+    },
+    "response": {
+      "requests": 23,
+      "transport_failures": 0,
+      "retry_calls": 9,
+      "request_seconds": 627.975,
+      "prompt_tokens": 177106,
+      "completion_tokens": 8319
+    }
+  },
+  "structured_retry_calls": 17,
+  "rejected_structured_outputs": 18,
+  "rejection_reasons": [
+    {
+      "case_id": "GPT50_006_t2",
+      "stage": "response",
+      "attempt": 1,
+      "reason": "reply_obligation and asserted request events disagree"
+    },
+    {
+      "case_id": "GPT50_006_t6_neutral",
+      "stage": "state",
+      "attempt": 1,
+      "reason": "each state_judgments item must contain exactly ['direction', 'directness', 'evidence_feature', 'evidence_span', 'judgment', 'rationale', 'variable']"
+    },
+    {
+      "case_id": "GPT50_006_t6_neutral",
+      "stage": "state",
+      "attempt": 2,
+      "reason": "dynamics_judgments must judge every supplied variable exactly once"
+    },
+    {
+      "case_id": "GPT50_006_t6_neutral",
+      "stage": "response",
+      "attempt": 1,
+      "reason": "invalid claim status 'reported_complete'"
+    },
+    {
+      "case_id": "GPT50_006_t6_neutral",
+      "stage": "response",
+      "attempt": 2,
+      "reason": "reply_obligation and asserted request events disagree"
+    },
+    {
+      "case_id": "GPT50_003_t2",
+      "stage": "state",
+      "attempt": 1,
+      "reason": "state_judgments evidence span must be an exact latest-action substring"
+    },
+    {
+      "case_id": "GPT50_012_t2",
+      "stage": "interaction",
+      "attempt": 1,
+      "reason": "$.appraisal.dialogue_diagnostics.consequential_claims[1].grounding: invalid 'asserted'; allowed=['observable_fact', 'proposal_or_hypothetical', 'speaker_report', 'uncertain', 'unsupported_assertion']"
+    },
+    {
+      "case_id": "GPT50_012_t7",
+      "stage": "state",
+      "attempt": 1,
+      "reason": "state_judgments evidence span must be an exact latest-action substring"
+    },
+    {
+      "case_id": "GPT50_012_t7_neutral",
+      "stage": "response",
+      "attempt": 1,
+      "reason": "reply_obligation and asserted request events disagree"
+    },
+    {
+      "case_id": "GPT50_012_t7_neutral",
+      "stage": "response",
+      "attempt": 2,
+      "reason": "reply_obligation and asserted request events disagree"
+    },
+    {
+      "case_id": "GPT50_011_t6",
+      "stage": "state",
+      "attempt": 1,
+      "reason": "state_judgments new evidence needs a direction"
+    },
+    {
+      "case_id": "GPT50_011_t6",
+      "stage": "state",
+      "attempt": 2,
+      "reason": "state_judgments new evidence needs a direction"
+    },
+    {
+      "case_id": "GPT50_011_t6",
+      "stage": "state",
+      "attempt": 3,
+      "reason": "state_judgments new evidence needs a direction"
+    },
+    {
+      "case_id": "GPT50_025_t2",
+      "stage": "response",
+      "attempt": 1,
+      "reason": "reply_obligation and asserted request events disagree"
+    },
+    {
+      "case_id": "GPT50_025_t2",
+      "stage": "response",
+      "attempt": 2,
+      "reason": "reply_obligation and asserted request events disagree"
+    },
+    {
+      "case_id": "GPT50_025_t2",
+      "stage": "response",
+      "attempt": 3,
+      "reason": "reply_obligation and asserted request events disagree"
+    },
+    {
+      "case_id": "GPT50_043_t2",
+      "stage": "state",
+      "attempt": 1,
+      "reason": "state_judgments evidence span must be an exact latest-action substring"
+    },
+    {
+      "case_id": "GPT50_043_t6",
+      "stage": "response",
+      "attempt": 1,
+      "reason": "expression_intent must be a concise non-empty string"
+    }
+  ],
+  "finish_reasons": {
+    "stop": 61
+  },
+  "response_language_contract": "one to three natural Chinese sentences",
+  "completed_response_languages": {
+    "Chinese": 8,
+    "English": 6
+  },
+  "completed_state_invariants": {
+    "within_bounds": 14,
+    "variable_set_preserved": 14
+  },
+  "assistant_review": {
+    "reviewer": "assistant",
+    "human_review": false,
+    "formal_admission": false,
+    "reviewed_cases": [
+      "GPT50_006_t2",
+      "GPT50_006_t6",
+      "GPT50_006_t6_neutral",
+      "GPT50_003_t2",
+      "GPT50_003_t6",
+      "GPT50_003_t6_neutral",
+      "GPT50_012_t2",
+      "GPT50_012_t7",
+      "GPT50_012_t7_neutral",
+      "GPT50_011_t2",
+      "GPT50_011_t6",
+      "GPT50_025_t2",
+      "GPT50_025_t6",
+      "GPT50_043_t2",
+      "GPT50_043_t6"
+    ],
+    "findings": [
+      {
+        "case_id": "GPT50_006_t2",
+        "category": "response_event_coverage",
+        "severity": "medium",
+        "observation": "After a response validation retry, the model retained the proposed joint action in response_text but removed all ledger_events and reply_obligation. The accepted JSON therefore loses an event-like clause.",
+        "evidence": "GPT50_006_t2/turn.json",
+        "details": {
+          "retry_reason": "reply_obligation and asserted request events disagree",
+          "final_response": "我们是否可以在等待社区资金授权的同时，先完成材料发布的最终核对？",
+          "final_ledger_events": []
+        },
+        "scope": "Model output and validator coverage; not a transport failure."
+      },
+      {
+        "case_id": "GPT50_006_t6",
+        "category": "risk_upgraded_to_abandonment",
+        "severity": "high",
+        "observation": "The current action accepts the risk of losing the funds. State appraisal treats the funding goal as abandoned, and the response states that the participant has given up the funds. The prior question offered a dichotomy, but the latest action explicitly preserved uncertainty.",
+        "evidence": "GPT50_006_t6/turn.json",
+        "details": {
+          "input": "accept the risk of missing out on the matching funds as a result",
+          "appraisal_rationale": "By accepting the loss of the funds, the immediate pressure to meet the deadline is resolved, as the goal is abandoned.",
+          "deadline_pressure_delta": -2,
+          "response_excerpt": "我接受你保留社区决策权并放弃匹配资金的立场"
+        },
+        "scope": "Unsupported strengthening of the current action, visible in both appraisal and response."
+      },
+      {
+        "case_id": "GPT50_006_t6_neutral",
+        "category": "schema_completeness",
+        "severity": "medium",
+        "observation": "State appraisal required three attempts: first omitted evidence_feature fields, then omitted every dynamics judgment. Response required three attempts due to an invalid claim status and reply-obligation mismatch.",
+        "evidence": "GPT50_006_t6_neutral/turn.json",
+        "scope": "Seven total calls versus three on first pass; recovered by the bounded runtime retries."
+      },
+      {
+        "case_id": "GPT50_006_t6_neutral",
+        "category": "response_language_contract",
+        "severity": "medium",
+        "observation": "All response attempts are in English even though response v31 explicitly requires one to three natural Chinese sentences.",
+        "evidence": "GPT50_006_t6_neutral/response_requests.json",
+        "scope": "Language instruction compliance, not semantic correctness."
+      },
+      {
+        "case_id": "GPT50_003_t2",
+        "category": "possible_repeated_evidence_counting",
+        "severity": "review",
+        "observation": "The model marks use of verified contracts/invoices/meeting records as decisive new evidence for reduced goal-failure risk and deadline pressure, although that publication route was already proposed in t1 and the editor had agreed contracts/invoices could be published. The new conflict acknowledgment is real new evidence, but the rationale does not distinguish it from the repeated publication route.",
+        "evidence": "GPT50_003_t2/turn.json",
+        "scope": "A calibration/history-use concern requiring semantic review; not proof that every positive state change is incorrect."
+      },
+      {
+        "case_id": "GPT50_003_t6",
+        "category": "response_language_contract",
+        "severity": "medium",
+        "observation": "The first-pass response is English despite the explicit Chinese response instruction.",
+        "evidence": "GPT50_003_t6/response_requests.json",
+        "scope": "Language instruction compliance."
+      },
+      {
+        "case_id": "GPT50_012_t2",
+        "category": "response_language_contract",
+        "severity": "medium",
+        "observation": "The response is English despite the explicit Chinese response instruction.",
+        "evidence": "GPT50_012_t2/response_requests.json",
+        "scope": "Language instruction compliance."
+      },
+      {
+        "case_id": "GPT50_012_t2",
+        "category": "schema_enum_confusion",
+        "severity": "medium",
+        "observation": "Interaction appraisal used asserted as consequential-claim grounding, confusing the grounding enum with assertion_mode. A bounded retry corrected it.",
+        "evidence": "GPT50_012_t2/interaction_requests.json",
+        "scope": "Recovered schema error, not a service failure."
+      },
+      {
+        "case_id": "GPT50_012_t7",
+        "category": "response_language_contract",
+        "severity": "medium",
+        "observation": "The response is English despite the explicit Chinese response instruction.",
+        "evidence": "GPT50_012_t7/response_requests.json",
+        "scope": "Language instruction compliance."
+      },
+      {
+        "case_id": "GPT50_012_t7",
+        "category": "evidence_span_not_exact",
+        "severity": "medium",
+        "observation": "State appraisal required a retry because a claimed evidence span was not an exact substring of the latest action.",
+        "evidence": "GPT50_012_t7/state_requests.json",
+        "scope": "Recovered evidence-grounding format error; full state generation was repeated."
+      },
+      {
+        "case_id": "GPT50_012_t7_neutral",
+        "category": "response_language_contract",
+        "severity": "medium",
+        "observation": "All response attempts are English despite the explicit Chinese response instruction.",
+        "evidence": "GPT50_012_t7_neutral/response_requests.json",
+        "scope": "Language instruction compliance."
+      },
+      {
+        "case_id": "GPT50_012_t7_neutral",
+        "category": "joint_action_owner",
+        "severity": "medium",
+        "observation": "The proposal says we accept a provisional standard, in a context requiring confirmation by both sides. Its action_owner is environment_agent rather than collective. Two reply-obligation retries ultimately clear the obligation but leave this attribution unchanged.",
+        "evidence": "GPT50_012_t7_neutral/response_requests.json",
+        "scope": "Assistant assessment of ledger-role semantics; not a human correctness label."
+      },
+      {
+        "case_id": "GPT50_011_t6",
+        "category": "unrecovered_state_schema_error",
+        "severity": "high",
+        "observation": "All three state appraisal attempts marked new evidence with an invalid direction. The case failed before deterministic update and response generation; no extra attempts were made.",
+        "evidence": "GPT50_011_t6/result.json",
+        "invalid_judgments": [
+          {
+            "attempt": 1,
+            "invalid_judgments": [
+              {
+                "group": "state_judgments",
+                "variable": "relationship.perceived_responsiveness",
+                "judgment": "ordinary_new_evidence",
+                "direction": "positive",
+                "evidence_span": "I'll check whether this kind of staff time is an allowable expense",
+                "directness": "direct",
+                "evidence_feature": "cooperation_signal",
+                "rationale": "Sela Aruun perceives Dorian Pell as responsive because Dorian directly addresses the previous turn's request to check if the staff time is an allowable expense, showing he is hearing and acting on the concern."
+              },
+              {
+                "group": "state_judgments",
+                "variable": "relationship.role_legitimacy",
+                "judgment": "ordinary_new_evidence",
+                "direction": "positive",
+                "evidence_span": "we cannot assume the community will make up this labor without pay",
+                "directness": "direct",
+                "evidence_feature": "respect_signal",
+                "rationale": "Sela Aruun perceives Dorian Pell's role as legitimate because he explicitly respects the community's labor rights and refuses to assume unpaid work, aligning with the archive's values of fair partnership."
+              },
+              {
+                "group": "dynamics_judgments",
+                "variable": "coordination_stability",
+                "judgment": "ordinary_new_evidence",
+                "direction": "positive",
+                "evidence_span": "I'll check whether this kind of staff time is an allowable expense",
+                "rationale": "The coordination remains stable as Dorian Pell follows through on the agreed process of verifying expense allowability before proceeding."
+              },
+              {
+                "group": "dynamics_judgments",
+                "variable": "information_asymmetry",
+                "judgment": "ordinary_new_evidence",
+                "direction": "negative",
+                "evidence_span": "I'll check whether this kind of staff time is an allowable expense",
+                "rationale": "Information asymmetry slightly decreases as Dorian Pell takes responsibility for verifying the funder's rules, sharing the burden of information gathering."
+              },
+              {
+                "group": "dynamics_judgments",
+                "variable": "negotiation_openness",
+                "judgment": "ordinary_new_evidence",
+                "direction": "positive",
+                "evidence_span": "If it isn't supported, I'd like to first adjust the scale of the preparation work",
+                "rationale": "Negotiation openness is maintained as Dorian Pell proposes a flexible alternative (adjusting scale) if the expense is not allowed, showing willingness to adapt."
+              }
+            ]
+          },
+          {
+            "attempt": 2,
+            "invalid_judgments": [
+              {
+                "group": "state_judgments",
+                "variable": "relationship.perceived_responsiveness",
+                "judgment": "ordinary_new_evidence",
+                "direction": "positive",
+                "evidence_span": "I'll check whether this kind of staff time is an allowable expense",
+                "directness": "direct",
+                "evidence_feature": "cooperation_signal",
+                "rationale": "Sela Aruun perceives Dorian Pell as responsive because Dorian directly addresses the previous turn's request to check if the staff time is an allowable expense, showing he is hearing and acting on the concern."
+              },
+              {
+                "group": "state_judgments",
+                "variable": "relationship.role_legitimacy",
+                "judgment": "ordinary_new_evidence",
+                "direction": "positive",
+                "evidence_span": "we cannot assume the community will make up this labor without pay",
+                "directness": "direct",
+                "evidence_feature": "respect_signal",
+                "rationale": "Sela Aruun perceives Dorian Pell's role as legitimate because he explicitly respects the community's labor rights and refuses to assume unpaid work, aligning with the archive's values of fair partnership."
+              },
+              {
+                "group": "dynamics_judgments",
+                "variable": "coordination_stability",
+                "judgment": "ordinary_new_evidence",
+                "direction": "positive",
+                "evidence_span": "I'll check whether this kind of staff time is an allowable expense",
+                "rationale": "The coordination remains stable as Dorian Pell follows through on the agreed process of verifying expense allowability before proceeding."
+              },
+              {
+                "group": "dynamics_judgments",
+                "variable": "information_asymmetry",
+                "judgment": "ordinary_new_evidence",
+                "direction": "negative",
+                "evidence_span": "I'll check whether this kind of staff time is an allowable expense",
+                "rationale": "Information asymmetry slightly decreases as Dorian Pell takes responsibility for verifying the funder's rules, sharing the burden of information gathering."
+              },
+              {
+                "group": "dynamics_judgments",
+                "variable": "negotiation_openness",
+                "judgment": "ordinary_new_evidence",
+                "direction": "positive",
+                "evidence_span": "If it isn't supported, I'd like to first adjust the scale of the preparation work",
+                "rationale": "Negotiation openness is maintained as Dorian Pell proposes a flexible alternative (adjusting scale) if the expense is not allowed, showing willingness to adapt."
+              }
+            ]
+          },
+          {
+            "attempt": 3,
+            "invalid_judgments": [
+              {
+                "group": "state_judgments",
+                "variable": "relationship.perceived_responsiveness",
+                "judgment": "ordinary_new_evidence",
+                "direction": "positive",
+                "evidence_span": "I'll check whether this kind of staff time is an allowable expense",
+                "directness": "direct",
+                "evidence_feature": "cooperation_signal",
+                "rationale": "Sela Aruun perceives Dorian Pell as responsive because Dorian directly addresses the previous turn's request to check if the staff time is an allowable expense."
+              },
+              {
+                "group": "state_judgments",
+                "variable": "relationship.role_legitimacy",
+                "judgment": "ordinary_new_evidence",
+                "direction": "positive",
+                "evidence_span": "we cannot assume the community will make up this labor without pay",
+                "directness": "direct",
+                "evidence_feature": "respect_signal",
+                "rationale": "Sela Aruun perceives Dorian Pell's role as legitimate because he explicitly respects the community's labor rights and refuses to assume unpaid work."
+              },
+              {
+                "group": "dynamics_judgments",
+                "variable": "coordination_stability",
+                "judgment": "ordinary_new_evidence",
+                "direction": "positive",
+                "evidence_span": "I'll check whether this kind of staff time is an allowable expense",
+                "rationale": "The coordination remains stable as Dorian Pell follows through on the agreed process of verifying expense allowability before proceeding."
+              },
+              {
+                "group": "dynamics_judgments",
+                "variable": "information_asymmetry",
+                "judgment": "ordinary_new_evidence",
+                "direction": "negative",
+                "evidence_span": "I'll check whether this kind of staff time is an allowable expense",
+                "rationale": "Information asymmetry slightly decreases as Dorian Pell takes responsibility for verifying the funder's rules, sharing the burden of information gathering."
+              },
+              {
+                "group": "dynamics_judgments",
+                "variable": "negotiation_openness",
+                "judgment": "ordinary_new_evidence",
+                "direction": "positive",
+                "evidence_span": "If it isn't supported, I'd like to first adjust the scale of the preparation work",
+                "rationale": "Negotiation openness is maintained as Dorian Pell proposes a flexible alternative (adjusting scale) if the expense is not allowed, showing willingness to adapt."
+              }
+            ]
+          }
+        ],
+        "scope": "A failed environment turn under the current bounded retries; HTTP transport succeeded."
+      },
+      {
+        "case_id": "GPT50_025_t2",
+        "category": "response_event_coverage",
+        "severity": "high",
+        "observation": "After three reply-obligation validation failures, the fourth response passes with an empty ledger and no reply obligation, despite an explicit first-person promise to inform the client and a new joint-action question. This reproduces the event-coverage gap from GPT50_006_t2 in a different scenario.",
+        "evidence": "GPT50_025_t2/response_requests.json",
+        "scope": "Model event omission plus validator coverage; transport succeeded."
+      },
+      {
+        "case_id": "GPT50_025_t6",
+        "category": "unsupported_outcome_guarantee",
+        "severity": "high",
+        "observation": "The response says parallel communication ensures all necessary coordination is finished before the cycle. Client parameters, authorization, and technical assessment remain pending; the environment character explicitly must not claim certainty beyond the evidence. The guarantee is also absent from consequential_claims.",
+        "evidence": "GPT50_025_t6/turn.json",
+        "details": {
+          "response_excerpt": "也能确保在和解周期前完成所有必要的协调工作"
+        },
+        "scope": "An unsupported strengthening of a proposed process into a guaranteed outcome."
+      },
+      {
+        "case_id": "GPT50_025_t6",
+        "category": "domain_term_mistranslation",
+        "severity": "medium",
+        "observation": "The scenario and prior history explicitly discuss medication reconciliation. The Chinese response renders reconciliation cycle as 和解周期, a social/legal reconciliation term, rather than the medication-review workflow.",
+        "evidence": "GPT50_025_t6/result.json",
+        "scope": "Domain meaning is changed during cross-language response generation."
+      },
+      {
+        "case_id": "GPT50_043_t2",
+        "category": "domain_term_mistranslation",
+        "severity": "medium",
+        "observation": "The scenario explicitly refers to the provisional competition title/win and national invitation. The response translates title as 标题, changing the object from a competition honor to a text heading.",
+        "evidence": "GPT50_043_t2/result.json",
+        "scope": "Domain meaning changed in Chinese generation."
+      },
+      {
+        "case_id": "GPT50_043_t2",
+        "category": "evidence_span_not_exact",
+        "severity": "medium",
+        "observation": "State appraisal required a retry because a claimed evidence span was not an exact substring of the latest action.",
+        "evidence": "GPT50_043_t2/state_requests.json",
+        "scope": "Recovered evidence-grounding format error."
+      },
+      {
+        "case_id": "GPT50_043_t6",
+        "category": "response_language_contract",
+        "severity": "medium",
+        "observation": "The response is English despite the explicit Chinese response instruction.",
+        "evidence": "GPT50_043_t6/response_requests.json",
+        "scope": "Language instruction compliance."
+      },
+      {
+        "case_id": "GPT50_043_t6",
+        "category": "expression_intent_schema",
+        "severity": "medium",
+        "observation": "The response required a retry because expression_intent violated the concise non-empty string constraint.",
+        "evidence": "GPT50_043_t6/response_requests.json",
+        "scope": "Recovered response schema error."
+      }
+    ],
+    "language_note": "Response v31 explicitly requests one to three natural Chinese sentences. Six of fourteen completed responses are English; eight contain Chinese. This is language-instruction inconsistency, separate from content correctness.",
+    "neutral_control_notes": [
+      {
+        "case_id": "GPT50_006_t6_neutral",
+        "state_delta": {
+          "behavioral_disposition.cooperation_readiness": 1
+        },
+        "dynamics_delta_all_zero": true,
+        "interpretation": "Listening can legitimately signal willingness to continue. This increase alone is not classified as an error. The environment independently concedes the funding deadline; whether that is an appropriate character choice needs broader trajectory review."
+      },
+      {
+        "case_id": "GPT50_003_t6_neutral",
+        "state_delta": {},
+        "dynamics_delta_all_zero": true,
+        "interpretation": "No unsupported numeric update. The response asks about an alternate evidence contingency; usefulness versus redundant reopening needs broader dialogue review."
+      },
+      {
+        "case_id": "GPT50_012_t7_neutral",
+        "state_delta": {},
+        "dynamics_delta_all_zero": true,
+        "interpretation": "No unsupported numeric update. The final response remains an explicit proposal, not a claim that both sides have approved it."
+      }
+    ],
+    "positive_observations": [
+      {
+        "case_id": "GPT50_006_t2",
+        "observation": "The response preserves the distinction between publication consent and fund authorization; it does not claim either permission has already been granted."
+      },
+      {
+        "case_id": "GPT50_003_t2",
+        "observation": "The response preserves the source-conflict concern, treats the allegation as unverified, and protects source identity. The environment is the editor and has authority to approve a qualified publication plan."
+      },
+      {
+        "case_id": "GPT50_003_t6",
+        "observation": "The response keeps publication justified by verified public-interest records rather than claiming an ability to influence the vote. The promised review already exists in t3/t5, so the empty event list is not classified here as a new-commitment omission."
+      },
+      {
+        "case_id": "GPT50_003_t6_neutral",
+        "observation": "The neutral control leaves every state and dynamics value unchanged, follows the Chinese language instruction, and records the follow-up question as a request with matching reply obligation. New corroboration is explicitly hypothetical, not asserted as an observed fact."
+      },
+      {
+        "case_id": "GPT50_012_t2",
+        "observation": "The response retains uncertainty about the affected ranch identities, makes scope acceptance conditional on boundary verification, and records both the conditional commitment and its follow-up request."
+      },
+      {
+        "case_id": "GPT50_012_t7",
+        "observation": "The response accepts the recordkeeping structure only as a baseline for joint confirmation and explicitly keeps the county threshold undefined. It does not claim county approval or a completed bilateral agreement."
+      },
+      {
+        "case_id": "GPT50_012_t7_neutral",
+        "observation": "State and dynamics remain unchanged on the neutral action; the final suggested standard is explicitly framed as a proposal."
+      },
+      {
+        "case_id": "GPT50_011_t2",
+        "observation": "The response distinguishes funder-scope evidence from community authorization, preserves community metadata rights, uses Chinese, and records its own proposed drafting commitment. The public history does not exclusively assign all drafting to the evaluated agent; this is not classified as a definite actor-ownership violation."
+      },
+      {
+        "case_id": "GPT50_025_t2",
+        "observation": "The final response explicitly retains that low impact is only a design goal because service-impact logs are missing. Its alternative is phrased as a conditional proposal rather than a completed isolation action."
+      },
+      {
+        "case_id": "GPT50_025_t6",
+        "observation": "The first sentence correctly assigns client contact to the account director and technical assessment to the evaluated agent; it does not claim isolation has already been authorized."
+      },
+      {
+        "case_id": "GPT50_043_t2",
+        "observation": "The response keeps students understanding distinct from the rules and explicitly treats a rebuild or conditional ruling as a request rather than an established outcome."
+      },
+      {
+        "case_id": "GPT50_043_t6",
+        "observation": "The response commits to filing before five and keeping the draft available without claiming filing is already complete. It keeps the remedy framed as a request and records the commitment and question."
+      }
+    ],
+    "discussion_quality_notes": [
+      {
+        "case_id": "GPT50_043_t6",
+        "observation": "The response adds a cover-letter preference question after an instruction to file directly rather than spend the window on another review cycle. It states it will proceed now, so this is recorded as possible unnecessary follow-up, not a definite blocking or factual error."
+      }
+    ]
+  },
+  "cases": [
+    {
+      "case_id": "GPT50_006_t2",
+      "kind": "matched_checkpoint",
+      "status": "completed",
+      "first_pass": false,
+      "request_count": 4,
+      "seconds": 197.696,
+      "response": "我同意将发布与资金授权视为两个独立环节，并尊重你关于书面确认的要求。鉴于匹配资金窗口即将关闭，我们是否可以在等待社区资金授权的同时，先完成材料发布的最终核对？",
+      "changed_state_variables": {
+        "emotion.anxiety": -1,
+        "emotion.frustration": -1,
+        "behavioral_disposition.cooperation_readiness": 1,
+        "relationship.perceived_responsiveness": 1,
+        "consequence_risk.goal_failure_risk": -1
+      },
+      "numeric_dynamics_delta": {
+        "deadline_pressure": -1,
+        "information_asymmetry": 0,
+        "public_exposure": 0,
+        "negotiation_openness": 1,
+        "institutional_constraint": 0
+      },
+      "error_type": null,
+      "error": null,
+      "state_bounds_valid": true,
+      "state_variable_set_preserved": true,
+      "response_language": "Chinese",
+      "artifact": "build/qwen_deployment/prompt_eval_frozen/GPT50_006_t2/result.json",
+      "result_sha256": "cf52089451c0b335274e808c847bf8d96c66e96981d413cd2a45eb6a93a8e622"
+    },
+    {
+      "case_id": "GPT50_006_t6",
+      "kind": "matched_checkpoint",
+      "status": "completed",
+      "first_pass": true,
+      "request_count": 3,
+      "seconds": 186.205,
+      "response": "我接受你保留社区决策权并放弃匹配资金的立场，之前的出版条件依然有效。关于向捐赠者解释授权尚未完成且不归咎于撤回故事的家庭，我可以配合这一沟通方向，但需要确认我们是否应在委员会完成审查后再发布正式声明，以避免信息不一致。",
+      "changed_state_variables": {
+        "behavioral_disposition.cooperation_readiness": 1,
+        "relationship.perceived_responsiveness": 1,
+        "relationship.perceived_fairness": 1,
+        "consequence_risk.reputational_harm_risk": -1
+      },
+      "numeric_dynamics_delta": {
+        "deadline_pressure": -2,
+        "information_asymmetry": 0,
+        "public_exposure": 1,
+        "negotiation_openness": 1,
+        "institutional_constraint": 1
+      },
+      "error_type": null,
+      "error": null,
+      "state_bounds_valid": true,
+      "state_variable_set_preserved": true,
+      "response_language": "Chinese",
+      "artifact": "build/qwen_deployment/prompt_eval_frozen/GPT50_006_t6/result.json",
+      "result_sha256": "f8d9f1fca4788dad9473d05e88883aa0859bdb0179408ce8125cad1c5a7f3a16"
+    },
+    {
+      "case_id": "GPT50_006_t6_neutral",
+      "kind": "neutral_control",
+      "status": "completed",
+      "first_pass": false,
+      "request_count": 7,
+      "seconds": 400.889,
+      "response": "I will prioritize preserving the community's decision-making authority and accept losing the matching funds. Let's focus on drafting the authorization protocol for the committee review.",
+      "changed_state_variables": {
+        "behavioral_disposition.cooperation_readiness": 1
+      },
+      "numeric_dynamics_delta": {
+        "deadline_pressure": 0,
+        "information_asymmetry": 0,
+        "public_exposure": 0,
+        "negotiation_openness": 0,
+        "institutional_constraint": 0
+      },
+      "error_type": null,
+      "error": null,
+      "state_bounds_valid": true,
+      "state_variable_set_preserved": true,
+      "response_language": "English",
+      "artifact": "build/qwen_deployment/prompt_eval_frozen/GPT50_006_t6_neutral/result.json",
+      "result_sha256": "defc25d1efc356d8ead22118483374f9880581ede64af5b3112d6de7b0e964c3"
+    },
+    {
+      "case_id": "GPT50_003_t2",
+      "kind": "matched_checkpoint",
+      "status": "completed",
+      "first_pass": false,
+      "request_count": 4,
+      "seconds": 369.797,
+      "response": "我同意将那条指令降级为待核实的线索，并严格保护消息源身份，这符合我们当前的处理原则。既然你已确认合同、发票和会议记录足以支撑今晚的报道，我批准按此框架发布，前提是确保所有引用均准确无误且未遗漏关键限定条件。",
+      "changed_state_variables": {
+        "emotion.anxiety": -2,
+        "emotion.frustration": -2,
+        "behavioral_disposition.evidence_seeking": 1,
+        "behavioral_disposition.cooperation_readiness": 2,
+        "relationship.trust": 2,
+        "relationship.perceived_responsiveness": 2,
+        "relationship.role_legitimacy": 2,
+        "consequence_risk.goal_failure_risk": -2,
+        "consequence_risk.reputational_harm_risk": -2,
+        "consequence_risk.institutional_harm_risk": -2
+      },
+      "numeric_dynamics_delta": {
+        "deadline_pressure": -2,
+        "resource_scarcity": 0,
+        "information_asymmetry": -2,
+        "negotiation_openness": 2,
+        "institutional_constraint": -2
+      },
+      "error_type": null,
+      "error": null,
+      "state_bounds_valid": true,
+      "state_variable_set_preserved": true,
+      "response_language": "Chinese",
+      "artifact": "build/qwen_deployment/prompt_eval_frozen/GPT50_003_t2/result.json",
+      "result_sha256": "b23cfad5f77937bb1c407991acd840a716056ba5a4df2256d6aeba36e9705ac7"
+    },
+    {
+      "case_id": "GPT50_003_t6",
+      "kind": "matched_checkpoint",
+      "status": "completed",
+      "first_pass": true,
+      "request_count": 3,
+      "seconds": 156.793,
+      "response": "That framing is acceptable, provided the justification for pre-vote publication rests strictly on the public relevance of the verified records rather than the vote itself. I will check that the draft maintains this distinction when I review it tonight.",
+      "changed_state_variables": {
+        "emotion.anxiety": -1,
+        "behavioral_disposition.cooperation_readiness": 1,
+        "relationship.trust": 1,
+        "consequence_risk.goal_failure_risk": -1,
+        "consequence_risk.reputational_harm_risk": -1
+      },
+      "numeric_dynamics_delta": {
+        "deadline_pressure": 0,
+        "resource_scarcity": 0,
+        "information_asymmetry": 0,
+        "negotiation_openness": 1,
+        "institutional_constraint": 0
+      },
+      "error_type": null,
+      "error": null,
+      "state_bounds_valid": true,
+      "state_variable_set_preserved": true,
+      "response_language": "English",
+      "artifact": "build/qwen_deployment/prompt_eval_frozen/GPT50_003_t6/result.json",
+      "result_sha256": "9c8b9f942d7a136aa53d2883a6d94708c3eb5f8d8314c4406472cefcfa33b7f1"
+    },
+    {
+      "case_id": "GPT50_003_t6_neutral",
+      "kind": "neutral_control",
+      "status": "completed",
+      "first_pass": true,
+      "request_count": 3,
+      "seconds": 155.129,
+      "response": "既然你准备好了，我想确认一下，在周一公共记录公开之前，如果那份有争议的指令出现新的独立佐证，我们是直接将其纳入今晚的稿件，还是坚持等到周一再评估？",
+      "changed_state_variables": {},
+      "numeric_dynamics_delta": {
+        "deadline_pressure": 0,
+        "resource_scarcity": 0,
+        "information_asymmetry": 0,
+        "negotiation_openness": 0,
+        "institutional_constraint": 0
+      },
+      "error_type": null,
+      "error": null,
+      "state_bounds_valid": true,
+      "state_variable_set_preserved": true,
+      "response_language": "Chinese",
+      "artifact": "build/qwen_deployment/prompt_eval_frozen/GPT50_003_t6_neutral/result.json",
+      "result_sha256": "b72f5bd40e0a9aafd5117ef9d962850a3138ab586010f1347f2195d1d20b8d29"
+    },
+    {
+      "case_id": "GPT50_012_t2",
+      "kind": "matched_checkpoint",
+      "status": "completed",
+      "first_pass": false,
+      "request_count": 4,
+      "seconds": 200.047,
+      "response": "Expanding the risk map to adjacent ranches addresses the uneven burden, so I accept that scope provided the boundary check is completed before we finalize the list. Since we cannot name the specific properties yet, how do you propose we verify the compensation standard applies fairly to those adjacent risks without delaying the dusk deadline?",
+      "changed_state_variables": {
+        "emotion.anxiety": -1,
+        "emotion.hope": 1,
+        "behavioral_disposition.cooperation_readiness": 1,
+        "relationship.perceived_responsiveness": 2,
+        "relationship.perceived_fairness": 2,
+        "relationship.role_legitimacy": 1,
+        "consequence_risk.goal_failure_risk": -1
+      },
+      "numeric_dynamics_delta": {
+        "deadline_pressure": 0,
+        "information_asymmetry": -1,
+        "negotiation_openness": 1,
+        "coordination_stability": 1,
+        "institutional_constraint": 0
+      },
+      "error_type": null,
+      "error": null,
+      "state_bounds_valid": true,
+      "state_variable_set_preserved": true,
+      "response_language": "English",
+      "artifact": "build/qwen_deployment/prompt_eval_frozen/GPT50_012_t2/result.json",
+      "result_sha256": "bd1938592baa12fe479a2c6e5ebd3d7ab8d9c5e982f3af91d7b83dd8ab0783d8"
+    },
+    {
+      "case_id": "GPT50_012_t7",
+      "kind": "matched_checkpoint",
+      "status": "completed",
+      "first_pass": false,
+      "request_count": 4,
+      "seconds": 363.767,
+      "response": "I accept that three-tier recordkeeping structure as the baseline for our joint confirmation. Since the county's threshold is still undefined, do you want the pending verification status to automatically trigger a re-evaluation once that standard is set, or should we require a separate re-submission?",
+      "changed_state_variables": {
+        "emotion.anxiety": -1,
+        "consequence_risk.goal_failure_risk": -1
+      },
+      "numeric_dynamics_delta": {
+        "deadline_pressure": 0,
+        "information_asymmetry": -1,
+        "negotiation_openness": 0,
+        "coordination_stability": 0,
+        "institutional_constraint": 0
+      },
+      "error_type": null,
+      "error": null,
+      "state_bounds_valid": true,
+      "state_variable_set_preserved": true,
+      "response_language": "English",
+      "artifact": "build/qwen_deployment/prompt_eval_frozen/GPT50_012_t7/result.json",
+      "result_sha256": "6ea37d8351e63e6bc64540f0ae7f4f005ab449c0e958df1dd09d72c21c6e0664"
+    },
+    {
+      "case_id": "GPT50_012_t7_neutral",
+      "kind": "neutral_control",
+      "status": "completed",
+      "first_pass": false,
+      "request_count": 5,
+      "seconds": 220.769,
+      "response": "I propose we accept a provisional standard now requiring purpose, cost, and labor hours to be logged, with the exact documentation format settled after the relocation. This preserves our agreement that the standard must be in place before access while acknowledging the time constraint.",
+      "changed_state_variables": {},
+      "numeric_dynamics_delta": {
+        "deadline_pressure": 0,
+        "information_asymmetry": 0,
+        "negotiation_openness": 0,
+        "coordination_stability": 0,
+        "institutional_constraint": 0
+      },
+      "error_type": null,
+      "error": null,
+      "state_bounds_valid": true,
+      "state_variable_set_preserved": true,
+      "response_language": "English",
+      "artifact": "build/qwen_deployment/prompt_eval_frozen/GPT50_012_t7_neutral/result.json",
+      "result_sha256": "a24b0705670ee67142978be57efb0eba2bb64872e12e375ea203f7334c8c49c2"
+    },
+    {
+      "case_id": "GPT50_011_t2",
+      "kind": "matched_checkpoint",
+      "status": "completed",
+      "first_pass": true,
+      "request_count": 3,
+      "seconds": 184.756,
+      "response": "既然那些记录仅用于核实资助方对缩减范围的接受度，那便与社区授权无关，我同意你整理后供我查阅。关于元数据修订权归社区所有，这符合我们一贯的原则，我会在申请草案中明确这一条款。",
+      "changed_state_variables": {
+        "emotion.anxiety": -1,
+        "behavioral_disposition.cooperation_readiness": 1,
+        "relationship.perceived_responsiveness": 2,
+        "relationship.role_legitimacy": 1,
+        "relationship.perceived_safety": 1,
+        "consequence_risk.institutional_harm_risk": -1,
+        "consequence_risk.autonomy_loss_risk": -1
+      },
+      "numeric_dynamics_delta": {
+        "deadline_pressure": 0,
+        "information_asymmetry": -2,
+        "negotiation_openness": 1,
+        "coordination_stability": 1,
+        "institutional_constraint": 0
+      },
+      "error_type": null,
+      "error": null,
+      "state_bounds_valid": true,
+      "state_variable_set_preserved": true,
+      "response_language": "Chinese",
+      "artifact": "build/qwen_deployment/prompt_eval_frozen/GPT50_011_t2/result.json",
+      "result_sha256": "cca720773962321dd54a9625cd0ff1cf6d252d20af2e3d433e7243ebf8ab3f2c"
+    },
+    {
+      "case_id": "GPT50_011_t6",
+      "kind": "matched_checkpoint",
+      "status": "failed",
+      "first_pass": false,
+      "request_count": 4,
+      "seconds": 409.363,
+      "response": null,
+      "changed_state_variables": null,
+      "numeric_dynamics_delta": null,
+      "error_type": "StructuredOutputError",
+      "error": "state appraiser failed JSON/schema validation after 3 attempts",
+      "state_bounds_valid": null,
+      "state_variable_set_preserved": null,
+      "response_language": null,
+      "artifact": "build/qwen_deployment/prompt_eval_frozen/GPT50_011_t6/result.json",
+      "result_sha256": "4efe35da84e3a582b2de8ec038567a8ca8d5596cb40dbd97732011d78c73139e"
+    },
+    {
+      "case_id": "GPT50_025_t2",
+      "kind": "matched_checkpoint",
+      "status": "completed",
+      "first_pass": false,
+      "request_count": 6,
+      "seconds": 254.171,
+      "response": "我会如实向客户说明缺乏服务影响日志使得“低影响”仅为设计目标。考虑到下午故障转移未经验证且人工队列无法积压，若客户拒绝全面隔离，我们是否应尝试争取一个极短的、可立即回滚的只读身份冻结窗口，以在保护临床连续性的同时降低凭证滥用风险？",
+      "changed_state_variables": {
+        "emotion.anxiety": -1,
+        "behavioral_disposition.cooperation_readiness": 1,
+        "relationship.perceived_responsiveness": 1,
+        "consequence_risk.decision_error_risk": -1
+      },
+      "numeric_dynamics_delta": {
+        "deadline_pressure": 0,
+        "resource_scarcity": 0,
+        "information_asymmetry": -1,
+        "negotiation_openness": 0,
+        "coordination_stability": 1
+      },
+      "error_type": null,
+      "error": null,
+      "state_bounds_valid": true,
+      "state_variable_set_preserved": true,
+      "response_language": "Chinese",
+      "artifact": "build/qwen_deployment/prompt_eval_frozen/GPT50_025_t2/result.json",
+      "result_sha256": "876ad6f45fb0c35d397863b6863fd185cfc26de66e0f85358a6687acb5a3b1a0"
+    },
+    {
+      "case_id": "GPT50_025_t6",
+      "kind": "matched_checkpoint",
+      "status": "completed",
+      "first_pass": true,
+      "request_count": 3,
+      "seconds": 166.236,
+      "response": "明白了，我会立即联系客户确认参数和授权边界，同时等待你的初步评估结果。这样既能保证信息一致，也能确保在和解周期前完成所有必要的协调工作。",
+      "changed_state_variables": {
+        "emotion.anxiety": -1,
+        "consequence_risk.decision_error_risk": -1
+      },
+      "numeric_dynamics_delta": {
+        "deadline_pressure": 0,
+        "resource_scarcity": 0,
+        "information_asymmetry": 0,
+        "negotiation_openness": 1,
+        "coordination_stability": 1
+      },
+      "error_type": null,
+      "error": null,
+      "state_bounds_valid": true,
+      "state_variable_set_preserved": true,
+      "response_language": "Chinese",
+      "artifact": "build/qwen_deployment/prompt_eval_frozen/GPT50_025_t6/result.json",
+      "result_sha256": "981ddb452200059da270fd20bde617fac70a98073093dfee327d91b2ced731de"
+    },
+    {
+      "case_id": "GPT50_043_t2",
+      "kind": "matched_checkpoint",
+      "status": "completed",
+      "first_pass": false,
+      "request_count": 4,
+      "seconds": 320.923,
+      "response": "我会按你的要求，在时间线中明确区分学生的理解与规则的实际边界，并标注谁做出了哪些决定，同时确保标题和邀请的临时状态得到保留。不过，考虑到审查的不确定性，我建议在报告中将重建或裁决明确表述为请求而非既定结果，以符合程序要求。",
+      "changed_state_variables": {
+        "emotion.anxiety": -1,
+        "relationship.perceived_responsiveness": 1,
+        "relationship.perceived_fairness": 1,
+        "relationship.role_legitimacy": 1,
+        "consequence_risk.goal_failure_risk": -1
+      },
+      "numeric_dynamics_delta": {
+        "deadline_pressure": 0,
+        "resource_scarcity": 0,
+        "information_asymmetry": 0,
+        "public_exposure": 0,
+        "institutional_constraint": 0
+      },
+      "error_type": null,
+      "error": null,
+      "state_bounds_valid": true,
+      "state_variable_set_preserved": true,
+      "response_language": "Chinese",
+      "artifact": "build/qwen_deployment/prompt_eval_frozen/GPT50_043_t2/result.json",
+      "result_sha256": "e6e151d93e64b8b8cb98bc1382d3f5121c3263d720b236b56e2e6fabd526d01c"
+    },
+    {
+      "case_id": "GPT50_043_t6",
+      "kind": "matched_checkpoint",
+      "status": "completed",
+      "first_pass": false,
+      "request_count": 4,
+      "seconds": 217.901,
+      "response": "I will file directly before five and keep the draft available for your inspection, ensuring the rebuild and ruling are framed as requests. Since the correction window is tight, I'll proceed with the filing now; do you want me to explicitly note in the cover letter that the draft is retained for team review, or is the availability of the file itself sufficient?",
+      "changed_state_variables": {
+        "emotion.anxiety": -1,
+        "consequence_risk.goal_failure_risk": -1
+      },
+      "numeric_dynamics_delta": {
+        "deadline_pressure": -1,
+        "resource_scarcity": 0,
+        "information_asymmetry": 0,
+        "public_exposure": 0,
+        "institutional_constraint": 0
+      },
+      "error_type": null,
+      "error": null,
+      "state_bounds_valid": true,
+      "state_variable_set_preserved": true,
+      "response_language": "English",
+      "artifact": "build/qwen_deployment/prompt_eval_frozen/GPT50_043_t6/result.json",
+      "result_sha256": "7ba8c07db2edca531be186cf9d8e4910a60e395054d1cd805857649c5cd81f3c"
+    }
+  ],
+  "artifacts": {
+    "manifest": "build/qwen_deployment/prompt_eval_frozen/manifest.json",
+    "manifest_sha256": "e2f8699775e9fe5ba1622f7eaa3541cff8d4920c466456c95bad92bc787e7e20",
+    "results": "build/qwen_deployment/prompt_eval_frozen/results.json",
+    "results_sha256": "dc7a3a6f33c16a8a086e59b977c3f9700913c6a4a20f3487626654b1ecfe6d43",
+    "runtime": "build/qwen_deployment/prompt_eval_frozen/runtime"
+  },
+  "service_health_after_evaluation": 200,
+  "limitations": [
+    "Development diagnostic only; no formal admission or human correctness labels.",
+    "One fixed non-thinking run on 15 checkpoints, not a full multi-turn or multi-model benchmark.",
+    "Source-model state-direction agreement is not accuracy; the source responses are not human ground truth.",
+    "Neutral acknowledgements may legitimately alter cooperative disposition.",
+    "Latency is for this eager-mode four-GPU deployment and includes real bounded retries; it is not a tuned throughput benchmark."
+  ]
+}
