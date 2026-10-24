@@ -28,6 +28,7 @@ def build(output, backend_url, allow_loopback=False, allow_existing_server=False
     html = html.replace('href="/experiment_hub.css"', 'href="./experiment_hub.css"')
     html = html.replace('href="/lab"', 'href="./"')
     html = html.replace('https://socialflux-experiment-lab.junqiao24.chatgpt.site/annotation', '../annotation/')
+    html = html.replace('href="/annotation/"', 'href="../annotation/"')
     html = re.sub(r'href="(/[^"\n]+)"', lambda match: 'href="' + backend_url + match[1] + '"', html)
     html = html.replace('连接本地实验目录', '连接实验数据')
     html = html.replace('<script src="/experiment_hub.js"></script>',

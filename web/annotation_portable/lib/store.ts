@@ -127,7 +127,7 @@ export function exportRecord(row: Session) {
     return {format: 'socialflux_human_gt_v1', release: row.release,
     receipt_id: row.id, reviewer_alias: row.alias, dataset_sha256: row.datasetSha256, item_hashes: JSON.parse(row.itemHashesJson),
     media_hashes: mediaHashes, status: row.status, revision: row.revision, created_at: row.createdAt, submitted_at: row.submittedAt,
-    prior_exposure: row.priorExposure, ...exported};
+    prior_exposure: row.priorExposure, saved_draft_answers: JSON.parse(row.draftJson), ...exported};
   }
   const multimodal = !!bundleFor(row.datasetSha256).videos;
   return {format: multimodal ? "socialflux_multimodal_review_v1" : "socialflux_public_demo_annotation_v1",

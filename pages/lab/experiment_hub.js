@@ -183,7 +183,10 @@ function renderLibrary(){
 }
 function renderHuman(){
   const h=snapshot.human_annotation||{};
-  $('human-summary').innerHTML=[stat('已导入标注',h.sessions||0,'份',`最终提交 ${h.submitted||0}`,'◇'),stat('共识 GT',h.gt_consensus||0,'题',`待裁决 ${h.gt_disputed||0}`,'✓'),stat('T4 固定抽样',50,'场景','完整轨迹池 182 / 总体 200','▥'),stat('Claude 对照已备',h.claude_available||0,'/ 50',`失败 ${h.claude_status?.failed||0} · 待完成 ${h.claude_status?.pending||0} · 详情见论文覆盖表`,'↔')].join('');
+  const cohorts=h.dataset_cohorts||[];
+  $('human-summary').innerHTML=[stat('全部版本已导入',h.total_sessions??h.sessions??0,'份',`当前版本 ${h.sessions||0} 份 · 当前版本最终提交 ${h.submitted||0}`,'◇'),stat('当前版本共识 GT',h.gt_consensus||0,'题',`待裁决 ${h.gt_disputed||0}`,'✓'),stat('T4 固定抽样',50,'场景','完整轨迹池 182 / 总体 200','▥'),stat('Claude 对照已备',h.claude_available||0,'/ 50',`失败 ${h.claude_status?.failed||0} · 待完成 ${h.claude_status?.pending||0} · 详情见论文覆盖表`,'↔')].join('');
+  $('human-release-note').textContent=`下方 GT 和环境核对统计使用版本：${h.release||'待准备'}。其他版本的记录保留在本表。`;
+  $('human-release-cohorts').innerHTML=cohorts.length?table(['材料版本','统计范围','已导入','未最终提交','最终提交'],cohorts.map(c=>[esc(c.release),c.current?'当前版本':c.registered_candidate?'候选版本':'历史版本',esc(c.sessions),esc(c.sessions-c.submitted),esc(c.submitted)])):empty('暂无已登记版本');
   const t=h.tables?.find(t=>t.id==='human-t4-calibration');
   $('human-comparison').innerHTML=t?table(t.columns,t.rows.map(row=>row.map(esc))):empty('等待冻结标注批次');
   const gt=h.tables?.find(t=>t.id==='gate2-human-coverage');

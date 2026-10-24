@@ -144,20 +144,24 @@ class HumanGTTests(unittest.TestCase):
             self.assertEqual(h.receipt_release(old['dataset_sha256'])['assignments'], old['assignments'])
 
     def test_replaced_media_does_not_mix_historical_video_baseline(self):
-        snapshot = {k: copy.deepcopy(self.release[k]) for k in ('release', 'dataset_sha256', 'source_bank_sha256', 'assignments')}
+        # Media overlays belong to the legacy bank; the active candidate may
+        # intentionally forbid combining records across release versions.
+        base = h.legacy_release()
+        group_count = len(next(a for a in base['assignments'] if a['track'] == 'offline_video')['item_ids'])
+        snapshot = {k: copy.deepcopy(base[k]) for k in ('release', 'dataset_sha256', 'source_bank_sha256', 'assignments')}
         snapshot['dataset_sha256'] = 'a' * 64
         snapshot['items'] = [{k: copy.deepcopy(x[k]) for k in ('id', 'item_sha256', 'media', 'coverage')} | {'has_video': x['public_video'] is not None}
-                             for x in self.release['items']]
-        first = self.receipt('old-video', track='offline_video')['assignment']['item_ids'][0]
+                             for x in base['items']]
+        first = self.receipt('old-video', data=base, track='offline_video')['assignment']['item_ids'][0]
         next(x for x in snapshot['items'] if x['id'] == first)['media'][0]['sha256'] = 'old-video-hash'
         path = Path(self.tmp.name) / 'snapshots' / 'history.json'; path.parent.mkdir(); path.write_text(json.dumps([snapshot]))
         with patch.object(h, 'MEDIA_HISTORY', path):
             old = h.receipt_release(snapshot['dataset_sha256'])
             h.import_receipt(self.receipt('old-video', data=old, track='offline_video'))
-            h.import_receipt(self.receipt('current-two', track='offline_video'))
-            h.import_receipt(self.receipt('current-three', track='offline_video'))
-            rows = next(x for x in h.load_human_gt()['tables'] if x['id'] == 'human-blind-baseline')['rows']
-        self.assertEqual(sum(x[3] for x in rows), self.group_count * 3 - 1)
+            h.import_receipt(self.receipt('current-two', data=base, track='offline_video'))
+            h.import_receipt(self.receipt('current-three', data=base, track='offline_video'))
+            rows = next(x for x in h.load_human_gt(base['dataset_sha256'])['tables'] if x['id'] == 'human-blind-baseline')['rows']
+        self.assertEqual(sum(x[3] for x in rows), group_count * 3 - 1)
 
     def test_claude_scores_require_matching_packet_and_valid_citations(self):
         item = copy.deepcopy(next(x for x in self.release['t4'] if x['machine']))
