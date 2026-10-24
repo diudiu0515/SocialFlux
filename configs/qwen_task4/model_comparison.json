@@ -1,0 +1,17 @@
+{
+  "model": "Qwen/Qwen3.8-27B-FP8",
+  "modelscope_weight_revision": "f7115dacf0c93b80b010ab9244a35d6ef3590f2a",
+  "download_manifest": "build/qwen_27b_comparison/modelscope_metadata.json",
+  "model_path": "build/qwen_27b_comparison/model",
+  "vllm_version": "0.32.0",
+  "host": "127.0.0.1",
+  "port": 8012,
+  "tensor_parallel_size": 4,
+  "max_model_len": 32768,
+  "max_num_seqs": 2,
+  "gpu_memory_utilization": 0.2,
+  "enable_expert_parallel": false,
+  "engram_config": {},
+  "reasoning_parser": "qwen3",
+  "scope": "Isolated local backbone comparison; not a promoted Task4 environment."
+}

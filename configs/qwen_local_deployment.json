@@ -11,9 +11,11 @@
   "tensor_parallel_size": 4,
   "max_model_len": 32768,
   "max_num_seqs": 8,
-  "gpu_memory_utilization": 0.90,
+  "gpu_memory_utilization": 0.74,
   "enable_expert_parallel": true,
-  "engram_config": {"cpu_offload": true},
+  "engram_config": {
+    "cpu_offload": true
+  },
   "reasoning_parser": "qwen3",
   "environment_source_config": "configs/gpt50_experiment/rollout.state_observed_evidence_v6_candidate.json",
   "environment_profile": "unified_current_trust_schema_v1",
@@ -25,6 +27,8 @@
     "timeout": 600,
     "max_transport_attempts": 1,
     "max_tokens": 8192,
-    "chat_template_kwargs": {"enable_thinking": false}
+    "chat_template_kwargs": {
+      "enable_thinking": false
+    }
   }
 }
