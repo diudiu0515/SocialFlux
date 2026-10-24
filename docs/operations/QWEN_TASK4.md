@@ -1,5 +1,28 @@
 # Qwen Task4 独立环境接口
 
+当前复测状态见 [验收记录](../../reports/analysis/2026-10-24_qwen_task4_acceptance.json)。
+`8011` 仍运行冻结的 v1；仓库默认独立配置已是 v2 候选，尚未通过语义准入。
+v2 用单份阶段指令保留全部 canonical 输入、校验和状态更新；两个固定案例均完成，
+但仍存在不确定性被升级为确定结果、事件类型误判，不能作为正式 benchmark 或 RL 奖励依据。
+下面的 v1 部署记录保留为历史证据。
+
+被测模型可通过以下入口进行开发联调，替换 `--policy` 即可换用已有 policy 配置：
+
+```bash
+python scripts/run_qwen_task4_policy.py \
+  --run build/qwen_task4/run_20261024_native \
+  --scenario-id GPT50_006 \
+  --policy configs/qwen_task4/policy.local.json \
+  --output build/qwen_task4/my_policy_probe \
+  --max-turns 1
+```
+
+该入口先校验冻结代码与场景哈希，再复用 `RolloutRunner`，只向 policy 传递公开观察。
+示例 policy 使用同一台本地 Qwen，只验证工程闭环，不充抵独立 E6。
+输出目录必须不存在；完整请求与 private trajectory 留在本地。`--max-turns 1`
+是明确的一轮联调预算，未自然结束时记为 `budget_truncated`，不算完整轨迹通过。
+正式自然交互默认上限 20 轮，仍需先通过环境质量验收。此次未配置奖励或终局评分。
+
 `qwen_task4_thinking_v1` 使用已经部署的
 `Qwen/Qwen3.8-Flash-Next-FP8`（模型 API 为 `127.0.0.1:8010`）。它为
 Task4 的环境角色提供独立配置和补充提示，复用同一个 canonical
