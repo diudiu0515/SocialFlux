@@ -2,8 +2,7 @@
   "date": "2026-10-24",
   "frontend": "GitHub Pages",
   "backend": "existing AutoDL server on port 6006",
-  "pages_live": false,
-  "deployment_blocker": "github-pages environment does not allow lab-independent-hosting-20261022",
+  "pages_live": true,
   "migrated_cloud_records": 5,
   "research_receipts_in_summary": 4,
   "legacy_demo_archived_separately": 1,
@@ -33,5 +32,57 @@
   "production_test_annotations_created": 0,
   "backup_bytes": 67108963,
   "backup_sha256": "ee60e5ac7583c4f54bad1889923875a4e9326d7bdd8b66180bc261502d9fc18d",
-  "off_server_backup": false
+  "off_server_backup": false,
+  "deployment_branch": "main",
+  "deployment_run": "https://github.com/diudiu0515/SocialFlux/actions/runs/40087124546",
+  "frontend_url": "https://diudiu0515.github.io/SocialFlux/lab/",
+  "annotation_url": "https://diudiu0515.github.io/SocialFlux/annotation/",
+  "deployed_commit": "8076d1a961b8f8c7dd72b1f827f499817692db7b",
+  "public_artifact_http_verification": [
+    {
+      "path": "lab/",
+      "status": 200,
+      "matches_published_artifact": true
+    },
+    {
+      "path": "annotation/",
+      "status": 200,
+      "matches_published_artifact": true
+    },
+    {
+      "path": "lab/experiment_hub.js",
+      "status": 200,
+      "matches_published_artifact": true
+    },
+    {
+      "path": "annotation/lab-config.js",
+      "status": 200,
+      "matches_published_artifact": true
+    },
+    {
+      "path": "annotation/lab_bootstrap.js",
+      "status": 200,
+      "matches_published_artifact": true
+    }
+  ],
+  "attribution_update": {
+    "identity": "SocialFlux Maintainer",
+    "commits": 13,
+    "branches": 6,
+    "file_trees_preserved": true,
+    "history_backup": "data/migrations/20261024-attribution/history-before.bundle"
+  },
+  "browser_checks_environment": "isolated staging, completed before deployment",
+  "live_browser_verification": {
+    "passed": false,
+    "limitation": "Headless browser in this execution environment reports ERR_CONNECTION_CLOSED when connecting to the AutoDL API; direct certificate-verified HTTPS API requests succeed.",
+    "writes_attempted": 0
+  },
+  "live_api_verification": {
+    "https_status": 200,
+    "allowed_origin": "https://diudiu0515.github.io",
+    "catalog_items": 400,
+    "saved_records": 5,
+    "sqlite_integrity": "ok"
+  }
 }

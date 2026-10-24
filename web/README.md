@@ -1,6 +1,6 @@
 # SocialFlux Annotation Studio
 
-2026-10-24 当前迁移方案：整个 Lab 前端发布到 GitHub Pages，数据由用户指定的当前 AutoDL 服务器保存。后端已运行，原有 5 份云端标注已核验迁入；Pages 发布目前被 GitHub 环境的分支保护规则阻止，目标地址尚不可用。发布步骤与备份说明见 [当前部署说明](../docs/operations/LAB_INDEPENDENT_HOSTING.md)。不再使用 ChatGPT Sites 作为新入口。
+2026-10-24 当前迁移方案：整个 Lab 前端发布到 GitHub Pages，数据由用户指定的当前 AutoDL 服务器保存。后端已运行，原有 5 份云端标注已核验迁入；GitHub Pages 已从获准的 `main` 分支发布：[Lab](https://diudiu0515.github.io/SocialFlux/lab/) · [标注](https://diudiu0515.github.io/SocialFlux/annotation/)。发布步骤与备份说明见 [当前部署说明](../docs/operations/LAB_INDEPENDENT_HOSTING.md)。不再使用 ChatGPT Sites 作为新入口。
 
 2026-10-24 公开背景修订：`annotation400-public-context-20261024-v1` 补齐 47 个场景原先缺失的人物关系、权力与资源、显性目标冲突，50 场景 / 400 题均可在首次作答前查看这三项。它们是公开背景；隐藏动机、私有证据、state 与预设后续结果不加入公开题面。修订源数据及逐场景审计在 `data/offline_public_context_20261024/`，生成脚本为 `scripts/export_public_context_revision.py`。新版已加入回执候选注册表；本地其他实验的活动批次不受影响。既有机器候选和轨迹未重跑，来源说明随新版保留，不能将其当作补全背景条件下重新评测的模型结果。
 
@@ -15,8 +15,7 @@
 独立入口：`http://127.0.0.1:8000/lab`，沿用现有服务与 SSH 隧道。
 
 最新发布目标是 GitHub Pages 页面与当前 AutoDL 后端；读取和保存依赖 AutoDL 在线。
-配置位于 `lab-independent-hosting-20261022` 分支，数据迁移已完成，尚待 GitHub Pages
-环境允许该分支部署；不能把计划中的 github.io 地址当作可用网址。
+发布配置位于 `main` 分支，数据迁移与 GitHub Pages 发布已完成；`github-pages` 环境继续仅允许 main 部署。
 完整流程见 [独立部署说明](../docs/operations/LAB_INDEPENDENT_HOSTING.md)。
 
 - **实验总览**：当前批次、开发题库、四个 Gate 和下一步计划。

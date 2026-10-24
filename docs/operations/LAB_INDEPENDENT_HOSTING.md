@@ -4,16 +4,13 @@
 
 用户已明确选择当前 AutoDL 服务器作为后端，取代下文历史 Sites / Render 方案。
 6006 的 Lab 与独立标注存储服务已运行，并由 Supervisor 自动重启。
-GitHub Pages 前端已提交到 `lab-independent-hosting-20261022` 分支，但尚未上线：
-[Actions 运行](https://github.com/diudiu0515/SocialFlux/actions/runs/40082029711)
-被 `github-pages` 环境拒绝，因为该分支未获部署许可。
+GitHub Pages 已从 `main` 成功发布并核验 HTTPS 页面资源：
+[成功的 Actions 运行](https://github.com/diudiu0515/SocialFlux/actions/runs/40087124546)。
+仓库的 `github-pages` 环境只允许 `main`；用户合并 Lab 后，发布触发器已对准该分支，
+保留原环境保护规则。之后更新 `main` 中的 `pages/` 或发布工作流会自动部署。
 
-发布前，仓库管理员须在 Settings → Environments → github-pages 的部署分支规则中
-允许 `lab-independent-hosting-20261022`，并将 Settings → Pages → Source 设为
-GitHub Actions。随后重跑失败作业并验证以下目标地址；在验证前不能作为可用链接交付：
-
-- `https://diudiu0515.github.io/SocialFlux/lab/`
-- `https://diudiu0515.github.io/SocialFlux/annotation/`
+- Lab：`https://diudiu0515.github.io/SocialFlux/lab/`
+- 标注：`https://diudiu0515.github.io/SocialFlux/annotation/`
 
 前端发布内容为本分支的 `pages/`，不含私有数据库、题库包、标注或视频。
 不再要求 Render、ChatGPT 登录或 ChatGPT Sites 域名。
@@ -41,7 +38,7 @@ GitHub Actions。随后重跑失败作业并验证以下目标地址；在验证
 
 浏览器已验证 Pages 子路径、Lab 七个视图、移动端、断网草稿恢复、跨设备恢复、
 JSON 下载和鉴权视频播放。生产数据库未写入测试标注；公网后端的 HTTPS 和 Pages CORS 已验证。
-最终 GitHub Pages 地址仍需部署成功后验证。
+最终 GitHub Pages 地址与发布资源已核验；生产浏览器验证结果记录在 `reports/experiments/2026-10-24_lab_pages_migration.json`。
 
 ## 历史部署记录（以下不再作为当前方案）
 

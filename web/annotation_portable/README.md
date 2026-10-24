@@ -50,12 +50,12 @@ Do not overwrite the only copy of a live database or discard WAL files.
 
 ## GitHub Pages deployment
 
-The `lab-independent-hosting-20261022` branch publishes the checked-in `pages/`
+The `main` branch publishes the checked-in `pages/`
 artifact through GitHub Actions. GitHub repository **Settings → Pages → Source**
 must be **GitHub Actions**. The GitHub connector used in this migration can push
 source but cannot change that repository setting.
 
-The artifact contains Lab's seven views and `/annotation/`. The expected address
-is `https://diudiu0515.github.io/SocialFlux/lab/`; it is live only after the Pages
-deployment succeeds. The server API address is public configuration, while the
+The artifact contains Lab's seven views and `/annotation/`. The live address
+is `https://diudiu0515.github.io/SocialFlux/lab/`. The `github-pages` environment
+allows `main`; keep that protection enabled. The server API address is public configuration, while the
 Lab password and all annotation records remain private.
