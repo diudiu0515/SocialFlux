@@ -38,7 +38,7 @@
   };
   window.socialfluxLabRequest = async (path, options = {}) => {
     const target = new URL(path, backend);
-    if (target.origin !== backend.origin || !target.pathname.startsWith('/api/lab')) throw Error('无效的实验接口');
+    if (target.origin !== backend.origin || !(target.pathname.startsWith('/api/') || target.pathname.startsWith('/media/'))) throw Error('无效的实验接口');
     await login;
     return fetch(target, {...options, credentials: 'omit',
       headers: {...options.headers, Authorization: authorization}});
