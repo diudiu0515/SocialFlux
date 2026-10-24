@@ -99,3 +99,5 @@
 .annotation-app .flow-review-note, .annotation-app .flow-review-issue, .annotation-app .flow-add-note { grid-column: 1 / -1; }
 .annotation-app .flow-add-note { justify-self: start; padding: 8px 0; }
 @media (max-width: 700px) { .annotation-app .flow-check-main { flex-wrap: wrap; gap: 4px; } .annotation-app .flow-check-main > .flow-check-option { flex-basis: 100%; } .annotation-app .flow-check-alternatives { flex-direction: column; } .annotation-app .flow-check-alternatives > label { flex-basis: auto; } }
+
+.annotation-app .video-transcript p[lang]{white-space:pre-wrap;overflow-wrap:anywhere}
