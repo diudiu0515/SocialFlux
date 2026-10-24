@@ -108,6 +108,20 @@ class QwenTask4Tests(unittest.TestCase):
         self.assertEqual(len(result["request_retry_diagnostics"]), 1)
         self.assertIn("output", calls[0][0]["content"].lower())
 
+    def test_xhigh_reasoning_keeps_an_explicit_final_answer_reserve(self):
+        config = load_config()
+        sampling = config["environment"]["state_appraisal_sampling"]
+        sampling.update(max_tokens=21504, thinking_token_budget=16384)
+        sampling["chat_template_kwargs"]["reasoning_effort"] = "xhigh"
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "config.json"
+            path.write_text(json.dumps(config))
+            self.assertEqual(load_config(path), config)
+            sampling["max_tokens"] = sampling["thinking_token_budget"] + 1024
+            path.write_text(json.dumps(config))
+            with self.assertRaisesRegex(ValueError, "final tokens"):
+                load_config(path)
+
     def test_schema_values_match_canonical_direction_acceptance(self):
         item = no_evidence("emotion.anxiety")
         item.update(judgment="ordinary_new_evidence", evidence_span="uncertain", directness="direct")

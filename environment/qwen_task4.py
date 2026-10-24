@@ -60,8 +60,8 @@ def load_config(path=DEFAULT_CONFIG):
                 or sampling.get("max_tokens", 0) - budget < 2048
                 or set(thinking) != {"enable_thinking", "reasoning_effort"}
                 or thinking.get("enable_thinking") is not True
-                or thinking.get("reasoning_effort") not in {"low", "medium"}):
-            raise ValueError(f"{stage} requires bounded low/medium thinking and at least 2048 final tokens")
+                or thinking.get("reasoning_effort") not in {"low", "medium", "xhigh"}):
+            raise ValueError(f"{stage} requires bounded low/medium/xhigh thinking and at least 2048 final tokens")
     return config
 
 
