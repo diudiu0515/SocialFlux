@@ -39,6 +39,25 @@ jobs:
                       assert 'chatgpt.site' not in text, path
                       assert 'gzip_base64' not in text, path
           PY
+      - name: Check AutoDL public connectivity
+        continue-on-error: true
+        run: |
+          python - <<'PYNET'
+          import socket, urllib.request, urllib.error
+          host='u294990-9e81-c55878e7.westc.seetacloud.com'
+          try:
+              print('Public DNS:', sorted({row[4][0] for row in socket.getaddrinfo(host,443)}))
+          except Exception as e:
+              print('::warning::AutoDL DNS: '+str(e))
+          for port in ('', ':8443'):
+              url='https://'+host+port+'/api/annotation/status'
+              try:
+                  with urllib.request.urlopen(url,timeout=15) as response: print(url,response.status)
+              except urllib.error.HTTPError as e:
+                  print(url, 'HTTP', e.code, '(401 is expected without credentials)')
+              except Exception as e:
+                  print('::warning::AutoDL public connection: '+url+' '+str(e))
+          PYNET
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

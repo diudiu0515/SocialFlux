@@ -34,7 +34,7 @@ export default function Demo() {
       setAnswers(draft); const first=(next.questions || []).findIndex(q=>!draft[q.instance_id]?.answer || !draft[q.instance_id]?.confidence); setIndex(first<0?0:first);
     }
   }
-  useEffect(()=>{(async()=>{try{accept(await api("status"),true);}catch(e){setError((e as Error).message);setState({session:null,invited:false});}})();},[]);
+  useEffect(()=>{const refresh=async()=>{try{accept(await api("status"),true);setError("");}catch(e){setError((e as Error).message);setState({session:null,invited:false});}};refresh();window.addEventListener("socialflux-login",refresh);return()=>window.removeEventListener("socialflux-login",refresh);},[]);
   useEffect(()=>{if(!session || session.status==="submitted")return;try{localStorage.setItem("sf-draft-"+session.id,JSON.stringify({revision:session.revision,answers}));}catch{}},[answers,session]);
   useEffect(()=>{if(!dirty)return;const warn=(e:BeforeUnloadEvent)=>{e.preventDefault();e.returnValue="";};window.addEventListener("beforeunload",warn);return()=>window.removeEventListener("beforeunload",warn);},[dirty]);
   async function work(fn:()=>Promise<void>){if(lock.current)return;lock.current=true;setBusy(true);setError("");try{await fn();}catch(e){setError((e as Error).message);}finally{lock.current=false;setBusy(false);}}

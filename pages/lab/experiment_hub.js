@@ -119,7 +119,7 @@ function renderOverview(){
     stat('已收录实验文件',d.reports.length,'份','报告、数据快照与可追溯来源','▤'),
     stat(inventory?.offline?.release?'当前标注题库':'当前开发题库',inventory?.offline?.total??live?.offline?.item_count,'题',inventory?.offline?`普通 ${esc(inventory.offline.ordinary)} · Hard ${esc(inventory.offline.hard)} · 音视频配对 ${esc(inventory.offline.pairs??'待核对')}`:`人工标签 ${esc(live?.offline?.human_labeled??'—')} · 正式准入 ${esc(live?.offline?.formal_admitted??'—')}`,'◫')
   ].join('');
-  $('next-plans').innerHTML=todo.slice(0,5).map(x=>`<button class="next-row" data-edit="${esc(x.id)}"><span class="priority-dot ${esc(x.priority)}"></span><div class="row-main"><div class="row-title">${esc(x.title)}</div><div class="row-sub"><span>${esc(x.category)}</span><span>·</span><span>${esc(x.owner||'待分配')}</span>${x.due_date?`<span>· ${esc(dateText(x.due_date))}</span>`:''}</div></div>${badge(x.status)}<span class="row-arrow">↗</span></button>`).join('')||empty('暂时没有待推进事项','可以新建实验，记录下一步研究计划。');
+  $('next-plans').innerHTML=todo.slice(0,5).map(x=>`<button class="next-row" data-edit="${esc(x.id)}"><span class="priority-dot ${esc(x.priority)}"></span><div class="row-main"><div class="row-title">${esc(x.title)}</div><div class="row-sub"><span>${esc(x.category)}</span><span>·</span><span>${esc(x.owner||'待分配')}</span>${x.due_date?`<span>· ${esc(dateText(x.due_date))}</span>`:''}</div></div>${badge(x.status)}<span class="row-arrow">↗</span></button>`).join('')||empty(snapshot.public_snapshot?'登录后查看研究计划':'暂时没有待推进事项');
   $('recent-runs').innerHTML=(live?.t4_runs||[]).slice(0,3).map(run=>{
     const pct=run.planned_slots ? Math.min(100,100*(run.finished_slots||0)/run.planned_slots):0;
     return `<div class="mini-run"><div class="mini-run-heading"><div><h3>${esc(run.title)}</h3><p>${esc(run.id)}</p></div><span class="badge ${run.process_alive?'running':''}">${esc(runStatus(run))}</span></div><div class="progress" aria-hidden="true"><span style="width:${pct}%"></span></div><div class="progress-label"><span>已记录槽位（含失败／移交）</span><span>${esc(run.finished_slots??'—')} / ${esc(run.planned_slots??'—')}</span></div></div>`;
@@ -131,7 +131,7 @@ function renderPlans(){
   const all=snapshot.records,search=$('plan-search').value.trim().toLowerCase(),category=$('plan-category').value,priority=$('plan-priority').value;
   $('plan-tabs').innerHTML=Object.entries({'':'全部',...statuses}).map(([s,label])=>`<button data-status="${s}" class="${s===planStatus?'active':''}" aria-pressed="${s===planStatus}">${label}<small>${all.filter(x=>!s||x.status===s).length}</small></button>`).join('');
   const rows=all.filter(r=>(!planStatus||r.status===planStatus)&&(!category||r.category===category)&&(!priority||r.priority===priority)&&(!search||[r.title,r.owner,r.hypothesis,r.method,r.notes,...r.sources].join(' ').toLowerCase().includes(search)));
-  $('plan-list').innerHTML=rows.map(r=>`<article class="plan-card" data-record="${esc(r.id)}"><div class="plan-card-top"><span class="badge ${esc(r.priority)}">${esc(priorities[r.priority])}</span>${badge(r.status)}</div><h3>${esc(r.title)}</h3><p>${esc(r.hypothesis||'还没有填写研究问题。')}</p><div class="row-sub"><span>${esc(r.category)}</span>${r.metrics.length?`<span>· ${r.metrics.length} 个结果指标</span>`:''}</div><div class="plan-card-bottom"><span>${esc(r.owner||'待分配')}${r.due_date?' · '+esc(dateText(r.due_date)):''}</span><button class="text-button" data-edit="${esc(r.id)}">查看 / 编辑 ↗</button></div></article>`).join('')||empty('没有符合条件的实验');
+  $('plan-list').innerHTML=rows.map(r=>`<article class="plan-card" data-record="${esc(r.id)}"><div class="plan-card-top"><span class="badge ${esc(r.priority)}">${esc(priorities[r.priority])}</span>${badge(r.status)}</div><h3>${esc(r.title)}</h3><p>${esc(r.hypothesis||'还没有填写研究问题。')}</p><div class="row-sub"><span>${esc(r.category)}</span>${r.metrics.length?`<span>· ${r.metrics.length} 个结果指标</span>`:''}</div><div class="plan-card-bottom"><span>${esc(r.owner||'待分配')}${r.due_date?' · '+esc(dateText(r.due_date)):''}</span><button class="text-button" data-edit="${esc(r.id)}">查看 / 编辑 ↗</button></div></article>`).join('')||empty(snapshot.public_snapshot?'登录后查看研究计划':'没有符合条件的实验');
 }
 function metric(value){
   if(!value?.n||value.mean===null||value.mean===undefined)return 'N/A<small>n=0</small>';
@@ -222,9 +222,9 @@ async function refresh(){
       for(const [k,v] of Object.entries(statuses))$('edit-status').add(new Option(v,k));
     }
     $('loading').hidden=true;
-    const errors=[snapshot.live_error,...(snapshot.catalog_errors.length?['部分报告不可读，目录列表可能不完整。']:[]),...((snapshot.live?.read_errors?.length||snapshot.matrix?.read_errors?.length)?['部分运行文件暂不可读，数据可能尚未完整。']:[])].filter(Boolean);
+    const errors=[snapshot.public_snapshot?'当前为已发布的汇总快照。实时数据、个人记录和保存操作需登录研究服务器。':null,snapshot.live_error,...(snapshot.catalog_errors.length?['部分报告不可读，目录列表可能不完整。']:[]),...((snapshot.live?.read_errors?.length||snapshot.matrix?.read_errors?.length)?['部分运行文件暂不可读，数据可能尚未完整。']:[])].filter(Boolean);
     $('error').textContent=errors.join(' ');$('error').hidden=!errors.length;
-    $('sync-status').textContent='已同步 '+new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(new Date(snapshot.generated_at));
+    $('sync-status').textContent=(snapshot.public_snapshot?'已发布汇总 · ':'已同步 ')+new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(new Date(snapshot.generated_at));
     render();
   }catch(error){$('error').textContent=(snapshot?'刷新失败，当前仍显示上次数据。':'')+error.message;$('error').hidden=false;$('loading').hidden=true;$('sync-status').textContent='连接失败';}
   finally{busy=false;$('refresh').disabled=false;}
@@ -300,4 +300,4 @@ window.addEventListener('hashchange',navigate);
 window.addEventListener('beforeunload',event=>{
   if($('record-dialog').open){event.preventDefault();event.returnValue='';}
 });
-navigate();refresh();setInterval(()=>{if(!document.hidden&&!$('record-dialog').open&&!$('source-dialog').open)refresh();},30000);
+window.addEventListener('socialflux-login',refresh);navigate();refresh();setInterval(()=>{if(!document.hidden&&!$('record-dialog').open&&!$('source-dialog').open)refresh();},30000);

@@ -221,9 +221,9 @@ async function refresh(){
       for(const [k,v] of Object.entries(statuses))$('edit-status').add(new Option(v,k));
     }
     $('loading').hidden=true;
-    const errors=[snapshot.live_error,...(snapshot.catalog_errors.length?['部分报告不可读，目录列表可能不完整。']:[]),...((snapshot.live?.read_errors?.length||snapshot.matrix?.read_errors?.length)?['部分运行文件暂不可读，数据可能尚未完整。']:[])].filter(Boolean);
+    const errors=[snapshot.public_snapshot?'当前为已发布的汇总快照。实时数据、个人记录和保存操作需登录研究服务器。':null,snapshot.live_error,...(snapshot.catalog_errors.length?['部分报告不可读，目录列表可能不完整。']:[]),...((snapshot.live?.read_errors?.length||snapshot.matrix?.read_errors?.length)?['部分运行文件暂不可读，数据可能尚未完整。']:[])].filter(Boolean);
     $('error').textContent=errors.join(' ');$('error').hidden=!errors.length;
-    $('sync-status').textContent='已同步 '+new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(new Date(snapshot.generated_at));
+    $('sync-status').textContent=(snapshot.public_snapshot?'已发布汇总 · ':'已同步 ')+new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(new Date(snapshot.generated_at));
     render();
   }catch(error){$('error').textContent=(snapshot?'刷新失败，当前仍显示上次数据。':'')+error.message;$('error').hidden=false;$('loading').hidden=true;$('sync-status').textContent='连接失败';}
   finally{busy=false;$('refresh').disabled=false;}
@@ -299,4 +299,4 @@ window.addEventListener('hashchange',navigate);
 window.addEventListener('beforeunload',event=>{
   if($('record-dialog').open){event.preventDefault();event.returnValue='';}
 });
-navigate();refresh();setInterval(()=>{if(!document.hidden&&!$('record-dialog').open&&!$('source-dialog').open)refresh();},30000);
+window.addEventListener('socialflux-login',refresh);navigate();refresh();setInterval(()=>{if(!document.hidden&&!$('record-dialog').open&&!$('source-dialog').open)refresh();},30000);

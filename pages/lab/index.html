@@ -27,7 +27,7 @@
       <a href="https://u294990-9e81-c55878e7.westc.seetacloud.com:8443/gpt50-live"><span>↗</span>场景与轨迹</a>
       <a href="https://u294990-9e81-c55878e7.westc.seetacloud.com:8443/experiments"><span>↗</span>Gate 详细结果</a>
     </nav>
-    <div class="sidebar-bottom"><span class="live-dot"></span>连接实验数据<p>实验记录保存在服务器<br>当前结果每 30 秒更新</p><span class="version">SOCIALFLUX / LAB NOTEBOOK</span></div>
+    <div class="sidebar-bottom"><span class="live-dot"></span>公开汇总 / 登录查看实时数据<p>实验记录保存在服务器<br>登录后每 30 秒更新</p><span class="version">SOCIALFLUX / LAB NOTEBOOK</span></div>
   </aside>
   <div class="workspace">
     <header class="topbar"><div class="breadcrumb">工作空间 <span>/</span> <strong id="crumb">实验总览</strong></div><div class="top-actions"><span id="sync-status" aria-live="polite">正在连接…</span><button class="icon-button" id="refresh" aria-label="刷新数据">↻</button><span class="avatar" aria-label="研究工作空间">SF</span></div></header>
@@ -115,6 +115,6 @@
   </dialog>
   <dialog id="source-dialog" aria-labelledby="source-title"><div class="dialog-heading"><div><p class="eyebrow">SOURCE DOCUMENT</p><h2 id="source-title">来源文件</h2></div><button class="close icon-button" aria-label="关闭来源文件">×</button></div><div class="source-meta" id="source-meta"></div><div class="source-content" id="source-content"></div><div class="dialog-footer"><span>原始记录 · 不改写来源</span><button class="secondary" id="download-source">下载原文件 ↓</button></div></dialog>
   <div id="toast" role="status" hidden></div>
-  <script src="./lab-config.js"></script><script src="./lab_bootstrap.js"></script><script src="./experiment_hub.js"></script>
+  <script src="./lab-config.js"></script><script src="./public-snapshot.js"></script><script src="./lab_bootstrap.js"></script><script src="./experiment_hub.js"></script>
 </body>
 </html>
