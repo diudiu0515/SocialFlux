@@ -2,7 +2,7 @@ name: Publish Lab on GitHub Pages
 on:
   workflow_dispatch:
   push:
-    branches: [lab-independent-hosting-20261022]
+    branches: [main]
     paths:
       - pages/**
       - .github/workflows/lab-pages.yml
