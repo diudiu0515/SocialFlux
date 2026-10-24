@@ -17,6 +17,28 @@ def read_packet(path):
     return frozen_packet(str(path), path.stat().st_mtime_ns)
 
 
+def receipt_packet(dataset_sha256, packet_sha256):
+    """Resolve legacy archives or an explicitly registered candidate packet."""
+    if (not isinstance(packet_sha256, str) or len(packet_sha256) != 64
+            or any(c not in '0123456789abcdef' for c in packet_sha256)):
+        raise ValueError('环境核对版本哈希无效')
+    if RELEASE.exists():
+        current = read_packet(RELEASE)
+        if packet_sha256 == current['sha256'] and dataset_sha256 == current['dataset_sha256']:
+            return current
+    archive = RELEASE.parent / 'versions' / (packet_sha256 + '.json')
+    if archive.exists():
+        data = read_packet(archive)
+        if packet_sha256 == data['sha256'] and dataset_sha256 == data['dataset_sha256']:
+            return data
+    # Deferred import avoids a cycle: human_gt owns the explicit file registry.
+    from web.human_gt import candidate_gate2_packet
+    candidate = candidate_gate2_packet(dataset_sha256, packet_sha256)
+    if candidate is not None:
+        return candidate
+    raise ValueError('环境核对版本未冻结，或与标注数据版本不匹配')
+
+
 def assigned_tasks(data, assignment):
     """Use the same scene/track boundary as the participant site."""
     track = assignment['track']
@@ -67,18 +89,32 @@ def validate_gate2(value):
         return
     if not isinstance(state, dict) or not isinstance(exported, dict):
         raise ValueError('环境核对记录格式无效')
-    data = read_packet(RELEASE)
-    if state.get('packet_sha256') != data['sha256']:
-        digest = state.get('packet_sha256', '')
-        if not isinstance(digest, str) or len(digest) != 64 or any(c not in '0123456789abcdef' for c in digest):
-            raise ValueError('环境核对版本哈希无效')
-        archive = RELEASE.parent / 'versions' / (digest + '.json')
-        if not archive.exists():
-            raise ValueError('环境核对版本未冻结')
-        data = read_packet(archive)
-    if state.get('packet_sha256') != data['sha256'] or value['dataset_sha256'] != data['dataset_sha256']:
-        raise ValueError('环境核对与冻结材料版本不匹配')
+    data = receipt_packet(value['dataset_sha256'], state.get('packet_sha256'))
     tasks = assigned_tasks(data, value['assignment'])
+    sequence = workflow.get('sceneSequence')
+    if sequence is not None:
+        # Progressive receipts intentionally omit hashes for unopened scenes.
+        # Validate the exact visible prefix, then apply the ordinary stage checks
+        # separately to each completed scene and the current scene.
+        scenes = sequence.get('scenes') if isinstance(sequence, dict) else None
+        index = sequence.get('index') if isinstance(sequence, dict) else None
+        complete = value['status'] == 'submitted'
+        if (not isinstance(scenes, list) or not scenes
+                or any(not isinstance(scene, dict) for scene in scenes)
+                or [scene.get('id') for scene in scenes] != value['assignment']['scene_ids']
+                or sequence.get('version') != 1 or type(index) is not int
+                or not 0 <= index <= len(scenes)
+                or complete != (index == len(scenes))
+                or complete != (workflow.get('phase') == 'complete')):
+            raise ValueError('逐场景进度与分配清单不一致')
+        completed = sequence.get('completed')
+        if (not isinstance(completed, dict)
+                or set(completed) != {scene['id'] for scene in scenes[:index]}
+                or any(not isinstance(lock, dict) or not lock.get('blindLockedAt')
+                       or not lock.get('submittedAt') for lock in completed.values())):
+            raise ValueError('逐场景完成记录不一致')
+        visible = {scene['id'] for scene in scenes[:index + 1]}
+        tasks = {key: task for key, task in tasks.items() if task['scene_id'] in visible}
     answers = state.get('answers')
     if not isinstance(answers, dict) or not set(answers) <= tasks.keys():
         raise ValueError('环境核对包含未分配任务')
@@ -86,6 +122,25 @@ def validate_gate2(value):
             or exported.get('task_hashes') != {k: t['sha256'] for k, t in tasks.items()}
             or exported.get('independent_locked_at') != state.get('independentLockedAt')):
         raise ValueError('环境核对哈希或原始判断不一致')
+    if sequence is not None:
+        for scene in sequence['scenes'][:sequence['index'] + 1]:
+            ident = scene['id']
+            finished = ident in sequence['completed']
+            selected = {key: task for key, task in tasks.items() if task['scene_id'] == ident}
+            scoped_state = {**state, 'answers': {key: row for key, row in answers.items() if key in selected}}
+            scoped_workflow = {key: row for key, row in workflow.items() if key != 'sceneSequence'}
+            if finished:
+                lock = sequence['completed'][ident]
+                scoped_state['independentLockedAt'] = lock.get('independentLockedAt')
+                scoped_workflow.update(phase='complete', attestedAt=lock['submittedAt'])
+            scoped_workflow['gate2'] = scoped_state
+            validate_gate2({**value, 'status': 'submitted' if finished else 'in_progress',
+                           'assignment': {**value['assignment'], 'scene_ids': [ident]},
+                           'workflow': scoped_workflow,
+                           'gate2_human_review': {**exported, 'answers': scoped_state['answers'],
+                               'task_hashes': {key: task['sha256'] for key, task in selected.items()},
+                               'independent_locked_at': scoped_state.get('independentLockedAt')}})
+        return
     complete = value['status'] == 'submitted'
     t4 = value['assignment']['track'] == 't4'
     locked = not t4 and workflow['phase'] in ('gt', 'complete')
@@ -117,14 +172,16 @@ def validate_gate2(value):
                 raise ValueError(issue)
 
 
-def gate2_coverage(receipts):
-    if not RELEASE.exists():
-        return None
-    data = read_packet(RELEASE)
+def gate2_coverage(receipts, data=None):
+    if data is None:
+        if not RELEASE.exists():
+            return None
+        data = read_packet(RELEASE)
     tasks = {t['id']: t for t in data['tasks']}
     groups = defaultdict(lambda: defaultdict(list))
     for record in receipts:
-        if (record.get('status') != 'submitted' or record.get('import_conflict')
+        if (record.get('dataset_sha256') != data['dataset_sha256']
+                or record.get('status') != 'submitted' or record.get('import_conflict')
                 or record.get('workflow', {}).get('phase') != 'complete' or not record['workflow'].get('attestedAt')):
             continue
         review = record.get('gate2_human_review')

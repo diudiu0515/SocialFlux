@@ -23,7 +23,7 @@
     <div class="nav-label second-label">研究工具</div>
     <nav aria-label="研究工具">
       <a href="/offline-demo"><span>↗</span>题库工作台</a>
-      <a href="https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site/" target="_blank" rel="noopener"><span>↗</span>统一人工标注站</a>
+      <a href="https://socialflux-experiment-lab.junqiao24.chatgpt.site/annotation" target="_blank" rel="noopener"><span>↗</span>统一人工标注站</a>
       <a href="/gpt50-live"><span>↗</span>场景与轨迹</a>
       <a href="/experiments"><span>↗</span>Gate 详细结果</a>
     </nav>
@@ -63,9 +63,10 @@
       </section>
       <section id="human-view" class="view" hidden>
         <div class="notice"><span>◇</span><p>T1–3：与模型相同的文字／视频输入 → 整组盲答锁定 → 查看 state、environment 私有材料与机器答案 → 人工 GT。<br>T4：50 条完整生成轨迹，独立五维评分后对照 Claude；缺失评分和不适用单独记录。</p></div>
-        <div class="toolbar"><a class="primary" href="https://socialflux-annotation-demo-20261021.junqiao24.chatgpt.site/" target="_blank" rel="noopener">进入统一标注站 ↗</a><label class="secondary">导入参与者导出 JSON<input id="human-import" type="file" accept=".json,application/json" multiple hidden></label><a class="secondary" href="/offline-annotation">恢复旧 Lab 会话</a></div>
-        <p class="subtle">分发原邀请链接，并为不同的人分配相同组别以形成复核；参与者凭恢复码继续。完成后下载本人 JSON，在此导入。导入保留原始回执并去重，不覆盖历史记录。</p>
+        <div class="toolbar"><a class="primary" href="/annotation/" target="_blank" rel="noopener">进入 Lab 人工标注 ↗</a><label class="secondary">导入参与者导出 JSON<input id="human-import" type="file" accept=".json,application/json" multiple hidden></label><a class="secondary" href="/offline-annotation">恢复旧 Lab 会话</a></div>
+        <p class="subtle">统一从 Lab 人工标注入口登录，并为不同的人分配相同组别以形成复核；参与者从自己的任务列表继续。完成后下载本人 JSON，在此导入。导入保留原始回执并去重，不覆盖历史记录。旧独立站已停用。</p>
         <div id="human-summary" class="stats"></div><p id="human-status" class="subtle" role="status"></p>
+        <section class="panel"><h2>各版本标注进度</h2><p id="human-release-note" class="subtle"></p><div id="human-release-cohorts"></div><p class="subtle">草稿保留进度，最终提交后才进入正式结果统计。同一人的重复回执不算多人审核；不同材料版本分别汇总。</p></section>
         <section class="panel" id="human-adjudication" hidden><h2>分歧裁决</h2><form id="human-adjudication-form"><label>待裁决题目<select id="adjudication-item"></select></label><div id="adjudication-evidence"></div><label>裁决人编号<input id="adjudicator" required maxlength="40" placeholder="须不同于已有审核人"></label><label>最终决定<select id="adjudication-answer"></select></label><label>裁决依据<textarea id="adjudication-rationale" required maxlength="4000" placeholder="核对完整材料后说明为何选择该答案或剔除题目"></textarea></label><label><input id="adjudication-attest" type="checkbox" required>我已核对题面、私有证据及分歧，本裁决由本人完成。</label><button class="primary" type="submit">保存裁决</button></form></section>
         <section class="panel"><h2>随题核对 · 场景与 Gate2</h2><p class="subtle">在标注页看题时核对场景、rollout 和环境证据。先锁定方向与释义的独立判断，再开放机器结果；同一场景只填写一次。</p><div id="gate2-human-coverage"></div></section>
         <section class="panel"><h2>T4 人工与 Claude 对照</h2><div id="human-comparison"></div><p class="subtle">同一轨迹逐维配对；偏差＝人工−Claude。详细 GT、分歧与差值表均可在“论文表格”导出 CSV、Markdown 和 LaTeX。</p></section>

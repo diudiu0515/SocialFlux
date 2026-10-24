@@ -1,0 +1,47 @@
+name: Publish Lab on GitHub Pages
+on:
+  workflow_dispatch:
+  push:
+    branches: [lab-independent-hosting-20261022]
+    paths:
+      - pages/**
+      - .github/workflows/lab-pages.yml
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: lab-pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check public artifact boundary
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          root=Path('pages')
+          assert (root/'lab/index.html').is_file()
+          assert (root/'annotation/index.html').is_file()
+          for path in root.rglob('*'):
+              if path.is_file():
+                  assert path.name in {'.nojekyll','OFL-NotoSansSC.txt'} or path.suffix in {'.html','.css','.js','.woff2','.svg'}, path
+                  if path.suffix in {'.html','.css','.js'}:
+                      text=path.read_text()
+                      assert 'chatgpt.site' not in text, path
+                      assert 'gzip_base64' not in text, path
+          PY
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages
+      - uses: actions/deploy-pages@v4
+        id: deploy

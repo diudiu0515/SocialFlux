@@ -1,0 +1,15 @@
+.git
+.secrets
+.env
+.env.*
+data
+build
+.local_models
+.local_tools
+**/node_modules
+**/.wrangler
+**/dist
+**/.next
+**/__pycache__
+**/*.sqlite3
+web/participant_demo/public/media
