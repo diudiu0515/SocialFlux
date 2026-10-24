@@ -1,4 +1,5 @@
 name: Publish Lab on GitHub Pages
+# Publish only the frontend; persistent annotation data stays on AutoDL.
 on:
   workflow_dispatch:
   push:
