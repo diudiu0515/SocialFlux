@@ -10,6 +10,8 @@ window.fetch=async(input,init={})=>{
  if(url.origin!==location.origin||!url.pathname.startsWith('/api/annotation/'))return original(input,init);
  const headers=new Headers(init.headers),code=localStorage.getItem(key);
  if(code)headers.set('X-Annotation-Recovery',code);
+ // Preserve the recovery code before a start request in case its response is lost.
+ if(url.pathname.endsWith('/start')){const posted=JSON.parse(String(init.body));localStorage.setItem(key,posted.recoveryCode);}
  const response=await win.socialfluxLabRequest(url.pathname,{...init,headers:Object.fromEntries(headers)});
  if(response.ok&&['start','recover'].includes(url.pathname.split('/').at(-1)!)){
   const posted=JSON.parse(String(init.body));localStorage.setItem(key,posted.recoveryCode);

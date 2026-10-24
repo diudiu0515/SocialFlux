@@ -6,13 +6,13 @@
   const dialog = document.createElement('dialog');
   dialog.setAttribute('aria-label', '登录实验管理台');
   dialog.style.cssText = 'width:min(420px,90vw);padding:28px;border:1px solid #d5ded8;border-radius:16px;color:#173d31';
-  dialog.innerHTML = '<form><h2>连接研究服务器</h2><p>登录后读取实时标注和保存进度。公开页面可直接浏览。</p><label>用户名<input name="username" value="socialflux" autocomplete="username" required></label><label>密码<input name="password" type="password" autocomplete="current-password" required></label><p role="status" aria-live="polite"></p><button class="primary" type="submit">登录</button> <button type="button" data-close>稍后登录</button></form>';
+  dialog.innerHTML = '<form><h2>登录标注管理</h2><p>研究者登录后查看实时汇总和管理实验。参与标注无需登录。</p><label>用户名<input name="username" value="socialflux" autocomplete="username" required></label><label>密码<input name="password" type="password" autocomplete="current-password" required></label><p role="status" aria-live="polite"></p><button class="primary" type="submit">登录</button> <button type="button" data-close>稍后登录</button></form>';
   for (const input of dialog.querySelectorAll('input')) input.style.cssText = 'display:block;width:100%;box-sizing:border-box;margin:8px 0 16px;padding:10px';
   document.body.append(dialog);
   const connect = document.createElement('button');
-  connect.textContent = '登录研究服务器';
+  connect.textContent = '研究者登录';
   connect.style.cssText = 'position:fixed;bottom:16px;right:16px;z-index:1000;padding:12px;background:#173d31;color:white;border:0;border-radius:10px;cursor:pointer';
-  document.body.append(connect);
+  if (!location.pathname.includes('/annotation')) document.body.append(connect);
   connect.onclick = () => dialog.showModal();
   dialog.querySelector('[data-close]').onclick = () => dialog.close();
   async function request(target, options = {}) {
@@ -38,11 +38,22 @@
   window.socialfluxLabRequest = async (path, options = {}) => {
     const target = new URL(path, backend), method = (options.method || 'GET').toUpperCase();
     if (target.origin !== backend.origin || !(target.pathname.startsWith('/api/') || target.pathname.startsWith('/media/'))) throw Error('无效的实验接口');
+    if (target.pathname.startsWith('/api/annotation/') || target.pathname.startsWith('/media/')) {
+      const headers = new Headers(options.headers);
+      const code = localStorage.getItem('socialflux-annotation-recovery');
+      if (code) headers.set('X-Annotation-Recovery', code);
+      if (method === 'GET' && target.pathname === '/api/annotation/status' && !code && window.SOCIALFLUX_PUBLIC_CATALOG)
+        return Response.json({session:null,invited:true,catalog:window.SOCIALFLUX_PUBLIC_CATALOG});
+      try { return await request(target, {...options, headers}); }
+      catch (error) {
+        if (method === 'GET' && target.pathname === '/api/annotation/status' && window.SOCIALFLUX_PUBLIC_CATALOG)
+          return Response.json({session:null,invited:true,catalog:window.SOCIALFLUX_PUBLIC_CATALOG,connectionError:error.message});
+        throw error;
+      }
+    }
     if (!authorization) {
       if (method === 'GET' && target.pathname === '/api/lab' && window.SOCIALFLUX_PUBLIC_SNAPSHOT)
         return Response.json(window.SOCIALFLUX_PUBLIC_SNAPSHOT);
-      if (method === 'GET' && target.pathname === '/api/annotation/status')
-        return Response.json({session:null,invited:false,catalog:window.SOCIALFLUX_PUBLIC_CATALOG});
       dialog.showModal();
       throw Error('请先登录研究服务器。此操作尚未保存。');
     }

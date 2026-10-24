@@ -42,8 +42,12 @@ def handler_type(frontend_origin, public_origin, username, password, proxy_secre
             self.end_headers()
 
         def proxy(self):
-            if not self.authenticate():
+            action = urlparse(self.path).path.removeprefix('/api/annotation/')
+            allowed = {'GET': {'status', 'export'}, 'POST': {'start', 'recover', 'logout', 'evidence', 'draft', 'submit', 'lock', 'gate2-lock'}}
+            if action not in allowed.get(self.command, set()):
+                self.send_json({'error': '没有这个参与者接口。'}, 404)
                 return
+            # Per-session recovery codes are validated by the storage service.
             origin = self.headers.get('Origin')
             if origin and origin not in {frontend_origin, public_origin} and urlparse(origin).netloc != self.headers.get('Host'):
                 self.send_json({'error': '跨站请求未被允许'}, 403)
@@ -77,8 +81,6 @@ def handler_type(frontend_origin, public_origin, username, password, proxy_secre
                 self.send_json({'error': '标注服务暂时不可用，输入仍保留在本设备，请稍后重试。'}, 503)
 
         def local_asset(self, path, root):
-            if not self.authenticate():
-                return
             target = (root / path).resolve()
             if not target.is_relative_to(root.resolve()) or not target.is_file():
                 self.send_error(404)
@@ -106,6 +108,23 @@ def handler_type(frontend_origin, public_origin, username, password, proxy_secre
             if path.startswith('/annotation/'):
                 return self.local_asset(path.removeprefix('/annotation/'), annotation_public)
             if path.startswith('/media/'):
+                code = self.headers.get('X-Annotation-Recovery', '')
+                if not code:
+                    self.send_json({'error': '请先开始或恢复自己的标注。'}, 401)
+                    return
+                connection = http.client.HTTPConnection('127.0.0.1', annotation_port, timeout=15)
+                try:
+                    connection.request('GET', '/api/annotation/status', headers={'X-SocialFlux-Proxy': proxy_secret, 'X-Annotation-Recovery': code})
+                    response = connection.getresponse()
+                    value = json.loads(response.read())
+                    if response.status != 200 or not value.get('session'):
+                        self.send_json({'error': '恢复码无效或尚未建立标注会话。'}, 401)
+                        return
+                except (OSError, ValueError, http.client.HTTPException):
+                    self.send_json({'error': '暂时无法读取标注材料，请重试。'}, 503)
+                    return
+                finally:
+                    connection.close()
                 return self.local_asset(path.removeprefix('/media/'), media_root)
             super().do_GET()
 
