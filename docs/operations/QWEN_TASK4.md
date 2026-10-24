@@ -99,7 +99,7 @@ action = "我想先确认目前哪些事项仍需要双方决定。"
 r = requests.post(base + f"/sessions/{episode['episode_id']}/step", json={
     "text": action,
     "expected_turn_id": episode["observation"]["turn_id"],
-}, timeout=4800)
+}, timeout=9600)
 episode = r.json()
 # 502 表示环境生成失败；保留失败样本，不能当成正常终止或零奖励。
 r.raise_for_status()
