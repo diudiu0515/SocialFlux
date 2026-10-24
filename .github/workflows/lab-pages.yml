@@ -57,6 +57,14 @@ jobs:
                   print(url, 'HTTP', e.code, '(401 is expected without credentials)')
               except Exception as e:
                   print('::warning::AutoDL public connection: '+url+' '+str(e))
+          req=urllib.request.Request('https://'+host+':8443/api/lab',method='OPTIONS',headers={
+              'Origin':'https://diudiu0515.github.io',
+              'Access-Control-Request-Method':'GET',
+              'Access-Control-Request-Headers':'authorization'})
+          with urllib.request.urlopen(req,timeout=15) as response:
+              print('Pages CORS:', response.status, response.headers.get('Access-Control-Allow-Origin'))
+              assert response.status == 204
+              assert response.headers.get('Access-Control-Allow-Origin') == 'https://diudiu0515.github.io'
           PYNET
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
