@@ -32,7 +32,9 @@ def build(output, backend_url, allow_loopback=False, allow_existing_server=False
     html = re.sub(r'href="(/[^"\n]+)"', lambda match: 'href="' + backend_url + match[1] + '"', html)
     html = html.replace('连接本地实验目录', '连接实验数据')
     html = html.replace('<script src="/experiment_hub.js"></script>',
-                        '<script src="./lab-config.js"></script><script src="./lab_bootstrap.js"></script><script src="./experiment_hub.js"></script>')
+                        '<script src="./lab-config.js"></script><script src="./public-snapshot.js"></script><script src="./lab_bootstrap.js"></script><script src="./experiment_hub.js"></script>')
+    from scripts.build_lab_public_snapshot import build as build_public_snapshot
+    build_public_snapshot(page / 'public-snapshot.js')
     (page / 'index.html').write_text(html)
     script = (static / 'experiment_hub.js').read_text()
     if script.count('await fetch(') != 2:
