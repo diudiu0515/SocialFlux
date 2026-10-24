@@ -1,0 +1,173 @@
+{
+  "created_at_utc": "2026-10-24T09:17:58.020840+00:00",
+  "objective": "Bring isolated Qwen Task4 environment quality to the level of the existing GPT appraisal / Claude Fable response environment; deployment readiness alone is insufficient.",
+  "status": "semantic_quality_not_accepted",
+  "formal_admission": false,
+  "human_review_status": "not_performed",
+  "reference_stack": {
+    "evidence": "data/claude150_v1/state_v3_validation/unified_gpt50_matched_claude50_20261022_runtime_recovery_20261024/manifest.json",
+    "sha256": "611add3aecec2a06b53d2f25a0929fb6f4738806a57d8129f86d90ae1741f36b",
+    "state_appraisal": "gpt-6-astra",
+    "interaction_appraisal": "gpt-6-astra",
+    "response": "claude-fable-5",
+    "state_prompt": "environment_state_appraisal_v6_observed_evidence",
+    "response_prompt": "environment_response_v31_contrastive_event_driven",
+    "caveat": "This is the verified existing reference configuration, not evidence that every historical Fable-named configuration used the same routing. Its outputs are comparison evidence, not human ground truth."
+  },
+  "physical_local_model_requests": 13,
+  "retries": 0,
+  "replacement_sampling": false,
+  "external_model_requests": 0,
+  "entailment_task_isolation": {
+    "run": "build/qwen_task4/acceptance_20261024_semantic_components",
+    "plan_sha256": "52e6279e421c720015f261d86e989278c19ae1d3dd85100342a55019acc4677f",
+    "physical_requests": 10,
+    "exposed_development_checkpoints": 2,
+    "conditions": [
+      "action only",
+      "action plus public background and full dialogue",
+      "full private state-appraisal context",
+      "same full context with previous numeric S/D removed",
+      "explicit positive synthetic control"
+    ],
+    "claim_families": [
+      "inability to promise approval implies impossibility",
+      "refusal to approve implies a request to pause the conversation"
+    ],
+    "raw_plain_json_label_matches": 8,
+    "labels_matching_after_existing_canonical_parser": 10,
+    "requested_field_names_matching_after_parse": 9,
+    "format_findings": [
+      "Two complete JSON objects were enclosed in Markdown fences; canonical parser already accepts these.",
+      "One output used description instead of required explanation."
+    ],
+    "parser_review": "build/qwen_task4/acceptance_20261024_semantic_components/parser_review.json",
+    "interpretation": "Qwen correctly distinguishes the tested meanings when the task explicitly asks for factual entailment, including with full private context. This does not prove correct state appraisal or general reliability.",
+    "comparison_limit": "System task and output schema differ from full appraisal; seed and output/thinking ceilings also differ. The contrast does not isolate a unique root cause."
+  },
+  "variable_scope_ablation": {
+    "run": "build/qwen_task4/acceptance_20261024_variable_scope",
+    "plan_sha256": "ab8932b565639ade2492c1d533d01be892f72a2d9de9eed6352f4165c29f87bb",
+    "physical_requests": 3,
+    "changed": [
+      "requested state variable paths",
+      "requested dynamics variable paths",
+      "corresponding output schema"
+    ],
+    "held_fixed": [
+      "all input evidence and prior S/D",
+      "all variable definitions",
+      "prose stage instructions",
+      "model",
+      "sampling",
+      "seed",
+      "token budgets"
+    ],
+    "scoped_schema_valid": 3,
+    "assistant_review_uncertainty_errors": 3,
+    "cases": [
+      {
+        "variable": "consequence_risk.goal_failure_risk",
+        "status": "completed",
+        "seconds": 152.0726575339213,
+        "scoped_schema_valid": true,
+        "full_canonical_appraisal": false,
+        "assistant_semantic_review": {
+          "uncertainty_preserved": false,
+          "finding": "Treats acceptance of loss risk as an unconditional choice not to pursue authorization; claims the last possible pathway has closed."
+        },
+        "usage": {
+          "prompt_tokens": 9956,
+          "total_tokens": 11909,
+          "completion_tokens": 1953,
+          "prompt_tokens_details": null,
+          "completion_tokens_details": {
+            "reasoning_tokens": 1612
+          }
+        },
+        "artifact": "build/qwen_task4/acceptance_20261024_variable_scope/consequence_risk.goal_failure_risk.json",
+        "sha256": "95f82e282c16d4d704f41b35070503252488c816a87fbc86f42510e59c9117a8"
+      },
+      {
+        "variable": "behavioral_disposition.resolve",
+        "status": "completed",
+        "seconds": 162.3721887510037,
+        "scoped_schema_valid": true,
+        "full_canonical_appraisal": false,
+        "assistant_semantic_review": {
+          "uncertainty_preserved": false,
+          "finding": "Uses an ordinary indirect judgment instead of decisive direct evidence, but still converts accepted loss risk into a closed goal pathway."
+        },
+        "usage": {
+          "prompt_tokens": 9950,
+          "total_tokens": 12043,
+          "completion_tokens": 2093,
+          "prompt_tokens_details": null,
+          "completion_tokens_details": {
+            "reasoning_tokens": 1763
+          }
+        },
+        "artifact": "build/qwen_task4/acceptance_20261024_variable_scope/behavioral_disposition.resolve.json",
+        "sha256": "b6e9b120d82845d2715fe0221dda45b0939ad952feb9bc6f173499ea09433aa1"
+      },
+      {
+        "variable": "emotion.anxiety",
+        "status": "completed",
+        "seconds": 128.35661184194032,
+        "scoped_schema_valid": true,
+        "full_canonical_appraisal": false,
+        "assistant_semantic_review": {
+          "uncertainty_preserved": false,
+          "finding": "Treats an accepted risk as an actual, now-certain negative outcome."
+        },
+        "usage": {
+          "prompt_tokens": 9946,
+          "total_tokens": 11606,
+          "completion_tokens": 1660,
+          "prompt_tokens_details": null,
+          "completion_tokens_details": {
+            "reasoning_tokens": 1361
+          }
+        },
+        "artifact": "build/qwen_task4/acceptance_20261024_variable_scope/emotion.anxiety.json",
+        "sha256": "b0de1e30a346e656383ab1b10f2c74c8ef684f00a29f14cb6e53c359bee1278d"
+      }
+    ],
+    "decision": "Do not deploy variable splitting based on this evidence. Scope reduction did not fix the recurring inference error."
+  },
+  "conclusions": [
+    "This is a failure to preserve evidence strength during state appraisal; it is not established that Qwen cannot understand the sentence.",
+    "Dialogue context or prior numeric levels alone cannot explain the failure: the simplified entailment task succeeds with them present.",
+    "Reduced output scope alone is insufficient: each of three separately judged variables still relies on a strengthened premise.",
+    "Do not characterize the original Fable-compatible prompt as simply too weak, or claim this local Qwen has reached reference quality."
+  ],
+  "quality_acceptance_target": {
+    "protocol": "docs/protocols/ENVIRONMENT_VALIDATION_V1.md",
+    "scope": "Compare corresponding scenarios under matched public task settings; report and control differences in horizon, language, modality, prompts and sampling.",
+    "required_evidence": [
+      "preservation of uncertainty, actor ownership and pending/completed distinctions",
+      "grounded state judgments and reasonable deterministic transitions",
+      "coherent complete natural trajectories without unsupported facts or commitments",
+      "first-pass acceptance, actual retries, failures and per-turn latency",
+      "independent development/test separation and unchanged formal review requirements"
+    ],
+    "baseline_is_not_gold": true,
+    "numeric_vector_identity_required": false,
+    "independent_evaluation_target_scenarios": 15,
+    "note": "These 13 component requests on exposed development cases do not contribute independent evaluation coverage or prove statistical equivalence."
+  },
+  "next_method_decision": {
+    "status": "requires_stage_adaptation_or_model_comparison",
+    "reason": "Repeated isolated instruction/sampling repairs and variable-scope reduction have not fixed the same semantic error. Keep failure evidence and evaluate a materially different adaptation; do not append more scenario-specific rules or relax validators.",
+    "training_status": "no training started; archived teacher outputs would require quality filtering and held-out split before use"
+  },
+  "deployment": {
+    "live_service": "build/qwen_task4/run_20261024_v1",
+    "promoted": false,
+    "qwen_candidate_config_changed": false,
+    "model_weights_changed": false,
+    "gpt_claude_prompts_changed": false,
+    "original_prompt_contract_files_hash_verified": 171,
+    "reward_status": "external_unconfigured"
+  }
+}
