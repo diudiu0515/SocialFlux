@@ -1,8 +1,11 @@
+import {scopedFlowTasks, questionEvidence} from './question-material';
+import {activeQuestionId} from './scenario-flow';
 // Server only. New sessions derive an immutable review plan from their frozen release.
 import {createHash} from 'node:crypto';
 import {gate2Tasks} from './gate2';
 import type {Workflow} from './research-protocol';
 import type {FlowTask, FlowStep} from './scenario-flow';
+export {scopedFlowTasks, questionEvidence} from './question-material';
 const quality = {yes: '合理 / 可接受', minor: '轻微瑕疵，不影响判断', no: '不合理 / 影响判断', uncertain: '材料不足 / 无法判断'};
 const question = (id: string, label: string, choices: Record<string, string> = quality) => ({id, label, choices});
 const sha = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -52,5 +55,5 @@ export function scenarioFlowTasks(assignment: {scene_ids: string[]; item_ids: st
 export function scenarioFlowView(tasks: FlowTask[], workflow: Workflow) {
   const flow = workflow.scenarioFlow!;
   const unlocked = ['gt', 'complete'].includes(workflow.phase);
-  return {version: 2, step: flow.step, tasks: tasks.filter(t => t.step === flow.step), stateTimeline: unlocked ? tasks.filter(t => t.step === 'state') : []};
+  return {version: flow.version, step: flow.step, lockedTaskIds: flow.version === 3 ? Object.keys(flow.questionLocks?.[workflow.sceneSequence!.scenes[workflow.sceneSequence!.index]?.id] || {}).flatMap(id => scopedFlowTasks(tasks, id).map(t => t.id)) : [], tasks: flow.version === 3 && flow.step === 'answer' ? scopedFlowTasks(tasks.filter(t => ['dialogue','media'].includes(t.step)), activeQuestionId(workflow)!).map(t => ({...t, evidence: questionEvidence(t, activeQuestionId(workflow)!)})) : tasks.filter(t => t.step === flow.step), stateTimeline: unlocked ? tasks.filter(t => t.step === 'state') : []};
 }

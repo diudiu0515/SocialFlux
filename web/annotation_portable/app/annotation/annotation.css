@@ -80,3 +80,22 @@
 .annotation-app {min-height:100vh;}
 
 .annotation-app .lab-saved-sessions{padding:24px 28px;border-bottom:1px solid #dce5d4}.annotation-app .lab-saved-sessions h2{font-size:18px}.annotation-app .resume-annotation{display:grid;gap:6px;text-align:left;width:100%;margin:10px 0;padding:14px;background:#f4f8ee;border:1px solid #dce5d4;border-radius:8px}.annotation-app .resume-annotation span{font-size:11px;color:#65755c}.annotation-app .legacy-recovery{font-size:12px;margin-top:18px;color:#65755c}.annotation-app .legacy-recovery a{text-decoration:underline}.annotation-app .legacy-recovery p{margin-top:10px}.annotation-app .top-right{flex-wrap:wrap;gap:12px}
+
+/* Explicit per-item review, with one-click confirmation and retained exceptions. */
+.annotation-app .flow-check-hint { margin: 4px 0 0; font-size: 12px; }
+.annotation-app .flow-checklist { grid-template-columns: 1fr; gap: 12px; }
+.annotation-app .flow-check-item { min-width: 0; margin: 0; padding: 12px 14px; border: 1px solid #dce5d4; border-radius: 10px; }
+.annotation-app .flow-check-item.answered { border-color: #a7bda1; }
+.annotation-app .flow-check-item legend { padding: 0 6px; font-size: 13px; color: #435b38; }
+.annotation-app .flow-check-main { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.annotation-app .flow-check-option { display: flex; align-items: center; gap: 10px; padding: 10px 12px; min-height: 44px; border-radius: 7px; font-size: 13px; cursor: pointer; }
+.annotation-app .flow-check-option.selected { background: #edf5e7; color: #35552b; }
+.annotation-app .flow-check-option input { margin: 0; }
+.annotation-app .flow-check-main > .flow-check-option { flex: 1; min-width: 0; }
+.annotation-app .flow-check-main > .text-button { flex: 0 1 auto; padding: 10px 4px; min-height: 44px; text-align: left; }
+.annotation-app .flow-check-alternatives { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e7ecdf; }
+.annotation-app .flow-check-alternatives > label { flex: 1 1 180px; border: 1px solid #e2e8db; }
+.annotation-app .flow-check-alternatives > .text-button { padding: 10px; min-height: 44px; }
+.annotation-app .flow-review-note, .annotation-app .flow-review-issue, .annotation-app .flow-add-note { grid-column: 1 / -1; }
+.annotation-app .flow-add-note { justify-self: start; padding: 8px 0; }
+@media (max-width: 700px) { .annotation-app .flow-check-main { flex-wrap: wrap; gap: 4px; } .annotation-app .flow-check-main > .flow-check-option { flex-basis: 100%; } .annotation-app .flow-check-alternatives { flex-direction: column; } .annotation-app .flow-check-alternatives > label { flex-basis: auto; } }

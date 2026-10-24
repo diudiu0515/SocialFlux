@@ -1,9 +1,12 @@
+import {activeQuestionId} from './scenario-flow';
 import {scenarioFlowTasks, scenarioFlowView} from './scenario-material';
 import {gate2Material, gate2Export, gate2DatasetHash} from './gate2';
 // Server-only: this module is imported exclusively by API/store modules.
 import {gunzipSync} from 'node:zlib';
 import compressed from '../data/research-server.json';
 import previousDeltaCompressed from '../data/research-previous-delta-server.json';
+import seedanceContextDelta from '../data/research-seedance-context-delta-server.json';
+import originalSeedanceDelta from '../data/research-seedance-original-delta-server.json';
 import publicContextDeltaCompressed from '../data/research-public-context-delta-server.json';
 import firstMediaSnapshot from '../data/research-annotation400-first-overlay.json';
 import mediaHistoryCompressed from '../data/research-media-history-server.json';
@@ -14,7 +17,7 @@ import {InputError, type Question} from './protocol';
 import {activeScene, dimensions, type Workflow} from './research-protocol';
 
 export type Assignment = {id: string; track: string; label: string; scene_ids: string[]; item_ids: string[]};
-type Item = {id: string; scene_id: string; task: string; item_sha256: string; public_text: Question; public_video: Question | null; media: {asset_id: string; sha256: string; url: string; evidence_ids: string[]; spoken_scope?: string}[]; coverage: unknown};
+type Item = {id: string; scene_id: string; task: string; item_sha256: string; public_text: Question; public_video: Question | null; media: {asset_id: string; sha256: string; url: string; evidence_ids: string[]; spoken_scope?: string; provider?: string}[]; coverage: unknown};
 // Evidence schemas are versioned in the Python release builder; pass through only at the gated endpoint.
 type Trajectory = {id: string; packet: Record<string, any>; packet_sha256: string; trajectory_sha256: string; machine: Record<string, any> | null; policy_condition: string; policy_model: string; judge_condition: string};
 type Research = {
@@ -22,10 +25,12 @@ type Research = {
   assignments: Assignment[]; rubric: unknown; sampling: Record<string, unknown>; private: Record<string, string>; evidence_blobs: Record<string, string>;
   public_context_revision?: {version: number; source_dataset_sha256: string}};
 const legacyResearch = unpackStored<Research>(compressed);
-export const research = restoreResearchDelta(legacyResearch, unpackStored(publicContextDeltaCompressed));
+const publicContextResearch = restoreResearchDelta(legacyResearch, unpackStored(publicContextDeltaCompressed));
+const originalSeedanceResearch = restoreResearchDelta(legacyResearch, unpackStored(originalSeedanceDelta));
+export const research = restoreResearchDelta(legacyResearch, unpackStored(seedanceContextDelta));
 const previousResearch = restoreResearchDelta(legacyResearch, unpackStored(previousDeltaCompressed));
 const mediaHistory = unpackStored<MediaSnapshot[]>(mediaHistoryCompressed);
-const releases = new Map([previousResearch, legacyResearch, research].map(value => [value.dataset_sha256, value]));
+const releases = new Map([previousResearch, legacyResearch, publicContextResearch, originalSeedanceResearch, research].map(value => [value.dataset_sha256, value]));
 // Every published media batch keeps its original assignments and assets.
 // Question and private evidence hashes remain frozen across these overlays.
 for (const snapshot of [firstMediaSnapshot, ...mediaHistory] as Partial<MediaSnapshot>[]) {
@@ -63,7 +68,7 @@ export function researchReleaseInfo(hash: string, currentTotal: number, assigned
   const counts = new Map<string, number>();
   for (const item of research.items) counts.set(item.scene_id, (counts.get(item.scene_id) || 0) + 1);
   const sizes = new Set(counts.values());
-  return {isCurrent: hash === research.dataset_sha256, currentTotal, assignedCount,
+  return {isCurrent: hash === research.dataset_sha256, currentTotal, assignedCount, latestSeedanceReady: research.items.some(x => x.media.some(m => m.provider === "seedance")),
     latestPublicContextReady: research.public_context_revision?.version === 1,
     currentPublicContextReady: releases.get(hash)?.public_context_revision?.version === 1,
     currentVideoFormat: videoFormat(releases.get(hash)), latestVideoFormat: videoFormat(research),
@@ -78,7 +83,7 @@ export function assignmentFor(id: unknown) {
   return assignment;
 }
 export function researchQuestions(a: Assignment, data = research) {
-  return data.items.filter(x => a.item_ids.includes(x.id)).map(x => ({...(a.track === 'offline_video' ? x.public_video! : x.public_text), instance_id: x.id}));
+  return data.items.filter(x => a.item_ids.includes(x.id)).map(x => ({...(a.track === 'offline_video' ? (x.public_video || x.public_text) : x.public_text), instance_id: x.id}));
 }
 export function researchTrajectories(a: Assignment, data = research) {
   return data.t4.filter(x => a.item_ids.includes(x.id));
@@ -95,8 +100,8 @@ export function researchMaterial(a: Assignment, workflow: Workflow, data = resea
   a = sceneAssignment(a, workflow);
   const referenceAnswers = workflow.sceneSequence && workflow.phase === 'gt' && workflow.blindLockedAt
     ? a.item_ids.map(id => ({id, answer: JSON.parse(gunzipSync(Buffer.from(data.private[id], 'base64')).toString()).machine?.answer || null})) : [];
-  return {assignment: a, referenceAnswers, ...(workflow.scenarioFlow ? {flow: scenarioFlowView(scenarioFlowTasks(a, workflow, data), workflow)} : {}), gate2Tasks: workflow.scenarioFlow ? [] : gate2Material(a.scene_ids, workflow.gate2, workflow.phase, a.track), items: data.items.filter(x => a.item_ids.includes(x.id)).map(x => ({id: x.id, scene_id: x.scene_id, task: x.task,
-    public: a.track === 'offline_video' ? x.public_video : x.public_text,
+  return {assignment: a, referenceAnswers, ...(workflow.scenarioFlow ? {flow: scenarioFlowView(scenarioFlowTasks(a, workflow, data), workflow)} : {}), gate2Tasks: workflow.scenarioFlow ? [] : gate2Material(a.scene_ids, workflow.gate2, workflow.phase, a.track), items: data.items.filter(x => a.item_ids.includes(x.id) && (workflow.scenarioFlow?.version !== 3 || ['feedback','state'].includes(workflow.scenarioFlow.step) || (workflow.scenarioFlow.step === 'answer' && x.id === activeQuestionId(workflow)))).map(x => ({id: x.id, scene_id: x.scene_id, task: x.task,
+    public: a.track === 'offline_video' ? (x.public_video || x.public_text) : x.public_text,
     media: a.track === 'offline_video' ? x.media : [], coverage: a.track === 'offline_video' ? x.coverage : null})), trajectories: []};
 }
 export function researchEvidence(a: Assignment, workflow: Workflow, id: unknown, data = research) {
@@ -114,7 +119,7 @@ export function researchHashes(a: Assignment, data = research) {
   return Object.fromEntries(a.track === 't4' ? researchTrajectories(a, data).map(x => [x.id, x.packet_sha256]) : data.items.filter(x => a.item_ids.includes(x.id)).map(x => [x.id, x.item_sha256]));
 }
 export function researchExport(a: Assignment, w: Workflow, data = research) {
-  return {assignment: a, workflow: w, ...(w.scenarioFlow ? {scenario_human_review: {version: 2, answers: w.scenarioFlow.reviews, machine_answer_judgments: w.scenarioFlow.machineVerdicts, step_locks: w.scenarioFlow.locks, task_hashes: Object.fromEntries(scenarioFlowTasks(a, w, data).map(t => [t.id, t.sha256]))}} : {}), gate2_human_review: w.scenarioFlow ? null : gate2Export(a.scene_ids, w.gate2, a.track), source_bank_sha256: data.source_bank_sha256,
+  return {assignment: a, workflow: w, ...(w.scenarioFlow ? {scenario_human_review: {version: w.scenarioFlow.version, question_locks: w.scenarioFlow.questionLocks, answers: w.scenarioFlow.reviews, machine_answer_judgments: w.scenarioFlow.machineVerdicts, step_locks: w.scenarioFlow.locks, task_hashes: Object.fromEntries(scenarioFlowTasks(a, w, data).map(t => [t.id, t.sha256]))}} : {}), gate2_human_review: w.scenarioFlow ? null : gate2Export(a.scene_ids, w.gate2, a.track), source_bank_sha256: data.source_bank_sha256,
     blind_responses: w.blind || {}, machine_assisted_gt: w.gt || {}, independent_t4_ratings: w.ratings || {},
     ...(a.track === 't4' ? {rubric: data.rubric, judge_condition: 'text_only',
       provenance: researchTrajectories(a, data).map(x => ({id: x.id, trajectory_sha256: x.trajectory_sha256, packet_sha256: x.packet_sha256,

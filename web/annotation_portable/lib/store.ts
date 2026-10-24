@@ -1,3 +1,4 @@
+import {activeQuestionId} from './scenario-flow';
 import {scenarioFlowTasks} from './scenario-material';
 import {gate2Hash, gate2Tasks} from './gate2';
 import { and, desc, eq, inArray } from "drizzle-orm";
@@ -33,7 +34,7 @@ export function payload(row: Session | undefined) {
   if (row && researchVersions.includes(row.datasetSha256)) {
     const frozen = researchFor(row.datasetSha256);
     const assignment = JSON.parse(row.assignmentJson) as Assignment, workflow = JSON.parse(row.workflowJson) as Workflow;
-    return {session: present(row), research: researchMaterial(assignment, workflow, frozen), questions: researchQuestions(sceneAssignment(assignment, workflow), frozen),
+    return {session: present(row), research: researchMaterial(assignment, workflow, frozen), questions: researchQuestions(sceneAssignment(assignment, workflow), frozen).filter(q => workflow.scenarioFlow?.version !== 3 || ['feedback','state'].includes(workflow.scenarioFlow.step) || (workflow.scenarioFlow.step === 'answer' && q.instance_id === activeQuestionId(workflow))),
       ...(assignment.track !== 't4' ? {releaseInfo: researchReleaseInfo(frozen.dataset_sha256, frozen.items.length, assignment.item_ids.length)} : {}),
       dataset: {sha256: frozen.dataset_sha256, release: frozen.release, count: assignment.item_ids.length, kind: 'research'}};
   }
@@ -56,7 +57,7 @@ export async function start(userId: string, data: Record<string, unknown>) {
   await getDb().insert(demoSessions).values({id: crypto.randomUUID(), userId,
     datasetSha256: research.dataset_sha256, release: research.release, ownerUserId: String(data.ownerUserId), ...clean, createdAt: time, updatedAt: time,
     assignmentJson: JSON.stringify(assignment), workflowJson: JSON.stringify({phase: 'blind', baselineEligible: !exclusions.length, exclusions, ...(assignment.track === 't4' ? {gate2: {packet_sha256: gate2Hash, answers: {}}} : {}),
-      ...(assignment.track !== 't4' ? {scenarioFlow: {version: 2, sourcePacketSha256: gate2Hash, step: 'scenario', reviews: {}, machineVerdicts: {}, locks: {}}, sceneSequence: {version: 1, index: 0, completed: {}, scenes: assignment.scene_ids.map(id => ({id, itemIds: research.items.filter(x => x.scene_id === id && assignment.item_ids.includes(x.id)).map(x => x.id)}))}} : {})}),
+      ...(assignment.track !== 't4' ? {scenarioFlow: {version: 3, questionIndex: 0, questionLocks: {}, sourcePacketSha256: gate2Hash, step: 'scenario', reviews: {}, machineVerdicts: {}, locks: {}}, sceneSequence: {version: 1, index: 0, completed: {}, scenes: assignment.scene_ids.map(id => ({id, itemIds: research.items.filter(x => x.scene_id === id && assignment.item_ids.includes(x.id)).map(x => x.id)}))}} : {})}),
     itemHashesJson: JSON.stringify(researchHashes(assignment)),
     mediaHashesJson: JSON.stringify(Object.fromEntries(research.items.filter(x => assignment.item_ids.includes(x.id)).map(x => [x.id, assignment.track === 'offline_video' ? x.media : []]))),
   }).onConflictDoNothing().run();

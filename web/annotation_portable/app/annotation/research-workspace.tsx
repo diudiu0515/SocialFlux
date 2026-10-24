@@ -2,7 +2,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {ArrowLeft, ArrowRight, CheckCircle2, Download, LogOut, MessageSquare, Save, ShieldCheck} from 'lucide-react';
 import {reviewComplete, reviewIssue, type ReviewTask, type ReviewAnswers} from '../../lib/gate2-protocol';
-import {Material, type Question} from './material';
+import {Material, PublicEvents, type Question} from './material';
 import ReleaseNotice, {type ReleaseInfo} from './release-notice';
 import type {Answers, Answer} from '../../lib/protocol';
 import {dimensions, type Dimension, type GT, type Ratings, type Workflow} from '../../lib/research-protocol';
@@ -37,7 +37,7 @@ export function Evidence({value, depth = 0, emptyText = '未提供'}: {value: an
   const entries = Object.entries(value);
   if (!entries.length) return <p className="evidence-value muted">{emptyText}</p>;
   if (entries.length && entries.every(([,v]) => typeof v === 'number')) return <table className="state-table"><tbody>{entries.map(([k,v]) => <tr key={k}><th>{label[k] || k}</th><td>{String(v)}</td></tr>)}</tbody></table>;
-  return <div className="evidence-tree">{entries.map(([key, v]) => typeof v === 'object' && v !== null ? <details key={key} open={depth < 1}><summary>{Array.isArray(value) ? `记录 ${Number(key) + 1}` : label[key] || key}</summary><Evidence value={v} depth={depth + 1} emptyText={key === 'public_situation' ? '当前公开材料未提供' : emptyText}/></details> : <div className="evidence-field" key={key}><b>{label[key] || key}</b><Evidence value={v} depth={depth + 1} emptyText={key === 'public_situation' ? '当前公开材料未提供' : emptyText}/></div>)}</div>;
+  return <div className="evidence-tree">{entries.map(([key, v]) => key === 'public_events' ? <div className="evidence-field" key={key}><b>公开事件</b><PublicEvents value={v}/></div> : typeof v === 'object' && v !== null ? <details key={key} open={depth < 1}><summary>{Array.isArray(value) ? `记录 ${Number(key) + 1}` : label[key] || key}</summary><Evidence value={v} depth={depth + 1} emptyText={key === 'public_situation' ? '当前公开材料未提供' : emptyText}/></details> : <div className="evidence-field" key={key}><b>{label[key] || key}</b><Evidence value={v} depth={depth + 1} emptyText={key === 'public_situation' ? '当前公开材料未提供' : emptyText}/></div>)}</div>;
 }
 const empty: Answer = {answer: null, confidence: '', rationale: '', issue: 'none'};
 function download(name: string, data: unknown) {const a = document.createElement('a'); const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'})); a.href = url; a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);}
