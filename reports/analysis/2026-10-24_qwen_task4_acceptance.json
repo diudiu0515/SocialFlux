@@ -168,15 +168,189 @@
   },
   "final_sampling_contrast": {
     "run": "build/qwen_task4/acceptance_20261024_sampling",
-    "status": "running",
+    "status": "completed_not_accepted",
     "max_requests": 3,
-    "change": "Stage temperatures only; state/interaction 0.0, response 0.35."
+    "change": "Stage temperatures only; state/interaction 0.0, response 0.35.",
+    "physical_requests": 3,
+    "canonical_first_pass": 1,
+    "canonical_validation": {
+      "state_uncertainty": {
+        "canonical_first_pass": true,
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 10162,
+          "total_tokens": 15931,
+          "completion_tokens": 5769,
+          "prompt_tokens_details": null,
+          "completion_tokens_details": {
+            "reasoning_tokens": 3521
+          }
+        },
+        "seconds": 498.6215349249542
+      },
+      "interaction_refusal": {
+        "canonical_first_pass": false,
+        "error": "Replay records first-pass failure; no additional generation permitted"
+      },
+      "response_grounding": {
+        "canonical_first_pass": false,
+        "error": "reply_obligation and asserted request events disagree"
+      }
+    },
+    "assistant_semantic_review": {
+      "passed": false,
+      "findings": [
+        "State still describes inability to promise as certainty of the worst-case outcome.",
+        "Interaction still represents refusal to sign as explicit dialogue pause.",
+        "Response asks for a reply without an asserted request event; canonical validator rejects it."
+      ]
+    }
   },
   "policy_entrypoint": {
     "script": "scripts/run_qwen_task4_policy.py",
     "example_policy": "configs/qwen_task4/policy.local.json",
     "smoke_run": "build/qwen_task4/policy_smoke_20261024_native",
-    "smoke_status": "running",
-    "smoke_scope": "One public-action turn with the same local model as tested policy; engineering only, not independent E6."
+    "smoke_status": "failed_timeout",
+    "smoke_scope": "One public-action turn with the same local model as tested policy; engineering only, not independent E6.",
+    "smoke_summary": {
+      "status": "failed",
+      "formal_admission": false,
+      "error_type": "TimeoutError",
+      "turns": 0,
+      "seconds": 636.598,
+      "provider_metrics": {
+        "policy": {
+          "request_count": 1,
+          "failed_request_count": 0,
+          "request_duration_seconds": 36.497,
+          "finish_reasons": {
+            "stop": 1
+          },
+          "credential_pool_size": 0,
+          "credential_slot_requests": {},
+          "transport_retry_sleep_seconds": 0.0,
+          "usage": {
+            "prompt_tokens": 3267,
+            "total_tokens": 3469,
+            "completion_tokens": 202
+          }
+        },
+        "state": {
+          "request_count": 1,
+          "failed_request_count": 1,
+          "request_duration_seconds": 600.022,
+          "finish_reasons": {},
+          "credential_pool_size": 0,
+          "credential_slot_requests": {},
+          "transport_retry_sleep_seconds": 0.0,
+          "usage": {}
+        },
+        "interaction": {
+          "request_count": 2,
+          "failed_request_count": 0,
+          "request_duration_seconds": 349.715,
+          "finish_reasons": {
+            "stop": 2
+          },
+          "credential_pool_size": 0,
+          "credential_slot_requests": {},
+          "transport_retry_sleep_seconds": 0.0,
+          "usage": {
+            "prompt_tokens": 11353,
+            "total_tokens": 14270,
+            "completion_tokens": 2917
+          }
+        },
+        "response": {
+          "request_count": 0,
+          "failed_request_count": 0,
+          "request_duration_seconds": 0.0,
+          "finish_reasons": {},
+          "credential_pool_size": 0,
+          "credential_slot_requests": {},
+          "transport_retry_sleep_seconds": 0.0,
+          "usage": {}
+        }
+      }
+    },
+    "public_boundary_checks": {
+      "environment_hidden_intention_absent_from_actual_policy_request": true,
+      "actual_policy_action_saved": true
+    },
+    "recovery": {
+      "run": "build/qwen_task4/run_20261024_native_timeout",
+      "status": "completed",
+      "change": "Local request timeout 600 -> 1200 seconds only",
+      "same_actual_policy_action": true,
+      "policy_resampled": false,
+      "failed_first_attempt_retained": true,
+      "episode_id": "81909ac2cac0444a8ac79065f2834eb6",
+      "seconds": 777.4332934500417,
+      "completed_turns": 1,
+      "physical_requests": 5,
+      "attempts_by_stage": {
+        "state": 1,
+        "interaction": 2,
+        "response": 2
+      },
+      "terminated": false,
+      "truncated": false,
+      "reward": null,
+      "formal_admission": false
+    },
+    "overall_engineering_status": "one_real_policy_action_completed_after_explicit_timeout_repair",
+    "limits": [
+      "Same local model supplies the tested-policy action; this is not independent model evaluation.",
+      "First attempt failed and remains in the denominator; recovery reuses the exact saved policy action and reset snapshot.",
+      "One turn only; no complete natural episode or 15-scenario E6 run.",
+      "Failed transport has request-count and context evidence but no returned usage or response body."
+    ]
+  },
+  "instruction_iteration_decision": "Do not promote this candidate or add further prompt clauses for the same semantic failure. Both instruction profiles and the reasoning/temperature component contrasts remain development evidence.",
+  "active_service": {
+    "endpoint": "http://127.0.0.1:8011",
+    "run": "build/qwen_task4/run_20261024_v1",
+    "status": "development_only",
+    "candidate_promoted": false
+  },
+  "final_decision": {
+    "engineering": "development_integration_only",
+    "semantic": "not_accepted",
+    "formal_benchmark_admission": false,
+    "human_review_performed": false,
+    "rl_reward": "unconfigured",
+    "candidate_promoted_to_8011": false,
+    "latency_observed_seconds": [
+      592.745,
+      788.023,
+      777.433
+    ],
+    "latency_context": "Concurrent local model load; these observations do not establish unloaded latency.",
+    "next_required_change": "Resolve the appraisal modality/closure errors through a reviewed component or model change; do not infer readiness from JSON validity."
+  },
+  "this_turn_physical_requests": 23,
+  "tests": {
+    "unique_tests_passed": 32,
+    "command": "python -m unittest -q tests.test_qwen_task4 tests.test_qwen_task4_policy tests.test_environment_prompt_diagnostic tests.test_independent_appraisal tests.test_structured_retry tests.test_unified_appraisal"
+  },
+  "original_file_check": {
+    "checked": 171,
+    "changed": [],
+    "prior_staged_changes_preserved": true
+  },
+  "health_at_completion": {
+    "model": {
+      "http_status": 200
+    },
+    "task4": {
+      "http_status": 200,
+      "body": {
+        "ready": true,
+        "profile": "qwen_task4_thinking_v1",
+        "model": "Qwen/Qwen3.8-Flash-Next-FP8",
+        "observation_condition": "text_only",
+        "reward_status": "unconfigured"
+      }
+    }
   }
 }
