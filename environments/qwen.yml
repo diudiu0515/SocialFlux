@@ -1,0 +1,14 @@
+# Optional GPU server. Keep it separate from the benchmark/client environment.
+# This matches the project's deployed vLLM release, not a claim of latest support.
+name: socialflux-qwen
+channels:
+  - defaults
+  - nodefaults
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - vllm==0.32.0
+      - -r ../requirements-qwen-task4.txt
+      - packaging>=24,<27
+      - supervisor==4.2.5

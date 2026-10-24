@@ -9,8 +9,11 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def command(config):
-    cmd = [str(ROOT / 'build/qwen_deployment/venv/bin/vllm'), 'serve', str(ROOT / config['model_path']),
+def command(config, runtime_prefix=None):
+    # Existing frozen deployments keep their original runtime until a new run
+    # explicitly selects a Conda prefix. Never switch a live batch implicitly.
+    prefix = Path(runtime_prefix).expanduser().resolve() if runtime_prefix else ROOT / 'build/qwen_deployment/venv'
+    cmd = [str(prefix / 'bin/vllm'), 'serve', str(ROOT / config['model_path']),
            '--served-model-name', config['model'], '--host', config['host'], '--port', str(config['port']),
            '--tensor-parallel-size', str(config['tensor_parallel_size']),
            '--max-model-len', str(config['max_model_len']), '--max-num-seqs', str(config['max_num_seqs']),
@@ -25,10 +28,12 @@ def command(config):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--config', type=Path, default=ROOT / 'configs/qwen_local_deployment.json')
+    parser.add_argument('--runtime-prefix', type=Path,
+                        help='Explicit Conda prefix for a new deployment; legacy frozen runtime is the default')
     parser.add_argument('--print-command', action='store_true')
     args = parser.parse_args()
     config = json.loads(args.config.read_text())
-    cmd = command(config)
+    cmd = command(config, args.runtime_prefix)
     if args.print_command:
         import shlex
         print(shlex.join(cmd))

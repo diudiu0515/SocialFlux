@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SocialFlux development Task4 session API v1",
+  "description": "Public wire contract for QwenTask4Session; model/prompt profiles are versioned separately. This is not formal benchmark admission.",
+  "$ref": "#/$defs/session",
+  "$defs": {
+    "create": {
+      "type": "object",
+      "required": [
+        "scenario_id"
+      ],
+      "properties": {
+        "scenario_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "step": {
+      "type": "object",
+      "required": [
+        "text",
+        "expected_turn_id"
+      ],
+      "properties": {
+        "text": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "expected_turn_id": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "session": {
+      "type": "object",
+      "required": [
+        "episode_id",
+        "observation",
+        "reward",
+        "terminated",
+        "truncated",
+        "failed",
+        "info"
+      ],
+      "properties": {
+        "episode_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{32}$"
+        },
+        "observation": {
+          "$ref": "#/$defs/observation"
+        },
+        "reward": {
+          "type": "null"
+        },
+        "terminated": {
+          "type": "boolean"
+        },
+        "truncated": {
+          "type": "boolean"
+        },
+        "failed": {
+          "type": "boolean"
+        },
+        "info": {
+          "type": "object",
+          "required": [
+            "reward_status",
+            "formal_admission"
+          ],
+          "properties": {
+            "reward_status": {
+              "const": "unconfigured"
+            },
+            "formal_admission": {
+              "const": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "not": {
+        "properties": {
+          "terminated": {
+            "const": true
+          },
+          "truncated": {
+            "const": true
+          }
+        },
+        "required": [
+          "terminated",
+          "truncated"
+        ]
+      },
+      "additionalProperties": false
+    },
+    "observation": {
+      "type": "object",
+      "required": [
+        "scenario_id",
+        "role",
+        "target_character",
+        "background",
+        "public_situation",
+        "explicit_goal",
+        "conversation_progress",
+        "longitudinal_context",
+        "history",
+        "current_response",
+        "observable_cues",
+        "observable_expression",
+        "media",
+        "turn_id",
+        "status"
+      ],
+      "properties": {
+        "scenario_id": {
+          "type": "string"
+        },
+        "role": {
+          "type": "object",
+          "properties": {
+            "character_id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            },
+            "explicit_goal": {
+              "type": "string"
+            },
+            "persona": {
+              "type": "object",
+              "properties": {
+                "name": {},
+                "role": {},
+                "core_values": {},
+                "temperament": {},
+                "communication_style": {},
+                "decision_style": {},
+                "conflict_style": {},
+                "boundaries": {}
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "target_character": {
+          "type": "object",
+          "required": [
+            "character_id",
+            "name",
+            "role"
+          ],
+          "properties": {
+            "character_id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "background": {
+          "type": "string"
+        },
+        "public_situation": {
+          "type": "object"
+        },
+        "explicit_goal": {
+          "type": "string"
+        },
+        "conversation_progress": {
+          "type": "object"
+        },
+        "longitudinal_context": {
+          "type": "object"
+        },
+        "history": {
+          "type": "array"
+        },
+        "current_response": {
+          "type": "string"
+        },
+        "observable_cues": {
+          "type": "array"
+        },
+        "observable_expression": {
+          "type": "object"
+        },
+        "media": {
+          "type": "array"
+        },
+        "turn_id": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "error": {
+      "type": "object",
+      "required": [
+        "error"
+      ],
+      "properties": {
+        "error": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

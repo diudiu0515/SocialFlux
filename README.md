@@ -17,6 +17,23 @@ SocialFlux 使用同一套社会状态环境生成 rollout、构建 T1–T3 离�
 | 查看场景、对话、视频或标注题目 | [网站说明](web/README.md) |
 | 查阅设计约束与历史实验 | [DESIGN_CONTRACT](DESIGN_CONTRACT.md)、[文档索引](docs/README.md)、[报告索引](reports/README.md) |
 
+## 开发环境与对外接口
+
+新环境统一由 Conda 管理，环境、下载缓存与临时文件默认放在数据盘上的
+`build/runtime/`，基础环境不安装 CUDA、PyTorch 或 vLLM：
+
+```bash
+bash scripts/create_conda_env.sh core
+conda activate "$PWD/build/runtime/envs/core"
+python -m pipeline --help
+python -m unittest tests.test_public_task4_api tests.test_offline_choice tests.test_qwen_task4_policy -v
+```
+
+[环境与复现说明](docs/operations/DEVELOPMENT_ENVIRONMENT.md)区分基础环境、可选 GPU
+服务及历史冻结实例。[公开接口合同](docs/protocols/PUBLIC_BENCHMARK_API.md)说明 T1–T3
+作答、T4 会话、模型接入和发布边界。接口测试使用合成工程 fixture，不需要本地题库、
+密钥或 GPU；通过测试不代表 benchmark 已完成正式验收或获得开源发布许可。
+
 ## 当前可用入口
 
 公共命令统一从 `python -m pipeline` 进入；`scripts/` 保存具体编排与专项实验入口。查看帮助不会发起模型调用：

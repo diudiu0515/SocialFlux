@@ -1,0 +1,10 @@
+name: socialflux
+channels:
+  - defaults
+  - nodefaults
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - -r requirements-qwen-task4.txt
+      - requests>=2.32,<3
