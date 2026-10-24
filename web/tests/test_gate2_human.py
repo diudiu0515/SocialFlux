@@ -137,5 +137,51 @@ class Gate2HumanTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, '没有精确绑定'): validate_gate2(record)
                 values['media_verifiability'] = 'missing'; validate_gate2(record)
 
+    def progressive_record(self):
+        data = self.expanded_bundle()
+        data['tasks'] = [task for task in data['tasks'] if task['kind'] in ('E1', 'scenario')]
+        data['tasks'] += [{**task, 'id': task['id'] + '-2', 'scene_id': 'scene-2'} for task in data['tasks'][:]]
+        record = self.record(data)
+        record['assignment']['scene_ids'] = ['scene-1', 'scene-2']
+        record['status'] = 'in_progress'
+        record['workflow'].update(phase='blind', sceneSequence={
+            'version': 1, 'index': 0, 'completed': {},
+            'scenes': [{'id': 'scene-1'}, {'id': 'scene-2'}]})
+        record['workflow']['gate2']['answers'].clear()
+        record['workflow']['gate2'].pop('independentLockedAt')
+        record['gate2_human_review'].pop('independent_locked_at')
+        return data, record
+
+    def test_progressive_receipt_accepts_only_exact_visible_hashes(self):
+        data, record = self.progressive_record()
+        with patch.object(g, 'receipt_packet', return_value=data):
+            validate_gate2(record)
+            for mutation in ('future_hash', 'missing_hash', 'hash', 'order', 'index', 'bool_index', 'future_answer'):
+                with self.subTest(mutation=mutation):
+                    bad = copy.deepcopy(record)
+                    if mutation == 'future_hash': bad['gate2_human_review']['task_hashes']['E1-2'] = 'E1'
+                    if mutation == 'missing_hash': bad['gate2_human_review']['task_hashes'].pop('E1')
+                    if mutation == 'hash': bad['gate2_human_review']['task_hashes']['E1'] = 'wrong'
+                    if mutation == 'order': bad['workflow']['sceneSequence']['scenes'].reverse()
+                    if mutation == 'index': bad['workflow']['sceneSequence']['index'] = 2
+                    if mutation == 'bool_index': bad['workflow']['sceneSequence']['index'] = False
+                    if mutation == 'future_answer': bad['workflow']['gate2']['answers']['E1-2'] = {'values': {}, 'rationale': ''}
+                    with self.assertRaises(ValueError): validate_gate2(bad)
+
+    def test_previous_scene_stays_complete_while_current_scene_is_blind(self):
+        data, record = self.progressive_record()
+        completed = self.record(data)
+        record['workflow']['gate2']['answers'].update(completed['workflow']['gate2']['answers'])
+        record['workflow']['sceneSequence'].update(index=1, completed={
+            'scene-1': {'blindLockedAt': 'earlier', 'independentLockedAt': 'earlier', 'submittedAt': 'earlier'}})
+        record['gate2_human_review']['task_hashes'] = {task['id']: task['sha256'] for task in data['tasks']}
+        with patch.object(g, 'receipt_packet', return_value=data):
+            validate_gate2(record)
+            missing = copy.deepcopy(record)
+            missing['workflow']['gate2']['answers'].pop('scenario')
+            with self.assertRaisesRegex(ValueError, '尚未完成'): validate_gate2(missing)
+            record['workflow']['gate2']['answers']['E1-2'] = {'values': {}, 'rationale': ''}
+            with self.assertRaisesRegex(ValueError, '未开放'): validate_gate2(record)
+
 
 if __name__ == '__main__': unittest.main()

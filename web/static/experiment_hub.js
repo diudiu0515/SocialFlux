@@ -1,7 +1,7 @@
 'use strict';
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const statuses = {planned:'待开展',running:'进行中',blocked:'受阻',review:'待复核',completed:'已完成',archived:'已归档'};
+const statuses = {planned:'待开展',running:'进行中',blocked:'受阻',review:'待复核',human_only:'仅需人工',completed:'已完成',archived:'已归档'};
 const priorities = {P0:'P0 · 优先',P1:'P1 · 常规',P2:'P2 · 后续'};
 const views = {
   overview:['实验总览','让每一次实验，都有据可循。','从研究问题到实验结果，在这里连接每一步。'],
@@ -51,6 +51,19 @@ function renderMatrix(){
       `${badge(r.plan_status)}<br><button class="text-button" data-edit="${esc(r.id)}">方法 / 记录 ↗</button>`
     ]))}</section>`;
   }).join('');
+  const design=snapshot.environment_validation;
+  if(design){
+    const progress=r=>[
+      r.progress?.counts?Object.entries(r.progress.counts).map(([k,v])=>`${outcomeNames[k]||k} ${v}`).join(' / '):'',
+      r.progress?.expected!=null?`场景 ${r.progress.recorded||0}/${r.progress.expected}`:'',
+      r.requests?`${r.requests.scope==='shared_suite'?'共享批次':r.requests.scope==='policy'?'策略调用':'实际调用'} ${r.requests.count}/${r.requests.limit}`:''
+    ].filter(Boolean).join(' · ');
+    $('research-matrix').insertAdjacentHTML('afterbegin',`<section class="panel matrix-panel"><div class="section-heading"><h2>六维实验设计 · ${esc(design.experiments.length)} 项</h2></div><p>${esc(design.note)}</p>${table(['实验','执行状态','已有证据 / 下一步'],design.experiments.map(r=>[
+      `<strong>${esc(r.id)} · ${esc(r.name)}</strong><small>维度 ${esc(r.dimension)}</small>`,
+      `${badge(r.status)}<small>${esc(progress(r))}</small>`,
+      `${esc(r.evidence_summary||'')}<small>${esc(r.next_step||'')}</small>${(r.machine_subtasks||[]).map(s=>`<small>${badge(s.status)} ${esc(s.name)} · ${esc(s.evidence)}</small>`).join('')}`
+    ]))}</section>`);
+  }
   const files=matrix?.inventory||[];
   $('inventory-count').textContent=`展开 ${files.length} 个来源文件 · ${files.filter(f=>f.status!=='available').length} 个缺失或不可读`;
   $('data-inventory').innerHTML=table(['文件','关联实验','状态 / 大小 / SHA-256'],files.map(f=>[
@@ -97,7 +110,7 @@ function renderOverview(){
   $('t4-counts-note').textContent='上方为最近登记的续跑批次。有效配对需同批、同场景、同模型的两条件均完成，且视频实际送达。各批含继承结果，不跨批相加；失败槽位不等于失败场景。';
   $('export-dataset').disabled=!datasetTable('dataset-overview');
   $('export-t4-counts').disabled=!pairing;
-  const todo=r.filter(x=>['planned','blocked','review'].includes(x.status)), running=r.filter(x=>x.status==='running');
+  const todo=r.filter(x=>['planned','blocked','review','human_only'].includes(x.status)), running=r.filter(x=>x.status==='running');
   $('plan-count').textContent=r.filter(x=>!['completed','archived'].includes(x.status)).length;
   $('stats').innerHTML=[
     stat('实验计划',r.filter(x=>x.status!=='archived').length,'项',`<b>${running.length} 项进行中</b> · ${r.filter(x=>x.status==='completed').length} 项已完成`,'☷'),
@@ -169,7 +182,10 @@ function renderLibrary(){
 }
 function renderHuman(){
   const h=snapshot.human_annotation||{};
-  $('human-summary').innerHTML=[stat('已导入标注',h.sessions||0,'份',`最终提交 ${h.submitted||0}`,'◇'),stat('共识 GT',h.gt_consensus||0,'题',`待裁决 ${h.gt_disputed||0}`,'✓'),stat('T4 固定抽样',50,'场景','完整轨迹池 182 / 总体 200','▥'),stat('Claude 对照已备',h.claude_available||0,'/ 50',`失败 ${h.claude_status?.failed||0} · 待完成 ${h.claude_status?.pending||0} · 详情见论文覆盖表`,'↔')].join('');
+  const cohorts=h.dataset_cohorts||[];
+  $('human-summary').innerHTML=[stat('全部版本已导入',h.total_sessions??h.sessions??0,'份',`当前版本 ${h.sessions||0} 份 · 当前版本最终提交 ${h.submitted||0}`,'◇'),stat('当前版本共识 GT',h.gt_consensus||0,'题',`待裁决 ${h.gt_disputed||0}`,'✓'),stat('T4 固定抽样',50,'场景','完整轨迹池 182 / 总体 200','▥'),stat('Claude 对照已备',h.claude_available||0,'/ 50',`失败 ${h.claude_status?.failed||0} · 待完成 ${h.claude_status?.pending||0} · 详情见论文覆盖表`,'↔')].join('');
+  $('human-release-note').textContent=`下方 GT 和环境核对统计使用版本：${h.release||'待准备'}。其他版本的记录保留在本表。`;
+  $('human-release-cohorts').innerHTML=cohorts.length?table(['材料版本','统计范围','已导入','未最终提交','最终提交'],cohorts.map(c=>[esc(c.release),c.current?'当前版本':c.registered_candidate?'候选版本':'历史版本',esc(c.sessions),esc(c.sessions-c.submitted),esc(c.submitted)])):empty('暂无已登记版本');
   const t=h.tables?.find(t=>t.id==='human-t4-calibration');
   $('human-comparison').innerHTML=t?table(t.columns,t.rows.map(row=>row.map(esc))):empty('等待冻结标注批次');
   const gt=h.tables?.find(t=>t.id==='gate2-human-coverage');

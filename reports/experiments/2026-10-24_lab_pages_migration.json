@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-24",
+  "frontend": "GitHub Pages",
+  "backend": "existing AutoDL server on port 6006",
+  "pages_live": false,
+  "deployment_blocker": "github-pages environment does not allow lab-independent-hosting-20261022",
+  "migrated_cloud_records": 5,
+  "research_receipts_in_summary": 4,
+  "legacy_demo_archived_separately": 1,
+  "preexisting_local_sessions_backed_up": 2,
+  "formal_submissions_among_migrated_records": 0,
+  "sqlite_integrity": "ok",
+  "restart_preserved_records": true,
+  "independent_snapshot_restore": true,
+  "private_media_files_sha256_verified": 170,
+  "public_context_scenes": 50,
+  "public_context_items": 400,
+  "test_suite": {
+    "tests": 34,
+    "result": "passed"
+  },
+  "browser_checks": [
+    "Pages project subpath",
+    "7 Lab views",
+    "version progress counts",
+    "public scenario fields",
+    "save and JSON download",
+    "offline draft recovery",
+    "cross-device alias and recovery code",
+    "390px mobile layout",
+    "authenticated video playback"
+  ],
+  "production_test_annotations_created": 0,
+  "backup_bytes": 67108963,
+  "backup_sha256": "ee60e5ac7583c4f54bad1889923875a4e9326d7bdd8b66180bc261502d9fc18d",
+  "off_server_backup": false
+}
