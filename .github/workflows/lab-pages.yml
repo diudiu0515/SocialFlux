@@ -1,13 +1,10 @@
-name: Publish independent Lab frontend
+name: Publish Lab on GitHub Pages
 on:
   workflow_dispatch:
   push:
     branches: [lab-independent-hosting-20261022]
     paths:
-      - web/static/experiment_hub.*
-      - web/static/fonts/**
-      - web/pages/**
-      - scripts/build_lab_pages.py
+      - pages/**
       - .github/workflows/lab-pages.yml
 
 permissions:
@@ -21,23 +18,30 @@ concurrency:
 
 jobs:
   publish:
-    if: vars.LAB_BACKEND_URL != ''
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Build frontend without research data
-        env:
-          LAB_BACKEND_URL: ${{ vars.LAB_BACKEND_URL }}
-        run: python scripts/build_lab_pages.py --output build/lab-pages --backend-url "$LAB_BACKEND_URL"
+      - name: Check public artifact boundary
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          root=Path('pages')
+          assert (root/'lab/index.html').is_file()
+          assert (root/'annotation/index.html').is_file()
+          for path in root.rglob('*'):
+              if path.is_file():
+                  assert path.name in {'.nojekyll','OFL-NotoSansSC.txt'} or path.suffix in {'.html','.css','.js','.woff2','.svg'}, path
+                  if path.suffix in {'.html','.css','.js'}:
+                      text=path.read_text()
+                      assert 'chatgpt.site' not in text, path
+                      assert 'gzip_base64' not in text, path
+          PY
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: build/lab-pages
+          path: pages
       - uses: actions/deploy-pages@v4
         id: deploy
