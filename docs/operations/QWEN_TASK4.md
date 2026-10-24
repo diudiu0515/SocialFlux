@@ -10,7 +10,7 @@ v2 用单份阶段指令保留全部 canonical 输入、校验和状态更新；
 
 ```bash
 python scripts/run_qwen_task4_policy.py \
-  --run build/qwen_task4/run_20261024_native \
+  --run build/qwen_task4/run_20261024_native_timeout \
   --scenario-id GPT50_006 \
   --policy configs/qwen_task4/policy.local.json \
   --output build/qwen_task4/my_policy_probe \
