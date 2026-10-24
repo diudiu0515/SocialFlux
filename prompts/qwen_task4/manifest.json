@@ -1,18 +1,18 @@
 {
-  "profile": "qwen_task4_thinking_v1",
-  "kind": "opt_in_prompt_supplements",
+  "profile": "qwen_task4_thinking_v2",
+  "kind": "opt_in_native_stage_instructions",
   "prompts": {
     "state": {
-      "path": "prompts/qwen_task4/state_contract_v1.txt",
-      "sha256": "4bcc23caa70af6254ce9c71474e5ff689aa2c8d5b76d69efa2373cec6c0e8920"
+      "path": "prompts/qwen_task4/state.txt",
+      "sha256": "7366abacf0f72cf74ad8edf034601c9a14026d459b04f513b196c606a58b9928"
     },
     "interaction": {
-      "path": "prompts/qwen_task4/interaction_contract_v1.txt",
-      "sha256": "85e0c9c9d79060966d731b7a410143f7f4992c10f48a3a4e8db2419212167a74"
+      "path": "prompts/qwen_task4/interaction.txt",
+      "sha256": "6006cf6819b448109cd44ab052beef319a64bbe2b825f8dc598ab379faeed3d2"
     },
     "response": {
-      "path": "prompts/qwen_task4/response_contract_v1.txt",
-      "sha256": "c10601de6c29f2915b67233b90e575f3cad6bcab1178836b3eee8679b76bad62"
+      "path": "prompts/qwen_task4/response.txt",
+      "sha256": "7a91765095030a9841998472c1c3030ecc3aff586737783f596ddadcfd9e17e3"
     }
   },
   "base_sha256": {
@@ -29,5 +29,6 @@
     "environment/ledger_events.py": "3a291a9ce6dce7f31bcff02cba955c298b139e7c29898f0ae05771722a5edeba",
     "environment/interaction_wire_schema.py": "4293f08860d4994caa21b3a0d23938d5f5099458e452b7c5eac6b569bf75f360",
     "environment/qwen_task4_contract.py": "3f8e7a03c75ecab00ab594bad6d1cf3dc2b9c683abcadfd21c16051b8190849d"
-  }
+  },
+  "reason": "Replace duplicated legacy and supplement instructions while retaining every canonical input value, validator and state update."
 }

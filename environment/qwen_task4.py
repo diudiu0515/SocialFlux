@@ -19,7 +19,7 @@ from pipeline.runtime import build_environment_factory
 from providers.local_vllm import LocalVLLMProvider
 
 ROOT = Path(__file__).resolve().parents[1]
-PROFILE = "qwen_task4_thinking_v1"
+PROFILE = "qwen_task4_thinking_v2"
 DEFAULT_CONFIG = ROOT / "configs/qwen_task4/environment.json"
 STAGES = ("state", "interaction", "response")
 
@@ -55,10 +55,13 @@ def load_config(path=DEFAULT_CONFIG):
     for stage in STAGES:
         sampling = env[stage + ("_sampling" if stage == "response" else "_appraisal_sampling")]
         budget = sampling.get("thinking_token_budget")
+        thinking = sampling.get("chat_template_kwargs", {})
         if (isinstance(budget, bool) or not isinstance(budget, int) or budget <= 0
                 or sampling.get("max_tokens", 0) - budget < 2048
-                or sampling.get("chat_template_kwargs") != {"enable_thinking": True, "reasoning_effort": "medium"}):
-            raise ValueError(f"{stage} requires bounded medium thinking and at least 2048 final tokens")
+                or set(thinking) != {"enable_thinking", "reasoning_effort"}
+                or thinking.get("enable_thinking") is not True
+                or thinking.get("reasoning_effort") not in {"low", "medium"}):
+            raise ValueError(f"{stage} requires bounded low/medium thinking and at least 2048 final tokens")
     return config
 
 
@@ -106,6 +109,19 @@ class QwenTask4Provider(LocalVLLMProvider):
             schema = state_schema(payload) if self.stage == "state" else interaction_schema(payload)
         else:
             schema = response_schema()
+            _, separator, encoded = result[1]["content"].partition("Private response request:\n")
+            if not separator:
+                raise ValueError("Missing canonical response input boundary")
+            context, tail = json.JSONDecoder().raw_decode(encoded.lstrip())
+            remaining = encoded.lstrip()[tail:].strip()
+            marker = "Runtime turn brief:\n"
+            if not remaining.startswith(marker):
+                raise ValueError("Missing canonical response turn brief")
+            payload = {"context": context, "runtime_turn_brief": json.loads(remaining[len(marker):])}
+        # Qwen gets one stage instruction, rather than a full legacy instruction
+        # followed by a second instruction. Preserve every canonical input value,
+        # including actor binding, trust definitions, history and the turn brief.
+        result[1]["content"] = "Task input:\n" + json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
         result[0]["content"] += (
             "\n\n" + self.instruction + "\nOutput schema (JSON Schema):\n"
             + json.dumps(schema, ensure_ascii=False, separators=(",", ":"))

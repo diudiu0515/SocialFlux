@@ -53,11 +53,26 @@ class QwenTask4Tests(unittest.TestCase):
 
     def test_reject_unbounded_thinking_before_requests(self):
         config = load_config()
-        config["environment"]["state_appraisal_sampling"]["thinking_token_budget"] = 6000
+        sampling = config["environment"]["state_appraisal_sampling"]
+        sampling["thinking_token_budget"] = sampling["max_tokens"]
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "config.json"
             path.write_text(json.dumps(config))
             with self.assertRaisesRegex(ValueError, "final tokens"):
+                load_config(path)
+
+    def test_reasoning_comparison_keeps_thinking_enabled_and_final_capacity(self):
+        config = load_config()
+        sampling = config["environment"]["state_appraisal_sampling"]
+        sampling.update(max_tokens=8192, thinking_token_budget=4096)
+        sampling["chat_template_kwargs"]["reasoning_effort"] = "low"
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "config.json"
+            path.write_text(json.dumps(config))
+            self.assertEqual(load_config(path), config)
+            sampling["chat_template_kwargs"]["enable_thinking"] = False
+            path.write_text(json.dumps(config))
+            with self.assertRaisesRegex(ValueError, "thinking"):
                 load_config(path)
 
     def test_state_direction_feedback_reaches_the_existing_bounded_retry(self):
@@ -131,8 +146,26 @@ class QwenTask4Tests(unittest.TestCase):
         original = deepcopy(messages)
         prepared = provider.prepare_messages(messages)
         self.assertEqual(messages, original)
-        self.assertEqual(prepared[1], original[1])
+        self.assertEqual(json.loads(prepared[1]["content"].split("Task input:\n", 1)[1]), payload)
         self.assertTrue(prepared[0]["content"].startswith(original[0]["content"]))
+
+    def test_response_adapter_preserves_context_brief_and_retry(self):
+        env = QwenTask4EnvironmentFactory(self.scenario)()
+        provider = env.response_generator.provider
+        context = {"action": {"text": "uncertain"}, "history": [{"text": "past"}]}
+        brief = {"pending": ["answer"]}
+        messages = [{"role": "system", "content": "role binding"},
+                    {"role": "user", "content": "legacy instructions\nPrivate response request:\n"
+                     + json.dumps(context) + "\n\nRuntime turn brief:\n" + json.dumps(brief)},
+                    {"role": "assistant", "content": "{}"},
+                    {"role": "user", "content": "Repair missing fields"}]
+        original = deepcopy(messages)
+        prepared = provider.prepare_messages(messages)
+        self.assertEqual(messages, original)
+        self.assertEqual(json.loads(prepared[1]["content"].split("Task input:\n", 1)[1]),
+                         {"context": context, "runtime_turn_brief": brief})
+        self.assertEqual(prepared[2], original[2])
+        self.assertTrue(prepared[3]["content"].startswith(original[3]["content"]))
 
     def test_public_session_stale_turn_failure_and_private_audit(self):
         with tempfile.TemporaryDirectory() as directory:

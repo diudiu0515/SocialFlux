@@ -1,0 +1,33 @@
+{
+  "status": "candidate_frozen_pending_model_validation",
+  "profile": "qwen_task4_thinking_v2",
+  "run": "build/qwen_task4/run_20261024_native",
+  "live_service_unchanged": "build/qwen_task4/run_20261024_v1",
+  "root_cause_evidence": [
+    "Qwen thinking ceiling can interrupt a draft before final JSON; low-effort-only response contrast still failed first pass.",
+    "Legacy and supplemental instructions duplicate stage directions; native adapter now retains every input value under one stage instruction."
+  ],
+  "repair_scope": [
+    "Qwen stage instructions, adapter and isolated sampling only",
+    "Canonical state machine, calibration, validators and GPT/Claude prompts unchanged"
+  ],
+  "semantic_repair_round": 1,
+  "unit_tests_passed": 31,
+  "development_cases": [
+    "GPT50_006 initial refusal",
+    "GPT50_006 turn 6 uncertainty checkpoint"
+  ],
+  "gates": [
+    "Canonical structured acceptance including actual retry counts",
+    "No invented consent or completed external outcome",
+    "Risk and inability to promise do not imply certain loss",
+    "Actor ownership and refusal semantics match the actual text"
+  ],
+  "full_independent_evaluation": {
+    "planned_scenarios": 15,
+    "manifest": "data/environment_validation_20261024_qwen_e6_v2/manifest.json",
+    "status": "awaiting_external_policy_authorization_and_development_gate"
+  },
+  "formal_admission": false,
+  "human_review_status": "not_performed"
+}
