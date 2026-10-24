@@ -29,5 +29,60 @@
     "status": "awaiting_external_policy_authorization_and_development_gate"
   },
   "formal_admission": false,
-  "human_review_status": "not_performed"
+  "human_review_status": "not_performed",
+  "reasoning_only_contrast": {
+    "run": "build/qwen_task4/acceptance_20261024_reasoning",
+    "physical_requests": 3,
+    "canonical_first_pass": 2,
+    "semantic_acceptance": false,
+    "finding": "Increasing reasoning capacity without changing instructions did not resolve the uncertainty error; response was a draft fragment after the thinking cutoff.",
+    "by_component": {
+      "state_uncertainty": {
+        "canonical_first_pass": true,
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 15611,
+          "total_tokens": 21879,
+          "completion_tokens": 6268,
+          "prompt_tokens_details": null,
+          "completion_tokens_details": {
+            "reasoning_tokens": 4095
+          }
+        },
+        "seconds": 515.5371025269851
+      },
+      "interaction_refusal": {
+        "canonical_first_pass": true,
+        "finish_reason": "stop",
+        "usage": {
+          "prompt_tokens": 8085,
+          "total_tokens": 10103,
+          "completion_tokens": 2018,
+          "prompt_tokens_details": null,
+          "completion_tokens_details": {
+            "reasoning_tokens": 1344
+          }
+        },
+        "seconds": 167.6144289560616
+      },
+      "response_grounding": {
+        "canonical_first_pass": false,
+        "error": "Expecting value: line 1 column 1 (char 0)"
+      }
+    },
+    "assistant_semantic_review": {
+      "state_uncertainty": {
+        "passed": false,
+        "finding": "Inability to promise approval is still interpreted as confirmed lack of approval and closure of the remaining path."
+      },
+      "interaction_refusal": {
+        "passed": false,
+        "finding": "Social act improved to refusal, but task refusal was also labeled as a conversational pause."
+      },
+      "response_grounding": {
+        "passed": false,
+        "finding": "No complete JSON response; the post-thinking content was a draft fragment."
+      }
+    }
+  }
 }

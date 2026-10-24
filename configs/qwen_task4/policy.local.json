@@ -1,0 +1,30 @@
+{
+  "policy_id": "qwen_local_same_model_engineering_probe",
+  "prompt_id": "task_rollout_action_v2_decision_continuity",
+  "source_type": "api",
+  "model_family": "qwen",
+  "horizon_mode": "natural_max_20",
+  "minimum_natural_turns": 1,
+  "observation_condition": "text_only",
+  "validation_profile": "hard_only",
+  "provider": {
+    "provider": "local_vllm",
+    "model": "Qwen/Qwen3.8-Flash-Next-FP8",
+    "endpoint": "http://127.0.0.1:8010/v1/chat/completions",
+    "use_proxy": false,
+    "timeout": 900,
+    "max_transport_attempts": 1
+  },
+  "sampling": {
+    "temperature": 0.6,
+    "top_p": 0.95,
+    "top_k": 20,
+    "seed": 47000,
+    "max_tokens": 4096,
+    "thinking_token_budget": 2048,
+    "chat_template_kwargs": {
+      "enable_thinking": true,
+      "reasoning_effort": "low"
+    }
+  }
+}
