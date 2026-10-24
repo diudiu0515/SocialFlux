@@ -66,11 +66,13 @@
     }
   ],
   "attribution_update": {
-    "identity": "SocialFlux Maintainer",
+    "identity": "diudiu0515",
     "commits": 13,
     "branches": 6,
     "file_trees_preserved": true,
-    "history_backup": "data/migrations/20261024-attribution/history-before.bundle"
+    "history_backup": "data/migrations/20261024-attribution/history-before.bundle",
+    "email": "242917299+diudiu0515@users.noreply.github.com",
+    "username_correction_commits": 18
   },
   "browser_checks_environment": "isolated staging, completed before deployment",
   "live_browser_verification": {
