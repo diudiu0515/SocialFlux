@@ -1,5 +1,5 @@
 {
-  "status": "candidate_frozen_pending_model_validation",
+  "status": "native_candidate_rejected_semantic_gate",
   "profile": "qwen_task4_thinking_v2",
   "run": "build/qwen_task4/run_20261024_native",
   "live_service_unchanged": "build/qwen_task4/run_20261024_v1",
@@ -12,7 +12,7 @@
     "Canonical state machine, calibration, validators and GPT/Claude prompts unchanged"
   ],
   "semantic_repair_round": 1,
-  "unit_tests_passed": 31,
+  "unit_tests_passed": 32,
   "development_cases": [
     "GPT50_006 initial refusal",
     "GPT50_006 turn 6 uncertainty checkpoint"
@@ -26,7 +26,7 @@
   "full_independent_evaluation": {
     "planned_scenarios": 15,
     "manifest": "data/environment_validation_20261024_qwen_e6_v2/manifest.json",
-    "status": "awaiting_external_policy_authorization_and_development_gate"
+    "status": "not_started_semantic_gate_failed_and_external_authorization_pending"
   },
   "formal_admission": false,
   "human_review_status": "not_performed",
@@ -84,5 +84,99 @@
         "finding": "No complete JSON response; the post-thinking content was a draft fragment."
       }
     }
+  },
+  "native_regression": {
+    "planned": 2,
+    "completed": 2,
+    "first_pass_steps": 0,
+    "physical_requests": 8,
+    "rejected_candidates": 2,
+    "cases": {
+      "initial_refusal": {
+        "status": "completed",
+        "episode_id": "b7fe5a3581c946759fe4ab452ec79c9d",
+        "seconds": 592.7453598019201,
+        "physical_requests": 4,
+        "attempts_by_stage": {
+          "state": 1,
+          "interaction": 2,
+          "response": 1
+        },
+        "finish_reasons": {
+          "state": [
+            "stop"
+          ],
+          "interaction": [
+            "stop",
+            "stop"
+          ],
+          "response": [
+            "stop"
+          ]
+        },
+        "assistant_semantic_review": {
+          "passed": false,
+          "findings": [
+            "Task refusal was recorded as explicit dialogue pause.",
+            "Response was English despite the Chinese output instruction.",
+            "Invented prior oral consent did not recur."
+          ]
+        }
+      },
+      "checkpoint_uncertainty": {
+        "status": "completed",
+        "episode_id": "22b1f7ea42c8499ebe4f9f0b4048bb43",
+        "seconds": 788.0230478229932,
+        "physical_requests": 4,
+        "attempts_by_stage": {
+          "state": 1,
+          "interaction": 1,
+          "response": 2
+        },
+        "finish_reasons": {
+          "state": [
+            "stop"
+          ],
+          "interaction": [
+            "stop"
+          ],
+          "response": [
+            "stop",
+            "stop"
+          ]
+        },
+        "assistant_semantic_review": {
+          "passed": false,
+          "findings": [
+            "State rationales converted inability to promise into confirmed impossibility and certain goal failure.",
+            "Interaction intent also described the statement as negating any possibility of approval."
+          ]
+        }
+      }
+    }
+  },
+  "archived_source_component_reference": {
+    "source_case": "build/qwen_task4/run_20261024_v1/checkpoint_case.json",
+    "same_action": true,
+    "same_preupdate_snapshot": true,
+    "state_model": "gpt-6-astra",
+    "response_model": "claude-fable-5",
+    "state_temperature": 0.0,
+    "response_temperature": 0.35,
+    "observed_difference": "Archived state rationale explicitly retained possible conditional publication and an unsettled failure outcome. Qwen promoted the same inability to promise into confirmed impossibility.",
+    "limits": "Archived reference, not a newly generated blinded or single-factor model comparison; matching every state direction is not an acceptance criterion."
+  },
+  "final_sampling_contrast": {
+    "run": "build/qwen_task4/acceptance_20261024_sampling",
+    "status": "running",
+    "max_requests": 3,
+    "change": "Stage temperatures only; state/interaction 0.0, response 0.35."
+  },
+  "policy_entrypoint": {
+    "script": "scripts/run_qwen_task4_policy.py",
+    "example_policy": "configs/qwen_task4/policy.local.json",
+    "smoke_run": "build/qwen_task4/policy_smoke_20261024_native",
+    "smoke_status": "running",
+    "smoke_scope": "One public-action turn with the same local model as tested policy; engineering only, not independent E6."
   }
 }

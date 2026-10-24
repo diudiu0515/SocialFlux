@@ -22,7 +22,7 @@
       "model": "Qwen/Qwen3.8-Flash-Next-FP8",
       "endpoint": "http://127.0.0.1:8010/v1/chat/completions",
       "use_proxy": false,
-      "timeout": 600,
+      "timeout": 1200,
       "max_transport_attempts": 1
     },
     "sampling": {},
@@ -31,7 +31,7 @@
       "model": "Qwen/Qwen3.8-Flash-Next-FP8",
       "endpoint": "http://127.0.0.1:8010/v1/chat/completions",
       "use_proxy": false,
-      "timeout": 600,
+      "timeout": 1200,
       "max_transport_attempts": 1
     },
     "response_sampling": {
@@ -87,7 +87,7 @@
       "model": "Qwen/Qwen3.8-Flash-Next-FP8",
       "endpoint": "http://127.0.0.1:8010/v1/chat/completions",
       "use_proxy": false,
-      "timeout": 600,
+      "timeout": 1200,
       "max_transport_attempts": 1
     },
     "interaction_appraisal_provider": {
@@ -95,7 +95,7 @@
       "model": "Qwen/Qwen3.8-Flash-Next-FP8",
       "endpoint": "http://127.0.0.1:8010/v1/chat/completions",
       "use_proxy": false,
-      "timeout": 600,
+      "timeout": 1200,
       "max_transport_attempts": 1
     }
   }
